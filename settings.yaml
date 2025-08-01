@@ -95,52 +95,52 @@ spec:
               value: light
               options:
                 - value: light
-                  label: light (明亮)
+                  label: light (明亮白色)
                 - value: cupcake
-                  label: cupcake (纸杯蛋糕)
+                  label: cupcake (粉色系)
                 - value: bumblebee
-                  label: bumblebee (大黄蜂)
+                  label: bumblebee (黄色系)
                 - value: emerald
-                  label: emerald (翡翠)
+                  label: emerald (绿色系)
                 - value: corporate
-                  label: corporate (企业)
+                  label: corporate (企业蓝)
                 - value: retro
-                  label: retro (复古)
+                  label: retro (复古橙)
                 - value: valentine
-                  label: valentine (情人节)
+                  label: valentine (粉红色)
                 - value: garden
-                  label: garden (花园)
+                  label: garden (自然绿)
                 - value: aqua
-                  label: aqua (水蓝)
+                  label: aqua (水蓝色)
                 - value: lofi
                   label: lofi (低保真)
                 - value: pastel
-                  label: pastel (粉彩)
+                  label: pastel (粉彩色)
                 - value: fantasy
-                  label: fantasy (幻想)
+                  label: fantasy (幻想紫)
                 - value: wireframe
-                  label: wireframe (线框)
+                  label: wireframe (线框风)
                 - value: cmyk
                   label: cmyk (印刷色)
                 - value: autumn
-                  label: autumn (秋天)
+                  label: autumn (秋日橙)
                 - value: acid
-                  label: acid (酸性)
+                  label: acid (酸性绿)
                 - value: lemonade
-                  label: lemonade (柠檬水)
+                  label: lemonade (柠檬黄)
                 - value: winter
-                  label: winter (冬天)
+                  label: winter (冬日蓝)
                 - value: nord
-                  label: nord (北欧)
+                  label: nord (北欧风)
             - $formkit: select
               name: dark_theme
               label: 深色主题
               value: dark
               options:
                 - value: dark
-                  label: dark (暗黑)
+                  label: dark (经典暗色)
                 - value: business
-                  label: business (商务)
+                  label: business (商务灰)
                 - value: synthwave
                   label: synthwave (合成波)
                 - value: cyberpunk
@@ -148,21 +148,21 @@ spec:
                 - value: halloween
                   label: halloween (万圣节)
                 - value: forest
-                  label: forest (森林)
+                  label: forest (森林绿)
                 - value: black
-                  label: black (黑色)
+                  label: black (纯黑色)
                 - value: luxury
-                  label: luxury (奢华)
+                  label: luxury (奢华金)
                 - value: dracula
                   label: dracula (德古拉)
                 - value: night
-                  label: night (夜晚)
+                  label: night (深夜蓝)
                 - value: coffee
-                  label: coffee (咖啡)
+                  label: coffee (咖啡棕)
                 - value: dim
-                  label: dim (昏暗)
+                  label: dim (昏暗灰)
                 - value: sunset
-                  label: sunset (日落)
+                  label: sunset (日落橙)
         - $formkit: group
           name: right_settings
           label: 功能设置
