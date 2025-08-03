@@ -1,0 +1,84 @@
+/* 开源字体配置 - 统一管理所有开源字体 */
+
+/* ===== 中文开源字体 ===== */
+/* 中文字体通过JavaScript动态加载，不再在此处导入 */
+/* 霞鹜文楷 Bright - 优雅的现代楷体 */
+/* @import url('./LXGWBright-SemiLight/result.css'); */
+
+/* 思源屏显臻宋 - 现代宋体 */
+/* @import url('./思源屏显臻宋/result.css'); */
+
+/* ===== 英文开源字体 ===== */
+
+/* Monoton - 开源装饰字体 */
+@font-face {
+  font-family: 'Monoton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/themes/theme-sky-blog-1/assets/fonts/monoton-0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Monoton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/themes/theme-sky-blog-1/assets/fonts/monoton-1.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Titan One - 开源装饰字体 */
+@font-face {
+  font-family: 'Titan One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/themes/theme-sky-blog-1/assets/fonts/titan-one-0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Titan One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/themes/theme-sky-blog-1/assets/fonts/titan-one-1.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ===== 字体工具类 ===== */
+
+/* 英文开源字体工具类 */
+.font-monoton {
+    font-family: 'Monoton', 'Courier New', monospace;
+    font-weight: 400;
+    font-display: swap;
+}
+
+.font-titan-one {
+    font-family: 'Titan One', Impact, 'Arial Black', sans-serif;
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* 中文开源字体工具类 */
+.font-lxgw-wenkai-bright {
+    font-family: 'LXGW WenKai Bright', '霞鹜文楷', '楷体', 'KaiTi', 'STKaiti', serif;
+    font-weight: 300;
+    font-display: swap;
+}
+
+.font-siyuan-songti {
+    font-family: '思源屏显臻宋', '思源宋体', '宋体', 'SimSun', 'STSong', serif;
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* 默认字体工具类 */
+.font-default {
+    font-family: '楷体', 'KaiTi', 'STKaiti', serif;
+    font-weight: 400;
+    font-display: swap;
+}

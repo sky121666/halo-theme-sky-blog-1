@@ -570,9 +570,13 @@ spec:
                 - value: none
                   label: 无
                 - value: effect-marker-pop
-                  label: 麦克笔感
+                  label: 麦克笔感 (英文开源)
                 - value: effect-diagonal-split
-                  label: 斜切双色
+                  label: 斜切双色 (英文开源)
+                - value: effect-lxgw-wenkai-bright
+                  label: 霞鹜文楷亮 (中文开源)
+                - value: effect-siyuan-songti
+                  label: 思源屏显臻宋 (中文开源)
         - $formkit: group
           name: subtitle_settings
           label: 副标题设置

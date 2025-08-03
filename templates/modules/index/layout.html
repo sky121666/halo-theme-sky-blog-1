@@ -1,42 +1,43 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)" 
-      th:attr="data-theme=${
+<html lang="zh-CN" th:fragment="html (content)" th:attr="data-theme=${
         (theme.config.nav.theme_settings.default_theme ?: 'dark_theme') == 'light_theme' ? 
         (theme.config.nav.theme_settings.light_theme ?: 'light') :
         (theme.config.nav.theme_settings.dark_theme ?: 'dark')
       }">
-  
-  <!-- 页面头部 -->
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- 页面标题 -->
-    <title th:text="${site.title}"></title>
- 
-    <!-- 主题样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-    <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
-    <!-- 字体-->
-    <link rel="stylesheet" th:href="@{/assets/fonts/fonts.css?v={version}(version=${theme.spec.version})}" />
-     </head>
-  
-  <body class="min-h-screen bg-base-100 text-base-content">
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
-    <th:block th:replace="~{modules/index/header}" />
 
-    <!-- 主要内容区域 -->
-    <main class="flex-1 -mt-16">
-      <th:block th:replace="${content}" />
-    </main>
-    
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
-    
-    <!-- JavaScript 文件 -->
-    <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
-    <script th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}" defer></script>
-  </body>
+<!-- 页面头部 -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 页面标题 -->
+  <title th:text="${site.title}"></title>
+
+  <!-- 主题样式 -->
+  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+  <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
+  <!-- 字体-->
+  <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
+</head>
+
+<body class="min-h-screen bg-base-100 text-base-content">
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
+  <th:block th:replace="~{modules/index/header}" />
+
+  <!-- 主要内容区域 -->
+  <main class="flex-1 -mt-16">
+    <th:block th:replace="${content}" />
+  </main>
+
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
+
+  <!-- JavaScript 文件 -->
+  <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
+  <script th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}" defer></script>
+</body>
+
 </html>

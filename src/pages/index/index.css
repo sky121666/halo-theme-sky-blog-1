@@ -414,6 +414,14 @@
 
 /* ===== 样式特效层 - 只改变文字样式 ===== */
 
+/* 默认样式 - 楷体 (当选择"无"样式时使用) */
+.effect-none {
+  font-family: '楷体', 'KaiTi', 'STKaiti', serif;
+  color: var(--title-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+}
+
 /* 麦克笔感特效 - 手绘风格 */
 .effect-marker-pop {
   color: transparent;
@@ -434,6 +442,44 @@
   background: linear-gradient(5deg, #fff 50%, var(--sky-primary) 50%);
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+/* 霞鹜文楷亮特效 - 优雅的开源中文字体风格 */
+.effect-lxgw-wenkai-bright {
+  font-family: 'LXGW WenKai Bright', '霞鹜文楷', '楷体', 'KaiTi', serif;
+  color: var(--title-color);
+  text-shadow: 
+    1px 1px 0px rgba(0, 0, 0, 0.5),
+    2px 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 8px var(--sky-primary);
+  letter-spacing: 0.05em;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  font-weight: 300;
+}
+
+/* 思源屏显臻宋特效 - 现代开源中文宋体风格 */
+.effect-siyuan-songti {
+  font-family: '思源屏显臻宋', '思源宋体', '宋体', 'SimSun', serif;
+  color: transparent;
+  background: linear-gradient(45deg, 
+    var(--sky-primary), var(--sky-secondary), var(--sky-accent), 
+    var(--sky-primary), var(--sky-secondary), var(--sky-accent));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: rainbow-flow 4s ease-in-out infinite;
+  letter-spacing: 0.02em;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+  font-weight: 400;
+}
+
+@keyframes rainbow-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* 副标题打字机效果 */

@@ -26,29 +26,7 @@
     /* base-300 */
     --halo-search-widget-kbd-shadow: 0 1px 3px 0 color-mix(in oklch, var(--color-base-100) 10%, transparent), 0 1px 2px -1px color-mix(in oklch, var(--color-base-100) 10%, transparent);
 
-    /* Header 文字颜色变量 - 智能适配 DaisyUI 主题 */
-    --header-title-color: color-mix(in oklch, var(--color-base-content) 70%, transparent);
-    /* 标题文字颜色 */
-    --header-title-color-scrolled: color-mix(in oklch, var(--color-base-content) 90%, transparent);
-    /* 滚动后标题文字颜色 */
-    --header-subtitle-color: color-mix(in oklch, var(--color-base-content) 70%, transparent);
-    /* 副标题文字颜色 */
-    --header-subtitle-color-scrolled: color-mix(in oklch, var(--color-base-content) 80%, transparent);
-    /* 滚动后副标题文字颜色 */
-    --header-moment-title-color: var(--color-base-content);
-    /* 说说标题颜色 */
-    --header-moment-text-color: var(--color-base-content);
-    /* 说说文字颜色 */
-    --header-moment-meta-color: var(--color-base-content);
-    /* 说说元信息颜色 */
-    --header-moment-time-color: var(--color-base-content);
-    /* 说说时间颜色 */
-    --header-moment-like-color: var(--color-base-content);
-    /* 说说点赞按钮颜色 */
-    --header-moment-nav-color: var(--color-base-content);
-    /* 说说导航按钮颜色 */
-    --header-moment-control-color: var(--color-base-content);
-    /* 说说控制按钮颜色 */
+  
 
     /* 主题颜色变量，使用DaisyUI的颜色系统 */
     --sky-primary: var(--color-primary);

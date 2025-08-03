@@ -1,5 +1,29 @@
 <!-- 增强版视差沉浸Banner Header -->
 <div class="relative min-h-screen overflow-hidden mt-[-50px] z-10" x-data="headerController()">
+    <!-- 字体按需加载脚本 -->
+    <script th:inline="javascript">
+        (function () {
+            // 获取当前使用的样式效果
+            const styleEffect = /*[[${theme.config.index.title_settings.style_effect}]]*/ 'none';
+
+            // 根据样式效果动态加载对应的字体文件
+            if (styleEffect === 'effect-lxgw-wenkai-bright') {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '/themes/theme-sky-blog-1/assets/fonts/LXGWBright-SemiLight/result.css';
+                document.head.appendChild(link);
+                console.log('已加载霞鹜文楷亮字体');
+            }
+            else if (styleEffect === 'effect-siyuan-songti') {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '/themes/theme-sky-blog-1/assets/fonts/思源屏显臻宋/result.css';
+                document.head.appendChild(link);
+                console.log('已加载思源屏显臻宋字体');
+            }
+            // 英文字体和默认字体已在基础CSS中加载，无需动态处理
+        })();
+    </script>
     <!-- 背景层：图片Banner背景 -->
     <div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.show_background}">
         <!-- 第一层：原始图片背景 -->
