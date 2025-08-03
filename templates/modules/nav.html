@@ -6,156 +6,151 @@
 <!-- ========================================== -->
 
 <!-- 主导航栏容器 -->
-<div th:fragment="navbar"
-     class="drawer sticky top-0 z-50 transition-all duration-500 ease-out"
-     x-data="navbarController">
-  
+<div th:fragment="navbar" class="drawer sticky top-0 z-50 transition-all duration-500 ease-out"
+  x-data="navbarController">
+
   <!-- 移动端抽屉开关 -->
   <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" />
-  
+
   <!-- 导航栏内容区域 -->
   <div class="drawer-content">
     <nav class="navbar">
       <div class="max-w-7xl mx-auto w-full sm:px-6 lg:px-8 flex items-center justify-between">
-        
+
         <!-- Logo 区域 -->
         <div class="flex-shrink-0">
           <a href="/" class="text-lg sm:text-xl font-bold flex items-center gap-2">
             <!-- Logo 图标 -->
-            <span th:if="${theme.config.nav.logo_settings.show_logo_icon}" 
-                  th:utext="${theme.config.nav.logo_settings.logo_icon_html}"
-                  class="w-8 h-8 text-primary flex items-center justify-center">
+            <span th:if="${theme.config.nav.logo_settings.show_logo_icon}"
+              th:utext="${theme.config.nav.logo_settings.logo_icon_html}"
+              class="w-8 h-8 text-primary flex items-center justify-center">
             </span>
             <!-- 站点标题 -->
-            <span th:if="${theme.config.nav.logo_settings.show_logo_title}" 
-                  th:text="${theme.config.nav.logo_settings.custom_logo_title}">
+            <span th:if="${theme.config.nav.logo_settings.show_logo_title}"
+              th:text="${theme.config.nav.logo_settings.custom_logo_title}">
             </span>
           </a>
         </div>
-        
+
         <!-- 主菜单区域（桌面端） -->
         <div class="hidden lg:flex flex-1 justify-end">
           <nav class="flex items-center space-x-1">
             <!-- 主菜单数据获取 -->
-            <th:block th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
+            <th:block
+              th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
               <!-- 菜单项遍历 -->
               <div th:each="menuItem : ${primaryMenu.menuItems}" class="relative group">
-                
+
                 <!-- 带子菜单的菜单项 -->
                 <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
                   <div class="dropdown dropdown-bottom dropdown-center dropdown-hover">
                     <!-- 父级菜单项 -->
-                    <a tabindex="0" role="button" 
-                       class="nav-menu-item flex items-center gap-1 px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50"
-                       th:text="${menuItem.status.displayName}">
+                    <a tabindex="0" role="button"
+                      class="nav-menu-item flex items-center gap-1 px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50"
+                      th:text="${menuItem.status.displayName}">
                     </a>
                     <!-- 子菜单下拉列表 -->
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300 mt-0">
+                    <ul tabindex="0"
+                      class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300 mt-0">
                       <li th:each="childItem : ${menuItem.children}">
-                        <a th:href="@{${childItem.status.href}}" 
-                           th:text="${childItem.status.displayName}"
-                           th:target="${childItem.spec.target?.value}"
-                           class="hover:bg-base-200/80 hover:text-base-content/70 duration-200">
+                        <a th:href="@{${childItem.status.href}}" th:text="${childItem.status.displayName}"
+                          th:target="${childItem.spec.target?.value}"
+                          class="hover:bg-base-200/80 hover:text-base-content/70 duration-200">
                         </a>
                       </li>
                     </ul>
                   </div>
                 </th:block>
-                
+
                 <!-- 普通菜单项（无子菜单） -->
                 <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <a th:href="@{${menuItem.status.href}}" 
-                     th:text="${menuItem.status.displayName}"
-                     th:target="${menuItem.spec.target?.value}"
-                     class="nav-menu-item flex items-center px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50">
+                  <a th:href="@{${menuItem.status.href}}" th:text="${menuItem.status.displayName}"
+                    th:target="${menuItem.spec.target?.value}"
+                    class="nav-menu-item flex items-center px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50">
                   </a>
                 </th:block>
-                
+
               </div>
             </th:block>
           </nav>
         </div>
-        
+
         <!-- 功能区域（右侧操作区） -->
         <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          
+
           <!-- 搜索功能 -->
           <div th:if="${theme.config.nav.right_settings.show_search and pluginFinder.available('PluginSearchWidget')}">
-            <button class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" 
-                    onclick="SearchWidget.open();">
+            <button class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" onclick="SearchWidget.open();">
               <span class="icon-[heroicons--magnifying-glass] w-5 h-5"></span>
             </button>
           </div>
-          
+
           <!-- 主题切换功能 -->
-          <div th:if="${theme.config.nav.theme_settings.show_theme_toggle}"
-               class="relative"
-               x-data="createThemeToggle()"
-               th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
+          <div th:if="${theme.config.nav.theme_settings.show_theme_toggle}" class="relative"
+            x-data="createThemeToggle()" th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
                         data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
                         data-default-theme=${theme.config.nav.theme_settings.default_theme}"
-               x-init="$nextTick(() => init())">
-            <button @click="toggleTheme()" 
-                    class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0"
-                    :title="isDark ? '切换到浅色模式' : '切换到深色模式'">
+            x-init="$nextTick(() => init())">
+            <button @click="toggleTheme()" class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0"
+              :title="isDark ? '切换到浅色模式' : '切换到深色模式'">
               <!-- 浅色模式图标 -->
               <span x-show="!isDark" class="icon-[heroicons--sun] w-5 h-5"></span>
               <!-- 深色模式图标 -->
               <span x-show="isDark" class="icon-[heroicons--moon] w-5 h-5"></span>
             </button>
           </div>
-          
+
           <!-- 用户操作功能 -->
-          <div th:if="${theme.config.nav.right_settings.show_user_actions}" 
-               class="flex items-center gap-2">
+          <div th:if="${theme.config.nav.right_settings.show_user_actions}" class="flex items-center gap-2">
             <!-- 用户状态检测 -->
             <div th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}">
-              
+
               <!-- 已登录用户：显示用户菜单 -->
-              <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}" 
-                   class="dropdown dropdown-end dropdown-hover">
+              <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}"
+                class="dropdown dropdown-end dropdown-hover">
                 <!-- 用户头像按钮 -->
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle border-0">
                   <div class="avatar avatar-online">
                     <div class="w-8 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
                       <!-- 用户头像 -->
-                      <img th:if="${!#strings.isEmpty(currentUser.avatar)}" 
-                           th:src="${currentUser.avatar}" 
-                           th:alt="${currentUser.displayName}" 
-                           class="object-cover" />
+                      <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
+                        th:alt="${currentUser.displayName}" class="object-cover" />
                       <!-- 默认头像图标 -->
-                      <img th:unless="${!#strings.isEmpty(currentUser.avatar)}" src="/themes/theme-sky-blog-1/assets/images/heihei.png"/>
+                      <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
+                        src="/themes/theme-sky-blog-1/static/images/heihei.png" />
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- 用户下拉菜单 -->
-                <div tabindex="0" class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-56 border border-base-300">
-                  
+                <div tabindex="0"
+                  class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-56 border border-base-300">
+
                   <!-- 用户信息展示区 -->
                   <div class="px-3 py-2">
                     <div class="flex items-center gap-3">
                       <!-- 用户头像（大尺寸） -->
                       <div class="avatar avatar-online">
-                        <div class="w-10 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
-                          <img th:if="${!#strings.isEmpty(currentUser.avatar)}" 
-                               th:src="${currentUser.avatar}" 
-                               th:alt="${currentUser.displayName}" 
-                               class="object-cover" />
-                              <img th:unless="${!#strings.isEmpty(currentUser.avatar)}" src="/themes/theme-sky-blog-1/assets/images/heihei.png"/>
+                        <div
+                          class="w-10 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
+                          <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
+                            th:alt="${currentUser.displayName}" class="object-cover" />
+                          <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
+                            src="/themes/theme-sky-blog-1/assets/images/heihei.png" />
                         </div>
                       </div>
                       <!-- 用户信息文本 -->
                       <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-base-content truncate" th:text="${currentUser.displayName}"></p>
+                        <p class="text-sm font-medium text-base-content truncate" th:text="${currentUser.displayName}">
+                        </p>
                         <p class="text-xs text-base-content/60 truncate" th:text="${currentUser.name}"></p>
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- 分割线 -->
                   <div class="divider my-0.5"></div>
-                  
+
                   <!-- 功能菜单项 -->
                   <li>
                     <a href="/console" class="flex items-center gap-3">
@@ -169,10 +164,10 @@
                       <span>个人中心</span>
                     </a>
                   </li>
-                  
+
                   <!-- 分割线 -->
                   <div class="divider my-0.5"></div>
-                  
+
                   <!-- 退出登录 -->
                   <li>
                     <a href="/logout" class="flex items-center gap-3 text-error">
@@ -182,67 +177,68 @@
                   </li>
                 </div>
               </div>
-              
+
               <!-- 未登录用户：显示登录按钮 -->
-              <a th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}" 
-                 href="/login" 
-                 class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" 
-                 title="登录">
+              <a th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}" href="/login"
+                class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" title="登录">
                 <span class="icon-[heroicons--user] w-5 h-5"></span>
               </a>
-              
+
             </div>
           </div>
-          
+
           <!-- 移动端菜单按钮 -->
           <div class="lg:hidden">
             <label for="mobile-menu-drawer" class="btn btn-ghost btn-circle drawer-button border-0">
               <span class="icon-[heroicons--bars-3] w-6 h-6"></span>
             </label>
           </div>
-          
+
         </div>
       </div>
     </nav>
   </div>
-  
+
   <!-- 移动端菜单抽屉 -->
   <div class="drawer-side z-[100]">
     <!-- 抽屉遮罩层 -->
     <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-    
+
     <!-- 抽屉主体内容 -->
     <aside class="min-h-full w-80 bg-base-100/95 backdrop-blur-xl shadow-2xl border-r border-base-200/50">
-      
+
       <!-- 抽屉头部区域 -->
-      <div class="flex items-center justify-between mb-6 pb-3 border-b border-base-200/50 bg-gradient-to-r from-primary/5 to-secondary/5 p-6">
+      <div
+        class="flex items-center justify-between mb-6 pb-3 border-b border-base-200/50 bg-gradient-to-r from-primary/5 to-secondary/5 p-6">
         <!-- Logo 区域 -->
         <a href="/" class="text-lg font-bold flex items-center gap-2">
           <!-- Logo 图标 -->
-          <span th:if="${theme.config.nav.logo_settings.show_logo_icon}" 
-                th:utext="${theme.config.nav.logo_settings.logo_icon_html}"
-                class="w-6 h-6 text-primary flex items-center justify-center">
+          <span th:if="${theme.config.nav.logo_settings.show_logo_icon}"
+            th:utext="${theme.config.nav.logo_settings.logo_icon_html}"
+            class="w-6 h-6 text-primary flex items-center justify-center">
           </span>
           <!-- 站点标题 -->
-          <span th:if="${theme.config.nav.logo_settings.show_logo_title}" 
-                th:text="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}">
+          <span th:if="${theme.config.nav.logo_settings.show_logo_title}"
+            th:text="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}">
           </span>
         </a>
-        
+
         <!-- 关闭按钮 -->
-        <label for="mobile-menu-drawer" class="btn btn-ghost btn-circle hover:bg-error/10 hover:text-error transition-all duration-200">
+        <label for="mobile-menu-drawer"
+          class="btn btn-ghost btn-circle hover:bg-error/10 hover:text-error transition-all duration-200">
           <span class="icon-[heroicons--x-mark] w-6 h-6"></span>
         </label>
       </div>
-      
+
       <!-- 移动端导航菜单区域 -->
       <div class="px-6">
         <nav class="space-y-3">
           <!-- 主菜单数据获取 -->
-          <th:block th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
+          <th:block
+            th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
             <!-- 菜单项遍历 -->
             <div th:each="menuItem : ${primaryMenu.menuItems}" class="mobile-menu-item">
-              
+
               <!-- 带子菜单的菜单项 -->
               <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
                 <!-- 使用 DaisyUI collapse 组件（适合移动端点击展开） -->
@@ -250,44 +246,43 @@
                   <!-- 折叠控制器 -->
                   <input type="checkbox" class="peer" x-model="open" />
                   <!-- 主菜单项标题 -->
-                  <div class="collapse-title mobile-menu-link flex items-center justify-between p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden min-h-0 py-4"
-                       @click="open = !open">
+                  <div
+                    class="collapse-title mobile-menu-link flex items-center justify-between p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden min-h-0 py-4"
+                    @click="open = !open">
                     <span th:text="${menuItem.status.displayName}">菜单项</span>
-                    <i class="icon-[heroicons--chevron-down] w-5 h-5 text-base-content/70 transition-transform duration-300 ease-in-out" 
-                       :class="{ 'rotate-180': open }"></i>
+                    <i class="icon-[heroicons--chevron-down] w-5 h-5 text-base-content/70 transition-transform duration-300 ease-in-out"
+                      :class="{ 'rotate-180': open }"></i>
                   </div>
                   <!-- 子菜单内容区 -->
                   <div class="collapse-content px-0">
                     <div class="menu rounded-box w-full p-2 ml-4 mt-2 border-l-2 border-primary/20">
                       <!-- 子菜单项遍历 -->
                       <div th:each="childItem : ${menuItem.children}" class="menu-item mobile-menu-item">
-                        <a th:href="@{${childItem.status.href}}" 
-                           th:text="${childItem.status.displayName}"
-                           th:target="${childItem.spec.target?.value}"
-                           class="flex items-center p-3 text-sm text-base-content/80 hover:text-base-content hover:bg-primary/5 transition-all duration-200 rounded-lg">
+                        <a th:href="@{${childItem.status.href}}" th:text="${childItem.status.displayName}"
+                          th:target="${childItem.spec.target?.value}"
+                          class="flex items-center p-3 text-sm text-base-content/80 hover:text-base-content hover:bg-primary/5 transition-all duration-200 rounded-lg">
                         </a>
                       </div>
                     </div>
                   </div>
                 </div>
               </th:block>
-              
+
               <!-- 无子菜单的菜单项 -->
               <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                <a th:href="@{${menuItem.status.href}}" 
-                   th:text="${menuItem.status.displayName}"
-                   th:target="${menuItem.spec.target?.value}"
-                   class="mobile-menu-link flex items-center p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden">
+                <a th:href="@{${menuItem.status.href}}" th:text="${menuItem.status.displayName}"
+                  th:target="${menuItem.spec.target?.value}"
+                  class="mobile-menu-link flex items-center p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden">
                 </a>
               </th:block>
-              
+
             </div>
           </th:block>
         </nav>
       </div>
     </aside>
   </div>
-  
+
 </div>
 
 
