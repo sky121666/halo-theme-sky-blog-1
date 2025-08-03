@@ -525,6 +525,7 @@ spec:
             show_title: true
             custom_title: "sky blog"
             decoration_effect: effect-particles
+            title_font: font-titan-one
             style_effect: effect-marker-pop
           children:
             - $formkit: radio
@@ -583,7 +584,7 @@ spec:
               if: $get(show_title).value
               label: 样式效果
               help: 选择主标题的样式特效
-              value: none
+              value: effect-marker-pop
               options:
                 - value: none
                   label: 无
@@ -651,3 +652,26 @@ spec:
                   label: 霞鹜文楷亮 (中文开源)
                 - value: font-siyuan-songti
                   label: 思源屏显臻宋 (中文开源)
+        - $formkit: group
+          name: wave_transition_settings
+          label: 底部过渡设置
+          value:
+            show_wave_transition: true
+            wave_color: "var(--sky-container)"
+          children:
+            - $formkit: radio
+              id: show_wave_transition
+              name: show_wave_transition
+              label: 显示波浪过渡
+              help: 是否显示首页头部底部的波浪过渡效果
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: text
+              name: wave_color
+              key: wave_color_field
+              if: $get(show_wave_transition).value
+              label: 波浪颜色
+              help: 波浪的颜色，可以使用颜色名称、HEX、RGB、变量

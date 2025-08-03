@@ -40,6 +40,8 @@
     --glow-intensity-light: 0.3;
     --glow-intensity-medium: 0.6;
     --glow-intensity-strong: 0.8;
+
+    --sky-container: var(--color-base-300);
 }
 
 /* 滚动条修复 - 防止页面跳动 */
