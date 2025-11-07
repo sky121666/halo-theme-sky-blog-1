@@ -711,16 +711,15 @@ spec:
               label: 样式效果
               help: |
                 选择标题的视觉样式
-                - 固定颜色：麦克笔感、斜切双色
                 - 🎨可自定义颜色：其他效果可在下方设置特效主色
               value: effect-marker-pop
               options:
                 - value: none
                   label: 无
                 - value: effect-marker-pop
-                  label: 麦克笔感（推荐Titan One）
+                  label: 🎨 麦克笔感（推荐Titan One）
                 - value: effect-diagonal-split
-                  label: 斜切双色（推荐Monoton）
+                  label: 🎨 斜切双色（推荐Monoton）
                 - value: gradient-flow
                   label: 🎨 流光渐变
                 - value: stroke-glow
