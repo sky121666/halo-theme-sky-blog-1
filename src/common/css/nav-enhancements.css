@@ -101,7 +101,8 @@
 /* 按钮交互效果 - 简约优雅风格 */
 /* 导航栏按钮特殊样式 */
 .navbar .btn-ghost {
-  transition: all 0.2s ease;
+  /* 限定过渡属性以避免主题切换颜色动画 */
+  transition: transform 0.2s ease, opacity 0.2s ease;
   position: relative;
 }
 
@@ -113,7 +114,7 @@
 
 .navbar .btn-ghost:active {
   transform: translateY(0);
-  transition: all 0.1s ease;
+  transition: transform 0.1s ease;
 }
 
 
