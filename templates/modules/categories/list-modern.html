@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!--
+  分类列表 - 卡片样式
+  样式类型：
+  - modern：卡片布局（网格、图片在上、文字在下）
+  说明：输入变量 posts 为 #UrlContextListResult<ListedPostVo>
+-->
+
+<!-- modern：DaisyUI 卡片（image-full），优雅现代布局 -->
+<div th:fragment="modern(posts)" class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+  <!-- 中文注释：重构为 DaisyUI image-full 卡片。若有封面（或回退封面）使用覆盖式大图与底部文本；无有效封面使用常规卡片占位图。统一圆角、边框与悬停阴影。 -->
+  <th:block th:each="post : ${posts.items}"
+            th:with="
+              cf=${theme.config.list_settings.cover_fallback},
+              en=${cf != null and cf.enable == true},
+              mode=${en ? cf.mode : 'missing_only'},
+              defaultImg=${en and cf.default_image != null and not #strings.isEmpty(cf.default_image) ? cf.default_image : null},
+              actual=${post.spec.cover},
+              actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
+              coverUrl=${en ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
+            ">
+    <!-- 有（有效）封面：标准 DaisyUI 卡片（图片在上、文字在下），更友好且易读 -->
+    <article th:if="${coverUrl != null}"
+             class="card rounded-xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+      <!-- 移除整卡链接，仅图片与标题可点击，避免遮挡底部分类链接 -->
+      <figure class="w-full h-56 sm:h-64 overflow-hidden">
+        <a th:href="@{${post.status.permalink}}" class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
+          <img th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy" class="w-full h-full object-cover" />
+        </a>
+      </figure>
+      <div class="card-body p-4 flex flex-col">
+        <!-- 上行：分类 + 标签（标题上方） -->
+        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-1">
+          <div class="flex items-center gap-2 min-w-0" th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
+            <span class="inline-flex items-center gap-1" th:if="${firstCat != null}">
+              <span class="icon-[heroicons--folder] w-4 h-4 text-base-content/70"></span>
+              <a th:href="@{${firstCat.status.permalink}}"
+                 class="hover:text-primary max-w-[160px] truncate"
+                 th:text="${firstCat.spec.displayName}">分类</a>
+            </span>
+          </div>
+          <!-- 中文注释：标签区域支持自动换行（最多两行），增大间距避免拥挤，超出隐藏。 -->
+          <!-- 中文注释：标签统一布局，仅显示前两个标签，以“单个空格”分隔，单行溢出省略。 -->
+          <div class="flex items-center gap-1 flex-nowrap overflow-hidden max-w-full text-base-content/60" th:if="${!#lists.isEmpty(post.tags)}" th:with="end=${post.tags.size() >= 4 ? 4 : post.tags.size()}, limited=${post.tags.subList(0, end)}">
+            <span class="icon-[heroicons--tag] w-4 h-4 text-base-content/60"></span>
+            <span class="inline-flex items-center gap-1 min-w-0 overflow-hidden truncate">
+              <th:block th:each="tag : ${limited}">
+                <a th:href="@{${tag.status.permalink}}"
+                   class="hover:text-primary shrink-0 truncate max-w-[140px]"
+                   th:text="${tag.spec.displayName}">标签</a>
+              </th:block>
+            </span>
+          </div>
+        </div>
+        <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
+          <a th:href="@{${post.status.permalink}}" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
+        </h3>
+          <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
+          <p class="text-sm text-base-content/70 line-clamp-2 w-full"
+             th:text="${post.spec.excerpt != null && post.spec.excerpt.raw != null ? post.spec.excerpt.raw : ''}"></p>
+          <!-- 元信息：固定在内容区底部。仅保留下行：日期 + 统计。分类与标签已上移至标题上方。 -->
+          <div class="mt-auto pt-2 space-y-1">
+            <!-- 下行专用：分类与标签已移至标题上方，此处不再展示。 -->
+            <!-- 下行：日期 + 统计（右侧为浏览/点赞/评论） -->
+            <div class="flex items-center justify-between text-xs text-base-content/60 leading-5">
+              <div class="flex items-center gap-2 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--calendar-days] w-4 h-4 text-base-content/70"></span>
+                  <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
+                </span>
+              </div>
+              <div class="flex items-center gap-2 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--eye] w-4 h-4"></span>
+                  <span th:text="${post.stats.visit ?: 0}"></span>
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--heart] w-4 h-4"></span>
+                  <span th:text="${post.stats.upvote ?: 0}"></span>
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--chat-bubble-left-ellipsis] w-4 h-4"></span>
+                  <span th:text="${post.stats.comment ?: 0}"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </article>
+
+    <!-- 无（有效）封面：常规 DaisyUI 卡片 + 占位图 -->
+    <article th:if="${coverUrl == null}"
+             class="card rounded-xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+      <!-- 移除整卡链接，仅占位图与标题可点击，避免遮挡底部分类链接 -->
+      <figure class="w-full">
+        <a th:href="@{${post.status.permalink}}" class="block focus:outline-none focus:ring-2 focus:ring-primary">
+          <div class="w-full aspect-[4/3] h-56 sm:h-64 bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
+            <span class="icon-[heroicons--photo] w-12 h-12 text-primary"></span>
+          </div>
+        </a>
+      </figure>
+      <div class="card-body p-4 flex flex-col">
+        <!-- 上行：分类 + 标签（标题上方） -->
+        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-1">
+          <div class="flex items-center gap-2 min-w-0" th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
+            <span class="inline-flex items-center gap-1" th:if="${firstCat != null}">
+              <span class="icon-[heroicons--folder] w-4 h-4 text-base-content/70"></span>
+              <a th:href="@{${firstCat.status.permalink}}"
+                 class="hover:text-primary max-w-[160px] truncate"
+                 th:text="${firstCat.spec.displayName}">分类</a>
+            </span>
+          </div>
+          <!-- 中文注释：标签区域支持自动换行（最多两行），增大间距避免拥挤，超出隐藏。 -->
+          <!-- 中文注释：标签统一布局，仅显示前两个标签，以“单个空格”分隔，单行溢出省略。 -->
+          <div class="flex items-center gap-1 flex-nowrap overflow-hidden max-w-full text-base-content/60" th:if="${!#lists.isEmpty(post.tags)}" th:with="end=${post.tags.size() >= 4 ? 4 : post.tags.size()}, limited=${post.tags.subList(0, end)}">
+            <span class="icon-[heroicons--tag] w-4 h-4 text-base-content/60"></span>
+            <span class="inline-flex items-center gap-1 min-w-0 overflow-hidden truncate">
+              <th:block th:each="tag : ${limited}">
+                <a th:href="@{${tag.status.permalink}}"
+                   class="hover:text-primary shrink-0 truncate max-w-[140px]"
+                   th:text="${tag.spec.displayName}">标签</a>
+              </th:block>
+            </span>
+          </div>
+        </div>
+        <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
+          <a th:href="@{${post.status.permalink}}" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
+        </h3>
+          <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
+          <p class="text-sm text-base-content/70 line-clamp-2 w-full"
+             th:text="${post.spec.excerpt != null && post.spec.excerpt.raw != null ? post.spec.excerpt.raw : ''}"></p>
+          <div class="mt-auto pt-2 space-y-1">
+            <!-- 下行专用：分类与标签已移至标题上方，此处不再展示。 -->
+            <!-- 下行：日期 + 浏览数（无封面卡片的简版统计） -->
+            <div class="flex items-center justify-between text-xs text-base-content/60 leading-5">
+              <div class="flex items-center gap-2 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--calendar-days] w-4 h-4 text-base-content/70"></span>
+                  <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
+                </span>
+              </div>
+              <div class="flex items-center gap-2 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span class="icon-[heroicons--eye] w-4 h-4"></span>
+                  <span th:text="${post.stats.visit ?: 0}"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </article>
+  </th:block>
+  
+</div>
+
+</html>

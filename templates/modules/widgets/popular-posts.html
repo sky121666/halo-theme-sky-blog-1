@@ -7,7 +7,7 @@
 
 <div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
      style="transition: box-shadow 0.2s ease;"
-     th:with="popularPosts = ${postFinder.list(1, 5)}">
+     th:with="popularPosts = ${postFinder.list({page: 1, size: 5})}">
   <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
     <span class="icon-[heroicons--fire] w-5 h-5"></span>
     <span>热门文章</span>

@@ -11,12 +11,20 @@
   
   logo_type 可选值：
   - none: 不显示图标
+  - system: 使用系统设置（Halo 后台设置 → 基本设置 → Logo）
   - svg: 显示 SVG 代码
   - image: 显示上传的图片
 -->
 
 <!-- Logo 图标渲染片段 -->
 <span th:fragment="icon(sizeClass)">
+  <!-- 系统设置类型 -->
+  <img th:if="${theme.config.nav.logo_settings.logo_type == 'system' && !#strings.isEmpty(site.logo)}"
+    th:src="${site.logo}"
+    th:alt="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}"
+    th:class="${sizeClass} + ' object-contain'"
+  />
+  
   <!-- SVG 代码类型 -->
   <span th:if="${theme.config.nav.logo_settings.logo_type == 'svg'}"
     th:utext="${theme.config.nav.logo_settings.logo_icon_html}"

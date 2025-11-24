@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--        分类页主体内容（索引与归档）          -->
+<!-- 说明：结构参考 modules/post/content.html      -->
+<!-- ========================================== -->
+
+<!-- 
+  模板系统说明：
+  
+  1. 模板文件：
+     - category.html（默认）→ 使用后台设置动态选择样式
+     - category-card.html → 强制使用卡片风格
+     - category-list.html → 强制使用列表风格
+  
+  2. 后台默认设置（全局默认）
+     - 位置：主题设置 → 列表设置 → 默认分类列表风格
+     - 可选：卡片、列表
+     - 应用于：category.html 和 /categories（全部）页面
+  
+  3. 自定义模板（针对特定分类）
+     - 位置：分类管理 → 编辑分类 → 自定义模板
+     - 可选：卡片风格、列表风格
+     - 效果：直接关联到对应的模板文件（category-card.html 或 category-list.html）
+  
+  4. 功能配置（所有模板共享）
+     - 侧边栏显示/隐藏：show_sidebar
+     - 封面图回退策略：cover_fallback
+     - 每页文章数量：page_size
+-->
+
+<!-- 分类集合内容片段：/categories -->
+<main class="relative" th:fragment="category-collection">
+  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与列表 -->
+
+  <!-- 主体内容区域（两列布局，与 post 一致） -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <!-- 左侧：分类按钮与全部文章前 N（后台配置），并提供更多链接 -->
+      <section class="flex-1" th:classappend="${theme.config.list_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+        <th:block th:with="categories = ${categoryFinder.listAsTree()}">
+          <!-- 分类按钮循环（包含“全部”）：链接使用永久链接 -->
+          <div class="categories-switch flex flex-wrap gap-2 mb-6">
+            <a th:href="@{/categories}"
+               class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10 active"
+               aria-pressed="true">全部</a>
+            <a th:each="c : ${categories}"
+               th:href="@{${c.status.permalink}}"
+               class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+               th:text="${c.spec.displayName}"></a>
+          </div>
+
+          <!-- 无分类提示 -->
+          <th:block th:if="${#lists.isEmpty(categories)}">
+            <div class="mt-6 flex items-center justify-center">
+              <span class="text-sm font-light text-gray-600" th:text="#{page.categories.empty}">暂无分类</span>
+            </div>
+          </th:block>
+
+          <!-- 有分类：在 /categories（全部）分页显示所有文章，风格由后台设置 -->
+          <th:block th:unless="${#lists.isEmpty(categories)}"
+                    th:with="pageSize=${site.post.categoryPageSize}, 
+                             pageParam=${param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'}, 
+                             currentPage=${#numbers.formatInteger(pageParam, 0)}, 
+                             posts=${postFinder.list({page: currentPage, size: pageSize})}">
+            <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
+            <th:block th:switch="${theme.config.list_settings.category_style}">
+              <th:block th:case="'modern'">
+                <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+              </th:block>
+              <th:block th:case="'media_text'">
+                <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+              </th:block>
+              <th:block th:case="*">
+                <!-- 默认使用列表风格 -->
+                <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+              </th:block>
+            </th:block>
+
+            <!-- 无文章提示 -->
+            <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
+              <span class="text-sm font-light text-gray-600" th:text="#{common.noPosts}">暂无文章</span>
+            </div>
+
+            <!-- 分页：上一页/下一页 + 下拉选择（索引页） -->
+            <th:block th:replace="~{modules/categories/pagination :: pagination(
+                context=@{/categories/},
+                prevUrl=@{/categories(page=${posts.page - 1})},
+                nextUrl=@{/categories(page=${posts.page + 1})},
+                totalPages=${posts.totalPages},
+                page=${posts.page},
+                hasPrevious=${posts.hasPrevious},
+                hasNext=${posts.hasNext}
+            )}" />
+          </th:block>
+        </th:block>
+      </section>
+
+      <!-- 右侧：通用功能区块（不含文章目录） -->
+      <aside th:if="${theme.config.list_settings.show_sidebar != false}" 
+             class="right-sidebar w-80 space-y-6 hidden lg:block">
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- 分类归档内容片段：/categories/:slug -->
+<main class="relative" th:fragment="category-archive">
+  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+
+  <!-- 主体内容区域（与 post 一致的两列布局） -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+      <section class="flex-1" th:classappend="${theme.config.list_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+        <!-- 分类按钮循环（包含“全部”，当前分类高亮） -->
+        <div class="categories-switch flex flex-wrap gap-2 mb-6" th:with="categories=${categoryFinder.listAsTree()}">
+          <a th:href="@{/categories}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null} ? '' : ' active'"
+             th:attr="aria-pressed=${category == null}">全部</a>
+          <a th:each="c : ${categories}"
+             th:href="@{${c.status.permalink}}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null and category.metadata.name == c.metadata.name} ? ' active' : ''"
+             th:attr="aria-pressed=${category != null and category.metadata.name == c.metadata.name}"
+             th:text="${c.spec.displayName}"></a>
+        </div>
+
+        <!-- 文章列表（当前分类）：使用后台默认设置 -->
+        <th:block th:switch="${theme.config.list_settings.category_style}">
+          <th:block th:case="'modern'">
+            <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+          </th:block>
+          <th:block th:case="'media_text'">
+            <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+          </th:block>
+          <th:block th:case="*">
+            <!-- 默认使用列表风格 -->
+            <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+          </th:block>
+        </th:block>
+
+        <!-- 分页（案例片段复用） -->
+        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            prevUrl=${posts.prevUrl},
+            nextUrl=${posts.nextUrl},
+            totalPages=${posts.totalPages},
+            page=${posts.page},
+            hasPrevious=${posts.hasPrevious},
+            hasNext=${posts.hasNext}
+        )}" />
+      </section>
+
+      <!-- 右侧：通用功能区块（不含文章目录） -->
+      <aside th:if="${theme.config.list_settings.show_sidebar != false}" 
+             class="right-sidebar w-80 space-y-6 hidden lg:block">
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- 分类归档内容片段：/categories/:slug - 强制卡片风格 -->
+<main class="relative" th:fragment="category-archive-card">
+  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+
+  <!-- 主体内容区域（与 post 一致的两列布局） -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+      <section class="flex-1" th:classappend="${theme.config.list_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+        <!-- 分类按钮循环（包含"全部"，当前分类高亮） -->
+        <div class="categories-switch flex flex-wrap gap-2 mb-6" th:with="categories=${categoryFinder.listAsTree()}">
+          <a th:href="@{/categories}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null} ? '' : ' active'"
+             th:attr="aria-pressed=${category == null}">全部</a>
+          <a th:each="c : ${categories}"
+             th:href="@{${c.status.permalink}}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null and category.metadata.name == c.metadata.name} ? ' active' : ''"
+             th:attr="aria-pressed=${category != null and category.metadata.name == c.metadata.name}"
+             th:text="${c.spec.displayName}"></a>
+        </div>
+
+        <!-- 文章列表（当前分类）：强制使用卡片风格 -->
+        <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+
+        <!-- 分页（案例片段复用） -->
+        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            prevUrl=${posts.prevUrl},
+            nextUrl=${posts.nextUrl},
+            totalPages=${posts.totalPages},
+            page=${posts.page},
+            hasPrevious=${posts.hasPrevious},
+            hasNext=${posts.hasNext}
+        )}" />
+      </section>
+
+      <!-- 右侧：通用功能区块（不含文章目录） -->
+      <aside th:if="${theme.config.list_settings.show_sidebar != false}" 
+             class="right-sidebar w-80 space-y-6 hidden lg:block">
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- 分类归档内容片段：/categories/:slug - 强制列表风格 -->
+<main class="relative" th:fragment="category-archive-list">
+  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+
+  <!-- 主体内容区域（与 post 一致的两列布局） -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+      <section class="flex-1" th:classappend="${theme.config.list_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+        <!-- 分类按钮循环（包含"全部"，当前分类高亮） -->
+        <div class="categories-switch flex flex-wrap gap-2 mb-6" th:with="categories=${categoryFinder.listAsTree()}">
+          <a th:href="@{/categories}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null} ? '' : ' active'"
+             th:attr="aria-pressed=${category == null}">全部</a>
+          <a th:each="c : ${categories}"
+             th:href="@{${c.status.permalink}}"
+             class="btn btn-sm border-base-300 bg-base-100 hover:border-primary hover:bg-primary/10"
+             th:classappend="${category != null and category.metadata.name == c.metadata.name} ? ' active' : ''"
+             th:attr="aria-pressed=${category != null and category.metadata.name == c.metadata.name}"
+             th:text="${c.spec.displayName}"></a>
+        </div>
+
+        <!-- 文章列表（当前分类）：强制使用列表风格 -->
+        <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+
+        <!-- 分页（案例片段复用） -->
+        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            prevUrl=${posts.prevUrl},
+            nextUrl=${posts.nextUrl},
+            totalPages=${posts.totalPages},
+            page=${posts.page},
+            hasPrevious=${posts.hasPrevious},
+            hasNext=${posts.hasNext}
+        )}" />
+      </section>
+
+      <!-- 右侧：通用功能区块（不含文章目录） -->
+      <aside th:if="${theme.config.list_settings.show_sidebar != false}" 
+             class="right-sidebar w-80 space-y-6 hidden lg:block">
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+      </aside>
+    </div>
+  </div>
+</main>
+
+</html>

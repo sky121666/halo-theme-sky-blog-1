@@ -13,7 +13,8 @@
     <span>分类</span>
   </h3>
   <ul class="space-y-1">
-    <li th:replace="~{modules/category-tree :: single(categories=${categories})}" />
+    <!-- 修正片段路径为 modules/categories/category-tree，符合 Halo 模板结构 -->
+  <li th:replace="~{modules/categories/category-tree :: tree-item(categories=${categories}, depth=${0})}" />
   </ul>
 </div>
 

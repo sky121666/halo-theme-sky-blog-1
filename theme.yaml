@@ -19,3 +19,11 @@ spec:
   license:
     - name: "GPL-3.0"
       url: "https://github.com/sky121666/halo-theme-sky-blog-1/blob/main/LICENSE"
+  customTemplates:
+    category:
+      - name: 卡片风格
+        description: 卡片风格
+        file: category-card.html
+      - name: 列表风格
+        description: 列表风格
+        file: category-list.html

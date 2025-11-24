@@ -8,7 +8,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8">
       <!-- 左侧文章内容区 -->
-      <article class="flex-1 lg:w-3/4">
+      <article class="flex-1" th:classappend="${theme.config.article.sidebar_settings.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
         <div class="prose prose-lg max-w-none font-sans" style="font-size: 16px; line-height: 1.8;">
           <!-- 文章正文内容 -->
           <div id="article-content" 
@@ -21,7 +21,8 @@
       </article>
 
       <!-- 右侧功能区块 -->
-      <aside class="right-sidebar w-80 space-y-6 hidden lg:block">
+      <aside th:if="${theme.config.article.sidebar_settings.show_sidebar != false}" 
+             class="right-sidebar w-80 space-y-6 hidden lg:block">
         <!-- 博客统计 -->
         <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
         

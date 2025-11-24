@@ -1,0 +1,243 @@
+/**
+ * 分类页样式 - 现代化设计
+ * 特性：玻璃态效果、微妙动画、优雅交互
+ */
+
+/* ==================== 分类切换按钮组 ==================== */
+.categories-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.categories-switch .btn {
+  position: relative;
+  overflow: hidden;
+  border-width: 1.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 按钮默认状态 */
+.categories-switch .btn:not(.active) {
+  background: var(--color-base-100);
+  border-color: var(--color-base-300);
+}
+
+/* 按钮悬停效果 - 渐变背景 */
+.categories-switch .btn:not(.active):hover {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, 
+    color-mix(in oklch, var(--color-primary) 8%, transparent),
+    color-mix(in oklch, var(--color-secondary) 8%, transparent)
+  );
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px color-mix(in oklch, var(--color-primary) 15%, transparent);
+}
+
+/* 激活状态 - 现代渐变 */
+.categories-switch .btn.active {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-color: color-mix(in oklch, var(--color-primary) 50%, transparent);
+  background: linear-gradient(135deg,
+    color-mix(in oklch, var(--color-primary) 12%, transparent),
+    color-mix(in oklch, var(--color-primary) 6%, transparent)
+  );
+  box-shadow: 
+    0 2px 8px color-mix(in oklch, var(--color-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 30%, transparent);
+}
+
+/* 键盘焦点 */
+.categories-switch .btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent);
+}
+
+/* ==================== 卡片列表增强 ==================== */
+#category-posts {
+  will-change: opacity, transform;
+}
+
+/* 卡片基础样式增强 */
+#category-posts .card {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-width: 1px;
+  background: var(--color-base-100);
+}
+
+/* 卡片悬停效果 - 提升 + 阴影 */
+#category-posts .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 28px color-mix(in oklch, var(--color-base-content) 10%, transparent),
+    0 4px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
+  border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
+}
+
+/* 图片容器增强 */
+#category-posts .card figure {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, 
+    color-mix(in oklch, var(--color-primary) 5%, var(--color-base-200)),
+    var(--color-base-200)
+  );
+}
+
+/* 图片悬停缩放效果 */
+#category-posts .card:hover figure img {
+  transform: scale(1.08);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 添加图片蒙版渐变 - 让文字更清晰 */
+#category-posts .card figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    color-mix(in oklch, var(--color-base-content) 3%, transparent) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#category-posts .card:hover figure::after {
+  opacity: 1;
+}
+
+/* 标题链接悬停效果 */
+#category-posts .card h3 a {
+  position: relative;
+  transition: color 0.2s ease;
+  background: linear-gradient(to right, var(--color-primary), var(--color-primary)) no-repeat;
+  background-size: 0% 2px;
+  background-position: left bottom;
+  transition: background-size 0.3s ease, color 0.2s ease;
+}
+
+#category-posts .card h3 a:hover {
+  color: var(--color-primary);
+  background-size: 100% 2px;
+}
+
+/* 分类/标签链接效果 */
+#category-posts .card a[class*="hover:text-primary"] {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+#category-posts .card a[class*="hover:text-primary"]:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 统计图标悬停效果 */
+#category-posts .card .inline-flex:has(> span[class*="icon-"]) {
+  transition: all 0.2s ease;
+}
+
+#category-posts .card:hover .inline-flex:has(> span[class*="icon-"]) span[class*="icon-"] {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* ==================== 横向卡片特殊优化 ==================== */
+#category-posts .card.md\:card-side:hover figure {
+  filter: brightness(1.05);
+}
+
+/* ==================== 占位图优化 ==================== */
+#category-posts .card figure > div:has(> span[class*="icon-[heroicons--photo]"]) {
+  background: linear-gradient(135deg,
+    color-mix(in oklch, var(--color-primary) 8%, transparent),
+    color-mix(in oklch, var(--color-secondary) 8%, transparent)
+  );
+  transition: all 0.3s ease;
+}
+
+#category-posts .card:hover figure > div:has(> span[class*="icon-[heroicons--photo]"]) {
+  background: linear-gradient(135deg,
+    color-mix(in oklch, var(--color-primary) 12%, transparent),
+    color-mix(in oklch, var(--color-secondary) 12%, transparent)
+  );
+}
+
+#category-posts .card figure span[class*="icon-[heroicons--photo]"] {
+  transition: all 0.3s ease;
+}
+
+#category-posts .card:hover figure span[class*="icon-[heroicons--photo]"] {
+  transform: scale(1.15);
+  opacity: 0.8;
+}
+
+/* ==================== 卡片内容区优化 ==================== */
+#category-posts .card .card-body {
+  position: relative;
+}
+
+/* 摘要文字渐显效果 */
+#category-posts .card .card-body p {
+  transition: color 0.2s ease;
+}
+
+#category-posts .card:hover .card-body p {
+  color: var(--color-base-content);
+}
+
+/* ==================== 加载动画 ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#category-posts .card {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+#category-posts .card:nth-child(1) { animation-delay: 0.05s; }
+#category-posts .card:nth-child(2) { animation-delay: 0.1s; }
+#category-posts .card:nth-child(3) { animation-delay: 0.15s; }
+#category-posts .card:nth-child(4) { animation-delay: 0.2s; }
+#category-posts .card:nth-child(5) { animation-delay: 0.25s; }
+#category-posts .card:nth-child(6) { animation-delay: 0.3s; }
+
+/* ==================== 响应式优化 ==================== */
+@media (max-width: 767px) {
+  #category-posts .card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .categories-switch .btn:hover {
+    transform: none;
+  }
+}
+
+/* ==================== 暗色模式优化 ==================== */
+@media (prefers-color-scheme: dark) {
+  #category-posts .card {
+    background: color-mix(in oklch, var(--color-base-100) 95%, transparent);
+  }
+  
+  #category-posts .card:hover {
+    background: var(--color-base-100);
+    box-shadow: 
+      0 12px 28px color-mix(in oklch, black 25%, transparent),
+      0 4px 8px color-mix(in oklch, black 15%, transparent);
+  }
+}

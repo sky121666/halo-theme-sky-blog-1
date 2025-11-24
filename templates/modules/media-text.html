@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!--
+  展示模块：左图右文（非卡片式）
+  布局要求：
+  - 左侧固定宽度（建议 40%），右侧自适应宽度
+  - 使用 flex 布局，保持 20-30px 间距（gap-6 ≈ 24px）
+  - 移动端自动切换为上下布局（图片在上、文字在下）
+  交互：图片 hover 放大（不影响可读性）
+  风格：与主题保持一致，不使用 DaisyUI card 组件
+-->
+
+<section th:fragment="media-text(imageUrl, title, paragraphs)"
+         class="group flex flex-col md:flex-row items-start gap-6 md:gap-6">
+  <!-- 左侧图片区域：桌面占比 40%，移动端全宽；溢出隐藏以裁切放大效果 -->
+  <figure class="w-full md:basis-[40%] md:max-w-[40%] shrink-0 overflow-hidden rounded-lg">
+    <th:block th:if="${imageUrl != null and not #strings.isEmpty(imageUrl)}">
+      <img th:src="${imageUrl}"
+           th:alt="|${title} 的配图|"
+           loading="lazy"
+           class="w-full h-auto md:h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
+    </th:block>
+    <th:block th:unless="${imageUrl != null and not #strings.isEmpty(imageUrl)}">
+      <!-- 无图占位：保持比例与统一风格（非卡片） -->
+      <div class="w-full aspect-[4/3] bg-base-200 grid place-items-center">
+        <span class="icon-[heroicons--photo] w-10 h-10 text-base-content/50"></span>
+      </div>
+    </th:block>
+  </figure>
+
+  <!-- 右侧文本区域：自适应宽度，支持多段落；高度由内容自动撑开 -->
+  <div class="flex-1 text-base-content">
+    <h3 class="text-lg font-semibold mb-2" th:text="${title}"></h3>
+    <!-- 多段落排版：传入 List<String> paragraphs 时逐段渲染；保留良好可读性 -->
+    <th:block th:if="${paragraphs != null}">
+      <p class="leading-relaxed mb-3" th:each="p : ${paragraphs}" th:text="${p}"></p>
+    </th:block>
+    <!-- 兼容：若传入的是单段字符串（非列表），同样展示 -->
+    <th:block th:if="${paragraphs == null}">
+      <p class="leading-relaxed mb-3" th:text="${title}"></p>
+    </th:block>
+  </div>
+</section>
+
+</html>

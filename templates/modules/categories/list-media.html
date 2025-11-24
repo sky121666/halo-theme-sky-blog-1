@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ============================================= -->
+<!--   分类页专用：左图右文非卡片布局（media_text）   -->
+<!--   路径控制：仅在 /categories 与 /categories/:slug 使用 -->
+<!--   不使用卡片背景；图片左侧固定比例，右侧文字自适应 -->
+<!-- ============================================= -->
+
+<!-- 片段：media_text(posts) -->
+<section th:fragment="media_text(posts)" class="space-y-8">
+  <!-- 循环文章列表：使用非卡片、左图右文布局 -->
+  <article th:each="post : ${posts.items}"
+           class="group flex flex-col md:flex-row md:items-stretch gap-5 md:gap-7">
+
+    <!-- 封面计算：支持主题的封面回退设置 -->
+    <th:block th:with="
+        cf=${theme.config.list_settings.cover_fallback},
+        en=${cf != null and cf.enable == true},
+        mode=${en ? cf.mode : 'missing_only'},
+        defaultImg=${en and cf.default_image != null and not #strings.isEmpty(cf.default_image) ? cf.default_image : null},
+        actual=${post.spec.cover},
+        actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
+        coverUrl=${en ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
+    ">
+      <!-- 左侧图片区域：桌面 40% 宽，移动端满宽；支持悬停轻微缩放 -->
+      <figure class="w-full md:basis-[20%] md:max-w-[20%] shrink-0 overflow-hidden rounded-lg">
+        <a th:href="@{${post.status.permalink}}" class="block">
+          <img th:if="${coverUrl != null}"
+               th:src="${coverUrl}"
+               th:alt="|${post.spec.title} 的封面|"
+               loading="lazy"
+               class="w-full h-full md:h-auto aspect-[4/3] object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
+          <!-- 无封面占位：采用与卡片侧式一致的风格 -->
+          <div th:if="${coverUrl == null}"
+               class="aspect-[4/3] w-full bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
+            <span class="icon-[heroicons--photo] w-8 h-8 text-primary"></span>
+          </div>
+        </a>
+      </figure>
+    </th:block>
+
+    <!-- 右侧文字区域：自适应高度与宽度，支持多段落排版 -->
+    <div class="flex-1 flex flex-col">
+      <!-- 标题：可点击，强调可读性 -->
+      <h3 class="text-base md:text-lg font-semibold leading-6 md:leading-7">
+        <a th:href="@{${post.status.permalink}}" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
+      </h3>
+
+      <!-- 摘要：响应式占满宽度，双行省略，移除固定宽度与高度以适配窄屏 -->
+      <p class="mt-2 text-sm text-base-content/70 line-clamp-2 w-full"
+         th:text="${post.spec.excerpt != null && post.spec.excerpt.raw != null ? post.spec.excerpt.raw : ''}"></p>
+
+      <!-- 元信息行：固定在右侧内容底部；按要求分两行：
+           行1（左）：分类 + 标签；行2（右）：时间 + 浏览量 + 点赞 + 评论 -->
+      <div class="mt-auto pt-2 text-xs md:text-sm text-base-content/70 flex flex-col md:flex-row md:items-center md:justify-between leading-5 gap-1">
+        <!-- 行1（左）：分类 + 标签；在窄宽下整体截断避免换行 -->
+        <div class="flex items-center gap-1 md:gap-2 whitespace-nowrap min-w-0 overflow-hidden flex-1" th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}, end=${post.tags.size() >= 4 ? 4 : post.tags.size()}, limited=${post.tags.subList(0, end)}">
+          <span class="inline-flex items-center gap-1" th:if="${firstCat != null}">
+            <span class="icon-[heroicons--folder] w-4 h-4"></span>
+            <a th:href="@{${firstCat.status.permalink}}"
+               class="hover:text-primary max-w-[120px] sm:max-w-[160px] truncate"
+               th:text="${firstCat.spec.displayName}">分类</a>
+          </span>
+          <!-- 标签组：最多 4 个，文字之间留少量间距；在极窄宽度下整体截断避免换行 -->
+          <span class="inline-flex items-center gap-1 min-w-0 overflow-hidden truncate" th:if="${!#lists.isEmpty(limited)}">
+            <span class="icon-[heroicons--tag] w-4 h-4"></span>
+            <span class="inline-flex items-center gap-1 min-w-0 overflow-hidden truncate">
+              <th:block th:each="tag : ${limited}">
+                <a th:href="@{${tag.status.permalink}}"
+                   class="hover:text-primary truncate max-w-[90px] sm:max-w-[110px] md:max-w-[140px]"
+                   th:text="${tag.spec.displayName}">标签</a>
+              </th:block>
+            </span>
+          </span>
+        </div>
+
+        <!-- 行2（右）：时间 + 浏览/点赞/评论（同一行，收紧间距并防止换行） -->
+        <div class="flex items-center gap-1 md:gap-2 whitespace-nowrap mt-1 md:mt-0">
+          <span class="inline-flex items-center gap-1">
+            <span class="icon-[heroicons--calendar-days] w-4 h-4 text-base-content/70"></span>
+            <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}">2025-01-01</span>
+          </span>
+          <span class="inline-flex items-center gap-1">
+            <span class="icon-[heroicons--eye] w-4 h-4"></span>
+            <span th:text="${post.stats.visit ?: 0}">0</span>
+          </span>
+          <span class="inline-flex items-center gap-1">
+            <span class="icon-[heroicons--heart] w-4 h-4"></span>
+            <span th:text="${post.stats.upvote ?: 0}">0</span>
+          </span>
+          <span class="inline-flex items-center gap-1">
+            <span class="icon-[heroicons--chat-bubble-left-ellipsis] w-4 h-4"></span>
+            <span th:text="${post.stats.comment ?: 0}">0</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 分隔：列表项间自然留白由 space-y-8 控制，无需额外边框 -->
+</section>
+
+</html>

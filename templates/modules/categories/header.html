@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           分类页头部 Banner（通用）          -->
+<!-- 说明：视觉结构参考 modules/post/header.html   -->
+<!--       在分类索引与分类归档页均可复用          -->
+<!-- ========================================== -->
+
+<header th:fragment="banner"
+        class="category-banner relative w-full h-[50vh] md:h-[60vh] overflow-hidden transition-all duration-500 ease-out"
+        th:with="headerBgSettings=${theme.config.article.header_background}">
+  <!-- 背景图片层（与 post 结构一致） -->
+  <div class="absolute inset-0 z-0">
+    <img class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
+         th:with="
+           backgroundImage=${
+             headerBgSettings.background_type == 'custom_url' ? 
+               (headerBgSettings.custom_image_url != null and !headerBgSettings.custom_image_url.isEmpty() ? headerBgSettings.custom_image_url : 'https://www.dmoe.cc/random.php') : 
+             headerBgSettings.background_type == 'upload' ? 
+               (headerBgSettings.upload_image != null and !headerBgSettings.upload_image.isEmpty() ? headerBgSettings.upload_image : 'https://www.dmoe.cc/random.php') : 
+               'https://www.dmoe.cc/random.php'
+           }
+         "
+         th:src="${backgroundImage}"
+         alt="分类背景图">
+
+    <!-- 蒙版组合（与 post 保持一致的层级与风格） -->
+    <div class="absolute inset-0">
+      <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
+      <div class="absolute inset-0 bg-black/20 transition-opacity duration-500"></div>
+    </div>
+  </div>
+
+  <!-- Banner 内容区 -->
+  <div class="relative z-10 flex flex-col justify-end items-center h-full px-4 pb-12 md:pb-16 text-center text-white">
+    <!-- 标题：索引页显示“分类”，归档页显示具体分类名称 -->
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight max-w-4xl text-white"
+        th:text="${category != null ? category.spec.displayName : '分类'}">
+      分类
+    </h1>
+
+    <!-- 美观分隔符 -->
+    <div class="w-16 h-0.5 bg-white mb-3 rounded-full opacity-80"></div>
+
+    <!-- 描述：仅在归档页存在描述时显示 -->
+    <p class="text-base mb-4 max-w-3xl leading-relaxed text-white/80 line-clamp-3"
+       th:if="${category != null and category.spec.description != null}"
+       th:text="${category.spec.description}"></p>
+
+    <!-- 元信息：索引页显示站点副标题，归档页显示文章计数（若传入） -->
+    <div class="flex flex-wrap justify-center items-center gap-3 text-sm text-white/90">
+      <div th:if="${category == null}" class="flex items-center gap-2">
+        <span class="icon-[heroicons--rectangle-stack] w-4 h-4"></span>
+        <span th:text="${site.subtitle}">欢迎浏览所有分类</span>
+      </div>
+      <div th:if="${category != null and posts != null}" class="flex items-center gap-2">
+        <span class="icon-[heroicons--document-text] w-4 h-4"></span>
+        <span th:text="|本分类共 ${posts.total} 篇文章|">共 N 篇文章</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+</html>

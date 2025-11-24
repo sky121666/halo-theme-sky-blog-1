@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           分类树形组件                      -->
+<!-- ========================================== -->
+
+<!-- 树项：单个分类条目（递归） -->
+<li th:fragment="tree-item(categories, depth)" th:each="category : ${categories}">
+  <a th:href="@{${category.status.permalink}}"
+     th:title="${category.spec.displayName}"
+     class="group flex items-center justify-between rounded-lg px-3 py-2 transition-colors duration-200"
+     th:classappend="${depth == 0} ? ' hover:bg-base-200 hover:text-primary' : ' hover:bg-primary/10'">
+    <!-- 分类名（可选显示数量：格式 名称（数量）） -->
+    <span class="text-sm text-base-content"
+          th:if="${category.postCount != null}"
+          th:text="|${category.spec.displayName}（${category.postCount}）|"></span>
+    <span class="text-sm text-base-content"
+          th:unless="${category.postCount != null}"
+          th:text="${category.spec.displayName}"></span>
+  </a>
+  <!-- 子分类递归 -->
+  <th:block th:if="${not #lists.isEmpty(category.children)}">
+    <ul class="ml-4 mt-1 space-y-1 border-l border-base-300 pl-2">
+      <!-- 按 Halo 路径写法引用自身片段（修正为 modules/categories/category-tree） -->
+      <th:block th:replace="~{modules/categories/category-tree :: tree-item(categories=${category.children}, depth=${depth + 1})}"></th:block>
+    </ul>
+  </th:block>
+</li>
+
+</html>
+
+
