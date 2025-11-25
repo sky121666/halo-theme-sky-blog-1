@@ -8,7 +8,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8">
       <!-- 左侧文章内容区 -->
-      <article class="flex-1" th:classappend="${theme.config.article.sidebar_settings.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
+      <article class="flex-1 min-w-0 overflow-hidden" th:classappend="${theme.config.article.sidebar_settings.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
         <div class="prose prose-lg max-w-none font-sans" style="font-size: 16px; line-height: 1.8;">
           <!-- 文章正文内容 -->
           <div id="article-content" 

@@ -7,47 +7,19 @@
  * 1. CSS 变量定义 - 统一变量管理
  * ==================================================*/
 :root {
-    /* DaisyUI 5 标准颜色变量 */
-    --glass-bg: color-mix(in srgb, var(--color-base-100) 8%, transparent);
-    --glass-border: color-mix(in srgb, var(--color-base-content) 4%, transparent);
-    
     /* 目录导航变量 */
     --toc-indent-unit: 16px;
     --toc-base-padding: 8px;
     --toc-link-height: 32px;
+    
+    /* TOC 交互状态变量 */
+    --toc-hover-bg: color-mix(in srgb, var(--color-primary) 7%, transparent);
+    --toc-active-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    --toc-border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
 /* ===================================================
- * 2. 文章简要截断样式
- * ==================================================*/
-.truncate-25 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    word-break: break-all;
-}
-
-/* ===================================================
- * 3. 玻璃效果样式
- * ==================================================*/
-.glass-effect {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    transition: box-shadow 0.18s ease, transform 0.12s ease;
-}
-
-.glass-effect:hover {
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 8%, transparent);
-    transform: translateY(-1px);
-}
-
-/* ===================================================
- * 4. 侧边栏样式 - 禁用响应式隐藏
+ * 2. 侧边栏样式
  * ==================================================*/
 .sidebar-card:hover {
     box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
@@ -55,7 +27,7 @@
 
 
 /* ===================================================
- * 5. 文章内容样式 - 通用基础（防止溢出）
+ * 3. 文章内容样式 - 通用基础
  * ==================================================*/
 #article-content {
     font-size: 16px;
@@ -91,7 +63,7 @@
 }
 
 /* ===================================================
- * 6. GitHub 风格样式
+ * 4. GitHub 风格样式
  * ==================================================*/
 #article-content.article-style-github h1,
 #article-content.article-style-github h2,
@@ -187,14 +159,8 @@
     margin-bottom: 0.5em;
     padding-left: 0.5em;
     line-height: 1.75;
-    transition: background-color 0.2s ease;
 }
 
-/* 列表项悬停效果 */
-#article-content.article-style-github li:hover {
-    background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
-    border-radius: 0.375rem;
-}
 
 /* 列表项内的段落 */
 #article-content.article-style-github li > p {
@@ -270,10 +236,63 @@
     color: color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
-/* 行内代码 - 基础样式 */
+/* 无序列表 list-style-type */
+#article-content.article-style-github ul {
+    list-style-type: disc;
+}
+
+#article-content.article-style-github ul ul {
+    list-style-type: circle;
+}
+
+#article-content.article-style-github ul ul ul {
+    list-style-type: square;
+}
+
+#article-content.article-style-github ul ul ul ul {
+    list-style-type: disc;
+}
+
+#article-content.article-style-github ul ul ul ul ul {
+    list-style-type: circle;
+}
+
+#article-content.article-style-github ul ul ul ul ul ul {
+    list-style-type: square;
+}
+
+/* 有序列表 list-style-type */
+#article-content.article-style-github ol {
+    list-style-type: decimal;
+}
+
+#article-content.article-style-github ol ol {
+    list-style-type: lower-alpha;
+}
+
+#article-content.article-style-github ol ol ol {
+    list-style-type: lower-roman;
+}
+
+#article-content.article-style-github ol ol ol ol {
+    list-style-type: decimal;
+}
+
+#article-content.article-style-github ol ol ol ol ol {
+    list-style-type: lower-alpha;
+}
+
+#article-content.article-style-github ol ol ol ol ol ol {
+    list-style-type: lower-roman;
+}
+
+/* 行内代码 - GitHub 风格 */
 #article-content.article-style-github code {
     padding: 0.2em 0.4em;
     font-size: 0.9em;
+    background: var(--color-base-200);
+    border-radius: 0.25rem;
+    font-family: ui-monospace, monospace;
 }
 
 /* 代码块 - 基础布局（Shiki 插件负责样式渲染） */
@@ -323,6 +342,15 @@
     background-color: var(--color-base-100);
 }
 
+/* 表格行悬停 */
+#article-content.article-style-github table tbody tr {
+    transition: background 0.15s ease;
+}
+
+#article-content.article-style-github table tbody tr:hover {
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
 #article-content.article-style-github hr {
     height: 1px;
     padding: 0;
@@ -344,11 +372,12 @@
     font-family: ui-monospace, monospace;
 }
 
-/* 高亮文本 */
+/* 高亮文本 - 使用主题色 */
 #article-content.article-style-github mark {
-    background-color: #fff3cd;
-    color: #000;
-    padding: 0.2em;
+    background: color-mix(in srgb, var(--color-warning) 35%, transparent);
+    color: var(--color-base-content);
+    padding: 0.2em 0.3em;
+    border-radius: 0.25rem;
 }
 
 /* 定义列表 */
@@ -423,33 +452,305 @@
     font-weight: 600;
 }
 
+/* 缩写 */
+#article-content.article-style-github abbr {
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
+/* 删除线 */
+#article-content.article-style-github del,
+#article-content.article-style-github s {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* 插入/下划线 */
+#article-content.article-style-github ins,
+#article-content.article-style-github u {
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary);
+}
+
+/* 上下标 */
+#article-content.article-style-github sub,
+#article-content.article-style-github sup {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+#article-content.article-style-github sub {
+    bottom: -0.25em;
+}
+
+#article-content.article-style-github sup {
+    top: -0.5em;
+}
+
+/* 小字 */
+#article-content.article-style-github small {
+    font-size: 0.875em;
+    color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
+}
+
+/* 引用标题 */
+#article-content.article-style-github cite {
+    font-style: italic;
+}
+
+/* 地址 */
+#article-content.article-style-github address {
+    margin: 1em 0;
+    font-style: normal;
+    line-height: 1.6;
+}
+
+/* 图像容器 */
+#article-content.article-style-github figure {
+    margin: 1.5em 0;
+}
+
+/* 时间 */
+#article-content.article-style-github time {
+    color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
+}
+
+/* 音频 */
+#article-content.article-style-github audio {
+    width: 100%;
+    margin: 1em 0;
+    display: block;
+}
+
+/* 视频 */
+#article-content.article-style-github video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 1.5em auto;
+    border-radius: 0.5rem;
+    display: block;
+}
+
+/* iframe */
+#article-content.article-style-github iframe {
+    width: 100%;
+    max-width: 100%;
+    margin: 1em 0;
+    border: 1px solid var(--color-base-300);
+    border-radius: 0.375rem;
+}
+
+/* 旁注 */
+#article-content.article-style-github aside {
+    margin: 1em 0;
+    padding: 1rem;
+    background: var(--color-base-200);
+    border-left: 4px solid var(--color-base-300);
+    border-radius: 0.25rem;
+}
+
+/* 表单分组 */
+#article-content.article-style-github fieldset {
+    margin: 1em 0;
+    padding: 1rem;
+    border: 1px solid var(--color-base-300);
+    border-radius: 0.375rem;
+}
+
+#article-content.article-style-github legend {
+    padding: 0 0.5rem;
+    font-weight: 600;
+}
+
+/* 进度条 */
+#article-content.article-style-github progress {
+    width: 100%;
+    height: 1rem;
+    margin: 1em 0;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+#article-content.article-style-github progress::-webkit-progress-bar {
+    background: var(--color-base-200);
+}
+
+#article-content.article-style-github progress::-webkit-progress-value {
+    background: var(--color-primary);
+}
+
+/* 度量条 */
+#article-content.article-style-github meter {
+    width: 100%;
+    height: 1rem;
+    margin: 1em 0;
+}
+
+/* 注音 */
+#article-content.article-style-github ruby {
+    font-size: inherit;
+}
+
+#article-content.article-style-github rt {
+    font-size: 0.6em;
+    color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+}
+
+#article-content.article-style-github rp {
+    color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
+}
+
+/* 表格页脚 */
+#article-content.article-style-github tfoot {
+    background: var(--color-base-200);
+    font-weight: 500;
+}
+
+#article-content.article-style-github tfoot td {
+    border-top: 2px solid var(--color-base-300);
+}
+
+/* 嵌入内容 */
+#article-content.article-style-github embed,
+#article-content.article-style-github object {
+    max-width: 100%;
+    margin: 1em 0;
+}
+
+/* 响应式图片容器 */
+#article-content.article-style-github picture {
+    display: block;
+    margin: 1.5em auto;
+}
+
+#article-content.article-style-github picture img {
+    margin: 0;
+}
+
+/* 文本方向控制 */
+#article-content.article-style-github bdi,
+#article-content.article-style-github bdo {
+    unicode-bidi: isolate;
+}
+
+/* 输出结果 */
+#article-content.article-style-github output {
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    background: var(--color-base-200);
+    border-radius: 0.25rem;
+    font-family: ui-monospace, monospace;
+}
+
+/* 对话框 */
+#article-content.article-style-github dialog {
+    padding: 1rem;
+    border: 1px solid var(--color-base-300);
+    border-radius: 0.375rem;
+    background: var(--color-base-100);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+}
+
+#article-content.article-style-github dialog::backdrop {
+    background: color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
 /* 任务列表 */
 #article-content.article-style-github ul[data-type="taskList"] {
     list-style: none;
     padding-left: 0;
+    margin: 1em 0;
 }
 
 #article-content.article-style-github li[data-type="taskItem"] {
     display: flex;
     align-items: flex-start;
     gap: 0.5em;
+    padding: 0.375em 0.5em;
+    margin: 0.25em 0;
+    border-radius: 0.25rem;
+    transition: background 0.15s ease;
 }
 
-/* 折叠内容 */
+#article-content.article-style-github li[data-type="taskItem"]:hover {
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+}
+
+#article-content.article-style-github li[data-type="taskItem"] input[type="checkbox"] {
+    margin-top: 0.25em;
+    accent-color: var(--color-primary);
+}
+
+#article-content.article-style-github li[data-type="taskItem"][data-checked="true"] {
+    opacity: 0.65;
+}
+
+#article-content.article-style-github li[data-type="taskItem"][data-checked="true"] div {
+    text-decoration: line-through;
+    color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+}
+
+/* 折叠内容 - 增强样式 */
+#article-content.article-style-github details.details {
+    margin: 1em 0;
+    border: 1px solid var(--color-base-300);
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
 #article-content.article-style-github details.details summary {
+    padding: 0.625rem 1rem;
     font-weight: 600;
+    background: var(--color-base-200);
+    cursor: pointer;
+    transition: background 0.15s ease;
 }
 
-/* 分栏卡片 */
+#article-content.article-style-github details.details summary:hover {
+    background: color-mix(in srgb, var(--color-base-200) 80%, var(--color-base-300));
+}
+
+#article-content.article-style-github details.details[open] summary {
+    border-bottom: 1px solid var(--color-base-300);
+}
+
+#article-content.article-style-github details.details > div {
+    padding: 0.875rem 1rem;
+}
+
+/* 分栏卡片 - 增强样式 */
 #article-content.article-style-github .columns {
     display: flex;
     gap: 1em;
     margin: 1em 0;
+    flex-wrap: wrap;
 }
 
 #article-content.article-style-github .column {
     flex: 1;
     min-width: 0;
+    padding: 0.875rem 1rem;
+    background: var(--color-base-200);
+    border: 1px solid var(--color-base-300);
+    border-radius: 0.375rem;
+    transition: background 0.15s ease;
+}
+
+#article-content.article-style-github .column:hover {
+    background: color-mix(in srgb, var(--color-base-200) 70%, var(--color-base-300));
+}
+
+#article-content.article-style-github .column p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    #article-content.article-style-github .columns {
+        flex-direction: column;
+    }
 }
 
 /* 表格宽度自适应 */
@@ -505,13 +806,15 @@
 }
 
 /* ===================================================
- * 7. 默认风格样式（现代化苹果风 - DaisyUI）
+ * 5. 默认风格样式（苹果风）
  * ==================================================*/
 #article-content.article-style-default {
     font-size: 16px;
     line-height: 1.75;
     color: var(--color-base-content);
     letter-spacing: -0.01em;
+    min-width: 0;
+    overflow-x: hidden;
 }
 
 /* 标题 - 苹果风格 */
@@ -565,38 +868,38 @@
 /* 链接 */
 #article-content.article-style-default a {
     color: var(--color-primary);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 3px;
-    transition: text-decoration-color 0.2s ease;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
 }
 
 #article-content.article-style-default a:hover {
-    text-decoration-color: var(--color-primary);
+    opacity: 0.7;
 }
 
-/* 引用块 - 苹果风格卡片 */
+/* 引用块 */
 #article-content.article-style-default blockquote {
     margin: 1.5em 0;
     padding: 1.25rem 1.5rem;
-    background: var(--color-base-200);
-    border-left: none;
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
     border-radius: 1rem;
     color: var(--color-base-content);
     font-size: 0.95em;
-    box-shadow: 0 1px 3px color-mix(in srgb, var(--color-base-content) 8%, transparent);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
 }
 
 #article-content.article-style-default blockquote p:last-child {
     margin-bottom: 0;
 }
 
-/* 行内代码 - 苹果风格 */
+/* 行内代码 */
 #article-content.article-style-default code {
-    padding: 0.2em 0.5em;
-    font-size: 0.9em;
-    background: var(--color-base-200);
-    color: var(--color-primary);
+    padding: 0.15em 0.4em;
+    font-size: 0.875em;
+    background: color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    color: var(--color-base-content);
     border-radius: 0.375rem;
     font-family: ui-monospace, monospace;
     font-weight: 500;
@@ -616,117 +919,173 @@
 }
 
 /* ===================================================
- * 列表样式 - 苹果风格增强
- * 支持深层嵌套（6层+），带颜色渐变和悬停效果
+ * 列表样式 - 简约优雅
  * ==================================================*/
 
-/* 无序列表和有序列表基础 */
+/* 基础列表样式 */
 #article-content.article-style-default ul,
 #article-content.article-style-default ol {
-    margin: 1em 0;
-    padding-left: 2em;
-    line-height: 1.75;
+    margin: 0.75em 0;
+    padding-left: 1.5em;
+    line-height: 1.8;
 }
 
-/* 列表项基础样式 */
+/* 嵌套列表间距 */
+#article-content.article-style-default li > ul,
+#article-content.article-style-default li > ol {
+    margin: 0.25em 0;
+    padding-left: 1.25em;
+}
+
+/* 列表项样式 */
 #article-content.article-style-default li {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    padding-left: 0.5em;
-    line-height: 1.75;
-    transition: background-color 0.2s ease;
+    margin: 0.25em 0;
+    padding-left: 0.25em;
+    line-height: 1.8;
 }
 
-/* 列表项悬停效果 */
-#article-content.article-style-default li:hover {
-    background: color-mix(in srgb, var(--color-base-200) 40%, transparent);
-    border-radius: 0.375rem;
-}
-
-/* 列表项内的段落 */
-#article-content.article-style-default li > p {
-    margin: 0;
-    line-height: 1.75;
-}
-
-/* 一级列表标记 - 最鲜艳 */
+/* 列表 marker 颜色 - 中性色调 */
 #article-content.article-style-default ul > li::marker {
-    color: var(--color-primary);
-    font-size: 1.1em;
-    font-weight: bold;
+    color: color-mix(in srgb, var(--color-base-content) 50%, transparent);
 }
 
 #article-content.article-style-default ol > li::marker {
-    color: var(--color-primary);
-    font-weight: 700;
-    font-size: 0.95em;
-}
-
-/* 二级嵌套列表 */
-#article-content.article-style-default li > ul,
-#article-content.article-style-default li > ol {
-    margin-top: 0.75em;
-    margin-bottom: 0.75em;
-    padding-left: 1.75em;
-}
-
-#article-content.article-style-default ul ul > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 85%, transparent);
-    font-size: 1em;
-}
-
-#article-content.article-style-default ol ol > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 85%, transparent);
-    font-weight: 600;
-}
-
-/* 三级嵌套列表 */
-#article-content.article-style-default ul ul ul > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 70%, transparent);
-}
-
-#article-content.article-style-default ol ol ol > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 70%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
     font-weight: 500;
 }
 
-/* 四级嵌套列表 */
-#article-content.article-style-default ul ul ul ul > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+#article-content.article-style-default ul ul > li::marker,
+#article-content.article-style-default ol ol > li::marker {
+    color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
 }
 
-#article-content.article-style-default ol ol ol ol > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+#article-content.article-style-default ul ul ul > li::marker,
+#article-content.article-style-default ol ol ol > li::marker {
+    color: color-mix(in srgb, var(--color-base-content) 35%, transparent);
 }
 
-/* 五级嵌套列表 */
-#article-content.article-style-default ul ul ul ul ul > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+/* 列表项内段落 */
+#article-content.article-style-default li > p {
+    margin: 0;
+    display: inline;
 }
 
-#article-content.article-style-default ol ol ol ol ol > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+/* 无序列表 - 简约圆点 */
+#article-content.article-style-default ul {
+    list-style-type: disc;
 }
 
-/* 六级及以上嵌套列表 */
-#article-content.article-style-default ul ul ul ul ul ul > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+#article-content.article-style-default ul ul {
+    list-style-type: circle;
 }
 
-#article-content.article-style-default ol ol ol ol ol ol > li::marker {
-    color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+#article-content.article-style-default ul ul ul {
+    list-style-type: square;
 }
 
-/* 表格 - 苹果风格 */
+#article-content.article-style-default ul ul ul ul {
+    list-style-type: disc;
+}
+
+#article-content.article-style-default ul ul ul ul ul {
+    list-style-type: circle;
+}
+
+#article-content.article-style-default ul ul ul ul ul ul {
+    list-style-type: square;
+}
+
+/* 有序列表 - 数字/字母/罗马 */
+#article-content.article-style-default ol {
+    list-style-type: decimal;
+}
+
+#article-content.article-style-default ol ol {
+    list-style-type: lower-alpha;
+}
+
+#article-content.article-style-default ol ol ol {
+    list-style-type: lower-roman;
+}
+
+#article-content.article-style-default ol ol ol ol {
+    list-style-type: decimal;
+}
+
+#article-content.article-style-default ol ol ol ol ol {
+    list-style-type: lower-alpha;
+}
+
+#article-content.article-style-default ol ol ol ol ol ol {
+    list-style-type: lower-roman;
+}
+
+/* ===================================================
+ * Halo 联系表单适配 - CSS 变量穿透 Shadow DOM
+ * ==================================================*/
+halo-contact-form {
+    /* 主色调 - 使用主题色 */
+    --halo-contact-form-color-primary: var(--color-primary);
+    
+    /* 文字颜色 */
+    --halo-contact-form-color-label: var(--color-base-content);
+    --halo-contact-form-color-input: var(--color-base-content);
+    --halo-contact-form-color-placeholder: color-mix(in srgb, var(--color-base-content) 50%, transparent);
+    --halo-contact-form-color-help: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    
+    /* 边框颜色 */
+    --halo-contact-form-color-border: var(--color-base-300);
+    
+    /* 错误/危险色 */
+    --halo-contact-form-color-danger: var(--color-error);
+    --halo-contact-form-error-ring-color: color-mix(in srgb, var(--color-error) 40%, transparent);
+    --halo-contact-form-error-ring-focus-color: color-mix(in srgb, var(--color-error) 25%, transparent);
+    
+    /* 按钮颜色 */
+    --halo-contact-form-color-button: var(--color-primary-content);
+    --halo-contact-form-color-button-hover: var(--color-primary-content);
+    
+    /* 背景 */
+    --halo-contact-form-bg-input: var(--color-base-100);
+    --halo-contact-form-bg-decorator: var(--color-base-200);
+    
+    /* 选中背景 */
+    --halo-contact-form-color-input-selection: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    
+    /* 焦点环 */
+    --halo-contact-form-focus-ring-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    
+    /* 圆角 */
+    --halo-contact-form-border-radius: 0.5rem;
+    
+    /* 字体 */
+    --halo-contact-form-font-size: 1em;
+    --halo-contact-form-line-height: 1.5;
+    
+    /* 提交按钮宽度 */
+    --halo-contact-form-width-submit: auto;
+    
+    /* 显示块级 */
+    display: block;
+    margin: 1.5em 0;
+    padding-left: 2px;
+}
+
+/* ===================================================
+ * 表格
+ * ==================================================*/
 #article-content.article-style-default table {
     width: 100% !important;
     margin: 1.5em 0;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 0.75rem;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 60%, transparent);
+    border-radius: 1rem;
     overflow: hidden;
-    border: 1px solid var(--color-base-300);
-    box-shadow: 0 1px 3px color-mix(in srgb, var(--color-base-content) 5%, transparent);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    background: color-mix(in srgb, var(--color-base-100) 80%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
 /* 覆盖编辑器内联样式 */
@@ -739,43 +1098,41 @@
     width: auto !important;
 }
 
-#article-content.article-style-default table thead {
-    background: var(--color-base-200);
+#article-content.article-style-default table th,
+#article-content.article-style-default table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-base-300);
 }
 
 #article-content.article-style-default table th {
-    padding: 1rem 1.25rem;
     font-weight: 600;
-    font-size: 0.9em;
-    text-align: left;
     color: var(--color-base-content);
-    border-bottom: 2px solid var(--color-base-300);
     background: var(--color-base-200);
 }
 
 /* 首行表头可能在 tbody 中 */
 #article-content.article-style-default table tbody tr:first-child th {
     background: var(--color-base-200);
-    border-bottom: 2px solid var(--color-base-300);
-}
-
-#article-content.article-style-default table td {
-    padding: 0.875rem 1.25rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
-}
-
-/* 表格行悬停效果 */
-#article-content.article-style-default table tbody tr {
-    transition: background-color 0.15s ease;
-}
-
-#article-content.article-style-default table tbody tr:hover {
-    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
 }
 
 #article-content.article-style-default table tbody tr:last-child td,
 #article-content.article-style-default table tbody tr:last-child th {
     border-bottom: none;
+}
+
+/* 斑马纹 */
+#article-content.article-style-default table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--color-base-200) 30%, transparent);
+}
+
+/* 行悬停效果 */
+#article-content.article-style-default table tbody tr {
+    transition: background 0.15s ease;
+}
+
+#article-content.article-style-default table tbody tr:hover {
+    background: color-mix(in srgb, var(--color-primary) 5%, transparent);
 }
 
 /* 表格内的段落 */
@@ -784,23 +1141,20 @@
     line-height: 1.5;
 }
 
-/* 分隔线 - 苹果风格 */
-#article-content.article-style-default hr {
-    margin: 2em 0;
-    height: 1px;
-    border: none;
-    background: var(--color-base-300);
-    opacity: 0.5;
-}
-
-/* 图片 - 苹果风格大圆角 */
+/* 图片 */
 #article-content.article-style-default img {
     max-width: 100%;
     height: auto;
     border-radius: 1rem;
     margin: 2em auto;
     display: block;
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 12%, transparent);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#article-content.article-style-default img:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-base-content) 18%, transparent);
 }
 
 /* 强调和加粗 */
@@ -813,53 +1167,67 @@
     font-style: italic;
 }
 
-/* 键盘按键 - 苹果风格 */
+/* 键盘按键 */
 #article-content.article-style-default kbd {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85em;
-    background: var(--color-base-200);
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8em;
+    background: linear-gradient(180deg, var(--color-base-100) 0%, var(--color-base-200) 100%);
     border: 1px solid var(--color-base-300);
     border-radius: 0.5rem;
     font-family: ui-monospace, monospace;
-    box-shadow: 0 2px 4px color-mix(in srgb, var(--color-base-content) 6%, transparent),
-                inset 0 -1px 0 var(--color-base-300);
+    box-shadow: 0 2px 0 var(--color-base-300), 0 3px 8px color-mix(in srgb, var(--color-base-content) 10%, transparent);
     font-weight: 500;
 }
 
-/* 高亮文本 - 苹果风格 */
+/* 高亮文本 */
 #article-content.article-style-default mark {
-    background: var(--color-warning);
-    color: var(--color-warning-content);
+    background: linear-gradient(120deg, color-mix(in srgb, var(--color-warning) 30%, transparent) 0%, color-mix(in srgb, var(--color-warning) 50%, transparent) 100%);
+    color: var(--color-base-content);
     padding: 0.15rem 0.4rem;
     border-radius: 0.375rem;
-    font-weight: 500;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
 }
 
 /* 定义列表 */
 #article-content.article-style-default dl {
     margin: 1.5em 0;
+    padding: 1.25rem 1.5rem;
+    background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 40%, transparent);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 5%, transparent);
 }
 
 #article-content.article-style-default dt {
     font-weight: 600;
-    margin-top: 1em;
+    margin-top: 0.75em;
     color: var(--color-base-content);
+    font-size: 1em;
+}
+
+#article-content.article-style-default dt:first-child {
+    margin-top: 0;
 }
 
 #article-content.article-style-default dd {
     margin-left: 1.5em;
     margin-top: 0.5em;
-    color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 80%, transparent);
 }
 
-/* 折叠组件 - 苹果风格 */
+/* 折叠组件 */
 #article-content.article-style-default details {
     margin: 1.5em 0;
-    background: var(--color-base-200);
-    border: 1px solid var(--color-base-300);
-    border-radius: 0.875rem;
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 1px 3px color-mix(in srgb, var(--color-base-content) 5%, transparent);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
 }
 
 #article-content.article-style-default summary {
@@ -886,14 +1254,26 @@
 
 /* 图注 */
 #article-content.article-style-default figure {
-    margin: 1.5em 0;
+    margin: 2em 0;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--color-base-200) 40%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 30%, transparent);
+}
+
+#article-content.article-style-default figure img {
+    margin: 0 auto 0.75rem;
+    border-radius: 0.75rem;
 }
 
 #article-content.article-style-default figcaption {
-    margin-top: 0.5em;
+    margin-top: 0.75em;
     text-align: center;
     font-size: 0.875em;
-    color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 65%, transparent);
+    font-style: italic;
 }
 
 /* 缩写 */
@@ -961,73 +1341,60 @@
     vertical-align: middle;
 }
 
-/* 嵌套列表 */
-#article-content.article-style-default li > ul,
-#article-content.article-style-default li > ol {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
-
 /* ===================================================
- * 任务列表 - 苹果风格增强
- * 带复选框、悬停效果和完成状态
+ * 任务列表 - 优雅样式
  * ==================================================*/
 
-/* 任务列表容器 */
 #article-content.article-style-default ul[data-type="taskList"] {
     list-style: none;
     padding-left: 0;
-    margin: 1.5em 0;
+    margin: 1em 0;
 }
 
-/* 任务列表项 */
 #article-content.article-style-default li[data-type="taskItem"] {
     display: flex;
     align-items: flex-start;
-    gap: 1em;
-    padding: 0.875em 1.25em;
-    margin: 0.75em 0;
-    background: var(--color-base-200);
-    border: 1px solid var(--color-base-300);
+    gap: 0.75em;
+    padding: 0.75em 1em;
+    margin: 0.5em 0;
+    background: color-mix(in srgb, var(--color-base-200) 40%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 30%, transparent);
     border-radius: 0.75rem;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 3px color-mix(in srgb, var(--color-base-content) 3%, transparent);
 }
 
-/* 任务项悬停效果 */
 #article-content.article-style-default li[data-type="taskItem"]:hover {
-    background: color-mix(in srgb, var(--color-base-200) 120%, var(--color-base-100));
-    border-color: var(--color-primary);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 10%, transparent);
-    transform: translateX(2px);
+    background: color-mix(in srgb, var(--color-base-200) 80%, transparent);
 }
 
-/* 复选框标签 */
 #article-content.article-style-default li[data-type="taskItem"] label {
     display: flex;
     align-items: center;
-    gap: 0.5em;
-    margin-top: 0.125em;
     cursor: pointer;
     flex-shrink: 0;
+    margin-top: 0.15em;
 }
 
-/* 复选框样式 */
 #article-content.article-style-default li[data-type="taskItem"] input[type="checkbox"] {
     margin: 0;
     width: 1.25em;
     height: 1.25em;
     cursor: pointer;
     accent-color: var(--color-primary);
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
+    transition: transform 0.15s ease;
 }
 
-/* 复选框后的 span（占位符） */
+#article-content.article-style-default li[data-type="taskItem"] input[type="checkbox"]:hover {
+    transform: scale(1.1);
+}
+
 #article-content.article-style-default li[data-type="taskItem"] label span {
     display: none;
 }
 
-/* 任务项内容区域 */
 #article-content.article-style-default li[data-type="taskItem"] div {
     flex: 1;
     min-width: 0;
@@ -1038,116 +1405,119 @@
     line-height: 1.6;
 }
 
-/* 已完成的任务项 */
 #article-content.article-style-default li[data-type="taskItem"][data-checked="true"] {
-    opacity: 0.65;
-    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
-    border-color: color-mix(in srgb, var(--color-base-300) 60%, transparent);
-}
-
-#article-content.article-style-default li[data-type="taskItem"][data-checked="true"]:hover {
-    opacity: 0.75;
+    opacity: 0.6;
 }
 
 #article-content.article-style-default li[data-type="taskItem"][data-checked="true"] div {
     text-decoration: line-through;
-    color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
 }
 
 /* ===================================================
- * 折叠内容 - 简洁现代风格
+ * 折叠面板 - 优雅样式
  * ==================================================*/
 
 #article-content.article-style-default details.details {
-    margin: 1.5em 0;
-    border: 1px solid var(--color-base-300);
-    border-radius: 0.75rem;
+    margin: 1.25em 0;
+    background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 40%, transparent);
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow: hidden;
-    background: var(--color-base-100);
-    transition: border-color 0.2s ease;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 5%, transparent);
+    transition: box-shadow 0.25s ease;
 }
 
 #article-content.article-style-default details.details:hover {
-    border-color: var(--color-primary);
+    box-shadow: 0 6px 28px color-mix(in srgb, var(--color-base-content) 8%, transparent);
 }
 
 #article-content.article-style-default details.details summary {
-    padding: 0.875rem 1rem;
+    padding: 1rem 1.25rem;
+    padding-left: 2.75rem;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 1em;
+    font-weight: 600;
     color: var(--color-base-content);
+    background: color-mix(in srgb, var(--color-base-100) 70%, transparent);
     user-select: none;
+    list-style: none;
+    position: relative;
     transition: all 0.2s ease;
-    list-style: none; /* 隐藏默认三角形 */
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
-/* 隐藏 Safari/Chrome 默认三角形 */
-#article-content.article-style-default details.details summary::-webkit-details-marker {
-    display: none;
-}
-
-/* 自定义展开图标 */
 #article-content.article-style-default details.details summary::before {
     content: '';
+    position: absolute;
+    left: 1.125rem;
+    top: 50%;
     width: 0.5rem;
     height: 0.5rem;
     border-right: 2px solid var(--color-primary);
     border-bottom: 2px solid var(--color-primary);
-    transform: rotate(-45deg);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-}
-
-#article-content.article-style-default details.details summary:hover {
-    color: var(--color-primary);
+    transform: translateY(-50%) rotate(-45deg);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #article-content.article-style-default details.details[open] summary::before {
-    transform: rotate(45deg);
+    transform: translateY(-65%) rotate(45deg);
+}
+
+#article-content.article-style-default details.details summary:hover {
+    background: color-mix(in srgb, var(--color-base-200) 80%, transparent);
 }
 
 #article-content.article-style-default details.details[open] summary {
-    border-bottom: 1px solid var(--color-base-300);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
 }
 
 #article-content.article-style-default details.details > div {
-    padding: 1rem;
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-x: auto;
 }
 
 /* ===================================================
- * 分栏卡片 - 苹果风格增强
- * 等宽布局、悬停上浮效果、响应式堆叠
+ * 分栏 - 优雅样式
  * ==================================================*/
 
 #article-content.article-style-default .columns {
     display: flex;
-    gap: 1.5em;
-    margin: 2em 0;
+    gap: 1em;
+    margin: 1.25em 0;
     flex-wrap: wrap;
 }
 
-/* 覆盖内联样式 */
 #article-content.article-style-default .columns[style] {
-    gap: 1.5em !important;
+    gap: 1em !important;
     width: 100% !important;
 }
 
 #article-content.article-style-default .column {
     flex: 1;
     min-width: 0;
-    padding: 1.5rem;
-    background: var(--color-base-200);
+    padding: 1.25rem 1.5rem;
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 1rem;
-    border: 1px solid var(--color-base-300);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 6%, transparent);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* 覆盖内联样式 */
+#article-content.article-style-default .column:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+}
+
 #article-content.article-style-default .column[style] {
     min-width: 0 !important;
     box-sizing: border-box !important;
@@ -1158,33 +1528,11 @@
     line-height: 1.6;
 }
 
-/* 分栏卡片悬停效果 - 上浮 + 阴影增强 */
-#article-content.article-style-default .column:hover {
-    background: var(--color-base-100);
-    border-color: var(--color-primary);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-primary) 15%, transparent);
-    transform: translateY(-4px) scale(1.02);
-}
-
-/* 分栏响应式 - 移动端堆叠 */
+/* 分栏响应式 */
 @media (max-width: 768px) {
     #article-content.article-style-default .columns {
         flex-direction: column;
-        gap: 1em;
     }
-    
-    #article-content.article-style-default .column {
-        width: 100%;
-    }
-}
-
-/* 表格固定宽度处理 */
-#article-content.article-style-default table[style*="width"] {
-    width: 100% !important;
-}
-
-#article-content.article-style-default table col[style*="width"] {
-    width: auto !important;
 }
 
 /* 表格标题 */
@@ -1232,10 +1580,12 @@
 /* 示例输出 */
 #article-content.article-style-default samp {
     font-family: ui-monospace, monospace;
-    padding: 0.2em 0.4em;
-    background: var(--color-base-200);
-    border-radius: 0.25rem;
-    font-size: 0.9em;
+    padding: 0.25em 0.5em;
+    background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-secondary) 20%, transparent);
+    border-radius: 0.5rem;
+    font-size: 0.875em;
+    color: var(--color-secondary);
 }
 
 /* 定义（术语） */
@@ -1259,8 +1609,10 @@
     width: 100%;
     max-width: 100%;
     margin: 1.5em 0;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     display: block;
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 6%, transparent);
 }
 
 /* 视频播放器 */
@@ -1271,7 +1623,13 @@
     margin: 2em auto;
     border-radius: 1rem;
     display: block;
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 12%, transparent);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#article-content.article-style-default video:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-base-content) 18%, transparent);
 }
 
 /* iframe 嵌入内容 */
@@ -1280,9 +1638,9 @@
     max-width: 100%;
     margin: 1.5em 0;
     border-radius: 1rem;
-    border: 1px solid var(--color-base-300);
-    background: var(--color-base-200);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 10%, transparent);
 }
 
 /* embed 和 object */
@@ -1311,10 +1669,12 @@
 #article-content.article-style-default aside {
     margin: 1.5em 0;
     padding: 1.25rem 1.5rem;
-    background: var(--color-base-200);
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 1rem;
-    border-left: 4px solid var(--color-accent);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 5%, transparent);
 }
 
 /* 注音标记（中文拼音） */
@@ -1344,54 +1704,63 @@
 /* 表单分组 */
 #article-content.article-style-default fieldset {
     margin: 1.5em 0;
-    padding: 1.25rem 1.5rem;
-    border: 1px solid var(--color-base-300);
+    padding: 1.5rem 1.75rem;
+    background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 40%, transparent);
     border-radius: 1rem;
-    background: var(--color-base-200);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 5%, transparent);
 }
 
 #article-content.article-style-default legend {
-    padding: 0 0.75rem;
+    padding: 0.25rem 1rem;
     font-weight: 600;
-    font-size: 1.125em;
-    color: var(--color-base-content);
+    font-size: 1.05em;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-base-100) 80%, transparent);
+    border-radius: 0.5rem;
 }
 
 /* 输出结果 */
 #article-content.article-style-default output {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: var(--color-base-200);
-    border-radius: 0.5rem;
+    padding: 0.3rem 0.875rem;
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-radius: 0.625rem;
     font-family: ui-monospace, monospace;
     color: var(--color-primary);
-    font-weight: 500;
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 10%, transparent);
 }
 
 /* 进度条 */
 #article-content.article-style-default progress {
     width: 100%;
-    height: 1.5rem;
+    height: 0.625rem;
     margin: 1em 0;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     overflow: hidden;
-    background: var(--color-base-200);
-    border: 1px solid var(--color-base-300);
+    background: color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    border: none;
+    box-shadow: inset 0 1px 3px color-mix(in srgb, var(--color-base-content) 10%, transparent);
 }
 
 #article-content.article-style-default progress::-webkit-progress-bar {
-    background: var(--color-base-200);
-    border-radius: 0.75rem;
+    background: transparent;
+    border-radius: 1rem;
 }
 
 #article-content.article-style-default progress::-webkit-progress-value {
-    background: var(--color-primary);
-    border-radius: 0.75rem;
+    background: linear-gradient(90deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 80%, var(--color-accent)));
+    border-radius: 1rem;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 40%, transparent);
 }
 
 #article-content.article-style-default progress::-moz-progress-bar {
-    background: var(--color-primary);
-    border-radius: 0.75rem;
+    background: linear-gradient(90deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 80%, var(--color-accent)));
+    border-radius: 1rem;
 }
 
 /* 度量条 */
@@ -1452,33 +1821,44 @@
     margin: 1.5em 0;
     padding: 1.25rem 1.5rem;
     border-radius: 1rem;
-    border-left: none;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#article-content.article-style-default .callout-note:hover,
+#article-content.article-style-default .callout-tip:hover,
+#article-content.article-style-default .callout-warning:hover,
+#article-content.article-style-default .callout-danger:hover,
+#article-content.article-style-default .callout-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 10%, transparent);
 }
 
 #article-content.article-style-default .callout-note {
-    background: color-mix(in srgb, var(--color-info) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-info) 30%, transparent);
+    background: color-mix(in srgb, var(--color-info) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-info) 15%, transparent);
 }
 
 #article-content.article-style-default .callout-tip {
-    background: color-mix(in srgb, var(--color-success) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-success) 30%, transparent);
+    background: color-mix(in srgb, var(--color-success) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-success) 15%, transparent);
 }
 
 #article-content.article-style-default .callout-warning {
-    background: color-mix(in srgb, var(--color-warning) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-warning) 30%, transparent);
+    background: color-mix(in srgb, var(--color-warning) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-warning) 15%, transparent);
 }
 
 #article-content.article-style-default .callout-danger {
-    background: color-mix(in srgb, var(--color-error) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-error) 30%, transparent);
+    background: color-mix(in srgb, var(--color-error) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-error) 15%, transparent);
 }
 
 #article-content.article-style-default .callout-info {
-    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 15%, transparent);
 }
 
 /* ===================================================
@@ -1501,8 +1881,22 @@
 }
 
 /* 脚注区域 */
-#article-content .footnotes,
-#article-content .footnote-list {
+#article-content.article-style-default .footnotes,
+#article-content.article-style-default .footnote-list {
+    margin-top: 3em;
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--color-base-200) 40%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-base-300) 40%, transparent);
+    border-radius: 1rem;
+    font-size: 0.9em;
+    color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
+}
+
+/* GitHub 风格脚注区域 */
+#article-content.article-style-github .footnotes,
+#article-content.article-style-github .footnote-list {
     margin-top: 3em;
     padding-top: 1.5em;
     border-top: 2px solid var(--color-base-300);
@@ -1549,8 +1943,9 @@
 /* 嵌套引用块 - 默认风格 */
 #article-content.article-style-default blockquote blockquote {
     margin: 1em 0;
-    background: color-mix(in srgb, var(--color-base-100) 50%, transparent);
-    box-shadow: inset 0 0 0 1px var(--color-base-300);
+    background: color-mix(in srgb, var(--color-base-100) 40%, transparent);
+    border-left-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--color-base-content) 4%, transparent);
 }
 
 /* 代码块语言标签 */
@@ -1566,34 +1961,16 @@
     letter-spacing: 0.05em;
 }
 
-/* 水平分隔线增强 - 默认风格 */
+/* 水平分隔线 */
 #article-content.article-style-default hr {
     margin: 3em 0;
     height: 1px;
     border: none;
-    background: linear-gradient(
-        to right,
-        transparent,
-        var(--color-base-300),
-        transparent
-    );
-    position: relative;
-}
-
-#article-content.article-style-default hr::after {
-    content: '✦';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--color-base-100);
-    padding: 0 0.75em;
-    color: var(--color-base-300);
-    font-size: 0.875rem;
+    background: linear-gradient(90deg, transparent, var(--color-base-300) 20%, var(--color-base-300) 80%, transparent);
 }
 
 /* ===================================================
- * 9. 文章页点赞样式
+ * 6. 文章页点赞样式
  * ==================================================*/
 .post-like-button .heart-icon {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1619,7 +1996,7 @@
 }
 
 /* ===================================================
- * 6. 动态目录导航样式 - 自适应布局系统
+ * 7. 目录导航样式
  * ==================================================*/
 
 /* 目录容器 - 自适应高度布局 */
@@ -1695,13 +2072,6 @@
     position: relative;
 }
 
-/* 交互状态 - 统一变量定义 */
-:root {
-    --toc-hover-bg: color-mix(in srgb, var(--color-primary) 7%, transparent);
-    --toc-active-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
-    --toc-border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
-}
-
 /* 悬停效果 */
 .toc-link:hover {
     background: var(--toc-hover-bg);
@@ -1730,16 +2100,11 @@
 }
 
 /* ===================================================
- * 9. 移动端响应式优化
+ * 8. 响应式优化
  * ==================================================*/
 
 /* 移动端布局修复 */
 @media (max-width: 1023px) {
-    /* 文章内容区占满宽度 */
-    .flex.gap-8 {
-        flex-direction: column;
-        gap: 0;
-    }
     
     /* 文章内容区 */
     article.flex-1 {
@@ -1772,6 +2137,7 @@
         font-size: 15px;
     }
     
+    /* GitHub 风格小屏优化 */
     #article-content.article-style-github h1 {
         font-size: 1.75em;
     }
@@ -1779,10 +2145,65 @@
     #article-content.article-style-github h2 {
         font-size: 1.5em;
     }
+    
+    #article-content.article-style-github h3 {
+        font-size: 1.2em;
+    }
+    
+    #article-content.article-style-github blockquote {
+        padding: 0.5em 0.75em;
+        margin: 0.75em 0;
+    }
+    
+    #article-content.article-style-github .columns {
+        flex-direction: column;
+    }
+    
+    #article-content.article-style-github .column {
+        padding: 0.75rem;
+    }
+    
+    /* 苹果风格小屏优化 */
+    #article-content.article-style-default h1 {
+        font-size: 2em;
+    }
+    
+    #article-content.article-style-default h2 {
+        font-size: 1.625em;
+    }
+    
+    #article-content.article-style-default h3 {
+        font-size: 1.375em;
+    }
+    
+    #article-content.article-style-default blockquote {
+        padding: 1rem;
+        margin: 1em 0;
+    }
+    
+    #article-content.article-style-default .column {
+        padding: 0.875rem 1rem;
+    }
+    
+    /* 通用小屏优化 */
+    #article-content ul,
+    #article-content ol {
+        padding-left: 1.25em;
+    }
+    
+    #article-content li {
+        padding-left: 0.125em;
+    }
+    
+    #article-content table th,
+    #article-content table td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9em;
+    }
 }
 
 /* ===================================================
- * 10. 无障碍和性能优化
+ * 9. 无障碍和性能优化
  * ==================================================*/
 
 /* 动画尊重用户偏好 */
