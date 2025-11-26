@@ -64,67 +64,50 @@
 
 /* ========================================== */
 /* Halo 评论组件样式适配                        */
-/* 颜色变量引用 DaisyUI，自动跟随主题             */
+/* 全部使用 DaisyUI/TW 变量，自动跟随主题        */
 /* ========================================== */
-:root {
-    /* 主色 - 跟随主题 */
+
+/* 评论组件变量 - html前缀提高优先级覆盖插件默认 */
+html {
+    /* 主色 - 按钮背景、链接、输入框焦点边框 */
     --halo-cw-primary-1-color: var(--color-primary);
     --halo-cw-primary-2-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
     --halo-cw-primary-3-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
-    /* 文本色 - 跟随主题 */
+    
+    /* 文本色 - 统一使用 base-content，确保可读性 */
     --halo-cw-text-1-color: var(--color-base-content);
-    --halo-cw-text-2-color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
-    --halo-cw-text-3-color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
-    /* 背景色 - 跟随主题 */
+    --halo-cw-text-2-color: color-mix(in srgb, var(--color-base-content) 75%, transparent);
+    --halo-cw-text-3-color: color-mix(in srgb, var(--color-base-content) 50%, transparent);
+    
+    /* 背景/边框色 - 使用 base 系列保持层次 */
     --halo-cw-muted-1-color: var(--color-base-300);
     --halo-cw-muted-2-color: var(--color-base-200);
     --halo-cw-muted-3-color: var(--color-base-100);
+    
     /* 基础样式 */
-    --halo-cw-base-rounded: 0.5rem;
+    --halo-cw-base-rounded: var(--radius-box, 0.5rem);
     --halo-cw-avatar-rounded: 9999px;
-    --halo-cw-avatar-size: 2rem;
-    --halo-cw-base-font-size: 14px;
-    --halo-cw-base-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --halo-cw-avatar-size: 2.5rem;
+    --halo-cw-base-font-size: 0.875rem;
+    --halo-cw-base-font-family: inherit;
+    
+    /* Emoji 选择器 */
+    --halo-cw-emoji-picker-color-border: var(--color-base-300);
+    --halo-cw-emoji-picker-color-border-over: var(--color-primary);
 }
 
-/* 亮色模式 - html前缀提高优先级，覆盖插件默认样式 */
-html[data-color-scheme='light'] {
-    --halo-cw-primary-1-color: var(--color-primary);
-    --halo-cw-primary-2-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
-    --halo-cw-primary-3-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
-    --halo-cw-text-1-color: var(--color-base-content);
-    --halo-cw-text-2-color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
-    --halo-cw-text-3-color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
-    --halo-cw-muted-1-color: var(--color-base-300);
-    --halo-cw-muted-2-color: var(--color-base-200);
-    --halo-cw-muted-3-color: var(--color-base-100);
-    /* Emoji 选择器 */
-    --halo-cw-emoji-picker-rgb-color: 55, 65, 81;
-    --halo-cw-emoji-picker-rgb-accent: 99, 102, 241;
-    --halo-cw-emoji-picker-rgb-background: 255, 255, 255;
-    --halo-cw-emoji-picker-rgb-input: 243, 244, 246;
-    --halo-cw-emoji-picker-color-border: rgba(0, 0, 0, 0.1);
-    --halo-cw-emoji-picker-color-border-over: rgba(0, 0, 0, 0.2);
+/* 评论组件按钮文字颜色修复 */
+halo-comment::part(submit-button),
+halo-comment button[type="submit"] {
+    color: var(--color-primary-content) !important;
 }
 
-/* 暗色模式 - html前缀提高优先级，覆盖插件默认样式 */
-html[data-color-scheme='dark'] {
-    --halo-cw-primary-1-color: var(--color-primary);
-    --halo-cw-primary-2-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
-    --halo-cw-primary-3-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
-    --halo-cw-text-1-color: var(--color-base-content);
-    --halo-cw-text-2-color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
-    --halo-cw-text-3-color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
-    --halo-cw-muted-1-color: var(--color-base-300);
-    --halo-cw-muted-2-color: var(--color-base-200);
-    --halo-cw-muted-3-color: var(--color-base-100);
-    /* Emoji 选择器 */
-    --halo-cw-emoji-picker-rgb-color: 222, 222, 221;
-    --halo-cw-emoji-picker-rgb-accent: 99, 102, 241;
-    --halo-cw-emoji-picker-rgb-background: 21, 22, 23;
-    --halo-cw-emoji-picker-rgb-input: 0, 0, 0;
-    --halo-cw-emoji-picker-color-border: rgba(255, 255, 255, 0.1);
-    --halo-cw-emoji-picker-color-border-over: rgba(255, 255, 255, 0.2);
+/* 评论组件链接颜色统一 */
+halo-comment a {
+    color: var(--color-primary);
+}
+halo-comment a:hover {
+    color: color-mix(in srgb, var(--color-primary) 80%, var(--color-base-content));
 }
 
 /* 滚动条修复 - 防止页面跳动 */
