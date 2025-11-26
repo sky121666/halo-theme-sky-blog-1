@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN" th:fragment="html (content)">
+
+<!-- ========================================== -->
+<!--        友情链接页面布局                     -->
+<!-- 路由：/links                               -->
+<!-- ========================================== -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 防止主题闪烁 -->
+  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+
+  <!-- 页面标题 -->
+  <title th:text="${site.title} + ' - 友情链接'"></title>
+  <!-- 字体 -->
+  <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
+  <!-- 主题样式 -->
+  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+  <link rel="stylesheet" th:href="@{/assets/css/links.css?v={version}(version=${theme.spec.version})}" />
+</head>
+
+<body class="min-h-screen bg-base-100 text-base-content">
+  <!-- 加载屏幕 -->
+  <div th:if="${theme.config.general != null && theme.config.general.loading_screen != null && theme.config.general.loading_screen.enable_loading}"
+       id="loading-screen"
+       th:with="loadingSettings=${theme.config.general.loading_screen}"
+       th:attr="data-min-duration=${loadingSettings.min_duration ?: 500}">
+    <div th:with="
+      animationType=${loadingSettings.animation_type ?: 'css'},
+      cssStyle=${loadingSettings.css_style ?: 'spinner'}
+    ">
+      <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="loading-spinner"></div>
+      <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="loading-dots"><span></span><span></span><span></span></div>
+      <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="loading-bars"><span></span><span></span><span></span><span></span><span></span></div>
+      <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="loading-ring"></div>
+      <div th:if="${animationType == 'svg' && loadingSettings.custom_svg != null && !loadingSettings.custom_svg.isEmpty()}"
+           th:utext="${loadingSettings.custom_svg}"></div>
+      <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
+           th:src="${loadingSettings.custom_gif}" alt="加载中" style="width: 64px; height: 64px; object-fit: contain;" />
+    </div>
+    <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
+  </div>
+
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
+
+  <!-- 主要内容区域 -->
+  <main class="flex-1 mt-6 md:mt-8">
+    <th:block th:replace="${content}" />
+  </main>
+
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
+
+  <!-- 悬浮 Dock 控制栏 -->
+  <th:block th:replace="~{modules/floating-dock :: dock}" />
+
+  <!-- JavaScript -->
+  <script th:src="@{/assets/js/links.js?v={version}(version=${theme.spec.version})}"></script>
+  <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
+</body>
+
+</html>

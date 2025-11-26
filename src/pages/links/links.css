@@ -1,0 +1,57 @@
+/**
+ * 友情链接页样式
+ * 模板位置：templates/links.html
+ * 
+ * 注：评论组件样式已在 base.css 中全局定义
+ */
+
+/* 友链卡片悬停效果 */
+.link-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.link-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Logo 图片容器 */
+.link-card img {
+  transition: transform 0.3s ease;
+}
+
+.link-card:hover img {
+  transform: scale(1.05);
+}
+
+/* 分组标题装饰线动画 */
+.link-group > div > .w-1 {
+  transition: height 0.3s ease;
+}
+
+.link-group:hover > div > .w-1 {
+  height: 2rem;
+}
+
+/* 卡片网格响应式间距 */
+@media (max-width: 640px) {
+  .link-card {
+    padding: 1rem;
+  }
+
+  .link-card > div:first-child {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+/* 申请友链区域样式 */
+.mt-16.p-6 {
+  background: linear-gradient(
+    135deg,
+    oklch(var(--b2) / 0.5) 0%,
+    oklch(var(--b3) / 0.3) 100%
+  );
+}

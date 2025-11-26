@@ -1320,3 +1320,40 @@ spec:
               value: true
             - label: 隐藏
               value: false
+    - group: links_settings
+      label: 友链
+      formSchema:
+        # 页面标题
+        - $formkit: text
+          name: page_title
+          label: 页面标题
+          value: "友情链接"
+          placeholder: "友情链接"
+        # 页面描述
+        - $formkit: textarea
+          name: page_description
+          label: 页面描述
+          value: "感谢这些优秀的网站与博客，让互联网变得更加精彩"
+          rows: 2
+        # 申请提示标题
+        - $formkit: text
+          name: apply_title
+          label: 申请区标题
+          value: "想要交换友链？"
+        # 申请提示描述
+        - $formkit: textarea
+          name: apply_description
+          label: 申请区描述
+          value: "如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。"
+          rows: 2
+        # 启用评论
+        - $formkit: radio
+          name: enable_comment
+          label: 启用评论
+          help: 在友链页面底部显示评论区
+          value: true
+          options:
+            - label: 启用
+              value: true
+            - label: 禁用
+              value: false
