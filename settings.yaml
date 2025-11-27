@@ -1489,3 +1489,37 @@ spec:
               value: true
             - label: 禁用
               value: false
+
+    - group: photos_settings
+      label: 图库
+      formSchema:
+        - $formkit: text
+          name: page_title
+          label: 页面标题
+          value: "图库"
+          placeholder: "图库页面的标题"
+        - $formkit: text
+          name: page_description
+          label: 页面描述
+          value: "记录生活中的美好瞬间"
+          placeholder: "图库页面的描述文字"
+        - $formkit: radio
+          name: show_photo_info
+          label: 显示图片信息
+          help: 鼠标悬浮时显示标题和描述
+          value: true
+          options:
+            - label: 显示
+              value: true
+            - label: 隐藏
+              value: false
+        - $formkit: radio
+          name: enable_comment
+          label: 启用评论
+          help: 在图库页面底部显示评论区
+          value: false
+          options:
+            - label: 启用
+              value: true
+            - label: 禁用
+              value: false

@@ -1,0 +1,108 @@
+<!-- ========================================== -->
+<!--        图库页面内容                         -->
+<!-- 使用插件提供的 photos/groups 变量            -->
+<!-- 分页数量在 Console → 插件 → 图库 → 设置     -->
+<!-- ========================================== -->
+<th:block th:fragment="content">
+
+  <th:block th:with="
+    cfg=${theme.config.photos_settings},
+    pageTitle=${cfg?.page_title ?: '图库'},
+    pageDesc=${cfg?.page_description ?: '记录生活中的美好瞬间'},
+    showPhotoInfo=${cfg?.show_photo_info != false},
+    enableComment=${cfg?.enable_comment == true}
+  ">
+
+    <div class="w-full px-4 md:px-6 lg:px-8 py-8 md:py-12">
+      
+      <!-- 页面标题区域 -->
+      <header class="text-center mb-12">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content mb-4"
+            th:text="${pageTitle}">图库</h1>
+        <p class="text-base-content/60 text-lg max-w-2xl mx-auto"
+           th:text="${pageDesc}">记录生活中的美好瞬间</p>
+        <p class="text-base-content/40 text-sm mt-2" th:if="${photos != null && photos.total > 0}">
+          共 <span th:text="${photos.total}">0</span> 张照片
+        </p>
+      </header>
+
+      <!-- 分组切换 -->
+      <div th:if="${groups != null && #lists.size(groups) > 1}" class="mb-8">
+        <div class="flex flex-wrap justify-center gap-2">
+          <a th:href="@{/photos}" 
+             class="btn btn-sm"
+             th:classappend="${param.group == null || #lists.isEmpty(param.group)} ? 'btn-primary' : 'btn-ghost'">
+            全部
+          </a>
+          <th:block th:each="group : ${groups}">
+            <a th:href="@{/photos(group=${group.metadata.name})}" 
+               class="btn btn-sm"
+               th:classappend="${param.group != null && !#lists.isEmpty(param.group) && param.group[0] == group.metadata.name} ? 'btn-primary' : 'btn-ghost'"
+               th:text="${group.spec.displayName}">
+              分组
+            </a>
+          </th:block>
+        </div>
+      </div>
+
+      <!-- 图片网格 (瀑布流全宽) -->
+      <div th:if="${photos != null && photos.total > 0}" 
+           id="photo-grid"
+           class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-1.5">
+        <th:block th:each="photo : ${photos.items}">
+          <div class="photo-item">
+            <figure class="photo-card">
+              <img th:src="${photo.spec.url}"
+                   th:alt="${photo.spec.displayName}"
+                   th:data-src="${photo.spec.url}"
+                   th:data-sub-html="${photo.spec.displayName != null ? '<h4>' + photo.spec.displayName + '</h4>' + (photo.spec.description != null ? '<p>' + photo.spec.description + '</p>' : '') : ''}"
+                   class="photo-img" loading="lazy" />
+              <figcaption th:if="${showPhotoInfo}" class="photo-info">
+                <h3 th:if="${photo.spec.displayName}" 
+                    th:text="${photo.spec.displayName}">照片标题</h3>
+                <p th:if="${photo.spec.description}"
+                   th:text="${photo.spec.description}">照片描述</p>
+              </figcaption>
+            </figure>
+          </div>
+        </th:block>
+      </div>
+
+      <!-- 分页导航 -->
+      <div th:if="${photos != null && (photos.hasPrevious() || photos.hasNext())}" 
+           class="flex justify-center items-center gap-4 mt-12">
+        <a th:if="${photos.hasPrevious()}"
+           th:href="@{${photos.prevUrl}}"
+           class="btn btn-sm btn-ghost btn-circle">
+          <span class="icon-[mdi--chevron-left] w-5 h-5"></span>
+        </a>
+        <span class="text-base-content/60 px-2" th:text="${photos.page} + ' / ' + ${photos.totalPages}">1 / 1</span>
+        <a th:if="${photos.hasNext()}"
+           th:href="@{${photos.nextUrl}}"
+           class="btn btn-sm btn-ghost btn-circle">
+          <span class="icon-[mdi--chevron-right] w-5 h-5"></span>
+        </a>
+      </div>
+
+      <!-- 空状态 -->
+      <div th:if="${photos == null || photos.total == 0}" class="text-center py-20">
+        <span class="icon-[mdi--image-off-outline] w-16 h-16 text-base-content/30 mx-auto mb-4"></span>
+        <p class="text-base-content/50 text-lg">暂无照片</p>
+        <p class="text-base-content/30 text-sm mt-2">请在后台添加照片</p>
+      </div>
+
+      <!-- 评论区 -->
+      <section th:if="${enableComment}" class="mt-16 max-w-4xl mx-auto">
+        <halo:comment 
+          group="content.halo.run" 
+          kind="SinglePage"
+          name="photos"
+          colorScheme="system">
+        </halo:comment>
+      </section>
+
+    </div>
+
+  </th:block>
+
+</th:block>
