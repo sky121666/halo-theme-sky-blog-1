@@ -11,32 +11,38 @@
 <section th:fragment="media_text(posts)" class="space-y-8">
   <!-- 循环文章列表：使用非卡片、左图右文布局 -->
   <article th:each="post : ${posts.items}"
+           th:with="isPinned = ${post.spec.pinned == true},
+                    isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
+                    isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
            class="group flex flex-col md:flex-row md:items-stretch gap-5 md:gap-7">
 
     <!-- 封面计算：支持主题的封面回退设置 -->
     <th:block th:with="
+        ps=${theme.config.index?.post_settings},
         cf=${theme.config.category_settings?.cover_fallback ?: theme.config.tag_settings?.cover_fallback},
-        en=${cf != null and cf.enable == true},
-        mode=${en ? cf.mode : 'missing_only'},
-        defaultImg=${en and cf.default_image != null and not #strings.isEmpty(cf.default_image) ? cf.default_image : null},
+        en=${(ps != null and ps.cover_fallback_enable == true) or (cf != null and cf.enable == true)},
+        mode=${ps != null ? ps.cover_fallback_mode : (cf != null ? cf.mode : 'missing_only')},
+        defaultImg=${ps != null and ps.cover_fallback_url != null ? ps.cover_fallback_url : (cf != null ? cf.default_image : null)},
         actual=${post.spec.cover},
         actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
         coverUrl=${en ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
     ">
-      <!-- 左侧图片区域：桌面 40% 宽，移动端满宽；支持悬停轻微缩放 -->
-      <figure class="w-full md:basis-[20%] md:max-w-[20%] shrink-0 overflow-hidden rounded-lg">
+      <!-- 左侧图片区域：4:3 比例 -->
+      <figure class="relative w-full md:basis-[20%] md:max-w-[20%] shrink-0 overflow-hidden rounded-lg">
         <a th:href="@{${post.status.permalink}}" class="block">
           <img th:if="${coverUrl != null}"
                th:src="${coverUrl}"
                th:alt="|${post.spec.title} 的封面|"
                loading="lazy"
-               class="w-full h-full md:h-auto aspect-[4/3] object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
-          <!-- 无封面占位：采用与卡片侧式一致的风格 -->
+               class="w-full h-full md:h-auto aspect-4/3 object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
+          <!-- 无封面占位 -->
           <div th:if="${coverUrl == null}"
-               class="aspect-[4/3] w-full bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
+               class="aspect-4/3 w-full bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
             <span class="icon-[heroicons--photo] w-8 h-8 text-primary"></span>
           </div>
         </a>
+        <!-- 置顶角标 -->
+        <span th:if="${isPinned}" class="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-black/50 text-white backdrop-blur-sm">置顶</span>
       </figure>
     </th:block>
 

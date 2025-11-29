@@ -14,22 +14,28 @@
   <!-- 中文注释：重构为 DaisyUI image-full 卡片。若有封面（或回退封面）使用覆盖式大图与底部文本；无有效封面使用常规卡片占位图。统一圆角、边框与悬停阴影。 -->
   <th:block th:each="post : ${posts.items}"
             th:with="
+              ps=${theme.config.index?.post_settings},
               cf=${theme.config.category_settings?.cover_fallback ?: theme.config.tag_settings?.cover_fallback},
-              en=${cf != null and cf.enable == true},
-              mode=${en ? cf.mode : 'missing_only'},
-              defaultImg=${en and cf.default_image != null and not #strings.isEmpty(cf.default_image) ? cf.default_image : null},
+              en=${(ps != null and ps.cover_fallback_enable == true) or (cf != null and cf.enable == true)},
+              mode=${ps != null ? ps.cover_fallback_mode : (cf != null ? cf.mode : 'missing_only')},
+              defaultImg=${ps != null and ps.cover_fallback_url != null ? ps.cover_fallback_url : (cf != null ? cf.default_image : null)},
               actual=${post.spec.cover},
               actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
               coverUrl=${en ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
             ">
     <!-- 有（有效）封面：玻璃拟态卡片（图片在上、文字在下），精致现代 -->
     <article th:if="${coverUrl != null}"
+             th:with="isPinned = ${post.spec.pinned == true},
+                      isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
+                      isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
              class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
-      <!-- 移除整卡链接，仅图片与标题可点击，避免遮挡底部分类链接 -->
-      <figure class="w-full h-56 sm:h-64 overflow-hidden">
+      <!-- 封面区域：16:10 比例 -->
+      <figure class="relative w-full aspect-video overflow-hidden">
         <a th:href="@{${post.status.permalink}}" class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
           <img th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy" class="w-full h-full object-cover" />
         </a>
+        <!-- 置顶角标 -->
+        <span th:if="${isPinned}" class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[11px] font-medium bg-black/50 text-white backdrop-blur-sm">置顶</span>
       </figure>
       <div class="card-body p-4 flex flex-col">
         <!-- 上行：分类 + 标签（标题上方） -->
@@ -96,14 +102,19 @@
 
     <!-- 无（有效）封面：玻璃拟态卡片 + 占位图 -->
     <article th:if="${coverUrl == null}"
+             th:with="isPinned = ${post.spec.pinned == true},
+                      isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
+                      isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
              class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
-      <!-- 移除整卡链接，仅占位图与标题可点击，避免遮挡底部分类链接 -->
-      <figure class="w-full h-56 sm:h-64 overflow-hidden">
+      <!-- 占位图区域：16:10 比例 -->
+      <figure class="relative w-full aspect-video overflow-hidden">
         <a th:href="@{${post.status.permalink}}" class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
           <div class="w-full h-full bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
             <span class="icon-[heroicons--photo] w-12 h-12 text-primary"></span>
           </div>
         </a>
+        <!-- 置顶角标 -->
+        <span th:if="${isPinned}" class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[11px] font-medium bg-black/50 text-white backdrop-blur-sm">置顶</span>
       </figure>
       <div class="card-body p-4 flex flex-col">
         <!-- 上行：分类 + 标签（标题上方） -->

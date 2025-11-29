@@ -93,12 +93,20 @@
 
       <!-- 评论区 -->
       <section th:if="${enableComment}" class="mt-16 max-w-4xl mx-auto">
-        <halo:comment 
-          group="content.halo.run" 
-          kind="SinglePage"
-          th:attr="name=${singlePage != null ? singlePage.metadata.name : 'photos'}"
-          colorScheme="system">
-        </halo:comment>
+        <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
+          <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
+          评论留言
+        </h2>
+        <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
+          <div class="card-body p-4 md:p-6">
+            <halo:comment 
+              group="content.halo.run" 
+              kind="SinglePage"
+              th:attr="name=${singlePage != null ? singlePage.metadata.name : 'photos'}"
+              colorScheme="system">
+            </halo:comment>
+          </div>
+        </div>
       </section>
 
     </div>

@@ -97,6 +97,9 @@
 
       <!-- GitHub 统计区域 -->
       <section th:if="${githubUsername != null && !githubUsername.isEmpty()}" class="mb-12 md:mb-16">
+        <!-- 颜色探测元素（不可见但可获取样式） -->
+        <span id="about-color-probe" class="absolute w-1 h-1 -z-50 opacity-0 bg-primary"></span>
+        
         <h2 class="text-xl md:text-2xl font-bold text-base-content mb-6 flex items-center gap-2">
           <span class="icon-[mdi--github] w-6 h-6"></span>
           GitHub
@@ -104,29 +107,85 @@
         
         <!-- GitHub Stats 卡片 -->
         <div th:if="${showGithubStats}" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
-          <div class="card bg-base-200/50 border border-base-300/50 overflow-hidden github-stats-card">
-            <img th:src="${githubStatsHost + '/api?username=' + githubUsername + '&show_icons=true&theme=transparent&hide_border=true&title_color=6366f1&icon_color=6366f1&text_color=a1a1aa'}"
-                 alt="GitHub Stats"
-                 class="w-full" 
-                 loading="lazy"
+          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden" style="transition: box-shadow 0.2s ease;">
+            <img id="github-stats-img" alt="GitHub Stats" class="w-full" loading="lazy"
                  onerror="this.parentElement.style.display='none'" />
           </div>
-          <div class="card bg-base-200/50 border border-base-300/50 overflow-hidden github-stats-card">
-            <img th:src="${githubStatsHost + '/api/top-langs/?username=' + githubUsername + '&layout=compact&theme=transparent&hide_border=true&title_color=6366f1&text_color=a1a1aa'}"
-                 alt="Top Languages"
-                 class="w-full"
-                 loading="lazy"
+          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden" style="transition: box-shadow 0.2s ease;">
+            <img id="github-langs-img" alt="Top Languages" class="w-full" loading="lazy"
                  onerror="this.parentElement.style.display='none'" />
           </div>
         </div>
         
-        <!-- GitHub 贡献日历 -->
-        <div th:if="${showGithubCalendar}" class="card bg-base-200/50 border border-base-300/50 p-4 overflow-x-auto">
-          <img th:src="'https://ghchart.rshah.org/' + ${githubUsername}"
-               alt="GitHub Contribution Chart"
-               class="w-full min-w-[700px] github-chart"
-               loading="lazy" />
+        <!-- GitHub 贡献热力图 -->
+        <div th:if="${showGithubCalendar}" class="card bg-base-100 shadow-sm rounded-lg sidebar-card p-4" style="transition: box-shadow 0.2s ease;">
+          <img id="github-calendar-img" alt="GitHub Contributions" class="w-full h-auto rounded" loading="lazy" />
+          <div class="flex items-center justify-between mt-3">
+            <span class="text-xs text-base-content/40">GitHub 年度贡献</span>
+            <div class="flex items-center gap-1 text-xs text-base-content/40">
+              <span>Less</span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-base-content/10"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/30"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/50"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/70"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary"></span>
+              <span>More</span>
+            </div>
+          </div>
         </div>
+        
+        <!-- GitHub 图片动态更新脚本 - 从 bg-primary 元素获取实际颜色 -->
+        <script th:inline="javascript">
+        (function() {
+          const username = /*[[${githubUsername}]]*/ '';
+          const statsHost = /*[[${githubStatsHost}]]*/ 'https://github-readme-stats.vercel.app';
+          const showStats = /*[[${showGithubStats}]]*/ false;
+          const showCalendar = /*[[${showGithubCalendar}]]*/ false;
+          if (!username) return;
+          
+          // 从 bg-primary 元素获取实际颜色（用 canvas 转换 oklch 为 rgb）
+          function getPrimaryHex() {
+            const probe = document.getElementById('about-color-probe');
+            if (!probe) return '6366f1';
+            const color = getComputedStyle(probe).backgroundColor;
+            
+            // 用 canvas 将任意颜色格式转为 rgb
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = 1;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+            
+            const hex = [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+            console.log('[GitHub Debug] color:', color, '-> hex:', hex);
+            return hex;
+          }
+          
+          function updateGithubImages() {
+            const color = getPrimaryHex();
+            
+            if (showStats) {
+              const statsImg = document.getElementById('github-stats-img');
+              const langsImg = document.getElementById('github-langs-img');
+              if (statsImg) statsImg.src = `${statsHost}/api?username=${username}&show_icons=true&hide_border=true&theme=transparent&title_color=${color}&icon_color=${color}&text_color=888888&bg_color=00000000`;
+              if (langsImg) langsImg.src = `${statsHost}/api/top-langs/?username=${username}&layout=compact&hide_border=true&theme=transparent&title_color=${color}&text_color=888888&bg_color=00000000`;
+            }
+            
+            if (showCalendar) {
+              const calendarImg = document.getElementById('github-calendar-img');
+              if (calendarImg) calendarImg.src = `https://ghchart.rshah.org/${color}/${username}`;
+            }
+          }
+          
+          // 初始化
+          updateGithubImages();
+          
+          // 监听主题切换（延迟50ms等待CSS变量更新）
+          new MutationObserver(() => setTimeout(updateGithubImages, 50))
+            .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        })();
+        </script>
       </section>
 
       <!-- 技术栈区域 -->
@@ -135,7 +194,7 @@
           <span class="icon-[mdi--code-tags] w-6 h-6"></span>
           技术栈
         </h2>
-        <div class="card bg-base-200/50 border border-base-300/50">
+        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
           <div class="card-body p-6">
             <div class="flex flex-wrap gap-3">
               <span th:each="tech : ${techStack}" class="tech-tag">
@@ -156,9 +215,9 @@
           <span class="icon-[mdi--text-box-outline] w-6 h-6"></span>
           更多介绍
         </h2>
-        <div class="card bg-base-200/50 border border-base-300/50">
+        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
           <div class="card-body p-6">
-            <div class="about-content" th:utext="${pageContent}"></div>
+            <article class="prose prose-base max-w-none" th:utext="${pageContent}"></article>
           </div>
         </div>
       </section>
@@ -170,22 +229,22 @@
           站点信息
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat bg-base-200/50 border border-base-300/50 rounded-box">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
             <div class="stat-title text-base-content/60">文章数</div>
             <div class="stat-value text-primary text-2xl" 
                  th:text="${siteStats?.post ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-200/50 border border-base-300/50 rounded-box">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
             <div class="stat-title text-base-content/60">分类数</div>
             <div class="stat-value text-secondary text-2xl" 
                  th:text="${siteStats?.category ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-200/50 border border-base-300/50 rounded-box">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
             <div class="stat-title text-base-content/60">评论数</div>
             <div class="stat-value text-accent text-2xl" 
                  th:text="${siteStats?.comment ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-200/50 border border-base-300/50 rounded-box">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
             <div class="stat-title text-base-content/60">总访问量</div>
             <div class="stat-value text-info text-2xl" 
                  th:text="${siteStats?.visit ?: 0}">0</div>
@@ -195,11 +254,11 @@
 
       <!-- 评论区域 -->
       <section th:if="${enableComment && (singlePage.spec.allowComment == null || singlePage.spec.allowComment)}">
-        <h2 class="text-xl md:text-2xl font-bold text-base-content mb-6 flex items-center gap-2">
-          <span class="icon-[mdi--comment-text-outline] w-6 h-6"></span>
+        <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
+          <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
           评论留言
         </h2>
-        <div class="card bg-base-200/50 border border-base-300/50">
+        <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
           <div class="card-body p-4 md:p-6">
             <halo:comment group="content.halo.run" 
                          kind="SinglePage" 

@@ -8,6 +8,9 @@
 
 <section th:fragment="minimal(posts)" class="max-w-2xl mx-auto px-4 sm:px-6">
   <article th:each="post, iterStat : ${posts.items}"
+           th:with="isPinned = ${post.spec.pinned == true},
+                    isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
+                    isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
            class="group relative py-12 sm:py-16">
     
     <!-- 文章序号：优雅的视觉引导 -->
@@ -16,8 +19,8 @@
             th:text="${iterStat.index < 9 ? '0' + (iterStat.index + 1) : (iterStat.index + 1)}">01</span>
     </div>
     
-    <!-- 上方元信息：时间与分类 -->
-    <div class="flex items-center gap-3 mb-5 text-xs tracking-wider uppercase text-base-content/40">
+    <!-- 上方元信息：时间、分类、角标 -->
+    <div class="flex items-center flex-wrap gap-3 mb-5 text-xs tracking-wider uppercase text-base-content/40">
       <time th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}">2025-01-24</time>
       <span class="w-1 h-1 rounded-full bg-base-content/20"></span>
       <span th:if="${!#lists.isEmpty(post.categories)}" 
@@ -26,6 +29,8 @@
         <a th:href="@{${firstCat.status.permalink}}" 
            th:text="${firstCat.spec.displayName}">Category</a>
       </span>
+      <!-- 置顶角标 -->
+      <span th:if="${isPinned}" class="px-2 py-0.5 rounded text-[10px] font-medium text-primary/80 bg-primary/10 normal-case tracking-normal">置顶</span>
     </div>
     
     <!-- 标题：优雅的字体编排 -->

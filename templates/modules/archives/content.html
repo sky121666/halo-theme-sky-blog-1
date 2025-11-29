@@ -86,6 +86,9 @@
                     <!-- 文章列表 -->
                     <div class="pl-6 space-y-3">
                       <article th:each="post : ${monthData.posts}"
+                               th:with="isPinned = ${post.spec.pinned == true},
+                                        isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
+                                        isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
                                class="group relative flex items-start gap-4 p-4 rounded-xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer">
                         <!-- 整卡片可点击链接 -->
                         <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
@@ -98,7 +101,16 @@
                         
                         <!-- 文章信息 -->
                         <div class="flex-1 min-w-0">
-                          <h3 class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1 mb-1" th:text="${post.spec.title}">文章标题</h3>
+                          <!-- 标题 + 角标 -->
+                          <div class="flex items-center gap-2 mb-1">
+                            <h3 class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1" th:text="${post.spec.title}">文章标题</h3>
+                            <span th:if="${isPrivate}" class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-warning text-warning-content">
+                              <span class="icon-[heroicons--eye-slash] w-2.5 h-2.5"></span>仅自己
+                            </span>
+                            <span th:if="${isLocked}" class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-error/90 text-error-content">
+                              <span class="icon-[heroicons--lock-closed] w-2.5 h-2.5"></span>
+                            </span>
+                          </div>
                           <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/60">
                             <!-- 分类 -->
                             <span th:if="${!#lists.isEmpty(post.categories)}" class="inline-flex items-center gap-1">
@@ -157,12 +169,20 @@
 
         <!-- 评论区 -->
         <section class="mt-12" th:if="${theme.config.archive_settings?.enable_comment == true}">
-          <halo:comment 
-              group="content.halo.run" 
-              kind="SinglePage"
-              th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}"
-              colorScheme="system">
-          </halo:comment>
+          <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
+            <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
+            评论留言
+          </h2>
+          <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
+            <div class="card-body p-4 md:p-6">
+              <halo:comment 
+                  group="content.halo.run" 
+                  kind="SinglePage"
+                  th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}"
+                  colorScheme="system">
+              </halo:comment>
+            </div>
+          </div>
         </section>
       </section>
 

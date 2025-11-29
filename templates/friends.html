@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<!--
+  朋友动态列表页
+  路由：/friends
+  插件：PluginFriends
+-->
+<head th:replace="~{modules/common/head :: head(title=${site.title + ' - 朋友动态'})}"></head>
+<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
+
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: nav}" />
+
+  <!-- 主内容 -->
+  <main class="flex-1 pt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <!-- 页面标题 -->
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-base-content mb-2">朋友动态</h1>
+        <p class="text-base-content/60">来自朋友们的最新文章</p>
+      </div>
+
+      <!-- 朋友动态列表 - 使用 modern 卡片风格 -->
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <th:block th:each="friend : ${friends.items}" th:with="spec = ${friend.spec}">
+          <article class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
+            <div class="card-body p-5">
+              <!-- 作者信息 -->
+              <div class="flex items-center gap-3 mb-3">
+                <img th:src="${spec.logo}" alt="" class="w-10 h-10 rounded-full object-cover ring-2 ring-base-content/10" loading="lazy" />
+                <div class="flex-1 min-w-0">
+                  <a th:href="${spec.authorUrl}" target="_blank" rel="noopener" 
+                     class="text-sm font-medium text-base-content hover:text-primary truncate block" 
+                     th:text="${spec.author}">作者</a>
+                  <span class="text-xs text-base-content/50" 
+                        th:text="${#temporals.format(spec.pubDate, 'yyyy-MM-dd HH:mm')}">时间</span>
+                </div>
+              </div>
+              <!-- 标题 -->
+              <h3 class="text-base font-semibold text-base-content line-clamp-2 mb-2">
+                <a th:href="${spec.postLink}" target="_blank" rel="noopener" 
+                   class="hover:text-primary" th:text="${spec.title}">标题</a>
+              </h3>
+              <!-- 描述 -->
+              <p th:if="${spec.description != null and !spec.description.isEmpty()}"
+                 class="text-sm text-base-content/70 line-clamp-3 mb-3" 
+                 th:text="${spec.description}">描述...</p>
+              <!-- 访问链接 -->
+              <div class="mt-auto pt-3">
+                <a th:href="${spec.postLink}" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors">
+                  <span>阅读原文</span>
+                  <span class="icon-[heroicons--arrow-top-right-on-square] w-4 h-4"></span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </th:block>
+      </div>
+
+      <!-- 空状态 -->
+      <div th:if="${#lists.isEmpty(friends.items)}" 
+           class="py-20 text-center text-base-content/40">
+        <span class="icon-[heroicons--users] w-16 h-16 mx-auto mb-4 block"></span>
+        <p class="text-lg">暂无朋友动态</p>
+        <p class="text-sm mt-2">快去添加一些友链吧~</p>
+      </div>
+
+      <!-- 分页 -->
+      <div th:if="${friends.totalPages > 1}" class="mt-12 flex justify-center">
+        <div class="join">
+          <a th:if="${friends.hasPrevious}" 
+             th:href="@{${friends.prevUrl}}"
+             class="join-item btn btn-sm">
+            <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
+            上一页
+          </a>
+          <span class="join-item btn btn-sm btn-disabled" th:text="'第 ' + ${friends.page} + ' / ' + ${friends.totalPages} + ' 页'">第 1 / 1 页</span>
+          <a th:if="${friends.hasNext}" 
+             th:href="@{${friends.nextUrl}}"
+             class="join-item btn btn-sm">
+            下一页
+            <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
+
+  <!-- 浮动工具栏 -->
+  <th:block th:replace="~{modules/floating-dock :: dock}" />
+
+</body>
+</html>

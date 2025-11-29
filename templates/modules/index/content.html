@@ -1,0 +1,250 @@
+<!-- 首页内容区 -->
+<th:block th:fragment="main-content"
+          th:with="githubUsername = ${theme.config.about_settings.github.username},
+                   profile = ${theme.config.about_settings.profile},
+                   contentSettings = ${theme.config.index.content_settings},
+                   postSettings = ${theme.config.index.post_settings},
+                   friendsSettings = ${theme.config.index.friends_settings},
+                   hasFriendsPlugin = ${pluginFinder.available('plugin-friends')},
+                   showFriendsTab = ${hasFriendsPlugin and friendsSettings.show_friends_tab != false},
+                   showSidebar = ${contentSettings.show_sidebar != false},
+                   showGithubCalendar = ${contentSettings.show_github_calendar != false and githubUsername != null and !githubUsername.isEmpty()},
+                   tabStyle = ${contentSettings.tab_style ?: 'chips'},
+                   listStyle = ${postSettings.list_style ?: 'magazine'},
+                   postCount = ${postSettings.post_count ?: 8},
+                   friendsCount = ${friendsSettings.friends_count ?: 10}">
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12">
+
+    <!-- 主内容区：左侧内容 + 右侧侧边栏 -->
+    <div class="flex gap-8">
+      <!-- 左侧：GitHub热力图 + Tab切换 + 文章列表 -->
+      <section class="flex-1 min-w-0">
+        <!-- GitHub 热力图 - 动态获取 primary 颜色 -->
+        <div th:if="${showGithubCalendar}" class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 p-5 mb-8">
+          <img id="index-github-calendar" alt="GitHub Contributions" class="w-full h-auto rounded" loading="lazy" />
+          <div class="flex items-center justify-between mt-3">
+            <span class="text-xs text-base-content/40">GitHub 年度贡献</span>
+            <div class="flex items-center gap-1 text-xs text-base-content/40">
+              <span>Less</span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-base-content/10"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/30"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/50"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-sm bg-primary/70"></span>
+              <span id="index-color-probe" class="inline-block w-2.5 h-2.5 rounded-sm bg-primary"></span>
+              <span>More</span>
+            </div>
+          </div>
+          <script th:inline="javascript">
+          (function() {
+            const username = /*[[${githubUsername}]]*/ '';
+            if (!username) return;
+            
+            // 从 bg-primary 元素获取实际颜色（用 canvas 转换 oklch 为 rgb）
+            function getPrimaryHex() {
+              const probe = document.getElementById('index-color-probe');
+              if (!probe) return '6366f1';
+              const color = getComputedStyle(probe).backgroundColor;
+              
+              // 用 canvas 将任意颜色格式转为 rgb
+              const canvas = document.createElement('canvas');
+              canvas.width = canvas.height = 1;
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = color;
+              ctx.fillRect(0, 0, 1, 1);
+              const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+              
+              return [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+            }
+            
+            function updateCalendar() {
+              const color = getPrimaryHex();
+              const img = document.getElementById('index-github-calendar');
+              if (img) img.src = `https://ghchart.rshah.org/${color}/${username}`;
+            }
+            
+            updateCalendar();
+            new MutationObserver(() => setTimeout(updateCalendar, 50))
+              .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+          })();
+          </script>
+        </div>
+        
+        <div x-data="{ tab: 'site' }">
+          <!-- Tab 切换块 -->
+          <th:block th:switch="${tabStyle}">
+            <!-- 药丸风格 -->
+            <th:block th:case="'pills'">
+              <div class="mb-8">
+                <div class="flex flex-wrap items-center gap-3">
+                  <button @click="tab = 'site'"
+                          :class="tab === 'site' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
+                          class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">站内动态</button>
+                  <button @click="tab = 'friends'" th:if="${showFriendsTab}"
+                          :class="tab === 'friends' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
+                          class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">朋友动态</button>
+                </div>
+              </div>
+            </th:block>
+            <!-- 芯片风格 -->
+            <th:block th:case="'chips'">
+              <div class="mb-8">
+                <div class="flex flex-wrap items-center gap-2">
+                  <button @click="tab = 'site'"
+                          :class="tab === 'site' ? 'bg-primary/10 text-primary border-primary/30 shadow-sm' : 'bg-base-100 text-base-content/70 border-base-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'"
+                          class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200">
+                    <span class="icon-[heroicons--squares-2x2] w-4 h-4"></span>站内动态</button>
+                  <button @click="tab = 'friends'" th:if="${showFriendsTab}"
+                          :class="tab === 'friends' ? 'bg-primary/10 text-primary border-primary/30 shadow-sm' : 'bg-base-100 text-base-content/70 border-base-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'"
+                          class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200">
+                    <span class="icon-[heroicons--users] w-4 h-4"></span>朋友动态</button>
+                </div>
+              </div>
+            </th:block>
+            <!-- 下划线风格 -->
+            <th:block th:case="'underline'">
+              <div class="mb-8 border-b border-base-200">
+                <div class="flex flex-wrap items-center gap-1 -mb-px">
+                  <button @click="tab = 'site'"
+                          :class="tab === 'site' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
+                          class="relative px-4 py-3 text-sm font-medium transition-colors duration-200">
+                    站内动态
+                    <span x-show="tab === 'site'" class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                  </button>
+                  <button @click="tab = 'friends'" th:if="${showFriendsTab}"
+                          :class="tab === 'friends' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
+                          class="relative px-4 py-3 text-sm font-medium transition-colors duration-200">
+                    朋友动态
+                    <span x-show="tab === 'friends'" class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                  </button>
+                </div>
+              </div>
+            </th:block>
+            <!-- 玻璃拟态风格 -->
+            <th:block th:case="'glass'">
+              <div class="mb-8">
+                <div class="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-base-200/30 backdrop-blur-sm">
+                  <button @click="tab = 'site'"
+                          :class="tab === 'site' ? 'bg-base-100 text-base-content shadow-md' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
+                          class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">站内动态</button>
+                  <button @click="tab = 'friends'" th:if="${showFriendsTab}"
+                          :class="tab === 'friends' ? 'bg-base-100 text-base-content shadow-md' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
+                          class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">朋友动态</button>
+                </div>
+              </div>
+            </th:block>
+            <!-- 默认药丸风格 -->
+            <th:block th:case="*">
+              <div class="mb-8">
+                <div class="flex flex-wrap items-center gap-3">
+                  <button @click="tab = 'site'"
+                          :class="tab === 'site' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
+                          class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">站内动态</button>
+                  <button @click="tab = 'friends'" th:if="${showFriendsTab}"
+                          :class="tab === 'friends' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
+                          class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">朋友动态</button>
+                </div>
+              </div>
+            </th:block>
+          </th:block>
+
+          <!-- 站内动态 -->
+          <div x-show="tab === 'site'" x-transition.opacity
+               th:with="sitePosts = ${postFinder.list({page: 1, size: postCount})}">
+            <th:block th:switch="${listStyle}">
+              <th:block th:case="'modern'">
+                <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts})}" />
+              </th:block>
+              <th:block th:case="'media_text'">
+                <th:block th:replace="~{modules/categories/list-media :: media_text(${sitePosts})}" />
+              </th:block>
+              <th:block th:case="'magazine'">
+                <th:block th:replace="~{modules/categories/list-magazine :: magazine(${sitePosts})}" />
+              </th:block>
+              <th:block th:case="'minimal'">
+                <th:block th:replace="~{modules/categories/list-minimal :: minimal(${sitePosts})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts})}" />
+              </th:block>
+            </th:block>
+            <div class="mt-8 text-center">
+              <a href="/archives" class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md transition-all duration-300">
+                查看全部文章
+                <span class="icon-[heroicons--arrow-right] w-4 h-4"></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 朋友动态 -->
+          <th:block th:if="${showFriendsTab and friendFinder != null}">
+            <div x-show="tab === 'friends'" x-transition.opacity x-cloak
+                 th:with="friendPosts = ${friendFinder.list({page: 1, size: friendsCount})}">
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <th:block th:each="friend : ${friendPosts.items}" th:with="spec = ${friend.spec}">
+                  <article class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
+                    <div class="card-body p-5">
+                      <div class="flex items-center gap-3 mb-3">
+                        <img th:src="${spec.logo}" alt="" class="w-10 h-10 rounded-full object-cover ring-2 ring-base-content/10" loading="lazy" />
+                        <div class="flex-1 min-w-0">
+                          <a th:href="${spec.authorUrl}" target="_blank" class="text-sm font-medium text-base-content hover:text-primary truncate block" th:text="${spec.author}">作者</a>
+                          <span class="text-xs text-base-content/50" th:text="${#temporals.format(spec.pubDate, 'yyyy-MM-dd HH:mm')}">时间</span>
+                        </div>
+                      </div>
+                      <h3 class="text-base font-semibold text-base-content line-clamp-2 mb-2">
+                        <a th:href="${spec.postLink}" target="_blank" class="hover:text-primary" th:text="${spec.title}">标题</a>
+                      </h3>
+                      <p th:if="${spec.description != null and !spec.description.isEmpty()}"
+                         class="text-sm text-base-content/70 line-clamp-2" th:text="${spec.description}">描述...</p>
+                      <div class="mt-auto pt-3">
+                        <a th:href="${spec.postLink}" target="_blank" 
+                           class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80">
+                          <span>阅读原文</span>
+                          <span class="icon-[heroicons--arrow-top-right-on-square] w-4 h-4"></span>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                </th:block>
+              </div>
+              <div th:if="${friendPosts.items == null or friendPosts.items.isEmpty()}" class="py-16 text-center text-base-content/40 text-sm">
+                暂无朋友动态
+              </div>
+              <div th:if="${friendPosts.items != null and !friendPosts.items.isEmpty()}" class="mt-8 text-center">
+                <a href="/friends" class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md transition-all duration-300">
+                  查看全部朋友动态
+                  <span class="icon-[heroicons--arrow-right] w-4 h-4"></span>
+                </a>
+              </div>
+            </div>
+          </th:block>
+        </div>
+      </section>
+
+      <!-- 右侧：侧边栏 -->
+      <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block">
+        <!-- 作者卡片 - 与侧边栏统一风格 -->
+        <a href="/about" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card block group" style="transition: box-shadow 0.2s ease;">
+          <div class="flex items-center gap-4">
+            <img th:src="${profile.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}" 
+                 alt="avatar" class="w-12 h-12 rounded-lg object-cover shrink-0" />
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base font-semibold text-base-content truncate"
+                  th:text="${profile.nickname != null and !profile.nickname.isEmpty()} ? ${profile.nickname} : ${site.title}">昵称</h3>
+              <p class="text-sm text-base-content/50 truncate"
+                 th:text="${profile.role != null and !profile.role.isEmpty()} ? ${profile.role} : '博主'">角色</p>
+            </div>
+            <span class="icon-[heroicons--chevron-right] w-5 h-5 text-base-content/30 group-hover:text-primary transition-colors shrink-0"></span>
+          </div>
+        </a>
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+      </aside>
+    </div>
+
+  </div>
+
+
+</th:block>

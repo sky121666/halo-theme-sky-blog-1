@@ -1,7 +1,9 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/index/layout :: html(content = ~{::content})}">
 
-
 <th:block th:fragment="content">
+  <!-- 首页主内容区 -->
+  <th:block th:replace="~{modules/index/content :: main-content}" />
+</th:block>
 
 </html>

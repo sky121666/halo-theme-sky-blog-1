@@ -1,3 +1,23 @@
+<!-- 瞬间卡片发光效果脚本 -->
+<script th:inline="none">
+window.handleMomentCardGlow = window.handleMomentCardGlow || function(event, card) {
+    var glowElement = card.querySelector('.moment-glow');
+    if (!glowElement) return;
+    var rect = card.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    glowElement.style.background = 'radial-gradient(circle 180px at ' + x + 'px ' + y + 'px, oklch(var(--p) / 0.35), transparent 70%)';
+};
+window.showMomentCardGlow = window.showMomentCardGlow || function(card) {
+    var glow = card.querySelector('.moment-glow');
+    if (glow) glow.style.opacity = '1';
+};
+window.hideMomentCardGlow = window.hideMomentCardGlow || function(card) {
+    var glow = card.querySelector('.moment-glow');
+    if (glow) glow.style.opacity = '0';
+};
+</script>
+
 <!-- 瞬间模块 - 统一布局方案 -->
 <div class="absolute inset-x-0 bottom-0 z-30 flex items-end justify-center pb-20 px-4"
     th:if="${theme.config.index.moment_settings.show_moment}">
@@ -44,20 +64,15 @@
                         <h3 class="moment-title text-base md:text-lg leading-5 md:leading-6 font-medium text-white transition-all duration-200"
                             th:text="${theme.config.index.moment_settings.moment_title ?: '瞬间'}">瞬间</h3>
                     </div>
-                    <!-- 发布瞬间按钮 - 仅登录用户可见 -->
-                    <button th:if="${#authorization.expression('isAuthenticated()')}"
-                        onclick="document.getElementById('talk-modal').classList.remove('hidden'); document.getElementById('talk-modal').style.display = 'flex';"
+                    <!-- 查看全部/发布按钮 -->
+                    <a href="/moments"
                         class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 
                                rounded-full text-xs md:text-sm leading-4 text-white hover:text-primary-200 
-                               transition-all duration-300 ease-out hover:scale-105 animate-natural-slide-up stagger-2" title="发布瞬间">
-                        <span class="icon-[material-symbols--add] w-3.5 h-3.5 md:w-4 md:h-4 mr-1"></span>
-                        发布
-                    </button>
-                    <!-- 查看全部按钮 - 未登录用户显示 -->
-                    <a th:unless="${#authorization.expression('isAuthenticated()')}" href="/moments"
-                        class="p-2 hover:scale-110 transition-all duration-300 group" title="查看全部瞬间">
-                        <span
-                            class="icon-[material-symbols--arrow-forward] w-5 h-5 text-white/80 group-hover:text-primary transition-colors"></span>
+                               transition-all duration-300 ease-out hover:scale-105 animate-natural-slide-up stagger-2" 
+                        th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}">
+                        <span th:if="${#authorization.expression('isAuthenticated()')}" class="icon-[material-symbols--add] w-3.5 h-3.5 md:w-4 md:h-4 mr-1"></span>
+                        <span th:if="${#authorization.expression('isAuthenticated()')}" >发布</span>
+                        <span th:unless="${#authorization.expression('isAuthenticated()')}" class="icon-[material-symbols--arrow-forward] w-4 h-4"></span>
                     </a>
                 </div>
 
@@ -65,14 +80,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-5 
                            transition-all duration-500 ease-out">
                     <th:block th:each="moment, momentStat : ${momentFinder.listAll()}"
-                        th:with="content=${moment.spec.content}">
+                        th:with="content=${moment.spec.content}, hasText=${not #strings.isEmpty(content.raw)}, hasMedia=${content.medium != null and not content.medium.isEmpty()}">
                         <!-- 根据索引动态设置响应式显示类 -->
-                        <div th:if="${not #strings.isEmpty(content.raw) and momentStat.index < 3}" th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift animate-smooth-fade-in tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + 
+                        <div th:if="${(hasText or hasMedia) and momentStat.index < 3}" th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift animate-smooth-fade-in tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + 
                                       (momentStat.index == 1 ? ' hidden md:flex stagger-2' : '') + 
                                       (momentStat.index == 2 ? ' hidden lg:flex stagger-3' : ' flex stagger-1')}"
                             th:classappend="${momentStat.index % 2 == 0 ? ' rotate-slight-left' : ' rotate-slight-right'}">
                             <!-- 瞬间内容 -->
-                            <div class="flex-1 text-sm md:text-base overflow-hidden max-h-12 md:max-h-16 leading-snug [&>*]:m-0 [&>*]:p-0" th:utext="${content.raw}"></div>
+                            <div class="flex-1 text-sm md:text-base overflow-hidden max-h-12 md:max-h-16 leading-snug *:m-0 *:p-0">
+                                <!-- 有文本内容时显示文本 -->
+                                <span th:if="${hasText}" th:utext="${content.raw}"></span>
+                                <!-- 只有媒体时显示媒体提示 -->
+                                <span th:unless="${hasText}" class="flex items-center gap-2 text-white/70">
+                                    <span class="icon-[material-symbols--image] w-5 h-5"></span>
+                                    <span th:text="${#lists.size(content.medium) + ' 张图片/视频'}"></span>
+                                </span>
+                            </div>
 
                             <!-- 底部信息栏 -->
                             <div class="flex items-center justify-between mt-2">
@@ -102,221 +125,5 @@
             </div>
         </div>
     </th:block>
-</div>
-
-<!-- 发布瞬间模态框 - 仅登录用户可见 -->
-<div id="talk-modal" th:if="${#authorization.expression('isAuthenticated()')}" th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}"
-    class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] items-center justify-center hidden moment-modal"
-    onclick="if(event.target === this) { document.getElementById('talk-modal').classList.add('hidden'); document.getElementById('talk-modal').style.display = 'none'; }"
-    style="display: none;">
-    <link rel="stylesheet" th:href="@{/assets/emoji/emoji-selector.css?v={version}(version=${theme.spec.version})}">
-    <script th:src="@{/assets/emoji/emoji-selector.js?v={version}(version=${theme.spec.version})}"></script>
-
-    <div class="w-full max-w-md mx-4 bg-base-100 rounded-2xl border border-primary/30 shadow-2xl overflow-hidden backdrop-blur-md text-white"
-        onclick="event.stopPropagation();">
-        <!-- 模态框标题 -->
-        <div class="px-6 md:px-8 py-4 border-b border-primary/30 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <span class="icon-[material-symbols--edit] w-5 h-5 text-primary"></span>
-                <h3 class="text-lg font-medium text-base-content">轻发布</h3>
-            </div>
-            <button class="p-1.5 text-base-content/70 hover:text-base-content transition-all"
-                onclick="document.getElementById('talk-modal').classList.add('hidden'); document.getElementById('talk-modal').style.display = 'none';"
-                title="关闭">
-                <span class="icon-[material-symbols--close] w-5 h-5"></span>
-            </button>
-        </div>
-
-        <!-- 模态框内容 -->
-        <div class="p-5 space-y-4">
-            <form class="space-y-4">
-                <!-- 文本输入区 -->
-                <div class="relative">
-                    <textarea id="talk-content"
-                        class="w-full bg-primary/10 border border-primary/30 rounded-xl p-4 text-base-content placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all resize-none"
-                        rows="4" placeholder="分享你的想法..." maxlength="200"
-                        oninput="document.getElementById('char-count').textContent = this.value.length + '/200'"></textarea>
-
-                    <!-- 字数统计 - 浮动在右下角 -->
-                    <div class="absolute bottom-3 right-3">
-                        <span id="char-count"
-                            class="text-xs text-base-content  px-2 py-1 rounded-full backdrop-blur-sm">0/200</span>
-                    </div>
-                </div>
-
-                <!-- 底部工具栏 -->
-                <div class="flex items-center justify-between pt-2">
-                    <!-- 左侧工具按钮 -->
-                    <div class="flex items-center space-x-2">
-                        <button type="button" id="emoji-trigger-btn"
-                            onclick="showEmojiSelector(document.getElementById('talk-content'), this)"
-                            class="flex items-center justify-center w-9 h-9 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 hover:border-primary/40 transition-all duration-300 group"
-                            title="添加表情">
-                            <span
-                                class="icon-[material-symbols--sentiment-satisfied] w-4 h-4 text-base-content/80 group-hover:text-primary transition-colors"></span>
-                        </button>
-                    </div>
-
-                    <!-- 右侧发布按钮 -->
-                    <button type="submit" id="publish-btn"
-                        class="publish-btn flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:brightness-110 text-white transition-all duration-300 hover:scale-105 shadow-lg"
-                        title="发布">
-                        <span class="icon-[material-symbols--send] w-4 h-4"></span>
-                    </button>
-                </div>
-            </form>
-        </div>
     </div>
-    <script th:inline="javascript">
-        /**
-         * 简化版瞬间发布功能
-         */
-        (function () {
-            'use strict';
-
-            /**
-             * 当前登录用户信息（由 Thymeleaf 注入）
-             * - CURRENT_USER_NAME 用于后端 Moment.owner 字段
-             * - DISPLAY_NAME 与 AVATAR 可用于后续展示或扩展
-             */
-            const CURRENT_USER_NAME = /*[[${currentUser.name}]]*/ '';
-            const CURRENT_USER_DISPLAY_NAME = /*[[${currentUser.displayName}]]*/ '';
-            const CURRENT_USER_AVATAR = /*[[${currentUser.avatar}]]*/ '';
-
-            /**
-             * 发布瞬间
-             * 根据当前登录用户动态设置 owner，避免写死变量
-             */
-            async function publishMoment(content) {
-
-
-                const momentName = 'moment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-
-
-                try {
-                    const response = await fetch('/apis/moment.halo.run/v1alpha1/moments', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            apiVersion: 'moment.halo.run/v1alpha1',
-                            kind: 'Moment',
-                            metadata: {
-                                name: momentName,
-                                labels: { 'moment.halo.run/visible': 'PUBLIC' }
-                            },
-                            spec: {
-                                approved: true,
-                                approvedTime: new Date().toISOString(),
-                                content: {
-                                    raw: content.trim(),
-                                    html: content.trim().replace(/\n/g, '<br>')
-                                },
-                                owner: CURRENT_USER_NAME,
-                                visible: 'PUBLIC',
-                                releaseTime: new Date().toISOString(),
-                                tags: []
-                            }
-                        })
-                    });
-
-
-
-                    if (response.ok) {
-
-                        return true;
-                    } else {
-                        const errorData = await response.json().catch(() => ({}));
-                        console.error('发布失败:', errorData);
-                        return false;
-                    }
-                } catch (error) {
-                    console.error('发布异常:', error);
-                    return false;
-                }
-            }
-
-            /**
-             * 局部刷新瞬间列表
-             */
-            async function refreshMomentsList() {
-
-                try {
-                    const response = await fetch(window.location.href);
-                    const html = await response.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-
-                    // 找到新的瞬间网格内容
-                    const newGrid = doc.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
-                    const currentGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
-
-                    if (newGrid && currentGrid) {
-                        currentGrid.innerHTML = newGrid.innerHTML;
-
-                    }
-                } catch (error) {
-                    console.error('局部刷新失败:', error);
-                }
-            }
-
-            /**
-             * 处理发布表单提交
-             */
-            async function handlePublishSubmit(event) {
-                event.preventDefault();
-
-
-                const contentInput = document.getElementById('talk-content');
-                const publishBtn = document.getElementById('publish-btn');
-                const modal = document.getElementById('talk-modal');
-                const content = contentInput.value.trim();
-
-
-
-                // 显示加载状态
-                const originalBtnContent = publishBtn.innerHTML;
-                publishBtn.disabled = true;
-                publishBtn.innerHTML = '<span class="icon-[material-symbols--hourglass-empty] w-5 h-5 animate-spin"></span>';
-
-                try {
-                    const success = await publishMoment(content);
-
-                    if (success) {
-
-
-                        // 清空输入框和重置计数
-                        contentInput.value = '';
-                        document.getElementById('char-count').textContent = '0/200';
-
-                        // 关闭模态框
-                        modal.classList.add('hidden');
-                        modal.style.display = 'none';
-
-                        // 局部刷新瞬间列表
-                        setTimeout(() => {
-                            refreshMomentsList();
-                        }, 1000);
-                    }
-                } finally {
-                    // 恢复按钮状态
-                    publishBtn.disabled = false;
-                    publishBtn.innerHTML = originalBtnContent;
-                }
-            }
-
-            // 绑定事件
-            document.addEventListener('DOMContentLoaded', function () {
-
-
-                const publishForm = document.querySelector('#talk-modal form');
-                if (publishForm) {
-                    publishForm.addEventListener('submit', handlePublishSubmit);
-
-                }
-            });
-
-        })();
-    </script>
 </div>
-
-    </div>
