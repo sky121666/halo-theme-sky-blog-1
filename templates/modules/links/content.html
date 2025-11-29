@@ -7,11 +7,15 @@
 <!-- ========================================== -->
 
 <!-- 友链内容片段 -->
-<main class="relative" th:fragment="links-content">
+<main class="relative" th:fragment="links-content"
+      th:with="cfg = ${theme.config.links_settings},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8">
+    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 主内容区 -->
-      <section class="flex-1 min-w-0" th:classappend="${theme.config.links_settings?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
+      <section class="flex-1 min-w-0" th:classappend="${cfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
     
         <!-- 页面标题区 -->
     <div class="text-center mb-12">
@@ -250,12 +254,9 @@
       </section>
 
       <!-- 右侧边栏 -->
-      <aside th:if="${theme.config.links_settings?.show_sidebar == true}" 
+      <aside th:if="${cfg?.show_sidebar == true}" 
              class="w-80 space-y-6 hidden lg:block shrink-0">
-        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-        <th:block th:replace="~{modules/widgets/categories :: list}" />
-        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
   </div>

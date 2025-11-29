@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           动态侧边栏渲染                     -->
+<!-- 支持传入页面配置，优先使用页面定制配置          -->
+<!-- ========================================== -->
+
+<!-- 
+  参数说明：
+  - pageCfg: 页面侧边栏配置（可选），包含 enable_custom_sidebar, sidebar_position, sidebar_widgets
+  - 如果 pageCfg.enable_custom_sidebar == true，使用页面配置
+  - 否则使用全局 sidebar_settings
+-->
+<th:block th:fragment="dynamic(pageCfg)"
+          th:with="globalCfg = ${theme.config.general.sidebar_settings},
+                   useCustom = ${pageCfg?.enable_custom_sidebar == true},
+                   configWidgets = ${useCustom ? pageCfg?.sidebar_widgets : globalCfg?.widgets},
+                   defaultWidgets = ${ {
+                     {widget: 'author_card'},
+                     {widget: 'blog_stats'},
+                     {widget: 'categories'},
+                     {widget: 'tags'},
+                     {widget: 'popular_posts'}
+                   } },
+                   widgets = ${configWidgets != null && !#lists.isEmpty(configWidgets) ? configWidgets : defaultWidgets}">
+  
+  <!-- 遍历配置的小工具 -->
+  <th:block th:each="item : ${widgets}">
+    <th:block th:if="${item.widget eq 'author_card'}">
+      <th:block th:replace="~{modules/widgets/author-card :: card}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'blog_stats'}">
+      <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'categories'}">
+      <th:block th:replace="~{modules/widgets/categories :: list}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'tags'}">
+      <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'popular_posts'}">
+      <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'recent_posts'}">
+      <th:block th:replace="~{modules/widgets/recent-posts :: list}" />
+    </th:block>
+  </th:block>
+
+</th:block>
+
+</html>

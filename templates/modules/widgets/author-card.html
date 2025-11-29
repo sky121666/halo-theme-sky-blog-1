@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           作者卡片组件                       -->
+<!-- ========================================== -->
+
+<a th:fragment="card" href="/about" 
+   class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card block group" 
+   style="transition: box-shadow 0.2s ease;"
+   th:with="profile = ${theme.config.about_settings.profile}">
+  <div class="flex items-center gap-4">
+    <img th:src="${profile.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}" 
+         alt="avatar" class="w-12 h-12 rounded-lg object-cover shrink-0" />
+    <div class="flex-1 min-w-0">
+      <h3 class="text-base font-semibold text-base-content truncate"
+          th:text="${profile.nickname != null and !profile.nickname.isEmpty()} ? ${profile.nickname} : ${site.title}">昵称</h3>
+      <p class="text-sm text-base-content/50 truncate"
+         th:text="${profile.role != null and !profile.role.isEmpty()} ? ${profile.role} : '博主'">角色</p>
+    </div>
+    <span class="icon-[heroicons--chevron-right] w-5 h-5 text-base-content/30 group-hover:text-primary transition-colors shrink-0"></span>
+  </div>
+</a>
+
+</html>

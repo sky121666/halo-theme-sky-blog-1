@@ -13,12 +13,15 @@
                    listStyle = ${postSettings.list_style ?: 'magazine'},
                    postCount = ${postSettings.post_count ?: 8},
                    friendsCount = ${friendsSettings.friends_count ?: 10},
-                   friendsListStyle = ${friendsSettings.list_style ?: 'two_columns'}">
+                   friendsListStyle = ${friendsSettings.list_style ?: 'two_columns'},
+                   globalSidebarCfg = ${theme.config.general.sidebar_settings},
+                   useCustomSidebar = ${contentSettings.enable_custom_sidebar == true},
+                   sidebarPosition = ${useCustomSidebar ? (contentSettings.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12">
 
-    <!-- 主内容区：左侧内容 + 右侧侧边栏 -->
-    <div class="flex gap-8">
+    <!-- 主内容区：内容 + 侧边栏 -->
+    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：GitHub热力图 + Tab切换 + 文章列表 -->
       <section class="flex-1 min-w-0">
         <!-- GitHub 热力图 - 动态获取 primary 颜色 -->
@@ -260,24 +263,8 @@
 
       <!-- 右侧：侧边栏 -->
       <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block">
-        <!-- 作者卡片 - 与侧边栏统一风格 -->
-        <a href="/about" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card block group" style="transition: box-shadow 0.2s ease;">
-          <div class="flex items-center gap-4">
-            <img th:src="${profile.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}" 
-                 alt="avatar" class="w-12 h-12 rounded-lg object-cover shrink-0" />
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-base-content truncate"
-                  th:text="${profile.nickname != null and !profile.nickname.isEmpty()} ? ${profile.nickname} : ${site.title}">昵称</h3>
-              <p class="text-sm text-base-content/50 truncate"
-                 th:text="${profile.role != null and !profile.role.isEmpty()} ? ${profile.role} : '博主'">角色</p>
-            </div>
-            <span class="icon-[heroicons--chevron-right] w-5 h-5 text-base-content/30 group-hover:text-primary transition-colors shrink-0"></span>
-          </div>
-        </a>
-        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-        <th:block th:replace="~{modules/widgets/categories :: list}" />
-        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+        <!-- 动态小工具 -->
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${contentSettings})}" />
       </aside>
     </div>
 

@@ -24,24 +24,25 @@
 </head>
 
 <body class="min-h-screen bg-base-200 text-base-content"
-      th:with="cfg=${theme.config.friends_page_settings}, showSidebar=${cfg?.enable_sidebar == true}">
+      th:with="cfg=${theme.config.friends_page_settings}, 
+               showSidebar=${cfg?.enable_sidebar == true},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
   <!-- 导航栏 -->
   <th:block th:replace="~{modules/nav :: navbar}" />
 
   <!-- 主要内容区域 -->
   <main class="flex-1 pt-20">
     <div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
-      <div class="flex gap-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
         <!-- 主内容 -->
         <div class="flex-1 min-w-0" th:classappend="${!showSidebar} ? 'max-w-2xl mx-auto' : ''">
           <th:block th:replace="${content}" />
         </div>
         <!-- 侧边栏 -->
         <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0">
-          <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-          <th:block th:replace="~{modules/widgets/categories :: list}" />
-          <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-          <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
         </aside>
       </div>
     </div>

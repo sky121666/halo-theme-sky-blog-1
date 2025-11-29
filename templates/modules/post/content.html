@@ -1,14 +1,18 @@
 
 <!-- 主要内容区域 -->
-<main class="relative" th:fragment="post-content">
+<main class="relative" th:fragment="post-content"
+      th:with="cfg = ${theme.config.article.sidebar_settings},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
   <!-- 顶部 Banner -->
   <th:block th:replace="~{modules/post/header :: banner}" />
 
   <!-- 主体内容区域 -->
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8">
+    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧文章内容区 -->
-      <article class="flex-1 min-w-0 overflow-hidden" th:classappend="${theme.config.article.sidebar_settings.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
+      <article class="flex-1 min-w-0 overflow-hidden" th:classappend="${cfg.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
         <div class="prose prose-lg max-w-none font-sans" style="font-size: 16px; line-height: 1.8;">
           <!-- 文章正文内容 -->
           <div id="article-content" 
@@ -21,22 +25,12 @@
       </article>
 
       <!-- 右侧功能区块 -->
-      <aside th:if="${theme.config.article.sidebar_settings.show_sidebar != false}" 
+      <aside th:if="${cfg.show_sidebar != false}" 
              class="right-sidebar w-80 space-y-6 hidden lg:block">
-        <!-- 博客统计 -->
-        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-        
-        <!-- 文章目录 -->
+        <!-- 文章目录（固定在最前面） -->
         <th:block th:replace="~{modules/post/toc :: widget}" />
-        
-        <!-- 分类 -->
-        <th:block th:replace="~{modules/widgets/categories :: list}" />
-        
-        <!-- 标签 -->
-        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-        
-        <!-- 热门文章 -->
-        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+        <!-- 动态小工具 -->
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
   </div>

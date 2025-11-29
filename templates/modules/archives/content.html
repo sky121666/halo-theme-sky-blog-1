@@ -7,11 +7,15 @@
 <!-- ========================================== -->
 
 <!-- 归档内容片段 -->
-<main class="relative" th:fragment="archive-content">
+<main class="relative" th:fragment="archive-content"
+      th:with="cfg = ${theme.config.archive_settings},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8">
+    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：归档内容 -->
-      <section class="flex-1" th:classappend="${theme.config.archive_settings?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
+      <section class="flex-1" th:classappend="${cfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
         
         <!-- 页面标题区 -->
         <div class="mb-8">
@@ -187,12 +191,9 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${theme.config.archive_settings?.show_sidebar == true}" 
+      <aside th:if="${cfg?.show_sidebar == true}" 
              class="right-sidebar w-80 space-y-6 hidden lg:block shrink-0">
-        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-        <th:block th:replace="~{modules/widgets/categories :: list}" />
-        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
   </div>
