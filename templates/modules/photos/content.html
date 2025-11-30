@@ -96,8 +96,8 @@
         <p class="text-base-content/30 text-sm mt-2">请在后台添加照片</p>
       </div>
 
-      <!-- 评论区 -->
-      <section th:if="${enableComment}" class="mt-16 max-w-4xl mx-auto">
+      <!-- 评论区（仅当未启用抽屉式评论时显示内嵌评论） -->
+      <section th:if="${enableComment and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}" class="mt-16 max-w-4xl mx-auto">
         <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
           <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
           评论留言
@@ -115,6 +115,12 @@
       </section>
 
     </div>
+    
+    <!-- 评论抽屉（仅当启用定制悬浮栏 + 启用评论按钮时显示，启用即为抽屉式） -->
+    <th:block th:if="${cfg?.floating_dock?.enable_custom_dock == true 
+                       and cfg?.floating_dock?.enable_comment == true}">
+      <th:block th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'photos'})}" />
+    </th:block>
 
   </th:block>
 

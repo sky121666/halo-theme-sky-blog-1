@@ -171,8 +171,8 @@
           )}" />
         </th:block>
 
-        <!-- 评论区 -->
-        <section class="mt-12" th:if="${theme.config.archive_settings?.enable_comment == true}">
+        <!-- 评论区（仅当未启用抽屉式评论时显示内嵌评论） -->
+        <section class="mt-12" th:if="${theme.config.archive_settings?.enable_comment == true and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}">
           <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
@@ -197,6 +197,12 @@
       </aside>
     </div>
   </div>
+  
+  <!-- 评论抽屉（仅当启用定制悬浮栏 + 启用评论按钮时显示，启用即为抽屉式） -->
+  <th:block th:if="${cfg?.floating_dock?.enable_custom_dock == true 
+                     and cfg?.floating_dock?.enable_comment == true}">
+    <th:block th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'archives'})}" />
+  </th:block>
 </main>
 
 </html>

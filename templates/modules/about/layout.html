@@ -57,7 +57,7 @@
   <th:block th:replace="~{modules/footer :: footer}" />
 
   <!-- 悬浮 Dock 控制栏 -->
-  <th:block th:replace="~{modules/floating-dock :: dock}" />
+  <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.about_settings}, 'comment')}" />
 
   <!-- JavaScript -->
   <script th:src="@{/assets/js/about.js?v={version}(version=${theme.spec.version})}"></script>

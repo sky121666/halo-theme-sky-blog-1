@@ -1177,6 +1177,42 @@ spec:
                   value: two_columns
                 - label: 单列
                   value: single_column
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: radio
+              id: index_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(index_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(index_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
     - group: article
       label: 文章
       formSchema:
@@ -1576,6 +1612,42 @@ spec:
                 - image/png
                 - image/webp
                 - image/gif
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: radio
+              id: category_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(category_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(category_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
     - group: tag_settings
       label: 标签
       formSchema:
@@ -1717,6 +1789,42 @@ spec:
                 - image/png
                 - image/webp
                 - image/gif
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: radio
+              id: tag_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(tag_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(tag_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
     - group: archive_settings
       label: 归档
       formSchema:
@@ -1793,6 +1901,54 @@ spec:
               value: true
             - label: 禁用
               value: false
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+            enable_comment: false
+          children:
+            - $formkit: radio
+              id: archive_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(archive_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(archive_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: radio
+              name: enable_comment
+              label: 评论按钮（抽屉式）
+              if: $get(archive_enable_custom_dock).value
+              help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
+              value: false
+              options:
+                - label: 启用
+                  value: true
+                - label: 不启用（使用内嵌式）
+                  value: false
     - group: links_settings
       label: 友链
       formSchema:
@@ -1888,6 +2044,54 @@ spec:
               value: true
             - label: 禁用
               value: false
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+            enable_comment: false
+          children:
+            - $formkit: radio
+              id: links_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(links_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(links_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: radio
+              name: enable_comment
+              label: 评论按钮（抽屉式）
+              if: $get(links_enable_custom_dock).value
+              help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
+              value: false
+              options:
+                - label: 启用
+                  value: true
+                - label: 不启用（使用内嵌式）
+                  value: false
     - group: about_settings
       label: 关于
       formSchema:
@@ -2061,7 +2265,54 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
-
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+            enable_comment: false
+          children:
+            - $formkit: radio
+              id: about_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(about_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(about_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: radio
+              name: enable_comment
+              label: 评论按钮（抽屉式）
+              if: $get(about_enable_custom_dock).value
+              help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
+              value: false
+              options:
+                - label: 启用
+                  value: true
+                - label: 不启用（使用内嵌式）
+                  value: false
     - group: photos_settings
       label: 图库
       formSchema:
@@ -2095,7 +2346,54 @@ spec:
               value: true
             - label: 禁用
               value: false
-
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+            enable_comment: false
+          children:
+            - $formkit: radio
+              id: photos_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(photos_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(photos_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: radio
+              name: enable_comment
+              label: 评论按钮（抽屉式）
+              if: $get(photos_enable_custom_dock).value
+              help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
+              value: false
+              options:
+                - label: 启用
+                  value: true
+                - label: 不启用（使用内嵌式）
+                  value: false
     - group: moments_settings
       label: 瞬间
       formSchema:
@@ -2187,7 +2485,42 @@ spec:
               value: true
             - label: 禁用
               value: false
-
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: radio
+              id: moments_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(moments_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(moments_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
     - group: friends_page_settings
       label: 朋友圈
       formSchema:
@@ -2275,3 +2608,39 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
+        # 悬浮控制栏设置
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: radio
+              id: friends_page_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，关闭则使用全局配置
+              value: false
+              options:
+                - label: 使用全局配置
+                  value: false
+                - label: 启用定制
+                  value: true
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(friends_page_enable_custom_dock).value
+              help: 选择要在悬浮 Dock 中显示的菜单
+            - $formkit: radio
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(friends_page_enable_custom_dock).value
+              value: true
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false

@@ -161,10 +161,10 @@
     <!-- 抽屉侧边栏 -->
     <div class="drawer-side">
       <!-- 遮罩层 -->
-      <label for="share-drawer" 
-             aria-label="关闭分享"
-             class="drawer-overlay">
-      </label>
+      <div aria-label="关闭分享"
+           class="drawer-overlay"
+           @click="closeShareDrawer()">
+      </div>
       
       <!-- 分享内容区 -->
       <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[420px] md:w-[540px] lg:w-[600px] min-h-full shadow-2xl flex flex-col border-l border-base-300/30">
@@ -259,11 +259,10 @@
     <!-- 抽屉侧边栏 -->
     <div class="drawer-side">
       <!-- 遮罩层 -->
-      <label for="comment-drawer" 
-             aria-label="关闭评论"
-             class="drawer-overlay"
-             @click="isOpen = false">
-      </label>
+      <div aria-label="关闭评论"
+           class="drawer-overlay"
+           @click="closeDrawer()">
+      </div>
       
       <!-- 评论内容区 -->
       <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[420px] md:w-[540px] lg:w-[600px] min-h-full shadow-2xl flex flex-col border-l border-base-300/30">
@@ -317,10 +316,10 @@
     <!-- 抽屉侧边栏 -->
     <div class="drawer-side">
       <!-- 遮罩层 -->
-      <label for="toc-drawer" 
-             aria-label="关闭目录"
-             class="drawer-overlay">
-      </label>
+      <div aria-label="关闭目录"
+           class="drawer-overlay"
+           @click="isOpen = false">
+      </div>
       
       <!-- 目录内容区 -->
       <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[320px] md:w-[360px] min-h-full shadow-2xl flex flex-col border-l border-base-300/30">

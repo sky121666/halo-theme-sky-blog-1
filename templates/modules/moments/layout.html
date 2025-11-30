@@ -38,7 +38,7 @@
   <th:block th:replace="~{modules/footer :: footer}" />
 
   <!-- 悬浮 Dock -->
-  <th:block th:replace="~{modules/floating-dock :: dock}" />
+  <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.moments_settings}, 'basic')}" />
 
   <!-- JavaScript -->
   <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>

@@ -56,8 +56,8 @@
   <!-- 页脚 -->
   <th:block th:replace="~{modules/footer :: footer}" />
 
-  <!-- 悬浮 Dock 控制栏（通用版本） -->
-  <th:block th:replace="~{modules/floating-dock :: dock}" />
+  <!-- 悬浮 Dock 控制栏 -->
+  <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.category_settings}, 'basic')}" />
 
   <!-- JavaScript 文件：分类页脚本与公共脚本 -->
   <script th:src="@{/assets/js/categories.js?v={version}(version=${theme.spec.version})}"></script>
