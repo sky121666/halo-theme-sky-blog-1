@@ -116,7 +116,7 @@
 
               <!-- 已登录用户：显示用户菜单 -->
               <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}"
-                class="dropdown dropdown-end dropdown-hover">
+                class="dropdown dropdown-end dropdown-hover group/user">
                 <!-- 用户头像按钮 -->
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle border-0">
                   <div class="avatar avatar-online">
@@ -133,15 +133,19 @@
 
                 <!-- 用户下拉菜单 -->
                 <div tabindex="0"
-                  class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-56 border border-base-300">
+                  class="dropdown-content z-50 menu w-56 mt-2 p-2 pt-4 -mr-1
+                         bg-base-100/95 backdrop-blur-md 
+                         rounded-xl shadow-xl shadow-base-content/5
+                         border border-base-content/10
+                         opacity-0 invisible group-hover/user:opacity-100 group-hover/user:visible
+                         transition-all duration-200 delay-75">
 
                   <!-- 用户信息展示区 -->
-                  <div class="px-3 py-2">
+                  <div class="px-2 py-2">
                     <div class="flex items-center gap-3">
                       <!-- 用户头像（大尺寸） -->
                       <div class="avatar avatar-online">
-                        <div
-                          class="w-10 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
+                        <div class="w-10 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
                           <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
                             th:alt="${currentUser.displayName}" class="object-cover" />
                           <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
@@ -150,37 +154,36 @@
                       </div>
                       <!-- 用户信息文本 -->
                       <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-base-content truncate" th:text="${currentUser.displayName}">
-                        </p>
-                        <p class="text-xs text-base-content/60 truncate" th:text="${currentUser.name}"></p>
+                        <p class="text-sm font-medium text-base-content truncate" th:text="${currentUser.displayName}"></p>
+                        <p class="text-xs text-base-content/50 truncate" th:text="${currentUser.name}"></p>
                       </div>
                     </div>
                   </div>
 
                   <!-- 分割线 -->
-                  <div class="divider my-0.5"></div>
+                  <div class="divider my-1 opacity-50"></div>
 
                   <!-- 功能菜单项 -->
                   <li>
-                    <a href="/console" class="flex items-center gap-3">
-                      <span class="icon-[heroicons--cog-8-tooth] w-5 h-5"></span>
+                    <a href="/console" class="flex items-center gap-3 rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
+                      <span class="icon-[heroicons--cog-8-tooth] w-4 h-4"></span>
                       <span>控制台</span>
                     </a>
                   </li>
                   <li>
-                    <a href="/uc" class="flex items-center gap-3">
-                      <span class="icon-[heroicons--user] w-5 h-5"></span>
+                    <a href="/uc" class="flex items-center gap-3 rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
+                      <span class="icon-[heroicons--user] w-4 h-4"></span>
                       <span>个人中心</span>
                     </a>
                   </li>
 
                   <!-- 分割线 -->
-                  <div class="divider my-0.5"></div>
+                  <div class="divider my-1 opacity-50"></div>
 
                   <!-- 退出登录 -->
                   <li>
-                    <a href="/logout" class="flex items-center gap-3 text-error">
-                      <span class="icon-[heroicons--arrow-left-on-rectangle] w-5 h-5"></span>
+                    <a href="/logout" class="flex items-center gap-3 rounded-lg text-sm text-error/70 hover:text-error hover:bg-error/10 transition-all duration-200">
+                      <span class="icon-[heroicons--arrow-left-on-rectangle] w-4 h-4"></span>
                       <span>退出登录</span>
                     </a>
                   </li>
