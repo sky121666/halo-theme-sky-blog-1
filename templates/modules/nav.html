@@ -38,19 +38,26 @@
 
                 <!-- 带子菜单的菜单项 -->
                 <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <div class="dropdown dropdown-bottom dropdown-center dropdown-hover">
+                  <div class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown">
                     <!-- 父级菜单项 -->
                     <a tabindex="0" role="button"
                       class="nav-menu-item flex items-center gap-1 px-4 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200"
                       th:text="${menuItem.status.displayName}">
                     </a>
-                    <!-- 子菜单下拉列表 -->
+                    <!-- 子菜单下拉列表 - 使用 pt 扩展触发区域 -->
                     <ul tabindex="0"
-                      class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300 mt-0">
-                      <li th:each="childItem : ${menuItem.children}">
-                        <a th:href="@{${childItem.status.href}}" th:text="${childItem.status.displayName}"
+                      class="dropdown-content menu z-50 w-48 p-1.5 pt-3 -mt-1
+                             bg-base-100/95 backdrop-blur-md 
+                             rounded-xl shadow-xl shadow-base-content/5
+                             border border-base-content/10
+                             opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible
+                             transition-all duration-200 delay-75">
+                      <li th:each="childItem : ${menuItem.children}" class="w-full">
+                        <a th:href="@{${childItem.status.href}}"
                           th:target="${childItem.spec.target?.value}"
-                          class="hover:bg-base-200/80 hover:text-base-content/70 duration-200">
+                          th:title="${childItem.status.displayName}"
+                          class="rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
+                          <span class="truncate" th:text="${childItem.status.displayName}"></span>
                         </a>
                       </li>
                     </ul>
