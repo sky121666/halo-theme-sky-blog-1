@@ -1,0 +1,29 @@
+<!-- 单页面内容 -->
+<th:block th:fragment="content">
+
+<article id="page-container">
+  
+  <!-- 页面标题 -->
+  <header id="page-header">
+    <h1 id="page-title" th:text="${singlePage.spec.title}">页面标题</h1>
+  </header>
+
+  <!-- 分割线 -->
+  <div class="divider"></div>
+
+  <!-- 文章内容 -->
+  <div id="page-content" th:utext="${singlePage.content.content}">
+    <p>页面内容...</p>
+  </div>
+
+  <!-- 底部分割线 -->
+  <div class="divider"></div>
+
+  <!-- 底部提示 -->
+  <footer id="page-footer">
+    <p>如有疑问，请通过站点提供的联系方式与我们取得联系。</p>
+  </footer>
+
+</article>
+
+</th:block>
