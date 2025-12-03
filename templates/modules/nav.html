@@ -44,14 +44,15 @@
                       class="nav-menu-item flex items-center gap-1 px-4 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200"
                       th:text="${menuItem.status.displayName}">
                     </a>
-                    <!-- 子菜单下拉列表 - 使用 pt 扩展触发区域 -->
+                    <!-- 子菜单下拉列表 - before 伪元素创建桥接区域 -->
                     <ul tabindex="0"
-                      class="dropdown-content menu z-50 w-48 p-1.5 pt-3 -mt-1
+                      class="dropdown-content menu z-50 w-48 p-1.5 mt-2
                              bg-base-100/95 backdrop-blur-md 
                              rounded-xl shadow-xl shadow-base-content/5
                              border border-base-content/10
                              opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible
-                             transition-all duration-200 delay-75">
+                             transition-all duration-200 delay-75
+                             before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                       <li th:each="childItem : ${menuItem.children}" class="w-full">
                         <a th:href="@{${childItem.status.href}}"
                           th:target="${childItem.spec.target?.value}"
