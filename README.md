@@ -44,6 +44,7 @@
 |------|------|------|
 | **瞬间** | 瞬间管理模块 | [应用市场](https://www.halo.run/store/apps/app-SnwWD) |
 | **朋友圈** | RSS 订阅功能，支持获取订阅内容 | [应用市场](https://www.halo.run/store/apps/app-yISsV) |
+| **Docsme 文档管理** | 项目文档管理，支持多文档项目、多语言、多版本 | [应用市场](https://www.halo.run/store/apps/app-yffxw) |
 | **友链自助提交** | 访问者可自助提交友链，后台审核 | [应用市场](https://www.halo.run/store/apps/app-glejqzwk) |
 | **图库管理** | 图库管理模块 | [应用市场](https://www.halo.run/store/apps/app-BmQJW) |
 | **链接管理** | 网站友情链接管理 | [应用市场](https://www.halo.run/store/apps/app-hfbQg) |
