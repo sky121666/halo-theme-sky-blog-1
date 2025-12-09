@@ -5,8 +5,7 @@
 <!--           分类目录组件                      -->
 <!-- ========================================== -->
 
-<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-     style="transition: box-shadow 0.2s ease;"
+<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
      th:with="categories = ${categoryFinder.listAsTree()}">
   <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
     <span class="icon-[heroicons--folder] w-5 h-5"></span>

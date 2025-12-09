@@ -114,7 +114,7 @@
 }
 
 #article-content.article-style-github a {
-    color: oklch(var(--p));
+    color: var(--color-primary);
     text-decoration: none;
     transition: color 0.2s ease;
 }

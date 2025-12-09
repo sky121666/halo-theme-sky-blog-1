@@ -45,7 +45,7 @@
       <div th:if="${animationType == 'svg' && loadingSettings.custom_svg != null && !loadingSettings.custom_svg.isEmpty()}"
            th:utext="${loadingSettings.custom_svg}"></div>
       <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
-           th:src="${loadingSettings.custom_gif}" alt="加载中" style="width: 64px; height: 64px; object-fit: contain;" />
+           th:src="${loadingSettings.custom_gif}" alt="加载中" class="loading-gif" />
     </div>
     <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
   </div>

@@ -5,8 +5,7 @@
 <!--           最新文章组件                      -->
 <!-- ========================================== -->
 
-<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-     style="transition: box-shadow 0.2s ease;"
+<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
      th:with="cfg = ${theme.config.general.sidebar_settings},
               postCount = ${cfg?.recent_posts_count ?: 5},
               recentPosts = ${postFinder.list({page: 1, size: postCount, sort: {'spec.publishTime,desc'}})}">

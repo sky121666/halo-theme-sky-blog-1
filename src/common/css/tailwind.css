@@ -3,5 +3,7 @@
 @plugin "@iconify/tailwind4";
 @plugin "daisyui" {
   themes: all;
+  /* 排除未使用的组件以减小 CSS 体积 */
+  exclude: artboard, browser, carousel, countdown, diff, file-input, hero, indicator, kbd, mask, mockup, phone, progress, radial-progress, radio, range, rating, skeleton, steps, swap, toast;
 }
 

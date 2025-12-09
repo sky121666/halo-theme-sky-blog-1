@@ -5,8 +5,7 @@
 <!--           标签云组件                        -->
 <!-- ========================================== -->
 
-<div th:fragment="cloud" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-     style="transition: box-shadow 0.2s ease;"
+<div th:fragment="cloud" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
      th:with="tags = ${tagFinder.list(1,50)}">
   <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
     <span class="icon-[heroicons--tag] w-5 h-5"></span>

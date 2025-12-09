@@ -35,7 +35,6 @@
 .dock-item {
   position: relative;
   overflow: visible;
-  will-change: transform;
 }
 
 /* Dock 自定义按钮样式 */
@@ -244,20 +243,6 @@
   }
 }
 
-/* 性能优化 */
-.dock-item,
-.dock-container {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* 分享平台按钮样式 */
-.share-platform-btn {
-  cursor: pointer;
-  user-select: none;
-}
-
 /* 深色模式微光圈效果 - 使用 data-color-scheme 统一判断 */
 [data-color-scheme="dark"] .dock-container {
   box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 15%, transparent);
@@ -266,18 +251,4 @@
 [data-color-scheme="dark"] .dock-container:hover {
   box-shadow: 0 6px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
-
-/* 动画关键帧 - 简约入场 */
-@keyframes dock-fade-in {
-  0% {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* 移除默认入场动画，由 Alpine.js 的 x-show 控制显示 */
 

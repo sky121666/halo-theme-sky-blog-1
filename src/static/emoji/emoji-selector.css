@@ -38,7 +38,7 @@
   max-height: 240px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: hsl(var(--color-base-300)) transparent;
+  scrollbar-color: var(--color-base-300) transparent;
 }
 
 .emoji-grid::-webkit-scrollbar {
@@ -50,12 +50,12 @@
 }
 
 .emoji-grid::-webkit-scrollbar-thumb {
-  background: hsl(var(--color-base-300));
+  background: var(--color-base-300);
   border-radius: 3px;
 }
 
 .emoji-grid::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--color-base-content) / 0.3);
+  background: color-mix(in srgb, var(--color-base-content) 30%, transparent);
 }
 
 .emoji-item {

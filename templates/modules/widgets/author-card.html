@@ -6,8 +6,7 @@
 <!-- ========================================== -->
 
 <a th:fragment="card" href="/about" 
-   class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card block group" 
-   style="transition: box-shadow 0.2s ease;"
+   class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card block group"
    th:with="profile = ${theme.config.about_settings.profile}">
   <div class="flex items-center gap-4">
     <img th:src="${profile.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}" 

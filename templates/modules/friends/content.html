@@ -6,7 +6,7 @@
               listStyle=${cfg?.list_style ?: 'single_column'}">
   
   <!-- 页面标题卡片 -->
-  <div class="card bg-base-100 shadow-sm rounded-2xl mb-6 p-6 sidebar-card" style="transition: box-shadow 0.2s ease;">
+  <div class="card bg-base-100 shadow-sm rounded-2xl mb-6 p-6 sidebar-card">
     <div class="flex items-center gap-4">
       <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
         <span class="icon-[heroicons--user-group] w-7 h-7 text-primary"></span>
@@ -25,8 +25,7 @@
   <!-- 单列样式 -->
   <div th:if="${listStyle == 'single_column'}" class="space-y-4">
     <article th:each="friend : ${friends.items}" th:with="spec = ${friend.spec}"
-             class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
+             class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card">
       <div class="p-5">
         <div class="flex items-center gap-3 mb-4">
           <a th:href="${spec.authorUrl}" target="_blank" rel="noopener" class="shrink-0">
@@ -66,8 +65,7 @@
   <!-- 双列样式 -->
   <div th:if="${listStyle == 'two_columns'}" class="grid grid-cols-1 gap-6 md:grid-cols-2">
     <article th:each="friend : ${friends.items}" th:with="spec = ${friend.spec}"
-             class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
+             class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card">
       <div class="card-body p-5">
         <div class="flex items-center gap-3 mb-3">
           <img th:src="${spec.logo}" alt="" class="w-10 h-10 rounded-full object-cover ring-2 ring-base-content/10" loading="lazy" />
@@ -93,7 +91,7 @@
 
   <!-- 空状态 -->
   <div th:if="${#lists.isEmpty(friends.items)}" 
-       class="card bg-base-100 shadow-sm rounded-2xl sidebar-card" style="transition: box-shadow 0.2s ease;">
+       class="card bg-base-100 shadow-sm rounded-2xl sidebar-card">
     <div class="card-body items-center text-center py-16">
       <span class="icon-[heroicons--inbox] w-16 h-16 text-base-content/20 mb-4"></span>
       <h3 class="text-lg font-medium text-base-content/60">暂无朋友动态</h3>

@@ -56,9 +56,6 @@
 }
 
 /* ==================== 卡片列表增强 ==================== */
-#category-posts {
-  will-change: opacity, transform;
-}
 
 /* 卡片基础样式增强 */
 #category-posts .card {
@@ -194,17 +191,7 @@
   color: var(--color-base-content);
 }
 
-/* ==================== 加载动画 ==================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ==================== 加载动画（使用公共 fadeInUp）==================== */
 
 #category-posts .card {
   animation: fadeInUp 0.5s ease-out backwards;
@@ -229,15 +216,13 @@
 }
 
 /* ==================== 暗色模式优化 ==================== */
-@media (prefers-color-scheme: dark) {
-  #category-posts .card {
-    background: color-mix(in oklch, var(--color-base-100) 95%, transparent);
-  }
-  
-  #category-posts .card:hover {
-    background: var(--color-base-100);
-    box-shadow: 
-      0 12px 28px color-mix(in oklch, black 25%, transparent),
-      0 4px 8px color-mix(in oklch, black 15%, transparent);
-  }
+[data-color-scheme="dark"] #category-posts .card {
+  background: color-mix(in oklch, var(--color-base-100) 95%, transparent);
+}
+
+[data-color-scheme="dark"] #category-posts .card:hover {
+  background: var(--color-base-100);
+  box-shadow: 
+    0 12px 28px color-mix(in oklch, black 25%, transparent),
+    0 4px 8px color-mix(in oklch, black 15%, transparent);
 }

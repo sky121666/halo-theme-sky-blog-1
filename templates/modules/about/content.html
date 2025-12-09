@@ -107,18 +107,18 @@
         
         <!-- GitHub Stats 卡片 -->
         <div th:if="${showGithubStats}" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
-          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden" style="transition: box-shadow 0.2s ease;">
+          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden">
             <img id="github-stats-img" alt="GitHub Stats" class="w-full" loading="lazy"
                  onerror="this.parentElement.style.display='none'" />
           </div>
-          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden" style="transition: box-shadow 0.2s ease;">
+          <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card overflow-hidden">
             <img id="github-langs-img" alt="Top Languages" class="w-full" loading="lazy"
                  onerror="this.parentElement.style.display='none'" />
           </div>
         </div>
         
         <!-- GitHub 贡献热力图 -->
-        <div th:if="${showGithubCalendar}" class="card bg-base-100 shadow-sm rounded-lg sidebar-card p-4" style="transition: box-shadow 0.2s ease;">
+        <div th:if="${showGithubCalendar}" class="card bg-base-100 shadow-sm rounded-lg sidebar-card p-4">
           <img id="github-calendar-img" alt="GitHub Contributions" class="w-full h-auto rounded" loading="lazy" />
           <div class="flex items-center justify-between mt-3">
             <span class="text-xs text-base-content/40">GitHub 年度贡献</span>
@@ -194,7 +194,7 @@
           <span class="icon-[mdi--code-tags] w-6 h-6"></span>
           技术栈
         </h2>
-        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card">
           <div class="card-body p-6">
             <div class="flex flex-wrap gap-3">
               <span th:each="tech : ${techStack}" class="tech-tag">
@@ -215,7 +215,7 @@
           <span class="icon-[mdi--text-box-outline] w-6 h-6"></span>
           更多介绍
         </h2>
-        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+        <div class="card bg-base-100 shadow-sm rounded-lg sidebar-card">
           <div class="card-body p-6">
             <article class="prose prose-base max-w-none" th:utext="${pageContent}"></article>
           </div>
@@ -229,22 +229,22 @@
           站点信息
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card">
             <div class="stat-title text-base-content/60">文章数</div>
             <div class="stat-value text-primary text-2xl" 
                  th:text="${siteStats?.post ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card">
             <div class="stat-title text-base-content/60">分类数</div>
             <div class="stat-value text-secondary text-2xl" 
                  th:text="${siteStats?.category ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card">
             <div class="stat-title text-base-content/60">评论数</div>
             <div class="stat-value text-accent text-2xl" 
                  th:text="${siteStats?.comment ?: 0}">0</div>
           </div>
-          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card" style="transition: box-shadow 0.2s ease;">
+          <div class="stat bg-base-100 shadow-sm rounded-lg sidebar-card">
             <div class="stat-title text-base-content/60">总访问量</div>
             <div class="stat-value text-info text-2xl" 
                  th:text="${siteStats?.visit ?: 0}">0</div>

@@ -58,7 +58,6 @@
   border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
   filter: blur(50px);
   z-index: 2;
-  will-change: transform, border-radius;
   opacity: 0.5;
 }
 
@@ -442,7 +441,6 @@
   filter: blur(1px);
   opacity: 0;
   z-index: 2;
-  will-change: transform, opacity;
 }
 
 /* 生成25颗流星，随机分布 */

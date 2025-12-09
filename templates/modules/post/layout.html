@@ -61,7 +61,7 @@
       <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
            th:src="${loadingSettings.custom_gif}"
            alt="加载中"
-           style="width: 64px; height: 64px; object-fit: contain;">
+           class="loading-gif">
     </div>
     
     <!-- 加载文字 -->

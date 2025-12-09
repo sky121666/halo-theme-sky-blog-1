@@ -256,10 +256,7 @@ body {
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
 
-body[style*="overflow: hidden"] {
-    overflow: auto !important;
-}
-
+/* 修复模态框打开时滚动条消失导致的页面跳动 */
 @supports not (scrollbar-gutter: stable) {
     :root {
         --scrollbar-width: calc(100vw - 100%);
@@ -267,7 +264,6 @@ body[style*="overflow: hidden"] {
 
     body[style*="overflow: hidden"] {
         padding-right: var(--scrollbar-width);
-        overflow: hidden;
     }
 }
 
@@ -291,4 +287,37 @@ body[style*="overflow: hidden"] {
 /* 抽屉侧边栏阴影 */
 [data-color-scheme="dark"] .drawer-side > div {
     box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+/* ===================================================
+ * 公共组件样式 - 替代内联 CSS
+ * ==================================================*/
+
+/* 侧边栏卡片过渡效果 */
+.sidebar-card {
+    transition: box-shadow 0.2s ease;
+}
+
+/* 加载动画 GIF 尺寸 */
+.loading-gif {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+/* 滚动容器细滚动条 */
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+/* 公共淡入上升动画 - 多页面共用 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

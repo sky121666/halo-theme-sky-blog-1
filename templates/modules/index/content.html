@@ -217,7 +217,7 @@
               <!-- 单列样式 -->
               <div th:if="${friendsListStyle == 'single_column'}" class="space-y-4">
                 <th:block th:each="friend : ${friendPosts.items}" th:with="spec = ${friend.spec}">
-                  <article class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card" style="transition: box-shadow 0.2s ease;">
+                  <article class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden sidebar-card">
                     <div class="p-5">
                       <div class="flex items-center gap-3 mb-4">
                         <a th:href="${spec.authorUrl}" target="_blank" rel="noopener" class="shrink-0">
