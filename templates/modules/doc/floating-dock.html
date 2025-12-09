@@ -70,8 +70,8 @@
                                         or cfg?.enable_sidebar_drawer 
                                         or cfg?.enable_back_to_top != false}"></div>
         
-        <!-- 评论按钮 -->
-        <button th:if="${cfg?.enable_comment}"
+        <!-- 评论按钮 - 需要主题启用评论且后端允许评论 -->
+        <button th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}"
                 @click="toggleCommentDrawer()"
                 class="dock-item dock-btn group relative"
                 title="评论">
@@ -166,8 +166,8 @@
       </th:block>
     </th:block>
     
-    <!-- 评论按钮 -->
-    <div th:if="${cfg?.enable_comment}">
+    <!-- 评论按钮 - 需要主题启用评论且后端允许评论 -->
+    <div th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}">
       <span class="text-sm whitespace-nowrap hidden sm:block">评论</span>
       <button class="btn btn-circle" @click="$dispatch('toggle-doc-comment-drawer')">
         <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5"></span>
@@ -207,7 +207,8 @@
 <!-- ========================================== -->
 
 <th:block th:fragment="doc-comment-drawer" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<div th:if="${cfg?.enable_comment}"
+<!-- 评论抽屉 - 需要主题启用评论且后端允许评论 -->
+<div th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}"
      x-data="{ isOpen: false }"
      @toggle-doc-comment-drawer.window="isOpen = !isOpen">
   
@@ -338,7 +339,8 @@
         </div>
         
         <div class="flex-1 overflow-y-auto p-4 scrollbar-thin">
-          <ul class="menu bg-transparent p-0">
+          <!-- 使用文档页的导航树样式 -->
+          <ul class="doc-nav-tree">
             <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
           </ul>
         </div>

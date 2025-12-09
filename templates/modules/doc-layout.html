@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (head, content, scripts, dock)">
-<!-- Docsme 文档专用布局 -->
+<!-- Docsme 文档专用布局 - 取消加载界面提升体验 -->
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,7 +10,7 @@
   <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
   <!-- 页面标题 -->
-  <title th:text="${site.title}"></title>
+  <title th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title}"></title>
   
   <!-- 字体 -->
   <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
@@ -18,36 +18,27 @@
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <!-- 文章样式（包含文章内容和目录样式） -->
   <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
+  <!-- 文档页专用样式 -->
+  <link rel="stylesheet" th:href="@{/assets/css/doc.css?v={version}(version=${theme.spec.version})}" />
 
   <!-- 额外的 head 内容（仅 CSS） -->
   <th:block th:if="${head != null}">
     <th:block th:replace="${head}" />
   </th:block>
+
+  <!-- 文档项目自定义 head 内容（CSS/JS）- 需要 Docsme 插件支持 -->
+  <th:block th:if="${project?.spec != null and project.spec['head'] != null}" th:utext="${project.spec['head']}" />
 </head>
 
 <body class="min-h-screen bg-base-100 flex flex-col">
   
-  <!-- 加载屏幕 -->
-  <div th:if="${theme.config.general != null && theme.config.general.loading_screen != null && theme.config.general.loading_screen.enable_loading}" 
-       id="loading-screen"
-       th:with="loadingSettings=${theme.config.general.loading_screen}"
-       th:attr="data-min-duration=${loadingSettings.min_duration ?: 500}">
-    <div th:with="animationType=${loadingSettings.animation_type ?: 'css'}, cssStyle=${loadingSettings.css_style ?: 'spinner'}">
-      <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="loading-spinner"></div>
-      <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="loading-dots"><span></span><span></span><span></span></div>
-      <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="loading-bars"><span></span><span></span><span></span><span></span><span></span></div>
-      <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="loading-ring"></div>
-      <div th:if="${animationType == 'svg' && loadingSettings.custom_svg != null && !loadingSettings.custom_svg.isEmpty()}" th:utext="${loadingSettings.custom_svg}"></div>
-      <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}" th:src="${loadingSettings.custom_gif}" alt="加载中" class="loading-gif">
-    </div>
-    <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
-  </div>
+  <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
 
   <!-- 主题导航栏 -->
   <th:block th:replace="~{modules/nav :: navbar}" />
 
   <!-- 主要内容 -->
-  <section class="flex-1 pt-16 w-full">
+  <section class="flex-1 w-full">
     <th:block th:replace="${content}" />
   </section>
 
@@ -65,11 +56,16 @@
 
   <!-- JavaScript -->
   <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+  <!-- 文档页专用脚本 -->
+  <script th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"></script>
   
   <!-- 插件脚本（需要在 body 后加载） -->
   <th:block th:if="${scripts != null}">
     <th:block th:replace="${scripts}" />
   </th:block>
+
+  <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
+  <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
 </body>
 
 </html>
