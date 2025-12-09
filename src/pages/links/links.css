@@ -55,3 +55,53 @@
     oklch(var(--b3) / 0.3) 100%
   );
 }
+
+/* ========================================== */
+/*     友链提交模态框性能优化                   */
+/* ========================================== */
+
+/* 禁用 DaisyUI 默认的模态框过渡动画 */
+#link-submit-modal,
+#link-submit-modal .modal-box {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* 模态框打开时直接显示 */
+#link-submit-modal[open] .modal-box {
+  opacity: 1;
+  transform: none;
+}
+
+/* 输入框优化 */
+#link-submit-modal .input,
+#link-submit-modal .textarea,
+#link-submit-modal .select {
+  transition: border-color 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* 输入框聚焦时 - 主题色发光效果 */
+#link-submit-modal .input:focus,
+#link-submit-modal .textarea:focus,
+#link-submit-modal .select:focus,
+#link-submit-modal .input:focus-visible,
+#link-submit-modal .textarea:focus-visible,
+#link-submit-modal .select:focus-visible {
+  outline: none !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent),
+              0 0 12px color-mix(in oklch, var(--color-primary) 15%, transparent) !important;
+}
+
+/* 模态框背景 - 毛玻璃遮蔽效果 */
+#link-submit-modal.modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+#link-submit-modal .modal-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}

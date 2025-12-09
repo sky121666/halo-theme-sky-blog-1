@@ -132,14 +132,15 @@
                   </div>
                 </div>
 
-                <!-- 用户下拉菜单 -->
+                <!-- 用户下拉菜单 - before 伪元素创建桥接区域 -->
                 <div tabindex="0"
-                  class="dropdown-content z-50 menu w-56 mt-2 p-2 pt-4 -mr-1
+                  class="dropdown-content z-50 menu w-56 mt-2 p-2 pt-3 -mr-1
                          bg-base-100/95 backdrop-blur-md 
                          rounded-xl shadow-xl shadow-base-content/5
                          border border-base-content/10
                          opacity-0 invisible group-hover/user:opacity-100 group-hover/user:visible
-                         transition-all duration-200 delay-75">
+                         transition-all duration-200 delay-75
+                         before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
 
                   <!-- 用户信息展示区 -->
                   <div class="px-2 py-2">
