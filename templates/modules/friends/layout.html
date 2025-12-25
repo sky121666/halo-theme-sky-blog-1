@@ -18,7 +18,7 @@
   <!-- 页面标题 -->
   <title th:text="${site.title} + ' - ' + (${theme.config.friends_page_settings?.page_title} ?: '朋友圈')"></title>
   <!-- 字体 -->
-  <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
+  <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
 </head>
