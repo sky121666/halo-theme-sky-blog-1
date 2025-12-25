@@ -9,26 +9,30 @@
 }
 
 .dock-container {
-  /* 毛玻璃效果增强 */
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* 毛玻璃效果 */
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   
   /* 阴影层次 */
   box-shadow: 
-    0 10px 40px -10px rgba(0, 0, 0, 0.1),
+    0 8px 32px -8px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  /* 悬停效果 */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dock-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 20px 60px -15px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+/* 桌面端 hover 效果 */
+@media (hover: hover) {
+  .dock-container {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .dock-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 16px 48px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
 /* Dock 按钮项 */
@@ -48,15 +52,22 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
   color: var(--color-base-content);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.dock-btn:hover [class*="icon-"],
-.dock-btn:hover .dock-icon-svg,
-.dock-btn:hover .dock-icon-svg svg {
-  color: var(--color-primary);
-  transform: scale(1.1);
+/* 桌面端 hover */
+@media (hover: hover) {
+  .dock-btn {
+    transition: transform 0.15s ease;
+  }
+  
+  .dock-btn:hover [class*="icon-"],
+  .dock-btn:hover .dock-icon-svg,
+  .dock-btn:hover .dock-icon-svg svg {
+    color: var(--color-primary);
+    transform: scale(1.1);
+  }
 }
 
 .dock-btn:active {
@@ -103,14 +114,20 @@
   border: 1px solid var(--color-base-300);
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
   text-decoration: none;
   color: var(--color-base-content);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.share-platform-btn:hover {
-  background: var(--color-base-200);
-  border-color: var(--color-primary);
+@media (hover: hover) {
+  .share-platform-btn {
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  
+  .share-platform-btn:hover {
+    background: var(--color-base-200);
+    border-color: var(--color-primary);
+  }
 }
 
 .share-icon-wrapper {

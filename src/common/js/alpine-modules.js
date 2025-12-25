@@ -420,19 +420,26 @@ function createNavbarController() {
     scrolled: false,
     
     init() {
-      // 滚动监听
+      // 使用 requestAnimationFrame 节流的滚动监听
+      let ticking = false;
+      
       window.addEventListener('scroll', () => {
-        this.scrolled = window.scrollY > 20;
-        // 添加/移除 scrolled 类到 navbar
-        const navbar = this.$el.querySelector('.navbar');
-        if (navbar) {
-          if (this.scrolled) {
-            navbar.classList.add('scrolled');
-          } else {
-            navbar.classList.remove('scrolled');
-          }
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const newScrolled = window.scrollY > 20;
+            // 只在状态变化时更新 DOM
+            if (this.scrolled !== newScrolled) {
+              this.scrolled = newScrolled;
+              const navbar = this.$el.querySelector('.navbar');
+              if (navbar) {
+                navbar.classList.toggle('scrolled', this.scrolled);
+              }
+            }
+            ticking = false;
+          });
+          ticking = true;
         }
-      });
+      }, { passive: true });
     }
   };
 }
@@ -500,7 +507,17 @@ function createSimpleFloatingDock() {
     
     init() {
       this.updateVisibility();
-      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+      
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     },
     
     updateVisibility() {
@@ -525,7 +542,17 @@ function createDocFloatingDock() {
     
     init() {
       this.updateVisibility();
-      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+      
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     },
     
     updateVisibility() {
@@ -651,15 +678,26 @@ function createSideFloatingDock() {
     
     init() {
       this.updateVisibility();
-      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+      
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     },
     
     updateVisibility() {
-      this.isVisible = window.scrollY >= 50;
+      const newVisible = window.scrollY >= 50;
       // 滚动时自动收起展开的菜单
-      if (!this.isVisible) {
+      if (!newVisible && this.isVisible) {
         this.isExpanded = false;
       }
+      this.isVisible = newVisible;
     },
     
     scrollToTop() {

@@ -4,6 +4,11 @@
  * 导航栏核心样式配置
  * 功能：提供透明背景、渐变遮罩和平滑过渡效果
  * 特性：响应式设计、主题适配、性能优化
+ * 
+ * 性能优化说明：
+ * 1. 使用具体属性替代 transition: all
+ * 2. hover 效果仅在支持 hover 的设备上生效
+ * 3. 动画分层：父容器滑入 + 子元素淡入（避免 transform 叠加）
  */
 
 /* 导航菜单图标样式 */
@@ -25,7 +30,7 @@
   color: currentColor !important;
 }
 
-/* 基础导航栏样式 - 透明背景与过渡效果 */
+/* 基础导航栏样式 - 透明背景 */
 .nav-wrapper {
   z-index: 50 !important;
 }
@@ -33,10 +38,7 @@
 .navbar {
   position: relative;
   background-color: transparent;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
-
 
 /* 导航栏内容层级管理 - 确保内容显示在遮罩上层 */
 .navbar > * {
@@ -44,17 +46,14 @@
   z-index: 10;
 }
 
-
-
 /**
- * 导航菜单交互效果
+ * 导航菜单交互效果（仅桌面端）
  * 功能：菜单项悬停动画、下划线指示器、位移效果
  */
 
-/* 导航菜单项基础悬停效果 */
+/* 导航菜单项基础样式 */
 .nav-menu-item {
   position: relative;
-  transition: all 0.3s ease-out;
   overflow: hidden;
 }
 
@@ -67,87 +66,84 @@
   height: 2px;
   background: linear-gradient(90deg, transparent, currentColor, transparent);
   transform: translateX(-50%);
-  transition: width 0.3s ease-out;
   opacity: 0.8;
 }
 
-.nav-menu-item:hover::before {
-  width: 60%;
+/* 桌面端 hover 效果 - 仅在支持 hover 的设备上生效 */
+@media (hover: hover) {
+  .nav-menu-item {
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  
+  .nav-menu-item::before {
+    transition: width 0.2s ease;
+  }
+  
+  .nav-menu-item:hover::before {
+    width: 60%;
+  }
+
+  .nav-menu-item:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Logo 区域交互效果 */
+  .navbar .flex-shrink-0 a {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .navbar .flex-shrink-0 a:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  
+  /* 导航栏按钮 hover */
+  .navbar .btn-ghost {
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .navbar .btn-ghost:hover {
+    background-color: color-mix(in srgb, var(--color-base-content) 5%, transparent);
+    transform: translateY(-1px);
+  }
 }
 
-.nav-menu-item:hover {
-  transform: translateY(-1px);
-  transition: all 0.3s ease-out;
-}
-
-/* Logo 区域交互效果 - 缩放与位移动画 */
-.flex-shrink-0 a {
-  transition: all 0.3s ease-out;
-}
-
-.flex-shrink-0 a:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-.flex-shrink-0 a span {
-  transition: all 0.3s ease-out;
-}
-
-.flex-shrink-0 a:hover span {
-  transform: translateX(2px);
-}
-
-/* 按钮交互效果 - 简约优雅风格 */
-/* 导航栏按钮特殊样式 */
-.navbar .btn-ghost {
-  /* 限定过渡属性以避免主题切换颜色动画 */
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  position: relative;
-}
-
-.navbar .btn-ghost:hover {
-  background-color: color-mix(in srgb, var(--color-base-content) 5%, transparent);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 8%, transparent);
-}
-
+/* 按钮 active 状态（所有设备） */
 .navbar .btn-ghost:active {
-  transform: translateY(0);
-  transition: transform 0.1s ease;
+  transform: translateY(0) scale(0.98);
 }
 
 
 /**
  * 移动端菜单系统
  * 功能：抽屉式菜单、触摸优化、动画效果
+ * 
+ * 动画优化：
+ * - 父容器（drawer-slide-in）：滑入动画
+ * - 子元素（drawer-menu-item）：仅淡入，不做位移（避免 transform 叠加）
  */
 
-/* 移动端抽屉渐变背景 */
+/* 移动端抽屉渐变背景 - 简化为 5 点渐变 */
 .drawer-gradient-bg {
   background: linear-gradient(
     to right,
     var(--color-base-100) 0%,
     var(--color-base-100) 30%,
-    color-mix(in srgb, var(--color-base-100) 95%, transparent) 40%,
-    color-mix(in srgb, var(--color-base-100) 88%, transparent) 50%,
-    color-mix(in srgb, var(--color-base-100) 76%, transparent) 60%,
-    color-mix(in srgb, var(--color-base-100) 58%, transparent) 70%,
-    color-mix(in srgb, var(--color-base-100) 38%, transparent) 80%,
-    color-mix(in srgb, var(--color-base-100) 18%, transparent) 90%,
+    color-mix(in srgb, var(--color-base-100) 70%, transparent) 55%,
+    color-mix(in srgb, var(--color-base-100) 30%, transparent) 80%,
     transparent 100%
   );
 }
 
-/* 移动端抽屉滑入动画 */
+/* 移动端抽屉滑入动画 - 父容器负责滑入 */
 .drawer-slide-in {
-  animation: drawerSlideIn 0.3s ease-out;
+  animation: drawerSlideIn 0.25s ease-out;
 }
 
 @keyframes drawerSlideIn {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-16px);
   }
   to {
     opacity: 1;
@@ -155,33 +151,26 @@
   }
 }
 
-/* 移动端菜单项依次淡入动画 */
+/* 移动端菜单项 - 仅淡入，不做位移（避免与父容器 transform 叠加） */
 .drawer-menu-item {
   opacity: 0;
-  animation: menuItemFadeIn 0.4s ease-out forwards;
-  animation-delay: calc(var(--item-index, 0) * 0.06s + 0.1s);
+  animation: menuItemFadeIn 0.2s ease-out forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.03s + 0.1s);
 }
 
 @keyframes menuItemFadeIn {
   from {
     opacity: 0;
-    transform: translateX(-12px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
 /* 移动端菜单项触摸交互优化 */
 .mobile-menu-link {
-  transition: all 0.3s ease-out;
   position: relative;
-}
-
-.mobile-menu-link:hover {
-  transform: translateX(4px);
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 移动端二级菜单折叠展开效果 */
@@ -197,33 +186,7 @@
 }
 
 .mobile-menu-item .collapse-content {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 移动端子菜单项交互样式 */
-.mobile-menu-item .menu-item a {
-  position: relative;
-  overflow: hidden;
-}
-
-.mobile-menu-item .menu-item a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent);
-  transition: width 0.3s ease-out;
-}
-
-.mobile-menu-item .menu-item a:hover::before {
-  width: 100%;
-}
-
-/* 移动端子菜单容器滑入动画 */
-.mobile-menu-item .collapse-content .menu {
-  animation: slideInLeft 0.3s ease-out;
+  transition: max-height 0.2s ease;
 }
 
 /* 移动端菜单项激活状态样式 */
@@ -232,56 +195,38 @@
   border-left-color: var(--color-primary);
 }
 
-/* 移动端触摸反馈效果 - 按压缩放动画 */
-.mobile-menu-item .collapse-title:active {
-  transform: scale(0.98);
-  transition-duration: 0.1s;
-}
-
-.mobile-menu-item .menu-item a:active {
-  transform: scale(0.95);
-  transition-duration: 0.1s;
+/* 移动端触摸反馈效果 - 简化为背景色变化 */
+.mobile-menu-item .collapse-title:active,
+.mobile-menu-item .menu-item a:active,
+.mobile-menu-link:active {
+  background-color: color-mix(in srgb, var(--color-base-content) 8%, transparent);
 }
 
 /**
- * 导航栏滚动状态增强
- * 功能：滚动时的渐变遮罩、阴影效果、背景变化
+ * 导航栏渐变遮罩
+ * 功能：顶部渐变过渡效果
+ * 优化：简化为 5 点渐变，移除无用的 transition
  */
 
-/* 滚动状态渐变遮罩效果 - 使用主题背景色的渐变透明效果 */
+/* 导航栏渐变遮罩 - 简化渐变点 */
 .navbar::after {
- content: "";
+  content: "";
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: calc(100% + 1rem);
   background: linear-gradient(
     to bottom,
     var(--color-base-100) 0%,
-    color-mix(in srgb, var(--color-base-100) 99%, transparent) 14%,
-    color-mix(in srgb, var(--color-base-100) 95%, transparent) 26.2%,
-    color-mix(in srgb, var(--color-base-100) 89%, transparent) 36.8%,
-    color-mix(in srgb, var(--color-base-100) 82%, transparent) 45.9%,
-    color-mix(in srgb, var(--color-base-100) 74%, transparent) 53.7%,
-    color-mix(in srgb, var(--color-base-100) 65%, transparent) 60.4%,
-    color-mix(in srgb, var(--color-base-100) 55%, transparent) 66.2%,
-    color-mix(in srgb, var(--color-base-100) 45%, transparent) 71.2%,
-    color-mix(in srgb, var(--color-base-100) 35%, transparent) 75.6%,
-    color-mix(in srgb, var(--color-base-100) 26%, transparent) 79.6%,
-    color-mix(in srgb, var(--color-base-100) 18%, transparent) 83.4%,
-    color-mix(in srgb, var(--color-base-100) 11%, transparent) 87.2%,
-    color-mix(in srgb, var(--color-base-100) 5%, transparent) 91.1%,
-    color-mix(in srgb, var(--color-base-100) 1%, transparent) 95.3%,
+    color-mix(in srgb, var(--color-base-100) 85%, transparent) 40%,
+    color-mix(in srgb, var(--color-base-100) 50%, transparent) 65%,
+    color-mix(in srgb, var(--color-base-100) 15%, transparent) 85%,
     transparent 100%
   );
   pointer-events: none;
-  opacity: 1;
   z-index: -1;
-  transition: opacity 0.4s, transform 0.4s, visibility 0.4s;
 }
-
-/* 滚动状态样式已移除 - 避免灰色蒙版问题 */
 
 
 /**
@@ -304,50 +249,24 @@
  * 功能：移动端专用样式、触摸交互、性能优化
  */
 
-/* 移动端导航栏响应式样式 */
+/* 移动端触摸反馈 */
 @media (max-width: 1023px) {
-  
-  .drawer-button:hover {
-    transform: scale(1.05);
-    background-color: color-mix(in srgb, var(--color-base-200) 40%, transparent);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 8%, transparent);
-  }
-  
-  /* 移动端触摸反馈 */
   .drawer-button:active {
-    transform: scale(0.98);
-    transition-duration: 0.1s;
+    background-color: color-mix(in srgb, var(--color-base-content) 10%, transparent);
   }
 }
 
 /**
- * 下拉子菜单交互效果
- * 功能：子菜单项的悬停动画和背景变化
+ * 下拉子菜单交互效果（仅桌面端）
  */
-
-/* 下拉子菜单项悬停效果 */
-.dropdown-content a {
-  transition: all 0.2s ease-out;
-}
-
-.dropdown-content a:hover {
-  transform: translateX(2px);
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-}
-/* 自定义动画 - 用于移动端菜单 */
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-15px);
+@media (hover: hover) {
+  .dropdown-content a {
+    transition: background-color 0.15s ease, transform 0.15s ease;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 
-/* 移动端菜单动画类 */
-.animate-slide-in-left {
-  animation: slideInLeft 0.3s ease-out;
+  .dropdown-content a:hover {
+    transform: translateX(2px);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
 }
 
