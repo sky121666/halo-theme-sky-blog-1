@@ -2232,6 +2232,59 @@ spec:
           label: 前端发布
           help: 允许登录用户在前端发布瞬间
           value: true
+        - $formkit: switch
+          id: moments_enable_share
+          name: enable_share
+          label: 启用分享
+          help: 在瞬间详情页显示分享按钮
+          value: true
+        - $formkit: group
+          name: share_settings
+          label: 分享设置
+          if: $get(moments_enable_share).value
+          value:
+            share_title_template: ""
+            share_item_ids:
+              - wechat
+              - weibo
+              - x
+              - qq
+          children:
+            - $formkit: text
+              name: share_title_template
+              label: 分享标题模板
+              help: 留空使用默认标题，可使用变量 {author} {site} {date}
+              placeholder: "{author} 的瞬间 - {site}"
+            - $formkit: select
+              name: share_item_ids
+              multiple: true
+              sortable: true
+              label: 启用的分享平台
+              help: 选择要启用的分享平台，可拖拽调整顺序
+              value:
+                - wechat
+                - weibo
+                - x
+                - qq
+              options:
+                - label: 微信
+                  value: wechat
+                - label: X (Twitter)
+                  value: x
+                - label: Telegram
+                  value: telegram
+                - label: Facebook
+                  value: facebook
+                - label: QQ
+                  value: qq
+                - label: QQ 空间
+                  value: qzone
+                - label: 微博
+                  value: weibo
+                - label: 豆瓣
+                  value: douban
+                - label: 系统分享
+                  value: native
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock

@@ -148,6 +148,12 @@
                     <span class="icon-[heroicons--chat-bubble-left] size-5"></span>
                     <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
                   </button>
+                  <!-- 详情入口 -->
+                  <a th:href="@{'/moments/' + ${moment.metadata.name}}" 
+                     class="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
+                     title="查看详情">
+                    <span class="icon-[heroicons--arrow-top-right-on-square] size-5"></span>
+                  </a>
                 </div>
                 
                 <!-- 评论区 -->

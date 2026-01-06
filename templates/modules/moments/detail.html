@@ -6,7 +6,11 @@
 
   <th:block th:with="
     cfg=${theme.config.moments_settings},
+    enableUpvote=${cfg?.enable_upvote != false},
     enableComment=${cfg?.enable_comment != false},
+    enableShare=${cfg?.enable_share != false},
+    shareSettings=${cfg?.share_settings},
+    shareItemIds=${shareSettings?.share_item_ids ?: {'wechat','weibo','x','qq'}},
     content=${moment.spec.content}
   ">
 
@@ -20,105 +24,110 @@
         </a>
       </div>
 
-      <!-- 瞬间卡片 -->
-      <article class="card bg-base-100 shadow-sm border border-base-200"
-               x-data="{ shareModal: false }">
-        <div class="card-body p-4 md:p-5">
-          
-          <!-- 头部：头像 + 用户名 -->
+      <!-- 瞬间卡片 - 与列表页样式一致 -->
+      <article class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden">
+        <div class="p-4">
+          <!-- 头部：头像 + 用户名 + 时间 -->
           <div class="flex items-center gap-3 mb-3">
             <div class="avatar">
-              <div class="w-10 h-10 rounded-full ring-1 ring-base-200">
+              <div class="w-11 h-11 rounded-xl bg-base-200">
                 <img th:if="${moment.owner?.avatar != null}" 
                      th:src="${moment.owner.avatar}" 
                      th:alt="${moment.owner.displayName}" />
                 <div th:if="${moment.owner?.avatar == null}" 
-                     class="w-full h-full bg-primary/10 flex items-center justify-center">
-                  <span class="text-primary font-medium"
-                        th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner.displayName, 0, 1) : 'U'}">U</span>
-                </div>
+                     class="w-full h-full flex items-center justify-center text-base-content/40 font-semibold"
+                     th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner.displayName, 0, 1) : 'U'}">U</div>
               </div>
             </div>
             <div class="flex-1 min-w-0">
-              <div class="font-medium text-base-content truncate" 
+              <div class="font-semibold text-primary text-sm truncate" 
                    th:text="${moment.owner?.displayName ?: '匿名用户'}">用户名</div>
+              <div class="text-xs text-base-content/40"
+                   th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">11-27 14:00</div>
             </div>
           </div>
           
           <!-- 文字内容 -->
           <div th:if="${not #strings.isEmpty(content.html)}" 
-               class="prose prose-sm max-w-none text-base-content"
+               class="text-sm text-base-content leading-relaxed mb-3"
                th:utext="${content.html}">
             今天的天气真好...
           </div>
-          
+
           <!-- 媒体区域 -->
-          <div th:if="${content.medium != null && !content.medium.isEmpty()}" class="moment-media mt-3 space-y-2">
-            <th:block th:each="medium : ${content.medium}">
-              <img th:if="${medium.type.name == 'PHOTO'}" 
-                   th:src="${medium.url}" 
-                   class="rounded-xl w-full object-cover"
-                   loading="lazy" />
-              <video th:if="${medium.type.name == 'VIDEO'}" 
+          <div th:if="${content.medium != null && !content.medium.isEmpty()}" class="moment-media mb-3">
+            <!-- 单图 -->
+            <th:block th:if="${#lists.size(content.medium) == 1}">
+              <th:block th:each="medium : ${content.medium}">
+                <img th:if="${medium.type.name == 'PHOTO'}" 
                      th:src="${medium.url}" 
-                     controls preload="metadata"
-                     class="rounded-xl w-full">
-              </video>
-              <div th:if="${medium.type.name == 'AUDIO'}" class="bg-base-200 rounded-xl p-3">
-                <audio th:src="${medium.url}" controls class="w-full"></audio>
-              </div>
+                     class="rounded-xl max-h-72 object-cover cursor-pointer"
+                     loading="lazy" />
+                <video th:if="${medium.type.name == 'VIDEO'}" 
+                       th:src="${medium.url}" 
+                       controls preload="metadata"
+                       class="rounded-xl max-h-72 w-full">
+                </video>
+                <div th:if="${medium.type.name == 'AUDIO'}" class="bg-base-200 rounded-xl p-3">
+                  <audio th:src="${medium.url}" controls class="w-full"></audio>
+                </div>
+              </th:block>
             </th:block>
+            
+            <!-- 多图网格 -->
+            <div th:if="${#lists.size(content.medium) > 1}" 
+                 class="grid gap-1 rounded-xl overflow-hidden"
+                 th:classappend="${#lists.size(content.medium) == 2 or #lists.size(content.medium) == 4} ? 'grid-cols-2' : 'grid-cols-3'">
+              <th:block th:each="medium, stat : ${content.medium}">
+                <div th:if="${medium.type.name == 'PHOTO' && stat.index < 9}" 
+                     class="aspect-square relative bg-base-200 overflow-hidden cursor-pointer">
+                  <img th:src="${medium.url}" 
+                       class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                       loading="lazy" />
+                  <div th:if="${stat.index == 8 && #lists.size(content.medium) > 9}" 
+                       class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span class="text-white font-semibold" 
+                          th:text="'+' + (${#lists.size(content.medium)} - 9)">+3</span>
+                  </div>
+                </div>
+              </th:block>
+            </div>
           </div>
 
           <!-- 标签 -->
-          <div th:if="${moment.spec.tags != null && !moment.spec.tags.isEmpty()}" class="mt-3 flex flex-wrap gap-1">
+          <div th:if="${moment.spec.tags != null && !moment.spec.tags.isEmpty()}" class="mb-3 flex flex-wrap gap-1.5">
             <a th:each="tag : ${moment.spec.tags}" 
                th:href="@{/moments(tag=${tag})}"
-               class="text-sm text-primary hover:underline"
+               class="badge badge-sm badge-ghost text-primary"
                th:text="'#' + ${tag}">#标签</a>
           </div>
 
-          <!-- 互动栏 -->
-          <div class="mt-4 flex items-center gap-4 text-sm text-base-content/50">
-            <!-- 点赞 -->
-            <upvote-button 
-              th:name="${moment.metadata.name}" 
-              group="moment.halo.run" 
-              kind="Moment"
-              th:attr="current-upvote-count=${moment.stats?.upvote ?: 0}">
-            </upvote-button>
-            
+          <!-- 互动操作 -->
+          <div class="flex items-center gap-4 pt-2 border-t border-base-200 text-sm text-base-content/50">
+            <!-- 点赞按钮 -->
+            <button th:if="${enableUpvote}"
+                    class="inline-flex items-center gap-1.5 hover:text-error transition-colors"
+                    th:data-moment-name="${moment.metadata.name}"
+                    th:data-upvote-count="${moment.stats?.upvote ?: 0}"
+                    onclick="handleMomentUpvote(this)">
+              <span class="icon-[heroicons--heart] size-5"></span>
+              <span class="upvote-count" th:text="${moment.stats?.upvote ?: 0}">0</span>
+            </button>
             <!-- 评论数 -->
-            <div class="inline-flex items-center">
-              <span class="icon-[heroicons--chat-bubble-left] size-4 mr-1"></span>
+            <div th:if="${enableComment}" class="inline-flex items-center gap-1.5">
+              <span class="icon-[heroicons--chat-bubble-left] size-5"></span>
               <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
             </div>
-            
             <!-- 分享 -->
-            <div class="group inline-flex cursor-pointer items-center transition-all hover:text-primary"
-                 @click="shareModal = true">
-              <div class="inline-flex size-7 items-center justify-center rounded-full group-hover:bg-primary/10">
-                <span class="icon-[heroicons--share] size-4"></span>
-              </div>
-            </div>
-            
-            <!-- 日期 -->
-            <div class="inline-flex items-center ml-auto">
-              <span class="icon-[heroicons--calendar] size-4 mr-1"></span>
-              <time th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</time>
-            </div>
-            
-            <!-- 分享弹窗 -->
-            <url-share-modal 
-              share-ids='["wechat","x","telegram","facebook","qq","weibo","native"]'
-              th:permalink="@{'/moments/' + ${moment.metadata.name}}"
-              x-bind:open="shareModal"
-              @close="shareModal = false">
-            </url-share-modal>
+            <button th:if="${enableShare}"
+                    id="moment-share-btn"
+                    class="inline-flex items-center gap-1.5 hover:text-primary transition-colors">
+              <span class="icon-[heroicons--share] size-5"></span>
+            </button>
           </div>
           
-          <!-- 评论区 -->
-          <div th:if="${enableComment}" class="mt-4 pt-4 border-t border-base-200">
+          <!-- 评论区 - 直接显示 -->
+          <div th:if="${enableComment}" class="mt-3 pt-3 border-t border-base-200">
             <halo:comment 
               group="moment.halo.run" 
               kind="Moment"
@@ -126,11 +135,177 @@
               colorScheme="system">
             </halo:comment>
           </div>
-          
         </div>
       </article>
 
     </div>
+
+    <!-- 分享面板 - PC居中弹窗 / 移动端底部弹出 -->
+    <div th:if="${enableShare}" id="moment-share-modal" class="fixed inset-0 z-50 hidden">
+      <!-- 遮罩 -->
+      <div class="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300" 
+           id="moment-share-overlay" onclick="closeMomentShare()"></div>
+      
+      <!-- 弹窗容器 - PC居中 / 移动端底部 -->
+      <div class="absolute inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="w-full sm:w-auto sm:min-w-80 transform translate-y-full sm:translate-y-0 sm:scale-95 sm:opacity-0 transition-all duration-300 ease-out" 
+             id="moment-share-panel">
+          <div class="bg-base-100 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden">
+            <!-- 移动端拖拽指示条 -->
+            <div class="flex justify-center pt-3 pb-1 sm:hidden">
+              <div class="w-10 h-1 bg-base-300 rounded-full"></div>
+            </div>
+            
+            <!-- 标题栏 -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
+              <h3 class="text-base font-semibold">分享瞬间</h3>
+              <button onclick="closeMomentShare()" class="btn btn-ghost btn-circle btn-sm">
+                <span class="icon-[heroicons--x-mark] size-5"></span>
+              </button>
+            </div>
+            
+            <!-- 分享平台 -->
+            <div class="p-5">
+              <div id="moment-share-grid" class="flex justify-center gap-5 flex-wrap">
+                <!-- 由 JS 动态生成 -->
+              </div>
+            </div>
+            
+            <!-- 链接复制区 -->
+            <div class="px-5 pb-5">
+              <div class="flex items-center gap-2 p-2.5 bg-base-200/60 rounded-xl">
+                <span class="icon-[heroicons--link] size-4 text-base-content/40 shrink-0 ml-1"></span>
+                <input type="text" id="moment-share-url" readonly
+                       class="flex-1 bg-transparent text-sm text-base-content/60 outline-none truncate min-w-0" />
+                <button onclick="copyMomentUrl()" 
+                        class="btn btn-sm btn-primary rounded-lg px-3 shrink-0">
+                  <span id="copy-btn-text">复制</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 分享逻辑 -->
+    <script th:if="${enableShare}" th:inline="javascript">
+    (function() {
+      const shareUrl = /*[[${#uris.escapePath('/moments/' + moment.metadata.name)}]]*/ '';
+      const fullUrl = window.location.origin + shareUrl;
+      const shareTitle = /*[[${moment.owner?.displayName ?: ''}]]*/ '' + ' 的瞬间';
+      const themeName = /*[[${theme.metadata.name}]]*/ 'theme-sky-blog-1';
+      const enabledPlatforms = /*[[${shareItemIds}]]*/ ['wechat', 'weibo', 'x', 'qq'];
+      
+      // 平台配置
+      const platforms = {
+        wechat: { name: '微信', icon: 'icon-[simple-icons--wechat]', color: '#07c160', action: 'qrcode' },
+        x: { name: 'X', icon: 'icon-[simple-icons--x]', color: '#000', url: 'https://twitter.com/intent/tweet?url={url}&text={title}' },
+        telegram: { name: 'Telegram', icon: 'icon-[simple-icons--telegram]', color: '#26a5e4', url: 'https://t.me/share/url?url={url}&text={title}' },
+        facebook: { name: 'Facebook', icon: 'icon-[simple-icons--facebook]', color: '#1877f2', url: 'https://www.facebook.com/sharer/sharer.php?u={url}' },
+        qq: { name: 'QQ', icon: 'icon-[simple-icons--tencentqq]', color: '#12b7f5', url: 'https://connect.qq.com/widget/shareqq/index.html?url={url}&title={title}' },
+        qzone: { name: 'QQ空间', icon: 'icon-[simple-icons--tencentqq]', color: '#fece00', url: 'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={url}&title={title}' },
+        weibo: { name: '微博', icon: 'icon-[simple-icons--sinaweibo]', color: '#e6162d', url: 'https://service.weibo.com/share/share.php?url={url}&title={title}' },
+        douban: { name: '豆瓣', icon: 'icon-[simple-icons--douban]', color: '#007722', url: 'https://www.douban.com/share/service?url={url}&title={title}' },
+        native: { name: '更多', icon: 'icon-[heroicons--share]', color: '#6366f1', action: 'native' }
+      };
+      
+      const isMobile = () => window.innerWidth < 640;
+      
+      // 渲染平台
+      function renderPlatforms() {
+        const container = document.getElementById('moment-share-grid');
+        if (!container) return;
+        
+        container.innerHTML = enabledPlatforms.map(id => {
+          const p = platforms[id];
+          if (!p) return '';
+          return '<button onclick="shareTo(\'' + id + '\')" class="flex flex-col items-center gap-2 w-14 active:scale-95 transition-transform">' +
+            '<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:' + p.color + ';">' +
+              '<span class="' + p.icon + ' size-6 text-white"></span>' +
+            '</div>' +
+            '<span class="text-xs text-base-content/60">' + p.name + '</span>' +
+          '</button>';
+        }).join('');
+      }
+      
+      // 打开
+      window.openMomentShare = function() {
+        const modal = document.getElementById('moment-share-modal');
+        const overlay = document.getElementById('moment-share-overlay');
+        const panel = document.getElementById('moment-share-panel');
+        const urlInput = document.getElementById('moment-share-url');
+        
+        if (modal && panel) {
+          modal.classList.remove('hidden');
+          urlInput.value = fullUrl;
+          requestAnimationFrame(() => {
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+            if (isMobile()) {
+              panel.classList.remove('translate-y-full');
+              panel.classList.add('translate-y-0');
+            } else {
+              panel.classList.remove('sm:scale-95', 'sm:opacity-0');
+              panel.classList.add('sm:scale-100', 'sm:opacity-100');
+            }
+          });
+        }
+      };
+      
+      // 关闭
+      window.closeMomentShare = function() {
+        const modal = document.getElementById('moment-share-modal');
+        const overlay = document.getElementById('moment-share-overlay');
+        const panel = document.getElementById('moment-share-panel');
+        
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+        if (isMobile()) {
+          panel.classList.remove('translate-y-0');
+          panel.classList.add('translate-y-full');
+        } else {
+          panel.classList.remove('sm:scale-100', 'sm:opacity-100');
+          panel.classList.add('sm:scale-95', 'sm:opacity-0');
+        }
+        setTimeout(() => modal?.classList.add('hidden'), 300);
+      };
+      
+      // 复制
+      window.copyMomentUrl = function() {
+        const urlInput = document.getElementById('moment-share-url');
+        const btnText = document.getElementById('copy-btn-text');
+        navigator.clipboard.writeText(urlInput.value).then(() => {
+          btnText.textContent = '已复制';
+          setTimeout(() => btnText.textContent = '复制', 2000);
+        });
+      };
+      
+      // 分享
+      window.shareTo = function(id) {
+        const p = platforms[id];
+        if (!p) return;
+        
+        if (p.action === 'native' && navigator.share) {
+          navigator.share({ title: shareTitle, url: fullUrl });
+        } else if (p.action === 'qrcode') {
+          const qrcodeUrl = '/themes/' + themeName + '/assets/qrcode/qrcode-share.html?url=' + encodeURIComponent(fullUrl);
+          window.open(qrcodeUrl, 'wechat-share', 'width=400,height=500,scrollbars=no,resizable=no');
+        } else if (p.url) {
+          const url = p.url.replace('{url}', encodeURIComponent(fullUrl)).replace('{title}', encodeURIComponent(shareTitle));
+          window.open(url, '_blank', 'width=600,height=500');
+        }
+        closeMomentShare();
+      };
+      
+      // 初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        renderPlatforms();
+        const shareBtn = document.getElementById('moment-share-btn');
+        if (shareBtn) shareBtn.addEventListener('click', openMomentShare);
+      });
+    })();
+    </script>
 
   </th:block>
 
