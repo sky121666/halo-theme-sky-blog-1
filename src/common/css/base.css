@@ -32,8 +32,8 @@
     /* 模态框样式 */
     --halo-search-widget-modal-bg-color: var(--color-base-100);
     /* base-100 */
-    --halo-search-widget-modal-layer-color: color-mix(in oklch, var(--color-base-100) 80%, transparent);
-    /* base-100/80 */
+    --halo-search-widget-modal-layer-color: color-mix(in oklch, var(--color-base-200) 80%, transparent);
+    /* base-200/80 */
     /* 搜索结果项样式 */
     --halo-search-widget-hit-bg-color: var(--color-base-200);
     /* base-200 */
@@ -44,7 +44,7 @@
     /* base-300 */
     --halo-search-widget-kbd-shadow: 0 1px 3px 0 color-mix(in oklch, var(--color-base-100) 10%, transparent), 0 1px 2px -1px color-mix(in oklch, var(--color-base-100) 10%, transparent);
 
-  
+
 
     /* 主题颜色变量，使用DaisyUI的颜色系统 */
     --sky-primary: var(--color-primary);
@@ -60,6 +60,32 @@
     --glow-intensity-strong: 0.8;
 
     --sky-container: var(--color-base-300);
+
+    /* ========================================== */
+    /* Apple Bento Design Tokens                  */
+    /* ========================================== */
+
+    /* Bento Card Radius */
+    --radius-bento-sm: 1rem;
+    /* 16px - 小卡片 */
+    --radius-bento-md: 1.25rem;
+    /* 20px - 中卡片 */
+    --radius-bento-lg: 1.5rem;
+    /* 24px - 大卡片/热力图 */
+    --radius-bento-xl: 2rem;
+    /* 32px - 超大卡片/Section */
+
+    /* Bento Shadows */
+    --shadow-bento: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
+    --shadow-bento-hover: 0 8px 32px -4px rgba(0, 0, 0, 0.12);
+    --shadow-bento-elevated: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
+
+    /* Apple Animation Timing */
+    --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --ease-apple-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
 }
 
 /* ========================================== */
@@ -73,24 +99,24 @@ html {
     --halo-cw-primary-1-color: var(--color-primary);
     --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent);
     --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent);
-    
+
     /* 文本色 - 使用 DaisyUI base-content */
     --halo-cw-text-1-color: var(--color-base-content);
     --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent);
     --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
-    
+
     /* 背景/边框色 - 使用 DaisyUI base 系列 */
     --halo-cw-muted-1-color: var(--color-base-300);
     --halo-cw-muted-2-color: var(--color-base-200);
     --halo-cw-muted-3-color: var(--color-base-100);
-    
+
     /* 基础样式 - 使用 DaisyUI 变量 */
     --halo-cw-base-rounded: var(--radius-box, 0.5rem);
     --halo-cw-avatar-rounded: 9999px;
     --halo-cw-avatar-size: 2.5rem;
     --halo-cw-base-font-size: 0.875rem;
     --halo-cw-base-font-family: inherit;
-    
+
     /* Emoji 选择器 */
     --halo-cw-emoji-picker-color-border: var(--color-base-300);
     --halo-cw-emoji-picker-color-border-over: var(--color-primary);
@@ -103,15 +129,15 @@ html[data-color-scheme="dark"],
     --halo-cw-primary-1-color: var(--color-primary) !important;
     --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
     --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
-    
+
     --halo-cw-text-1-color: var(--color-base-content) !important;
     --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent) !important;
     --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent) !important;
-    
+
     --halo-cw-muted-1-color: var(--color-base-300) !important;
     --halo-cw-muted-2-color: var(--color-base-200) !important;
     --halo-cw-muted-3-color: var(--color-base-100) !important;
-    
+
     --halo-cw-emoji-picker-color-border: var(--color-base-300) !important;
     --halo-cw-emoji-picker-color-border-over: var(--color-primary) !important;
 }
@@ -126,6 +152,7 @@ halo-comment button[type="submit"] {
 halo-comment a {
     color: var(--color-primary);
 }
+
 halo-comment a:hover {
     color: color-mix(in srgb, var(--color-primary) 80%, var(--color-base-content));
 }
@@ -133,6 +160,13 @@ halo-comment a:hover {
 /* 滚动条修复 - 防止页面跳动 */
 body {
     scrollbar-gutter: stable;
+}
+
+/* 主题切换时禁用所有过渡 - 防止闪烁 */
+/* JavaScript 在切换主题时会临时添加此类 */
+html.theme-transitioning,
+html.theme-transitioning * {
+    transition: none !important;
 }
 
 /* 平板端优化和流畅动画系统 */
@@ -156,20 +190,20 @@ body {
         transform: scale(0.98);
         transition: transform 0.3s var(--ease-smooth);
     }
-    
+
     .tablet-optimized:hover {
         transform: scale(1);
     }
-    
+
     /* 平板端减少动画强度 */
     .animate-smooth-fade-in {
         animation-duration: 0.3s;
     }
-    
+
     .animate-gentle-scale {
         animation-duration: 0.25s;
     }
-    
+
     .animate-natural-slide-up {
         animation-duration: 0.4s;
     }
@@ -181,6 +215,7 @@ body {
         opacity: 0;
         transform: translateY(16px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -193,6 +228,7 @@ body {
         transform: scale(0.95);
         opacity: 0;
     }
+
     100% {
         transform: scale(1);
         opacity: 1;
@@ -205,6 +241,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -244,11 +281,25 @@ body {
 }
 
 /* 响应式动画延迟 */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
 
 /* 修复模态框打开时滚动条消失导致的页面跳动 */
 @supports not (scrollbar-gutter: stable) {
@@ -279,7 +330,7 @@ body {
 }
 
 /* 抽屉侧边栏阴影 */
-[data-color-scheme="dark"] .drawer-side > div {
+[data-color-scheme="dark"] .drawer-side>div {
     box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
@@ -290,6 +341,69 @@ body {
 /* 侧边栏卡片过渡效果 */
 .sidebar-card {
     transition: box-shadow 0.2s ease;
+}
+
+/* ===================================================
+ * 现代化标签 Chip 组件 - Soft UI Evolution
+ * 设计理念：
+ * 1. 语义化结构：Prefix (Icon/#) + Label (Text) + Badge (Count)
+ * 2. 智能配色：基于 CSS 变量 --tag-color 自动计算背景/边框/文字
+ * 3. 交互反馈：Soft hover, Focus ring, Active press
+ * ==================================================*/
+
+/* ===================================================
+ * 霓虹玻璃 (Neon Glass) 标签样式
+ * 特性：动态光晕、玻璃质感、悬停发光
+ * ==================================================*/
+
+/* ===================================================
+ * Apple Minimal 标签样式
+ * ==================================================*/
+
+/* ===================================================
+ * Apple Minimal 标签样式 (Refined)
+ * ==================================================*/
+
+/* ===================================================
+ * Pure Text 标签样式 (极简)
+ * 颜色：使用文案颜色 --color-base-content
+ * ==================================================*/
+
+.tag-aurora {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.125rem;
+
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+
+    /* 使用文案颜色 */
+    background: none;
+    color: var(--color-base-content);
+    border: none;
+    padding: 0;
+
+    transition: opacity 0.15s ease;
+    cursor: pointer;
+}
+
+.tag-aurora:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+
+.tag-aurora:active {
+    opacity: 0.5;
+}
+
+.tag-aurora-prefix {
+    opacity: 0.5;
+    font-weight: 400;
 }
 
 /* 加载动画 GIF 尺寸 */
@@ -310,8 +424,157 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ===================================================
+ * View Transitions API - 页面过渡动画
+ * 浏览器支持：Chrome 111+, Edge 111+, Safari 18+
+ * 作为渐进增强，不支持的浏览器会自动忽略
+ * ==================================================*/
+
+/* 启用页面导航过渡（MPA同文档导航） */
+@view-transition {
+    navigation: auto;
+}
+
+/* 页面过渡动画 - 淡入淡出 */
+::view-transition-old(root) {
+    animation: view-fade-out 0.2s ease-out both;
+}
+
+::view-transition-new(root) {
+    animation: view-fade-in 0.3s ease-in both;
+    animation-delay: 0.1s;
+}
+
+@keyframes view-fade-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+}
+
+@keyframes view-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(1.02);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 减少动作偏好 - 尊重用户设置 */
+@media (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: none;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}
+
+/* Alpine.js x-cloak 支持 - 隐藏未初始化内容 */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Alpine 初始化后的渐入动画 - 细腻贝塞尔曲线 */
+[x-data]:not([x-cloak]) {
+    --stagger-delay: 0ms;
+    animation: alpine-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) var(--stagger-delay) both;
+}
+
+/* 交错延迟 - 不同组件依次出现 */
+[x-data]:not([x-cloak]):nth-of-type(1) {
+    --stagger-delay: 0ms;
+}
+
+[x-data]:not([x-cloak]):nth-of-type(2) {
+    --stagger-delay: 60ms;
+}
+
+[x-data]:not([x-cloak]):nth-of-type(3) {
+    --stagger-delay: 120ms;
+}
+
+[x-data]:not([x-cloak]):nth-of-type(4) {
+    --stagger-delay: 180ms;
+}
+
+[x-data]:not([x-cloak]):nth-of-type(5) {
+    --stagger-delay: 240ms;
+}
+
+[x-data]:not([x-cloak]):nth-of-type(n+6) {
+    --stagger-delay: 300ms;
+}
+
+/* 不同类型组件使用不同动画 */
+.heatmap-card[x-data]:not([x-cloak]) {
+    animation-name: alpine-scale-in;
+}
+
+.card[x-data]:not([x-cloak]) {
+    animation-name: alpine-slide-up;
+}
+
+/* 基础淡入（默认） */
+@keyframes alpine-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 缩放淡入（热力图等大块内容） */
+@keyframes alpine-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* 滑入（卡片） */
+@keyframes alpine-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 尊重用户减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+    [x-data]:not([x-cloak]) {
+        animation: none;
     }
 }

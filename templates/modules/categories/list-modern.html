@@ -10,167 +10,186 @@
 -->
 
 <!-- modern：玻璃拟态卡片，精致现代布局 -->
-<div th:fragment="modern(posts)" class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div th:fragment="modern(posts, settings)" class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
   <!-- 中文注释：重构为 DaisyUI image-full 卡片。若有封面（或回退封面）使用覆盖式大图与底部文本；无有效封面使用常规卡片占位图。统一圆角、边框与悬停阴影。 -->
-  <th:block th:each="post : ${posts.items}"
-            th:with="
-              ps=${theme.config.index?.post_settings},
-              cf=${theme.config.category_settings?.cover_fallback ?: theme.config.tag_settings?.cover_fallback},
-              en=${(ps != null and ps.cover_fallback_enable == true) or (cf != null and cf.enable == true)},
-              mode=${ps != null ? ps.cover_fallback_mode : (cf != null ? cf.mode : 'missing_only')},
-              defaultImg=${ps != null and ps.cover_fallback_url != null ? ps.cover_fallback_url : (cf != null ? cf.default_image : null)},
+  <th:block th:each="post : ${posts.items}" th:with="
+              nested = ${settings?.cover_fallback},
+              flatEnable = ${settings?.cover_fallback_enable},
+              flatMode = ${settings?.cover_fallback_mode},
+              flatUrl = ${settings?.cover_fallback_url},
+              enable = ${nested != null ? (nested.enable ?: false) : (flatEnable ?: false)},
+              mode = ${nested != null ? (nested.mode ?: 'missing_only') : (flatMode ?: 'missing_only')},
+              defaultImg = ${nested != null ? nested.default_image : flatUrl},
               actual=${post.spec.cover},
               actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
-              coverUrl=${en ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
+              coverUrl=${(enable == true) ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
             ">
     <!-- 有（有效）封面：玻璃拟态卡片（图片在上、文字在下），精致现代 -->
     <article th:if="${coverUrl != null}"
-             th:with="isPinned = ${post.spec.pinned == true},
+      th:with="isPinned = ${post.spec.pinned == true},
                       isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                       isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-             class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
+      class="card group cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden">
       <!-- 封面区域：16:10 比例 -->
       <figure class="relative w-full aspect-video overflow-hidden">
-        <a th:href="@{${post.status.permalink}}" class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
-          <img th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy" class="w-full h-full object-cover" />
+        <a th:href="@{${post.status.permalink}}"
+          class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
+          <img th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         </a>
-        <!-- 置顶角标 -->
-        <span th:if="${isPinned}" class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[11px] font-medium bg-black/50 text-white backdrop-blur-sm">置顶</span>
+
+        <!-- 置顶/推荐角标 - 渐变风格 -->
+        <span th:if="${isPinned}"
+          class="absolute top-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold text-white bg-gradient-to-r from-pink-500 to-rose-500 shadow-sm backdrop-blur-md">置顶</span>
+
+        <!-- 发布时间 - 胶囊风格 -->
+        <div
+          class="absolute top-3 right-3 px-2 py-1 rounded-full bg-base-100/80 backdrop-blur-md shadow-sm border border-base-content/5 flex items-center gap-1">
+          <span class="icon-[heroicons--clock] w-3 h-3 text-base-content/60"></span>
+          <span class="text-[10px] font-medium text-base-content/80"
+            th:text="${#dates.format(post.spec.publishTime,'MM-dd')}">01-01</span>
+        </div>
       </figure>
       <div class="card-body p-4 flex flex-col">
         <!-- 上行：分类 + 标签（标题上方） -->
-        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-1">
-          <div class="flex items-center gap-2 min-w-0" th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
-            <span class="inline-flex items-center gap-1" th:if="${firstCat != null}">
-              <span class="icon-[heroicons--folder] w-4 h-4 text-base-content/70"></span>
-              <a th:href="@{${firstCat.status.permalink}}"
-                 class="hover:text-primary max-w-[160px] truncate"
-                 th:text="${firstCat.spec.displayName}">分类</a>
+        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-2">
+          <!-- 分类 - 胶囊风格 -->
+          <div class="flex items-center gap-2 min-w-0"
+            th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
+            <span
+              class="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/5 text-primary text-[10px] font-medium"
+              th:if="${firstCat != null}">
+              <a th:href="@{${firstCat.status.permalink}}" class="hover:underline max-w-[160px] truncate"
+                th:text="${firstCat.spec.displayName}">分类</a>
             </span>
           </div>
           <!-- 标签：使用 flex-wrap 避免格式错乱，最多显示2个 -->
           <div class="flex items-center flex-wrap gap-2" th:if="${!#lists.isEmpty(post.tags)}">
             <th:block th:each="tag, tagStat : ${post.tags}">
               <span th:if="${tagStat.index < 2}"
-                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-base-content/5 hover:bg-base-content/10 transition-colors">
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-base-content/5 hover:bg-base-content/10 transition-colors">
                 <span th:if="${tagStat.index == 0}" class="icon-[heroicons--tag] w-3 h-3"></span>
-                <a th:href="@{${tag.status.permalink}}"
-                   class="hover:text-primary max-w-[70px] truncate"
-                   th:text="${tag.spec.displayName}">标签</a>
+                <a th:href="@{${tag.status.permalink}}" class="hover:text-primary max-w-[70px] truncate"
+                  th:text="${tag.spec.displayName}">标签</a>
               </span>
             </th:block>
-            <span th:if="${post.tags.size() > 2}" class="text-xs text-base-content/40" th:text="'+' + ${post.tags.size() - 2}">+2</span>
+            <span th:if="${post.tags.size() > 2}" class="text-xs text-base-content/40"
+              th:text="'+' + ${post.tags.size() - 2}">+2</span>
           </div>
         </div>
         <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
           <a th:href="@{${post.status.permalink}}" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
         </h3>
-          <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
-          <p class="text-sm text-base-content/70 line-clamp-2 w-full">
-            <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
-               th:text="${post.spec.excerpt != null && post.spec.excerpt.raw != null ? post.spec.excerpt.raw : ''}"></a>
-          </p>
-          <!-- 元信息：固定在内容区底部。仅保留下行：日期 + 统计。分类与标签已上移至标题上方。 -->
-          <div class="mt-auto pt-2 space-y-1">
-            <!-- 下行专用：分类与标签已移至标题上方，此处不再展示。 -->
-            <!-- 下行：日期 + 统计（右侧为浏览/点赞/评论） -->
-            <div class="flex items-center justify-between text-xs text-base-content/60 leading-5">
-              <div class="flex items-center gap-2 whitespace-nowrap">
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--calendar-days] w-4 h-4 text-base-content/70"></span>
-                  <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
-                </span>
-              </div>
-              <div class="flex items-center gap-2 whitespace-nowrap">
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--eye] w-4 h-4"></span>
-                  <span th:text="${post.stats.visit ?: 0}"></span>
-                </span>
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--heart] w-4 h-4"></span>
-                  <span th:text="${post.stats.upvote ?: 0}"></span>
-                </span>
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--chat-bubble-left-ellipsis] w-4 h-4"></span>
-                  <span th:text="${post.stats.comment ?: 0}"></span>
-                </span>
-              </div>
+        <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
+        <p class="text-sm text-base-content/70 line-clamp-2 w-full">
+          <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
+            th:text="${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"></a>
+        </p>
+        <!-- 元信息：固定在内容区底部。仅保留下行：日期 + 统计。分类与标签已上移至标题上方。 -->
+        <div class="mt-auto pt-2 space-y-1">
+          <!-- 下行专用：分类与标签已移至标题上方，此处不再展示。 -->
+          <!-- 下行：日期 + 统计（右侧为浏览/点赞/评论） -->
+          <div class="flex items-center gap-2 mt-auto pt-3 border-t border-base-content/5">
+            <!-- 胶囊式元信息 -->
+            <div
+              class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60 group-hover:bg-base-200 transition-colors">
+              <span class="icon-[heroicons--eye] w-3 h-3"></span>
+              <span th:text="${post.stats.visit ?: 0}">0</span>
+            </div>
+
+            <div
+              class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60 group-hover:bg-base-200 transition-colors">
+              <span class="icon-[heroicons--heart] w-3 h-3"></span>
+              <span th:text="${post.stats.upvote ?: 0}">0</span>
+            </div>
+
+            <div
+              class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60 group-hover:bg-base-200 transition-colors">
+              <span class="icon-[heroicons--chat-bubble-left] w-3 h-3"></span>
+              <span th:text="${post.stats.comment ?: 0}">0</span>
             </div>
           </div>
         </div>
+      </div>
     </article>
 
     <!-- 无（有效）封面：玻璃拟态卡片 + 占位图 -->
     <article th:if="${coverUrl == null}"
-             th:with="isPinned = ${post.spec.pinned == true},
+      th:with="isPinned = ${post.spec.pinned == true},
                       isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                       isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-             class="card rounded-2xl backdrop-blur-md bg-base-100/40 border border-base-content/10 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 overflow-hidden">
+      class="card group cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden">
       <!-- 占位图区域：16:10 比例 -->
       <figure class="relative w-full aspect-video overflow-hidden">
-        <a th:href="@{${post.status.permalink}}" class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
-          <div class="w-full h-full bg-primary/10 border border-primary/20 hover:border-primary/30 transition-all duration-200 grid place-items-center">
-            <span class="icon-[heroicons--photo] w-12 h-12 text-primary"></span>
+        <a th:href="@{${post.status.permalink}}"
+          class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
+          <div
+            class="w-full h-full bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 transition-all duration-200 grid place-items-center group-hover:from-primary/15 group-hover:to-accent/15">
+            <span
+              class="icon-[heroicons--photo] w-12 h-12 text-primary/30 group-hover:text-primary/50 transition-colors"></span>
           </div>
         </a>
-        <!-- 置顶角标 -->
-        <span th:if="${isPinned}" class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[11px] font-medium bg-black/50 text-white backdrop-blur-sm">置顶</span>
+
+        <!-- 置顶/推荐角标 - 渐变风格 -->
+        <span th:if="${isPinned}"
+          class="absolute top-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold text-white bg-gradient-to-r from-pink-500 to-rose-500 shadow-sm backdrop-blur-md">置顶</span>
+
+        <!-- 发布时间 - 胶囊风格 -->
+        <div
+          class="absolute top-3 right-3 px-2 py-1 rounded-full bg-base-100/80 backdrop-blur-md shadow-sm border border-base-content/5 flex items-center gap-1">
+          <span class="icon-[heroicons--clock] w-3 h-3 text-base-content/60"></span>
+          <span class="text-[10px] font-medium text-base-content/80"
+            th:text="${#dates.format(post.spec.publishTime,'MM-dd')}">01-01</span>
+        </div>
       </figure>
       <div class="card-body p-4 flex flex-col">
         <!-- 上行：分类 + 标签（标题上方） -->
-        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-1">
-          <div class="flex items-center gap-2 min-w-0" th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
-            <span class="inline-flex items-center gap-1" th:if="${firstCat != null}">
-              <span class="icon-[heroicons--folder] w-4 h-4 text-base-content/70"></span>
-              <a th:href="@{${firstCat.status.permalink}}"
-                 class="hover:text-primary max-w-[160px] truncate"
-                 th:text="${firstCat.spec.displayName}">分类</a>
+        <div class="flex items-center text-xs text-base-content/60 leading-5 gap-4 mb-2">
+          <div class="flex items-center gap-2 min-w-0"
+            th:with="firstCat=${!#lists.isEmpty(post.categories) ? post.categories[0] : null}">
+            <span
+              class="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/5 text-primary text-[10px] font-medium"
+              th:if="${firstCat != null}">
+              <a th:href="@{${firstCat.status.permalink}}" class="hover:underline max-w-[160px] truncate"
+                th:text="${firstCat.spec.displayName}">分类</a>
             </span>
           </div>
           <!-- 标签：使用 flex-wrap 避免格式错乱，最多显示2个 -->
           <div class="flex items-center flex-wrap gap-2" th:if="${!#lists.isEmpty(post.tags)}">
             <th:block th:each="tag, tagStat : ${post.tags}">
               <span th:if="${tagStat.index < 2}"
-                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-base-content/5 hover:bg-base-content/10 transition-colors">
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-base-content/5 hover:bg-base-content/10 transition-colors">
                 <span th:if="${tagStat.index == 0}" class="icon-[heroicons--tag] w-3 h-3"></span>
-                <a th:href="@{${tag.status.permalink}}"
-                   class="hover:text-primary max-w-[70px] truncate"
-                   th:text="${tag.spec.displayName}">标签</a>
+                <a th:href="@{${tag.status.permalink}}" class="hover:text-primary max-w-[70px] truncate"
+                  th:text="${tag.spec.displayName}">标签</a>
               </span>
             </th:block>
-            <span th:if="${post.tags.size() > 2}" class="text-xs text-base-content/40" th:text="'+' + ${post.tags.size() - 2}">+2</span>
+            <span th:if="${post.tags.size() > 2}" class="text-xs text-base-content/40"
+              th:text="'+' + ${post.tags.size() - 2}">+2</span>
           </div>
         </div>
         <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
           <a th:href="@{${post.status.permalink}}" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
         </h3>
-          <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
-          <p class="text-sm text-base-content/70 line-clamp-2 w-full">
-            <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
-               th:text="${post.spec.excerpt != null && post.spec.excerpt.raw != null ? post.spec.excerpt.raw : ''}"></a>
-          </p>
-          <div class="mt-auto pt-2 space-y-1">
-            <!-- 下行专用：分类与标签已移至标题上方，此处不再展示。 -->
-            <!-- 下行：日期 + 浏览数（无封面卡片的简版统计） -->
-            <div class="flex items-center justify-between text-xs text-base-content/60 leading-5">
-              <div class="flex items-center gap-2 whitespace-nowrap">
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--calendar-days] w-4 h-4 text-base-content/70"></span>
-                  <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
-                </span>
-              </div>
-              <div class="flex items-center gap-2 whitespace-nowrap">
-                <span class="inline-flex items-center gap-1">
-                  <span class="icon-[heroicons--eye] w-4 h-4"></span>
-                  <span th:text="${post.stats.visit ?: 0}"></span>
-                </span>
-              </div>
+        <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
+        <p class="text-sm text-base-content/70 line-clamp-2 w-full">
+          <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
+            th:text="${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"></a>
+        </p>
+        <div class="mt-auto pt-2 space-y-1">
+          <!-- 下行：浏览数统计 -->
+          <div class="flex items-center gap-2 mt-auto pt-3 border-t border-base-content/5">
+            <div
+              class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60 group-hover:bg-base-200 transition-colors">
+              <span class="icon-[heroicons--eye] w-3 h-3"></span>
+              <span th:text="${post.stats.visit ?: 0}">0</span>
             </div>
           </div>
         </div>
+      </div>
     </article>
   </th:block>
-  
+
 </div>
 
 </html>

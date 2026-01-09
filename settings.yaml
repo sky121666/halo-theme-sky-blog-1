@@ -962,7 +962,8 @@ spec:
           label: 首页基础设置
           value:
             show_sidebar: true
-            show_github_calendar: true
+            show_heatmap: true
+            heatmap_type: github
             tab_style: chips
           children:
             - $formkit: switch
@@ -1022,10 +1023,22 @@ spec:
                     - label: 最新文章
                       value: recent_posts
             - $formkit: switch
-              name: show_github_calendar
-              label: 显示 GitHub 热力图
-              help: 是否在首页显示 GitHub 贡献热力图（需在"关于"设置中配置 GitHub 用户名）
+              id: index_show_heatmap
+              name: show_heatmap
+              label: 显示热力图
+              help: 是否在首页显示热力图
               value: true
+            - $formkit: radio
+              name: heatmap_type
+              if: $get(index_show_heatmap).value
+              label: 热力图类型
+              help: GitHub 热力图需在"关于"设置中配置用户名
+              value: github
+              options:
+                - label: GitHub 贡献热力图
+                  value: github
+                - label: 文章发布热力图
+                  value: article
             - $formkit: select
               name: tab_style
               label: Tab 切换风格
@@ -1129,6 +1142,123 @@ spec:
                   value: two_columns
                 - label: 单列
                   value: single_column
+        # 图库模块设置
+        - $formkit: group
+          name: gallery_settings
+          label: 图库模块
+          value:
+            enable_gallery: true
+            gallery_title: "图库"
+            gallery_count: 8
+          children:
+            - $formkit: switch
+              id: enable_gallery
+              name: enable_gallery
+              label: 启用图库模块
+              help: 是否在首页显示图库模块
+              value: true
+            - $formkit: text
+              name: gallery_title
+              if: $get(enable_gallery).value
+              label: 模块标题
+              help: 图库模块的标题文字
+              value: "图库"
+            - $formkit: text
+              name: gallery_subtitle
+              if: $get(enable_gallery).value
+              label: 模块副标题
+              help: 图库模块的副标题文字（如：Focus Moments）
+              value: "Focus Moments"
+            - $formkit: number
+              name: gallery_count
+              if: $get(enable_gallery).value
+              label: 显示数量
+              help: 首页显示的图片数量（4-12）
+              value: 8
+              min: 4
+              max: 12
+        # 文档中心模块设置
+        - $formkit: group
+          name: docs_settings
+          label: 文档中心模块
+          help: 需安装 plugin-docs 插件
+          value:
+            enable_docs: true
+            docs_title: "文档中心"
+            docs_count: 6
+          children:
+            - $formkit: switch
+              id: enable_docs
+              name: enable_docs
+              label: 启用文档中心
+              help: 是否在首页显示文档中心模块
+              value: true
+            - $formkit: text
+              name: docs_title
+              if: $get(enable_docs).value
+              label: 模块标题
+              help: 文档中心模块的标题文字
+              value: "文档中心"
+            - $formkit: number
+              name: docs_count
+              if: $get(enable_docs).value
+              label: 显示数量
+              help: 首页显示的文档项目数量（3-9）
+              value: 6
+              min: 3
+              max: 9
+        # 友情链接模块设置
+        - $formkit: group
+          name: links_settings
+          label: 友情链接模块
+          help: 需安装 plugin-links 插件
+          value:
+            enable_links: true
+            links_title: "友情链接"
+            links_groups: []
+            links_count: 10
+          children:
+            - $formkit: switch
+              id: enable_links
+              name: enable_links
+              label: 启用友情链接
+              help: 是否在首页显示友情链接模块
+              value: true
+            - $formkit: text
+              name: links_title
+              if: $get(enable_links).value
+              label: 模块标题
+              help: 友情链接模块的标题文字
+              value: "友情链接"
+            - $formkit: text
+              name: links_subtitle
+              if: $get(enable_links).value
+              label: 模块副标题
+              help: 友情链接模块的副标题文字（如：Friends & Partners）
+              value: "Friends & Partners"
+            - $formkit: select
+              name: links_groups
+              if: $get(enable_links).value
+              label: 显示分组
+              help: 选择要在首页显示的链接分组，留空则显示所有分组
+              clearable: true
+              multiple: true
+              searchable: true
+              action: /apis/core.halo.run/v1alpha1/linkgroups
+              requestOption:
+                method: GET
+                itemsField: items
+                labelField: spec.displayName
+                valueField: metadata.name
+                fieldSelectorKey: metadata.name
+            - $formkit: number
+              name: links_count
+              if: $get(enable_links).value
+              label: 显示数量
+              help: 首页显示的友链数量（5-20）
+              value: 10
+              min: 5
+              max: 20
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock

@@ -6,82 +6,77 @@
 <!--   设计理念：克制、呼吸、层次、细节            -->
 <!-- ============================================= -->
 
-<section th:fragment="minimal(posts)" class="max-w-2xl mx-auto px-4 sm:px-6">
+<section th:fragment="minimal(posts, settings)" class="max-w-2xl mx-auto px-4 sm:px-6">
   <article th:each="post, iterStat : ${posts.items}"
-           th:with="isPinned = ${post.spec.pinned == true},
+    th:with="isPinned = ${post.spec.pinned == true},
                     isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                     isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-           class="group relative py-12 sm:py-16">
-    
+    class="group relative py-12 sm:py-16">
+
     <!-- 文章序号：优雅的视觉引导 -->
     <div class="absolute left-0 top-12 sm:top-16 -ml-12 hidden lg:block">
-      <span class="text-6xl font-light text-base-content/8 group-hover:text-primary/20 transition-all duration-500"
-            th:text="${iterStat.index < 9 ? '0' + (iterStat.index + 1) : (iterStat.index + 1)}">01</span>
+      <span
+        class="text-6xl font-extralight text-base-content/10 group-hover:text-primary/20 transition-all duration-500"
+        th:text="${iterStat.index < 9 ? '0' + (iterStat.index + 1) : (iterStat.index + 1)}">01</span>
     </div>
-    
+
     <!-- 上方元信息：时间、分类、角标 -->
     <div class="flex items-center flex-wrap gap-3 mb-5 text-xs tracking-wider uppercase text-base-content/40">
       <time th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}">2025-01-24</time>
       <span class="w-1 h-1 rounded-full bg-base-content/20"></span>
-      <span th:if="${!#lists.isEmpty(post.categories)}" 
-            th:with="firstCat=${post.categories[0]}"
-            class="hover:text-primary transition-colors">
-        <a th:href="@{${firstCat.status.permalink}}" 
-           th:text="${firstCat.spec.displayName}">Category</a>
+      <span th:if="${!#lists.isEmpty(post.categories)}" th:with="firstCat=${post.categories[0]}"
+        class="hover:text-primary transition-colors">
+        <a th:href="@{${firstCat.status.permalink}}" th:text="${firstCat.spec.displayName}">Category</a>
       </span>
       <!-- 置顶角标 -->
-      <span th:if="${isPinned}" class="px-2 py-0.5 rounded text-[10px] font-medium text-primary/80 bg-primary/10 normal-case tracking-normal">置顶</span>
+      <span th:if="${isPinned}"
+        class="px-2 py-0.5 rounded text-[10px] font-medium text-primary/80 bg-primary/10 normal-case tracking-normal">置顶</span>
     </div>
-    
+
     <!-- 标题：优雅的字体编排 -->
-    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light leading-tight mb-6 group-hover:text-primary transition-colors duration-300 tracking-tight">
+    <h2
+      class="text-3xl sm:text-4xl lg:text-5xl font-light leading-tight mb-6 group-hover:text-primary transition-colors duration-300 tracking-tight">
       <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">文章标题</a>
     </h2>
-    
+
     <!-- 摘要：舒适的阅读体验 -->
-    <p th:if="${post.spec.excerpt != null && post.spec.excerpt.raw != null}"
-       class="text-lg sm:text-xl text-base-content/60 leading-relaxed mb-8 font-light"
-       style="line-height: 1.8;">
-      <a th:href="@{${post.status.permalink}}" 
-         class="hover:text-base-content"
-         th:text="${post.spec.excerpt.raw}"></a>
+    <p th:with="excerptText = ${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"
+      th:if="${excerptText != null and !excerptText.isEmpty()}"
+      class="text-lg sm:text-xl text-base-content/60 leading-relaxed mb-8 font-light" style="line-height: 1.8;">
+      <a th:href="@{${post.status.permalink}}" class="hover:text-base-content" th:text="${excerptText}"></a>
     </p>
-    
+
     <!-- 底部信息栏 -->
-    <div class="flex items-center justify-between pt-6 border-t border-base-content/5">
+    <div class="flex items-center justify-between pt-8 border-t border-base-content/5">
       <!-- 标签 -->
-      <div th:if="${!#lists.isEmpty(post.tags)}" 
-           class="flex flex-wrap gap-2">
-        <a th:each="tag, tagStat : ${post.tags}"
-           th:if="${tagStat.index < 3}"
-           th:href="@{${tag.status.permalink}}"
-           class="inline-block text-xs text-base-content/40 hover:text-primary transition-colors px-2.5 py-1 rounded-full border border-base-content/10 hover:border-primary/30"
-           th:text="${tag.spec.displayName}">标签</a>
-        <span th:if="${post.tags.size() > 3}"
-              class="inline-block text-xs text-base-content/30 px-2.5 py-1"
-              th:text="'+ ' + ${post.tags.size() - 3}">+2</span>
+      <div th:if="${!#lists.isEmpty(post.tags)}" class="flex flex-wrap gap-2">
+        <a th:each="tag, tagStat : ${post.tags}" th:if="${tagStat.index < 3}" th:href="@{${tag.status.permalink}}"
+          class="inline-block text-xs text-base-content/40 hover:text-primary transition-colors px-2.5 py-1 rounded-full border border-base-content/10 hover:border-primary/30"
+          th:text="${tag.spec.displayName}">标签</a>
+        <span th:if="${post.tags.size() > 3}" class="inline-block text-xs text-base-content/30 px-2.5 py-1"
+          th:text="'+ ' + ${post.tags.size() - 3}">+2</span>
       </div>
-      
+
       <!-- 阅读指示 -->
       <div class="flex items-center gap-4 text-xs text-base-content/40">
-        <span th:if="${(post.stats.visit ?: 0) > 0}" 
-              class="inline-flex items-center gap-1.5">
+        <span th:if="${(post.stats.visit ?: 0) > 0}" class="inline-flex items-center gap-1.5">
           <span class="icon-[heroicons--eye] w-4 h-4"></span>
           <span th:text="${post.stats.visit}">0</span>
         </span>
         <a th:href="@{${post.status.permalink}}"
-           class="inline-flex items-center gap-2 hover:text-primary transition-colors">
+          class="inline-flex items-center gap-2 hover:text-primary transition-colors">
           <span>阅读更多</span>
           <span class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform"></span>
         </a>
       </div>
     </div>
-    
+
     <!-- 分隔线：微妙优雅 -->
-    <div th:unless="${iterStat.last}" 
-         class="absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-base-content/10 to-transparent"></div>
+    <div th:unless="${iterStat.last}"
+      class="absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-base-content/15 to-transparent">
+    </div>
   </article>
-  
+
   <!-- 底部留白 -->
   <div class="h-16"></div>
 </section>

@@ -113,7 +113,8 @@
         </div>
 
         <!-- GitHub 贡献热力图 -->
-        <div th:if="${showGithubCalendar}" class="card bg-base-100 shadow-sm rounded-lg sidebar-card p-4">
+        <div th:if="${showGithubCalendar}"
+          class="heatmap-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5">
           <img id="github-calendar-img" alt="GitHub Contributions" class="w-full h-auto rounded" loading="lazy" />
           <div class="flex items-center justify-between mt-3">
             <span class="text-xs text-base-content/40">GitHub 年度贡献</span>
@@ -254,8 +255,8 @@
           <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
           评论留言
         </h2>
-        <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
-          <div class="card-body p-4 md:p-6">
+        <div class="card bg-base-100/60 backdrop-blur-xl shadow-xl border border-base-content/5 rounded-[1.5rem]">
+          <div class="card-body p-6 sm:p-8">
             <halo:comment group="content.halo.run" kind="SinglePage" th:name="${singlePage.metadata.name}"
               colorScheme="auto" />
           </div>

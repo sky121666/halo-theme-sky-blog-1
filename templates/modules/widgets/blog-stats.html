@@ -2,38 +2,59 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--           博客统计信息组件                  -->
+<!--  博客统计组件 - Premium Refined Style    -->
 <!-- ========================================== -->
 
-<div th:fragment="stats" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
-     th:with="stats = ${siteStatsFinder.getStats()}">
-  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
-    <span class="icon-[heroicons--information-circle] w-5 h-5"></span>
-    <span>博客详情</span>
-  </h3>
-  <div class="space-y-3 text-sm">
-    <div class="flex justify-between">
-      <span>总文章数</span>
-      <span class="font-medium" th:text="${stats.post}"></span>
+<div th:fragment="stats"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
+  th:with="stats = ${siteStatsFinder.getStats()}">
+
+  <!-- 统计网格 - 2x2 精致布局 -->
+  <div class="grid grid-cols-2 gap-3">
+    <!-- 文章数 -->
+    <div
+      class="relative overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-4 group hover:from-primary/10 hover:to-primary/20 transition-all cursor-default">
+      <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative">
+        <span class="icon-[heroicons--document-text] w-5 h-5 text-primary mb-2 block"></span>
+        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.post}">0</p>
+        <p class="text-xs text-base-content/50 mt-0.5">篇文章</p>
+      </div>
     </div>
-    <div class="flex justify-between">
-      <span>总分类数</span>
-      <span class="font-medium" th:text="${stats.category}"></span>
+
+    <!-- 分类数 -->
+    <div
+      class="relative overflow-hidden bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-2xl p-4 group hover:from-secondary/10 hover:to-secondary/20 transition-all cursor-default">
+      <div class="absolute top-0 right-0 w-16 h-16 bg-secondary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative">
+        <span class="icon-[heroicons--folder] w-5 h-5 text-secondary mb-2 block"></span>
+        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.category}">0</p>
+        <p class="text-xs text-base-content/50 mt-0.5">个分类</p>
+      </div>
     </div>
-    <div class="flex justify-between">
-      <span>总点赞数</span>
-      <span class="font-medium" th:text="${stats.upvote}"></span>
+
+    <!-- 评论数 -->
+    <div
+      class="relative overflow-hidden bg-gradient-to-br from-accent/5 to-accent/10 rounded-2xl p-4 group hover:from-accent/10 hover:to-accent/20 transition-all cursor-default">
+      <div class="absolute top-0 right-0 w-16 h-16 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative">
+        <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5 text-accent mb-2 block"></span>
+        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.comment}">0</p>
+        <p class="text-xs text-base-content/50 mt-0.5">条评论</p>
+      </div>
     </div>
-    <div class="flex justify-between">
-      <span>总评论数</span>
-      <span class="font-medium" th:text="${stats.comment}"></span>
-    </div>
-    <div class="flex justify-between">
-      <span>总访问量</span>
-      <span class="font-medium" th:text="${stats.visit}"></span>
+
+    <!-- 访问量 -->
+    <div
+      class="relative overflow-hidden bg-gradient-to-br from-info/5 to-info/10 rounded-2xl p-4 group hover:from-info/10 hover:to-info/20 transition-all cursor-default">
+      <div class="absolute top-0 right-0 w-16 h-16 bg-info/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative">
+        <span class="icon-[heroicons--eye] w-5 h-5 text-info mb-2 block"></span>
+        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.visit}">0</p>
+        <p class="text-xs text-base-content/50 mt-0.5">次访问</p>
+      </div>
     </div>
   </div>
 </div>
 
 </html>
-

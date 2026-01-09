@@ -148,3 +148,37 @@ window.hideMomentCardGlow = function(card) {
     });
 
 })();
+
+/**
+ * 文档卡片 3D 倾斜 + 光斑跟随效果
+ */
+window.handleDocTilt = function(event, card) {
+  const inner = card.querySelector('.doc-tilt-inner');
+  const glow = card.querySelector('.doc-glow-spot');
+  if (!inner) return;
+  
+  const rect = card.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  
+  // 计算倾斜角度（最大 15 度）
+  const rotateX = ((y - centerY) / centerY) * -10;
+  const rotateY = ((x - centerX) / centerX) * 10;
+  
+  inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+  
+  // 光斑跟随
+  if (glow) {
+    glow.style.left = x + 'px';
+    glow.style.top = y + 'px';
+  }
+};
+
+window.resetDocTilt = function(card) {
+  const inner = card.querySelector('.doc-tilt-inner');
+  if (inner) {
+    inner.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+  }
+};

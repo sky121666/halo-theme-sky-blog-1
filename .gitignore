@@ -9,3 +9,8 @@ dist/
 .trae/
 .husky/
 pnpm-lock.yaml
+.shared/
+.kiro/
+.agent/
+.cursor/
+build/

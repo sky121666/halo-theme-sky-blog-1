@@ -3,22 +3,31 @@
 
 <!-- 分页片段（极简版）：仅上一页/下一页 -->
 <div th:fragment="pagination(context,prevUrl,nextUrl,totalPages,page,hasPrevious,hasNext)">
-  <div class="mt-6 flex items-center justify-center gap-6" th:if="${hasPrevious || hasNext}">
+  <div class="mt-10 flex items-center justify-center gap-4" th:if="${hasPrevious || hasNext}">
     <!-- 上一页 -->
-    <a th:href="@{${prevUrl}}"
-       class="inline-flex items-center gap-1 text-sm text-base-content/60 hover:text-base-content hover:font-medium transition-all"
-       th:classappend="${!hasPrevious} ? ' pointer-events-none opacity-40' : ''">
-      <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
+    <a th:href="@{${prevUrl}}" class="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold 
+              bg-base-200/50 text-base-content/60 
+              hover:bg-base-200 hover:text-base-content 
+              transition-all duration-300 ease-out"
+      th:classappend="${!hasPrevious} ? ' pointer-events-none opacity-40' : ''">
+      <span
+        class="icon-[heroicons--arrow-left] w-4 h-4 text-base-content/40 group-hover:text-base-content/80 group-hover:-translate-x-1 transition-all duration-300"></span>
       <span>上一页</span>
     </a>
-    <!-- 页码 -->
-    <span class="text-sm text-base-content/50" th:text="${page} + ' / ' + ${totalPages}">1/1</span>
+
+    <!-- 页码指示器 (极简风格) -->
+    <span class="text-xs font-semibold text-base-content/30 tracking-widest uppercase"
+      th:text="|Page ${page} of ${totalPages}|">PAGE 1 OF 1</span>
+
     <!-- 下一页 -->
-    <a th:href="@{${nextUrl}}"
-       class="inline-flex items-center gap-1 text-sm text-base-content/60 hover:text-base-content hover:font-medium transition-all"
-       th:classappend="${!hasNext} ? ' pointer-events-none opacity-40' : ''">
+    <a th:href="@{${nextUrl}}" class="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold 
+              bg-base-200/50 text-base-content/60 
+              hover:bg-base-200 hover:text-base-content 
+              transition-all duration-300 ease-out"
+      th:classappend="${!hasNext} ? ' pointer-events-none opacity-40' : ''">
       <span>下一页</span>
-      <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
+      <span
+        class="icon-[heroicons--arrow-right] w-4 h-4 text-base-content/40 group-hover:text-base-content/80 group-hover:translate-x-1 transition-all duration-300"></span>
     </a>
   </div>
 </div>

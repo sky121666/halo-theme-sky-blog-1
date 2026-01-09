@@ -8,7 +8,7 @@
 
 <!-- 标签集合内容片段：/tags -->
 <main class="relative" th:fragment="tag-collection"
-      th:with="cfg = ${theme.config.tag_settings},
+  th:with="cfg = ${theme.config.tag_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -18,7 +18,7 @@
       <!-- 左侧：标签切换块与文章列表 -->
       <section class="flex-1" th:classappend="${cfg.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
         <th:block th:with="tags = ${tagFinder.listAll()}">
-          
+
           <!-- 标签切换块 - 根据后台设置渲染不同风格 -->
           <th:block th:switch="${theme.config.tag_settings.tag_display_style}">
             <th:block th:case="'pills'">
@@ -46,27 +46,31 @@
           </th:block>
 
           <!-- 有标签：在 /tags（全部）分页显示所有文章 -->
-          <th:block th:unless="${#lists.isEmpty(tags)}"
-                    th:with="pageSize=${site.post.tagPageSize ?: 10}, 
+          <th:block th:unless="${#lists.isEmpty(tags)}" th:with="pageSize=${site.post.tagPageSize ?: 10}, 
                              pageParam=${param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'}, 
                              currentPage=${#numbers.formatInteger(pageParam, 0)}, 
                              posts=${postFinder.list({page: currentPage, size: pageSize})}">
             <!-- 动态渲染不同风格的列表 -->
             <th:block th:switch="${theme.config.tag_settings.list_style}">
               <th:block th:case="'modern'">
-                <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+                <th:block
+                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
               <th:block th:case="'media_text'">
-                <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+                <th:block
+                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
               <th:block th:case="'magazine'">
-                <th:block th:replace="~{modules/categories/list-magazine :: magazine(${posts})}" />
+                <th:block
+                  th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
               <th:block th:case="'minimal'">
-                <th:block th:replace="~{modules/categories/list-minimal :: minimal(${posts})}" />
+                <th:block
+                  th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
               <th:block th:case="*">
-                <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+                <th:block
+                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
             </th:block>
 
@@ -90,8 +94,7 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${cfg.show_sidebar == true}" 
-             class="right-sidebar w-80 space-y-6 hidden lg:block">
+      <aside th:if="${cfg.show_sidebar == true}" class="right-sidebar w-80 space-y-6 hidden lg:block">
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
@@ -100,7 +103,7 @@
 
 <!-- 标签归档内容片段：/tags/:slug -->
 <main class="relative" th:fragment="tag-archive"
-      th:with="cfg = ${theme.config.tag_settings},
+  th:with="cfg = ${theme.config.tag_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -108,8 +111,9 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：标签切换块与当前标签文章列表 -->
-      <section class="flex-1" th:classappend="${theme.config.tag_settings.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
-        
+      <section class="flex-1"
+        th:classappend="${theme.config.tag_settings.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
+
         <!-- 标签切换块 -->
         <th:block th:with="tags = ${tagFinder.listAll()}">
           <th:block th:switch="${theme.config.tag_settings.tag_display_style}">
@@ -134,19 +138,24 @@
         <!-- 文章列表（当前标签） -->
         <th:block th:switch="${theme.config.tag_settings.list_style}">
           <th:block th:case="'modern'">
-            <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+            <th:block
+              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
           </th:block>
           <th:block th:case="'media_text'">
-            <th:block th:replace="~{modules/categories/list-media :: media_text(${posts})}" />
+            <th:block
+              th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
           </th:block>
           <th:block th:case="'magazine'">
-            <th:block th:replace="~{modules/categories/list-magazine :: magazine(${posts})}" />
+            <th:block
+              th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.tag_settings})}" />
           </th:block>
           <th:block th:case="'minimal'">
-            <th:block th:replace="~{modules/categories/list-minimal :: minimal(${posts})}" />
+            <th:block
+              th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.tag_settings})}" />
           </th:block>
           <th:block th:case="*">
-            <th:block th:replace="~{modules/categories/list-modern :: modern(${posts})}" />
+            <th:block
+              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
           </th:block>
         </th:block>
 
@@ -163,8 +172,7 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${cfg.show_sidebar == true}" 
-             class="right-sidebar w-80 space-y-6 hidden lg:block">
+      <aside th:if="${cfg.show_sidebar == true}" class="right-sidebar w-80 space-y-6 hidden lg:block">
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>

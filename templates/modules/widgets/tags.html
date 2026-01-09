@@ -2,25 +2,45 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--           标签云组件                        -->
+<!--     标签云组件 - Premium Refined Style    -->
 <!-- ========================================== -->
 
-<div th:fragment="cloud" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
-     th:with="tags = ${tagFinder.list(1,50)}">
-  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
-    <span class="icon-[heroicons--tag] w-5 h-5"></span>
-    <span>标签</span>
-  </h3>
+<div th:fragment="cloud"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
+  th:with="tags = ${tagFinder.list(1,20)}">
+
+  <!-- 标题栏 -->
+  <div class="flex items-center justify-between mb-5">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10 flex items-center justify-center">
+        <span class="icon-[heroicons--tag] w-5 h-5 text-warning"></span>
+      </div>
+      <div>
+        <span class="font-bold text-base-content">标签云</span>
+        <p class="text-xs text-base-content/40">按标签浏览</p>
+      </div>
+    </div>
+    <span class="text-xs text-base-content/30 bg-base-200/50 px-2 py-0.5 rounded-full"
+      th:text="|${tags.total}|">0</span>
+  </div>
+
+  <!-- 标签网格 - 精致药丸 -->
   <div class="flex flex-wrap gap-2">
-    <a th:each="tag : ${tags.items}"
-       th:href="@{${tag.status.permalink}}"
-       th:title="${tag.spec.displayName}"
-       class="inline-flex items-center gap-1 rounded-full border border-base-300 bg-base-100 px-2.5 py-1 text-xs hover:border-primary hover:bg-base-200 transition-all">
-      <span th:text="|#${tag.spec.displayName}|"></span>
-      <sup class="text-primary font-medium" th:text="${tag.postCount ?: 0}"></sup>
+    <a th:each="tag, iterStat : ${tags.items}" th:if="${iterStat.index < 15}" th:href="@{${tag.status.permalink}}"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-base-200/50 text-base-content/60 hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+      <span class="text-base-content/30 group-hover:text-primary/60">#</span>
+      <span th:text="${tag.spec.displayName}">标签</span>
+      <span class="text-[10px] text-base-content/30 group-hover:text-primary/50"
+        th:text="${tag.status.postCount ?: 0}">0</span>
     </a>
   </div>
+
+  <!-- 查看更多 -->
+  <a href="/tags" th:if="${tags.total > 15}"
+    class="flex items-center justify-center gap-1 mt-4 pt-4 border-t border-base-content/5 text-xs text-base-content/40 hover:text-primary transition-colors cursor-pointer">
+    查看全部标签
+    <span class="icon-[heroicons--arrow-right] w-3 h-3"></span>
+  </a>
 </div>
 
 </html>
-

@@ -2,20 +2,81 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--           分类目录组件                      -->
+<!--   分类目录组件 - Premium Refined Style   -->
+<!--   支持后端元数据自定义图标 (key=icon)     -->
 <!-- ========================================== -->
 
-<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
-     th:with="categories = ${categoryFinder.listAsTree()}">
-  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
-    <span class="icon-[heroicons--folder] w-5 h-5"></span>
-    <span>分类</span>
-  </h3>
-  <ul class="space-y-1">
-    <!-- 修正片段路径为 modules/categories/category-tree，符合 Halo 模板结构 -->
-  <li th:replace="~{modules/categories/category-tree :: tree-item(categories=${categories}, depth=${0})}" />
-  </ul>
+<div th:fragment="list"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
+  th:with="categories = ${categoryFinder.listAsTree()}">
+
+  <!-- 标题栏 -->
+  <div class="flex items-center gap-3 mb-5">
+    <div
+      class="w-9 h-9 rounded-xl bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center">
+      <span class="icon-[heroicons--folder] w-5 h-5 text-secondary"></span>
+    </div>
+    <div>
+      <span class="font-bold text-base-content">分类目录</span>
+      <p class="text-xs text-base-content/40">按分类浏览</p>
+    </div>
+  </div>
+
+  <!-- 分类列表 -->
+  <div class="space-y-1">
+    <th:block th:each="category : ${categories}" th:with="categoryIcon = ${category.metadata.annotations?.get('icon')}">
+      <a th:href="@{${category.status.permalink}}"
+        class="flex items-center justify-between p-3 -mx-1 rounded-xl hover:bg-base-200/50 transition-all cursor-pointer group">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-lg bg-base-200/60 group-hover:bg-secondary/10 flex items-center justify-center transition-colors">
+            <!-- 优先使用后端传递的自定义图标 -->
+            <th:block th:if="${categoryIcon != null and !categoryIcon.isEmpty()}">
+              <span th:utext="${categoryIcon}"
+                class="w-4 h-4 text-base-content/40 group-hover:text-secondary transition-colors [&>svg]:w-4 [&>svg]:h-4"></span>
+            </th:block>
+            <!-- 默认图标 -->
+            <th:block th:if="${categoryIcon == null or categoryIcon.isEmpty()}">
+              <span
+                class="icon-[heroicons--folder-open] w-4 h-4 text-base-content/40 group-hover:text-secondary transition-colors"></span>
+            </th:block>
+          </div>
+          <span class="text-sm font-medium text-base-content group-hover:text-secondary transition-colors"
+            th:text="${category.spec.displayName}">分类名</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-base-content/30 bg-base-200/60 px-2 py-0.5 rounded-full"
+            th:text="${category.status.postCount ?: 0}">0</span>
+          <span
+            class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/20 group-hover:text-secondary group-hover:translate-x-0.5 transition-all"></span>
+        </div>
+      </a>
+
+      <!-- 子分类 -->
+      <th:block th:if="${category.children != null and !category.children.isEmpty()}">
+        <th:block th:each="child : ${category.children}"
+          th:with="childIcon = ${child.metadata.annotations?.get('icon')}">
+          <a th:href="@{${child.status.permalink}}"
+            class="flex items-center justify-between p-2.5 pl-12 -mx-1 rounded-xl hover:bg-base-200/50 transition-all cursor-pointer group">
+            <div class="flex items-center gap-2">
+              <!-- 子分类自定义图标 -->
+              <th:block th:if="${childIcon != null and !childIcon.isEmpty()}">
+                <span th:utext="${childIcon}"
+                  class="w-3.5 h-3.5 text-base-content/30 group-hover:text-secondary transition-colors [&>svg]:w-3.5 [&>svg]:h-3.5"></span>
+              </th:block>
+              <!-- 默认点状标记 -->
+              <th:block th:if="${childIcon == null or childIcon.isEmpty()}">
+                <span class="w-1 h-1 rounded-full bg-base-content/20"></span>
+              </th:block>
+              <span class="text-sm text-base-content/70 group-hover:text-secondary transition-colors"
+                th:text="${child.spec.displayName}">子分类</span>
+            </div>
+            <span class="text-xs text-base-content/30" th:text="${child.status.postCount ?: 0}">0</span>
+          </a>
+        </th:block>
+      </th:block>
+    </th:block>
+  </div>
 </div>
 
 </html>
-

@@ -8,7 +8,7 @@
 
 <!-- 归档内容片段 -->
 <main class="relative" th:fragment="archive-content"
-      th:with="cfg = ${theme.config.archive_settings},
+  th:with="cfg = ${theme.config.archive_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -16,7 +16,7 @@
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：归档内容 -->
       <section class="flex-1" th:classappend="${cfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
-        
+
         <!-- 页面标题区 -->
         <div class="mb-8">
           <h1 class="text-3xl font-bold text-base-content mb-2">
@@ -31,17 +31,18 @@
         </div>
 
         <!-- 年份月份快速导航 -->
-        <div class="mb-8 space-y-3" th:if="${archives != null and archives.items != null and !#lists.isEmpty(archives.items)}">
+        <div class="mb-8 space-y-3"
+          th:if="${archives != null and archives.items != null and !#lists.isEmpty(archives.items)}">
           <div th:each="archive : ${archives.items}" class="flex flex-wrap items-center gap-2">
             <!-- 年份标签 -->
             <a th:href="|#year-${archive.year}|"
-               class="px-3 py-1.5 rounded-lg text-sm font-bold bg-primary text-primary-content hover:bg-primary/80 transition-all">
+              class="px-3 py-1.5 rounded-lg text-sm font-bold bg-primary text-primary-content hover:bg-primary/80 transition-all">
               <span th:text="${archive.year}"></span>
             </a>
             <!-- 月份按钮 -->
             <th:block th:each="monthData : ${archive.months}">
               <a th:href="|#month-${archive.year}-${monthData.month}|"
-                 class="px-3 py-1.5 rounded-full text-sm bg-base-200/80 text-base-content/70 hover:bg-primary hover:text-primary-content transition-all">
+                class="px-3 py-1.5 rounded-full text-sm bg-base-200/80 text-base-content/70 hover:bg-primary hover:text-primary-content transition-all">
                 <span th:text="${monthData.month + '月'}"></span>
                 <span class="ml-1 opacity-60" th:text="'(' + ${#lists.size(monthData.posts)} + ')'"></span>
               </a>
@@ -50,21 +51,20 @@
         </div>
 
         <!-- 归档时间线 -->
-        <div class="archive-timeline space-y-12" 
-             th:if="${archives != null and archives.items != null}"
-             x-data="archiveScroll()"
-             @scroll.window="updateCurrentMonth()">
+        <div class="archive-timeline space-y-12" th:if="${archives != null and archives.items != null}"
+          x-data="archiveScroll()" @scroll.window="updateCurrentMonth()">
           <th:block th:each="archive : ${archives.items}">
             <!-- 年份标题 -->
             <div th:id="${'year-' + archive.year}" class="relative" th:attr="data-year=${archive.year}">
               <!-- 年份标记（粘性，显示当前月份） -->
               <div class="sticky top-20 z-10 mb-6">
-                <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-primary text-primary-content shadow-lg shadow-primary/20">
+                <div
+                  class="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-primary text-primary-content shadow-lg shadow-primary/20">
                   <span class="icon-[heroicons--calendar] w-5 h-5"></span>
                   <span class="text-xl font-bold" th:text="${archive.year}"></span>
-                  <span class="text-sm opacity-80" 
-                        th:attr="data-year=${archive.year}, data-default-month=${archive.months[0].month}"
-                        x-text="currentMonth[$el.dataset.year] ? currentMonth[$el.dataset.year] + '月' : $el.dataset.defaultMonth + '月'">
+                  <span class="text-sm opacity-80"
+                    th:attr="data-year=${archive.year}, data-default-month=${archive.months[0].month}"
+                    x-text="currentMonth[$el.dataset.year] ? currentMonth[$el.dataset.year] + '月' : $el.dataset.defaultMonth + '月'">
                   </span>
                 </div>
               </div>
@@ -73,15 +73,17 @@
               <div class="space-y-8 pl-4 border-l-2 border-base-300 ml-4">
                 <th:block th:each="monthData : ${archive.months}">
                   <!-- 月份标题 -->
-                  <div class="relative month-section" 
-                       th:id="${'month-' + archive.year + '-' + monthData.month}"
-                       th:attr="data-year=${archive.year}, data-month=${monthData.month}">
+                  <div class="relative month-section" th:id="${'month-' + archive.year + '-' + monthData.month}"
+                    th:attr="data-year=${archive.year}, data-month=${monthData.month}">
                     <!-- 时间线节点 -->
-                    <div class="absolute -left-[1.35rem] top-1 w-4 h-4 rounded-full bg-base-100 border-2 border-primary"></div>
-                    
+                    <div
+                      class="absolute -left-[1.35rem] top-1 w-4 h-4 rounded-full bg-base-100 border-2 border-primary">
+                    </div>
+
                     <!-- 月份标签 -->
                     <div class="mb-4 pl-6">
-                      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-base-200 text-base-content">
+                      <span
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-base-200 text-base-content">
                         <span th:text="${monthData.month + ' 月'}"></span>
                         <span class="text-xs opacity-60" th:text="'(' + ${#lists.size(monthData.posts)} + ' 篇)'"></span>
                       </span>
@@ -90,28 +92,35 @@
                     <!-- 文章列表 -->
                     <div class="pl-6 space-y-3">
                       <article th:each="post : ${monthData.posts}"
-                               th:with="isPinned = ${post.spec.pinned == true},
+                        th:with="isPinned = ${post.spec.pinned == true},
                                         isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                                         isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-                               class="group relative flex items-start gap-4 p-4 rounded-xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer">
+                        class="group relative flex items-start gap-4 p-4 rounded-xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer">
                         <!-- 整卡片可点击链接 -->
                         <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
-                        
+
                         <!-- 日期标记 -->
-                        <div class="shrink-0 w-12 h-12 rounded-xl bg-base-200 flex flex-col items-center justify-center text-center">
-                          <span class="text-lg font-bold text-base-content leading-none" th:text="${#dates.format(post.spec.publishTime, 'dd')}"></span>
-                          <span class="text-xs text-base-content/60 uppercase" th:text="${#dates.format(post.spec.publishTime, 'EEE')}"></span>
+                        <div
+                          class="shrink-0 w-12 h-12 rounded-xl bg-base-200 flex flex-col items-center justify-center text-center">
+                          <span class="text-lg font-bold text-base-content leading-none"
+                            th:text="${#dates.format(post.spec.publishTime, 'dd')}"></span>
+                          <span class="text-xs text-base-content/60 uppercase"
+                            th:text="${#dates.format(post.spec.publishTime, 'EEE')}"></span>
                         </div>
-                        
+
                         <!-- 文章信息 -->
                         <div class="flex-1 min-w-0">
                           <!-- 标题 + 角标 -->
                           <div class="flex items-center gap-2 mb-1">
-                            <h3 class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1" th:text="${post.spec.title}">文章标题</h3>
-                            <span th:if="${isPrivate}" class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-warning text-warning-content">
+                            <h3
+                              class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1"
+                              th:text="${post.spec.title}">文章标题</h3>
+                            <span th:if="${isPrivate}"
+                              class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-warning text-warning-content">
                               <span class="icon-[heroicons--eye-slash] w-2.5 h-2.5"></span>仅自己
                             </span>
-                            <span th:if="${isLocked}" class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-error/90 text-error-content">
+                            <span th:if="${isLocked}"
+                              class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-error/90 text-error-content">
                               <span class="icon-[heroicons--lock-closed] w-2.5 h-2.5"></span>
                             </span>
                           </div>
@@ -119,16 +128,15 @@
                             <!-- 分类 -->
                             <span th:if="${!#lists.isEmpty(post.categories)}" class="inline-flex items-center gap-1">
                               <span class="icon-[heroicons--folder] w-3.5 h-3.5"></span>
-                              <a th:href="${post.categories[0].status.permalink}" 
-                                 th:text="${post.categories[0].spec.displayName}"
-                                 class="relative z-20 hover:text-primary"></a>
+                              <a th:href="${post.categories[0].status.permalink}"
+                                th:text="${post.categories[0].spec.displayName}"
+                                class="relative z-20 hover:text-primary"></a>
                             </span>
                             <!-- 标签 -->
                             <span th:if="${!#lists.isEmpty(post.tags)}" class="inline-flex items-center gap-1">
                               <span class="icon-[heroicons--tag] w-3.5 h-3.5"></span>
-                              <a th:href="${post.tags[0].status.permalink}" 
-                                 th:text="${post.tags[0].spec.displayName}"
-                                 class="relative z-20 hover:text-primary"></a>
+                              <a th:href="${post.tags[0].status.permalink}" th:text="${post.tags[0].spec.displayName}"
+                                class="relative z-20 hover:text-primary"></a>
                             </span>
                             <!-- 阅读量 -->
                             <span class="inline-flex items-center gap-1">
@@ -152,8 +160,8 @@
         </div>
 
         <!-- 无归档提示 -->
-        <div th:if="${archives == null or archives.items == null or #lists.isEmpty(archives.items)}" 
-             class="flex flex-col items-center justify-center py-20 text-center">
+        <div th:if="${archives == null or archives.items == null or #lists.isEmpty(archives.items)}"
+          class="flex flex-col items-center justify-center py-20 text-center">
           <span class="icon-[heroicons--archive-box-x-mark] w-16 h-16 text-base-content/30 mb-4"></span>
           <p class="text-base-content/60">暂无归档文章</p>
         </div>
@@ -172,18 +180,16 @@
         </th:block>
 
         <!-- 评论区（仅当未启用抽屉式评论时显示内嵌评论） -->
-        <section class="mt-12" th:if="${theme.config.archive_settings?.enable_comment == true and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}">
+        <section class="mt-12"
+          th:if="${theme.config.archive_settings?.enable_comment == true and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}">
           <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
           </h2>
-          <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
-            <div class="card-body p-4 md:p-6">
-              <halo:comment 
-                  group="content.halo.run" 
-                  kind="SinglePage"
-                  th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}"
-                  colorScheme="system">
+          <div class="card bg-base-100/60 backdrop-blur-xl shadow-xl border border-base-content/5 rounded-[1.5rem]">
+            <div class="card-body p-6 sm:p-8">
+              <halo:comment group="content.halo.run" kind="SinglePage"
+                th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}" colorScheme="system">
               </halo:comment>
             </div>
           </div>
@@ -191,17 +197,17 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${cfg?.show_sidebar == true}" 
-             class="right-sidebar w-80 space-y-6 hidden lg:block shrink-0">
+      <aside th:if="${cfg?.show_sidebar == true}" class="right-sidebar w-80 space-y-6 hidden lg:block shrink-0">
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
   </div>
-  
+
   <!-- 评论抽屉（仅当启用定制悬浮栏 + 启用评论按钮时显示，启用即为抽屉式） -->
   <th:block th:if="${cfg?.floating_dock?.enable_custom_dock == true 
                      and cfg?.floating_dock?.enable_comment == true}">
-    <th:block th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'archives'})}" />
+    <th:block
+      th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'archives'})}" />
   </th:block>
 </main>
 

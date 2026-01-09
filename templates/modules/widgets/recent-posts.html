@@ -2,31 +2,77 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--           最新文章组件                      -->
+<!--   最新文章组件 - 时间线卡片风格           -->
 <!-- ========================================== -->
 
-<div th:fragment="list" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card"
-     th:with="cfg = ${theme.config.general.sidebar_settings},
-              postCount = ${cfg?.recent_posts_count ?: 5},
-              recentPosts = ${postFinder.list({page: 1, size: postCount, sort: {'spec.publishTime,desc'}})}">
-  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
-    <span class="icon-[heroicons--document-text] w-5 h-5"></span>
-    <span>最新文章</span>
-  </h3>
-  <div class="space-y-2">
-    <a th:each="post : ${recentPosts.items}"
-       th:href="@{${post.status.permalink}}"
-       th:title="${post.spec.title}"
-       class="block p-2.5 rounded-lg hover:bg-base-200 transition-colors">
-      <h4 class="text-sm font-medium mb-1.5 line-clamp-2 text-base-content" th:text="${post.spec.title}"></h4>
-      <div class="flex items-center justify-between gap-2 text-xs text-base-content/60">
-        <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
-        <div class="flex items-center gap-1">
-          <span class="icon-[heroicons--eye] w-3 h-3"></span>
-          <span th:text="${post.stats.visit ?: 0}"></span>
+<div th:fragment="list"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5" th:with="cfg = ${theme.config.general.sidebar_settings},
+           postCount = ${cfg?.recent_posts_count ?: 5},
+           recentPosts = ${postFinder.list({page: 1, size: postCount, sort: {'spec.publishTime,desc'}})}">
+
+  <!-- 标题栏 -->
+  <div class="flex items-center gap-3 mb-5">
+    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-success/20 to-success/10 flex items-center justify-center">
+      <span class="icon-[heroicons--clock] w-5 h-5 text-success"></span>
+    </div>
+    <div>
+      <span class="font-bold text-base-content">最新文章</span>
+      <p class="text-xs text-base-content/40">近期发布</p>
+    </div>
+  </div>
+
+  <!-- 文章列表 - 时间线风格 -->
+  <div class="relative">
+    <!-- 时间线 -->
+    <div
+      class="absolute left-[19px] top-2 bottom-2 w-px bg-gradient-to-b from-success/30 via-base-content/10 to-transparent">
+    </div>
+
+    <div class="space-y-4">
+      <a th:each="post, iterStat : ${recentPosts.items}" th:href="@{${post.status.permalink}}"
+        th:title="${post.spec.title}" class="relative flex gap-4 group cursor-pointer">
+
+        <!-- 时间节点 -->
+        <div class="relative shrink-0 flex flex-col items-center">
+          <!-- 节点圆点 -->
+          <div class="w-10 h-10 rounded-xl flex flex-col items-center justify-center z-10 transition-all"
+            th:classappend="${iterStat.index == 0} ? 'bg-success/10 ring-2 ring-success/30' : 'bg-base-200/80'">
+            <span class="text-xs font-bold text-base-content"
+              th:text="${#dates.format(post.spec.publishTime,'dd')}">01</span>
+            <span class="text-[9px] text-base-content/50 -mt-0.5"
+              th:text="${#dates.format(post.spec.publishTime,'MMM')}">Jan</span>
+          </div>
         </div>
-      </div>
-    </a>
+
+        <!-- 文章内容 -->
+        <div class="flex-1 min-w-0 pb-1">
+          <!-- 标题 -->
+          <h4
+            class="text-sm font-medium text-base-content line-clamp-2 group-hover:text-primary transition-colors leading-snug"
+            th:text="${post.spec.title}">文章标题</h4>
+
+          <!-- 描述 -->
+          <p class="text-xs text-base-content/40 mt-1 truncate"
+            th:if="${post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()}"
+            th:text="${post.spec.excerpt.raw}">摘要...</p>
+
+          <!-- 元信息 -->
+          <div class="flex items-center gap-2 mt-2 text-[10px] text-base-content/40">
+            <span class="inline-flex items-center gap-1">
+              <span class="icon-[heroicons--eye] w-3 h-3"></span>
+              <span th:text="${post.stats.visit ?: 0}">0</span>
+            </span>
+            <span>·</span>
+            <span th:if="${post.categories != null and !post.categories.isEmpty()}"
+              th:text="${post.categories[0].spec.displayName}">分类</span>
+          </div>
+        </div>
+
+        <!-- 箭头 -->
+        <span
+          class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/20 group-hover:text-primary group-hover:translate-x-0.5 transition-all self-center shrink-0"></span>
+      </a>
+    </div>
   </div>
 </div>
 

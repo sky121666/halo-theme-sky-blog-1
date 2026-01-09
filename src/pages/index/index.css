@@ -57,13 +57,13 @@
  * 3.1 说说卡片基础样式
  * 用于说说模块的卡片样式，包含悬停动画和毛玻璃效果
  */
- .moment-card {
-   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-   backdrop-filter: blur(10px);
-   background: rgba(255, 255, 255, 0.05);
-   border: 1px solid rgba(255, 255, 255, 0.1);
- }
- 
+.moment-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .moment-floating-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
@@ -130,7 +130,7 @@
   border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
   box-shadow:
     0 8px 32px color-mix(in oklch, var(--color-primary) 50%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 20%, transparent),;
+    0 0 20px color-mix(in oklch, var(--color-primary) 20%, transparent), ;
 }
 
 /* 为瞬间浮动卡片添加发光效果支持 */
@@ -155,10 +155,10 @@
   opacity: 0;
   transition: opacity 0.3s ease-out;
   background: radial-gradient(circle,
-    color-mix(in oklch, var(--color-primary) 50%, transparent),
-    color-mix(in oklch, var(--color-primary) 30%, transparent),
-    color-mix(in oklch, var(--color-primary) 10%, transparent),
-    transparent 70%);
+      color-mix(in oklch, var(--color-primary) 50%, transparent),
+      color-mix(in oklch, var(--color-primary) 30%, transparent),
+      color-mix(in oklch, var(--color-primary) 10%, transparent),
+      transparent 70%);
   filter: blur(15px);
   transform: translate(-50%, -50%);
 }
@@ -176,7 +176,7 @@
   width: 100%;
   height: 120px;
   overflow: hidden;
-  
+
 }
 
 .wave {
@@ -208,9 +208,11 @@
   0% {
     transform: translateX(0);
   }
+
   50% {
     transform: translateX(-25%);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -270,10 +272,13 @@
 }
 
 @keyframes dot-float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) scale(1);
     opacity: 0.6;
   }
+
   50% {
     transform: translateY(-15px) scale(1.2);
     opacity: 0.9;
@@ -289,8 +294,454 @@
  * 针对动画和特效的性能优化
  */
 @media (prefers-reduced-motion: reduce) {
+
   .wave,
   .wave-dot {
     animation: none;
   }
+}
+
+
+/* ===================================================
+ * 6. 首页扩展模块样式
+ * ==================================================*/
+
+/**
+ * 6.1 3D 卡片翻转效果 - 图库
+ */
+.gallery-card-3d {
+  perspective: 1000px;
+}
+
+.gallery-card-3d .gallery-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.gallery-card-3d:hover .gallery-card-inner {
+  transform: rotateY(180deg);
+}
+
+.gallery-card-3d .gallery-card-front,
+.gallery-card-3d .gallery-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.gallery-card-3d .gallery-card-back {
+  transform: rotateY(180deg);
+}
+
+/**
+ * 6.2 文档卡片 - 3D 倾斜 + 光斑跟随
+ */
+.doc-tilt-card {
+  perspective: 1000px;
+}
+
+.doc-tilt-inner {
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.doc-tilt-card:hover .doc-tilt-inner {
+  box-shadow:
+    0 20px 40px -10px color-mix(in oklch, var(--color-primary) 20%, transparent),
+    0 0 20px color-mix(in oklch, var(--color-primary) 10%, transparent);
+}
+
+/* 光斑跟随效果 */
+.doc-glow-spot {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      color-mix(in oklch, var(--color-primary) 40%, transparent) 0%,
+      color-mix(in oklch, var(--color-primary) 20%, transparent) 30%,
+      transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+  filter: blur(20px);
+  z-index: 1;
+}
+
+.doc-tilt-card:hover .doc-glow-spot {
+  opacity: 1;
+}
+
+/**
+ * 6.3 友链卡片 - 旋转 + 光环 + 波纹
+ */
+.friend-avatar-wrap {
+  perspective: 500px;
+}
+
+.friend-avatar {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.friend-card:hover .friend-avatar {
+  transform: rotateY(360deg) scale(1.1);
+}
+
+/* 光环效果 */
+.friend-halo {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+      var(--color-primary),
+      var(--color-secondary),
+      var(--color-accent),
+      var(--color-primary));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: halo-spin 3s linear infinite paused;
+}
+
+.friend-card:hover .friend-halo {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+@keyframes halo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 波纹扩散效果 */
+.friend-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  opacity: 0;
+  transform: scale(1);
+  pointer-events: none;
+  z-index: -2;
+}
+
+.friend-card:hover .friend-ripple {
+  animation: ripple-expand 1.5s ease-out infinite;
+}
+
+.friend-card:hover .friend-ripple.delay-1 {
+  animation-delay: 0.5s;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+
+/* ===================================================
+ * 7. 热力图样式
+ * ==================================================*/
+
+/**
+ * 7.1 热力图卡片通用样式
+ */
+.heatmap-card {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+/* 暗色模式热力图卡片发光效果 */
+[data-theme="dark"] .heatmap-card,
+[data-color-scheme="dark"] .heatmap-card {
+  box-shadow:
+    0 0 30px color-mix(in oklch, var(--color-primary) 12%, transparent),
+    0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/**
+ * 7.2 骨架屏动画
+ */
+.heatmap-skeleton {
+  position: relative;
+  /* 固定高度，避免布局抖动 */
+  min-height: 120px;
+  aspect-ratio: 53 / 7;
+  /* GitHub 热力图的宽高比 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-base-100);
+  border-radius: 0.5rem;
+}
+
+.heatmap-skeleton-row {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.heatmap-skeleton-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+      oklch(from var(--color-base-content) l c h / 0.05) 25%,
+      oklch(from var(--color-base-content) l c h / 0.1) 50%,
+      oklch(from var(--color-base-content) l c h / 0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/**
+ * 7.3 错误状态样式
+ */
+.heatmap-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: oklch(from var(--color-base-content) l c h / 0.5);
+}
+
+.heatmap-error-icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.4;
+}
+
+.heatmap-error-text {
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.heatmap-retry-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  background: oklch(from var(--color-primary) l c h / 0.1);
+  color: var(--color-primary);
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.heatmap-retry-btn:hover {
+  background: oklch(from var(--color-primary) l c h / 0.2);
+  transform: translateY(-1px);
+}
+
+/**
+ * 7.4 文章热力图 SVG 样式
+ */
+.article-heatmap-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.article-heatmap-cell {
+  cursor: pointer;
+  transition: all 0.15s ease;
+  transform-origin: center;
+}
+
+.article-heatmap-cell:hover {
+  filter: brightness(1.15);
+  transform: scale(1.15);
+}
+
+.article-heatmap-cell.has-posts:hover {
+  filter: brightness(1.2) drop-shadow(0 0 6px var(--color-primary));
+  transform: scale(1.2);
+}
+
+/**
+ * 7.5 格子渐入动画
+ */
+.heatmap-cell-animated {
+  opacity: 0;
+  animation: heatmap-cell-enter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 优雅的淡入动画 - 使用 opacity + translateY 而非 scale 避免变形感 */
+@keyframes heatmap-cell-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * 7.6 月份/星期标签样式
+ */
+.heatmap-label {
+  font-size: 9px;
+  fill: oklch(from var(--color-base-content) l c h / 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+}
+
+.heatmap-month-label {
+  font-size: 10px;
+  fill: oklch(from var(--color-base-content) l c h / 0.5);
+  font-weight: 500;
+}
+
+/**
+ * 7.7 自定义工具提示样式
+ */
+.heatmap-tooltip {
+  position: fixed;
+  z-index: 9999;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-base-100);
+  border: 1px solid oklch(from var(--color-base-content) l c h / 0.1);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px oklch(from var(--color-base-content) l c h / 0.1);
+  font-size: 0.75rem;
+  color: var(--color-base-content);
+  max-width: 250px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.15s ease;
+}
+
+.heatmap-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heatmap-tooltip-date {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary);
+}
+
+.heatmap-tooltip-count {
+  color: oklch(from var(--color-base-content) l c h / 0.7);
+}
+
+.heatmap-tooltip-posts {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid oklch(from var(--color-base-content) l c h / 0.1);
+}
+
+.heatmap-tooltip-post {
+  display: block;
+  padding: 0.25rem 0;
+  color: oklch(from var(--color-base-content) l c h / 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.heatmap-tooltip-post::before {
+  content: '•';
+  margin-right: 0.5rem;
+  color: var(--color-primary);
+}
+
+/**
+ * 7.8 空态样式
+ */
+.heatmap-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.heatmap-empty-icon {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+  color: oklch(from var(--color-base-content) l c h / 0.2);
+}
+
+.heatmap-empty-text {
+  font-size: 0.875rem;
+  color: oklch(from var(--color-base-content) l c h / 0.4);
+}
+
+/**
+ * 7.9 响应式适配
+ */
+@media (max-width: 640px) {
+  .heatmap-legend {
+    display: none;
+  }
+
+  .heatmap-footer {
+    justify-content: center;
+  }
+
+  .heatmap-cell-animated {
+    animation-duration: 0.15s;
+  }
+}
+
+@media (max-width: 768px) {
+  .heatmap-label {
+    font-size: 8px;
+  }
+
+  .heatmap-month-label {
+    font-size: 9px;
+  }
+}
+
+/**
+ * 7.10 GitHub 热力图图片样式
+ * 使用主题背景色，格子保持外部服务原始颜色
+ */
+.github-heatmap-img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  transition: opacity 0.3s ease;
+  padding: 0.5rem;
+  /* 使用主题背景色 */
+  background: var(--color-base-100);
 }

@@ -8,7 +8,7 @@
 
 <!-- 友链内容片段 -->
 <main class="relative" th:fragment="links-content"
-      th:with="cfg = ${theme.config.links_settings},
+  th:with="cfg = ${theme.config.links_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -16,236 +16,225 @@
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 主内容区 -->
       <section class="flex-1 min-w-0" th:classappend="${cfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
-    
+
         <!-- 页面标题区 -->
-    <div class="text-center mb-12">
-      <h1 class="text-3xl md:text-4xl font-bold text-base-content mb-4">
-        <span class="icon-[heroicons--link] w-8 h-8 md:w-10 md:h-10 mr-2 align-middle text-primary"></span>
-        <span th:text="${theme.config.links_settings?.page_title ?: '友情链接'}">友情链接</span>
-      </h1>
-      <p class="text-base-content/60 max-w-2xl mx-auto"
-         th:text="${theme.config.links_settings?.page_description ?: '感谢这些优秀的网站与博客，让互联网变得更加精彩'}">
-        感谢这些优秀的网站与博客，让互联网变得更加精彩
-      </p>
-    </div>
+        <div class="text-center mb-12">
+          <h1 class="text-3xl md:text-4xl font-bold text-base-content mb-4">
+            <span class="icon-[heroicons--link] w-8 h-8 md:w-10 md:h-10 mr-2 align-middle text-primary"></span>
+            <span th:text="${theme.config.links_settings?.page_title ?: '友情链接'}">友情链接</span>
+          </h1>
+          <p class="text-base-content/60 max-w-2xl mx-auto"
+            th:text="${theme.config.links_settings?.page_description ?: '感谢这些优秀的网站与博客，让互联网变得更加精彩'}">
+            感谢这些优秀的网站与博客，让互联网变得更加精彩
+          </p>
+        </div>
 
-    <!-- 分组展示 -->
-    <div class="space-y-12" th:if="${groups != null and !#lists.isEmpty(groups)}">
-      <th:block th:each="group, groupStat : ${groups}">
-        <!-- 分组标题 -->
-        <section class="link-group">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-1 h-6 rounded-full bg-primary"></div>
-            <h2 class="text-xl font-bold text-base-content" th:text="${group.spec.displayName}">分组名称</h2>
-            <span class="text-sm text-base-content/50" th:text="'(' + ${#lists.size(group.links)} + ')'"></span>
-          </div>
+        <!-- 分组展示 -->
+        <div class="space-y-12" th:if="${groups != null and !#lists.isEmpty(groups)}">
+          <th:block th:each="group, groupStat : ${groups}">
+            <!-- 分组标题 -->
+            <section class="link-group">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-1 h-6 rounded-full bg-primary"></div>
+                <h2 class="text-xl font-bold text-base-content" th:text="${group.spec.displayName}">分组名称</h2>
+                <span class="text-sm text-base-content/50" th:text="'(' + ${#lists.size(group.links)} + ')'"></span>
+              </div>
 
-          <!-- 链接卡片网格 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a th:each="link : ${group.links}"
-               th:href="${link.spec.url}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="link-card group relative flex items-center gap-4 p-4 rounded-2xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
-              
-              <!-- Logo -->
-              <div class="shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-base-200 flex items-center justify-center">
-                <img th:if="${link.spec.logo != null and !link.spec.logo.isEmpty()}"
-                     th:src="${link.spec.logo}"
-                     th:alt="${link.spec.displayName}"
-                     class="w-full h-full object-cover"
-                     loading="lazy"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <span class="icon-[heroicons--globe-alt] w-7 h-7 text-base-content/40"
+              <!-- 链接卡片网格 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer"
+                  class="link-card group relative flex items-center gap-4 p-4 rounded-2xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+
+                  <!-- Logo -->
+                  <div
+                    class="shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-base-200 flex items-center justify-center">
+                    <img th:if="${link.spec.logo != null and !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
+                      th:alt="${link.spec.displayName}" class="w-full h-full object-cover" loading="lazy"
+                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <span class="icon-[heroicons--globe-alt] w-7 h-7 text-base-content/40"
                       th:style="${link.spec.logo != null and !link.spec.logo.isEmpty() ? 'display:none' : ''}"></span>
-              </div>
+                  </div>
 
-              <!-- 信息 -->
-              <div class="flex-1 min-w-0">
-                <h3 class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1 mb-1"
-                    th:text="${link.spec.displayName}">网站名称</h3>
-                <p class="text-sm text-base-content/60 line-clamp-2"
-                   th:text="${link.spec.description ?: '暂无描述'}">网站描述</p>
-              </div>
+                  <!-- 信息 -->
+                  <div class="flex-1 min-w-0">
+                    <h3
+                      class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1 mb-1"
+                      th:text="${link.spec.displayName}">网站名称</h3>
+                    <p class="text-sm text-base-content/60 line-clamp-2" th:text="${link.spec.description ?: '暂无描述'}">
+                      网站描述</p>
+                  </div>
 
-              <!-- 外链图标 -->
-              <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <span class="icon-[heroicons--arrow-top-right-on-square] w-5 h-5 text-primary"></span>
+                  <!-- 外链图标 -->
+                  <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="icon-[heroicons--arrow-top-right-on-square] w-5 h-5 text-primary"></span>
+                  </div>
+                </a>
               </div>
-            </a>
-          </div>
-        </section>
-      </th:block>
-    </div>
+            </section>
+          </th:block>
+        </div>
 
-    <!-- 无友链提示 -->
-    <div th:if="${groups == null or #lists.isEmpty(groups)}" 
-         class="flex flex-col items-center justify-center py-20 text-center">
-      <span class="icon-[heroicons--link-slash] w-16 h-16 text-base-content/30 mb-4"></span>
-      <p class="text-base-content/60">暂无友情链接</p>
-    </div>
+        <!-- 无友链提示 -->
+        <div th:if="${groups == null or #lists.isEmpty(groups)}"
+          class="flex flex-col items-center justify-center py-20 text-center">
+          <span class="icon-[heroicons--link-slash] w-16 h-16 text-base-content/30 mb-4"></span>
+          <p class="text-base-content/60">暂无友情链接</p>
+        </div>
 
-    <!-- 申请友链提示 -->
-    <div class="mt-16">
-      <div class="card bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
-        <div class="card-body">
-          <div class="flex flex-col md:flex-row items-center gap-6">
-            <div class="shrink-0">
-              <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <span class="icon-[heroicons--hand-raised] w-8 h-8 text-primary"></span>
+        <!-- 申请友链提示 -->
+        <div class="mt-16">
+          <div class="card bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
+            <div class="card-body">
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="shrink-0">
+                  <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                    <span class="icon-[heroicons--hand-raised] w-8 h-8 text-primary"></span>
+                  </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                  <h3 class="text-lg font-bold text-base-content mb-2"
+                    th:text="${theme.config.links_settings?.apply_title ?: '想要交换友链？'}">想要交换友链？</h3>
+                  <p class="text-base-content/60 text-sm"
+                    th:text="${theme.config.links_settings?.apply_description ?: '如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。'}">
+                    如果你也有一个优质的网站或博客，欢迎与我交换友链。
+                  </p>
+                </div>
+                <div class="shrink-0">
+                  <!-- 有插件时显示弹窗按钮 -->
+                  <button th:if="${pluginFinder.available('link-submit')}" type="button" class="btn btn-primary gap-2"
+                    onclick="document.getElementById('link-submit-modal').showModal()">
+                    <span class="icon-[heroicons--plus-circle] w-5 h-5"></span>
+                    提交友链
+                  </button>
+                  <!-- 无插件时显示跳转链接 -->
+                  <a th:unless="${pluginFinder.available('link-submit')}"
+                    href="https://github.com/chengzhongxue/link-submit" target="_blank" rel="noopener"
+                    class="btn btn-primary gap-2">
+                    <span class="icon-[heroicons--arrow-top-right-on-square] w-5 h-5"></span>
+                    提交友链
+                  </a>
+                </div>
               </div>
-            </div>
-            <div class="flex-1 text-center md:text-left">
-              <h3 class="text-lg font-bold text-base-content mb-2"
-                  th:text="${theme.config.links_settings?.apply_title ?: '想要交换友链？'}">想要交换友链？</h3>
-              <p class="text-base-content/60 text-sm"
-                 th:text="${theme.config.links_settings?.apply_description ?: '如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。'}">
-                如果你也有一个优质的网站或博客，欢迎与我交换友链。
-              </p>
-            </div>
-            <div class="shrink-0">
-              <!-- 有插件时显示弹窗按钮 -->
-              <button th:if="${pluginFinder.available('link-submit')}" 
-                      type="button" 
-                      class="btn btn-primary gap-2" 
-                      onclick="document.getElementById('link-submit-modal').showModal()">
-                <span class="icon-[heroicons--plus-circle] w-5 h-5"></span>
-                提交友链
-              </button>
-              <!-- 无插件时显示跳转链接 -->
-              <a th:unless="${pluginFinder.available('link-submit')}"
-                 href="https://github.com/chengzhongxue/link-submit"
-                 target="_blank"
-                 rel="noopener"
-                 class="btn btn-primary gap-2">
-                <span class="icon-[heroicons--arrow-top-right-on-square] w-5 h-5"></span>
-                提交友链
-              </a>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- 友链提交弹窗 -->
-    <dialog id="link-submit-modal" class="modal modal-bottom sm:modal-middle" th:if="${pluginFinder.available('link-submit')}">
-      <div class="modal-box w-full max-w-lg" x-data="linkSubmitForm()">
-        <!-- 头部 -->
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-bold">提交友链申请</h3>
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost">
-              <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-            </button>
+        <!-- 友链提交弹窗 -->
+        <dialog id="link-submit-modal" class="modal modal-bottom sm:modal-middle"
+          th:if="${pluginFinder.available('link-submit')}">
+          <div class="modal-box w-full max-w-lg" x-data="linkSubmitForm()">
+            <!-- 头部 -->
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-bold">提交友链申请</h3>
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost">
+                  <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+                </button>
+              </form>
+            </div>
+
+            <!-- 表单内容 -->
+            <form @submit.prevent="submitLink" class="space-y-4">
+              <!-- 网站名称 + 邮箱 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label py-1">
+                    <span class="label-text">网站名称 <span class="text-error">*</span></span>
+                  </label>
+                  <input type="text" x-model="form.displayName" required class="input input-bordered w-full"
+                    placeholder="我的博客" />
+                </div>
+                <div class="form-control">
+                  <label class="label py-1">
+                    <span class="label-text">联系邮箱 <span class="text-error">*</span></span>
+                  </label>
+                  <input type="email" x-model="form.email" required class="input input-bordered w-full"
+                    placeholder="your@email.com" />
+                </div>
+              </div>
+
+              <!-- 网站地址 -->
+              <div class="form-control">
+                <label class="label py-1">
+                  <span class="label-text">网站地址 <span class="text-error">*</span></span>
+                </label>
+                <input type="url" x-model="form.url" required class="input input-bordered w-full"
+                  placeholder="https://example.com" />
+              </div>
+
+              <!-- Logo + RSS -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label py-1">
+                    <span class="label-text">Logo 地址</span>
+                  </label>
+                  <input type="url" x-model="form.logo" class="input input-bordered w-full" placeholder="https://..." />
+                </div>
+                <div class="form-control">
+                  <label class="label py-1">
+                    <span class="label-text">RSS 地址</span>
+                  </label>
+                  <input type="url" x-model="form.rssUrl" class="input input-bordered w-full"
+                    placeholder="https://.../rss.xml" />
+                </div>
+              </div>
+
+              <!-- 网站描述 -->
+              <div class="form-control">
+                <label class="label py-1">
+                  <span class="label-text">网站描述</span>
+                </label>
+                <textarea x-model="form.description" rows="2" class="textarea textarea-bordered w-full"
+                  placeholder="一句话介绍你的网站"></textarea>
+              </div>
+
+              <!-- 分组选择 -->
+              <div class="form-control" x-show="groups.length > 0">
+                <label class="label py-1">
+                  <span class="label-text">申请分组</span>
+                </label>
+                <select x-model="form.groupName" class="select select-bordered w-full">
+                  <option value="">请选择分组</option>
+                  <template x-for="group in groups" :key="group.groupName">
+                    <option :value="group.groupName" x-text="group.displayName"></option>
+                  </template>
+                </select>
+              </div>
+
+              <!-- 提交结果提示 -->
+              <div x-show="result.show" x-transition>
+                <div class="alert" :class="result.success ? 'alert-success' : 'alert-error'">
+                  <span x-text="result.message"></span>
+                </div>
+              </div>
+
+              <!-- 按钮 -->
+              <div class="flex justify-end gap-3 pt-2">
+                <button type="button" class="btn btn-ghost"
+                  onclick="document.getElementById('link-submit-modal').close()">取消</button>
+                <button type="submit" class="btn btn-primary" :disabled="submitting">
+                  <span x-show="submitting" class="loading loading-spinner loading-sm"></span>
+                  <span x-text="submitting ? '提交中...' : '提交申请'"></span>
+                </button>
+              </div>
+            </form>
+          </div>
+          <form method="dialog" class="modal-backdrop">
+            <button>close</button>
           </form>
-        </div>
-        
-        <!-- 表单内容 -->
-        <form @submit.prevent="submitLink" class="space-y-4">
-          <!-- 网站名称 + 邮箱 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="form-control">
-              <label class="label py-1">
-                <span class="label-text">网站名称 <span class="text-error">*</span></span>
-              </label>
-              <input type="text" x-model="form.displayName" required
-                     class="input input-bordered w-full" placeholder="我的博客" />
-            </div>
-            <div class="form-control">
-              <label class="label py-1">
-                <span class="label-text">联系邮箱 <span class="text-error">*</span></span>
-              </label>
-              <input type="email" x-model="form.email" required
-                     class="input input-bordered w-full" placeholder="your@email.com" />
-            </div>
-          </div>
-          
-          <!-- 网站地址 -->
-          <div class="form-control">
-            <label class="label py-1">
-              <span class="label-text">网站地址 <span class="text-error">*</span></span>
-            </label>
-            <input type="url" x-model="form.url" required
-                   class="input input-bordered w-full" placeholder="https://example.com" />
-          </div>
-          
-          <!-- Logo + RSS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="form-control">
-              <label class="label py-1">
-                <span class="label-text">Logo 地址</span>
-              </label>
-              <input type="url" x-model="form.logo"
-                     class="input input-bordered w-full" placeholder="https://..." />
-            </div>
-            <div class="form-control">
-              <label class="label py-1">
-                <span class="label-text">RSS 地址</span>
-              </label>
-              <input type="url" x-model="form.rssUrl"
-                     class="input input-bordered w-full" placeholder="https://.../rss.xml" />
-            </div>
-          </div>
-          
-          <!-- 网站描述 -->
-          <div class="form-control">
-            <label class="label py-1">
-              <span class="label-text">网站描述</span>
-            </label>
-            <textarea x-model="form.description" rows="2"
-                      class="textarea textarea-bordered w-full" 
-                      placeholder="一句话介绍你的网站"></textarea>
-          </div>
-          
-          <!-- 分组选择 -->
-          <div class="form-control" x-show="groups.length > 0">
-            <label class="label py-1">
-              <span class="label-text">申请分组</span>
-            </label>
-            <select x-model="form.groupName" class="select select-bordered w-full">
-              <option value="">请选择分组</option>
-              <template x-for="group in groups" :key="group.groupName">
-                <option :value="group.groupName" x-text="group.displayName"></option>
-              </template>
-            </select>
-          </div>
-          
-          <!-- 提交结果提示 -->
-          <div x-show="result.show" x-transition>
-            <div class="alert" :class="result.success ? 'alert-success' : 'alert-error'">
-              <span x-text="result.message"></span>
-            </div>
-          </div>
-          
-          <!-- 按钮 -->
-          <div class="flex justify-end gap-3 pt-2">
-            <button type="button" class="btn btn-ghost" 
-                    onclick="document.getElementById('link-submit-modal').close()">取消</button>
-            <button type="submit" class="btn btn-primary" :disabled="submitting">
-              <span x-show="submitting" class="loading loading-spinner loading-sm"></span>
-              <span x-text="submitting ? '提交中...' : '提交申请'"></span>
-            </button>
-          </div>
-        </form>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
+        </dialog>
 
         <!-- 评论区（仅当未启用抽屉式评论时显示内嵌评论） -->
-        <section class="mt-16" th:if="${theme.config.links_settings?.enable_comment != false and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}">
+        <section class="mt-16"
+          th:if="${theme.config.links_settings?.enable_comment != false and !(cfg?.floating_dock?.enable_custom_dock == true and cfg?.floating_dock?.enable_comment == true)}">
           <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
           </h2>
-          <div class="card bg-base-200/50 border border-base-content/5 shadow-lg shadow-primary/5">
-            <div class="card-body p-4 md:p-6">
-              <halo:comment 
-                group="content.halo.run" 
-                kind="SinglePage"
-                th:attr="name=${singlePage != null ? singlePage.metadata.name : 'links'}"
-                colorScheme="system">
+          <div class="card bg-base-100/60 backdrop-blur-xl shadow-xl border border-base-content/5 rounded-[1.5rem]">
+            <div class="card-body p-6 sm:p-8">
+              <halo:comment group="content.halo.run" kind="SinglePage"
+                th:attr="name=${singlePage != null ? singlePage.metadata.name : 'links'}" colorScheme="system">
               </halo:comment>
             </div>
           </div>
@@ -254,17 +243,17 @@
       </section>
 
       <!-- 右侧边栏 -->
-      <aside th:if="${cfg?.show_sidebar == true}" 
-             class="w-80 space-y-6 hidden lg:block shrink-0">
+      <aside th:if="${cfg?.show_sidebar == true}" class="w-80 space-y-6 hidden lg:block shrink-0">
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
       </aside>
     </div>
   </div>
-  
+
   <!-- 评论抽屉（仅当启用定制悬浮栏 + 启用评论按钮时显示，启用即为抽屉式） -->
   <th:block th:if="${cfg?.floating_dock?.enable_custom_dock == true 
                      and cfg?.floating_dock?.enable_comment == true}">
-    <th:block th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'links'})}" />
+    <th:block
+      th:replace="~{modules/floating-dock :: commentDrawer('SinglePage', ${singlePage != null ? singlePage.metadata.name : 'links'})}" />
   </th:block>
 </main>
 

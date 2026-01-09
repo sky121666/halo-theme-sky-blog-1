@@ -483,13 +483,26 @@ function createThemeToggle() {
     /**
      * 应用主题到 HTML 元素
      * 同时设置 data-theme（具体主题名）和 data-color-scheme（light/dark 标识）
+     * 切换时临时禁用过渡，防止闪烁
      */
     applyTheme() {
       const themeName = this.isDark ? this.darkTheme : this.lightTheme;
       const themeMode = this.isDark ? 'dark' : 'light';
+      const html = document.documentElement;
       
-      document.documentElement.setAttribute('data-theme', themeName);
-      document.documentElement.setAttribute('data-color-scheme', themeMode);
+      // 临时禁用所有过渡
+      html.classList.add('theme-transitioning');
+      
+      // 应用新主题
+      html.setAttribute('data-theme', themeName);
+      html.setAttribute('data-color-scheme', themeMode);
+      
+      // 下一帧恢复过渡
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          html.classList.remove('theme-transitioning');
+        });
+      });
     }
   };
 }

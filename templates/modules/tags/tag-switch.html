@@ -2,115 +2,174 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--        标签切换块组件 - 现代化风格          -->
+<!--        标签切换块组件 - 现代化简约风格      -->
 <!-- ========================================== -->
 
 <!-- 
-  风格说明：
-  1. pills - 药丸风格：圆润药丸形状，柔和阴影
-  2. chips - 芯片风格：Material Design 风格，带计数徽章
-  3. underline - 下划线风格：极简，文字+下划线高亮
-  4. glass - 玻璃拟态：毛玻璃效果，半透明
+  风格说明 (所有风格都支持折叠):
+  1. pills - 药丸风格：简约标签，无外层容器
+  2. chips - 芯片风格：圆角边框，带计数
+  3. underline - 下划线风格：极简，文字+下划线
+  4. glass - 玻璃拟态：轻量毛玻璃
 -->
 
-<!-- 药丸风格 - 圆润现代 -->
-<div th:fragment="pills(tags, currentTag)" class="tags-switch-pills mb-8">
-  <div class="flex flex-wrap items-center gap-3">
+<!-- ===================== -->
+<!-- 药丸风格 - 胶囊徽章 -->
+<!-- ===================== -->
+<div th:fragment="pills(tags, currentTag)" class="tags-switch-pills mb-8"
+  th:with="maxVisible = 6, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
+  x-data="{ expanded: false }">
+  <div class="flex flex-wrap items-center gap-2">
     <!-- 全部按钮 -->
     <a th:href="@{/tags}"
-       class="group relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300"
-       th:classappend="${currentTag == null} ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'">
-      <span class="relative z-10">全部</span>
+      class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
+      th:classappend="${currentTag == null} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'">
+      <span class="icon-[heroicons--squares-2x2] w-3.5 h-3.5"></span>
+      <span>全部</span>
     </a>
-    
-    <!-- 标签药丸 -->
-    <a th:each="t : ${tags}"
-       th:href="@{${t.status.permalink}}"
-       th:with="postCount=${t.status.postCount ?: 0}"
-       class="group relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300"
-       th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? ' bg-primary text-primary-content shadow-lg shadow-primary/30' : ' bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'">
-      <span class="relative z-10" th:text="${t.spec.displayName}"></span>
-      <span th:if="${postCount > 0}" 
-            class="absolute -top-1 -right-1 min-w-5 h-5 flex items-center justify-center px-1.5 rounded-full text-xs font-bold"
-            th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? ' bg-primary-content text-primary' : ' bg-primary text-primary-content'"
-            th:text="${postCount}"></span>
-    </a>
+
+    <!-- 标签 -->
+    <th:block th:each="t, iterStat : ${tags}">
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
+        th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
+        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
+        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
+        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
+        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        <span class="text-base-content/40">#</span>
+        <span th:text="${t.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="text-xs text-base-content/50" th:text="${postCount}"></span>
+      </a>
+    </th:block>
+
+    <!-- 展开/收起 -->
+    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+      class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-dashed border-base-content/20 text-base-content/50 hover:text-base-content hover:border-base-content/30 hover:bg-base-100/50 transition-all duration-200 cursor-pointer">
+      <span x-show="!expanded" class="icon-[heroicons--chevron-down] w-3.5 h-3.5"></span>
+      <span x-show="expanded" class="icon-[heroicons--chevron-up] w-3.5 h-3.5"></span>
+      <span x-show="!expanded" th:text="'+' + ${totalTags - maxVisible}"></span>
+      <span x-show="expanded">收起</span>
+    </button>
   </div>
 </div>
 
-<!-- 芯片风格 - Material Design -->
-<div th:fragment="chips(tags, currentTag)" class="tags-switch-chips mb-8">
-  <div class="flex flex-wrap items-center gap-2">
+<!-- ===================== -->
+<!-- 芯片风格 - 边框卡片   -->
+<!-- ===================== -->
+<div th:fragment="chips(tags, currentTag)" class="tags-switch-chips mb-8"
+  th:with="maxVisible = 10, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
+  x-data="{ expanded: false }">
+  <div class="flex flex-wrap justify-center gap-2">
     <!-- 全部芯片 -->
     <a th:href="@{/tags}"
-       class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
-       th:classappend="${currentTag == null} ? 'bg-primary/10 text-primary border-primary/30 shadow-sm' : 'bg-base-100 text-base-content/70 border-base-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'">
+      class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
+      th:classappend="${currentTag == null} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'">
       <span class="icon-[heroicons--squares-2x2] w-4 h-4"></span>
       <span>全部</span>
     </a>
-    
+
     <!-- 标签芯片 -->
-    <a th:each="t : ${tags}"
-       th:href="@{${t.status.permalink}}"
-       th:with="postCount=${t.status.postCount ?: 0}"
-       class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
-       th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? ' bg-primary/10 text-primary border-primary/30 shadow-sm' : ' bg-base-100 text-base-content/70 border-base-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'">
-      <span class="icon-[heroicons--hashtag] w-3.5 h-3.5 opacity-50"></span>
-      <span th:text="${t.spec.displayName}"></span>
-      <span th:if="${postCount > 0}" 
-            class="text-xs opacity-60"
-            th:text="'(' + ${postCount} + ')'"></span>
-    </a>
+    <th:block th:each="t, iterStat : ${tags}">
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+        class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
+        th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'"
+        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
+        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
+        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
+        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        <span class="opacity-40">#</span>
+        <span th:text="${t.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="text-xs opacity-50" th:text="'(' + ${postCount} + ')'"></span>
+      </a>
+    </th:block>
+
+    <!-- 展开/收起 -->
+    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+      class="inline-flex items-center gap-1 h-9 px-3 rounded-lg text-sm font-medium border border-dashed border-primary/30 text-primary/70 hover:text-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer">
+      <span x-show="!expanded" class="icon-[heroicons--plus] w-4 h-4"></span>
+      <span x-show="expanded" class="icon-[heroicons--minus] w-4 h-4"></span>
+      <span x-show="!expanded" th:text="${totalTags - maxVisible}"></span>
+      <span x-show="expanded">收起</span>
+    </button>
   </div>
 </div>
 
-<!-- 下划线风格 - 极简现代 -->
-<div th:fragment="underline(tags, currentTag)" class="tags-switch-underline mb-8 border-b border-base-200">
-  <div class="flex flex-wrap items-center gap-1 -mb-px">
+<!-- ===================== -->
+<!-- 下划线风格 - 极简     -->
+<!-- ===================== -->
+<div th:fragment="underline(tags, currentTag)" class="tags-switch-underline mb-8"
+  th:with="maxVisible = 12, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
+  x-data="{ expanded: false }">
+  <div class="flex flex-wrap justify-center items-center gap-x-1 gap-y-0 border-b border-base-content/10 pb-px">
     <!-- 全部 -->
-    <a th:href="@{/tags}"
-       class="relative px-4 py-3 text-sm font-medium transition-colors duration-200"
-       th:classappend="${currentTag == null} ? 'text-primary' : 'text-base-content/60 hover:text-base-content'">
+    <a th:href="@{/tags}" class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+      th:classappend="${currentTag == null} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'">
       <span>全部</span>
-      <span th:if="${currentTag == null}" 
-            class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+      <span th:if="${currentTag == null}" class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
     </a>
-    
+
     <!-- 标签 -->
-    <a th:each="t : ${tags}"
-       th:href="@{${t.status.permalink}}"
-       th:with="postCount=${t.status.postCount ?: 0}"
-       class="relative px-4 py-3 text-sm font-medium transition-colors duration-200"
-       th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? ' text-primary' : ' text-base-content/60 hover:text-base-content'">
-      <span th:text="${t.spec.displayName}"></span>
-      <sup th:if="${postCount > 0}" class="ml-0.5 text-xs opacity-50" th:text="${postCount}"></sup>
-      <span th:if="${currentTag != null and currentTag.metadata.name == t.metadata.name}" 
-            class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
-    </a>
+    <th:block th:each="t, iterStat : ${tags}">
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+        class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+        th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'"
+        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
+        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
+        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
+        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        <span th:text="${t.spec.displayName}"></span>
+        <sup th:if="${postCount > 0}" class="ml-0.5 text-xs opacity-40" th:text="${postCount}"></sup>
+        <span th:if="${currentTag != null and currentTag.metadata.name == t.metadata.name}"
+          class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
+      </a>
+    </th:block>
+
+    <!-- 展开/收起 -->
+    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+      class="px-3 py-2.5 text-sm font-medium text-primary/60 hover:text-primary transition-colors duration-200 cursor-pointer">
+      <span x-show="!expanded" th:text="'+' + ${totalTags - maxVisible} + ' 更多'"></span>
+      <span x-show="expanded">收起</span>
+    </button>
   </div>
 </div>
 
-<!-- 玻璃拟态风格 - 毛玻璃效果 -->
-<div th:fragment="glass(tags, currentTag)" class="tags-switch-glass mb-8">
-  <div class="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-base-200/30 backdrop-blur-sm">
+<!-- ===================== -->
+<!-- 玻璃拟态风格 - 轻量   -->
+<!-- ===================== -->
+<div th:fragment="glass(tags, currentTag)" class="tags-switch-glass mb-8"
+  th:with="maxVisible = 10, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
+  x-data="{ expanded: false }">
+  <div class="flex flex-wrap justify-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-sm dark:bg-base-300/30">
     <!-- 全部 -->
-    <a th:href="@{/tags}"
-       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
-       th:classappend="${currentTag == null} ? 'bg-base-100 text-base-content shadow-md' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'">
+    <a th:href="@{/tags}" class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+      th:classappend="${currentTag == null} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'">
       全部
     </a>
-    
+
     <!-- 标签 -->
-    <a th:each="t : ${tags}"
-       th:href="@{${t.status.permalink}}"
-       th:with="postCount=${t.status.postCount ?: 0}"
-       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
-       th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? ' bg-base-100 text-base-content shadow-md' : ' text-base-content/60 hover:bg-base-100/50 hover:text-base-content'">
-      <span th:text="${t.spec.displayName}"></span>
-      <span th:if="${postCount > 0}" 
-            class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
-            th:text="${postCount}"></span>
-    </a>
+    <th:block th:each="t, iterStat : ${tags}">
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+        th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'"
+        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
+        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
+        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
+        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        <span th:text="${t.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
+          th:text="${postCount}"></span>
+      </a>
+    </th:block>
+
+    <!-- 展开/收起 -->
+    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+      class="px-4 py-2 rounded-xl text-sm font-medium text-primary/70 hover:text-primary hover:bg-base-100/60 transition-all duration-200 cursor-pointer">
+      <span x-show="!expanded" class="inline-flex items-center gap-1">
+        <span th:text="'+' + ${totalTags - maxVisible}"></span>
+      </span>
+      <span x-show="expanded">收起</span>
+    </button>
   </div>
 </div>
 
