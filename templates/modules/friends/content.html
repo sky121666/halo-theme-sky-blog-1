@@ -12,8 +12,7 @@
         <p class="text-sm text-base-content/50 mt-1.5 font-medium" th:text="${pageDesc}">订阅朋友们的最新动态</p>
       </div>
       <!-- Apple Style Counter Pill -->
-      <div
-        class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-base-200/70 backdrop-blur-md border border-base-content/5">
+      <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-base-200/70 backdrop-blur-md">
         <span class="text-lg font-bold text-base-content tabular-nums" th:text="${friends.total}">0</span>
         <span class="text-xs text-base-content/50 font-medium">Updates</span>
       </div>
@@ -138,8 +137,7 @@
 
   <!-- ==================== 分页 - Apple Pill Nav ==================== -->
   <div th:if="${friends.hasPrevious() || friends.hasNext()}" class="mt-12 flex items-center justify-center">
-    <div
-      class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md border border-base-content/5 shadow-sm">
+    <div class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md">
       <!-- Previous Button -->
       <a th:href="@{${friends.prevUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
                 text-base-content/60 hover:text-base-content hover:bg-base-100 
