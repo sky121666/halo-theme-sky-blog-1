@@ -545,8 +545,7 @@
             <!-- 玻璃拟态风格 -->
             <th:block th:case="'glass'">
               <div class="mb-8">
-                <div
-                  class="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-md border border-base-content/10 dark:bg-base-300/40 dark:border-base-content/10">
+                <div class="flex flex-wrap items-center gap-2">
                   <button @click="tab = 'site'"
                     :class="tab === 'site' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
                     class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">站内动态</button>
