@@ -1,132 +1,170 @@
-<!-- 朋友圈内容 - Apple Style -->
+<!-- 朋友圈内容 - Apple Style V7 (Unified Sidebar Glow) -->
 <div th:fragment="friends-content" th:with="cfg=${theme.config.friends_page_settings},
               pageTitle=${cfg?.page_title ?: '朋友圈'},
               pageDesc=${cfg?.page_description ?: '订阅朋友们的最新动态'},
               listStyle=${cfg?.list_style ?: 'single_column'}">
 
   <!-- 页面标题区域 - Apple风格简洁标题 -->
-  <header class="mb-8">
+  <header class="mb-10">
     <div class="flex items-center justify-between">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight" th:text="${pageTitle}">朋友圈</h1>
-        <p class="text-base-content/50 mt-1" th:text="${pageDesc}">订阅朋友们的最新动态</p>
+        <p class="text-sm text-base-content/50 mt-1.5 font-medium" th:text="${pageDesc}">订阅朋友们的最新动态</p>
       </div>
-      <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/60 backdrop-blur-sm">
-        <span class="text-xl font-semibold text-base-content" th:text="${friends.total}">0</span>
-        <span class="text-xs text-base-content/50">条动态</span>
+      <!-- Apple Style Counter Pill -->
+      <div
+        class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-base-200/70 backdrop-blur-md border border-base-content/5">
+        <span class="text-lg font-bold text-base-content tabular-nums" th:text="${friends.total}">0</span>
+        <span class="text-xs text-base-content/50 font-medium">Updates</span>
       </div>
     </div>
   </header>
 
-  <!-- 单列样式 - Apple News风格 -->
-  <div th:if="${listStyle == 'single_column'}" class="space-y-4">
-    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="group relative bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] 
-                    shadow-sm hover:shadow-lg hover:border-base-content/10 
-                    transition-all duration-300 ease-out cursor-pointer overflow-hidden">
+  <!-- ==================== 单列样式 - Apple News Card ==================== -->
+  <div th:if="${listStyle == 'single_column'}" class="space-y-5">
+    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="card group relative bg-base-100/90 backdrop-blur-xl rounded-[1.25rem] 
+                    border border-base-content/[0.06] shadow-lg
+                    hover:shadow-xl hover:-translate-y-0.5
+                    motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out 
+                    cursor-pointer overflow-visible z-0 hover:z-10">
 
-      <!-- 卡片内容 -->
-      <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block p-5">
-        <!-- 作者信息行 -->
-        <div class="flex items-center gap-3 mb-4">
-          <img th:src="${spec.logo}" alt="" class="w-10 h-10 rounded-full object-cover ring-1 ring-base-content/10 
-                      group-hover:ring-primary/40 transition-all duration-300" loading="lazy" />
-          <div class="flex-1 min-w-0">
-            <span class="font-medium text-sm text-base-content block truncate" th:text="${spec.author}">作者</span>
-            <time class="text-xs text-base-content/40" th:if="${spec.pubDate}"
-              th:text="${#dates.format(spec.pubDate, 'MM月dd日 HH:mm')}">时间</time>
+      <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block p-5 md:p-6">
+        <!-- Author Row -->
+        <div class="flex items-center gap-4 mb-4">
+          <!-- Avatar -->
+          <div class="relative shrink-0">
+            <!-- Halo Glow -->
+            <div
+              class="absolute -inset-2 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-lg opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
+            </div>
+
+            <img th:src="${spec.logo}" alt="" class="relative w-12 h-12 rounded-xl object-cover ring-1 ring-base-content/10 
+                        group-hover:ring-primary/30 motion-safe:transition-all motion-safe:duration-300"
+              loading="lazy" />
           </div>
-          <span class="icon-[heroicons--arrow-up-right] w-4 h-4 text-base-content/20 
-                       group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
-                       transition-all duration-300"></span>
+
+          <!-- Author Info -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-lg text-base-content truncate" th:text="${spec.author}">作者</span>
+              <span class="shrink-0 w-1 h-1 rounded-full bg-base-content/20"></span>
+              <time class="shrink-0 text-xs text-base-content/40 font-medium tabular-nums" th:if="${spec.pubDate}"
+                th:text="${#dates.format(spec.pubDate, 'MM-dd HH:mm')}">时间</time>
+            </div>
+            <!-- Site Domain Badge -->
+            <span class="text-xs text-base-content/40 font-medium mt-0.5 block truncate">Friends Feed</span>
+          </div>
+
+          <!-- Straight Arrow Icon -->
+          <span class="icon-[heroicons--arrow-right] w-5 h-5 text-base-content/20 shrink-0
+                       group-hover:text-primary group-hover:translate-x-1 
+                       motion-safe:transition-all motion-safe:duration-300"></span>
         </div>
 
-        <!-- 文章标题 -->
-        <h2 class="text-base font-semibold text-base-content leading-snug mb-2 
-                   group-hover:text-primary transition-colors duration-300" th:text="${spec.title}">标题</h2>
+        <!-- Title (Bold, Apple News Style) -->
+        <h2 class="text-lg font-bold text-base-content leading-snug mb-2.5 line-clamp-2
+                   group-hover:text-primary motion-safe:transition-colors motion-safe:duration-300"
+          th:text="${spec.title}">标题</h2>
 
-        <!-- 摘要 -->
+        <!-- Description -->
         <p th:if="${spec.description}" class="text-sm text-base-content/60 line-clamp-2 leading-relaxed"
           th:text="${spec.description}">描述</p>
       </a>
     </article>
   </div>
 
-  <!-- 双列样式 - Bento Grid风格 -->
-  <div th:if="${listStyle == 'two_columns'}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="group relative bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] 
-                    shadow-sm hover:shadow-lg hover:border-base-content/10 hover:scale-[1.02]
-                    transition-all duration-300 ease-out cursor-pointer overflow-hidden">
+  <!-- ==================== 双列样式 - Bento Grid ==================== -->
+  <div th:if="${listStyle == 'two_columns'}" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="card group relative bg-base-100/90 backdrop-blur-xl rounded-2xl 
+                    border border-base-content/[0.06] shadow-lg
+                    hover:shadow-xl
+                    motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-0.5
+                    motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out 
+                    cursor-pointer overflow-visible z-0 hover:z-10">
 
       <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block p-5 h-full flex flex-col">
-        <!-- 作者头像与时间 -->
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2.5">
-            <img th:src="${spec.logo}" alt="" class="w-9 h-9 rounded-full object-cover ring-1 ring-base-content/10"
-              loading="lazy" />
-            <span class="text-sm font-medium text-base-content truncate max-w-[120px]"
-              th:text="${spec.author}">作者</span>
+        <!-- Header: Avatar + Author + Date Badge -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <!-- Avatar with Halo -->
+            <div class="relative shrink-0">
+              <div
+                class="absolute -inset-1.5 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-md opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
+              </div>
+              <img th:src="${spec.logo}" alt="" class="relative w-10 h-10 rounded-xl object-cover ring-1 ring-base-content/10 
+                          group-hover:ring-primary/30 motion-safe:transition-all" loading="lazy" />
+            </div>
+            <span class="text-sm font-bold text-base-content truncate" th:text="${spec.author}">作者</span>
           </div>
-          <time class="text-xs text-base-content/40 shrink-0" th:if="${spec.pubDate}"
+          <!-- Date Badge -->
+          <time class="shrink-0 text-[11px] text-base-content/40 font-medium 
+                       px-2.5 py-1 rounded-lg bg-base-200/60 tabular-nums" th:if="${spec.pubDate}"
             th:text="${#dates.format(spec.pubDate, 'MM-dd')}">日期</time>
         </div>
 
-        <!-- 标题 -->
-        <h3 class="text-base font-semibold text-base-content line-clamp-2 mb-2 flex-1
-                   group-hover:text-primary transition-colors duration-300" th:text="${spec.title}">标题</h3>
+        <!-- Title (Bold, 2 lines) -->
+        <h3 class="text-base font-bold text-base-content line-clamp-2 mb-2.5 flex-1
+                   group-hover:text-primary motion-safe:transition-colors motion-safe:duration-300 leading-snug"
+          th:text="${spec.title}">标题</h3>
 
-        <!-- 描述（可选） -->
-        <p th:if="${spec.description}" class="text-sm text-base-content/50 line-clamp-2 mb-3"
+        <!-- Description (2 lines) -->
+        <p th:if="${spec.description}" class="text-sm text-base-content/50 line-clamp-2 leading-relaxed mb-4"
           th:text="${spec.description}">描述...</p>
 
-        <!-- 阅读提示 -->
-        <div class="flex items-center justify-between mt-auto pt-3 border-t border-base-content/5">
-          <span class="text-xs text-base-content/40">点击阅读</span>
-          <span class="icon-[heroicons--arrow-up-right] w-3.5 h-3.5 text-base-content/30 
-                       group-hover:text-primary transition-colors"></span>
+        <!-- Footer: Divider + Read More -->
+        <div class="flex items-center justify-between mt-auto pt-3.5 border-t border-base-content/[0.06]">
+          <span class="text-xs text-base-content/40 font-medium">Read Post</span>
+          <!-- Straight Arrow Icon -->
+          <span class="icon-[heroicons--arrow-right] w-4 h-4 text-base-content/30 
+                       group-hover:text-primary group-hover:translate-x-1 
+                       motion-safe:transition-all motion-safe:duration-300"></span>
         </div>
       </a>
     </article>
   </div>
 
-  <!-- 空状态 - 简洁 -->
+  <!-- ==================== 空状态 - Apple Style ==================== -->
   <div th:if="${#lists.isEmpty(friends.items)}"
-    class="bg-base-100/60 backdrop-blur-xl rounded-2xl border border-base-content/5">
-    <div class="flex flex-col items-center justify-center py-20">
-      <div class="w-16 h-16 rounded-2xl bg-base-200/60 flex items-center justify-center mb-4">
-        <span class="icon-[heroicons--inbox] w-8 h-8 text-base-content/30"></span>
+    class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/5 shadow-sm">
+    <div class="flex flex-col items-center justify-center py-24">
+      <div
+        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-base-200/80 to-base-200/40 flex items-center justify-center mb-5 shadow-sm">
+        <span class="icon-[heroicons--inbox] w-8 h-8 text-base-content/25"></span>
       </div>
-      <h3 class="text-base font-medium text-base-content/60">暂无朋友动态</h3>
-      <p class="text-sm text-base-content/40 mt-1">快去添加一些友链订阅吧</p>
+      <h3 class="text-base font-semibold text-base-content/60">暂无朋友动态</h3>
+      <p class="text-sm text-base-content/40 mt-1.5 font-medium">No updates from friends yet</p>
     </div>
   </div>
 
-  <!-- 分页 - 简洁风格 -->
-  <div th:if="${friends.hasPrevious() || friends.hasNext()}" class="mt-10 flex items-center justify-center gap-4">
-    <!-- 上一页 -->
-    <a th:href="@{${friends.prevUrl}}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm 
-              bg-base-200/60 text-base-content/70 hover:bg-base-200 hover:text-base-content
-              transition-all duration-200"
-      th:classappend="${!friends.hasPrevious()} ? ' pointer-events-none opacity-40' : ''">
-      <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
-      <span>上一页</span>
-    </a>
-    <!-- 页码指示 -->
-    <span class="text-sm text-base-content/40 tabular-nums"
-      th:text="${friends.page} + ' / ' + ${friends.totalPages}">1/1</span>
-    <!-- 下一页 -->
-    <a th:href="@{${friends.nextUrl}}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm 
-              bg-base-200/60 text-base-content/70 hover:bg-base-200 hover:text-base-content
-              transition-all duration-200"
-      th:classappend="${!friends.hasNext()} ? ' pointer-events-none opacity-40' : ''">
-      <span>下一页</span>
-      <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
-    </a>
+  <!-- ==================== 分页 - Apple Pill Nav ==================== -->
+  <div th:if="${friends.hasPrevious() || friends.hasNext()}" class="mt-12 flex items-center justify-center">
+    <div
+      class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md border border-base-content/5 shadow-sm">
+      <!-- Previous Button -->
+      <a th:href="@{${friends.prevUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
+                text-base-content/60 hover:text-base-content hover:bg-base-100 
+                motion-safe:transition-all motion-safe:duration-200"
+        th:classappend="${!friends.hasPrevious()} ? 'opacity-30 pointer-events-none' : ''">
+        <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
+      </a>
+
+      <!-- Page Indicator -->
+      <span class="px-4 text-xs font-semibold text-base-content/50 tabular-nums tracking-wide"
+        th:text="${friends.page} + ' / ' + ${friends.totalPages}">1 / 1</span>
+
+      <!-- Next Button -->
+      <a th:href="@{${friends.nextUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
+                text-base-content/60 hover:text-base-content hover:bg-base-100 
+                motion-safe:transition-all motion-safe:duration-200"
+        th:classappend="${!friends.hasNext()} ? 'opacity-30 pointer-events-none' : ''">
+        <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
+      </a>
+    </div>
   </div>
 
-  <!-- 底部提示 -->
-  <div th:if="${!#lists.isEmpty(friends.items) and !friends.hasNext()}"
-    class="text-center mt-10 text-sm text-base-content/30">
-    — 已经到底啦 —
+  <!-- ==================== 底部提示 ==================== -->
+  <div th:if="${!#lists.isEmpty(friends.items) and !friends.hasNext()}" class="text-center mt-12 mb-4">
+    <span class="text-xs text-base-content/25 font-medium tracking-widest">— END —</span>
   </div>
 
 </div>
