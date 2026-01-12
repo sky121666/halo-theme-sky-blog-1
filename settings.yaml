@@ -2517,30 +2517,27 @@ spec:
         # 文档内容页设置 (doc.html)
         - $formkit: group
           name: doc_settings
-          label: 📄 文档内容页
+          label: 文档内容页
           value:
-            enable_dock: true
-            dock_style: global
+            enable_custom_dock: false
+            dock_style: bottom
             dock_menu: primary
-            enable_comment: true
             enable_toc_drawer: true
             enable_sidebar_drawer: true
             enable_back_to_top: true
           children:
             - $formkit: switch
-              id: docsme_doc_enable_dock
-              name: enable_dock
-              label: 启用悬浮控制栏
-              help: 控制文档内容页是否显示底部悬浮控制栏
-              value: true
+              id: docsme_doc_custom_dock
+              name: enable_custom_dock
+              label: 启用定制 Dock 设置
+              help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
+              value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
-              if: $get(docsme_doc_enable_dock).value
+              if: $get(docsme_doc_custom_dock).value
               options:
-                - label: 跟随全局设置
-                  value: global
                 - label: 底部居中
                   value: bottom
                 - label: 右侧可折叠
@@ -2549,58 +2546,47 @@ spec:
               name: dock_menu
               label: Dock 菜单
               value: primary
-              if: $get(docsme_doc_enable_dock).value
+              if: $get(docsme_doc_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
             - $formkit: switch
-              id: docsme_doc_enable_comment
-              name: enable_comment
-              label: 启用评论抽屉
-              help: 从右侧展开的评论面板
-              if: $get(docsme_doc_enable_dock).value
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(docsme_doc_custom_dock).value
               value: true
             - $formkit: switch
               id: docsme_doc_enable_toc
               name: enable_toc_drawer
               label: 启用目录抽屉
               help: 当屏幕较小目录隐藏时，可从悬浮栏打开目录
-              if: $get(docsme_doc_enable_dock).value
               value: true
             - $formkit: switch
               id: docsme_doc_enable_sidebar
               name: enable_sidebar_drawer
               label: 启用菜单抽屉
               help: 当屏幕较小左侧文档树隐藏时，可从悬浮栏打开菜单
-              if: $get(docsme_doc_enable_dock).value
-              value: true
-            - $formkit: switch
-              name: enable_back_to_top
-              label: 返回顶部按钮
-              if: $get(docsme_doc_enable_dock).value
               value: true
         # 文档列表页设置 (docs.html)
         - $formkit: group
           name: docs_settings
-          label: 📚 文档列表页
+          label: 文档列表页
           value:
-            enable_dock: true
-            dock_style: global
+            enable_custom_dock: false
+            dock_style: bottom
             dock_menu: primary
             enable_back_to_top: true
           children:
             - $formkit: switch
-              id: docsme_docs_enable_dock
-              name: enable_dock
-              label: 启用悬浮控制栏
-              help: 控制文档列表页是否显示底部悬浮控制栏
-              value: true
+              id: docsme_docs_custom_dock
+              name: enable_custom_dock
+              label: 启用定制 Dock 设置
+              help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
+              value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
-              if: $get(docsme_docs_enable_dock).value
+              if: $get(docsme_docs_custom_dock).value
               options:
-                - label: 跟随全局设置
-                  value: global
                 - label: 底部居中
                   value: bottom
                 - label: 右侧可折叠
@@ -2609,37 +2595,35 @@ spec:
               name: dock_menu
               label: Dock 菜单
               value: primary
-              if: $get(docsme_docs_enable_dock).value
+              if: $get(docsme_docs_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
-              if: $get(docsme_docs_enable_dock).value
+              if: $get(docsme_docs_custom_dock).value
               value: true
         # 文档目录页设置 (doc-catalog.html)
         - $formkit: group
           name: doc_catalog_settings
-          label: 📂 文档目录页
+          label: 文档目录页
           value:
-            enable_dock: true
-            dock_style: global
+            enable_custom_dock: false
+            dock_style: bottom
             dock_menu: primary
             enable_back_to_top: true
           children:
             - $formkit: switch
-              id: docsme_catalog_enable_dock
-              name: enable_dock
-              label: 启用悬浮控制栏
-              help: 控制文档目录页是否显示底部悬浮控制栏
-              value: true
+              id: docsme_catalog_custom_dock
+              name: enable_custom_dock
+              label: 启用定制 Dock 设置
+              help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
+              value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
-              if: $get(docsme_catalog_enable_dock).value
+              if: $get(docsme_catalog_custom_dock).value
               options:
-                - label: 跟随全局设置
-                  value: global
                 - label: 底部居中
                   value: bottom
                 - label: 右侧可折叠
@@ -2648,11 +2632,16 @@ spec:
               name: dock_menu
               label: Dock 菜单
               value: primary
-              if: $get(docsme_catalog_enable_dock).value
+              if: $get(docsme_catalog_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
-              if: $get(docsme_catalog_enable_dock).value
+              if: $get(docsme_catalog_custom_dock).value
+              value: true
+            - $formkit: switch
+              name: enable_sidebar_drawer
+              label: 启用菜单抽屉
+              help: 当屏幕较小左侧文档树隐藏时，可从悬浮栏打开菜单
               value: true
 

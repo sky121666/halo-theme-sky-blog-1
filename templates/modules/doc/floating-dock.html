@@ -6,12 +6,13 @@
 <!-- ========================================== -->
 
 <!-- 文档内容页悬浮 Dock 入口片段 - 根据样式选择 -->
-<th:block th:fragment="doc-dock" 
-          th:with="cfg = ${theme.config.docsme?.doc_settings},
-                   pageDockStyle = ${cfg?.dock_style ?: 'global'},
-                   globalDockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
-                   dockStyle = ${pageDockStyle == 'global' ? globalDockStyle : pageDockStyle}">
-  <th:block th:if="${cfg?.enable_dock != false}">
+<th:block th:fragment="doc-dock" th:with="cfg = ${theme.config.docsme?.doc_settings},
+                   globalDock = ${theme.config.general.floating_dock},
+                   enableCustom = ${cfg?.enable_custom_dock},
+                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
+                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
+                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
+  <th:block th:if="${globalDock?.enable_dock != false}">
     <!-- 底部居中样式 -->
     <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docBottomDock}" />
     <!-- 右侧可折叠样式 -->
@@ -23,510 +24,491 @@
 <!--          底部居中样式                        -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docBottomDock" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<div x-data="docFloatingDock"
-     th:attr="data-doc-name=${docTree?.metadata?.name}"
-     x-show="isVisible"
-     x-transition:enter="transition ease-in-out duration-400"
-     x-transition:enter-start="opacity-0 translate-y-8"
-     x-transition:enter-end="opacity-100 translate-y-0"
-     x-transition:leave="transition ease-in-out duration-300"
-     x-transition:leave-start="opacity-100 translate-y-0"
-     x-transition:leave-end="opacity-0 translate-y-4"
-     class="floating-dock-wrapper z-50">
-  
-  <!-- Dock 容器 - 固定在视口底部 -->
-  <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
-    <div class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
-      
-      <!-- Dock 按钮组 -->
-      <div class="flex items-center gap-1">
-        
-        <!-- 自定义菜单图标 -->
-        <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-          <th:block th:if="${dockMenu != null}">
-            <a th:each="menuItem : ${dockMenu.menuItems}"
-               th:href="@{${menuItem.status.href}}"
-               th:target="${menuItem.spec.target?.value}"
-               class="dock-item dock-btn group relative"
-               th:title="${menuItem.status.displayName}">
-              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
-                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-              </div>
-              <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                    class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
-              </span>
-              <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                    th:text="${menuItem.status.displayName}">
-              </span>
-            </a>
+<th:block th:fragment="docBottomDock"
+  th:with="cfg = ${theme.config.docsme?.doc_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="docFloatingDock" th:attr="data-doc-name=${docTree?.metadata?.name}" x-show="isVisible"
+    x-transition:enter="transition ease-in-out duration-400" x-transition:enter-start="opacity-0 translate-y-8"
+    x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in-out duration-300"
+    x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
+    class="floating-dock-wrapper z-50">
+
+    <!-- Dock 容器 - 固定在视口底部 -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
+      <div
+        class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
+
+        <!-- Dock 按钮组 -->
+        <div class="flex items-center gap-1">
+
+          <!-- 自定义菜单图标 -->
+          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+            <th:block th:if="${dockMenu != null}">
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+                th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
+                th:title="${menuItem.status.displayName}">
+                <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
+                  <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+                </div>
+                <span
+                  th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
+                </span>
+                <span
+                  class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+                  th:text="${menuItem.status.displayName}">
+                </span>
+              </a>
+            </th:block>
           </th:block>
-        </th:block>
-        
-        <!-- 分隔线 -->
-        <div class="w-px h-6" th:if="${cfg?.enable_comment 
-                                        or cfg?.enable_toc_drawer 
+
+          <!-- 分隔线 -->
+          <div class="w-px h-6" th:if="${cfg?.enable_toc_drawer 
                                         or cfg?.enable_sidebar_drawer 
-                                        or cfg?.enable_back_to_top != false}"></div>
-        
-        <!-- 评论按钮 - 需要主题启用评论且后端允许评论 -->
-        <button th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}"
-                @click="toggleCommentDrawer()"
-                class="dock-item dock-btn group relative"
-                title="评论">
-          <span class="icon-[heroicons--chat-bubble-left-right] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
-          </span>
-          <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            评论
-          </span>
-        </button>
-        
-        <!-- 目录按钮（仅手机端显示） -->
-        <button th:if="${cfg?.enable_toc_drawer}"
-                @click="toggleTocDrawer()"
-                class="dock-item dock-btn group relative md:hidden!"
-                title="目录">
-          <span class="icon-[heroicons--list-bullet] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
-          </span>
-          <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            文档目录
-          </span>
-        </button>
-        
-        <!-- 菜单按钮（仅手机端显示） -->
-        <button th:if="${cfg?.enable_sidebar_drawer}"
-                @click="toggleSidebarDrawer()"
-                class="dock-item dock-btn group relative md:hidden!"
-                title="文档菜单">
-          <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
-          </span>
-          <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            文档菜单
-          </span>
-        </button>
-        
-        <!-- 返回顶部按钮 -->
-        <button th:if="${cfg?.enable_back_to_top != false}"
-                @click="scrollToTop()"
-                class="dock-item dock-btn"
-                title="返回顶部">
-          <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
-        </button>
-        
+                                        or enableBackToTop}"></div>
+
+          <!-- 评论按钮已移除，移至文章底部 -->
+
+          <!-- 目录按钮（仅手机端显示） -->
+          <button th:if="${cfg?.enable_toc_drawer}" @click="toggleTocDrawer()"
+            class="dock-item dock-btn group relative md:hidden!" title="目录">
+            <span class="icon-[heroicons--list-bullet] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
+            </span>
+            <span
+              class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              文档目录
+            </span>
+          </button>
+
+          <!-- 菜单按钮（仅手机端显示） -->
+          <button th:if="${cfg?.enable_sidebar_drawer}" @click="toggleSidebarDrawer()"
+            class="dock-item dock-btn group relative md:hidden!" title="文档菜单">
+            <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
+            </span>
+            <span
+              class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              文档菜单
+            </span>
+          </button>
+
+          <!-- 返回顶部按钮 -->
+          <button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+            <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
+          </button>
+
+        </div>
       </div>
     </div>
+
   </div>
-  
-</div>
 </th:block>
 
 <!-- ========================================== -->
 <!--          右侧可折叠样式 (FAB)                -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docSideDock" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<div x-data="sideFloatingDock"
-     th:attr="data-doc-name=${docTree?.metadata?.name}"
-     x-show="isVisible"
-     class="fixed right-4 bottom-6 z-40">
-  
-  <!-- DaisyUI FAB 组件 -->
-  <div class="fab fab-top">
-    <!-- 触发按钮 -->
-    <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
-      <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
-    </div>
-    
-    <!-- 关闭按钮（展开时显示） -->
-    <div class="fab-close">
-      <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
-      <span class="btn btn-circle btn-neutral shadow-lg">
-        <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-      </span>
-    </div>
-    
-    <!-- 自定义菜单项 -->
-    <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-      <th:block th:if="${dockMenu != null}">
-        <div th:each="menuItem : ${dockMenu.menuItems}">
-          <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-          <a th:href="@{${menuItem.status.href}}"
-             th:target="${menuItem.spec.target?.value}"
-             class="btn btn-circle"
-             th:title="${menuItem.status.displayName}">
-            <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                 class="w-5 h-5 flex items-center justify-center">
-              <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-            </div>
-            <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                  class="icon-[heroicons--home] w-5 h-5"></span>
-          </a>
-        </div>
+<th:block th:fragment="docSideDock"
+  th:with="cfg = ${theme.config.docsme?.doc_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="sideFloatingDock" th:attr="data-doc-name=${docTree?.metadata?.name}" x-show="isVisible"
+    class="fixed right-4 bottom-6 z-40">
+
+    <!-- DaisyUI FAB 组件 -->
+    <div class="fab fab-top">
+      <!-- 触发按钮 -->
+      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+        <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
+      </div>
+
+      <!-- 关闭按钮（展开时显示） -->
+      <div class="fab-close">
+        <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
+        <span class="btn btn-circle btn-neutral shadow-lg">
+          <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+        </span>
+      </div>
+
+      <!-- 自定义菜单项 -->
+      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+        <th:block th:if="${dockMenu != null}">
+          <div th:each="menuItem : ${dockMenu.menuItems}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.displayName}">
+              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="w-5 h-5 flex items-center justify-center">
+                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+              </div>
+              <span
+                th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="icon-[heroicons--home] w-5 h-5"></span>
+            </a>
+          </div>
+        </th:block>
       </th:block>
-    </th:block>
-    
-    <!-- 评论按钮 - 需要主题启用评论且后端允许评论 -->
-    <div th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}">
-      <span class="text-sm whitespace-nowrap hidden sm:block">评论</span>
-      <button class="btn btn-circle" @click="$dispatch('toggle-doc-comment-drawer')">
-        <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5"></span>
-      </button>
+
+      <!-- 评论按钮已移除，移至文章底部 -->
+
+      <!-- 目录按钮（仅手机端显示） -->
+      <div th:if="${cfg?.enable_toc_drawer}" class="md:hidden">
+        <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
+        <button class="btn btn-circle" @click="$dispatch('toggle-doc-toc-drawer')">
+          <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
+        </button>
+      </div>
+
+      <!-- 菜单按钮（仅手机端显示） -->
+      <div th:if="${cfg?.enable_sidebar_drawer}" class="md:hidden">
+        <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
+        <button class="btn btn-circle" @click="$dispatch('toggle-doc-sidebar-drawer')">
+          <span class="icon-[heroicons--book-open] w-5 h-5"></span>
+        </button>
+      </div>
+
+      <!-- 返回顶部按钮 -->
+      <div th:if="${enableBackToTop}">
+        <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
+        <button class="btn btn-circle" @click="scrollToTop()">
+          <span class="icon-[heroicons--arrow-up] w-5 h-5"></span>
+        </button>
+      </div>
     </div>
-    
-    <!-- 目录按钮（仅手机端显示） -->
-    <div th:if="${cfg?.enable_toc_drawer}" class="md:hidden">
-      <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
-      <button class="btn btn-circle" @click="$dispatch('toggle-doc-toc-drawer')">
-        <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
-      </button>
-    </div>
-    
-    <!-- 菜单按钮（仅手机端显示） -->
-    <div th:if="${cfg?.enable_sidebar_drawer}" class="md:hidden">
-      <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
-      <button class="btn btn-circle" @click="$dispatch('toggle-doc-sidebar-drawer')">
-        <span class="icon-[heroicons--book-open] w-5 h-5"></span>
-      </button>
-    </div>
-    
-    <!-- 返回顶部按钮 -->
-    <div th:if="${cfg?.enable_back_to_top != false}">
-      <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-      <button class="btn btn-circle" @click="scrollToTop()">
-        <span class="icon-[heroicons--arrow-up] w-5 h-5"></span>
-      </button>
-    </div>
+
   </div>
-  
-</div>
 </th:block>
 
 <!-- ========================================== -->
 <!--              评论抽屉                       -->
 <!-- ========================================== -->
 
-<th:block th:fragment="doc-comment-drawer" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<!-- 评论抽屉 - 需要主题启用评论且后端允许评论 -->
-<div th:if="${cfg?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}"
-     x-data="{ isOpen: false }"
-     @toggle-doc-comment-drawer.window="isOpen = !isOpen">
-  
-  <div class="drawer drawer-end z-9999">
-    <input id="doc-comment-drawer" 
-           type="checkbox" 
-           class="drawer-toggle"
-           :checked="isOpen"
-           @change="isOpen = $event.target.checked" />
-    
-    <div class="drawer-side">
-      <div aria-label="关闭评论"
-           class="drawer-overlay"
-           @click="isOpen = false">
-      </div>
-      
-      <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[420px] md:w-[540px] lg:w-[600px] min-h-full shadow-2xl flex flex-col border-l border-base-300/30">
-        
-        <div class="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-base-300/50 bg-base-100/95 backdrop-blur-xl">
-          <h3 class="text-lg font-semibold flex items-center gap-2 truncate">
-            <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5 text-primary shrink-0"></span>
-            <span class="truncate">评论</span>
-          </h3>
-          <button @click="isOpen = false" 
-                  class="btn btn-ghost btn-circle btn-sm shrink-0">
-            <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-          </button>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto p-4">
-          <!-- Halo 评论组件 - 使用文档类型 -->
-          <halo:comment 
-            group="run.halo.docsme" 
-            kind="Doc"
-            th:attr="name=${docTree?.metadata?.name}"
-            colorScheme="system">
-          </halo:comment>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  
-</div>
-</th:block>
+<!-- 评论抽屉已移除 -->
+<th:block th:fragment="doc-comment-drawer"></th:block>
 
 <!-- ========================================== -->
 <!--              目录抽屉                       -->
 <!-- ========================================== -->
 
 <th:block th:fragment="doc-toc-drawer" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<div th:if="${cfg?.enable_toc_drawer}"
-     x-data="docTocDrawer"
-     @toggle-doc-toc-drawer.window="isOpen = !isOpen">
-  
-  <div class="drawer drawer-end z-9999">
-    <input id="doc-toc-drawer" 
-           type="checkbox" 
-           class="drawer-toggle"
-           :checked="isOpen"
-           @change="isOpen = $event.target.checked" />
-    
-    <div class="drawer-side">
-      <div aria-label="关闭目录"
-           class="drawer-overlay"
-           @click="isOpen = false">
-      </div>
-      
-      <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[320px] md:w-[360px] min-h-full shadow-2xl flex flex-col border-l border-base-300/30">
-        
-        <div class="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-base-300/50 bg-base-100/95 backdrop-blur-xl">
-          <h3 class="text-lg font-semibold flex items-center gap-2 truncate">
-            <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary shrink-0"></span>
-            <span class="truncate">文档目录</span>
-          </h3>
-          <button @click="isOpen = false" 
-                  class="btn btn-ghost btn-circle btn-sm shrink-0">
-            <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-          </button>
+  <div th:if="${cfg?.enable_toc_drawer}" x-data="docTocDrawer" x-show="isOpen" class="fixed inset-0 z-[9999]"
+    style="display: none;" @toggle-doc-toc-drawer.window="isOpen = !isOpen">
+
+    <div class="drawer drawer-end h-full">
+      <input id="doc-toc-drawer" type="checkbox" class="drawer-toggle" :checked="isOpen"
+        @change="isOpen = $event.target.checked" />
+
+      <div class="drawer-side h-full z-[9999]">
+        <div aria-label="关闭目录" class="drawer-overlay bg-base-content/10 backdrop-blur-sm transition-opacity"
+          @click="isOpen = false">
         </div>
-        
-        <div class="flex-1 overflow-y-auto p-4 scrollbar-thin">
-          <nav id="doc-toc-drawer-nav" class="space-y-1" role="navigation" aria-label="文档目录">
-            <!-- 目录将由 JavaScript 自动生成 -->
-          </nav>
+
+        <div
+          class="bg-base-100/80 backdrop-blur-2xl w-[85vw] max-w-[360px] h-full shadow-2xl flex flex-col border-l border-base-content/5">
+
+          <div
+            class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-base-content/5 bg-base-100/50 backdrop-blur-xl">
+            <h3 class="text-lg font-semibold flex items-center gap-2 truncate text-base-content/90">
+              <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary shrink-0 opacity-80"></span>
+              <span class="truncate">文档目录</span>
+            </h3>
+            <button @click="isOpen = false"
+              class="btn btn-ghost btn-circle btn-sm shrink-0 text-base-content/60 hover:bg-base-content/10">
+              <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-y-auto p-6 scrollbar-thin pb-[env(safe-area-inset-bottom)]">
+            <nav id="doc-toc-drawer-nav" class="space-y-1" role="navigation" aria-label="文档目录">
+              <!-- 目录将由 JavaScript 自动生成 -->
+            </nav>
+          </div>
+
         </div>
-        
       </div>
     </div>
+
   </div>
-  
-</div>
 </th:block>
 
 <!-- ========================================== -->
 <!--              菜单抽屉（文档树）              -->
 <!-- ========================================== -->
 
-<th:block th:fragment="doc-sidebar-drawer" th:with="cfg = ${theme.config.docsme?.doc_settings}">
-<div th:if="${cfg?.enable_sidebar_drawer}"
-     x-data="docSidebarDrawer"
-     @toggle-doc-sidebar-drawer.window="isOpen = !isOpen">
-  
-  <div class="drawer z-9999">
-    <input id="doc-sidebar-drawer" 
-           type="checkbox" 
-           class="drawer-toggle"
-           :checked="isOpen"
-           @change="isOpen = $event.target.checked" />
-    
-    <div class="drawer-side">
-      <div aria-label="关闭菜单"
-           class="drawer-overlay"
-           @click="isOpen = false">
-      </div>
-      
-      <div class="bg-base-100/95 backdrop-blur-xl w-full sm:w-[300px] md:w-[320px] min-h-full shadow-2xl flex flex-col border-r border-base-300/30">
-        
-        <div class="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-base-300/50 bg-base-100/95 backdrop-blur-xl">
-          <a th:href="${project.status.permalink}" class="text-lg font-semibold flex items-center gap-2 truncate hover:text-primary transition-colors">
-            <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
-            <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
-          </a>
-          <button @click="isOpen = false" 
-                  class="btn btn-ghost btn-circle btn-sm shrink-0">
-            <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-          </button>
+<th:block th:fragment="doc-sidebar-drawer(config)" th:with="cfg = ${config ?: theme.config.docsme?.doc_settings}">
+  <div th:if="${cfg?.enable_sidebar_drawer}" x-data="docSidebarDrawer" x-show="isOpen" class="fixed inset-0 z-[9999]"
+    style="display: none;" @toggle-doc-sidebar-drawer.window="isOpen = !isOpen">
+
+    <div class="drawer h-full">
+      <input id="doc-sidebar-drawer" type="checkbox" class="drawer-toggle" :checked="isOpen"
+        @change="isOpen = $event.target.checked" />
+
+      <div class="drawer-side h-full z-[9999]">
+        <div aria-label="关闭菜单" class="drawer-overlay bg-base-content/10 backdrop-blur-sm transition-opacity"
+          @click="isOpen = false">
         </div>
-        
-        <div class="flex-1 overflow-y-auto p-4 scrollbar-thin">
-          <!-- 使用文档页的导航树样式 -->
-          <ul class="doc-nav-tree">
-            <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
-          </ul>
+
+        <div
+          class="bg-base-100/80 backdrop-blur-2xl w-[85vw] max-w-[320px] h-full shadow-2xl flex flex-col border-r border-base-content/5">
+
+          <div
+            class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-base-content/5 bg-base-100/50 backdrop-blur-xl">
+            <a th:href="${project.status.permalink}"
+              class="text-lg font-semibold flex items-center gap-2 truncate text-base-content/90 hover:text-primary transition-colors">
+              <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0 opacity-80"></span>
+              <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
+            </a>
+            <button @click="isOpen = false"
+              class="btn btn-ghost btn-circle btn-sm shrink-0 text-base-content/60 hover:bg-base-content/10">
+              <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-y-auto p-6 scrollbar-thin pb-[env(safe-area-inset-bottom)]">
+            <!-- 使用文档页的导航树样式 -->
+            <ul class="doc-nav-tree">
+              <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
+            </ul>
+          </div>
+
         </div>
-        
       </div>
     </div>
+
   </div>
-  
-</div>
 </th:block>
 
 <!-- ========================================== -->
 <!--         文档列表页 Dock (docs.html)         -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docs-dock" 
-          th:with="cfg = ${theme.config.docsme?.docs_settings},
-                   pageDockStyle = ${cfg?.dock_style ?: 'global'},
-                   globalDockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
-                   dockStyle = ${pageDockStyle == 'global' ? globalDockStyle : pageDockStyle}">
-  <th:block th:if="${cfg?.enable_dock != false}">
+<th:block th:fragment="docs-dock" th:with="cfg = ${theme.config.docsme?.docs_settings},
+                   globalDock = ${theme.config.general.floating_dock},
+                   enableCustom = ${cfg?.enable_custom_dock},
+                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
+                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
+                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
+  <th:block th:if="${globalDock?.enable_dock != false}">
     <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docsBottomDock}" />
     <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: docsSideDock}" />
   </th:block>
 </th:block>
 
-<th:block th:fragment="docsBottomDock" th:with="cfg = ${theme.config.docsme?.docs_settings}">
-<div x-data="simpleFloatingDock"
-     x-show="isVisible"
-     x-transition:enter="transition ease-in-out duration-400"
-     x-transition:enter-start="opacity-0 translate-y-8"
-     x-transition:enter-end="opacity-100 translate-y-0"
-     x-transition:leave="transition ease-in-out duration-300"
-     x-transition:leave-start="opacity-100 translate-y-0"
-     x-transition:leave-end="opacity-0 translate-y-4"
-     class="floating-dock-wrapper z-50">
-  <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
-    <div class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
-      <div class="flex items-center gap-1">
-        <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-          <th:block th:if="${dockMenu != null}">
-            <a th:each="menuItem : ${dockMenu.menuItems}"
-               th:href="@{${menuItem.status.href}}"
-               th:target="${menuItem.spec.target?.value}"
-               class="dock-item dock-btn group relative"
-               th:title="${menuItem.status.displayName}">
-              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
-                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-              </div>
-              <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                    class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
-              <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                    th:text="${menuItem.status.displayName}"></span>
-            </a>
+<th:block th:fragment="docsBottomDock"
+  th:with="cfg = ${theme.config.docsme?.docs_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="simpleFloatingDock" x-show="isVisible" x-transition:enter="transition ease-in-out duration-400"
+    x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 translate-y-4" class="floating-dock-wrapper z-50">
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
+      <div
+        class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
+        <div class="flex items-center gap-1">
+          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+            <th:block th:if="${dockMenu != null}">
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+                th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
+                th:title="${menuItem.status.displayName}">
+                <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
+                  <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+                </div>
+                <span
+                  th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
+                <span
+                  class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+                  th:text="${menuItem.status.displayName}"></span>
+              </a>
+            </th:block>
           </th:block>
-        </th:block>
-        <div class="w-px h-6" th:if="${cfg?.enable_back_to_top != false}"></div>
-        <button th:if="${cfg?.enable_back_to_top != false}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
-          <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
-        </button>
+          <div class="w-px h-6" th:if="${enableBackToTop}"></div>
+          <button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+            <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </th:block>
 
-<th:block th:fragment="docsSideDock" th:with="cfg = ${theme.config.docsme?.docs_settings}">
-<div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
-  <div class="fab fab-top">
-    <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
-      <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
-    </div>
-    <div class="fab-close">
-      <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
-      <span class="btn btn-circle btn-neutral shadow-lg">
-        <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-      </span>
-    </div>
-    <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-      <th:block th:if="${dockMenu != null}">
-        <div th:each="menuItem : ${dockMenu.menuItems}">
-          <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-          <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle" th:title="${menuItem.status.displayName}">
-            <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}" class="w-5 h-5 flex items-center justify-center">
-              <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-            </div>
-            <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}" class="icon-[heroicons--home] w-5 h-5"></span>
-          </a>
-        </div>
+<th:block th:fragment="docsSideDock"
+  th:with="cfg = ${theme.config.docsme?.docs_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
+    <div class="fab fab-top">
+      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+        <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
+      </div>
+      <div class="fab-close">
+        <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
+        <span class="btn btn-circle btn-neutral shadow-lg">
+          <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+        </span>
+      </div>
+      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+        <th:block th:if="${dockMenu != null}">
+          <div th:each="menuItem : ${dockMenu.menuItems}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.displayName}">
+              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="w-5 h-5 flex items-center justify-center">
+                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+              </div>
+              <span
+                th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="icon-[heroicons--home] w-5 h-5"></span>
+            </a>
+          </div>
+        </th:block>
       </th:block>
-    </th:block>
-    <div th:if="${cfg?.enable_back_to_top != false}">
-      <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-      <button class="btn btn-circle" @click="scrollToTop()"><span class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
+      <div th:if="${enableBackToTop}">
+        <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
+        <button class="btn btn-circle" @click="scrollToTop()"><span
+            class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
+      </div>
     </div>
   </div>
-</div>
 </th:block>
 
 <!-- ========================================== -->
 <!--       文档目录页 Dock (doc-catalog.html)     -->
 <!-- ========================================== -->
 
-<th:block th:fragment="catalog-dock" 
-          th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
-                   pageDockStyle = ${cfg?.dock_style ?: 'global'},
-                   globalDockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
-                   dockStyle = ${pageDockStyle == 'global' ? globalDockStyle : pageDockStyle}">
-  <th:block th:if="${cfg?.enable_dock != false}">
+<th:block th:fragment="catalog-dock" th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
+                   globalDock = ${theme.config.general.floating_dock},
+                   enableCustom = ${cfg?.enable_custom_dock},
+                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
+                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
+                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
+  <th:block th:if="${globalDock?.enable_dock != false}">
     <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: catalogBottomDock}" />
     <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: catalogSideDock}" />
+    <th:block th:replace="~{modules/doc/floating-dock :: doc-sidebar-drawer(config=${cfg})}" />
   </th:block>
 </th:block>
 
-<th:block th:fragment="catalogBottomDock" th:with="cfg = ${theme.config.docsme?.doc_catalog_settings}">
-<div x-data="simpleFloatingDock"
-     x-show="isVisible"
-     x-transition:enter="transition ease-in-out duration-400"
-     x-transition:enter-start="opacity-0 translate-y-8"
-     x-transition:enter-end="opacity-100 translate-y-0"
-     x-transition:leave="transition ease-in-out duration-300"
-     x-transition:leave-start="opacity-100 translate-y-0"
-     x-transition:leave-end="opacity-0 translate-y-4"
-     class="floating-dock-wrapper z-50">
-  <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
-    <div class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
-      <div class="flex items-center gap-1">
-        <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-          <th:block th:if="${dockMenu != null}">
-            <a th:each="menuItem : ${dockMenu.menuItems}"
-               th:href="@{${menuItem.status.href}}"
-               th:target="${menuItem.spec.target?.value}"
-               class="dock-item dock-btn group relative"
-               th:title="${menuItem.status.displayName}">
-              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
-                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-              </div>
-              <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                    class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
-              <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                    th:text="${menuItem.status.displayName}"></span>
-            </a>
+<th:block th:fragment="catalogBottomDock"
+  th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="simpleFloatingDock" x-show="isVisible" x-transition:enter="transition ease-in-out duration-400"
+    x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 translate-y-4" class="floating-dock-wrapper z-50">
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2">
+      <div
+        class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
+        <div class="flex items-center gap-1">
+          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+            <th:block th:if="${dockMenu != null}">
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+                th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
+                th:title="${menuItem.status.displayName}">
+                <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
+                  <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+                </div>
+                <span
+                  th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                  class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
+                <span
+                  class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+                  th:text="${menuItem.status.displayName}"></span>
+              </a>
+            </th:block>
           </th:block>
-        </th:block>
-        <div class="w-px h-6" th:if="${cfg?.enable_back_to_top != false}"></div>
-        <button th:if="${cfg?.enable_back_to_top != false}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
-          <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
-        </button>
-      </div>
-    </div>
-  </div>
+</th:block>
+
+<!-- 分隔线 -->
+<div class="w-px h-6" th:if="${cfg?.enable_sidebar_drawer or enableBackToTop}"></div>
+
+<!-- 菜单按钮（仅手机端显示） -->
+<button th:if="${cfg?.enable_sidebar_drawer}" @click="toggleSidebarDrawer()"
+  class="dock-item dock-btn group relative md:hidden!" title="文档菜单">
+  <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
+  </span>
+  <span
+    class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+    文档菜单
+  </span>
+</button>
+
+<div class="w-px h-6" th:if="${enableBackToTop}"></div>
+<button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+  <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
+</button>
+</div>
+</div>
+</div>
 </div>
 </th:block>
 
-<th:block th:fragment="catalogSideDock" th:with="cfg = ${theme.config.docsme?.doc_catalog_settings}">
-<div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
-  <div class="fab fab-top">
-    <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
-      <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
-    </div>
-    <div class="fab-close">
-      <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
-      <span class="btn btn-circle btn-neutral shadow-lg">
-        <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-      </span>
-    </div>
-    <th:block th:with="dockMenu = ${menuFinder.getByName(cfg?.dock_menu ?: 'primary')}">
-      <th:block th:if="${dockMenu != null}">
-        <div th:each="menuItem : ${dockMenu.menuItems}">
-          <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-          <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle" th:title="${menuItem.status.displayName}">
-            <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}" class="w-5 h-5 flex items-center justify-center">
-              <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
-            </div>
-            <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}" class="icon-[heroicons--home] w-5 h-5"></span>
-          </a>
-        </div>
+<th:block th:fragment="catalogSideDock"
+  th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
+          globalDock = ${theme.config.general.floating_dock},
+          enableCustom = ${cfg?.enable_custom_dock},
+          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
+          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+  <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
+    <div class="fab fab-top">
+      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+        <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
+      </div>
+      <div class="fab-close">
+        <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
+        <span class="btn btn-circle btn-neutral shadow-lg">
+          <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+        </span>
+      </div>
+      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+        <th:block th:if="${dockMenu != null}">
+          <div th:each="menuItem : ${dockMenu.menuItems}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.displayName}">
+              <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="w-5 h-5 flex items-center justify-center">
+                <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
+              </div>
+              <span
+                th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                class="icon-[heroicons--home] w-5 h-5"></span>
+            </a>
+          </div>
+        </th:block>
       </th:block>
-    </th:block>
-    <div th:if="${cfg?.enable_back_to_top != false}">
-      <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-      <button class="btn btn-circle" @click="scrollToTop()"><span class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
-    </div>
-  </div>
+</th:block>
+
+<!-- 菜单按钮（仅手机端显示） -->
+<div th:if="${cfg?.enable_sidebar_drawer}" class="md:hidden">
+  <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
+  <button class="btn btn-circle" @click="$dispatch('toggle-doc-sidebar-drawer')">
+    <span class="icon-[heroicons--book-open] w-5 h-5"></span>
+  </button>
+</div>
+
+<div th:if="${enableBackToTop}">
+  <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
+  <button class="btn btn-circle" @click="scrollToTop()"><span
+      class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
+</div>
+</div>
 </div>
 </th:block>
 

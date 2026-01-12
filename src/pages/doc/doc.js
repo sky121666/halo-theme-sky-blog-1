@@ -130,11 +130,80 @@ function initDropdowns() {
   );
 }
 
+// 侧边栏与 Footer 碰撞检测
+function initSidebarFooterCollision() {
+  const sidebar = document.querySelector('.doc-sidebar');
+  const toc = document.querySelector('.doc-toc');
+  const footer = document.querySelector('footer');
+  const docLayout = document.querySelector('.doc-layout');
+
+  if (!footer || (!sidebar && !toc)) return;
+
+  // 获取导航栏高度，默认为 64
+  let navHeight = 64;
+  if (docLayout) {
+    const val = getComputedStyle(docLayout).getPropertyValue('--doc-nav-height');
+    if (val) navHeight = parseInt(val);
+  } else {
+    // 尝试从 root 获取或直接使用默认
+    const val = getComputedStyle(document.documentElement).getPropertyValue('--doc-nav-height');
+    if (val) navHeight = parseInt(val);
+  }
+
+  const offset = navHeight + 16; // nav + 1rem
+
+  function updateSidebarPositions() {
+    // 使用 document.documentElement.clientHeight 兼容性更好
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const footerRect = footer.getBoundingClientRect();
+
+    // 计算 footer 顶部距离视口顶部的距离
+    // 如果 footerRect.top < viewportHeight，说明 footer 已经进入视口（或在视口上方）
+
+    [sidebar, toc].forEach((el) => {
+      if (!el) return;
+
+      const elHeight = el.offsetHeight;
+      // 计算停止位置：Footer 顶部 - 1rem - 元素高度
+      // 这是元素 top 允许的最大值（相对于视口）
+      // footerRect.top 是 footer 顶部相对于视口的 Y 坐标
+      const stopPositionTop = footerRect.top - 16 - elHeight;
+
+      // 如果计算出的位置小于默认 offset（顶部固定位置），说明 footer 顶到了侧边栏
+      if (stopPositionTop < offset) {
+        el.style.top = `${stopPositionTop}px`;
+      } else {
+        // 否则保持在顶部固定位置
+        if (el.style.top !== `${offset}px`) {
+          el.style.top = `${offset}px`;
+        }
+      }
+    });
+  }
+
+  // 使用 passive 事件和 requestAnimationFrame 优化性能
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateSidebarPositions();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // 初始化及窗口大小改变时更新
+  updateSidebarPositions();
+  window.addEventListener('resize', updateSidebarPositions);
+}
+
 // 初始化
 function init() {
   initLazyLoad();
   initTOC();
   initDropdowns();
+  initSidebarFooterCollision();
 }
 
 if (document.readyState === 'loading') {

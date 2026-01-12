@@ -1,55 +1,51 @@
-<!-- 文档列表页 - 适配主题样式 -->
+<!-- 文档列表页 - Apple 简约风格 -->
 <div th:fragment="content" class="max-w-7xl mx-auto px-4 py-12">
-  
-  <!-- 页面标题 -->
-  <div class="text-center mb-12">
-    <h1 class="text-3xl lg:text-4xl font-bold text-base-content mb-4 flex items-center justify-center gap-3">
-      <span class="icon-[heroicons--book-open] w-8 h-8 lg:w-10 lg:h-10 text-primary"></span>
-      文档中心
-    </h1>
-    <p class="text-base-content/60">查阅项目文档和使用指南</p>
-  </div>
+
+  <!-- 页面标题 - 居中简约 -->
+  <header class="text-center mb-12">
+    <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight">文档中心</h1>
+    <p class="text-base-content/50 mt-2">查阅项目文档和使用指南</p>
+  </header>
 
   <!-- 文档项目列表 -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <th:block th:each="project : ${projects}">
-      <a th:href="${project.status.permalink}" 
-         class="card bg-base-100 shadow-sm rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group border border-transparent hover:border-primary">
-        <div class="card-body">
-          <!-- 图标 -->
-          <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:bg-primary/20 transition-colors">
-            <img th:unless="${#strings.isEmpty(project.spec.icon)}" th:src="${project.spec.icon}" th:alt="${project.spec.displayName}" class="w-8 h-8 object-contain" />
-            <span th:if="${#strings.isEmpty(project.spec.icon)}" class="icon-[heroicons--document-text] w-7 h-7 text-primary"></span>
-          </div>
-          
-          <!-- 标题 -->
-          <h2 class="card-title text-base-content group-hover:text-primary transition-colors" th:text="${project.spec.displayName}">项目名称</h2>
-          
-          <!-- 统计信息 -->
-          <div class="flex items-center gap-2 text-sm text-base-content/60 mt-1">
-            <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-            <span th:text="|${project.status.totalDocs ?: 0} 篇文档|">0 篇文档</span>
-          </div>
-          
-          <!-- 路径 -->
-          <p class="text-base-content/40 text-xs mt-1 font-mono" th:text="${project.status.permalink}">/docs/xxx</p>
-          
-          <!-- 访问按钮 -->
-          <div class="card-actions justify-end mt-4">
-            <span class="btn btn-primary btn-sm gap-1">
-              访问文档
-              <span class="icon-[heroicons--arrow-right] w-4 h-4"></span>
-            </span>
-          </div>
+      <a th:href="${project.status.permalink}" class="glow-card group block p-6 bg-base-100/80 backdrop-blur-xl rounded-2xl 
+                border border-base-content/[0.06] hover:border-base-content/10
+                shadow-sm hover:shadow-lg
+                transition-all duration-300 cursor-pointer">
+        <!-- 图标 -->
+        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 
+                    group-hover:bg-primary/20 transition-colors">
+          <img th:unless="${#strings.isEmpty(project.spec.icon)}" th:src="${project.spec.icon}"
+            th:alt="${project.spec.displayName}" class="w-7 h-7 object-contain" />
+          <span th:if="${#strings.isEmpty(project.spec.icon)}"
+            class="icon-[heroicons--document-text] w-6 h-6 text-primary"></span>
+        </div>
+
+        <!-- 标题 -->
+        <h2 class="text-lg font-semibold text-base-content group-hover:text-primary transition-colors mb-2"
+          th:text="${project.spec.displayName}">项目名称</h2>
+
+        <!-- 统计信息 -->
+        <div class="flex items-center gap-2 text-sm text-base-content/50">
+          <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
+          <span th:text="${(project.status.totalDocs ?: 0) + ' 篇文档'}">0 篇文档</span>
+        </div>
+
+        <!-- 箭头指示 -->
+        <div class="flex items-center justify-end mt-4 text-base-content/30 group-hover:text-primary transition-colors">
+          <span class="icon-[heroicons--arrow-right] w-5 h-5"></span>
         </div>
       </a>
     </th:block>
   </div>
 
   <!-- 空状态 -->
-  <div th:if="${projects == null || projects.isEmpty()}" class="card bg-base-100 shadow-sm rounded-lg p-12 text-center">
+  <div th:if="${projects == null || projects.isEmpty()}"
+    class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] shadow-lg p-12 text-center">
     <span class="icon-[heroicons--document-text] w-16 h-16 mx-auto text-base-content/20 mb-4"></span>
     <p class="text-base-content/50 text-lg">暂无文档项目</p>
-    <p class="text-base-content/40 text-sm mt-2">请在后台创建文档项目</p>
+    <p class="text-base-content/30 text-sm mt-2">请在后台创建文档项目</p>
   </div>
 </div>

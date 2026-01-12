@@ -1,79 +1,71 @@
 <!-- 文档内容页 - 现代全宽文档风格 -->
 <div th:fragment="content" class="doc-layout">
-  
+
   <!-- 左侧文档树 - 固定定位 -->
   <aside class="doc-sidebar hidden lg:block">
     <div class="doc-sidebar-inner scrollbar-thin">
-        
-        <!-- 版本选择器 - 仅当有多个版本时显示 -->
-        <th:block th:if="${#lists.size(versions) > 1}">
-          <div class="doc-version-selector">
-            <button class="doc-version-btn" 
-                    onclick="this.nextElementSibling.classList.toggle('show')" 
-                    type="button">
-              <span class="flex items-center gap-2">
-                <span class="icon-[heroicons--tag] w-4 h-4"></span>
-                <span th:text="${currentVersion.spec.slug}">版本</span>
-              </span>
-              <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-            </button>
-            <div class="doc-version-dropdown">
-              <a th:each="version : ${versions}"
-                 th:href="${version.status.permalink}"
-                 class="doc-version-item"
-                 th:classappend="${version.metadata.name == currentVersion.metadata.name} ? 'active' : ''">
-                <span th:text="${version.spec.slug}">版本名</span>
-              </a>
-            </div>
+
+      <!-- 版本选择器 - 仅当有多个版本时显示 -->
+      <th:block th:if="${#lists.size(versions) > 1}">
+        <div class="doc-version-selector">
+          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
+            <span class="flex items-center gap-2">
+              <span class="icon-[heroicons--tag] w-4 h-4"></span>
+              <span th:text="${currentVersion.spec.slug}">版本</span>
+            </span>
+            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+          </button>
+          <div class="doc-version-dropdown">
+            <a th:each="version : ${versions}" th:href="${version.status.permalink}" class="doc-version-item"
+              th:classappend="${version.metadata.name == currentVersion.metadata.name} ? 'active' : ''">
+              <span th:text="${version.spec.slug}">版本名</span>
+            </a>
           </div>
-        </th:block>
-        
-        <!-- 语言选择器 - 仅当有多个语言时显示 -->
-        <th:block th:if="${#lists.size(languages) > 1}">
-          <div class="doc-version-selector">
-            <button class="doc-version-btn" 
-                    onclick="this.nextElementSibling.classList.toggle('show')" 
-                    type="button">
-              <span class="flex items-center gap-2">
-                <span class="icon-[heroicons--language] w-4 h-4"></span>
-                <span th:if="${currentLanguage != null}" th:text="${currentLanguage.label}">语言</span>
-                <span th:unless="${currentLanguage != null}">语言</span>
-              </span>
-              <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-            </button>
-            <div class="doc-version-dropdown">
-              <a th:each="language : ${languages}"
-                 th:href="${language.link}"
-                 class="doc-version-item">
-                <span th:text="${language.label}">语言名</span>
-              </a>
-            </div>
+        </div>
+      </th:block>
+
+      <!-- 语言选择器 - 仅当有多个语言时显示 -->
+      <th:block th:if="${#lists.size(languages) > 1}">
+        <div class="doc-version-selector">
+          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
+            <span class="flex items-center gap-2">
+              <span class="icon-[heroicons--language] w-4 h-4"></span>
+              <span th:if="${currentLanguage != null}" th:text="${currentLanguage.label}">语言</span>
+              <span th:unless="${currentLanguage != null}">语言</span>
+            </span>
+            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+          </button>
+          <div class="doc-version-dropdown">
+            <a th:each="language : ${languages}" th:href="${language.link}" class="doc-version-item">
+              <span th:text="${language.label}">语言名</span>
+            </a>
           </div>
-        </th:block>
-        
-        <!-- 项目标题 -->
-        <a th:href="${project.status.permalink}" class="doc-project-title">
-          <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
-          <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
-        </a>
-        
-        <!-- 文档树导航 -->
-        <ul class="doc-nav-tree">
-          <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
-        </ul>
+        </div>
+      </th:block>
+
+      <!-- 项目标题 -->
+      <a th:href="${project.status.permalink}" class="doc-project-title">
+        <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
+        <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
+      </a>
+
+      <!-- 文档树导航 -->
+      <ul class="doc-nav-tree">
+        <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
+      </ul>
     </div>
   </aside>
 
   <!-- 主内容区 -->
   <main class="doc-main">
     <div class="doc-content-wrapper">
-      
+
       <!-- 访问限制提示 - 非公开文档 -->
       <div th:if="${project?.spec != null and project.spec['public'] == false}" class="doc-restricted-banner">
         <span class="icon-[heroicons--lock-closed] w-5 h-5 shrink-0"></span>
         <span>此文档仅对登录用户可见</span>
       </div>
-      
+
       <!-- 面包屑 -->
       <nav class="doc-breadcrumb" aria-label="面包屑导航">
         <a th:href="${project.status.permalink}" class="flex items-center gap-1">
@@ -81,7 +73,7 @@
           <span th:text="${project.spec.displayName}">首页</span>
         </a>
         <th:block th:each="crumb : ${crumbs}">
-          <span>/</span>
+          <span class="icon-[heroicons--chevron-right] w-3 h-3 opacity-40"></span>
           <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}">分类</a>
         </th:block>
       </nav>
@@ -91,19 +83,27 @@
 
       <!-- 文档正文内容 -->
       <article class="doc-article">
-        <div id="article-content" 
-             th:classappend="${'article-style-' + (theme.config.article.content_style.style_theme ?: 'github')}"
-             class="prose prose-lg max-w-none"
-             th:utext="${docInfo.content.content}">
+        <div id="article-content"
+          th:classappend="${'article-style-' + (theme.config.article.content_style.style_theme ?: 'github')}"
+          class="prose prose-lg max-w-none" th:utext="${docInfo.content.content}">
           文档内容
         </div>
       </article>
 
+      <!-- 文档评论 - 移至文章底部 -->
+      <div
+        th:if="${theme.config.docsme?.doc_settings?.enable_comment and (project?.spec == null or project.spec['allowComment'] != false)}"
+        class="mt-12 mb-8 glow-card p-6 bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] shadow-lg">
+        <div class="flex items-center gap-2 mb-6 pb-4 border-b border-base-content/5">
+          <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5 text-primary"></span>
+          <span class="text-lg font-semibold text-base-content">评论</span>
+        </div>
+        <halo:comment group="run.halo.docsme" kind="Doc" th:attr="name=${docTree.metadata.name}" colorScheme="system" />
+      </div>
       <!-- 上一篇 / 下一篇 -->
       <nav th:if="${linkNavigation}" class="doc-nav-footer">
-        <a th:if="${linkNavigation.hasPrevious}" 
-           th:href="${linkNavigation.previous.link}" 
-           class="doc-nav-link prev">
+        <a th:if="${linkNavigation.hasPrevious}" th:href="${linkNavigation.previous.link}"
+          class="doc-nav-link prev shadow-lg">
           <span class="doc-nav-link-label flex items-center gap-1">
             <span class="icon-[heroicons--arrow-left] w-3 h-3"></span>
             上一篇
@@ -111,9 +111,7 @@
           <span class="doc-nav-link-title" th:text="${linkNavigation.previous.title}">上一篇标题</span>
         </a>
         <div th:unless="${linkNavigation.hasPrevious}" class="flex-1"></div>
-        <a th:if="${linkNavigation.hasNext}" 
-           th:href="${linkNavigation.next.link}" 
-           class="doc-nav-link next">
+        <a th:if="${linkNavigation.hasNext}" th:href="${linkNavigation.next.link}" class="doc-nav-link next shadow-lg">
           <span class="doc-nav-link-label flex items-center gap-1">
             下一篇
             <span class="icon-[heroicons--arrow-right] w-3 h-3"></span>
@@ -143,18 +141,18 @@
 <th:block th:fragment="tree-item(docTrees)">
   <li th:each="currentDocTree : ${docTrees}">
     <!-- 文档链接 -->
-    <a th:if="${currentDocTree.spec.type == 'DOC'}"
-       th:href="${currentDocTree.status.permalink}" 
-       th:title="${currentDocTree.spec.title}"
-       th:classappend="${currentDocTree.metadata.name == docTree.metadata.name} ? 'active' : ''">
+    <a th:if="${currentDocTree.spec.type == 'DOC'}" th:href="${currentDocTree.status.permalink}"
+      th:title="${currentDocTree.spec.title}"
+      th:classappend="${currentDocTree.metadata.name == docTree.metadata.name} ? 'active' : ''">
       <span th:text="${currentDocTree.spec.title}" class="truncate">标题</span>
     </a>
-    <!-- 目录（可展开） -->
-    <details th:if="${currentDocTree.spec.type == 'TREE'}" 
-             th:id="${currentDocTree.metadata.name}"
-             th:open="${#arrays.contains(crumbs, currentDocTree) || currentDocTree.metadata.name == docTree.metadata.name}">
+    <!-- 目录（可展开 + 可点击导航至目录页） -->
+    <details th:if="${currentDocTree.spec.type == 'TREE'}" th:id="${currentDocTree.metadata.name}"
+      th:open="${#arrays.contains(crumbs, currentDocTree) || currentDocTree.metadata.name == docTree.metadata.name}">
       <summary th:title="${currentDocTree.spec.title}">
-        <span th:text="${currentDocTree.spec.title}" class="truncate">分类标题</span>
+        <a th:href="${currentDocTree.status.permalink}" th:text="${currentDocTree.spec.title}"
+          th:classappend="${currentDocTree.metadata.name == docTree.metadata.name} ? 'active' : ''"
+          class="truncate doc-nav-folder-link">分类标题</a>
       </summary>
       <ul th:if="${currentDocTree.children != null && !currentDocTree.children.isEmpty()}">
         <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${currentDocTree.children})}" />

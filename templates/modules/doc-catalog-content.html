@@ -1,59 +1,131 @@
-<!-- 文档目录页 - 适配主题样式 -->
-<div th:fragment="content" class="max-w-7xl mx-auto px-4 py-8">
-  
-  <!-- 面包屑 -->
-  <div class="breadcrumbs text-sm mb-6">
-    <ul>
-      <li>
-        <a th:href="${project.status.permalink}" class="text-base-content/70 hover:text-primary flex items-center gap-1">
+<!-- 文档目录页 - 适配 Doc Layout (Sidebar + Content) -->
+<div th:fragment="content" class="doc-layout">
+
+  <!-- 左侧文档树 - 复用 doc-content.html 的侧边栏结构 -->
+  <aside class="doc-sidebar hidden lg:block">
+    <div class="doc-sidebar-inner scrollbar-thin">
+
+      <!-- 版本选择器 -->
+      <th:block th:if="${versions != null and #lists.size(versions) > 1}">
+        <div class="doc-version-selector">
+          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
+            <span class="flex items-center gap-2">
+              <span class="icon-[heroicons--tag] w-4 h-4"></span>
+              <span th:text="${currentVersion.spec.slug}">版本</span>
+            </span>
+            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+          </button>
+          <div class="doc-version-dropdown">
+            <a th:each="version : ${versions}" th:href="${version.status.permalink}" class="doc-version-item"
+              th:classappend="${version.metadata.name == currentVersion.metadata.name} ? 'active' : ''">
+              <span th:text="${version.spec.slug}">版本名</span>
+            </a>
+          </div>
+        </div>
+      </th:block>
+
+      <!-- 语言选择器 -->
+      <th:block th:if="${languages != null and #lists.size(languages) > 1}">
+        <div class="doc-version-selector">
+          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
+            <span class="flex items-center gap-2">
+              <span class="icon-[heroicons--language] w-4 h-4"></span>
+              <span th:if="${currentLanguage != null}" th:text="${currentLanguage.label}">语言</span>
+              <span th:unless="${currentLanguage != null}">语言</span>
+            </span>
+            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+          </button>
+          <div class="doc-version-dropdown">
+            <a th:each="language : ${languages}" th:href="${language.link}" class="doc-version-item">
+              <span th:text="${language.label}">语言名</span>
+            </a>
+          </div>
+        </div>
+      </th:block>
+
+      <!-- 项目标题 -->
+      <a th:href="${project.status.permalink}" class="doc-project-title">
+        <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
+        <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
+      </a>
+
+      <!-- 文档树导航 -->
+      <ul class="doc-nav-tree">
+        <!-- 复用 doc-content 中的 tree-item 片段 -->
+        <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
+      </ul>
+    </div>
+  </aside>
+
+  <!-- 主内容区 - 与 doc-content.html 完全一致 -->
+  <main class="doc-main">
+    <div class="doc-content-wrapper">
+
+      <!-- 面包屑 - 与 doc-content.html 完全一致 -->
+      <nav class="doc-breadcrumb" aria-label="面包屑导航">
+        <a th:href="${project.status.permalink}" class="flex items-center gap-1">
           <span class="icon-[heroicons--home] w-4 h-4"></span>
-          首页
+          <span th:text="${project.spec.displayName}">首页</span>
         </a>
-      </li>
-      <li th:each="crumb : ${crumbs}">
-        <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}" class="text-base-content/70 hover:text-primary"></a>
-      </li>
-    </ul>
-  </div>
+        <th:block th:each="crumb : ${crumbs}">
+          <span class="icon-[heroicons--chevron-right] w-3 h-3 opacity-40"></span>
+          <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}">分类</a>
+        </th:block>
+      </nav>
 
-  <!-- 目录卡片 -->
-  <div class="card bg-base-100 shadow-sm rounded-lg p-6 lg:p-8 mb-6">
-    <!-- 目录标题 -->
-    <h1 class="text-2xl lg:text-3xl font-bold text-base-content mb-2 flex items-center gap-3">
-      <span class="icon-[heroicons--folder-open] w-7 h-7 text-primary"></span>
-      <span th:text="${docTree.spec.title}">目录名称</span>
-    </h1>
-    <p class="text-base-content/60 text-sm" th:if="${sonNodes != null}" th:text="|共 ${#lists.size(sonNodes)} 个项目|">共 0 个项目</p>
-  </div>
+      <!-- 目录标题 - 使用 doc-title 样式与内容页一致 -->
+      <h1 class="doc-title" th:text="${docTree.spec.title}">目录名称</h1>
 
-  <!-- 子项目列表 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-    <a th:each="node : ${sonNodes}"
-       th:href="${node.status.permalink}"
-       class="card bg-base-100 shadow-sm rounded-lg p-4 hover:shadow-md border border-transparent hover:border-primary transition-all group">
-      <div class="flex items-center gap-4">
-        <!-- 图标 -->
-        <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-          <span th:if="${node.spec.type == 'TREE'}" class="icon-[heroicons--folder] w-6 h-6 text-primary"></span>
-          <span th:if="${node.spec.type == 'DOC'}" class="icon-[heroicons--document-text] w-6 h-6 text-primary"></span>
-        </div>
-        <!-- 内容 -->
-        <div class="flex-1 min-w-0">
-          <h3 class="font-medium text-base-content group-hover:text-primary transition-colors truncate" th:text="${node.spec.title}">项目名称</h3>
-          <p class="text-xs text-base-content/50 mt-1">
-            <span th:if="${node.spec.type == 'TREE'}">文件夹</span>
-            <span th:if="${node.spec.type == 'DOC'}">文档</span>
-          </p>
-        </div>
-        <!-- 箭头 -->
-        <span class="icon-[heroicons--chevron-right] w-5 h-5 text-base-content/30 group-hover:text-primary transition-colors"></span>
+      <!-- 子项目列表 - Glassmorphism Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a th:each="node : ${sonNodes}" th:href="${node.status.permalink}" class="glow-card group relative overflow-hidden bg-base-100/80 backdrop-blur-xl rounded-2xl 
+                  p-6 border border-base-content/[0.06] hover:border-primary/20
+                  shadow-sm hover:shadow-xl hover:-translate-y-1 
+                  transition-all duration-300 ease-out cursor-pointer">
+
+          <div class="flex items-start gap-5">
+            <!-- 图标容器 -->
+            <div
+              class="w-12 h-12 rounded-2xl bg-base-content/[0.03] group-hover:bg-primary/10 flex items-center justify-center shrink-0 transition-colors duration-300 border border-base-content/[0.05]">
+              <span th:if="${node.spec.type == 'TREE'}"
+                class="icon-[heroicons--folder] w-6 h-6 text-base-content/70 group-hover:text-primary transition-colors"></span>
+              <span th:if="${node.spec.type == 'DOC'}"
+                class="icon-[heroicons--document-text] w-6 h-6 text-base-content/70 group-hover:text-primary transition-colors"></span>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="flex-1 min-w-0 pt-0.5">
+              <h3
+                class="font-semibold text-base-content text-lg leading-snug group-hover:text-primary transition-colors truncate mb-2"
+                th:text="${node.spec.title}">项目名称</h3>
+
+              <!-- 描述: 仅使用 spec.description (安全) -->
+              <p th:if="${node.spec.description != null && !node.spec.description.isEmpty()}"
+                class="text-sm text-base-content/60 line-clamp-2 leading-relaxed" th:text="${node.spec.description}">
+                描述内容...
+              </p>
+            </div>
+
+            <!-- 悬浮箭头 -->
+            <div
+              class="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary">
+              <span class="icon-[heroicons--arrow-right] w-5 h-5"></span>
+            </div>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
 
-  <!-- 空状态 -->
-  <div th:if="${sonNodes == null || sonNodes.isEmpty()}" class="card bg-base-100 shadow-sm rounded-lg p-12 text-center">
-    <span class="icon-[heroicons--folder-open] w-16 h-16 mx-auto text-base-content/20 mb-4"></span>
-    <p class="text-base-content/50 text-lg">此目录暂无内容</p>
-  </div>
+      <!-- 空状态 -->
+      <div th:if="${sonNodes == null || sonNodes.isEmpty()}"
+        class="glow-card bg-base-100/60 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] shadow-lg p-16 text-center mt-8">
+        <div class="w-20 h-20 mx-auto bg-base-content/5 rounded-full flex items-center justify-center mb-6">
+          <span class="icon-[heroicons--folder-open] w-10 h-10 text-base-content/30"></span>
+        </div>
+        <p class="text-base-content/60 text-lg font-medium">Empty Catalog</p>
+        <p class="text-base-content/40 text-sm mt-1">There are no items in this folder yet.</p>
+      </div>
+
+    </div>
+  </main>
+
 </div>
