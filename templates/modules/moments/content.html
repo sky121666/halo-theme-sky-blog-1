@@ -15,11 +15,11 @@
     sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}
   ">
 
-    <div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+    <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${showSidebar} ? 'max-w-5xl' : 'max-w-2xl'">
       <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
 
         <!-- 主内容区 -->
-        <section class="flex-1 min-w-0" th:classappend="${!showSidebar} ? 'max-w-xl mx-auto' : ''">
+        <section class="flex-1 min-w-0">
 
           <!-- 标签筛选 + 发布按钮 -->
           <div class="mb-6 flex items-center justify-between gap-4">
