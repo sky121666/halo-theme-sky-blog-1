@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--   欢迎卡片组件 - 天气 + 问候 + 动态背景     -->
+<!-- ========================================== -->
+
+<div th:fragment="card"
+  class="card backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl p-5 relative overflow-hidden group hover:shadow-xl transition-all duration-500"
+  :class="{
+    'bg-gradient-to-br from-amber-500/10 via-orange-400/5 to-yellow-300/10 hover:border-amber-500/20': weatherBg === 'sunny',
+    'bg-gradient-to-br from-slate-500/10 via-gray-400/5 to-slate-300/10 hover:border-slate-400/20': weatherBg === 'cloudy',
+    'bg-gradient-to-br from-indigo-900/15 via-slate-800/10 to-violet-900/15 hover:border-indigo-500/20': weatherBg === 'night-clear',
+    'bg-gradient-to-br from-slate-700/15 via-gray-600/10 to-slate-600/15 hover:border-slate-500/20': weatherBg === 'night-cloudy',
+    'bg-gradient-to-br from-gray-400/15 via-slate-300/10 to-gray-300/15 hover:border-gray-400/20': weatherBg === 'foggy',
+    'bg-gradient-to-br from-blue-500/15 via-cyan-400/10 to-blue-400/15 hover:border-blue-500/20': weatherBg === 'rainy',
+    'bg-gradient-to-br from-sky-200/20 via-blue-100/10 to-white/20 hover:border-sky-400/20': weatherBg === 'snowy',
+    'bg-gradient-to-br from-purple-600/15 via-slate-700/10 to-indigo-600/15 hover:border-purple-500/20': weatherBg === 'stormy',
+    'bg-base-100/80 hover:border-primary/20': !weatherBg
+  }"
+  x-data="welcomeWeatherCard()">
+
+  <!-- 动态背景装饰 -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <!-- 晴天 - 阳光光晕 -->
+    <template x-if="weatherBg === 'sunny'">
+      <div>
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-amber-400/30 to-orange-300/20 rounded-full blur-2xl animate-pulse"></div>
+        <div class="absolute top-4 right-4 w-16 h-16 bg-yellow-300/20 rounded-full blur-xl"></div>
+      </div>
+    </template>
+    
+    <!-- 多云 -->
+    <template x-if="weatherBg === 'cloudy'">
+      <div>
+        <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-slate-400/20 to-gray-300/15 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-0 left-0 w-20 h-20 bg-slate-300/15 rounded-full blur-xl"></div>
+      </div>
+    </template>
+    
+    <!-- 晴朗夜晚 - 星空效果 -->
+    <template x-if="weatherBg === 'night-clear'">
+      <div>
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-violet-400/15 rounded-full blur-2xl"></div>
+        <div class="absolute top-3 right-8 w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
+        <div class="absolute top-8 right-16 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse" style="animation-delay: 0.5s"></div>
+        <div class="absolute top-6 right-4 w-0.5 h-0.5 bg-white/50 rounded-full animate-pulse" style="animation-delay: 1s"></div>
+      </div>
+    </template>
+    
+    <!-- 多云夜晚 -->
+    <template x-if="weatherBg === 'night-cloudy'">
+      <div>
+        <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-slate-600/25 to-gray-500/20 rounded-full blur-2xl"></div>
+      </div>
+    </template>
+    
+    <!-- 雾天 -->
+    <template x-if="weatherBg === 'foggy'">
+      <div>
+        <div class="absolute inset-0 bg-gradient-to-b from-gray-300/10 to-transparent"></div>
+        <div class="absolute -top-4 -right-4 w-40 h-20 bg-gray-400/15 rounded-full blur-3xl"></div>
+      </div>
+    </template>
+    
+    <!-- 雨天 - 雨滴效果 -->
+    <template x-if="weatherBg === 'rainy'">
+      <div>
+        <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-blue-400/25 to-cyan-300/20 rounded-full blur-2xl"></div>
+        <div class="absolute top-0 left-1/4 w-0.5 h-6 bg-gradient-to-b from-blue-400/30 to-transparent rounded-full animate-bounce" style="animation-duration: 1s"></div>
+        <div class="absolute top-2 left-1/2 w-0.5 h-4 bg-gradient-to-b from-blue-400/20 to-transparent rounded-full animate-bounce" style="animation-duration: 1.2s; animation-delay: 0.3s"></div>
+        <div class="absolute top-1 left-3/4 w-0.5 h-5 bg-gradient-to-b from-blue-400/25 to-transparent rounded-full animate-bounce" style="animation-duration: 0.9s; animation-delay: 0.6s"></div>
+      </div>
+    </template>
+    
+    <!-- 雪天 - 雪花效果 -->
+    <template x-if="weatherBg === 'snowy'">
+      <div>
+        <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-sky-200/30 to-blue-100/25 rounded-full blur-2xl"></div>
+        <div class="absolute top-2 left-1/4 w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce" style="animation-duration: 2s"></div>
+        <div class="absolute top-4 left-1/2 w-1 h-1 bg-white/40 rounded-full animate-bounce" style="animation-duration: 2.5s; animation-delay: 0.5s"></div>
+        <div class="absolute top-1 left-2/3 w-1.5 h-1.5 bg-white/45 rounded-full animate-bounce" style="animation-duration: 2.2s; animation-delay: 1s"></div>
+      </div>
+    </template>
+    
+    <!-- 雷暴 - 闪电效果 -->
+    <template x-if="weatherBg === 'stormy'">
+      <div>
+        <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-purple-500/25 to-indigo-400/20 rounded-full blur-2xl animate-pulse"></div>
+        <div class="absolute top-0 right-1/4 w-0.5 h-8 bg-gradient-to-b from-yellow-300/60 via-white/40 to-transparent animate-pulse" style="animation-duration: 0.5s"></div>
+      </div>
+    </template>
+    
+    <!-- 默认背景 -->
+    <template x-if="!weatherBg">
+      <div class="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-2xl"></div>
+    </template>
+  </div>
+  
+  <!-- 加载状态 -->
+  <div x-show="loading" class="relative flex items-center justify-center py-4">
+    <span class="loading loading-spinner loading-sm text-primary"></span>
+  </div>
+
+  <!-- 内容区域 -->
+  <div x-show="!loading" x-cloak class="relative space-y-3">
+    <!-- 问候语 -->
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-xs text-base-content/50" x-text="currentDate"></p>
+        <h3 class="text-lg font-semibold text-base-content" x-text="greeting"></h3>
+      </div>
+      <!-- 天气图标（Meteocons 动态 SVG 内联） -->
+      <div x-show="weather && weatherIconSvg" class="flex-shrink-0 w-12 h-12" x-html="weatherIconSvg"></div>
+    </div>
+
+    <!-- 天气信息 -->
+    <div x-show="weather" class="flex items-center gap-4">
+      <!-- 温度 -->
+      <div class="flex items-baseline gap-1">
+        <span class="text-3xl font-bold text-base-content" x-text="Math.round(weather?.temp || 0)"></span>
+        <span class="text-base-content/50">°C</span>
+      </div>
+      
+      <!-- 详情 -->
+      <div class="flex-1 text-xs text-base-content/60 space-y-0.5">
+        <p class="flex items-center gap-1">
+          <!-- 位置图标（动画） -->
+          <svg class="w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20.5c0 0 -6 -7 -6 -11.5c0 -3.31 2.69 -6 6 -6c3.31 0 6 2.69 6 6c0 4.5 -6 11.5 -6 11.5Z"><animate fill="freeze" attributeName="d" dur="0.4s" keyTimes="0;0.7;1" values="M12 20.5c0 0 -1 -1.5 -1 -2.5c0 -0.5 0.5 -1 1 -1c0.5 0 1 0.5 1 1c0 1 -1 2.5 -1 2.5Z;M12 20.5c0 0 -7 -7.5 -7 -12.5c0 -3.5 3 -7 7 -7c4 0 7 3.5 7 7c0 5 -7 12.5 -7 12.5Z;M12 20.5c0 0 -6 -7 -6 -11.5c0 -3.31 2.69 -6 6 -6c3.31 0 6 2.69 6 6c0 4.5 -6 11.5 -6 11.5Z"/><animateTransform attributeName="transform" dur="3s" keyTimes="0;0.3;0.4;0.54;0.6;0.68;0.7;1" repeatCount="indefinite" type="rotate" values="0 12 20.5;0 12 20.5;-8 12 20.5;0 12 20.5;5 12 20.5;-2 12 20.5;0 12 20.5;0 12 20.5"/></path><circle cx="12" cy="9" fill="currentColor"><animate fill="freeze" attributeName="r" begin="0.4s" dur="0.2s" to="2.5"/></circle></svg>
+          <span x-text="location"></span>
+        </p>
+        <p x-text="weather?.description" class="capitalize"></p>
+      </div>
+    </div>
+
+    <!-- 额外信息 -->
+    <div x-show="weather" class="flex items-center justify-between pt-2 border-t border-base-content/5 text-xs text-base-content/60 !mb-0">
+      <span class="flex items-center gap-1">
+        <!-- 温度计图标（动画） -->
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><symbol id="thermo-bulb" viewBox="0 0 72 168"><circle cx="36" cy="132" r="36" fill="#ef4444"/><path fill="none" stroke="#ef4444" stroke-linecap="round" stroke-miterlimit="10" stroke-width="24" d="M36 12v120"><animateTransform attributeName="transform" calcMode="spline" dur="1s" keySplines=".42, 0, .58, 1; .42, 0, .58, 1" repeatCount="indefinite" type="translate" values="0 0; 0 18; 0 0"/></path></symbol><symbol id="thermo-frame" viewBox="0 0 118 278"><path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="M115 218.2c0 31.4-25 56.8-56 56.8S3 249.6 3 218.2a57 57 0 0 1 24-46.6V35.5a32 32 0 1 1 64 0v136a57 57 0 0 1 24 46.7ZM63 83h28M63 51h28m-28 64h28"/></symbol><symbol id="thermo-full" viewBox="0 0 118 278"><use width="72" height="168" href="#thermo-bulb" transform="translate(23 87)"/><use width="118" height="278" href="#thermo-frame"/></symbol></defs><use width="118" height="278" href="#thermo-full" transform="translate(197 117)"/></svg>
+        <span x-text="Math.round(weather?.feels_like || 0)"></span>°
+      </span>
+      <span class="flex items-center gap-1">
+        <!-- 湿度图标（水滴动画） -->
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><symbol id="drop-inner" viewBox="0 0 175 260"><path fill="#0ea5e9" stroke="#0ea5e9" stroke-miterlimit="10" stroke-width="12" d="M87.5 13.4c-48.7 72-80.5 117-80.5 160.7c0 44.3 36 80.2 80.5 80.2s80.5-35.9 80.5-80.2C168 130.3 136.2 85.3 87.5 13.4Z"><animateTransform attributeName="transform" calcMode="spline" dur="1s" keySplines=".42, 0, .58, 1; .42, 0, .58, 1" repeatCount="indefinite" type="scale" values="1 1; 1 .9; 1 1"/></path></symbol></defs><use width="175" height="260" href="#drop-inner" transform="translate(168 100)"/></svg>
+        <span x-text="weather?.humidity || 0"></span>%
+      </span>
+      <span class="flex items-center gap-1">
+        <!-- 风速图标（动画） -->
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><symbol id="wind-lines" viewBox="0 0 342 234"><path fill="none" stroke="#94a3b8" stroke-dasharray="148" stroke-linecap="round" stroke-miterlimit="10" stroke-width="18" d="M264.2 21.3A40 40 0 1 1 293 89H9"><animate attributeName="stroke-dashoffset" dur="6s" repeatCount="indefinite" values="0; 2960"/></path><path fill="none" stroke="#94a3b8" stroke-dasharray="110" stroke-linecap="round" stroke-miterlimit="10" stroke-width="18" d="M148.2 212.7A40 40 0 1 0 177 145H9"><animate attributeName="stroke-dashoffset" dur="6s" repeatCount="indefinite" values="0; 1540"/></path></symbol></defs><use width="342" height="234" href="#wind-lines" transform="translate(85 139)"/></svg>
+        <span x-text="weather?.wind || 0"></span>m/s
+      </span>
+    </div>
+
+    <!-- 无天气数据时的简化显示 -->
+    <div x-show="!weather && !loading" class="text-center py-2 !mb-0">
+      <p class="text-sm text-base-content/60" x-text="errorMsg || '欢迎访问'"></p>
+    </div>
+  </div>
+</div>
+
+</html>

@@ -27,6 +27,9 @@
 
   <!-- 遍历配置的小工具 -->
   <th:block th:each="item : ${widgets}">
+    <th:block th:if="${item.widget eq 'welcome_card'}">
+      <th:block th:replace="~{modules/widgets/welcome-card :: card}" />
+    </th:block>
     <th:block th:if="${item.widget eq 'author_card'}">
       <th:block th:replace="~{modules/widgets/author-card :: card}" />
     </th:block>

@@ -191,7 +191,7 @@
         </section>
 
         <!-- 右侧边栏 -->
-        <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0">
+        <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
           <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
         </aside>
 

@@ -730,7 +730,7 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block">
+      <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block sticky top-20 self-start">
         <!-- 动态小工具 -->
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${contentSettings})}" />
       </aside>

@@ -555,6 +555,260 @@ function createSideFloatingDock() {
 }
 
 /**
+ * 欢迎天气卡片
+ * 模板使用：templates/modules/widgets/welcome-card.html
+ */
+function welcomeWeatherCard() {
+  // 缓存配置（v3 版本 - 内联 SVG）
+  const CACHE_KEY = 'sky_weather_cache_v3';
+  const CACHE_DURATION = 30 * 60 * 1000; // 30 分钟缓存
+  
+  // 清除旧版本缓存
+  try {
+    localStorage.removeItem('sky_weather_cache');
+    localStorage.removeItem('sky_weather_cache_v2');
+  } catch { /* ignore */ }
+
+  return {
+    loading: true,
+    weather: null,
+    location: '',
+    errorMsg: '',
+    greeting: '',
+    currentDate: '',
+    weatherIcon: '',
+    weatherIconSvg: '',
+    weatherBg: '',
+
+    init() {
+      this.updateGreeting();
+      this.updateDate();
+      // Open-Meteo 无需 API Key，直接获取天气
+      this.loadWeather();
+    },
+
+    updateGreeting() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 9) {
+        this.greeting = '早上好 ☀️';
+      } else if (hour >= 9 && hour < 12) {
+        this.greeting = '上午好 🌤️';
+      } else if (hour >= 12 && hour < 14) {
+        this.greeting = '中午好 🌞';
+      } else if (hour >= 14 && hour < 18) {
+        this.greeting = '下午好 ⛅';
+      } else if (hour >= 18 && hour < 22) {
+        this.greeting = '晚上好 🌙';
+      } else {
+        this.greeting = '夜深了 🌟';
+      }
+    },
+
+    updateDate() {
+      const now = new Date();
+      const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      this.currentDate = `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
+    },
+
+    // 从缓存加载或请求新数据
+    async loadWeather() {
+      try {
+        // 1. 尝试从缓存读取
+        const cached = this.getCache();
+        if (cached) {
+          this.applyWeatherData(cached);
+          this.loading = false;
+          return;
+        }
+
+        // 2. 缓存无效，请求新数据
+        await this.fetchWeather();
+      } catch (error) {
+        console.error('Weather load error:', error);
+        this.errorMsg = '天气获取失败';
+        this.loading = false;
+      }
+    },
+
+    // 获取缓存
+    getCache() {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return null;
+
+        const data = JSON.parse(cached);
+        const now = Date.now();
+
+        // 检查缓存是否过期
+        if (now - data.timestamp > CACHE_DURATION) {
+          localStorage.removeItem(CACHE_KEY);
+          return null;
+        }
+
+        return data;
+      } catch {
+        return null;
+      }
+    },
+
+    // 保存缓存
+    setCache(data) {
+      try {
+        const cacheData = {
+          ...data,
+          timestamp: Date.now()
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+      } catch {
+        // 忽略存储错误
+      }
+    },
+
+    // 应用天气数据到组件
+    applyWeatherData(data) {
+      this.location = data.location;
+      this.weather = data.weather;
+      this.weatherIcon = data.weatherIcon;
+      this.weatherIconSvg = data.weatherIconSvg || '';
+      this.weatherBg = data.weatherBg || 'sunny';
+    },
+    
+    // 加载 SVG 图标内容
+    async loadSvgIcon(url) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          let svg = await res.text();
+          // 移除 XML 声明，添加样式类
+          svg = svg.replace(/<\?xml[^>]*\?>/g, '');
+          svg = svg.replace(/<svg/, '<svg class="w-full h-full"');
+          this.weatherIconSvg = svg;
+        }
+      } catch {
+        this.weatherIconSvg = '';
+      }
+    },
+
+    async fetchWeather() {
+      try {
+        // 1. 使用 ipapi.co 获取经纬度
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const ipData = await ipRes.json();
+
+        if (!ipData.latitude || !ipData.longitude) {
+          throw new Error('无法获取位置');
+        }
+
+        this.location = ipData.city || ipData.region || '未知位置';
+        const latitude = ipData.latitude.toFixed(2);
+        const longitude = ipData.longitude.toFixed(2);
+
+        // 2. 使用 Open-Meteo API（完全免费，无需 API Key）
+        const weatherRes = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`
+        );
+        const weatherData = await weatherRes.json();
+
+        if (!weatherData.current) {
+          throw new Error('天气获取失败');
+        }
+
+        const current = weatherData.current;
+        const weatherCode = current.weather_code;
+
+        this.weather = {
+          temp: current.temperature_2m,
+          feels_like: current.apparent_temperature,
+          humidity: current.relative_humidity_2m,
+          description: this.getWeatherDescription(weatherCode),
+          icon: weatherCode,
+          wind: current.wind_speed_10m
+        };
+
+        // 使用 WMO 天气代码对应的图标
+        this.weatherIcon = this.getWeatherIcon(weatherCode);
+        this.weatherBg = this.getWeatherBg(weatherCode);
+        
+        // 加载 SVG 内容
+        await this.loadSvgIcon(this.weatherIcon);
+
+        // 3. 保存到缓存
+        this.setCache({
+          location: this.location,
+          weather: this.weather,
+          weatherIcon: this.weatherIcon,
+          weatherIconSvg: this.weatherIconSvg,
+          weatherBg: this.weatherBg
+        });
+
+      } catch (error) {
+        console.error('Weather fetch error:', error);
+        this.errorMsg = '天气获取失败';
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    // WMO 天气代码转描述
+    getWeatherDescription(code) {
+      const descriptions = {
+        0: '晴朗', 1: '大部晴朗', 2: '局部多云', 3: '多云',
+        45: '有雾', 48: '雾凇',
+        51: '小毛毛雨', 53: '毛毛雨', 55: '大毛毛雨',
+        56: '冻毛毛雨', 57: '大冻毛毛雨',
+        61: '小雨', 63: '中雨', 65: '大雨',
+        66: '小冻雨', 67: '大冻雨',
+        71: '小雪', 73: '中雪', 75: '大雪', 77: '雪粒',
+        80: '小阵雨', 81: '阵雨', 82: '大阵雨',
+        85: '小阵雪', 86: '大阵雪',
+        95: '雷暴', 96: '雷暴伴小冰雹', 99: '雷暴伴大冰雹'
+      };
+      return descriptions[code] || '未知';
+    },
+
+    // WMO 天气代码转 Meteocons SVG URL（动态天气图标）
+    getWeatherIcon(code) {
+      const baseUrl = 'https://basmilius.github.io/weather-icons/production/fill/all/';
+      // 判断是否为夜间（18:00-06:00）
+      const hour = new Date().getHours();
+      const isNight = hour >= 18 || hour < 6;
+      
+      let icon = 'not-available';
+      if (code === 0) icon = isNight ? 'clear-night' : 'clear-day';
+      else if (code === 1) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
+      else if (code === 2) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
+      else if (code === 3) icon = 'cloudy';
+      else if (code <= 48) icon = 'fog';
+      else if (code <= 57) icon = 'drizzle';
+      else if (code <= 65) icon = 'rain';
+      else if (code <= 67) icon = 'sleet';
+      else if (code <= 77) icon = 'snow';
+      else if (code <= 82) icon = isNight ? 'partly-cloudy-night-rain' : 'partly-cloudy-day-rain';
+      else if (code <= 86) icon = isNight ? 'partly-cloudy-night-snow' : 'partly-cloudy-day-snow';
+      else if (code >= 95) icon = 'thunderstorms';
+      else icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
+      
+      return `${baseUrl}${icon}.svg`;
+    },
+
+    // 根据天气代码获取背景类型
+    getWeatherBg(code) {
+      const hour = new Date().getHours();
+      const isNight = hour >= 18 || hour < 6;
+      
+      if (code === 0) return isNight ? 'night-clear' : 'sunny';
+      if (code <= 3) return isNight ? 'night-cloudy' : 'cloudy';
+      if (code <= 48) return 'foggy';
+      if (code <= 67) return 'rainy';
+      if (code <= 77) return 'snowy';
+      if (code <= 86) return 'snowy';
+      if (code >= 95) return 'stormy';
+      return isNight ? 'night-cloudy' : 'cloudy';
+    }
+  };
+}
+
+/**
  * 初始化所有组件
  * 注册模板中实际使用的 Alpine.js 组件
  */
@@ -572,6 +826,9 @@ function initializeAll() {
   Alpine.data('simpleFloatingDock', createSimpleFloatingDock);
   Alpine.data('docFloatingDock', createDocFloatingDock);
   Alpine.data('docCommentDrawer', createDocCommentDrawer);
+
+  // 小工具组件
+  Alpine.data('welcomeWeatherCard', welcomeWeatherCard);
 }
 
 
@@ -586,5 +843,6 @@ export {
   createSideFloatingDock,
   createSimpleFloatingDock,
   createDocFloatingDock,
-  createDocCommentDrawer
+  createDocCommentDrawer,
+  welcomeWeatherCard
 };
