@@ -1211,6 +1211,41 @@ spec:
                   value: two_columns
                 - label: 单列
                   value: single_column
+        # 瞬间说说设置
+        - $formkit: group
+          name: moments_settings
+          label: 瞬间说说设置
+          help: 需安装 plugin-moments 插件
+          value:
+            show_moments_tab: true
+            moments_count: 6
+            list_style: two_columns
+          children:
+            - $formkit: switch
+              id: show_moments_tab
+              name: show_moments_tab
+              label: 显示瞬间说说
+              help: 是否显示"瞬间说说"Tab
+              value: true
+            - $formkit: number
+              name: moments_count
+              if: $get(show_moments_tab).value
+              label: 瞬间数量
+              help: 首页显示的瞬间数量（3-12）
+              value: 6
+              min: 3
+              max: 12
+            - $formkit: radio
+              name: list_style
+              if: $get(show_moments_tab).value
+              label: 列表样式
+              help: 选择首页瞬间的展示样式
+              value: two_columns
+              options:
+                - label: 两列
+                  value: two_columns
+                - label: 单列
+                  value: single_column
         # 图库模块设置
         - $formkit: group
           name: gallery_settings

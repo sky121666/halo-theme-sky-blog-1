@@ -5,8 +5,11 @@
                    contentSettings = ${theme.config.index.content_settings},
                    postSettings = ${theme.config.index.post_settings},
                    friendsSettings = ${theme.config.index.friends_settings},
+                   momentsSettings = ${theme.config.index.moments_settings},
                    hasFriendsPlugin = ${pluginFinder.available('plugin-friends')},
+                   hasMomentsPlugin = ${pluginFinder.available('PluginMoments')},
                    showFriendsTab = ${hasFriendsPlugin and friendsSettings.show_friends_tab != false},
+                   showMomentsTab = ${hasMomentsPlugin and momentsSettings.show_moments_tab != false},
                    showSidebar = ${contentSettings.show_sidebar != false},
                    showHeatmap = ${contentSettings.show_heatmap != false},
                    heatmapType = ${contentSettings.heatmap_type ?: 'github'},
@@ -15,6 +18,8 @@
                    postCount = ${postSettings.post_count ?: 8},
                    friendsCount = ${friendsSettings.friends_count ?: 10},
                    friendsListStyle = ${friendsSettings.list_style ?: 'two_columns'},
+                   momentsCount = ${momentsSettings.moments_count ?: 6},
+                   momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'},
                    globalSidebarCfg = ${theme.config.general.sidebar_settings},
                    useCustomSidebar = ${contentSettings.enable_custom_sidebar == true},
                    sidebarPosition = ${useCustomSidebar ? (contentSettings.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -502,6 +507,12 @@
                     <span class="icon-[heroicons--users] w-3.5 h-3.5"></span>
                     朋友动态
                   </button>
+                  <button @click="tab = 'moments'" th:if="${showMomentsTab}"
+                    :class="tab === 'moments' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer">
+                    <span class="icon-[heroicons--chat-bubble-left-ellipsis] w-3.5 h-3.5"></span>
+                    瞬间说说
+                  </button>
                 </div>
               </div>
             </th:block>
@@ -518,6 +529,10 @@
                     :class="tab === 'friends' ? 'bg-base-100 shadow-md text-base-content dark:bg-base-100/95' : 'text-base-content/60 hover:text-base-content hover:bg-base-100/40'"
                     class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                     <span class="icon-[heroicons--users] w-4 h-4"></span>朋友动态</button>
+                  <button @click="tab = 'moments'" th:if="${showMomentsTab}"
+                    :class="tab === 'moments' ? 'bg-base-100 shadow-md text-base-content dark:bg-base-100/95' : 'text-base-content/60 hover:text-base-content hover:bg-base-100/40'"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
+                    <span class="icon-[heroicons--chat-bubble-left-ellipsis] w-4 h-4"></span>瞬间说说</button>
                 </div>
               </div>
             </th:block>
@@ -539,6 +554,13 @@
                     <span x-show="tab === 'friends'"
                       class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
                   </button>
+                  <button @click="tab = 'moments'" th:if="${showMomentsTab}"
+                    :class="tab === 'moments' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
+                    class="relative px-4 py-3 text-sm font-medium transition-colors duration-200">
+                    瞬间说说
+                    <span x-show="tab === 'moments'"
+                      class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                  </button>
                 </div>
               </div>
             </th:block>
@@ -552,6 +574,9 @@
                   <button @click="tab = 'friends'" th:if="${showFriendsTab}"
                     :class="tab === 'friends' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
                     class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">朋友动态</button>
+                  <button @click="tab = 'moments'" th:if="${showMomentsTab}"
+                    :class="tab === 'moments' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
+                    class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300">瞬间说说</button>
                 </div>
               </div>
             </th:block>
@@ -565,6 +590,9 @@
                   <button @click="tab = 'friends'" th:if="${showFriendsTab}"
                     :class="tab === 'friends' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
                     class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">朋友动态</button>
+                  <button @click="tab = 'moments'" th:if="${showMomentsTab}"
+                    :class="tab === 'moments' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
+                    class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300">瞬间说说</button>
                 </div>
               </div>
             </th:block>
@@ -718,6 +746,162 @@
               </div>
               <div th:if="${friendPosts.items != null and !friendPosts.items.isEmpty()}" class="mt-10 text-center">
                 <a href="/friends"
+                  class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
+                  View All
+                  <span
+                    class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></span>
+                </a>
+              </div>
+            </div>
+          </th:block>
+
+          <!-- 瞬间说说 -->
+          <th:block th:if="${showMomentsTab and momentFinder != null}">
+            <div x-show="tab === 'moments'" x-transition.opacity x-cloak 
+                 th:with="momentsList = ${momentFinder.listAll()}">
+
+              <!-- 两列样式 -->
+              <div th:if="${momentsListStyle == 'two_columns'}" class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <th:block th:each="moment, stat : ${momentsList}" th:if="${stat.index < momentsCount}">
+                  <article th:with="content = ${moment.spec.content}"
+                    class="card group relative bg-base-100/80 backdrop-blur-xl border border-base-content/5 shadow-lg rounded-[1.5rem] overflow-hidden hover:shadow-xl hover:border-secondary/20 transition-all duration-300">
+                    
+                    <!-- 头部信息 -->
+                    <div class="p-5 pb-3">
+                      <div class="flex items-center gap-3 mb-3">
+                        <div class="relative">
+                          <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}" alt=""
+                            class="w-10 h-10 rounded-xl object-cover ring-2 ring-base-content/5" loading="lazy" />
+                          <div th:unless="${moment.owner?.avatar != null}" 
+                               class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center">
+                            <span class="icon-[heroicons--user] w-5 h-5 text-secondary/60"></span>
+                          </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-sm font-bold text-base-content block truncate" 
+                                th:text="${moment.owner?.displayName ?: '匿名用户'}">用户</span>
+                          <time class="text-xs text-base-content/40"
+                                th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">01-01 12:00</time>
+                        </div>
+                      </div>
+                      
+                      <!-- 文字内容 -->
+                      <div th:if="${content.html != null and !#strings.isEmpty(content.html)}"
+                           class="text-sm text-base-content/80 leading-relaxed line-clamp-4"
+                           th:utext="${content.html}">内容...</div>
+                    </div>
+                    
+                    <!-- 媒体区域 -->
+                    <div th:if="${content.medium != null and !content.medium.isEmpty()}" class="px-5 pb-3">
+                      <div class="rounded-xl overflow-hidden"
+                           th:classappend="${#lists.size(content.medium) > 1} ? 'grid grid-cols-2 gap-1' : ''">
+                        <th:block th:each="medium, mStat : ${content.medium}" th:if="${mStat.index < 4}">
+                          <div th:if="${medium.type.name == 'PHOTO'}" 
+                               class="relative aspect-square bg-base-200 overflow-hidden">
+                            <img th:src="${medium.url}" class="w-full h-full object-cover" loading="lazy" />
+                            <div th:if="${mStat.index == 3 and #lists.size(content.medium) > 4}"
+                                 class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                              <span class="text-white font-semibold" th:text="'+' + (${#lists.size(content.medium)} - 4)">+2</span>
+                            </div>
+                          </div>
+                          <div th:if="${medium.type.name == 'VIDEO' and mStat.index == 0}" class="col-span-2">
+                            <video th:src="${medium.url}" controls preload="metadata" class="w-full rounded-lg max-h-48"></video>
+                          </div>
+                        </th:block>
+                      </div>
+                    </div>
+                    
+                    <!-- 互动信息 -->
+                    <div class="px-5 py-3 border-t border-base-content/5 flex items-center justify-between text-xs text-base-content/40">
+                      <div class="flex items-center gap-4">
+                        <span class="flex items-center gap-1.5">
+                          <span class="icon-[heroicons--heart] w-4 h-4"></span>
+                          <span th:text="${moment.stats?.upvote ?: 0}">0</span>
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                          <span class="icon-[heroicons--chat-bubble-left] w-4 h-4"></span>
+                          <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
+                        </span>
+                      </div>
+                      <a th:href="@{'/moments/' + ${moment.metadata.name}}" 
+                         class="flex items-center gap-1 text-secondary hover:underline">
+                        <span>查看详情</span>
+                        <span class="icon-[heroicons--arrow-right] w-3.5 h-3.5"></span>
+                      </a>
+                    </div>
+                  </article>
+                </th:block>
+              </div>
+
+              <!-- 单列样式 -->
+              <div th:if="${momentsListStyle == 'single_column'}" class="space-y-4">
+                <th:block th:each="moment, stat : ${momentsList}" th:if="${stat.index < momentsCount}">
+                  <article th:with="content = ${moment.spec.content}"
+                    class="card group bg-base-100/80 backdrop-blur-xl border border-base-content/5 shadow-lg rounded-[1.5rem] overflow-hidden hover:shadow-xl transition-all duration-300">
+                    
+                    <div class="p-5">
+                      <!-- 头部 -->
+                      <div class="flex items-center gap-3 mb-4">
+                        <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}" alt=""
+                          class="w-12 h-12 rounded-xl object-cover ring-2 ring-base-content/5" loading="lazy" />
+                        <div th:unless="${moment.owner?.avatar != null}" 
+                             class="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center">
+                          <span class="icon-[heroicons--user] w-6 h-6 text-secondary/60"></span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm font-bold text-base-content" 
+                                  th:text="${moment.owner?.displayName ?: '匿名用户'}">用户</span>
+                          </div>
+                          <time class="text-xs text-base-content/40"
+                                th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm')}">2024-01-01</time>
+                        </div>
+                      </div>
+                      
+                      <!-- 内容 -->
+                      <div th:if="${content.html != null and !#strings.isEmpty(content.html)}"
+                           class="text-base text-base-content/80 leading-relaxed mb-4"
+                           th:utext="${content.html}">内容...</div>
+                      
+                      <!-- 媒体 -->
+                      <div th:if="${content.medium != null and !content.medium.isEmpty()}" class="mb-4">
+                        <div class="rounded-xl overflow-hidden"
+                             th:classappend="${#lists.size(content.medium) > 1} ? 'grid grid-cols-3 gap-1' : ''">
+                          <th:block th:each="medium, mStat : ${content.medium}" th:if="${mStat.index < 9}">
+                            <div th:if="${medium.type.name == 'PHOTO'}" 
+                                 class="relative aspect-square bg-base-200 overflow-hidden">
+                              <img th:src="${medium.url}" class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer" loading="lazy" />
+                            </div>
+                          </th:block>
+                        </div>
+                      </div>
+                      
+                      <!-- 互动 -->
+                      <div class="flex items-center justify-between text-sm text-base-content/50">
+                        <div class="flex items-center gap-4">
+                          <span class="flex items-center gap-1.5">
+                            <span class="icon-[heroicons--heart] w-4 h-4"></span>
+                            <span th:text="${moment.stats?.upvote ?: 0}">0</span>
+                          </span>
+                          <span class="flex items-center gap-1.5">
+                            <span class="icon-[heroicons--chat-bubble-left] w-4 h-4"></span>
+                            <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
+                          </span>
+                        </div>
+                        <a th:href="@{'/moments/' + ${moment.metadata.name}}" 
+                           class="text-secondary hover:underline">查看详情 →</a>
+                      </div>
+                    </div>
+                  </article>
+                </th:block>
+              </div>
+
+              <div th:if="${momentsList == null or momentsList.isEmpty()}"
+                class="py-16 text-center text-base-content/40 text-sm">
+                暂无瞬间说说
+              </div>
+              <div th:if="${momentsList != null and !momentsList.isEmpty()}" class="mt-10 text-center">
+                <a href="/moments"
                   class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
                   View All
                   <span
