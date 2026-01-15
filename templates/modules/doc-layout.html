@@ -38,24 +38,24 @@
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
       th:class="'min-h-screen flex flex-col relative ' + ${bgClass}">
-  
+
   <!-- 网格背景（仅当选择 grid 样式时显示） -->
   <div th:if="${enableCustomBg and bgStyle == 'grid'}" 
        class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]"></div>
   
   <div class="relative z-10">
-    <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
+  <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
 
-    <!-- 主题导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+  <!-- 主题导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 主要内容 -->
-    <section class="flex-1 w-full">
-      <th:block th:replace="${content}" />
-    </section>
+  <!-- 主要内容 -->
+  <section class="flex-1 w-full">
+    <th:block th:replace="${content}" />
+  </section>
 
-    <!-- 主题页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
+  <!-- 主题页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
   </div>
 
   <!-- 悬浮 Dock（由各页面传入自定义 dock） -->

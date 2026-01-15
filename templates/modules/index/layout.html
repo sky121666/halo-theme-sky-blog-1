@@ -48,21 +48,21 @@
   <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
   <div class="relative z-10">
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 首页头部区域 - 根据开关决定是否显示 -->
-    <th:block th:if="${theme.config.index.header_settings?.enable_header != false}">
-      <th:block th:replace="~{modules/index/header}" />
-    </th:block>
+  <!-- 首页头部区域 - 根据开关决定是否显示 -->
+  <th:block th:if="${theme.config.index.header_settings?.enable_header != false}">
+    <th:block th:replace="~{modules/index/header}" />
+  </th:block>
 
-    <!-- 主要内容区域 -->
-    <main th:class="${theme.config.index.header_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
-      <th:block th:replace="${content}" />
-    </main>
+  <!-- 主要内容区域 -->
+  <main th:class="${theme.config.index.header_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
+    <th:block th:replace="${content}" />
+  </main>
 
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
   </div>
 
   <!-- 悬浮 Dock 控制栏 -->

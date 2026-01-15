@@ -34,19 +34,19 @@
        class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]"></div>
   
   <div class="relative z-10">
-    <!-- 加载屏幕 -->
-    <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+  <!-- 加载屏幕 -->
+  <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 主要内容区域 -->
-    <main class="flex-1 mt-6 md:mt-8">
-      <th:block th:replace="${content}" />
-    </main>
+  <!-- 主要内容区域 -->
+  <main class="flex-1 mt-6 md:mt-8">
+    <th:block th:replace="${content}" />
+  </main>
 
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
   </div>
 
   <!-- 悬浮 Dock 控制栏 -->

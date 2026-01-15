@@ -25,33 +25,39 @@ spec:
               label: 启用加载屏幕
               help: 在页面加载时显示加载动画，避免样式闪烁和变形
               value: true
-            - $formkit: radio
+            - $formkit: toggle
               id: animation_type
               name: animation_type
               if: $get(enable_loading).value
               label: 动画来源
               help: 选择加载动画的来源方式
+              render-type: text
+              size: 80
+              gap: 10
               value: css
               options:
                 - label: 内置 CSS 动画
                   value: css
                 - label: 自定义 GIF 动图
                   value: gif
-            - $formkit: select
+            - $formkit: toggle
               name: css_style
               key: css_style_field
               if: $get(animation_type).value === 'css'
               label: CSS 动画样式
               help: 选择内置的 CSS 加载动画样式
+              render-type: text
+              size: 60
+              gap: 10
               value: bars
               options:
-                - label: 旋转圆环（Spinner）
+                - label: Spinner
                   value: spinner
-                - label: 脉冲圆点（Dots）
+                - label: Dots
                   value: dots
-                - label: 加载条（Bars）
+                - label: Bars
                   value: bars
-                - label: DaisyUI Ring
+                - label: Ring
                   value: ring
             - $formkit: attachment
               name: custom_gif
@@ -125,11 +131,15 @@ spec:
               label: 启用悬浮 Dock
               help: 是否显示底部悬浮控制栏（通用页面）
               value: true
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(fd_general_enable_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: side
               options:
                 - label: 底部居中
                   value: bottom
@@ -155,10 +165,13 @@ spec:
             popular_posts_count: 5
             recent_posts_count: 5
           children:
-            - $formkit: radio
+            - $formkit: toggle
               name: position
               label: 侧边栏位置
               help: 选择侧边栏显示在左侧还是右侧（各页面可单独覆盖）
+              render-type: text
+              size: 80
+              gap: 10
               value: right
               options:
                 - label: 左侧
@@ -222,18 +235,21 @@ spec:
             body_font: font-siyuan-songti
             font_cdn: "https://cdn.5ee.net/fonts"
           children:
-            - $formkit: radio
+            - $formkit: toggle
               name: body_font
               label: 正文字体
               help: 选择全站正文的字体风格，影响文章、文档等内容区域
+              render-type: text
+              size: 80
+              gap: 10
               value: font-default
               options:
-                - value: font-default
-                  label: 系统默认
-                - value: font-lxgw-wenkai-bright
-                  label: 霞鹜文楷亮（推荐中文）
-                - value: font-siyuan-songti
-                  label: 思源宋体（优雅阅读）
+                - label: 系统默认
+                  value: font-default
+                - label: 霞鹜文楷亮
+                  value: font-lxgw-wenkai-bright
+                - label: 思源宋体
+                  value: font-siyuan-songti
             - $formkit: text
               name: font_cdn
               label: 字体 CDN 地址
@@ -254,20 +270,23 @@ spec:
             show_logo_title: true
             custom_logo_title: "5ee.net"
           children:
-            - $formkit: radio
+            - $formkit: toggle
               id: logo_type
               name: logo_type
               label: Logo 图标类型
               help: 选择 Logo 图标的显示方式
+              render-type: text
+              size: 60
+              gap: 10
               value: iconify
               options:
                 - label: 隐藏
                   value: none
                 - label: 设置-Logo
                   value: system
-                - label: Iconify 图标选择器
+                - label: Iconify
                   value: iconify
-                - label: SVG 代码（高级）
+                - label: SVG
                   value: svg
                 - label: 上传图片
                   value: image
@@ -353,96 +372,142 @@ spec:
               help: 自定义深色主题按钮图标，不选择则使用默认图标
               format: svg
               value-only: true
-            - $formkit: radio
+            - $formkit: toggle
               name: default_theme
               label: 默认主题
               help: 当前默认显示的主题,可从以下主题中选择,https://daisyui.com/theme-generator/ 查看具体配色方案
+              render-type: text
+              size: 80
+              gap: 10
               value: dark_theme
               options:
-                - value: light_theme
-                  label: 浅色主题
-                - value: dark_theme
-                  label: 深色主题
-            - $formkit: select
+                - label: 浅色主题
+                  value: light_theme
+                - label: 深色主题
+                  value: dark_theme
+            - $formkit: toggle
               name: light_theme
               label: 浅色主题
+              help: 选择浅色模式下使用的主题
+              render-type: image
+              size: 40
+              gap: 4
               value: light
               options:
-                - value: light
-                  label: light 
-                - value: cupcake
-                  label: cupcake 
-                - value: bumblebee
-                  label: bumblebee 
-                - value: emerald
-                  label: emerald 
-                - value: corporate
-                  label: corporate 
-                - value: retro
-                  label: retro 
-                - value: valentine
-                  label: valentine 
-                - value: garden
-                  label: garden 
-                - value: lofi
-                  label: lofi 
-                - value: pastel
-                  label: pastel 
-                - value: fantasy
-                  label: fantasy 
-                - value: wireframe
-                  label: wireframe 
-                - value: cmyk
-                  label: cmyk 
-                - value: autumn
-                  label: autumn 
-                - value: acid
-                  label: acid 
-                - value: lemonade
-                  label: lemonade
-                - value: winter
-                  label: winter 
-                - value: nord
-                  label: nord 
-                - value: caramellatte
-                  label: caramellatte 
-                - value: silk
-                  label: silk 
-            - $formkit: select
+                - label: Light
+                  value: light
+                  render: "/themes/theme-sky-blog-1/assets/previews/light.svg"
+                - label: Cupcake
+                  value: cupcake
+                  render: "/themes/theme-sky-blog-1/assets/previews/cupcake.svg"
+                - label: Bumblebee
+                  value: bumblebee
+                  render: "/themes/theme-sky-blog-1/assets/previews/bumblebee.svg"
+                - label: Emerald
+                  value: emerald
+                  render: "/themes/theme-sky-blog-1/assets/previews/emerald.svg"
+                - label: Corporate
+                  value: corporate
+                  render: "/themes/theme-sky-blog-1/assets/previews/corporate.svg"
+                - label: Retro
+                  value: retro
+                  render: "/themes/theme-sky-blog-1/assets/previews/retro.svg"
+                - label: Cyberpunk
+                  value: cyberpunk
+                  render: "/themes/theme-sky-blog-1/assets/previews/cyberpunk.svg"
+                - label: Valentine
+                  value: valentine
+                  render: "/themes/theme-sky-blog-1/assets/previews/valentine.svg"
+                - label: Garden
+                  value: garden
+                  render: "/themes/theme-sky-blog-1/assets/previews/garden.svg"
+                - label: Lofi
+                  value: lofi
+                  render: "/themes/theme-sky-blog-1/assets/previews/lofi.svg"
+                - label: Pastel
+                  value: pastel
+                  render: "/themes/theme-sky-blog-1/assets/previews/pastel.svg"
+                - label: Fantasy
+                  value: fantasy
+                  render: "/themes/theme-sky-blog-1/assets/previews/fantasy.svg"
+                - label: Wireframe
+                  value: wireframe
+                  render: "/themes/theme-sky-blog-1/assets/previews/wireframe.svg"
+                - label: CMYK
+                  value: cmyk
+                  render: "/themes/theme-sky-blog-1/assets/previews/cmyk.svg"
+                - label: Autumn
+                  value: autumn
+                  render: "/themes/theme-sky-blog-1/assets/previews/autumn.svg"
+                - label: Acid
+                  value: acid
+                  render: "/themes/theme-sky-blog-1/assets/previews/acid.svg"
+                - label: Lemonade
+                  value: lemonade
+                  render: "/themes/theme-sky-blog-1/assets/previews/lemonade.svg"
+                - label: Winter
+                  value: winter
+                  render: "/themes/theme-sky-blog-1/assets/previews/winter.svg"
+                - label: Nord
+                  value: nord
+                  render: "/themes/theme-sky-blog-1/assets/previews/nord.svg"
+                - label: Caramellatte
+                  value: caramellatte
+                  render: "/themes/theme-sky-blog-1/assets/previews/caramellatte.svg"
+                - label: Silk
+                  value: silk
+                  render: "/themes/theme-sky-blog-1/assets/previews/silk.svg"
+            - $formkit: toggle
               name: dark_theme
               label: 深色主题
+              help: 选择深色模式下使用的主题
+              render-type: image
+              size: 40
+              gap: 4
               value: dark
               options:
-                - value: dark
-                  label: dark
-                - value: synthwave
-                  label: synthwave
-                - value: cyberpunk
-                  label: cyberpunk
-                - value: halloween
-                  label: halloween
-                - value: forest
-                  label: forest
-                - value: aqua
-                  label: aqua
-                - value: black
-                  label: black
-                - value: luxury
-                  label: luxury
-                - value: dracula
-                  label: dracula
-                - value: business
-                  label: business
-                - value: night
-                  label: night
-                - value: coffee
-                  label: coffee
-                - value: dim
-                  label: dim
-                - value: sunset
-                  label: sunset
-                - value: abyss
-                  label: abyss
+                - label: Dark
+                  value: dark
+                  render: "/themes/theme-sky-blog-1/assets/previews/dark.svg"
+                - label: Synthwave
+                  value: synthwave
+                  render: "/themes/theme-sky-blog-1/assets/previews/synthwave.svg"
+                - label: Halloween
+                  value: halloween
+                  render: "/themes/theme-sky-blog-1/assets/previews/halloween.svg"
+                - label: Forest
+                  value: forest
+                  render: "/themes/theme-sky-blog-1/assets/previews/forest.svg"
+                - label: Aqua
+                  value: aqua
+                  render: "/themes/theme-sky-blog-1/assets/previews/aqua.svg"
+                - label: Black
+                  value: black
+                  render: "/themes/theme-sky-blog-1/assets/previews/black.svg"
+                - label: Luxury
+                  value: luxury
+                  render: "/themes/theme-sky-blog-1/assets/previews/luxury.svg"
+                - label: Dracula
+                  value: dracula
+                  render: "/themes/theme-sky-blog-1/assets/previews/dracula.svg"
+                - label: Business
+                  value: business
+                  render: "/themes/theme-sky-blog-1/assets/previews/business.svg"
+                - label: Night
+                  value: night
+                  render: "/themes/theme-sky-blog-1/assets/previews/night.svg"
+                - label: Coffee
+                  value: coffee
+                  render: "/themes/theme-sky-blog-1/assets/previews/coffee.svg"
+                - label: Dim
+                  value: dim
+                  render: "/themes/theme-sky-blog-1/assets/previews/dim.svg"
+                - label: Sunset
+                  value: sunset
+                  render: "/themes/theme-sky-blog-1/assets/previews/sunset.svg"
+                - label: Abyss
+                  value: abyss
+                  render: "/themes/theme-sky-blog-1/assets/previews/abyss.svg"
         - $formkit: group
           name: right_settings
           label: 功能设置
@@ -499,18 +564,21 @@ spec:
             show_site_days: true
             site_start_date: "2024-01-01"
           children:
-            - $formkit: radio
+            - $formkit: toggle
               id: brand_icon_type
               name: brand_icon_type
               label: 站点图标类型
               help: 选择站点图标的显示方式
+              render-type: text
+              size: 60
+              gap: 10
               value: iconify
               options:
                 - label: 隐藏
                   value: none
-                - label: Iconify 图标选择器
+                - label: Iconify
                   value: iconify
-                - label: SVG 代码（高级）
+                - label: SVG
                   value: svg
                 - label: 上传图片
                   value: image
@@ -809,11 +877,14 @@ spec:
             background_image: "https://www.dmoe.cc/random.php"
             effect_style: starry-sky
           children:
-            - $formkit: radio
+            - $formkit: toggle
               id: background_type
               name: background_type
               label: 背景类型
               help: 选择首页头部背景的显示方式
+              render-type: text
+              size: 80
+              gap: 10
               value: effect
               options:
                 - label: 背景图片
@@ -834,12 +905,15 @@ spec:
                 - video/mp4
                 - video/webm
                 - video/ogg
-            - $formkit: select
+            - $formkit: toggle
               name: effect_style
               key: effect_style_field
               if: $get(background_type).value === 'effect'
               label: 特效样式
               help: 选择 CSS 特效的视觉风格，支持自动适配主题色
+              render-type: text
+              size: 60
+              gap: 10
               value: starry-sky
               options:
                 - label: 流体渐变
@@ -874,24 +948,27 @@ spec:
               if: $get(show_title).value
               label: 自定义主标题
               help: 留空则使用站点标题，填写则使用自定义标题
-            - $formkit: radio
+            - $formkit: toggle
               id: title_font
               name: title_font
               if: $get(show_title).value
               label: 字体
               help: 选择主标题的字体
+              render-type: text
+              size: 60
+              gap: 10
               value: font-titan-one
               options:
-                - value: font-default
-                  label: 无
-                - value: font-monoton
-                  label: Monoton（推荐斜切双色）
-                - value: font-titan-one
-                  label: Titan One（推荐麦克笔感）
-                - value: font-lxgw-wenkai-bright
-                  label: 霞鹜文楷亮
-                - value: font-siyuan-songti
-                  label: 思源宋
+                - label: 无
+                  value: font-default
+                - label: Monoton
+                  value: font-monoton
+                - label: Titan One
+                  value: font-titan-one
+                - label: 霞鹜文楷亮
+                  value: font-lxgw-wenkai-bright
+                - label: 思源宋
+                  value: font-siyuan-songti
             - $formkit: select
               name: style_effect
               key: style_effect_field
@@ -928,20 +1005,23 @@ spec:
                 - CSS变量：var(--color-primary)、var(--color-secondary)
               placeholder: "var(--color-primary)"
               value: "var(--color-primary)"
-            - $formkit: radio
+            - $formkit: toggle
               id: decoration_effect
               name: decoration_effect
               if: $get(show_title).value
               label: 装饰效果（可选）
               help: 为标题添加动态装饰元素
+              render-type: text
+              size: 80
+              gap: 10
               value: none
               options:
-                - value: none
-                  label: 无
-                - value: effect-particles
-                  label: 粒子轨道
-                - value: effect-starlight
-                  label: 星光闪烁
+                - label: 无
+                  value: none
+                - label: 粒子轨道
+                  value: effect-particles
+                - label: 星光闪烁
+                  value: effect-starlight
         - $formkit: group
           name: subtitle_settings
           label: 副标题设置
@@ -965,24 +1045,27 @@ spec:
               if: $get(show_subtitle).value
               label: 副标题文本
               help: 首页头部副标题的文字内容
-            - $formkit: radio
+            - $formkit: toggle
               id: subtitle_font
               name: subtitle_font
               if: $get(show_subtitle).value
               label: 字体
               help: 选择副标题的字体
+              render-type: text
+              size: 60
+              gap: 10
               value: font-default
               options:
-                - value: font-default
-                  label: 默认字体
-                - value: font-monoton
-                  label: Monoton
-                - value: font-titan-one
-                  label: Titan One
-                - value: font-lxgw-wenkai-bright
-                  label: 霞鹜文楷亮
-                - value: font-siyuan-songti
-                  label: 思源宋
+                - label: 默认字体
+                  value: font-default
+                - label: Monoton
+                  value: font-monoton
+                - label: Titan One
+                  value: font-titan-one
+                - label: 霞鹜文楷亮
+                  value: font-lxgw-wenkai-bright
+                - label: 思源宋
+                  value: font-siyuan-songti
             - $formkit: select
               name: subtitle_effect
               key: subtitle_effect_field
@@ -1079,10 +1162,13 @@ spec:
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: sidebar_position
               if: $get(index_enable_custom_sidebar).value
               label: 侧边栏位置
+              render-type: text
+              size: 80
+              gap: 10
               value: right
               options:
                 - label: 左侧
@@ -1130,28 +1216,34 @@ spec:
               label: 显示热力图
               help: 是否在首页显示热力图
               value: true
-            - $formkit: radio
+            - $formkit: toggle
               name: heatmap_type
               if: $get(index_show_heatmap).value
               label: 热力图类型
               help: GitHub 热力图需在"关于"设置中配置用户名
+              render-type: text
+              size: 80
+              gap: 10
               value: github
               options:
-                - label: GitHub 贡献热力图
+                - label: GitHub 贡献
                   value: github
-                - label: 文章发布热力图
+                - label: 文章发布
                   value: article
-            - $formkit: select
+            - $formkit: toggle
               name: tab_style
               label: Tab 切换风格
               help: 选择首页"站内动态/朋友动态"切换按钮的风格
+              render-type: text
+              size: 60
+              gap: 10
               value: chips
               options:
-                - label: 药丸风格
+                - label: 药丸
                   value: pills
-                - label: 芯片风格
+                - label: 芯片
                   value: chips
-                - label: 下划线风格
+                - label: 下划线
                   value: underline
                 - label: 玻璃拟态
                   value: glass
@@ -1166,10 +1258,13 @@ spec:
             cover_fallback_mode: missing_only
             cover_fallback_url: "https://www.dmoe.cc/random.php"
           children:
-            - $formkit: select
+            - $formkit: toggle
               name: list_style
               label: 文章列表风格
               help: 选择首页文章列表的展示风格
+              render-type: text
+              size: 60
+              gap: 10
               value: magazine
               options:
                 - label: 卡片
@@ -1193,16 +1288,19 @@ spec:
               label: 启用封面替代
               help: 启用后无封面的文章将使用指定图片替代
               value: true
-            - $formkit: select
+            - $formkit: toggle
               name: cover_fallback_mode
               if: $get(index_cover_fallback_enable).value
               label: 替代模式
               help: 选择替代策略
+              render-type: text
+              size: 80
+              gap: 10
               value: missing_only
               options:
                 - label: 无封面时替代
                   value: missing_only
-                - label: 始终使用指定图片
+                - label: 始终使用
                   value: always
             - $formkit: text
               name: cover_fallback_url
@@ -1233,11 +1331,14 @@ spec:
               value: 10
               min: 3
               max: 20
-            - $formkit: radio
+            - $formkit: toggle
               name: list_style
               if: $get(show_friends_tab).value
               label: 列表样式
               help: 选择首页朋友动态的展示样式
+              render-type: text
+              size: 80
+              gap: 10
               value: two_columns
               options:
                 - label: 两列
@@ -1268,11 +1369,14 @@ spec:
               value: 6
               min: 3
               max: 12
-            - $formkit: radio
+            - $formkit: toggle
               name: list_style
               if: $get(show_moments_tab).value
               label: 列表样式
               help: 选择首页瞬间的展示样式
+              render-type: text
+              size: 80
+              gap: 10
               value: two_columns
               options:
                 - label: 两列
@@ -1373,14 +1477,17 @@ spec:
             custom_image: ""
             fallback_image: "https://www.dmoe.cc/random.php"
           children:
-            - $formkit: radio
+            - $formkit: toggle
               id: background_type
               name: background_type
               label: 背景图片来源
               help: 选择文章头部背景图片的来源方式
+              render-type: text
+              size: 80
+              gap: 10
               value: cover
               options:
-                - label: 使用文章封面图
+                - label: 文章封面图
                   value: cover
                 - label: 自定义图片
                   value: custom
@@ -1436,10 +1543,13 @@ spec:
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: true
-            - $formkit: radio
+            - $formkit: toggle
               name: sidebar_position
               if: $get(post_enable_custom_sidebar).value
               label: 侧边栏位置
+              render-type: text
+              size: 80
+              gap: 10
               value: right
               options:
                 - label: 左侧
@@ -1565,13 +1675,17 @@ spec:
               label: 启用定制 Dock
               help: 启用后可自定义 Dock 样式和菜单，禁用则使用全局设置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(enable_custom_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: global
               options:
-                - label: 跟随全局设置
+                - label: 跟随全局
                   value: global
                 - label: 底部居中
                   value: bottom
@@ -1610,10 +1724,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(cat_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -1655,12 +1772,15 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
-        - $formkit: select
+        - $formkit: toggle
           name: list_style
           label: 文章列表风格
           help: |
             选择分类页的文章列表展示风格。
             • 分类页可通过「分类管理 → 自定义模板」单独覆盖
+          render-type: text
+          size: 60
+          gap: 10
           value: modern
           options:
             - label: 卡片
@@ -1671,17 +1791,20 @@ spec:
               value: magazine
             - label: 极简
               value: minimal
-        - $formkit: select
+        - $formkit: toggle
           name: category_display_style
           label: 分类切换块风格
           help: 选择分类页顶部分类列表的展示风格
+          render-type: text
+          size: 60
+          gap: 10
           value: chips
           options:
-            - label: 药丸风格
+            - label: 药丸
               value: pills
-            - label: 芯片风格
+            - label: 芯片
               value: chips
-            - label: 下划线风格
+            - label: 下划线
               value: underline
             - label: 玻璃拟态
               value: glass
@@ -1702,18 +1825,21 @@ spec:
               label: 启用封面替代
               help: 启用后可在无封面或始终替代模式下使用指定图片。
               value: false
-            - $formkit: select
+            - $formkit: toggle
               id: cat_cover_fallback_mode
               name: mode
               key: cat_cover_fallback_mode_field
               if: $get(cat_cover_fallback_enable).value
               label: 替代模式
               help: 选择替代策略（无封面时替代 或 始终使用指定图片）。
+              render-type: text
+              size: 80
+              gap: 10
               value: missing_only
               options:
                 - label: 无封面时替代
                   value: missing_only
-                - label: 始终使用指定图片
+                - label: 始终使用
                   value: always
             - $formkit: attachment
               id: cat_cover_fallback_default_image
@@ -1769,10 +1895,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(tag_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -1814,10 +1943,13 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
-        - $formkit: select
+        - $formkit: toggle
           name: list_style
           label: 文章列表风格
           help: 选择标签页的文章列表展示风格
+          render-type: text
+          size: 60
+          gap: 10
           value: minimal
           options:
             - label: 卡片
@@ -1828,17 +1960,20 @@ spec:
               value: magazine
             - label: 极简
               value: minimal
-        - $formkit: select
+        - $formkit: toggle
           name: tag_display_style
           label: 标签切换块风格
           help: 选择标签页顶部标签列表的展示风格
+          render-type: text
+          size: 60
+          gap: 10
           value: underline
           options:
-            - label: 药丸风格
+            - label: 药丸
               value: pills
-            - label: 芯片风格
+            - label: 芯片
               value: chips
-            - label: 下划线风格
+            - label: 下划线
               value: underline
             - label: 玻璃拟态
               value: glass
@@ -1859,18 +1994,21 @@ spec:
               label: 启用封面替代
               help: 启用后可在无封面或始终替代模式下使用指定图片。
               value: false
-            - $formkit: select
+            - $formkit: toggle
               id: tag_cover_fallback_mode
               name: mode
               key: tag_cover_fallback_mode_field
               if: $get(tag_cover_fallback_enable).value
               label: 替代模式
               help: 选择替代策略（无封面时替代 或 始终使用指定图片）。
+              render-type: text
+              size: 80
+              gap: 10
               value: missing_only
               options:
                 - label: 无封面时替代
                   value: missing_only
-                - label: 始终使用指定图片
+                - label: 始终使用
                   value: always
             - $formkit: attachment
               id: tag_cover_fallback_default_image
@@ -1926,10 +2064,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(archive_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -2025,10 +2166,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(author_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -2099,10 +2243,13 @@ spec:
               value: 6
               min: 3
               max: 20
-            - $formkit: radio
+            - $formkit: toggle
               name: default_tab
               label: 默认显示
               help: 选择作者页默认显示的内容标签
+              render-type: text
+              size: 80
+              gap: 10
               value: posts
               options:
                 - label: 文章
@@ -2125,11 +2272,15 @@ spec:
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(author_enable_custom_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: side
               options:
                 - label: 底部居中
                   value: bottom
@@ -2181,10 +2332,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(links_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -2746,10 +2900,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(moments_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -2898,10 +3055,13 @@ spec:
           value: "订阅朋友们的最新动态"
           rows: 2
           placeholder: "朋友圈页面的描述"
-        - $formkit: radio
+        - $formkit: toggle
           name: list_style
           label: 列表样式
           help: 选择朋友圈页面的展示样式
+          render-type: text
+          size: 80
+          gap: 10
           value: single_column
           options:
             - label: 单列
@@ -2921,10 +3081,13 @@ spec:
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-        - $formkit: radio
+        - $formkit: toggle
           name: sidebar_position
           if: $get(friends_page_enable_custom_sidebar).value
           label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
           value: right
           options:
             - label: 左侧
@@ -3070,11 +3233,15 @@ spec:
               label: 启用定制 Dock 设置
               help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_doc_custom_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: bottom
               options:
                 - label: 底部居中
                   value: bottom
@@ -3119,11 +3286,15 @@ spec:
               label: 启用定制 Dock 设置
               help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_docs_custom_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: bottom
               options:
                 - label: 底部居中
                   value: bottom
@@ -3156,11 +3327,15 @@ spec:
               label: 启用定制 Dock 设置
               help: 开启后可自定义 Dock 样式和菜单；关闭则跟随全局设置
               value: false
-            - $formkit: radio
+            - $formkit: toggle
               name: dock_style
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_catalog_custom_dock).value
+              render-type: text
+              size: 80
+              gap: 10
+              value: bottom
               options:
                 - label: 底部居中
                   value: bottom

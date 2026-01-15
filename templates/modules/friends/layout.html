@@ -38,35 +38,35 @@
   
   <div class="relative z-10">
     <th:block th:with="cfg=${theme.config.friends_page_settings}, 
-                 showSidebar=${cfg?.enable_sidebar == true},
-                 globalSidebarCfg = ${theme.config.general.sidebar_settings},
-                 useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
-                 sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-      <!-- 加载屏幕 -->
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+               showSidebar=${cfg?.enable_sidebar == true},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <!-- 加载屏幕 -->
+  <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-      <!-- 导航栏 -->
-      <th:block th:replace="~{modules/nav :: navbar}" />
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
 
-      <!-- 主要内容区域 -->
+  <!-- 主要内容区域 -->
       <main class="flex-1 " th:with="listStyle=${cfg?.list_style ?: 'single_column'},
                                        maxWidth=${listStyle == 'single_column' ? (showSidebar ? 'max-w-5xl' : 'max-w-3xl') : (showSidebar ? 'max-w-6xl' : 'max-w-5xl')}">
         <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${maxWidth}">
-          <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-            <!-- 主内容 -->
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 主内容 -->
             <div class="flex-1 min-w-0">
-              <th:block th:replace="${content}" />
-            </div>
-            <!-- 侧边栏 -->
-            <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-              <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
-            </aside>
-          </div>
+          <th:block th:replace="${content}" />
         </div>
-      </main>
+        <!-- 侧边栏 -->
+            <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${cfg})}" />
+        </aside>
+      </div>
+    </div>
+  </main>
 
-      <!-- 页脚 -->
-      <th:block th:replace="~{modules/footer :: footer}" />
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
     </th:block>
   </div>
 

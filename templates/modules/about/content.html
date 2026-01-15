@@ -43,7 +43,7 @@
   ">
 
     <div class="about-squareform">
-      
+
       <!-- ========== Hero - 居中极简 ========== -->
       <section class="sf-hero">
         <div class="sf-hero-content" data-reveal="fade-up">
@@ -150,7 +150,7 @@
                 <span class="sf-stat-plus">+</span>
               </div>
               <span class="sf-stat-label">Articles Published</span>
-            </div>
+                </div>
             <div class="sf-stat-item" data-stat-value th:attr="data-target=${siteStats?.category ?: 0}">
               <div>
                 <span class="sf-stat-number">0</span>
@@ -162,9 +162,9 @@
               <div>
                 <span class="sf-stat-number">0</span>
                 <span class="sf-stat-plus">+</span>
-              </div>
+                </div>
               <span class="sf-stat-label">Comments</span>
-            </div>
+                </div>
             <div class="sf-stat-item" data-stat-value th:attr="data-target=${siteStats?.visit ?: 0}">
               <div>
                 <span class="sf-stat-number">0</span>
@@ -284,8 +284,8 @@
           <div class="sf-section-header" data-reveal="fade-up">
             <span class="sf-section-tag">开发工具</span>
             <h2 class="sf-section-title">技术栈</h2>
-          </div>
-          
+        </div>
+
           <div class="sf-toolkit-grid" data-reveal="fade-up" data-reveal-delay="200">
             <th:block th:each="tech, stat : ${techStack}">
               <div class="sf-tool-card" th:if="${stat.index < 6}" 
@@ -301,7 +301,7 @@
                           th:value="${percent}" max="100"></progress>
                 <span class="sf-tool-percent" 
                       th:text="'熟练度: ' + ${percent} + '%'">熟练度: 95%</span>
-              </div>
+            </div>
             </th:block>
           </div>
         </div>
@@ -356,7 +356,7 @@
           <div class="sf-cta-card" data-reveal="fade-up">
             <h2 class="sf-cta-title" th:text="${ctaTitle}">
               让我们一起打造卓越的数字体验 — 立即开始您的下一个项目
-            </h2>
+        </h2>
             <a th:href="${ctaBtnLink}" 
                th:text="${ctaBtnText}"
                class="btn btn-neutral btn-lg sf-cta-btn">立即开始</a>
