@@ -1380,7 +1380,7 @@ halo-contact-form {
  * 24. 目录导航
  * ==================================================*/
 .toc-container {
-  max-height: min(70vh, 400px);
+  max-height: min(70vh, 600px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;

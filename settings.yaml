@@ -1077,6 +1077,8 @@ spec:
                   name: widget
                   label: 小工具类型
                   options:
+                    - label: 欢迎卡片（天气）
+                      value: welcome_card
                     - label: 作者卡片
                       value: author_card
                     - label: 博客统计
@@ -1347,9 +1349,9 @@ spec:
             sidebar_position: right
             sidebar_widgets:
               - widget: toc
+              - widget: welcome_card
               - widget: author_card
               - widget: blog_stats
-              - widget: categories
               - widget: tags
               - widget: popular_posts
           children:
@@ -1400,6 +1402,8 @@ spec:
                   options:
                     - label: 文章目录
                       value: toc
+                    - label: 欢迎卡片（天气）
+                      value: welcome_card
                     - label: 作者卡片
                       value: author_card
                     - label: 博客统计
@@ -1569,6 +1573,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
@@ -1726,6 +1732,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
@@ -1881,6 +1889,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
@@ -1997,6 +2007,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
@@ -2560,6 +2572,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
@@ -2733,6 +2747,8 @@ spec:
               name: widget
               label: 小工具类型
               options:
+                - label: 欢迎卡片（天气）
+                  value: welcome_card
                 - label: 作者卡片
                   value: author_card
                 - label: 博客统计
