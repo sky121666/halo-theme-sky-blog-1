@@ -6,7 +6,10 @@
 <!-- ========================================== -->
 
 <!-- 主页脚容器 -->
-<footer class="relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden" th:fragment="footer">
+<footer th:with="dockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
+                 hasBottomDock = ${dockStyle != 'side' and theme.config.general.floating_dock?.enable_dock != false}"
+        th:class="${hasBottomDock} ? 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden pb-16' : 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden'" 
+        th:fragment="footer">
 
   <!-- 背景网格效果 -->
   <div class="absolute inset-0 opacity-[0.015]" style="background-image: radial-gradient(circle, currentColor 1px, transparent 1px); background-size: 24px 24px;"></div>
