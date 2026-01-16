@@ -2159,7 +2159,7 @@ spec:
     - group: author_settings
       label: 作者
       formSchema:
-            - $formkit: switch
+        - $formkit: switch
           id: author_show_sidebar
           name: show_sidebar
           label: 显示侧边栏
@@ -2171,7 +2171,7 @@ spec:
           if: $get(author_show_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-              value: false
+          value: false
         - $formkit: toggle
           name: sidebar_position
           if: $get(author_enable_custom_sidebar).value
@@ -2648,12 +2648,12 @@ spec:
             - $formkit: group
               name: primary_group
               label: 主按钮
-          children:
-            - $formkit: switch
+              children:
+                - $formkit: switch
                   id: hero_show_primary
                   name: show_primary
                   label: 显示主按钮
-              value: true
+                  value: true
                 - $formkit: text
                   name: primary_text
                   label: 按钮文字
@@ -2670,11 +2670,11 @@ spec:
               name: secondary_group
               label: 次要按钮
               children:
-            - $formkit: switch
+                - $formkit: switch
                   id: hero_show_secondary
                   name: show_secondary
                   label: 显示次要按钮
-              value: true
+                  value: true
                 - $formkit: text
                   name: secondary_text
                   label: 按钮文字
