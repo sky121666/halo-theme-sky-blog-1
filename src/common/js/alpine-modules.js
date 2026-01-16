@@ -565,18 +565,14 @@ function welcomeWeatherCard() {
 
   // 清除旧版本缓存
   try {
-    console.log('[天气卡片] 清除旧版本缓存...');
     const oldKeys = ['sky_weather_cache', 'sky_weather_cache_v2', 'sky_weather_cache_v3', 'sky_weather_cache_v4',
       'sky_weather_cache_v5', 'sky_weather_cache_v6', 'sky_weather_cache_v7', 'sky_weather_cache_v8', 'sky_weather_cache_v9'];
     oldKeys.forEach(key => {
       if (localStorage.getItem(key)) {
         localStorage.removeItem(key);
-        console.log('[天气卡片] 已清除旧缓存:', key);
       }
     });
-  } catch (error) {
-    console.warn('[天气卡片] 清除旧缓存时出错:', error);
-  }
+  } catch (e) { /* ignore */ }
 
   return {
     loading: true,
@@ -590,12 +586,8 @@ function welcomeWeatherCard() {
     weatherBg: '',
 
     init() {
-      console.log('[天气卡片] 初始化天气卡片组件...');
       this.updateGreeting();
-      console.log('[天气卡片] 问候语:', this.greeting);
       this.updateDate();
-      console.log('[天气卡片] 当前日期:', this.currentDate);
-      // Open-Meteo 无需 API Key，直接获取天气
       this.loadWeather();
     },
 
@@ -634,49 +626,34 @@ function welcomeWeatherCard() {
 
     // 从缓存加载或请求新数据
     async loadWeather() {
-      console.log('[天气卡片] 开始加载天气数据...');
-
       // 1. 优先使用缓存
       const cached = this.getCache();
       if (cached) {
-        console.log('[天气卡片] 使用缓存数据:', cached.location, cached.weather?.temp + '°C');
         this.applyWeatherData(cached);
         this.loading = false;
         return;
       }
 
       // 2. 无缓存时，立即显示默认数据并开始获取真实位置
-      console.log('[天气卡片] 显示默认数据，同时获取真实位置...');
       this.applyWeatherData(this.getDefaultWeather());
-      this.loading = false;  // 先让 UI 显示
+      this.loading = false;
 
       // 3. 后台获取真实天气
       try {
         await this.fetchWeatherWithGeolocation();
-      } catch (error) {
-        console.error('[天气卡片] 获取天气失败:', error);
-        // 保持默认数据显示
-      }
+      } catch (e) { /* keep default */ }
     },
 
     // 尝试浏览器定位（5秒超时），失败则用 IP 定位
     async fetchWeatherWithGeolocation() {
       let latitude, longitude, cityName;
 
-      // 尝试浏览器 Geolocation（5秒超时）
       try {
-        console.log('[天气卡片] 尝试浏览器定位（5秒超时）...');
         const position = await this.getBrowserLocation(5000);
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
-
-        // 用坐标反查城市名
-        console.log('[天气卡片] 浏览器定位成功，坐标:', latitude, longitude);
         cityName = await this.getCityFromCoords(latitude, longitude);
-        console.log('[天气卡片] 城市名:', cityName);
-      } catch (geoError) {
-        console.log('[天气卡片] 浏览器定位失败或超时，使用 IP 定位:', geoError.message);
-
+      } catch (e) {
         // 降级到 IP 定位
         const locationData = await this.getLocationFromIP();
         latitude = locationData.latitude;
@@ -684,7 +661,6 @@ function welcomeWeatherCard() {
         cityName = locationData.city;
       }
 
-      // 获取天气
       await this.fetchWeatherByCoords(latitude, longitude, cityName);
     },
 
@@ -717,33 +693,22 @@ function welcomeWeatherCard() {
     // 根据坐标获取城市名
     async getCityFromCoords(latitude, longitude) {
       try {
-        // 使用 wttr.in 返回的 nearest_area 获取城市名
         const res = await fetch(`https://wttr.in/~${latitude},${longitude}?format=j1&lang=zh`);
         if (res.ok) {
           const data = await res.json();
           const rawCity = data.nearest_area?.[0]?.areaName?.[0]?.value || '未知';
           return this.translateCity(rawCity);
         }
-      } catch (e) {
-        console.warn('[天气卡片] 获取城市名失败:', e);
-      }
+      } catch (e) { /* ignore */ }
       return '未知';
     },
 
     // IP 定位
     async getLocationFromIP() {
-      console.log('[天气卡片] 使用 IP 定位...');
-
-      // 获取 IP
       const ipRes = await fetch('https://api.ipify.cn/?format=json');
       const ipData = await ipRes.json();
-      console.log('[天气卡片] IP:', ipData.ip);
-
-      // 用 IP 获取坐标
       const locationRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
       const locationData = await locationRes.json();
-      console.log('[天气卡片] 位置:', locationData.city, locationData.latitude, locationData.longitude);
-
       return {
         latitude: locationData.latitude,
         longitude: locationData.longitude,
@@ -773,16 +738,12 @@ function welcomeWeatherCard() {
 
     // 根据坐标获取天气
     async fetchWeatherByCoords(latitude, longitude, cityName) {
-      console.log('[天气卡片] 获取天气，坐标:', latitude, longitude, '城市:', cityName);
-
-      const weatherUrl = `https://wttr.in/~${latitude},${longitude}?format=j1&lang=zh`;
-      const res = await fetch(weatherUrl, { headers: { 'Accept': 'application/json' } });
-
-      if (!res.ok) throw new Error(`wttr.in 响应失败: ${res.status}`);
+      const res = await fetch(`https://wttr.in/~${latitude},${longitude}?format=j1&lang=zh`, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error('wttr.in error');
 
       const data = await res.json();
       const current = data.current_condition?.[0];
-      if (!current) throw new Error('无天气数据');
+      if (!current) throw new Error('No weather data');
 
       const weatherCode = parseInt(current.weatherCode);
       const weatherData = {
@@ -798,50 +759,27 @@ function welcomeWeatherCard() {
         weatherBg: this.getWeatherBgFromWttr(weatherCode)
       };
 
-      // 加载 SVG
       await this.loadSvgIcon(weatherData.weatherIcon);
       weatherData.weatherIconSvg = this.weatherIconSvg;
 
-      // 更新 UI 并缓存
       this.applyWeatherData(weatherData);
       this.setCache(weatherData);
-      console.log('[天气卡片] 天气数据更新完成:', cityName, weatherData.weather.temp + '°C');
     },
 
     // 获取缓存
     getCache() {
       try {
-        console.log('[天气卡片] 从 localStorage 读取缓存，Key:', CACHE_KEY);
         const cached = localStorage.getItem(CACHE_KEY);
-        if (!cached) {
-          console.log('[天气卡片] 缓存不存在');
-          return null;
-        }
+        if (!cached) return null;
 
         const data = JSON.parse(cached);
-        const now = Date.now();
-        const cacheAge = now - data.timestamp;
-        const cacheAgeMinutes = Math.floor(cacheAge / 1000 / 60);
-
-        console.log('[天气卡片] 缓存信息:', {
-          exists: true,
-          age: `${cacheAgeMinutes} 分钟`,
-          expiresIn: `${Math.floor((CACHE_DURATION - cacheAge) / 1000 / 60)} 分钟`,
-          location: data.location,
-          temp: data.weather?.temp
-        });
-
-        // 检查缓存是否过期
+        const cacheAge = Date.now() - data.timestamp;
         if (cacheAge > CACHE_DURATION) {
-          console.log('[天气卡片] 缓存已过期，删除缓存');
           localStorage.removeItem(CACHE_KEY);
           return null;
         }
-
-        console.log('[天气卡片] 缓存有效，使用缓存数据');
         return data;
-      } catch (error) {
-        console.error('[天气卡片] 读取缓存失败:', error);
+      } catch (e) {
         return null;
       }
     },
@@ -849,62 +787,33 @@ function welcomeWeatherCard() {
     // 保存缓存
     setCache(data) {
       try {
-        const cacheData = {
-          ...data,
-          timestamp: Date.now()
-        };
-        console.log('[天气卡片] 保存缓存到 localStorage，Key:', CACHE_KEY, {
-          location: cacheData.location,
-          temp: cacheData.weather?.temp,
-          timestamp: new Date(cacheData.timestamp).toLocaleString()
-        });
+        const cacheData = { ...data, timestamp: Date.now() };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-        console.log('[天气卡片] 缓存保存成功');
-      } catch (error) {
-        console.error('[天气卡片] 保存缓存失败:', error);
-        // 忽略存储错误
-      }
+      } catch (e) { /* ignore */ }
     },
 
     // 应用天气数据到组件
     applyWeatherData(data) {
-      console.log('[天气卡片] 应用天气数据到组件:', {
-        location: data.location,
-        temp: data.weather?.temp,
-        description: data.weather?.description,
-        icon: data.weatherIcon,
-        bg: data.weatherBg
-      });
       this.location = data.location;
       this.weather = data.weather;
       this.weatherIcon = data.weatherIcon;
       this.weatherIconSvg = data.weatherIconSvg || '';
       this.weatherBg = data.weatherBg || 'sunny';
-      console.log('[天气卡片] 天气数据应用完成');
     },
 
     // 加载 SVG 图标内容
     async loadSvgIcon(url) {
       try {
-        console.log('[天气卡片] 开始加载 SVG 图标，URL:', url);
         const res = await fetch(url);
-        console.log('[天气卡片] SVG 图标响应状态:', res.status, res.statusText);
-
         if (res.ok) {
           let svg = await res.text();
-          console.log('[天气卡片] SVG 原始内容长度:', svg.length);
-
-          // 移除 XML 声明，添加样式类
           svg = svg.replace(/<\?xml[^>]*\?>/g, '');
           svg = svg.replace(/<svg/, '<svg class="w-full h-full"');
           this.weatherIconSvg = svg;
-          console.log('[天气卡片] SVG 图标处理完成，最终长度:', this.weatherIconSvg.length);
         } else {
-          console.warn('[天气卡片] SVG 图标加载失败，状态码:', res.status);
           this.weatherIconSvg = '';
         }
-      } catch (error) {
-        console.error('[天气卡片] SVG 图标加载异常:', error);
+      } catch (e) {
         this.weatherIconSvg = '';
       }
     },
