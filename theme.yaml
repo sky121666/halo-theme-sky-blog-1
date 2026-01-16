@@ -3,7 +3,7 @@ kind: Theme
 metadata:
   name: theme-sky-blog-1
 spec:
-  displayName: Sky Blog 1
+  displayName: Sky Blog Theme
   author:
     name: sky
     website: https://github.com/sky121666
@@ -14,7 +14,7 @@ spec:
   issues: https://github.com/sky121666/halo-theme-sky-blog-1/issues
   settingName: "theme-sky-blog-1-setting"
   configMapName: "theme-sky-blog-1-configMap"
-  version: "2.0.6"
+  version: "2.0.7"
   requires: ">=2.22.9"
   license:
     - name: "GPL-3.0"
