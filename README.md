@@ -13,6 +13,49 @@
 | [5ee 博客](https://5ee.net) | 在线演示 |
 | [主题文档](https://5ee.net/docs/halo-theme-sky-blog-1/jianjie) | 使用说明 |
 
+### 📸 界面预览
+
+<div align="center">
+
+**首页展示**
+
+<img src="https://5ee.net/upload/%E9%A6%96%E9%A1%B5%E5%A4%A7%E5%B1%8F.png" width="49%" /> <img src="https://5ee.net/upload/%E9%A6%96%E9%A1%B5%E8%AF%A6%E6%83%85.png" width="49%" />
+
+**文章与文档**
+
+<img src="https://5ee.net/upload/%E6%96%87%E7%AB%A0%E9%A1%B5.png" width="49%" /> <img src="https://5ee.net/upload/%E6%96%87%E6%A1%A3%E4%B8%AD%E5%BF%83.png" width="49%" />
+
+**功能展示**
+
+<img src="https://5ee.net/upload/%E5%85%B3%E4%BA%8E%E7%95%8C%E9%9D%A2.png" width="49%" /> <img src="https://5ee.net/upload/%E5%9B%BE%E5%BA%93.png" width="49%" />
+
+<img src="https://5ee.net/upload/%E7%9E%AC%E9%97%B4%E5%88%97%E8%A1%A8.png" width="49%" /> <img src="https://5ee.net/upload/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5.png" width="49%" />
+
+<details>
+<summary>🖼️ 查看更多截图</summary>
+
+<br>
+
+<img src="https://5ee.net/upload/%E9%A6%96%E9%A1%B5%E5%9B%BE2.png" width="49%" /> <img src="https://5ee.net/upload/tag-%E5%88%97%E8%A1%A8.png" width="49%" />
+
+<img src="https://5ee.net/upload/pc%E5%88%86%E4%BA%AB.png" width="49%" /> <img src="https://5ee.net/upload/%E6%89%8B%E6%9C%BA%E5%88%86%E4%BA%AB.png" width="49%" />
+
+<img src="https://5ee.net/upload/%E6%96%87%E6%A1%A3%E5%86%85%E5%AE%B9.png" width="49%" /> <img src="https://5ee.net/upload/%E6%90%9C%E7%B4%A2.png" width="49%" />
+
+<img src="https://5ee.net/upload/%E7%9E%AC%E9%97%B4%E8%AF%A6%E6%83%85.png" width="49%" /> <img src="https://5ee.net/upload/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5%E6%8F%90%E4%BA%A4.png" width="49%" />
+
+<img src="https://5ee.net/upload/%E5%88%86%E7%B1%BB-%E5%8D%A1%E7%89%87.png" width="49%" /> <img src="https://5ee.net/upload/%E5%BD%92%E6%A1%A3.png" width="49%" />
+
+<img src="https://5ee.net/upload/%E6%9C%8B%E5%8F%8B%E5%9C%88.png" width="49%" /> <img src="https://5ee.net/upload/%E9%BB%98%E8%AE%A4%E5%8D%95%E9%A1%B5.png" width="49%" />
+
+**页脚展示**
+
+<img src="https://5ee.net/upload/%E9%A1%B5%E8%84%9A1.png" width="98%" />
+
+</details>
+
+</div>
+
 ---
 
 ## ✨ 功能特性
