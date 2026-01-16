@@ -4,7 +4,7 @@
 
 [![Halo](https://img.shields.io/badge/Halo-2.22.9+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.7-orange)](https://github.com/sky121666/halo-theme-sky-blog-1/releases)
+[![Version](https://img.shields.io/badge/Version-2.0.8-orange)](https://github.com/sky121666/halo-theme-sky-blog-1/releases)
 
 ## 🌐 预览
 

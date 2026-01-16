@@ -48,12 +48,15 @@
         <th:block th:each="photo : ${photos.items}">
           <!-- 图片卡片 -->
           <div class="photo-item mb-2 break-inside-avoid">
-            <figure class="group relative overflow-hidden rounded-lg cursor-pointer" th:data-src="${photo.spec.url}"
+            <figure class="group relative overflow-hidden rounded-lg cursor-pointer" 
+              th:data-src="${photo.spec.url}"
               th:data-sub-html="${photo.spec.displayName != null ? '<h4>' + photo.spec.displayName + '</h4>' + (photo.spec.description != null ? '<p>' + photo.spec.description + '</p>' : '') : ''}">
               <!-- 图片 -->
-              <img th:src="${photo.spec.url}" th:alt="${photo.spec.displayName}"
+              <img th:src="${photo.spec.url}" 
+                th:alt="${photo.spec.displayName}"
                 class="w-full h-auto object-cover transition-all duration-300 group-hover:brightness-[0.85]"
-                loading="lazy" />
+                loading="lazy"
+                onload="this.classList.add('loaded'); this.parentElement.classList.add('loaded');" />
               <!-- 悬浮遮罩 + 信息 -->
               <div th:if="${showPhotoInfo && photo.spec.displayName != null}"
                 class="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">

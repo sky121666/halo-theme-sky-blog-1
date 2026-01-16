@@ -559,14 +559,15 @@ function createSideFloatingDock() {
  * 模板使用：templates/modules/widgets/welcome-card.html
  */
 function welcomeWeatherCard() {
-  // 缓存配置（v3 版本 - 内联 SVG）
-  const CACHE_KEY = 'sky_weather_cache_v3';
+  // 缓存配置（v4 版本 - 优化定位策略）
+  const CACHE_KEY = 'sky_weather_cache_v4';
   const CACHE_DURATION = 30 * 60 * 1000; // 30 分钟缓存
   
   // 清除旧版本缓存
   try {
     localStorage.removeItem('sky_weather_cache');
     localStorage.removeItem('sky_weather_cache_v2');
+    localStorage.removeItem('sky_weather_cache_v3');
   } catch { /* ignore */ }
 
   return {
@@ -608,48 +609,6 @@ function welcomeWeatherCard() {
       const now = new Date();
       const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
       this.currentDate = `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
-    },
-
-    /**
-     * 获取浏览器地理位置
-     * @returns {Promise<{latitude: number, longitude: number}>}
-     */
-    getBrowserLocation() {
-      return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-          reject(new Error('浏览器不支持地理位置'));
-          return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            resolve({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            });
-          },
-          (error) => {
-            let message = '定位失败';
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                message = '用户拒绝位置权限';
-                break;
-              case error.POSITION_UNAVAILABLE:
-                message = '位置信息不可用';
-                break;
-              case error.TIMEOUT:
-                message = '定位请求超时';
-                break;
-            }
-            reject(new Error(message));
-          },
-          {
-            enableHighAccuracy: false, // 不需要高精度（省电）
-            timeout: 5000,             // 5秒超时
-            maximumAge: 300000         // 5分钟内的缓存位置可用
-          }
-        );
-      });
     },
 
     // 从缓存加载或请求新数据
@@ -735,39 +694,29 @@ function welcomeWeatherCard() {
       try {
         let latitude, longitude;
         
-        // 1. 优先使用浏览器地理位置 API（更精确）
+        // 使用高德 IP 定位（智能、快速、中文）
         try {
-          const position = await this.getBrowserLocation();
-          latitude = position.latitude.toFixed(2);
-          longitude = position.longitude.toFixed(2);
-          
-          // 使用 Nominatim 反向地理编码获取城市名
-          try {
-            const geoRes = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=zh-CN`
-            );
-            const geoData = await geoRes.json();
-            this.location = geoData.address?.city || 
-                          geoData.address?.town || 
-                          geoData.address?.county || 
-                          geoData.address?.state || 
-                          '当前位置';
-          } catch {
-            this.location = '当前位置';
-          }
-        } catch (geoError) {
-          // 2. 降级方案：使用 IP 定位
-          console.log('浏览器定位失败，使用 IP 定位:', geoError.message);
-          const ipRes = await fetch('https://ipapi.co/json/');
+          const ipRes = await fetch('https://restapi.amap.com/v3/ip?key=d8bb5db670078bb5e415c92e0b71ca32');
           const ipData = await ipRes.json();
 
-          if (!ipData.latitude || !ipData.longitude) {
-            throw new Error('无法获取位置');
+          if (ipData.status === '1' && ipData.rectangle) {
+            // 解析经纬度（格式：经度1,纬度1;经度2,纬度2）
+            const coords = ipData.rectangle.split(';')[0].split(',');
+            longitude = parseFloat(coords[0]).toFixed(2);
+            latitude = parseFloat(coords[1]).toFixed(2);
+            
+            // 中文城市名（去掉"市"后缀）
+            let cityName = ipData.city || ipData.province || '未知位置';
+            this.location = cityName.replace('市', '');
+          } else {
+            throw new Error('IP 定位返回数据无效');
           }
-
-          this.location = ipData.city || ipData.region || '未知位置';
-          latitude = ipData.latitude.toFixed(2);
-          longitude = ipData.longitude.toFixed(2);
+        } catch (ipError) {
+          // 降级：使用北京作为默认位置
+          console.log('IP 定位失败，使用默认位置（北京）:', ipError.message);
+          latitude = '39.90';    // 北京纬度
+          longitude = '116.41';  // 北京经度
+          this.location = '北京';
         }
 
         // 2. 使用 Open-Meteo API（完全免费，无需 API Key）
