@@ -41,7 +41,7 @@
 }
 
 /* 导航栏内容层级管理 - 确保内容显示在遮罩上层 */
-.navbar > * {
+.navbar>* {
   position: relative;
   z-index: 10;
 }
@@ -74,11 +74,11 @@
   .nav-menu-item {
     transition: transform 0.2s ease, color 0.2s ease;
   }
-  
+
   .nav-menu-item::before {
     transition: width 0.2s ease;
   }
-  
+
   .nav-menu-item:hover::before {
     width: 60%;
   }
@@ -86,7 +86,7 @@
   .nav-menu-item:hover {
     transform: translateY(-1px);
   }
-  
+
   /* Logo 区域交互效果 */
   .navbar .flex-shrink-0 a {
     transition: transform 0.2s ease, opacity 0.2s ease;
@@ -96,7 +96,7 @@
     transform: scale(1.05);
     opacity: 0.9;
   }
-  
+
   /* 导航栏按钮 hover */
   .navbar .btn-ghost {
     transition: transform 0.15s ease, background-color 0.15s ease;
@@ -125,14 +125,12 @@
 
 /* 移动端抽屉渐变背景 - 简化为 5 点渐变 */
 .drawer-gradient-bg {
-  background: linear-gradient(
-    to right,
-    var(--color-base-100) 0%,
-    var(--color-base-100) 30%,
-    color-mix(in srgb, var(--color-base-100) 70%, transparent) 55%,
-    color-mix(in srgb, var(--color-base-100) 30%, transparent) 80%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      var(--color-base-100) 0%,
+      var(--color-base-100) 30%,
+      color-mix(in srgb, var(--color-base-100) 70%, transparent) 55%,
+      color-mix(in srgb, var(--color-base-100) 30%, transparent) 80%,
+      transparent 100%);
 }
 
 /* 移动端抽屉滑入动画 - 父容器负责滑入 */
@@ -145,6 +143,7 @@
     opacity: 0;
     transform: translateX(-16px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -162,6 +161,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -216,14 +216,12 @@
   left: 0;
   width: 100%;
   height: calc(100% + 1rem);
-  background: linear-gradient(
-    to bottom,
-    var(--color-base-100) 0%,
-    color-mix(in srgb, var(--color-base-100) 85%, transparent) 40%,
-    color-mix(in srgb, var(--color-base-100) 50%, transparent) 65%,
-    color-mix(in srgb, var(--color-base-100) 15%, transparent) 85%,
-    transparent 100%
-  );
+  background: linear-gradient(to bottom,
+      var(--color-base-100) 0%,
+      color-mix(in srgb, var(--color-base-100) 85%, transparent) 40%,
+      color-mix(in srgb, var(--color-base-100) 50%, transparent) 65%,
+      color-mix(in srgb, var(--color-base-100) 15%, transparent) 85%,
+      transparent 100%);
   pointer-events: none;
   z-index: -1;
 }
@@ -249,10 +247,25 @@
  * 功能：移动端专用样式、触摸交互、性能优化
  */
 
-/* 移动端触摸反馈 */
+/* 移动端触摸反馈 + 布局优化 */
 @media (max-width: 1023px) {
   .drawer-button:active {
     background-color: color-mix(in srgb, var(--color-base-content) 10%, transparent);
+  }
+
+  /* 移动端导航栏内边距优化 */
+  .navbar>div {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* 小屏幕额外优化 */
+@media (max-width: 640px) {
+  .navbar>div {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    gap: 0.25rem;
   }
 }
 
@@ -269,4 +282,3 @@
     background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   }
 }
-
