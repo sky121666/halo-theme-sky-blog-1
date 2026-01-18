@@ -4,6 +4,26 @@
  */
 
 /* ===================================================
+ * 0. 蒙版主题切换
+ * 根据 data-color-scheme 属性切换明暗主题蒙版显示
+ * ==================================================*/
+.overlay-light {
+  display: block;
+}
+
+.overlay-dark {
+  display: none;
+}
+
+[data-color-scheme="dark"] .overlay-light {
+  display: none;
+}
+
+[data-color-scheme="dark"] .overlay-dark {
+  display: block;
+}
+
+/* ===================================================
  * 1. 首页通用样式
  * ==================================================*/
 

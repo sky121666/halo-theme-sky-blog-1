@@ -925,6 +925,72 @@ spec:
                 - label: 深邃星空
                   value: starry-sky
         - $formkit: group
+          name: overlay_settings
+          label: 蒙版渐变设置
+          if: $get(enable_header).value && $get(background_type).value === 'image'
+          value:
+            light_scheme: black
+            light_custom_color: "#000000"
+            dark_scheme: black
+            dark_custom_color: "#000000"
+          children:
+            - $formkit: toggle
+              id: light_scheme
+              name: light_scheme
+              label: 浅色主题蒙版
+              help: 选择浅色主题下的蒙版颜色方案
+              render-type: color
+              size: 40
+              gap: 8
+              value: black
+              options:
+                - label: 黑色
+                  value: black
+                  render: "#1a1a1a"
+                - label: 白色
+                  value: white
+                  render: "#ffffff"
+                - label: 主题背景色
+                  value: theme
+                  render: "#e5e7eb"
+                - label: 自定义
+                  value: custom
+                  render: "#6366f1"
+            - $formkit: color
+              name: light_custom_color
+              if: $get(light_scheme).value === 'custom'
+              label: 自定义颜色（浅色主题）
+              help: 选择浅色主题下蒙版的自定义颜色
+              value: "#000000"
+            - $formkit: toggle
+              id: dark_scheme
+              name: dark_scheme
+              label: 深色主题蒙版
+              help: 选择深色主题下的蒙版颜色方案
+              render-type: color
+              size: 40
+              gap: 8
+              value: black
+              options:
+                - label: 黑色
+                  value: black
+                  render: "#1a1a1a"
+                - label: 白色
+                  value: white
+                  render: "#ffffff"
+                - label: 主题背景色
+                  value: theme
+                  render: "#374151"
+                - label: 自定义
+                  value: custom
+                  render: "#6366f1"
+            - $formkit: color
+              name: dark_custom_color
+              if: $get(dark_scheme).value === 'custom'
+              label: 自定义颜色（深色主题）
+              help: 选择深色主题下蒙版的自定义颜色
+              value: "#000000"
+        - $formkit: group
           name: title_settings
           label: 主标题设置
           if: $get(enable_header).value

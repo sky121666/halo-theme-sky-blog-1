@@ -14,15 +14,33 @@
         class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
         th:src="${bgSrc}" alt="背景媒体">
 
-    <!-- 组合蒙版容器 -->
-    <div class="absolute inset-0">
-        <!-- 基础渐变蒙版 -->
-        <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
-        <!-- 滚动深邃效果蒙版 -->
-        <div class="absolute inset-0 bg-black transition-opacity duration-500"
-            :style="`opacity: ${scrolled ? 0.4 : 0.1}`">
+    <!-- 组合蒙版容器 - 支持明暗主题独立配置 -->
+    <th:block th:with="
+        overlayCfg = ${theme.config.index.overlay_settings},
+        lightScheme = ${overlayCfg?.light_scheme ?: 'black'},
+        lightCustom = ${overlayCfg?.light_custom_color ?: '#000000'},
+        darkScheme = ${overlayCfg?.dark_scheme ?: 'black'},
+        darkCustom = ${overlayCfg?.dark_custom_color ?: '#000000'}
+    ">
+        <div class="absolute inset-0">
+            <!-- 浅色主题蒙版 (data-color-scheme=light 时显示) -->
+            <div class="overlay-light absolute inset-0 bg-gradient-to-b" th:classappend="${lightScheme == 'black'} ? 'from-black/10 via-black/50 to-black/80' : 
+                               (${lightScheme == 'white'} ? 'from-white/10 via-white/50 to-white/80' : 
+                               (${lightScheme == 'theme'} ? 'from-base-300/10 via-base-300/50 to-base-300/80' : ''))"
+                th:style="${lightScheme == 'custom'} ? 'background: linear-gradient(to bottom, ' + ${lightCustom} + '1a, ' + ${lightCustom} + '80, ' + ${lightCustom} + 'cc)' : ''">
+            </div>
+            <!-- 深色主题蒙版 (data-color-scheme=dark 时显示) -->
+            <div class="overlay-dark absolute inset-0 bg-gradient-to-b" th:classappend="${darkScheme == 'black'} ? 'from-black/10 via-black/50 to-black/80' : 
+                               (${darkScheme == 'white'} ? 'from-white/10 via-white/50 to-white/80' : 
+                               (${darkScheme == 'theme'} ? 'from-base-300/10 via-base-300/50 to-base-300/80' : ''))"
+                th:style="${darkScheme == 'custom'} ? 'background: linear-gradient(to bottom, ' + ${darkCustom} + '1a, ' + ${darkCustom} + '80, ' + ${darkCustom} + 'cc)' : ''">
+            </div>
+            <!-- 滚动深邃效果蒙版 -->
+            <div class="absolute inset-0 transition-opacity duration-500 bg-black"
+                :style="`opacity: ${scrolled ? 0.4 : 0.1}`">
+            </div>
         </div>
-    </div>
+    </th:block>
 </div>
 
 <!-- 背景层：CSS 特效（4种优化特效） -->
