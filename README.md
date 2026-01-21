@@ -158,6 +158,7 @@
 | 插件 | 链接 | 备注 |
 |------|------|------|
 | 投票管理 | [应用市场](https://www.halo.run/store/apps/app-veyvzyhv) | 文章投票功能 |
+| Steam 游戏库 | [GitHub](https://github.com/Tim0x0/halo-plugin-steam) | Steam 信息展示 |
 | Shiki 代码高亮 | [应用市场](https://www.halo.run/store/apps/app-kzloktzn) | 美观的代码块渲染 |
 | 搜索组件 | [应用市场](https://www.halo.run/store/apps/app-DlacW) | 强大的站内搜索 |
 | 评论组件 | [应用市场](https://www.halo.run/store/apps/app-YXyaD) | 现代化评论系统 |
