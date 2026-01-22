@@ -31,7 +31,10 @@
         <!-- Profile Header -->
         <div class="steam-profile-header">
           <div class="steam-profile-avatar" th:classappend="${p?.playing ? 'playing' : ''}">
-            <img th:src="${p?.summary?.avatarFull}" th:alt="${p?.summary?.personaName}" loading="eager" />
+            <img th:src="${p?.summary?.avatarFull}" th:alt="${p?.summary?.personaName}" 
+                 loading="eager" 
+                 decoding="async"
+                 class="steam-avatar-img" />
           </div>
           <div class="steam-profile-info">
             <div class="flex items-center gap-2">
@@ -109,8 +112,12 @@
           <div class="steam-badges-grid">
             <th:block th:each="badge, iter : ${badges.badges}" th:if="${iter.index < 8}">
               <div class="steam-badge-item" th:title="${(badge.badgeName ?: badge.displayName) + ' Lv.' + badge.level}">
-                <img th:if="${badge.imageUrl != null && !badge.imageUrl.isEmpty()}" th:src="${badge.imageUrl}"
-                  th:alt="${badge.displayName}" loading="lazy" />
+                <img th:if="${badge.imageUrl != null && !badge.imageUrl.isEmpty()}" 
+                     th:src="${badge.imageUrl}"
+                     th:alt="${badge.displayName}" 
+                     loading="lazy" 
+                     decoding="async"
+                     class="steam-badge-img" />
               </div>
             </th:block>
           </div>
@@ -162,7 +169,11 @@
         <th:block th:each="game, iter : ${recentGames}" th:if="${iter.index < 10}">
           <a th:href="@{'https://store.steampowered.com/app/' + ${game.appId}}" target="_blank" class="steam-game-card">
             <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" th:alt="${game.name}" loading="lazy" />
+              <img th:src="${game.headerImageUrl}" 
+                   th:alt="${game.name}" 
+                   loading="lazy" 
+                   decoding="async"
+                   class="steam-game-img" />
             </div>
             <div class="steam-game-card-info">
               <div class="steam-game-card-name" th:text="${game.name}">Game</div>
@@ -199,7 +210,11 @@
           <a th:if="${enableGameLink}" th:href="'https://store.steampowered.com/app/' + ${game.appId}" target="_blank"
             class="steam-game-card">
             <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" th:alt="${game.name}" loading="lazy" />
+              <img th:src="${game.headerImageUrl}" 
+                   th:alt="${game.name}" 
+                   loading="lazy" 
+                   decoding="async"
+                   class="steam-game-img" />
             </div>
             <div class="steam-game-card-info">
               <div class="steam-game-card-name" th:text="${game.name}">Game</div>
@@ -212,7 +227,11 @@
           </a>
           <div th:unless="${enableGameLink}" class="steam-game-card">
             <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" th:alt="${game.name}" loading="lazy" />
+              <img th:src="${game.headerImageUrl}" 
+                   th:alt="${game.name}" 
+                   loading="lazy" 
+                   decoding="async"
+                   class="steam-game-img" />
             </div>
             <div class="steam-game-card-info">
               <div class="steam-game-card-name" th:text="${game.name}">Game</div>

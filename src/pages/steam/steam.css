@@ -18,6 +18,63 @@
   --steam-glow: color-mix(in oklch, var(--color-primary) 15%, transparent);
 }
 
+/* ========================================== */
+/*     图片懒加载优化                         */
+/* ========================================== */
+
+/* 图片占位符背景 */
+.steam-avatar-img,
+.steam-badge-img,
+.steam-game-img {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--color-base-content) 5%, transparent) 0%,
+    color-mix(in srgb, var(--color-base-content) 8%, transparent) 100%);
+  transition: opacity 0.3s ease;
+}
+
+/* 加载中的模糊效果 */
+.steam-game-img[loading="lazy"]:not(.loaded) {
+  filter: blur(8px);
+  transform: scale(1.05);
+}
+
+/* 加载完成 */
+.steam-game-img.loaded {
+  filter: none;
+  transform: scale(1);
+}
+
+/* 骨架屏动画 */
+@keyframes steam-skeleton {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.steam-game-card-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-base-content) 3%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: steam-skeleton 1.5s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.steam-game-card-image:has(img:not(.loaded))::before {
+  opacity: 1;
+}
+
 /* 亮色主题下增强对比度 */
 [data-color-scheme="light"] .steam-page {
   --steam-card-bg: color-mix(in oklch, var(--color-base-200) 95%, transparent);

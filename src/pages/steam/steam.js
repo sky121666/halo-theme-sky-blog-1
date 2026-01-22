@@ -11,24 +11,32 @@ import './steam.css';
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
-  // 图片加载错误处理
-  document.querySelectorAll('.steam-game-card img, .steam-recent-card img').forEach(img => {
-    img.addEventListener('error', function () {
-      // 使用占位图
-      this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215"%3E%3Crect fill="%231b2838" width="460" height="215"/%3E%3Ctext x="50%25" y="50%25" fill="%2366c0f4" font-size="24" text-anchor="middle" dy=".3em"%3E🎮%3C/text%3E%3C/svg%3E';
+  // 图片懒加载优化 - 添加加载完成标记和错误处理
+  const observeImageLoad = () => {
+    const images = document.querySelectorAll('.steam-game-img, .steam-badge-img, .steam-avatar-img');
+    
+    images.forEach(img => {
+      // 如果图片已经加载完成
+      if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add('loaded');
+      } else {
+        // 监听加载完成
+        img.addEventListener('load', function() {
+          this.classList.add('loaded');
+        });
+        
+        // 监听加载失败
+        img.addEventListener('error', function() {
+          this.classList.add('loaded');
+          // 使用占位图
+          this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215"%3E%3Crect fill="%231b2838" width="460" height="215"/%3E%3Ctext x="50%25" y="50%25" fill="%2366c0f4" font-size="24" text-anchor="middle" dy=".3em"%3E🎮%3C/text%3E%3C/svg%3E';
+        });
+      }
     });
-  });
+  };
 
-  // 图片懒加载优化 - 添加加载完成标记
-  document.querySelectorAll('.steam-game-card img, .steam-recent-card img').forEach(img => {
-    if (img.complete) {
-      img.classList.add('loaded');
-    } else {
-      img.addEventListener('load', function () {
-        this.classList.add('loaded');
-      });
-    }
-  });
+  // 初始化图片加载监听
+  observeImageLoad();
 
   // 成就进度条计算
   initAchievementProgressBars();
