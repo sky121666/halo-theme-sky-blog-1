@@ -1,0 +1,79 @@
+/* ========================================== */
+/*    Auth Layout: Default (简洁默认)         */
+/* ========================================== */
+@import '../auth-common.css';
+
+.auth-page-default {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--color-base-200);
+}
+
+.auth-card-default {
+    width: 100%;
+    max-width: 560px;
+    background: var(--color-base-100);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px -10px oklch(from var(--color-base-content) l c h / 0.1);
+    border: 1px solid oklch(from var(--color-base-content) l c h / 0.05);
+}
+
+@media (min-width: 640px) {
+    .auth-card-default {
+        padding: 3rem;
+    }
+}
+
+.auth-logo-default {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-logo-default a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.2s;
+}
+
+.auth-logo-default a:hover {
+    transform: scale(1.02);
+}
+
+/* 简洁默认布局下的标题样式调整 */
+.auth-page-default .auth-title {
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .auth-page-default .auth-title {
+        font-size: 2rem;
+    }
+}
+
+.auth-page-default .auth-subtitle {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-copyright-default {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: oklch(from var(--color-base-content) l c h / 0.4);
+}
+
+.auth-copyright-default a {
+    transition: color 0.2s;
+}
+
+.auth-copyright-default a:hover {
+    color: var(--color-primary);
+}

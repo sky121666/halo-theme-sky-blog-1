@@ -79,7 +79,7 @@ function generateEntries() {
   });
 
   // Auth 布局入口
-  const authLayouts = ['split', 'centered', 'terminal'];
+  const authLayouts = ['default', 'split', 'centered'];
   authLayouts.forEach((layout) => {
     const jsFile = `src/pages/auth/themes/${layout}.js`;
     if (existsSync(jsFile)) {

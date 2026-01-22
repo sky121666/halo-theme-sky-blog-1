@@ -18,8 +18,61 @@
             sendVerificationCodeSending: '发送中...',
             passwordConfirmationFailed: '两次密码输入不一致',
         };
+        
+        // 密码确认验证
+        window.setupPasswordConfirmation = function (passwordId, confirmPasswordId) {
+            const password = document.getElementById(passwordId);
+            const confirmPassword = document.getElementById(confirmPasswordId);
+            if (!password || !confirmPassword) return;
+
+            function validate() {
+                const msg = password.value !== confirmPassword.value
+                    ? (window.i18nResources?.passwordConfirmationFailed || "密码不一致")
+                    : '';
+                confirmPassword.setCustomValidity(msg);
+            }
+            password.addEventListener('input', validate);
+            confirmPassword.addEventListener('input', validate);
+        };
+
+        // 发送验证码
+        window.sendVerificationCode = function (button, sendRequest) {
+            let countdown = 60;
+            const originalText = button.textContent;
+
+            button.addEventListener('click', async function () {
+                if (button.disabled) return;
+                button.disabled = true;
+                button.textContent = '发送中...';
+
+                try {
+                    await sendRequest();
+                    const timer = setInterval(function () {
+                        countdown--;
+                        button.textContent = countdown + 's';
+                        if (countdown <= 0) {
+                            clearInterval(timer);
+                            button.textContent = originalText;
+                            button.disabled = false;
+                            countdown = 60;
+                        }
+                    }, 1000);
+                } catch (error) {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    alert(error.message || '发送失败');
+                }
+            });
+        };
     </script>
     <script type="module" src="/js/main.js"></script>
+    
+    <!-- Altcha Captcha Scripts (Halo Pro) -->
+    <th:block th:if="${#strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
+        <script async defer src="/webjars/altcha/2.0.3/dist/altcha.i18n.js" type="module"></script>
+        <script src="/js/altcha-lib.iife.js"></script>
+        <script src="/js/altcha-utils.js"></script>
+    </th:block>
 </th:block>
 
 <!-- 基础样式资源 -->

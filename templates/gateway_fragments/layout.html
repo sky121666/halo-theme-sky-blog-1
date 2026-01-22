@@ -1,5 +1,5 @@
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}" th:fragment="layout (title,head,body)" th:with="authLayout = ${theme.config.auth?.auth_settings?.auth_layout ?: 'split'},
+<html th:lang="${#locale.toLanguageTag}" th:fragment="layout (title,head,body)" th:with="authLayout = ${theme.config.auth?.auth_settings?.auth_layout ?: 'default'},
                brandStyle = ${theme.config.auth?.auth_settings?.brand_style ?: 'simple'},
                cardEffect = ${theme.config.auth?.auth_settings?.card_effect ?: 'none'},
                brandSlogan = ${theme.config.auth?.auth_settings?.brand_slogan ?: '探索、记录、分享'},
@@ -30,7 +30,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
 
     <!-- Auth 布局 CSS -->
-    <link th:if="${authLayout != 'default'}" rel="stylesheet"
+    <link rel="stylesheet"
         th:href="@{'/assets/css/auth-' + ${authLayout} + '.css?v=' + ${theme.spec.version}}" />
 
     <th:block th:replace="~{gateway_fragments/common::basicStaticResources}"></th:block>
@@ -43,11 +43,30 @@
 <body class="font-sans text-base-content antialiased selection:bg-primary selection:text-primary-content">
 
     <!-- ======================== -->
-    <!-- 布局 1: 系统默认          -->
+    <!-- 布局 1: 简洁默认          -->
     <!-- ======================== -->
     <th:block th:if="${authLayout == 'default'}">
-        <div class="gateway-wrapper">
-            <th:block th:replace="${body}" />
+        <div class="auth-page-default">
+            <div class="auth-card-default">
+                <!-- Logo -->
+                <div class="auth-logo-default">
+                    <a href="/" class="flex items-center justify-center gap-3 group">
+                        <img th:if="${site.logo != null and !site.logo.isEmpty()}" 
+                             th:src="${site.logo}" th:alt="${site.title}"
+                             class="w-10 h-10 rounded-xl shadow-md" />
+                        <span class="text-2xl font-bold text-primary" th:text="${site.title}">Site</span>
+                    </a>
+                </div>
+                <!-- 表单内容 -->
+                <div class="auth-form-container">
+                    <th:block th:replace="${body}" />
+                </div>
+            </div>
+            <!-- 版权 -->
+            <div class="auth-copyright-default">
+                <span>©</span>
+                <a href="/" class="ml-1" th:text="${site.title}">Site</a>
+            </div>
         </div>
     </th:block>
 
@@ -196,30 +215,8 @@
         </div>
     </th:block>
 
-    <!-- ======================== -->
-    <!-- 布局 4: 极客终端          -->
-    <!-- ======================== -->
-    <th:block th:if="${authLayout == 'terminal'}">
-        <div class="auth-page-terminal">
-            <div class="auth-card-terminal">
-                <!-- Terminal 头部 -->
-                <div class="terminal-header">
-                    <div class="terminal-controls">
-                        <span class="control close"></span>
-                        <span class="control minimize"></span>
-                        <span class="control maximize"></span>
-                    </div>
-                    <div class="terminal-title">root@auth-server:~</div>
-                </div>
-                <div class="auth-form-container">
-                    <th:block th:replace="${body}" />
-                </div>
-            </div>
-        </div>
-    </th:block>
-
     <!-- Auth 布局 JS -->
-    <script th:if="${authLayout != 'default'}" type="module"
+    <script type="module"
         th:src="@{'/assets/js/auth-' + ${authLayout} + '.js?v=' + ${theme.spec.version}}"></script>
 </body>
 

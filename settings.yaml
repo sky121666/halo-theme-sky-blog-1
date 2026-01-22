@@ -3284,7 +3284,7 @@ spec:
           name: auth_settings
           label: 认证页面样式
           value:
-            auth_layout: split
+            auth_layout: default
             brand_style: simple
             card_effect: none
             brand_slogan: "探索、记录、分享"
@@ -3298,7 +3298,7 @@ spec:
               render-type: text
               size: 100
               gap: 10
-              value: split
+              value: default
               options:
                 - label: 系统默认
                   value: default
@@ -3306,8 +3306,6 @@ spec:
                   value: split
                 - label: 居中卡片
                   value: centered
-                - label: 极客终端
-                  value: terminal
             - $formkit: toggle
               id: brand_style
               name: brand_style
@@ -3380,10 +3378,11 @@ spec:
                   value: "欢迎来到"
                 
                 # 特性 1
-                - $formkit: icon
+                - $formkit: iconify
                   name: feature_1_icon
                   label: 特性 1 图标
-                  value: "icon-[heroicons--shield-check]"
+                  format: svg
+                  value-only: true
                 - $formkit: text
                   name: feature_1_title
                   label: 特性 1 标题
@@ -3394,10 +3393,11 @@ spec:
                   value: "基于 Spring Security 的账户保护"
 
                 # 特性 2
-                - $formkit: icon
+                - $formkit: iconify
                   name: feature_2_icon
                   label: 特性 2 图标
-                  value: "icon-[heroicons--sparkles]"
+                  format: svg
+                  value-only: true
                 - $formkit: text
                   name: feature_2_title
                   label: 特性 2 标题
@@ -3408,10 +3408,11 @@ spec:
                   value: "为您量身定制的阅读体验"
 
                 # 特性 3
-                - $formkit: icon
+                - $formkit: iconify
                   name: feature_3_icon
                   label: 特性 3 图标
-                  value: "icon-[heroicons--device-phone-mobile]"
+                  format: svg
+                  value-only: true
                 - $formkit: text
                   name: feature_3_title
                   label: 特性 3 标题
