@@ -96,7 +96,14 @@
                   return;
                 }
 
-                this.$nextTick(() => this.loadImage());
+                // 延迟加载热力图，不阻塞首屏
+                this.$nextTick(() => {
+                  if ('requestIdleCallback' in window) {
+                    requestIdleCallback(() => this.loadImage(), { timeout: 3000 });
+                  } else {
+                    setTimeout(() => this.loadImage(), 200);
+                  }
+                });
 
                 new MutationObserver(() => {
                   requestAnimationFrame(() => this.updateImageSrc());

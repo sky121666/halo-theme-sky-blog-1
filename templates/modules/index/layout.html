@@ -12,11 +12,13 @@
 
   <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
   <th:block th:replace="~{modules/theme-script :: inline-script}" />
+  <!-- 关键 CSS 内联 -->
+  <th:block th:replace="~{modules/critical-css :: critical}" />
 
   <!-- 页面标题 -->
   <title th:text="${site.title}"></title>
-  <!-- 字体-->
-  <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
+  <!-- 字体 - 异步加载，不阻塞渲染 -->
+  <th:block th:replace="~{modules/font-loader :: fonts}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />

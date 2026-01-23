@@ -257,6 +257,47 @@ window.SkyEvents = {
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', () => {
   window.SkyEvents.onPageLoad();
+  
+  // 图片懒加载优化 - 添加 loaded 类实现淡入效果
+  const observeImages = () => {
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+      if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add('loaded');
+      } else {
+        img.addEventListener('load', function() {
+          this.classList.add('loaded');
+        }, { once: true });
+        img.addEventListener('error', function() {
+          this.classList.add('loaded'); // 即使失败也显示，避免空白
+        }, { once: true });
+      }
+    });
+  };
+  
+  observeImages();
+  
+  // 监听动态加载的图片（如无限滚动）
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === 1) {
+          const imgs = node.querySelectorAll ? node.querySelectorAll('img[loading="lazy"]') : [];
+          imgs.forEach(img => {
+            if (img.complete && img.naturalHeight !== 0) {
+              img.classList.add('loaded');
+            } else {
+              img.addEventListener('load', function() {
+                this.classList.add('loaded');
+              }, { once: true });
+            }
+          });
+        }
+      });
+    });
+  });
+  
+  observer.observe(document.body, { childList: true, subtree: true });
 });
 
 // 监听 Alpine.js 初始化完成

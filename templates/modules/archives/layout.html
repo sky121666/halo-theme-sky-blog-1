@@ -19,7 +19,7 @@
   <!-- 页面标题 -->
   <title th:text="'归档 - ' + ${site.title}"></title>
   <!-- 字体 -->
-  <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
+  <th:block th:replace="~{modules/font-loader :: fonts}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <link rel="stylesheet" th:href="@{/assets/css/archives.css?v={version}(version=${theme.spec.version})}" />

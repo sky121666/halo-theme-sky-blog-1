@@ -20,7 +20,7 @@
   <!-- 页面标题 -->
   <title th:text="${(theme.config.friends_page_settings?.page_title ?: '朋友圈')} + ' - ' + ${site.title}"></title>
   <!-- 字体 -->
-  <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
+  <th:block th:replace="~{modules/font-loader :: fonts}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
 </head>

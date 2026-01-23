@@ -583,7 +583,12 @@ function welcomeWeatherCard() {
     init() {
       this.updateGreeting();
       this.updateDate();
-      this.loadWeather();
+      // 延迟加载天气，不阻塞首屏渲染
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => this.loadWeather(), { timeout: 2000 });
+      } else {
+        setTimeout(() => this.loadWeather(), 100);
+      }
     },
 
     updateGreeting() {

@@ -1,5 +1,11 @@
-/* 导入 Tailwind CSS 和 DaisyUI */
+/* Tailwind CSS 4 + DaisyUI 5 配置 */
 @import "tailwindcss";
+
+/* 内容扫描 - 只包含实际使用的类 */
+@source "../../templates/**/*.html";
+@source "../**/*.js";
+
+/* 插件 */
 @plugin "@iconify/tailwind4";
 @plugin "daisyui" {
   themes: all;

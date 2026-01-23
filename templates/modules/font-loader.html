@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- 字体异步加载片段 - 不阻塞渲染 -->
+<!-- 使用后端配置的 font_cdn 地址 -->
+<th:block th:fragment="fonts">
+  <!-- 预连接到字体 CDN -->
+  <link rel="preconnect" th:href="${theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts'}" crossorigin />
+  
+  <!-- 异步加载通用字体样式 -->
+  <link rel="stylesheet" 
+        th:href="${(theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts') + '/open-fonts.css'}" 
+        media="print" 
+        onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" 
+          th:href="${(theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts') + '/open-fonts.css'}" />
+  </noscript>
+</th:block>
+
+</html>

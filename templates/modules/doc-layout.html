@@ -16,7 +16,7 @@
   <title th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title}"></title>
 
   <!-- 字体 -->
-  <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
+  <th:block th:replace="~{modules/font-loader :: fonts}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <!-- 文章样式（包含文章内容和目录样式） -->

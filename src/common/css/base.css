@@ -753,3 +753,49 @@ html.font-siyuan-songti body {
     font-family: '思源屏显臻宋', 'Source Han Serif SC', 'Noto Serif CJK SC', serif;
 }
 
+
+
+/* ===================================================
+ * 图片懒加载优化 - 骨架屏 + 淡入效果
+ * ==================================================*/
+
+/* 图片容器 - 防止布局抖动 */
+.img-lazy-container {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+        90deg,
+        color-mix(in oklch, var(--color-base-content) 5%, transparent) 25%,
+        color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
+        color-mix(in oklch, var(--color-base-content) 5%, transparent) 75%
+    );
+    background-size: 200% 100%;
+    animation: img-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes img-skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 图片加载中状态 */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* 图片加载完成 */
+img[loading="lazy"].loaded,
+img[loading="lazy"]:not([src=""]):not([src*="data:"]) {
+    opacity: 1;
+}
+
+/* 文章卡片封面图优化 */
+article img[loading="lazy"] {
+    background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+}
+
+/* 头像图片 - 圆形骨架 */
+.avatar img[loading="lazy"]:not(.loaded) {
+    background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+}
