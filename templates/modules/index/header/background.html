@@ -5,6 +5,21 @@
 <!-- 仅在 show_background 为 true 时显示背景 -->
 <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
 
+<!-- 背景层：天气联动特效 -->
+<div class="absolute inset-0 z-0 overflow-hidden weather-effect-container"
+    th:if="${theme.config.index.background_settings.background_type == 'weather'}"
+    id="weather-effect-root">
+    
+    <!-- 天气效果容器 - JS 会动态更新 class -->
+    <div class="weather-effect">
+        <!-- 效果层 - JS 动态生成内容 -->
+        <div class="weather-effect-layer"></div>
+    </div>
+    
+    <!-- 滚动蒙版 -->
+    <div class="scroll-mask absolute inset-0 bg-black/5 transition-opacity duration-700" style="opacity: 0;"></div>
+</div>
+
 <!-- 背景层：图片/视频背景 -->
 <div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.background_type == 'image'}"
     th:with="bgSrc=${theme.config.index.background_settings.background_image},
@@ -39,9 +54,7 @@
                 th:style="${darkScheme == 'custom'} ? 'background: linear-gradient(to bottom, ' + ${darkCustom} + '1a, ' + ${darkCustom} + '80, ' + ${darkCustom} + 'cc)' : ''">
             </div>
             <!-- 滚动深邃效果蒙版 -->
-            <div class="absolute inset-0 transition-opacity duration-500 bg-black"
-                :style="`opacity: ${scrolled ? 0.4 : 0.1}`">
-            </div>
+            <div class="scroll-mask absolute inset-0 transition-opacity duration-500 bg-black" style="opacity: 0.1;"></div>
         </div>
     </th:block>
 </div>
@@ -83,40 +96,6 @@
         <div class="effect-overlay"></div>
     </div>
 
-    <!-- 特效 3：流星雨 -->
-    <div class="effect-meteor-shower" th:if="${theme.config.index.background_settings.effect_style == 'meteor-shower'}">
-        <!-- 暗色基底 -->
-        <div class="effect-bg-base"></div>
-        <!-- 流星 - 25颗 -->
-        <div class="meteor meteor-1"></div>
-        <div class="meteor meteor-2"></div>
-        <div class="meteor meteor-3"></div>
-        <div class="meteor meteor-4"></div>
-        <div class="meteor meteor-5"></div>
-        <div class="meteor meteor-6"></div>
-        <div class="meteor meteor-7"></div>
-        <div class="meteor meteor-8"></div>
-        <div class="meteor meteor-9"></div>
-        <div class="meteor meteor-10"></div>
-        <div class="meteor meteor-11"></div>
-        <div class="meteor meteor-12"></div>
-        <div class="meteor meteor-13"></div>
-        <div class="meteor meteor-14"></div>
-        <div class="meteor meteor-15"></div>
-        <div class="meteor meteor-16"></div>
-        <div class="meteor meteor-17"></div>
-        <div class="meteor meteor-18"></div>
-        <div class="meteor meteor-19"></div>
-        <div class="meteor meteor-20"></div>
-        <div class="meteor meteor-21"></div>
-        <div class="meteor meteor-22"></div>
-        <div class="meteor meteor-23"></div>
-        <div class="meteor meteor-24"></div>
-        <div class="meteor meteor-25"></div>
-        <!-- 柔和蒙版 -->
-        <div class="effect-overlay"></div>
-    </div>
-
     <!-- 特效 4：深邃星空 -->
     <div class="effect-starry-sky" th:if="${theme.config.index.background_settings.effect_style == 'starry-sky'}">
         <!-- 暗色基底 -->
@@ -143,10 +122,10 @@
     </div>
 
     <!-- 滚动交互蒙版（所有特效共用） -->
-    <div class="absolute inset-0 bg-black transition-opacity duration-700 ease-out"
-        :style="`opacity: ${scrolled ? 0.25 : 0.05}`">
-    </div>
+    <div class="scroll-mask absolute inset-0 bg-black transition-opacity duration-700 ease-out" style="opacity: 0.05;"></div>
 
 </div>
+
+
 
 </th:block>

@@ -907,12 +907,31 @@ function welcomeWeatherCard() {
     },
 
     // 心知天气代码映射背景
+    // 代码参考: https://seniverse.yuque.com/hyper_data/api_2018/yev2c3
+    // 0: 晴, 1-3: 晴间多云, 4-9: 多云/阴, 10-12: 阵雨/雷阵雨, 13-19: 各种雨
+    // 20-25: 各种雪, 26-31: 雾/霾, 32-36: 风, 37: 冷, 38: 热, 99: 未知
     getWeatherBgFromSeniverse(code) {
-      if (code === 0 || code === 38) return 'sunny';
-      if (code >= 10 && code <= 19) return 'rain';
-      if (code >= 20 && code <= 25) return 'snow';
-      if (code >= 26 && code <= 31) return 'fog';
-      return 'cloudy';
+      const hour = new Date().getHours();
+      const isNight = hour >= 18 || hour < 6;
+
+      // 晴天
+      if (code === 0 || code === 38) return isNight ? 'night-clear' : 'sunny';
+      // 晴间多云
+      if (code >= 1 && code <= 3) return isNight ? 'night-cloudy' : 'cloudy';
+      // 多云/阴
+      if (code >= 4 && code <= 9) return isNight ? 'night-cloudy' : 'cloudy';
+      // 雷阵雨 (10-12 包含雷暴)
+      if (code >= 10 && code <= 12) return 'stormy';
+      // 各种雨 (13-19)
+      if (code >= 13 && code <= 19) return 'rainy';
+      // 各种雪
+      if (code >= 20 && code <= 25) return 'snowy';
+      // 雾/霾
+      if (code >= 26 && code <= 31) return 'foggy';
+      // 风/冷 - 按多云处理
+      if (code >= 32 && code <= 37) return isNight ? 'night-cloudy' : 'cloudy';
+      // 默认
+      return isNight ? 'night-cloudy' : 'cloudy';
     },
 
     // 获取缓存
@@ -925,8 +944,17 @@ function welcomeWeatherCard() {
         const cacheAge = Date.now() - data.timestamp;
         if (cacheAge > CACHE_DURATION) {
           localStorage.removeItem(CACHE_KEY);
+          console.log('%c🌤️ 天气缓存已过期，重新获取...', 'color: #FF9800');
           return null;
         }
+        
+        // 缓存命中日志
+        const minutes = Math.floor(cacheAge / 60000);
+        console.log('%c🌤️ 使用天气缓存', 'color: #2196F3; font-weight: bold', `(${minutes}分钟前)`);
+        console.log('📍 位置:', data.location || '未知');
+        console.log('🌡️ 温度:', (data.weather?.temp || '--') + '°C |', data.weather?.description || '未知');
+        console.log('🎨 背景:', data.weatherBg || 'sunny');
+        
         return data;
       } catch (e) {
         return null;
@@ -938,6 +966,13 @@ function welcomeWeatherCard() {
       try {
         const cacheData = { ...data, timestamp: Date.now() };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+        
+        // 输出天气日志
+        console.log('%c🌤️ 天气数据已更新', 'color: #4CAF50; font-weight: bold');
+        console.log('📍 位置:', data.location || '未知');
+        console.log('🌡️ 温度:', (data.weather?.temp || '--') + '°C');
+        console.log('☁️ 天气:', data.weather?.description || '未知');
+        console.log('🎨 背景:', data.weatherBg || 'sunny');
       } catch (e) { /* ignore */ }
     },
 
@@ -1063,7 +1098,6 @@ function welcomeWeatherCard() {
     }
   };
 }
-
 /**
  * 初始化所有组件
  * 注册模板中实际使用的 Alpine.js 组件

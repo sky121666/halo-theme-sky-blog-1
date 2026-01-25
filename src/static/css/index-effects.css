@@ -413,116 +413,7 @@
   }
 }
 
-/* ===================================================
- * 特效 3：流星雨 (meteor-shower)
- * 动感自然风 - 流星划过夜空，主题色拖尾
- * ==================================================*/
 
-.effect-meteor-shower {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* 流星 - 不同轨迹和速度，纯白色 */
-.meteor {
-  position: absolute;
-  width: 3px;
-  height: 120px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 10%,
-    rgba(255, 255, 255, 0.9) 30%,
-    rgba(255, 255, 255, 0.6) 70%,
-    transparent 100%
-  );
-  border-radius: 50%;
-  filter: blur(1px);
-  opacity: 0;
-  z-index: 2;
-}
-
-/* 生成25颗流星，随机分布 */
-.meteor-1 { top: 10%; left: 20%; animation: meteor-fall-1 10s ease-in infinite; }
-.meteor-2 { top: 15%; left: 40%; animation: meteor-fall-2 12s ease-in infinite 1s; }
-.meteor-3 { top: 20%; left: 60%; animation: meteor-fall-3 11s ease-in infinite 2s; }
-.meteor-4 { top: 25%; left: 80%; animation: meteor-fall-1 13s ease-in infinite 3s; }
-.meteor-5 { top: 30%; left: 35%; animation: meteor-fall-2 9s ease-in infinite 4s; }
-.meteor-6 { top: 35%; left: 55%; animation: meteor-fall-3 14s ease-in infinite 5s; }
-.meteor-7 { top: 40%; left: 75%; animation: meteor-fall-1 10s ease-in infinite 6s; }
-.meteor-8 { top: 45%; left: 25%; animation: meteor-fall-2 15s ease-in infinite 7s; }
-.meteor-9 { top: 50%; left: 45%; animation: meteor-fall-3 11s ease-in infinite 8s; }
-.meteor-10 { top: 55%; left: 65%; animation: meteor-fall-1 12s ease-in infinite 9s; }
-.meteor-11 { top: 60%; left: 15%; animation: meteor-fall-2 13s ease-in infinite 1.5s; }
-.meteor-12 { top: 12%; left: 70%; animation: meteor-fall-3 10s ease-in infinite 2.5s; }
-.meteor-13 { top: 18%; left: 30%; animation: meteor-fall-1 14s ease-in infinite 3.5s; }
-.meteor-14 { top: 22%; left: 50%; animation: meteor-fall-2 11s ease-in infinite 4.5s; }
-.meteor-15 { top: 28%; left: 85%; animation: meteor-fall-3 9s ease-in infinite 5.5s; }
-.meteor-16 { top: 32%; left: 10%; animation: meteor-fall-1 15s ease-in infinite 6.5s; }
-.meteor-17 { top: 38%; left: 42%; animation: meteor-fall-2 12s ease-in infinite 7.5s; }
-.meteor-18 { top: 42%; left: 62%; animation: meteor-fall-3 10s ease-in infinite 8.5s; }
-.meteor-19 { top: 48%; left: 18%; animation: meteor-fall-1 13s ease-in infinite 9.5s; }
-.meteor-20 { top: 52%; left: 52%; animation: meteor-fall-2 11s ease-in infinite 1.2s; }
-.meteor-21 { top: 58%; left: 72%; animation: meteor-fall-3 14s ease-in infinite 2.2s; }
-.meteor-22 { top: 8%; left: 48%; animation: meteor-fall-1 10s ease-in infinite 3.2s; }
-.meteor-23 { top: 65%; left: 28%; animation: meteor-fall-2 12s ease-in infinite 4.2s; }
-.meteor-24 { top: 14%; left: 78%; animation: meteor-fall-3 11s ease-in infinite 5.2s; }
-.meteor-25 { top: 48%; left: 88%; animation: meteor-fall-1 13s ease-in infinite 6.2s; }
-
-/* 所有流星使用相同的白色拖尾 */
-
-/* 流星下落动画 - 3种不同轨迹 */
-@keyframes meteor-fall-1 {
-  0% {
-    opacity: 0;
-    transform: translateX(0) translateY(0) rotate(45deg);
-  }
-  8% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-400px) translateY(400px) rotate(45deg);
-  }
-}
-
-@keyframes meteor-fall-2 {
-  0% {
-    opacity: 0;
-    transform: translateX(0) translateY(0) rotate(38deg);
-  }
-  10% {
-    opacity: 1;
-  }
-  88% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-450px) translateY(450px) rotate(38deg);
-  }
-}
-
-@keyframes meteor-fall-3 {
-  0% {
-    opacity: 0;
-    transform: translateX(0) translateY(0) rotate(52deg);
-  }
-  7% {
-    opacity: 1;
-  }
-  87% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-420px) translateY(420px) rotate(52deg);
-  }
-}
 
 /* ===================================================
  * 特效 4：深邃星空 (starry-sky)
@@ -766,7 +657,6 @@
 @media (prefers-reduced-motion: reduce) {
   .fluid-blob,
   .neon-line,
-  .meteor,
   .star-layer-far,
   .star-layer-mid,
   .star-layer-near,

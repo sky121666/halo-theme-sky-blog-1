@@ -892,10 +892,14 @@ spec:
               gap: 10
               value: effect
               options:
+                - label: 无
+                  value: none
                 - label: 背景图片
                   value: image
                 - label: CSS 特效
                   value: effect
+                - label: 天气联动
+                  value: weather
             - $formkit: attachment
               name: background_image
               key: background_image_field
@@ -925,8 +929,6 @@ spec:
                   value: fluid-gradient
                 - label: 霓虹线条
                   value: neon-lines
-                - label: 流星雨
-                  value: meteor-shower
                 - label: 深邃星空
                   value: starry-sky
             # 蒙版渐变设置 - 扁平化到 background_settings 中

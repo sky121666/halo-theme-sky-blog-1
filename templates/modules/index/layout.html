@@ -27,6 +27,9 @@
     <!-- 背景特效样式 - 只在选择 CSS 特效时加载 -->
     <link th:if="${theme.config.index.background_settings.background_type == 'effect'}" rel="stylesheet"
       th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 天气联动特效样式 - 只在选择天气联动时加载 -->
+    <link th:if="${theme.config.index.background_settings.background_type == 'weather'}" rel="stylesheet"
+      th:href="@{/assets/css/index-weather-effects.css?v={version}(version=${theme.spec.version})}" />
     <!-- 标题特效样式 - 只在显示标题时加载 -->
     <link th:if="${theme.config.index.title_settings.show_title}" rel="stylesheet"
       th:href="@{/assets/css/index-title-effects.css?v={version}(version=${theme.spec.version})}" />
