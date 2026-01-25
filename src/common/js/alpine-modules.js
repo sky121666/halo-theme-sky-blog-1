@@ -702,7 +702,7 @@ function welcomeWeatherCard() {
     // IP 定位 (两个 API 同时请求，谁快用谁，pconline 优先级最高)
     async getLocationFromIP() {
       let usedSource = null;
-      
+
       // pconline 请求
       const pconlinePromise = this.pconlineJsonp().then(data => {
         const rawCity = data.city || data.addr || '';
@@ -726,13 +726,13 @@ function welcomeWeatherCard() {
 
       // 谁先成功用谁
       const firstResult = await Promise.race([
-        pconlinePromise.then(r => r ? r : new Promise(() => {})),
-        ipapiPromise.then(r => r ? r : new Promise(() => {}))
+        pconlinePromise.then(r => r ? r : new Promise(() => { })),
+        ipapiPromise.then(r => r ? r : new Promise(() => { }))
       ].map(p => p.catch(() => null))).catch(() => null);
 
       if (firstResult) {
         usedSource = firstResult.source;
-        
+
         // 如果先用的是 ipapi，继续等 pconline，成功后覆盖更新
         if (usedSource === 'ipapi') {
           pconlinePromise.then(async (pconlineResult) => {
@@ -741,7 +741,7 @@ function welcomeWeatherCard() {
             }
           });
         }
-        
+
         return firstResult;
       }
 
@@ -944,17 +944,9 @@ function welcomeWeatherCard() {
         const cacheAge = Date.now() - data.timestamp;
         if (cacheAge > CACHE_DURATION) {
           localStorage.removeItem(CACHE_KEY);
-          console.log('%c🌤️ 天气缓存已过期，重新获取...', 'color: #FF9800');
           return null;
         }
-        
-        // 缓存命中日志
-        const minutes = Math.floor(cacheAge / 60000);
-        console.log('%c🌤️ 使用天气缓存', 'color: #2196F3; font-weight: bold', `(${minutes}分钟前)`);
-        console.log('📍 位置:', data.location || '未知');
-        console.log('🌡️ 温度:', (data.weather?.temp || '--') + '°C |', data.weather?.description || '未知');
-        console.log('🎨 背景:', data.weatherBg || 'sunny');
-        
+
         return data;
       } catch (e) {
         return null;
@@ -966,13 +958,6 @@ function welcomeWeatherCard() {
       try {
         const cacheData = { ...data, timestamp: Date.now() };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-        
-        // 输出天气日志
-        console.log('%c🌤️ 天气数据已更新', 'color: #4CAF50; font-weight: bold');
-        console.log('📍 位置:', data.location || '未知');
-        console.log('🌡️ 温度:', (data.weather?.temp || '--') + '°C');
-        console.log('☁️ 天气:', data.weather?.description || '未知');
-        console.log('🎨 背景:', data.weatherBg || 'sunny');
       } catch (e) { /* ignore */ }
     },
 
