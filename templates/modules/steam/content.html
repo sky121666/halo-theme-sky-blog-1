@@ -2,89 +2,86 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <!-- ========================================== -->
-<!--        Steam 游戏库主体内容                 -->
+<!--        Steam 游戏库主体内容 (异步加载)      -->
 <!-- ========================================== -->
 
-<main class="steam-page relative" th:fragment="steam-content" th:with="profile = ${steamFinder.getProfile()},
-           recentGames = ${steamFinder.getRecentGames(recentGamesLimit)},
-           stats = ${steamFinder.getStats()},
-           badges = ${steamFinder.getBadges()}">
+<main class="steam-page relative" th:fragment="steam-content"
+  x-data="steamPage()" x-init="init()">
 
   <div class="max-w-6xl mx-auto px-4 py-8">
 
     <!-- 错误提示 -->
-    <div th:if="${profile == null || stats == null}" class="alert alert-warning mb-6 rounded-2xl steam-animate-in">
+    <div x-show="error" x-cloak class="alert alert-warning mb-6 rounded-2xl steam-animate-in">
       <span class="icon-[heroicons--exclamation-triangle] w-5 h-5"></span>
-      <span>部分 Steam 数据加载失败，请稍后刷新重试或检查插件配置。</span>
+      <span x-text="error">部分 Steam 数据加载失败，请稍后刷新重试或检查插件配置。</span>
     </div>
 
     <!-- ========================================== -->
     <!--     两栏布局 - Steam 官方风格              -->
     <!-- ========================================== -->
-    <div th:if="${profile != null}" th:with="p = ${profile}" class="steam-layout steam-animate-in">
+    <div class="steam-layout steam-animate-in">
 
       <!-- ================================ -->
       <!-- 左侧主栏                          -->
       <!-- ================================ -->
       <div class="steam-main">
 
-        <!-- Profile Header -->
-        <div class="steam-profile-header">
-          <div class="steam-profile-avatar" th:classappend="${p?.playing ? 'playing' : ''}">
-            <img th:src="${p?.summary?.avatarFull}" th:alt="${p?.summary?.personaName}" 
-                 loading="eager" 
-                 decoding="async"
-                 class="steam-avatar-img" />
+        <!-- Profile Header - 骨架屏 -->
+        <div x-show="loading.profile" class="steam-profile-header">
+          <div class="steam-profile-avatar">
+            <div class="skeleton w-20 h-20 rounded-full"></div>
+          </div>
+          <div class="steam-profile-info">
+            <div class="skeleton h-7 w-32 mb-2"></div>
+            <div class="skeleton h-4 w-24"></div>
+          </div>
+        </div>
+
+        <!-- Profile Header - 实际内容 -->
+        <div x-show="!loading.profile && profile" x-cloak class="steam-profile-header">
+          <div class="steam-profile-avatar" :class="profile?.playing ? 'playing' : ''">
+            <img :src="profile?.summary?.avatarfull" :alt="profile?.summary?.personaname"
+                 loading="eager" decoding="async" class="steam-avatar-img" />
           </div>
           <div class="steam-profile-info">
             <div class="flex items-center gap-2">
-              <h1 class="steam-profile-name" th:text="${p?.summary?.personaName}">Steam User</h1>
-              <!-- Level Badge (Moved from Sidebar) -->
+              <h1 class="steam-profile-name" x-text="profile?.summary?.personaname">Steam User</h1>
+              <!-- Level Badge -->
               <span class="badge badge-outline gap-1 font-mono"
-                th:classappend="${(badges?.playerLevel ?: p?.steamLevel ?: 0) >= 100 ? 'badge-warning' : 'badge-neutral'}"
+                :class="(badges?.playerLevel || profile?.steamLevel || 0) >= 100 ? 'badge-warning' : 'badge-neutral'"
                 style="border-color: var(--color-primary); color: var(--color-primary);">
                 <span class="text-xs">Lv.</span>
-                <span class="font-bold" th:text="${badges?.playerLevel ?: p?.steamLevel ?: 0}">0</span>
+                <span class="font-bold" x-text="badges?.playerLevel || profile?.steamLevel || 0">0</span>
               </span>
             </div>
 
-            <!-- Status (Moved from Sidebar) -->
+            <!-- Status -->
             <div class="steam-status-subtitle flex items-center gap-2 text-sm mt-1">
               <span class="w-2 h-2 rounded-full"
-                th:classappend="${p?.playing ? 'bg-success' : (p?.summary?.personaState == 1 ? 'bg-info' : 'bg-base-content/30')}"></span>
-              <span th:text="${p?.statusText}" class="opacity-70">在线</span>
-              <span th:if="${p?.playing}" class="text-success text-xs">
-              </span>
-              </span>
+                :class="profile?.playing ? 'bg-success' : (profile?.summary?.personastate == 1 ? 'bg-info' : 'bg-base-content/30')"></span>
+              <span x-text="profile?.statusText" class="opacity-70">在线</span>
             </div>
           </div>
         </div>
 
         <!-- 最新动态 (热力图) -->
         <div th:if="${showHeatmap}" class="steam-activity-section">
-          <!-- 热力图容器 -->
           <div class="steam-heatmap-inline relative">
             <div class="heatmap-container relative min-h-[120px]">
               <div id="steam-heatmap-grid" class="steam-heatmap-grid" th:data-days="${heatmapDays}"
                 th:data-api-url="@{/apis/api.steam.halo.run/v1alpha1/heatmap/records}"></div>
 
-              <!-- Tooltip -->
               <div id="steam-heatmap-tooltip" class="steam-heatmap-tooltip"></div>
-
-              <!-- 加载状态 -->
               <div id="steam-heatmap-loading" class="steam-heatmap-status">
                 <span class="loading loading-spinner loading-md opacity-50"></span>
               </div>
-              <!-- 空状态 -->
               <div id="steam-heatmap-empty" class="steam-heatmap-status" style="display: none;">
                 <span class="text-xs opacity-50">暂无数据</span>
               </div>
-              <!-- 错误状态 -->
               <div id="steam-heatmap-error" class="steam-heatmap-status" style="display: none;">
                 <span class="text-xs text-error opacity-50">加载失败</span>
               </div>
             </div>
-            <!-- 颜色图例 -->
             <div class="steam-heatmap-legend">
               <span class="steam-legend-text">Less</span>
               <span class="steam-legend-dot l0"></span>
@@ -97,66 +94,77 @@
         </div>
 
       </div>
-      <!-- End of steam-main -->
 
       <!-- ================================ -->
       <!-- 右侧边栏                          -->
       <!-- ================================ -->
       <div class="steam-sidebar">
 
-        <!-- 徽章展示 -->
-        <div th:if="${badges != null && badges.badges != null && !badges.badges.isEmpty()}" class="steam-sidebar-card">
-          <div class="steam-sidebar-title">
-            徽章 <span th:text="${badges.totalBadges}">0</span>
-          </div>
+        <!-- 徽章展示 - 骨架屏 -->
+        <div x-show="loading.badges" class="steam-sidebar-card">
+          <div class="steam-sidebar-title">徽章</div>
           <div class="steam-badges-grid">
-            <th:block th:each="badge, iter : ${badges.badges}" th:if="${iter.index < 8}">
-              <div class="steam-badge-item" th:title="${(badge.badgeName ?: badge.displayName) + ' Lv.' + badge.level}">
-                <img th:if="${badge.imageUrl != null && !badge.imageUrl.isEmpty()}" 
-                     th:src="${badge.imageUrl}"
-                     th:alt="${badge.displayName}" 
-                     loading="lazy" 
-                     decoding="async"
-                     class="steam-badge-img" />
-              </div>
-            </th:block>
+            <template x-for="i in 8" :key="i">
+              <div class="skeleton w-10 h-10 rounded"></div>
+            </template>
           </div>
         </div>
 
-        <!-- 统计信息 -->
-        <div th:if="${stats != null}" class="steam-sidebar-card steam-stats-list">
+        <!-- 徽章展示 - 实际内容 -->
+        <div x-show="!loading.badges && badges?.badges?.length > 0" x-cloak class="steam-sidebar-card">
+          <div class="steam-sidebar-title">
+            徽章 <span x-text="badges?.totalBadges || 0">0</span>
+          </div>
+          <div class="steam-badges-grid">
+            <template x-for="(badge, index) in (badges?.badges || []).slice(0, 8)" :key="index">
+              <div class="steam-badge-item" :title="(badge.badgeName || badge.displayName) + ' Lv.' + badge.level">
+                <img x-show="badge.imageUrl" :src="badge.imageUrl" :alt="badge.displayName"
+                     loading="lazy" decoding="async" class="steam-badge-img" />
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- 统计信息 - 骨架屏 -->
+        <div x-show="loading.stats" class="steam-sidebar-card steam-stats-list">
           <div class="steam-stat-item">
             <span class="steam-stat-label">游戏</span>
-            <span class="steam-stat-value" th:text="${stats.totalGames}">0</span>
+            <span class="skeleton h-5 w-12"></span>
           </div>
           <div class="steam-stat-item">
             <span class="steam-stat-label">总时长</span>
-            <span class="steam-stat-value"
-              th:text="${#numbers.formatDecimal(stats.totalPlaytimeMinutes / 60.0, 0, 1)} + 'h'">0h</span>
+            <span class="skeleton h-5 w-16"></span>
           </div>
-          <!-- 2周时长 (Moved from Header) -->
           <div class="steam-stat-item">
             <span class="steam-stat-label">最近2周</span>
-            <span class="steam-stat-value text-primary">
-              <span th:text="${stats.recentPlaytimeMinutes / 60}">0</span>
-              <span th:if="${stats.recentPlaytimeMinutes % 60 > 0}"
-                th:text="'.' + ${stats.recentPlaytimeMinutes % 60 / 6}"></span>
-              h
-            </span>
+            <span class="skeleton h-5 w-14"></span>
           </div>
+        </div>
 
+        <!-- 统计信息 - 实际内容 -->
+        <div x-show="!loading.stats && stats" x-cloak class="steam-sidebar-card steam-stats-list">
+          <div class="steam-stat-item">
+            <span class="steam-stat-label">游戏</span>
+            <span class="steam-stat-value" x-text="stats?.totalGames || 0">0</span>
+          </div>
+          <div class="steam-stat-item">
+            <span class="steam-stat-label">总时长</span>
+            <span class="steam-stat-value" x-text="((stats?.totalPlaytimeMinutes || 0) / 60).toFixed(1) + 'h'">0h</span>
+          </div>
+          <div class="steam-stat-item">
+            <span class="steam-stat-label">最近2周</span>
+            <span class="steam-stat-value text-primary" x-text="((stats?.recentPlaytimeMinutes || 0) / 60).toFixed(1) + 'h'">0h</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- End of steam-layout -->
 
   <div class="max-w-6xl mx-auto px-4 pb-8">
     <!-- ========================================== -->
     <!--     最近游玩 - 网格卡片布局               -->
     <!-- ========================================== -->
-    <section th:if="${recentGames != null && !recentGames.isEmpty()}"
-      class="steam-section steam-animate-in steam-stagger-1">
+    <section class="steam-section steam-animate-in steam-stagger-1">
       <div class="steam-section-header">
         <div class="steam-section-icon recent">
           <span class="icon-[heroicons--clock] w-5 h-5"></span>
@@ -164,39 +172,55 @@
         <h2 class="steam-section-title">最近游玩</h2>
       </div>
 
-      <!-- 游戏卡片网格 -->
-      <div class="steam-library-grid">
-        <th:block th:each="game, iter : ${recentGames}" th:if="${iter.index < 10}">
-          <a th:href="@{'https://store.steampowered.com/app/' + ${game.appId}}" target="_blank" class="steam-game-card">
+      <!-- 骨架屏 -->
+      <div x-show="loading.recent" class="steam-library-grid">
+        <template x-for="i in 6" :key="i">
+          <div class="steam-game-card">
             <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" 
-                   th:alt="${game.name}" 
-                   loading="lazy" 
-                   decoding="async"
-                   class="steam-game-img" />
+              <div class="skeleton w-full h-full"></div>
             </div>
             <div class="steam-game-card-info">
-              <div class="steam-game-card-name" th:text="${game.name}">Game</div>
+              <div class="skeleton h-4 w-3/4 mb-2"></div>
+              <div class="skeleton h-3 w-1/2"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- 实际内容 -->
+      <div x-show="!loading.recent && recentGames.length > 0" x-cloak class="steam-library-grid">
+        <template x-for="(game, idx) in recentGames.filter(g => g.appid).slice(0, 10)" :key="game.appid + '-' + idx">
+          <a :href="'https://store.steampowered.com/app/' + game.appid" target="_blank" class="steam-game-card">
+            <div class="steam-game-card-image">
+              <img :src="game.headerImageUrl" :alt="game.name" loading="lazy" decoding="async" class="steam-game-img" />
+            </div>
+            <div class="steam-game-card-info">
+              <div class="steam-game-card-name" x-text="game.name">Game</div>
               <div class="steam-game-card-meta">
-                <span class="steam-game-card-playtime" th:text="${game.playtime2WeeksFormatted}">0h</span>
+                <span class="steam-game-card-playtime" x-text="game.playtime2WeeksFormatted">0h</span>
               </div>
-              <!-- 成就进度条 - 同行显示 -->
-              <div class="steam-game-card-achievement-row" th:if="${game.achievementProgressText != null}">
-                <span class="steam-game-card-achievement" th:text="${game.achievementProgressText}"></span>
-                <div class="steam-achievement-bar" th:data-progress="${game.achievementProgressText}">
-                  <div class="steam-achievement-fill"></div>
+              <div class="steam-game-card-achievement-row" x-show="game.achievementProgressText">
+                <span class="steam-game-card-achievement" x-text="game.achievementProgressText"></span>
+                <div class="steam-achievement-bar" :data-progress="game.achievementProgressText">
+                  <div class="steam-achievement-fill" :style="'width:' + getAchievementPercent(game.achievementProgressText) + '%'"></div>
                 </div>
               </div>
             </div>
           </a>
-        </th:block>
+        </template>
+      </div>
+
+      <!-- 空状态 -->
+      <div x-show="!loading.recent && recentGames.length === 0" x-cloak class="steam-empty-state">
+        <div class="steam-empty-icon">🎮</div>
+        <div class="steam-empty-title">暂无最近游玩</div>
       </div>
     </section>
 
     <!-- ========================================== -->
     <!--     游戏库 - 网格卡片布局                 -->
     <!-- ========================================== -->
-    <section th:if="${games != null}" class="steam-section steam-animate-in steam-stagger-2">
+    <section class="steam-section steam-animate-in steam-stagger-2">
       <div class="steam-section-header">
         <div class="steam-section-icon library">
           <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
@@ -204,71 +228,73 @@
         <h2 class="steam-section-title">游戏库</h2>
       </div>
 
-      <!-- 游戏卡片网格 -->
-      <div th:if="${!games.items.isEmpty()}" class="steam-library-grid">
-        <th:block th:each="game : ${games.items}">
-          <a th:if="${enableGameLink}" th:href="'https://store.steampowered.com/app/' + ${game.appId}" target="_blank"
-            class="steam-game-card">
+      <!-- 骨架屏 -->
+      <div x-show="loading.games" class="steam-library-grid">
+        <template x-for="i in 12" :key="i">
+          <div class="steam-game-card">
             <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" 
-                   th:alt="${game.name}" 
-                   loading="lazy" 
-                   decoding="async"
-                   class="steam-game-img" />
+              <div class="skeleton w-full h-full"></div>
             </div>
             <div class="steam-game-card-info">
-              <div class="steam-game-card-name" th:text="${game.name}">Game</div>
+              <div class="skeleton h-4 w-3/4 mb-2"></div>
+              <div class="skeleton h-3 w-1/2"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- 实际内容 -->
+      <div x-show="!loading.games && games.items.length > 0" x-cloak class="steam-library-grid">
+        <template x-for="(game, idx) in games.items.filter(g => (g.appid || g.appId) && g.headerImageUrl)" :key="(game.appid || game.appId) + '-games-' + idx">
+          <a th:if="${enableGameLink}" :href="'https://store.steampowered.com/app/' + (game.appid || game.appId)" target="_blank" class="steam-game-card">
+            <div class="steam-game-card-image">
+              <img :src="game.headerImageUrl" :alt="game.name" loading="lazy" decoding="async" class="steam-game-img" />
+            </div>
+            <div class="steam-game-card-info">
+              <div class="steam-game-card-name" x-text="game.name">Game</div>
               <div class="steam-game-card-meta">
-                <span class="steam-game-card-playtime" th:text="${game.playtimeFormatted}">0h</span>
-                <span th:if="${game.lastPlayedFormatted}" class="steam-game-card-lastplayed"
-                  th:text="${game.lastPlayedFormatted}"></span>
+                <span class="steam-game-card-playtime" x-text="game.playtimeFormatted">0h</span>
+                <span x-show="game.lastPlayedFormatted" class="steam-game-card-lastplayed" x-text="game.lastPlayedFormatted"></span>
               </div>
             </div>
           </a>
-          <div th:unless="${enableGameLink}" class="steam-game-card">
-            <div class="steam-game-card-image">
-              <img th:src="${game.headerImageUrl}" 
-                   th:alt="${game.name}" 
-                   loading="lazy" 
-                   decoding="async"
-                   class="steam-game-img" />
-            </div>
-            <div class="steam-game-card-info">
-              <div class="steam-game-card-name" th:text="${game.name}">Game</div>
-              <div class="steam-game-card-meta">
-                <span class="steam-game-card-playtime" th:text="${game.playtimeFormatted}">0h</span>
-                <span th:if="${game.lastPlayedFormatted}" class="steam-game-card-lastplayed"
-                  th:text="${game.lastPlayedFormatted}"></span>
-              </div>
-            </div>
-          </div>
-        </th:block>
+        </template>
       </div>
 
       <!-- 空状态 -->
-      <div th:if="${games.items.isEmpty()}" class="steam-empty-state">
+      <div x-show="!loading.games && games.items.length === 0" x-cloak class="steam-empty-state">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无游戏数据</div>
         <div class="steam-empty-desc">游戏库为空，请检查 Steam 账号设置</div>
       </div>
 
       <!-- 分页 -->
-      <div th:if="${games.totalPages > 1}" class="steam-pagination">
+      <div x-show="games?.totalPages > 1" x-cloak class="steam-pagination">
         <div class="steam-pagination-inner">
-          <a th:if="${games.hasPrevious()}" th:href="@{${games.prevUrl}}" class="steam-pagination-btn" title="上一页">
+          <button @click="loadGames(games.page - 1)" :disabled="games?.page <= 1"
+            class="steam-pagination-btn" :class="games?.page <= 1 ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
-          </a>
+          </button>
           <span class="steam-pagination-info">
-            <span th:text="${games.page}">1</span> / <span th:text="${games.totalPages}">1</span>
+            <span x-text="games?.page || 1">1</span> / <span x-text="games?.totalPages || 1">1</span>
           </span>
-          <a th:if="${games.hasNext()}" th:href="@{${games.nextUrl}}" class="steam-pagination-btn" title="下一页">
+          <button @click="loadGames(games.page + 1)" :disabled="games?.page >= games?.totalPages"
+            class="steam-pagination-btn" :class="games?.page >= games?.totalPages ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
-          </a>
+          </button>
         </div>
       </div>
     </section>
-
   </div>
+
+  <!-- 配置数据 -->
+  <script th:inline="javascript">
+    window.steamPageConfig = {
+      recentGamesLimit: /*[[${recentGamesLimit ?: 10}]]*/ 10,
+      gamesPageSize: /*[[${gamesPageSize ?: 20}]]*/ 20,
+      enableGameLink: /*[[${enableGameLink != false}]]*/ true
+    };
+  </script>
 </main>
 
 </html>

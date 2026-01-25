@@ -33,17 +33,16 @@
 <body th:with="bgConfig = ${theme.config.general.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
-                 bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'},
-                 steamProfile = ${steamFinder?.getProfile()}"
-  th:class="'min-h-screen text-base-content relative ' + ${bgClass}">
+                 bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
+  th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+  x-data="{ gameBg: null }"
+  x-init="fetch('/apis/api.steam.halo.run/v1alpha1/profile').then(r => r.json()).then(d => { if(d.playing && d.summary?.gameid) gameBg = d.summary.gameid; }).catch(() => {})">
 
-  <!-- 动态游戏背景 (正在游玩时显示) -->
-  <div th:if="${steamProfile != null && steamProfile.playing && steamProfile.summary.gameId != null}"
-    class="fixed inset-0 z-0 pointer-events-none">
-    <img
-      th:src="@{'https://cdn.akamai.steamstatic.com/steam/apps/' + ${steamProfile.summary.gameId} + '/library_hero.jpg'}"
+  <!-- 动态游戏背景 (正在游玩时显示，异步加载) -->
+  <div x-show="gameBg" x-cloak class="fixed inset-0 z-0 pointer-events-none">
+    <img x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
       class="w-full h-full object-cover opacity-20"
-      onerror="this.src=this.src.replace('library_hero.jpg', 'header.jpg');" />
+      @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'" />
     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-base-100/80 to-base-100"></div>
   </div>
 

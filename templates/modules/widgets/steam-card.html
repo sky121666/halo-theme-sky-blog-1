@@ -113,36 +113,128 @@
   </div>
 
   <script>
+    // Steam 卡片缓存配置
+    const STEAM_CARD_CACHE_KEY = 'steam_card_cache';
+    const STEAM_CARD_CACHE_TTL = 3 * 60 * 1000; // 3分钟
+
+    const steamCardCache = {
+      get(key) {
+        try {
+          const data = localStorage.getItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
+          if (!data) return null;
+          const { value, expiry } = JSON.parse(data);
+          if (Date.now() > expiry) {
+            console.log(`[Steam Card] 缓存过期: ${key}`);
+            localStorage.removeItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
+            return null;
+          }
+          console.log(`[Steam Card] 命中缓存: ${key}`);
+          return value;
+        } catch {
+          return null;
+        }
+      },
+      set(key, value) {
+        try {
+          localStorage.setItem(`${STEAM_CARD_CACHE_KEY}_${key}`, JSON.stringify({
+            value,
+            expiry: Date.now() + STEAM_CARD_CACHE_TTL
+          }));
+          console.log(`[Steam Card] 写入缓存: ${key}`);
+        } catch (e) {
+          console.warn('[Steam Card] 缓存写入失败:', e);
+        }
+      }
+    };
+
     document.addEventListener('alpine:init', () => {
+      // 防止重复注册
+      if (Alpine.data && Alpine._steamCardRegistered) return;
+      Alpine._steamCardRegistered = true;
+
       Alpine.data('steamCard', () => ({
         loading: true,
         profile: null,
         stats: null,
         badges: null,
         gameHeaderUrl: null,
+        _initialized: false,
 
         async init() {
+          // 防止重复初始化
+          if (this._initialized) {
+            console.log('[Steam Card] 跳过重复初始化');
+            return;
+          }
+          this._initialized = true;
+
+          console.log('[Steam Card] 初始化开始');
+          const startTime = performance.now();
+
           try {
-            const [profileRes, statsRes, badgesRes] = await Promise.all([
-              fetch('/apis/api.steam.halo.run/v1alpha1/profile').then(r => r.ok ? r.json() : null).catch(() => null),
-              fetch('/apis/api.steam.halo.run/v1alpha1/stats').then(r => r.ok ? r.json() : null).catch(() => null),
-              fetch('/apis/api.steam.halo.run/v1alpha1/badges').then(r => r.ok ? r.json() : null).catch(() => null)
-            ]);
+            // 尝试从缓存读取
+            const cachedProfile = steamCardCache.get('profile');
+            const cachedStats = steamCardCache.get('stats');
+            const cachedBadges = steamCardCache.get('badges');
 
-            this.profile = profileRes;
-            this.stats = statsRes;
-            this.badges = badgesRes;
+            // 如果全部命中缓存，直接使用
+            if (cachedProfile && cachedStats && cachedBadges) {
+              console.log('[Steam Card] 全部使用缓存数据');
+              this.profile = cachedProfile;
+              this.stats = cachedStats;
+              this.badges = cachedBadges;
+            } else {
+              // 否则请求 API
+              console.log('[Steam Card] 开始请求 API...');
+              const fetchStart = performance.now();
 
-            // 只有正在玩游戏且有 gameid 时才设置背景图
-            // 注意：API 返回的字段是小写的 (gameid, personaname 等)
-            const gameId = profileRes?.summary?.gameId || profileRes?.summary?.gameid;
-            if (profileRes?.playing && gameId) {
-              this.gameHeaderUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+              const [profileRes, statsRes, badgesRes] = await Promise.all([
+                cachedProfile ? Promise.resolve(cachedProfile) : 
+                  fetch('/apis/api.steam.halo.run/v1alpha1/profile')
+                    .then(r => { console.log(`[Steam Card] profile 响应: ${r.status}`); return r.ok ? r.json() : null; })
+                    .catch(e => { console.error('[Steam Card] profile 请求失败:', e); return null; }),
+                cachedStats ? Promise.resolve(cachedStats) :
+                  fetch('/apis/api.steam.halo.run/v1alpha1/stats')
+                    .then(r => { console.log(`[Steam Card] stats 响应: ${r.status}`); return r.ok ? r.json() : null; })
+                    .catch(e => { console.error('[Steam Card] stats 请求失败:', e); return null; }),
+                cachedBadges ? Promise.resolve(cachedBadges) :
+                  fetch('/apis/api.steam.halo.run/v1alpha1/badges')
+                    .then(r => { console.log(`[Steam Card] badges 响应: ${r.status}`); return r.ok ? r.json() : null; })
+                    .catch(e => { console.error('[Steam Card] badges 请求失败:', e); return null; })
+              ]);
+
+              console.log(`[Steam Card] API 请求耗时: ${(performance.now() - fetchStart).toFixed(0)}ms`);
+
+              this.profile = profileRes;
+              this.stats = statsRes;
+              this.badges = badgesRes;
+
+              // 写入缓存
+              if (profileRes) steamCardCache.set('profile', profileRes);
+              if (statsRes) steamCardCache.set('stats', statsRes);
+              if (badgesRes) steamCardCache.set('badges', badgesRes);
             }
+
+            // 设置游戏背景图
+            const gameId = this.profile?.summary?.gameId || this.profile?.summary?.gameid;
+            if (this.profile?.playing && gameId) {
+              this.gameHeaderUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+              console.log(`[Steam Card] 正在游玩, gameId: ${gameId}`);
+            }
+
+            console.log('[Steam Card] 数据加载完成:', {
+              profile: !!this.profile,
+              stats: !!this.stats,
+              badges: !!this.badges,
+              playing: this.profile?.playing,
+              status: this.profile?.statusText
+            });
+
           } catch (e) {
-            console.error('Steam card load failed:', e);
+            console.error('[Steam Card] 加载失败:', e);
           } finally {
             this.loading = false;
+            console.log(`[Steam Card] 总耗时: ${(performance.now() - startTime).toFixed(0)}ms`);
           }
         }
       }));
