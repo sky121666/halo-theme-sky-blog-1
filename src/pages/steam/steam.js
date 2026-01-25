@@ -25,11 +25,9 @@ const cache = {
       if (!data) return null;
       const { value, expiry } = JSON.parse(data);
       if (Date.now() > expiry) {
-        console.log(`[Steam Page] 缓存过期: ${key}`);
         localStorage.removeItem(`${CACHE_KEY}_${key}`);
         return null;
       }
-      console.log(`[Steam Page] 命中缓存: ${key}`);
       return value;
     } catch {
       return null;
@@ -41,9 +39,8 @@ const cache = {
         value,
         expiry: Date.now() + CACHE_TTL
       }));
-      console.log(`[Steam Page] 写入缓存: ${key}`);
-    } catch (e) {
-      console.warn('[Steam Page] 缓存写入失败:', e);
+    } catch {
+      // 忽略缓存写入失败
     }
   }
 };
@@ -59,13 +56,7 @@ async function fetchAPI(endpoint, useCache = true) {
     if (cached) return cached;
   }
   
-  console.log(`[Steam Page] 请求 API: ${endpoint}`);
-  const startTime = performance.now();
-  
   const response = await fetch(`/apis/api.steam.halo.run/v1alpha1${endpoint}`);
-  const elapsed = (performance.now() - startTime).toFixed(0);
-  
-  console.log(`[Steam Page] API 响应: ${endpoint} - ${response.status} (${elapsed}ms)`);
   
   if (!response.ok) throw new Error(`API error: ${response.status}`);
   
@@ -106,14 +97,8 @@ document.addEventListener('alpine:init', () => {
     
     async init() {
       // 防止重复初始化
-      if (this._initialized) {
-        console.log('[Steam Page] 跳过重复初始化');
-        return;
-      }
+      if (this._initialized) return;
       this._initialized = true;
-
-      console.log('[Steam Page] 初始化开始');
-      const startTime = performance.now();
       
       // 并行加载所有数据
       await Promise.all([
@@ -124,15 +109,6 @@ document.addEventListener('alpine:init', () => {
         this.loadGames(1)
       ]);
       
-      console.log(`[Steam Page] 所有数据加载完成, 总耗时: ${(performance.now() - startTime).toFixed(0)}ms`);
-      console.log('[Steam Page] 数据状态:', {
-        profile: !!this.profile,
-        stats: !!this.stats,
-        badges: !!this.badges,
-        recentGames: this.recentGames?.length || 0,
-        games: this.games?.items?.length || 0
-      });
-      
       // 初始化热力图
       this.$nextTick(() => {
         initHeatmap();
@@ -142,9 +118,8 @@ document.addEventListener('alpine:init', () => {
     async loadProfile() {
       try {
         this.profile = await fetchAPI('/profile');
-        console.log('[Steam Page] profile 加载成功:', this.profile?.summary?.personaname);
       } catch (e) {
-        console.error('[Steam Page] profile 加载失败:', e);
+        console.error('[Steam] profile 加载失败:', e);
         this.error = 'Steam 资料加载失败';
       } finally {
         this.loading.profile = false;
@@ -154,9 +129,8 @@ document.addEventListener('alpine:init', () => {
     async loadStats() {
       try {
         this.stats = await fetchAPI('/stats');
-        console.log('[Steam Page] stats 加载成功:', { totalGames: this.stats?.totalGames });
       } catch (e) {
-        console.error('[Steam Page] stats 加载失败:', e);
+        console.error('[Steam] stats 加载失败:', e);
       } finally {
         this.loading.stats = false;
       }
@@ -165,9 +139,8 @@ document.addEventListener('alpine:init', () => {
     async loadBadges() {
       try {
         this.badges = await fetchAPI('/badges');
-        console.log('[Steam Page] badges 加载成功:', { totalBadges: this.badges?.totalBadges });
       } catch (e) {
-        console.error('[Steam Page] badges 加载失败:', e);
+        console.error('[Steam] badges 加载失败:', e);
       } finally {
         this.loading.badges = false;
       }
@@ -177,21 +150,9 @@ document.addEventListener('alpine:init', () => {
       try {
         const limit = this.config.recentGamesLimit || 10;
         const data = await fetchAPI(`/recent?limit=${limit}`);
-        // 确保是数组
         this.recentGames = Array.isArray(data) ? data : [];
-        console.log('[Steam Page] recent 加载成功:', { count: this.recentGames.length });
-        // 检查数据完整性 (API 返回 appid 小写)
-        this.recentGames.forEach((game, i) => {
-          if (!game.appid || !game.headerImageUrl) {
-            console.warn(`[Steam Page] recent[${i}] 数据不完整:`, { 
-              appid: game.appid, 
-              headerImageUrl: game.headerImageUrl,
-              name: game.name 
-            });
-          }
-        });
       } catch (e) {
-        console.error('[Steam Page] recent 加载失败:', e);
+        console.error('[Steam] recent 加载失败:', e);
         this.recentGames = [];
       } finally {
         this.loading.recent = false;
@@ -202,29 +163,10 @@ document.addEventListener('alpine:init', () => {
       this.loading.games = true;
       try {
         const size = this.config.gamesPageSize || 20;
-        console.log(`[Steam Page] 加载游戏库 page=${page}, size=${size}`);
-        // 分页数据不缓存
         const data = await fetchAPI(`/games?page=${page}&size=${size}`, false);
         this.games = data || { items: [], page: 1, totalPages: 1 };
-        console.log('[Steam Page] games 加载成功:', { 
-          page: this.games?.page, 
-          total: this.games?.total,
-          items: this.games?.items?.length 
-        });
-        // 检查数据完整性 (API 返回 appid 小写)
-        if (this.games?.items) {
-          this.games.items.forEach((game, i) => {
-            if (!game.appid || !game.headerImageUrl) {
-              console.warn(`[Steam Page] games[${i}] 数据不完整:`, { 
-                appid: game.appid, 
-                headerImageUrl: game.headerImageUrl,
-                name: game.name 
-              });
-            }
-          });
-        }
       } catch (e) {
-        console.error('[Steam Page] games 加载失败:', e);
+        console.error('[Steam] games 加载失败:', e);
         this.games = { items: [], page: 1, totalPages: 1 };
       } finally {
         this.loading.games = false;
@@ -253,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
  * 图片懒加载优化
  */
 function observeImageLoad() {
-  // 使用 MutationObserver 监听动态添加的图片
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
@@ -269,17 +210,12 @@ function observeImageLoad() {
   });
   
   observer.observe(document.body, { childList: true, subtree: true });
-  
-  // 处理已存在的图片
   document.querySelectorAll('.steam-game-img, .steam-badge-img, .steam-avatar-img').forEach(setupImageHandlers);
 }
 
 function setupImageHandlers(img) {
   if (img.dataset.handled) return;
   img.dataset.handled = 'true';
-  
-  // 记录图片 src 用于调试
-  const originalSrc = img.src || img.getAttribute(':src') || 'unknown';
   
   if (img.complete && img.naturalHeight !== 0) {
     img.classList.add('loaded');
@@ -288,12 +224,9 @@ function setupImageHandlers(img) {
       this.classList.add('loaded');
     });
     img.addEventListener('error', function() {
-      // 忽略空 src 或无效 src 的错误
       if (!this.src || this.src === window.location.href || this.src.endsWith('/steam')) {
-        console.log('[Steam Page] 忽略无效图片 src:', this.src);
         return;
       }
-      console.warn('[Steam Page] 图片加载失败:', this.src);
       this.classList.add('loaded');
       this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215"%3E%3Crect fill="%231b2838" width="460" height="215"/%3E%3Ctext x="50%25" y="50%25" fill="%2366c0f4" font-size="24" text-anchor="middle" dy=".3em"%3E🎮%3C/text%3E%3C/svg%3E';
     });
@@ -310,33 +243,23 @@ async function initHeatmap() {
   const errorEl = document.getElementById('steam-heatmap-error');
   const tooltipEl = document.getElementById('steam-heatmap-tooltip');
 
-  if (!gridEl) {
-    console.log('[Steam Page] 热力图元素不存在，跳过');
-    return;
-  }
-
-  console.log('[Steam Page] 开始加载热力图');
+  if (!gridEl) return;
 
   try {
     const heatmapDays = parseInt(gridEl.dataset.days || '365', 10);
     const apiUrl = gridEl.dataset.apiUrl;
 
     if (!apiUrl) {
-      console.log('[Steam Page] 热力图 API URL 未配置');
       if (loadingEl) loadingEl.style.display = 'none';
       if (emptyEl) emptyEl.style.display = 'flex';
       return;
     }
 
-    console.log(`[Steam Page] 热力图请求: ${apiUrl}, days=${heatmapDays}`);
-    const startTime = performance.now();
     const data = await fetchHeatmapData(apiUrl, heatmapDays);
-    console.log(`[Steam Page] 热力图数据获取完成, 耗时: ${(performance.now() - startTime).toFixed(0)}ms, 记录数: ${data?.items?.length || 0}`);
 
     if (loadingEl) loadingEl.style.display = 'none';
 
     if (!data || !data.items || data.items.length === 0) {
-      console.log('[Steam Page] 热力图无数据');
       if (emptyEl) emptyEl.style.display = 'flex';
       return;
     }
@@ -345,15 +268,13 @@ async function initHeatmap() {
     data.items.forEach(item => {
       const date = item.spec.date;
       const minutes = item.spec.playtimeMinutes || 0;
-      // 累加同一天不同游戏的时长
       dateMap.set(date, (dateMap.get(date) || 0) + minutes);
     });
 
     renderCustomHeatmap(gridEl, dateMap, heatmapDays, tooltipEl);
-    console.log('[Steam Page] 热力图渲染完成');
 
   } catch (error) {
-    console.error('[Steam Page] 热力图加载失败:', error);
+    console.error('[Steam] 热力图加载失败:', error);
     if (loadingEl) loadingEl.style.display = 'none';
     if (errorEl) errorEl.style.display = 'flex';
   }
