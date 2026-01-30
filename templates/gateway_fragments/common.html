@@ -18,7 +18,7 @@
             sendVerificationCodeSending: '发送中...',
             passwordConfirmationFailed: '两次密码输入不一致',
         };
-        
+
         // 密码确认验证
         window.setupPasswordConfirmation = function (passwordId, confirmPasswordId) {
             const password = document.getElementById(passwordId);
@@ -66,9 +66,9 @@
         };
     </script>
     <script type="module" src="/js/main.js"></script>
-    
+
     <!-- Altcha Captcha Scripts (Halo Pro) -->
-    <th:block th:if="${#strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
+    <th:block th:if="${globalInfo != null and #strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
         <script async defer src="/webjars/altcha/2.0.3/dist/altcha.i18n.js" type="module"></script>
         <script src="/js/altcha-lib.iife.js"></script>
         <script src="/js/altcha-utils.js"></script>

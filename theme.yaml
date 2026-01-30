@@ -16,7 +16,7 @@ spec:
   issues: https://github.com/sky121666/halo-theme-sky-blog-1/issues
   settingName: "theme-sky-blog-1-setting"
   configMapName: "theme-sky-blog-1-configMap"
-  version: "2.1.15"
+  version: "2.1.16"
   requires: ">=2.22.9"
   license:
     - name: "GPL-3.0"

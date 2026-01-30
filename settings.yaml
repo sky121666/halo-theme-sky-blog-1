@@ -2296,67 +2296,144 @@ spec:
           label: 页面描述
           value: "感谢这些优秀的网站与博客，让互联网变得更加精彩"
           rows: 2
-        - $formkit: text
-          name: apply_title
-          label: 申请区标题
-          value: "想要交换友链？"
-        - $formkit: textarea
-          name: apply_description
-          label: 申请区描述
-          value: "如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。"
-          rows: 2
-        - $formkit: switch
-          id: links_show_sidebar
-          name: show_sidebar
-          label: 显示侧边栏
-          help: 启用后显示侧边栏
-          value: false
-        - $formkit: switch
-          id: links_enable_custom_sidebar
-          name: enable_custom_sidebar
-          if: $get(links_show_sidebar).value
-          label: 定制侧边栏
-          help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-          value: false
-        - $formkit: toggle
-          name: sidebar_position
-          if: $get(links_enable_custom_sidebar).value
-          label: 侧边栏位置
-          render-type: text
-          size: 80
-          gap: 10
-          value: right
-          options:
-            - label: 左侧
-              value: left
-            - label: 右侧
-              value: right
-        - $formkit: array
-          name: sidebar_widgets
-          if: $get(links_enable_custom_sidebar).value
-          label: 小工具列表
-          addLabel: 添加小工具
-          min: 0
-          max: 10
-          itemLabels:
-            - type: text
-              label: $value.widget
+        # 申请设置分组
+        - $formkit: group
+          name: apply_settings
+          label: 友链申请
           value:
-            - widget: author_card
-            - widget: blog_stats
-            - widget: categories
-            - widget: tags
-            - widget: popular_posts
+            enable: true
+            apply_title: "想要交换友链？"
+            apply_description: "如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。"
+            apply_url: "/#"
           children:
-            - $formkit: select
-              name: widget
-              label: 小工具类型
-              options: *widget_options
-        - $formkit: switch
-          name: enable_comment
-          label: 启用评论
-          help: 在友链页面底部显示评论区
-          value: true
+            - $formkit: switch
+              id: apply_enable
+              name: enable
+              label: 启用友链申请
+              help: 是否在页面显示友链申请模块
+              value: true
+            # Application Content
+            - $formkit: text
+              name: apply_title
+              if: $get(apply_enable).value
+              label: 申请区标题
+              help: 申请区域的标题文字
+            - $formkit: textarea
+              name: apply_description
+              if: $get(apply_enable).value
+              label: 申请区描述
+              help: 申请区域的说明文字
+              rows: 2
+            - $formkit: text
+              name: apply_url
+              if: $get(apply_enable).value
+              label: 申请链接
+              help: 申请按钮跳转的链接，默认为 /# (不跳转)
+              placeholder: "/#"
+
+            # Blogger Info (Merged)
+            - $formkit: header
+              if: $get(apply_enable).value
+              label: 本站信息配置
+            - $formkit: text
+              name: blogger_logo
+              if: $get(apply_enable).value
+              label: 站点 Logo
+              help: 自定义展示的 Logo 地址，留空则使用系统默认 Logo
+              placeholder: "https://example.com/logo.png"
+            - $formkit: text
+              name: blogger_title
+              if: $get(apply_enable).value
+              label: 站点名称
+              help: 自定义展示的站点名称，留空则使用系统默认标题
+              placeholder: "My Blog"
+            - $formkit: text
+              name: blogger_rss
+              if: $get(apply_enable).value
+              label: RSS 地址
+              help: 自定义 RSS 地址，留空则默认为 /rss.xml
+              placeholder: "https://example.com/rss.xml"
+            - $formkit: text
+              name: blogger_email
+              if: $get(apply_enable).value
+              label: 联系邮箱
+              help: 站长联系邮箱，用于友链申请联系
+              placeholder: "admin@example.com"
+            - $formkit: textarea
+              name: blogger_description
+              if: $get(apply_enable).value
+              label: 站点描述
+              help: 自定义站点描述，留空则使用系统副标题
+              rows: 2
+
+        # 其他功能 (侧边栏与评论)
+        - $formkit: group
+          name: other_functions
+          label: 其他功能
+          value:
+            show_sidebar: false
+            enable_custom_sidebar: false
+            sidebar_position: right
+            sidebar_widgets:
+              - widget: author_card
+              - widget: blog_stats
+              - widget: categories
+              - widget: tags
+              - widget: popular_posts
+            enable_comment: true
+          children:
+            - $formkit: switch
+              id: links_show_sidebar
+              name: show_sidebar
+              label: 显示侧边栏
+              help: 启用后显示侧边栏
+              value: false
+            - $formkit: switch
+              id: links_enable_custom_sidebar
+              name: enable_custom_sidebar
+              if: $get(links_show_sidebar).value
+              label: 定制侧边栏
+              help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
+              value: false
+            - $formkit: toggle
+              name: sidebar_position
+              if: $get(links_enable_custom_sidebar).value
+              label: 侧边栏位置
+              render-type: text
+              size: 80
+              gap: 10
+              value: right
+              options:
+                - label: 左侧
+                  value: left
+                - label: 右侧
+                  value: right
+            - $formkit: array
+              name: sidebar_widgets
+              if: $get(links_enable_custom_sidebar).value
+              label: 小工具列表
+              addLabel: 添加小工具
+              min: 0
+              max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
+              value:
+                - widget: author_card
+                - widget: blog_stats
+                - widget: categories
+                - widget: tags
+                - widget: popular_posts
+              children:
+                - $formkit: select
+                  name: widget
+                  label: 小工具类型
+                  options: *widget_options
+            - $formkit: switch
+              name: enable_comment
+              label: 启用评论
+              help: 在友链页面底部显示评论区
+              value: true
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
