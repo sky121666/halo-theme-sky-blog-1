@@ -21,7 +21,7 @@
         flatUrl = ${settings?.cover_fallback_url},
         enable = ${nested != null ? (nested.enable ?: false) : (flatEnable ?: false)},
         mode = ${nested != null ? (nested.mode ?: 'missing_only') : (flatMode ?: 'missing_only')},
-        defaultImg = ${nested != null ? nested.default_image : flatUrl},
+        defaultImg = ${nested != null ? (nested.default_image + '?id=' + post.metadata.name) : (flatUrl + '?id=' + post.metadata.name)},
         actual=${post.spec.cover},
         actualOk=${actual != null and not #strings.isEmpty(actual) ? actual : null},
         coverUrl=${(enable == true) ? ((mode == 'always' and defaultImg != null) ? defaultImg : (actualOk != null ? actualOk : defaultImg)) : actualOk}
