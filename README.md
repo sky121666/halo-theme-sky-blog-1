@@ -136,6 +136,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | Bilibili 追番 | [app-OTFPN](https://www.halo.run/store/apps/app-OTFPN) | [plugin-bilibili-bangumi](https://github.com/Roozenlz/plugin-bilibili-bangumi) | ✅ 追番列表、轮播卡片 |
 | Steam 游戏库 | [app-0ojqyzfh](https://www.halo.run/store/apps/app-0ojqyzfh) | [plugin-steam](https://github.com/Tim0x0/halo-plugin-steam) | ✅ 游戏库展示、侧边栏卡片 |
 | 投票管理 | [app-veyvzyhv](https://www.halo.run/store/apps/app-veyvzyhv) | [plugin-vote](https://github.com/chengzhongxue/plugin-vote) | ✅ CSS 变量适配 |
+| 装备管理 | [app-ytygyqml](https://www.halo.run/store/apps/app-ytygyqml) | [plugin-equipment](https://github.com/chengzhongxue/plugin-equipment) | ✅ 装备展示/我的装备 |
 
 ### 工具类
 
@@ -146,6 +147,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 评论组件 | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD) | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统 |
 | 文本绘图 | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi) | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram) | ✅ Mermaid/PlantUML |
 | lightgallery | [app-OoggD](https://www.halo.run/store/apps/app-OoggD) | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery) | ✅ 图片灯箱 |
+| Passkey 认证 | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 无密码登录/指纹/面部识别 |
 
 ### 存储类
 
@@ -192,8 +194,8 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 安装以下插件以获得完整体验：
 
 - **必装**：搜索组件、评论组件
-- **推荐**：瞬间、图库、友链提交
-- **可选**：Docsme 文档、朋友圈、追番、Steam
+- **推荐**：瞬间、图库、友链提交、装备管理
+- **可选**：Docsme 文档、朋友圈、追番、Steam、Passkey 认证
 
 ---
 
