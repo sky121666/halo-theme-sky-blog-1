@@ -17,8 +17,9 @@
     'bg-gradient-to-br from-sky-200/20 via-blue-100/10 to-white/20 hover:border-sky-400/20': weatherBg === 'snowy',
     'bg-gradient-to-br from-purple-600/15 via-slate-700/10 to-indigo-600/15 hover:border-purple-500/20': weatherBg === 'stormy',
     'bg-base-100/80 hover:border-primary/20': !weatherBg
-  }" x-data="welcomeWeatherCard()"
-  th:attr="data-weather-key=${theme.config.general.weather_settings?.seniverse_api_key ?: ''}">
+  }" x-data="welcomeWeatherCard()" th:attr="
+    data-weather-provider=${theme.config.general.weather_settings?.enabled == false ? 'none' : 'auto'}
+  ">
 
   <!-- 动态背景装饰 -->
   <div class="absolute inset-0 pointer-events-none overflow-hidden">
@@ -237,7 +238,7 @@
           </defs>
           <use width="342" height="234" href="#wind-lines" transform="translate(85 139)" />
         </svg>
-        <span x-text="weather?.wind || 0"></span>m/s
+        <span x-text="weather?.wind || 0"></span>
       </span>
     </div>
 

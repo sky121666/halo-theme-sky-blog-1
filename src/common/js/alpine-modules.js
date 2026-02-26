@@ -549,41 +549,31 @@ function createSideFloatingDock() {
 }
 
 /**
- * 欢迎天气卡片
+ * 欢迎天气卡片（多源支持）
  * 模板使用：templates/modules/widgets/welcome-card.html
+ * 定位源：pconline CF Worker（默认）/ 高德 IP 定位
+ * 天气源：心知天气（默认免费）/ 高德天气 / 和风天气
  */
 function welcomeWeatherCard() {
-  // 缓存配置（v12 版本 - 心知天气 Seniverse 支持）
-  const CACHE_KEY = 'sky_weather_cache_v12';
-  const CACHE_DURATION = 30 * 60 * 1000; // 30 分钟缓存
+  const CACHE_KEY = 'sky_weather_cache_v13';
+  const CACHE_DURATION = 30 * 60 * 1000;
 
-  // 清除旧版本缓存
-  try {
-    const oldKeys = ['sky_weather_cache', 'sky_weather_cache_v2', 'sky_weather_cache_v3', 'sky_weather_cache_v4',
-      'sky_weather_cache_v5', 'sky_weather_cache_v6', 'sky_weather_cache_v7', 'sky_weather_cache_v8', 'sky_weather_cache_v9',
-      'sky_weather_cache_v10', 'sky_weather_cache_v11'];
-    oldKeys.forEach(key => {
-      if (localStorage.getItem(key)) {
-        localStorage.removeItem(key);
-      }
-    });
-  } catch (e) { /* ignore */ }
+  // 清除旧缓存
+  try { for (let i = 1; i <= 12; i++) { const k = i === 1 ? 'sky_weather_cache' : `sky_weather_cache_v${i}`; localStorage.removeItem(k); } } catch (e) { }
 
   return {
-    loading: true,
-    weather: null,
-    location: '',
-    errorMsg: '',
-    greeting: '',
-    currentDate: '',
-    weatherIcon: '',
-    weatherIconSvg: '',
-    weatherBg: '',
+    loading: true, weather: null, location: '', errorMsg: '', greeting: '', currentDate: '',
+    weatherIcon: '', weatherIconSvg: '', weatherBg: '', config: {},
 
     init() {
+      // 天气源已固化为自有后端的无感 Open-Meteo，不再需要复杂的来源和 Key 管理
+      this.config = {
+        enabled: this.$el.dataset.weatherProvider !== 'none'
+      };
+      if (!this.config.enabled) return;
+
       this.updateGreeting();
       this.updateDate();
-      // 延迟加载天气，不阻塞首屏渲染
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => this.loadWeather(), { timeout: 2000 });
       } else {
@@ -593,19 +583,12 @@ function welcomeWeatherCard() {
 
     updateGreeting() {
       const hour = new Date().getHours();
-      if (hour >= 5 && hour < 9) {
-        this.greeting = '早上好 ☀️';
-      } else if (hour >= 9 && hour < 12) {
-        this.greeting = '上午好 🌤️';
-      } else if (hour >= 12 && hour < 14) {
-        this.greeting = '中午好 🌞';
-      } else if (hour >= 14 && hour < 18) {
-        this.greeting = '下午好 ⛅';
-      } else if (hour >= 18 && hour < 22) {
-        this.greeting = '晚上好 🌙';
-      } else {
-        this.greeting = '夜深了 🌟';
-      }
+      if (hour >= 5 && hour < 9) this.greeting = '早上好 ☀️';
+      else if (hour >= 9 && hour < 12) this.greeting = '上午好 🌤️';
+      else if (hour >= 12 && hour < 14) this.greeting = '中午好 🌞';
+      else if (hour >= 14 && hour < 18) this.greeting = '下午好 ⛅';
+      else if (hour >= 18 && hour < 22) this.greeting = '晚上好 🌙';
+      else this.greeting = '夜深了 🌟';
     },
 
     updateDate() {
@@ -614,20 +597,19 @@ function welcomeWeatherCard() {
       this.currentDate = `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
     },
 
-    // 默认天气数据（北京）
     getDefaultWeather() {
       return {
-        location: '北京',
-        weather: { temp: '--', description: '加载中...', humidity: '--', wind: '--' },
+        location: '--',
+        weather: { temp: '--', description: '加载中...', humidity: '--', wind: '--', feels_like: '--' },
         weatherIcon: 'https://basmilius.github.io/weather-icons/production/fill/all/clear-day.svg',
         weatherBg: 'sunny'
       };
     },
 
-    // 从缓存加载或请求新数据
+    // ═══════ 主流程 ═══════
+
     async loadWeather() {
       console.log('[Weather] 开始加载天气...');
-      // 1. 优先使用缓存
       const cached = this.getCache();
       if (cached) {
         console.log('[Weather] 命中缓存，城市:', cached.location);
@@ -635,300 +617,173 @@ function welcomeWeatherCard() {
         this.loading = false;
         return;
       }
-
       console.log('[Weather] 无缓存，显示默认数据，后台获取真实天气');
-      // 2. 无缓存时，立即显示默认数据
       this.applyWeatherData(this.getDefaultWeather());
       this.loading = false;
 
-      // 3. 后台获取真实天气
       try {
-        await this.fetchWeatherByIP();
+        const loc = await this.getLocationByPconline();
+        console.log('[Weather] 定位结果:', loc.city, '(来源:', loc.source + ')');
+        if (!loc.city || loc.city === '未知') { console.warn('[Weather] 定位失败'); return; }
+        await this.getWeatherByWttrProxy(loc);
       } catch (e) {
-        console.warn('[Weather] IP 定位或天气获取失败:', e.message);
+        console.warn('[Weather] 天气获取失败:', e.message);
+        this.errorMsg = '服务维护中';
       }
     },
 
-    // 通过 IP 获取城市名，然后查询天气
-    async fetchWeatherByIP() {
-      console.log('[Weather] 开始 IP 定位...');
-      const locationData = await this.getLocationFromIP();
-      const cityName = locationData.city;
-      console.log('[Weather] IP 定位结果:', cityName, '(来源:', locationData.source + ')');
+    // ═══════ IP 定位路由 ═══════
 
-      if (!cityName || cityName === '未知') {
-        throw new Error('无法获取城市名');
+    async getLocationByPconline() {
+      console.log('[Weather] 通过 pconline 获取位置...');
+      try {
+        const data = await this.fetchWithTimeout('https://pconline.xoku.cn/', {}, 6000).then(r => r.json());
+        const rawCity = data.city || data.addr || '';
+        const city = rawCity.replace('市', '').trim() || '未知';
+        console.log('[Weather] pconline 返回:', city, data);
+        const bad = city.includes('美国') || city.includes('CloudFlare') || city.includes('节点') || city === '未知';
+        if (city && !bad) return { city, adcode: '', source: 'pconline' };
+        console.warn('[Weather] pconline 返回异常城市，降级');
+        return { city: '未知', adcode: '', source: 'fallback' };
+      } catch (e) {
+        console.warn('[Weather] pconline 失败:', e.message);
+        return { city: '未知', adcode: '', source: 'fallback' };
       }
-
-      await this.fetchWeatherByCity(cityName);
     },
 
-    // 带超时的 fetch 封装
+    // ═══════ 天气查询路由 ═══════
+
+    async getWeatherByWttrProxy(loc) {
+      console.log('[Weather] Open-Meteo CF 反代请求:', loc.city);
+      try {
+        const url = `https://pconline.xoku.cn/weather?city=${encodeURIComponent(loc.city)}`;
+        const res = await this.fetchWithTimeout(url, {}, 8000);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+        if (data.temp === undefined) throw new Error('返回数据格式异常');
+
+        // WMO weather_code 映射到 Basmilius 图标
+        const code = data.weather_code;
+        const iconInfo = this.getWeatherMapFromWmoCode(code);
+
+        const wd = {
+          location: data.location || loc.city,
+          weather: {
+            temp: data.temp,
+            feels_like: data.feels_like,
+            humidity: data.humidity,
+            description: data.description,
+            wind: `${this.degToDir(data.wind_direction)} ${data.wind_speed}km/h`
+          },
+          weatherIcon: iconInfo.icon,
+          weatherBg: iconInfo.bg
+        };
+        console.log('[Weather] 天气请求成功:', wd.location + ',', wd.weather.description + ',', wd.weather.temp + '°C');
+        await this.loadSvgIcon(wd.weatherIcon);
+        wd.weatherIconSvg = this.weatherIconSvg;
+        this.applyWeatherData(wd);
+        this.setCache(wd);
+      } catch (e) {
+        console.warn('[Weather] 天气查询失败:', e.message);
+        throw e;
+      }
+    },
+
     fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeoutMs);
-      return fetch(url, { ...options, signal: controller.signal })
-        .finally(() => clearTimeout(timer));
+      return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
     },
 
-    // IP 定位：只用 pconline（你的 CF Worker 代理），直接获取真实运营商 IP
-    // 备用 API（ip-api.com 等）会因代理/CDN 路由问题返回错误城市，已放弃
-    async getLocationFromIP() {
-      console.log('[Weather] 通过 pconline CF Worker 获取位置...');
-      try {
-        const data = await this.fetchWithTimeout('https://pconline.xoku.cn/', {}, 6000)
-          .then(res => res.json());
+    // ═══════ 天气代码 → 图标 & 背景映射 ═══════
 
-        const rawCity = data.city || data.addr || '';
-        const city = rawCity.replace('市', '').trim() || '未知';
-        console.log('[Weather] pconline 返回城市:', city, '原始数据:', data);
+    _isNight() { const h = new Date().getHours(); return h >= 18 || h < 6; },
+    _iconBase: 'https://basmilius.github.io/weather-icons/production/fill/all/',
 
-        // 如果用户开启了代理、iCloud 专用代理等，会定位到奇怪的地方
-        const isAbnormalCity = city.includes('美国') || city.includes('CloudFlare') || city.includes('节点') || city === '未知';
-
-        if (city && !isAbnormalCity) {
-          return { city, source: 'pconline' };
-        }
-
-        console.warn('[Weather] pconline 返回异常城市或使用了代理，降级为默认');
-        return { city: '未知', source: 'fallback' };
-      } catch (e) {
-        console.warn('[Weather] pconline 请求失败:', e.message, '，降级为默认城市');
-        return { city: '未知', source: 'fallback' };
-      }
+    // 风向角度 → 方位文字
+    degToDir(deg) {
+      if (deg == null) return '';
+      const dirs = ['北风', '东北偏北风', '东北风', '东北偏东风', '东风', '东南偏东风', '东南风', '东南偏南风', '南风', '西南偏南风', '西南风', '西南偏西风', '西风', '西北偏西风', '西北风', '西北偏北风'];
+      return dirs[Math.round(deg / 22.5) % 16];
     },
 
-
-
-    // 城市名英中映射
-    translateCity(cityName) {
-      const cityMap = {
-        'Beijing': '北京', 'Shanghai': '上海', 'Guangzhou': '广州', 'Shenzhen': '深圳',
-        'Hangzhou': '杭州', 'Nanjing': '南京', 'Chengdu': '成都', 'Wuhan': '武汉',
-        'Xi\'an': '西安', 'Xian': '西安', 'Chongqing': '重庆', 'Tianjin': '天津',
-        'Suzhou': '苏州', 'Qingdao': '青岛', 'Dalian': '大连', 'Xiamen': '厦门',
-        'Ningbo': '宁波', 'Dongguan': '东莞', 'Shenyang': '沈阳', 'Zhengzhou': '郑州',
-        'Changsha': '长沙', 'Jinan': '济南', 'Harbin': '哈尔滨', 'Fuzhou': '福州',
-        'Kunming': '昆明', 'Hefei': '合肥', 'Nanchang': '南昌', 'Shijiazhuang': '石家庄',
-        'Taiyuan': '太原', 'Changchun': '长春', 'Lanzhou': '兰州', 'Guiyang': '贵阳',
-        'Nanning': '南宁', 'Urumqi': '乌鲁木齐', 'Hohhot': '呼和浩特', 'Lhasa': '拉萨',
-        'Xining': '西宁', 'Yinchuan': '银川', 'Haikou': '海口', 'Macau': '澳门',
-        'Hong Kong': '香港', 'Zhuhai': '珠海', 'Foshan': '佛山', 'Wuxi': '无锡',
-        'Wenzhou': '温州', 'Huizhou': '惠州', 'Zhongshan': '中山', 'Jiaxing': '嘉兴',
-        'Nantong': '南通', 'Changzhou': '常州', 'Yangzhou': '扬州', 'Zhenjiang': '镇江'
-      };
-      return cityMap[cityName] || cityName.replace('市', '');
-    },
-
-    // 根据城市名获取天气
-    async fetchWeatherByCity(cityName) {
-      // 优先使用用户在主题设置中配置的 Key，留空则使用内置默认 Key
-      const DEFAULT_KEY = 'SWMR1Zeyn0TCbArs1';
-      const SENIVERSE_KEY = this.$el?.dataset?.weatherKey || DEFAULT_KEY;
-
-      // 1. 尝试心知天气 (基础数据：温度、天气描述)
-      try {
-        const url = `https://api.seniverse.com/v3/weather/now.json?key=${SENIVERSE_KEY}&location=${encodeURIComponent(cityName)}&language=zh-Hans&unit=c`;
-
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`Seniverse API error: ${res.status}`);
-
-        const data = await res.json();
-
-        const now = data.results?.[0]?.now;
-        const location = data.results?.[0]?.location;
-        if (!now) throw new Error('No weather data');
-
-        const code = parseInt(now.code);
-        const weatherData = {
-          location: location?.name || cityName,
-          weather: {
-            temp: parseFloat(now.temperature),
-            feels_like: parseFloat(now.temperature),
-            humidity: 0,
-            description: now.text,
-            wind: 0
-          },
-          weatherIcon: this.getWeatherIconFromSeniverse(code),
-          weatherBg: this.getWeatherBgFromSeniverse(code)
-        };
-
-        await this.loadSvgIcon(weatherData.weatherIcon);
-        weatherData.weatherIconSvg = this.weatherIconSvg;
-
-        // 2. 并行请求 wttr.in 补充湿度和风速 (不阻塞主流程)
-        this.fetchExtraWeatherData(cityName);
-
-        this.applyWeatherData(weatherData);
-        this.setCache(weatherData);
-        return;
-      } catch (e) {
-        // Fallback to wttr.in
-      }
-
-      // 2. 降级到 wttr.in
-      try {
-        const url = `https://wttr.in/${encodeURIComponent(cityName)}?format=j1&lang=zh`;
-
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw new Error('wttr.in error');
-
-        const data = await res.json();
-        const current = data.current_condition?.[0];
-        if (!current) throw new Error('No weather data');
-
-        const weatherCode = parseInt(current.weatherCode);
-        const weatherData = {
-          location: cityName,
-          weather: {
-            temp: parseFloat(current.temp_C),
-            feels_like: parseFloat(current.FeelsLikeC),
-            humidity: parseInt(current.humidity),
-            description: current.lang_zh?.[0]?.value || current.weatherDesc?.[0]?.value || '未知',
-            wind: parseFloat(current.windspeedKmph)
-          },
-          weatherIcon: this.getWeatherIconFromWttr(weatherCode),
-          weatherBg: this.getWeatherBgFromWttr(weatherCode)
-        };
-
-        await this.loadSvgIcon(weatherData.weatherIcon);
-        weatherData.weatherIconSvg = this.weatherIconSvg;
-
-        this.applyWeatherData(weatherData);
-        this.setCache(weatherData);
-      } catch (e) {
-        // Silent fail
-      }
-    },
-
-    // 补充获取湿度和风速 (从 wttr.in，不阻塞主流程)
-    async fetchExtraWeatherData(cityName) {
-      try {
-        const res = await fetch(`https://wttr.in/${encodeURIComponent(cityName)}?format=j1&lang=zh`, {
-          headers: { 'Accept': 'application/json' }
-        });
-        if (!res.ok) return;
-
-        const data = await res.json();
-        const current = data.current_condition?.[0];
-        if (!current) return;
-
-        // 直接更新 Alpine 响应式属性
-        this.weather.humidity = parseInt(current.humidity || 0);
-        this.weather.wind = parseFloat(current.windspeedKmph || 0);
-        this.weather.feels_like = parseFloat(current.FeelsLikeC || this.weather.temp);
-
-
-        // 更新缓存
-        this.setCache({
-          location: this.location,
-          weather: this.weather,
-          weatherIcon: this.weatherIcon,
-          weatherBg: this.weatherBg,
-          weatherIconSvg: this.weatherIconSvg
-        });
-      } catch (e) {
-        // Silent fail
-      }
-    },
-
-    // 心知天气代码映射图标 (返回完整 URL)
-    getWeatherIconFromSeniverse(code) {
-      const baseUrl = 'https://basmilius.github.io/weather-icons/production/fill/all/';
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
-
-      // https://seniverse.yuque.com/hyper_data/api_2018/yev2c3
+    // WMO 标准天气代码映射 (Open-Meteo 使用)
+    getWeatherMapFromWmoCode(code) {
+      const n = this._isNight();
       let icon = 'not-available';
-      if (code === 0 || code === 38) icon = isNight ? 'clear-night' : 'clear-day';  // 晴/热
-      else if (code >= 1 && code <= 3) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';  // 晴间多云
-      else if (code >= 4 && code <= 9) icon = 'cloudy';  // 多云/阴
-      else if (code >= 10 && code <= 19) icon = 'rain';  // 各种雨
-      else if (code >= 20 && code <= 25) icon = 'snow';  // 各种雪
-      else if (code >= 26 && code <= 31) icon = 'fog';  // 雾/霾
-      else if (code >= 32 && code <= 36) icon = 'wind';  // 风
-      else if (code === 37) icon = 'snow';  // 冷
-      else icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
+      let bg = n ? 'night-cloudy' : 'cloudy';
 
-      return `${baseUrl}${icon}.svg`;
+      if (code === 0) {
+        icon = n ? 'clear-night' : 'clear-day';
+        bg = n ? 'night-clear' : 'sunny';
+      } else if (code === 1 || code === 2) {
+        icon = n ? 'partly-cloudy-night' : 'partly-cloudy-day';
+        bg = n ? 'night-cloudy' : 'cloudy';
+      } else if (code === 3) {
+        icon = 'cloudy';
+        bg = n ? 'night-cloudy' : 'cloudy';
+      } else if (code === 45 || code === 48) {
+        icon = 'fog';
+        bg = 'foggy';
+      } else if (code >= 51 && code <= 57) {
+        icon = 'drizzle';
+        bg = 'rainy';
+      } else if (code >= 61 && code <= 67) {
+        icon = 'rain';
+        bg = 'rainy';
+      } else if (code >= 71 && code <= 77) {
+        icon = 'snow';
+        bg = 'snowy';
+      } else if (code >= 80 && code <= 82) {
+        icon = 'rain';
+        bg = code === 82 ? 'stormy' : 'rainy';
+      } else if (code === 85 || code === 86) {
+        icon = 'snow';
+        bg = 'snowy';
+      } else if (code >= 95 && code <= 99) {
+        icon = 'thunderstorms';
+        bg = 'stormy';
+      } else {
+        icon = n ? 'partly-cloudy-night' : 'partly-cloudy-day';
+      }
+      return { icon: `${this._iconBase}${icon}.svg`, bg };
     },
 
-    // 心知天气代码映射背景
-    // 代码参考: https://seniverse.yuque.com/hyper_data/api_2018/yev2c3
-    // 0: 晴, 1-3: 晴间多云, 4-9: 多云/阴, 10-12: 阵雨/雷阵雨, 13-19: 各种雨
-    // 20-25: 各种雪, 26-31: 雾/霾, 32-36: 风, 37: 冷, 38: 热, 99: 未知
-    getWeatherBgFromSeniverse(code) {
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
+    // ═══════ 缓存 ═══════
 
-      // 晴天
-      if (code === 0 || code === 38) return isNight ? 'night-clear' : 'sunny';
-      // 晴间多云
-      if (code >= 1 && code <= 3) return isNight ? 'night-cloudy' : 'cloudy';
-      // 多云/阴
-      if (code >= 4 && code <= 9) return isNight ? 'night-cloudy' : 'cloudy';
-      // 雷阵雨 (10-12 包含雷暴)
-      if (code >= 10 && code <= 12) return 'stormy';
-      // 各种雨 (13-19)
-      if (code >= 13 && code <= 19) return 'rainy';
-      // 各种雪
-      if (code >= 20 && code <= 25) return 'snowy';
-      // 雾/霾
-      if (code >= 26 && code <= 31) return 'foggy';
-      // 风/冷 - 按多云处理
-      if (code >= 32 && code <= 37) return isNight ? 'night-cloudy' : 'cloudy';
-      // 默认
-      return isNight ? 'night-cloudy' : 'cloudy';
-    },
-
-    // 获取缓存
     getCache() {
       try {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (!cached) return null;
-
-        const data = JSON.parse(cached);
-        const cacheAge = Date.now() - data.timestamp;
-        if (cacheAge > CACHE_DURATION) {
-          localStorage.removeItem(CACHE_KEY);
-          return null;
-        }
-
-        return data;
-      } catch (e) {
-        return null;
-      }
+        const c = localStorage.getItem(CACHE_KEY);
+        if (!c) return null;
+        const d = JSON.parse(c);
+        if (Date.now() - d.timestamp > CACHE_DURATION) { localStorage.removeItem(CACHE_KEY); return null; }
+        return d;
+      } catch (e) { return null; }
     },
 
-    // 保存缓存
-    // 用于追踪上次触发的天气类型，避免重复事件
     _lastDispatchedBg: null,
-
     setCache(data) {
       try {
-        const cacheData = { ...data, timestamp: Date.now() };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-
-        // 只在 weatherBg 真正变化时触发事件，避免重复
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, timestamp: Date.now() }));
         if (data.weatherBg && data.weatherBg !== this._lastDispatchedBg) {
           this._lastDispatchedBg = data.weatherBg;
-          window.dispatchEvent(new CustomEvent('sky-weather-updated', {
-            detail: { weatherBg: data.weatherBg, location: data.location }
-          }));
+          window.dispatchEvent(new CustomEvent('sky-weather-updated', { detail: { weatherBg: data.weatherBg, location: data.location } }));
         }
-      } catch (e) { /* ignore */ }
+      } catch (e) { }
     },
 
-    // 应用天气数据到组件
-    applyWeatherData(data) {
-      this.location = data.location;
-      this.weather = data.weather;
-      this.weatherIcon = data.weatherIcon;
-      this.weatherIconSvg = data.weatherIconSvg || '';
-      this.weatherBg = data.weatherBg || 'sunny';
+    // ═══════ 通用工具 ═══════
+
+    applyWeatherData(d) {
+      this.location = d.location;
+      this.weather = d.weather;
+      this.weatherIcon = d.weatherIcon;
+      this.weatherIconSvg = d.weatherIconSvg || '';
+      this.weatherBg = d.weatherBg || 'sunny';
     },
 
-    // 加载 SVG 图标内容
     async loadSvgIcon(url) {
       try {
         const res = await fetch(url);
@@ -937,114 +792,12 @@ function welcomeWeatherCard() {
           svg = svg.replace(/<\?xml[^>]*\?>/g, '');
           svg = svg.replace(/<svg/, '<svg class="w-full h-full"');
           this.weatherIconSvg = svg;
-        } else {
-          this.weatherIconSvg = '';
-        }
-      } catch (e) {
-        this.weatherIconSvg = '';
-      }
-    },
-
-    // wttr.in 天气代码转图标 URL
-    getWeatherIconFromWttr(code) {
-      const baseUrl = 'https://basmilius.github.io/weather-icons/production/fill/all/';
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
-
-      let icon = 'not-available';
-      // wttr.in 使用 WWO (World Weather Online) 代码
-      // 参考: https://www.worldweatheronline.com/developer/api/docs/weather-icons.aspx
-      if (code === 113) icon = isNight ? 'clear-night' : 'clear-day';  // 晴
-      else if (code === 116) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';  // 局部多云
-      else if (code === 119 || code === 122) icon = 'cloudy';  // 多云/阴
-      else if (code === 143 || code === 248 || code === 260) icon = 'fog';  // 雾
-      else if (code === 176 || code === 263 || code === 266) icon = 'drizzle';  // 毛毛雨
-      else if (code >= 293 && code <= 314) icon = 'rain';  // 雨
-      else if (code >= 179 && code <= 230) icon = 'snow';  // 雪
-      else if (code >= 350 && code <= 377) icon = 'sleet';  // 冰雹/雨夹雪
-      else if (code >= 386 && code <= 395) icon = 'thunderstorms';  // 雷暴
-      else if (code >= 320 && code <= 338) icon = 'snow';  // 雪
-      else icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
-
-      return `${baseUrl}${icon}.svg`;
-    },
-
-    // wttr.in 天气代码转背景类型
-    getWeatherBgFromWttr(code) {
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
-
-      if (code === 113) return isNight ? 'night-clear' : 'sunny';  // 晴
-      if (code === 116 || code === 119 || code === 122) return isNight ? 'night-cloudy' : 'cloudy';  // 多云
-      if (code === 143 || code === 248 || code === 260) return 'foggy';  // 雾
-      if ((code >= 176 && code <= 230) || (code >= 320 && code <= 338)) return 'snowy';  // 雪
-      if ((code >= 263 && code <= 314) || (code >= 350 && code <= 377)) return 'rainy';  // 雨
-      if (code >= 386 && code <= 395) return 'stormy';  // 雷暴
-      return isNight ? 'night-cloudy' : 'cloudy';
-    },
-
-    // WMO 天气代码转描述（保留用于兼容）
-    getWeatherDescription(code) {
-      const descriptions = {
-        0: '晴朗', 1: '大部晴朗', 2: '局部多云', 3: '多云',
-        45: '有雾', 48: '雾凇',
-        51: '小毛毛雨', 53: '毛毛雨', 55: '大毛毛雨',
-        56: '冻毛毛雨', 57: '大冻毛毛雨',
-        61: '小雨', 63: '中雨', 65: '大雨',
-        66: '小冻雨', 67: '大冻雨',
-        71: '小雪', 73: '中雪', 75: '大雪', 77: '雪粒',
-        80: '小阵雨', 81: '阵雨', 82: '大阵雨',
-        85: '小阵雪', 86: '大阵雪',
-        95: '雷暴', 96: '雷暴伴小冰雹', 99: '雷暴伴大冰雹'
-      };
-      return descriptions[code] || '未知';
-    },
-
-    // WMO 天气代码转 Meteocons SVG URL（动态天气图标）
-    getWeatherIcon(code) {
-      const baseUrl = 'https://basmilius.github.io/weather-icons/production/fill/all/';
-      // 判断是否为夜间（18:00-06:00）
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
-
-      let icon = 'not-available';
-      if (code === 0) icon = isNight ? 'clear-night' : 'clear-day';
-      else if (code === 1) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
-      else if (code === 2) icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
-      else if (code === 3) icon = 'cloudy';
-      else if (code <= 48) icon = 'fog';
-      else if (code <= 57) icon = 'drizzle';
-      else if (code <= 65) icon = 'rain';
-      else if (code <= 67) icon = 'sleet';
-      else if (code <= 77) icon = 'snow';
-      else if (code <= 82) icon = isNight ? 'partly-cloudy-night-rain' : 'partly-cloudy-day-rain';
-      else if (code <= 86) icon = isNight ? 'partly-cloudy-night-snow' : 'partly-cloudy-day-snow';
-      else if (code >= 95) icon = 'thunderstorms';
-      else icon = isNight ? 'partly-cloudy-night' : 'partly-cloudy-day';
-
-      return `${baseUrl}${icon}.svg`;
-    },
-
-    // 根据天气代码获取背景类型
-    getWeatherBg(code) {
-      const hour = new Date().getHours();
-      const isNight = hour >= 18 || hour < 6;
-
-      if (code === 0) return isNight ? 'night-clear' : 'sunny';
-      if (code <= 3) return isNight ? 'night-cloudy' : 'cloudy';
-      if (code <= 48) return 'foggy';
-      if (code <= 67) return 'rainy';
-      if (code <= 77) return 'snowy';
-      if (code <= 86) return 'snowy';
-      if (code >= 95) return 'stormy';
-      return isNight ? 'night-cloudy' : 'cloudy';
+        } else { this.weatherIconSvg = ''; }
+      } catch (e) { this.weatherIconSvg = ''; }
     }
   };
 }
-/**
- * 初始化所有组件
- * 注册模板中实际使用的 Alpine.js 组件
- */
+
 function initializeAll() {
   // 注册模板中使用的组件
   Alpine.data('floatingDock', createFloatingDock);

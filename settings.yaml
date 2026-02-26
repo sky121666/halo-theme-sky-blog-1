@@ -263,15 +263,17 @@ spec:
               placeholder: "https://cdn.5ee.net/fonts"
         - $formkit: group
           name: weather_settings
-          label: 天气设置
+          label: 天气组件
           value:
-            seniverse_api_key: ""
+            enabled: true
           children:
-            - $formkit: text
-              name: seniverse_api_key
-              label: 心知天气 API Key
-              help: 申请地址 https://www.seniverse.com，留空则使用内置默认 Key（建议在心知天气控制台开启域名白名单限制）
-              placeholder: "留空使用默认 Key"
+            - $formkit: toggle
+              name: enabled
+              label: 启用天气与定位卡片
+              help: "开启后，会在控制台侧边欢迎区域显示访客当地的天气情况"
+              value: true
+
+
     - group: nav
 
       label: 顶部（全局）
