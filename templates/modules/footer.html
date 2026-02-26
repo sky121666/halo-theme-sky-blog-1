@@ -175,7 +175,8 @@
                 class="hover:text-primary transition-all hover:scale-105"></a>
               <span th:if="${!iterStat.last}" class="text-base-content/10">•</span>
             </th:block>
-            <span class="text-base-content/10">•</span>
+            <span th:if="${not #lists.isEmpty(theme.config.footer.copyright_settings.hosting_links)}"
+              class="text-base-content/10">•</span>
             <a href="https://github.com/sky121666/halo-theme-sky-blog-1" target="_blank" rel="noopener"
               class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
               <span class="icon-[mdi--github] w-3 h-3"></span>
