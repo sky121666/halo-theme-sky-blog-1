@@ -261,7 +261,19 @@ spec:
               help: 自定义字体文件的 CDN 根路径，末尾不要加斜杠
               value: "https://cdn.5ee.net/fonts"
               placeholder: "https://cdn.5ee.net/fonts"
+        - $formkit: group
+          name: weather_settings
+          label: 天气设置
+          value:
+            seniverse_api_key: ""
+          children:
+            - $formkit: text
+              name: seniverse_api_key
+              label: 心知天气 API Key
+              help: 申请地址 https://www.seniverse.com，留空则使用内置默认 Key（建议在心知天气控制台开启域名白名单限制）
+              placeholder: "留空使用默认 Key"
     - group: nav
+
       label: 顶部（全局）
       formSchema:
         - $formkit: group

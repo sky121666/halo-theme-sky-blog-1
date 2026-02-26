@@ -777,7 +777,9 @@ function welcomeWeatherCard() {
 
     // 根据城市名获取天气
     async fetchWeatherByCity(cityName) {
-      const SENIVERSE_KEY = 'SWMR1Zeyn0TCbArs1';
+      // 优先使用用户在主题设置中配置的 Key，留空则使用内置默认 Key
+      const DEFAULT_KEY = 'SWMR1Zeyn0TCbArs1';
+      const SENIVERSE_KEY = this.$el?.dataset?.weatherKey || DEFAULT_KEY;
 
       // 1. 尝试心知天气 (基础数据：温度、天气描述)
       try {
