@@ -626,134 +626,79 @@ function welcomeWeatherCard() {
 
     // 从缓存加载或请求新数据
     async loadWeather() {
+      console.log('[Weather] 开始加载天气...');
       // 1. 优先使用缓存
       const cached = this.getCache();
       if (cached) {
+        console.log('[Weather] 命中缓存，城市:', cached.location);
         this.applyWeatherData(cached);
         this.loading = false;
         return;
       }
 
+      console.log('[Weather] 无缓存，显示默认数据，后台获取真实天气');
       // 2. 无缓存时，立即显示默认数据
       this.applyWeatherData(this.getDefaultWeather());
       this.loading = false;
 
-      // 3. 后台获取真实天气（纯 IP 定位，不用浏览器定位）
+      // 3. 后台获取真实天气
       try {
         await this.fetchWeatherByIP();
       } catch (e) {
-        // Silent fail
+        console.warn('[Weather] IP 定位或天气获取失败:', e.message);
       }
     },
 
     // 通过 IP 获取城市名，然后查询天气
     async fetchWeatherByIP() {
-      // Step 1: 获取城市名
+      console.log('[Weather] 开始 IP 定位...');
       const locationData = await this.getLocationFromIP();
       const cityName = locationData.city;
+      console.log('[Weather] IP 定位结果:', cityName, '(来源:', locationData.source + ')');
 
       if (!cityName || cityName === '未知') {
         throw new Error('无法获取城市名');
       }
 
-      // Step 2: 用城市名查询天气
       await this.fetchWeatherByCity(cityName);
     },
 
-    // 浏览器定位（带超时）
-    getBrowserLocation(timeout) {
-      return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-          reject(new Error('浏览器不支持定位'));
-          return;
-        }
-
-        const timeoutId = setTimeout(() => {
-          reject(new Error('定位超时'));
-        }, timeout);
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            clearTimeout(timeoutId);
-            resolve(position);
-          },
-          (error) => {
-            clearTimeout(timeoutId);
-            reject(new Error(`定位失败: ${error.message}`));
-          },
-          { enableHighAccuracy: false, timeout: timeout, maximumAge: 300000 }
-        );
-      });
+    // 带超时的 fetch 封装
+    fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      return fetch(url, { ...options, signal: controller.signal })
+        .finally(() => clearTimeout(timer));
     },
 
-    // 根据坐标获取城市名
-    async getCityFromCoords(latitude, longitude) {
-      try {
-        const res = await fetch(`https://wttr.in/~${latitude},${longitude}?format=j1&lang=zh`);
-        if (res.ok) {
-          const data = await res.json();
-          const rawCity = data.nearest_area?.[0]?.areaName?.[0]?.value || '未知';
-          return this.translateCity(rawCity);
-        }
-      } catch (e) { /* ignore */ }
-      return '未知';
-    },
-
-    // IP 定位 (两个 API 同时请求，谁快用谁，pconline 优先级最高)
+    // IP 定位：只用 pconline（你的 CF Worker 代理），直接获取真实运营商 IP
+    // 备用 API（ip-api.com 等）会因代理/CDN 路由问题返回错误城市，已放弃
     async getLocationFromIP() {
-      let usedSource = null;
+      console.log('[Weather] 通过 pconline CF Worker 获取位置...');
+      try {
+        const data = await this.fetchWithTimeout('https://pconline.xoku.cn/', {}, 6000)
+          .then(res => res.json());
 
-      // pconline 请求
-      const pconlinePromise = this.pconlineJsonp().then(data => {
         const rawCity = data.city || data.addr || '';
         const city = rawCity.replace('市', '').trim() || '未知';
-        return { latitude: null, longitude: null, city, source: 'pconline' };
-      }).catch(() => null);
+        console.log('[Weather] pconline 返回城市:', city, '原始数据:', data);
 
-      // ipapi 备用请求
-      const ipapiPromise = (async () => {
-        try {
-          const ipRes = await fetch('https://api.ipify.cn/?format=json');
-          const ipData = await ipRes.json();
-          const locationRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-          const locationData = await locationRes.json();
-          const city = this.translateCity(locationData.city || locationData.region || '未知');
-          return { latitude: locationData.latitude, longitude: locationData.longitude, city, source: 'ipapi' };
-        } catch (e) {
-          return null;
-        }
-      })();
+        // 如果用户开启了代理、iCloud 专用代理等，会定位到奇怪的地方
+        const isAbnormalCity = city.includes('美国') || city.includes('CloudFlare') || city.includes('节点') || city === '未知';
 
-      // 谁先成功用谁
-      const firstResult = await Promise.race([
-        pconlinePromise.then(r => r ? r : new Promise(() => { })),
-        ipapiPromise.then(r => r ? r : new Promise(() => { }))
-      ].map(p => p.catch(() => null))).catch(() => null);
-
-      if (firstResult) {
-        usedSource = firstResult.source;
-
-        // 如果先用的是 ipapi，继续等 pconline，成功后覆盖更新
-        if (usedSource === 'ipapi') {
-          pconlinePromise.then(async (pconlineResult) => {
-            if (pconlineResult && pconlineResult.city && pconlineResult.city !== '未知') {
-              await this.fetchWeatherByCity(pconlineResult.city);
-            }
-          });
+        if (city && !isAbnormalCity) {
+          return { city, source: 'pconline' };
         }
 
-        return firstResult;
+        console.warn('[Weather] pconline 返回异常城市或使用了代理，降级为默认');
+        return { city: '未知', source: 'fallback' };
+      } catch (e) {
+        console.warn('[Weather] pconline 请求失败:', e.message, '，降级为默认城市');
+        return { city: '未知', source: 'fallback' };
       }
-
-      // 都失败了
-      return { latitude: null, longitude: null, city: '未知' };
     },
 
-    // Pconline 调用 (通过 CF Worker 代理)
-    pconlineJsonp() {
-      return fetch('https://pconline.xoku.cn/')
-        .then(res => res.json());
-    },
+
 
     // 城市名英中映射
     translateCity(cityName) {
