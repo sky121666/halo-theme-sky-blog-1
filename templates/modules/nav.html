@@ -157,11 +157,12 @@
             <div th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}">
 
               <!-- 已登录用户：显示用户菜单 -->
-              <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}"
-                class="dropdown dropdown-end dropdown-hover group/user">
+              <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}" class="relative group/user"
+                x-data="{ userMenuOpen: false }" @click.outside="userMenuOpen = false">
                 <!-- 用户头像按钮 -->
-                <div tabindex="0" role="button"
-                  class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
+                <div role="button"
+                  class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
+                  @click="userMenuOpen = !userMenuOpen">
                   <div class="avatar avatar-online">
                     <div class="w-8 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
                       <!-- 用户头像 -->
@@ -174,14 +175,16 @@
                   </div>
                 </div>
 
-                <!-- 用户下拉菜单 - before 伪元素创建桥接区域 -->
-                <div tabindex="0" class="dropdown-content z-50 menu w-56 mt-2 p-2 pt-3 -mr-1
+                <!-- 用户下拉菜单 -->
+                <div x-show="userMenuOpen" x-transition:enter="transition ease-out duration-200"
+                  x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                  x-transition:leave-end="opacity-0 scale-95 -translate-y-1" x-cloak class="absolute right-0 z-50 menu w-56 mt-2 p-2 pt-3 -mr-1
                          bg-base-100/95 backdrop-blur-md 
                          rounded-xl shadow-xl shadow-base-content/5
-                         border border-base-content/10
-                         opacity-0 invisible group-hover/user:opacity-100 group-hover/user:visible
-                         transition-all duration-200 delay-75
-                         before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
+                         border border-base-content/10">
 
                   <!-- 用户信息展示区 -->
                   <div class="px-2 py-2">
@@ -309,11 +312,14 @@
                     class="collapse-title min-h-0 flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-base-content/5 cursor-pointer"
                     @click="open = !open">
                     <!-- 菜单图标（如果有自定义图标） -->
-                    <th:block th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                      <span th:utext="${menuItem.metadata.annotations['icon']}" class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
+                    <th:block
+                      th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                      <span th:utext="${menuItem.metadata.annotations['icon']}"
+                        class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
                     </th:block>
                     <!-- 默认图标 -->
-                    <th:block th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                    <th:block
+                      th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
                       <span class="icon-[heroicons--folder] w-5 h-5 text-base-content/70"></span>
                     </th:block>
                     <span class="text-sm text-base-content" th:text="${menuItem.status.displayName}">菜单项</span>
@@ -339,11 +345,14 @@
                   class="flex items-center gap-3 px-3 py-2.5 text-sm text-base-content rounded-md hover:bg-base-content/5 drawer-menu-item"
                   th:style="'--item-index: ' + ${iterStat.index + 1}">
                   <!-- 菜单图标（如果有自定义图标） -->
-                  <th:block th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                    <span th:utext="${menuItem.metadata.annotations['icon']}" class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
+                  <th:block
+                    th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                    <span th:utext="${menuItem.metadata.annotations['icon']}"
+                      class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
                   </th:block>
                   <!-- 默认图标 -->
-                  <th:block th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                  <th:block
+                    th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
                     <span class="icon-[heroicons--link] w-5 h-5 text-base-content/70"></span>
                   </th:block>
                   <span th:text="${menuItem.status.displayName}"></span>
