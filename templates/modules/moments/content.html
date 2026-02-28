@@ -75,14 +75,23 @@
                       <a th:href="@{/authors/{name}(name=${moment.owner.name})}"
                         class="font-semibold text-primary text-sm truncate hover:underline"
                         th:text="${moment.owner?.displayName ?: '匿名用户'}">用户名</a>
-                      <div class="text-xs text-base-content/40"
-                        th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">11-27 14:00</div>
+                      <div class="flex items-center gap-1.5 mt-0.5 text-xs text-base-content/40">
+                        <span th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">11-27 14:00</span>
+                        <span th:if="${moment.spec.visible != null and moment.spec.visible.name() == 'PRIVATE'}"
+                          class="text-warning/80" title="私密瞬间">
+                          <span class="icon-[heroicons--lock-closed] w-3 h-3"></span>
+                        </span>
+                        <span th:if="${moment.spec.visible != null and moment.spec.visible.name() == 'INTERNAL'}"
+                          class="text-info/80" title="仅登录用户可见">
+                          <span class="icon-[heroicons--users] w-3 h-3"></span>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   <!-- 文字内容 -->
                   <div th:if="${not #strings.isEmpty(content.html)}"
-                    class="text-sm text-base-content leading-relaxed mb-3" th:utext="${content.html}">
+                    class="text-sm text-base-content leading-relaxed mb-3 [&_a.tag]:hidden" th:utext="${content.html}">
                     今天的天气真好...
                   </div>
 
@@ -170,7 +179,7 @@
             class="mt-8 flex items-center justify-center">
             <div class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md">
               <!-- 上一页 -->
-              <a th:href="@{${moments.prevUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
+              <a th:href="@{${moments.prevUrl}(owner=${param.owner}, tag=${param.tag})}" class="w-9 h-9 flex items-center justify-center rounded-full 
                         text-base-content/60 hover:text-base-content hover:bg-base-100 
                         transition-all duration-200"
                 th:classappend="${!moments.hasPrevious()} ? 'opacity-30 pointer-events-none' : ''">
@@ -180,7 +189,7 @@
               <span class="px-4 text-xs font-semibold text-base-content/50 tabular-nums tracking-wide"
                 th:text="${moments.page} + ' / ' + ${moments.totalPages}">1 / 1</span>
               <!-- 下一页 -->
-              <a th:href="@{${moments.nextUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
+              <a th:href="@{${moments.nextUrl}(owner=${param.owner}, tag=${param.tag})}" class="w-9 h-9 flex items-center justify-center rounded-full 
                         text-base-content/60 hover:text-base-content hover:bg-base-100 
                         transition-all duration-200"
                 th:classappend="${!moments.hasNext()} ? 'opacity-30 pointer-events-none' : ''">

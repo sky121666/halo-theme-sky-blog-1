@@ -87,115 +87,193 @@
           </div>
         </div>
 
-        <!-- ========== 文章列表 ========== -->
-        <div class="author-posts mb-6">
-          <h2 class="text-lg font-bold text-base-content mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--document-text] w-5 h-5 text-primary"></span>
-            文章列表
-            <span class="text-sm font-normal text-base-content/50" th:text="'(' + ${posts.total} + ')'"></span>
-          </h2>
+        <!-- ========== Tab 切换 (DaisyUI Radio Tabs, 无 JS) ========== -->
+        <th:block th:with="authorMoments = ${momentFinder.list({
+          page: 1,
+          size: 5,
+          owner: author.metadata.name,
+          sort: {'spec.releaseTime,desc'}
+        })}, hasMoments = ${authorMoments != null and authorMoments.total > 0}">
 
-          <!-- 卡片文章列表 -->
-          <div th:if="${posts.total > 0}" class="author-posts-list space-y-4">
-            <th:block th:each="post, stat : ${posts.items}">
-              <article
-                class="group card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
+          <div role="tablist" class="tabs tabs-bordered mb-8">
 
-                <!-- 左侧封面 -->
-                <figure th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}"
-                  class="relative w-full md:w-40 md:h-28 shrink-0 overflow-hidden rounded-xl">
-                  <a th:href="${post.status.permalink}" class="block w-full aspect-video md:aspect-auto md:h-full">
-                    <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy"
-                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <!-- === 文章 Tab (默认选中) === -->
+            <input type="radio" name="author_tab" role="tab"
+              class="tab text-base font-medium transition-all duration-300 hover:text-primary checked:text-primary checked:font-bold checked:border-primary"
+              th:attr="aria-label='文章 (' + ${posts.total} + ')'" checked="checked" />
+            <div role="tabpanel" class="tab-content pt-6">
+              <!-- 文章列表 -->
+              <div th:if="${posts.total > 0}" class="author-posts-list space-y-4">
+                <th:block th:each="post, stat : ${posts.items}">
+                  <article
+                    class="group card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
+                    <!-- 封面 -->
+                    <figure th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}"
+                      class="relative w-full md:w-40 md:h-28 shrink-0 overflow-hidden rounded-xl">
+                      <a th:href="${post.status.permalink}" class="block w-full aspect-video md:aspect-auto md:h-full">
+                        <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy"
+                          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                      </a>
+                    </figure>
+                    <!-- 内容 -->
+                    <div class="flex-1 flex flex-col min-w-0">
+                      <h3 class="text-base md:text-lg font-bold leading-snug">
+                        <a th:href="${post.status.permalink}" class="hover:text-primary transition-colors"
+                          th:text="${post.spec.title}">文章标题</a>
+                      </h3>
+                      <p th:if="${post.status.excerpt != null and !#strings.isEmpty(post.status.excerpt)}"
+                        class="mt-2 text-sm text-base-content/70 line-clamp-2 leading-relaxed">
+                        <a th:href="${post.status.permalink}" class="hover:text-base-content"
+                          th:text="${post.status.excerpt}">文章摘要...</a>
+                      </p>
+                      <div class="mt-auto pt-3 flex flex-wrap items-center justify-between gap-y-2">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                          <span th:if="${post.categories != null and !post.categories.isEmpty()}"
+                            class="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/5 text-primary text-[10px] font-medium shrink-0">
+                            <a th:href="${post.categories[0].status.permalink}"
+                              class="hover:underline max-w-[100px] truncate"
+                              th:text="${post.categories[0].spec.displayName}">分类</a>
+                          </span>
+                          <div th:if="${post.tags != null and !post.tags.isEmpty()}"
+                            class="flex items-center gap-2 text-xs text-base-content/50 truncate">
+                            <th:block th:each="tag, tagStat : ${post.tags}" th:if="${tagStat.index < 3}">
+                              <a th:href="${tag.status.permalink}" class="hover:text-primary transition-colors"
+                                th:text="'#' + ${tag.spec.displayName}">#标签</a>
+                            </th:block>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs text-base-content/40"
+                            th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</span>
+                          <div
+                            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
+                            <span class="icon-[heroicons--eye] w-3 h-3"></span>
+                            <span th:text="${post.stats?.visit ?: 0}">0</span>
+                          </div>
+                          <div
+                            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
+                            <span class="icon-[heroicons--chat-bubble-left] w-3 h-3"></span>
+                            <span th:text="${post.stats?.comment ?: 0}">0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </th:block>
+              </div>
+              <!-- 空状态 -->
+              <div th:if="${posts.total == 0}"
+                class="card bg-base-100/80 backdrop-blur-sm border border-base-content/5 rounded-xl p-12 text-center">
+                <span
+                  class="icon-[heroicons--document-magnifying-glass] w-16 h-16 text-base-content/20 mx-auto mb-4"></span>
+                <p class="text-base-content/60">该作者暂未发布任何文章</p>
+              </div>
+              <!-- 分页 -->
+              <div th:if="${posts.totalPages > 1}" class="mt-8 flex items-center justify-center">
+                <div class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md">
+                  <a th:href="${posts.prevUrl}"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-base-content/60 hover:text-base-content hover:bg-base-100 transition-all duration-200"
+                    th:classappend="${!posts.hasPrevious} ? 'opacity-30 pointer-events-none' : ''">
+                    <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
                   </a>
-                </figure>
+                  <span class="px-4 text-xs font-semibold text-base-content/50 tabular-nums tracking-wide"
+                    th:text="${posts.page} + ' / ' + ${posts.totalPages}">1 / 1</span>
+                  <a th:href="${posts.nextUrl}"
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-base-content/60 hover:text-base-content hover:bg-base-100 transition-all duration-200"
+                    th:classappend="${!posts.hasNext} ? 'opacity-30 pointer-events-none' : ''">
+                    <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
+                  </a>
+                </div>
+              </div>
+            </div>
 
-                <!-- 右侧内容 -->
-                <div class="flex-1 flex flex-col min-w-0">
-                  <!-- 标题 -->
-                  <h3 class="text-base md:text-lg font-bold leading-snug">
-                    <a th:href="${post.status.permalink}" class="hover:text-primary transition-colors"
-                      th:text="${post.spec.title}">文章标题</a>
-                  </h3>
-
-                  <!-- 摘要 -->
-                  <p th:if="${post.status.excerpt != null and !#strings.isEmpty(post.status.excerpt)}"
-                    class="mt-2 text-sm text-base-content/70 line-clamp-2 leading-relaxed">
-                    <a th:href="${post.status.permalink}" class="hover:text-base-content"
-                      th:text="${post.status.excerpt}">文章摘要...</a>
-                  </p>
-
-                  <!-- 底部元信息 -->
-                  <div class="mt-auto pt-3 flex flex-wrap items-center justify-between gap-y-2">
-                    <!-- 左侧：分类 + 标签 -->
-                    <div class="flex items-center gap-2 overflow-hidden">
-                      <!-- 分类 -->
-                      <span th:if="${post.categories != null and !post.categories.isEmpty()}"
-                        class="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/5 text-primary text-[10px] font-medium shrink-0">
-                        <a th:href="${post.categories[0].status.permalink}"
-                          class="hover:underline max-w-[100px] truncate"
-                          th:text="${post.categories[0].spec.displayName}">分类</a>
-                      </span>
-                      <!-- 标签 -->
-                      <div th:if="${post.tags != null and !post.tags.isEmpty()}"
-                        class="flex items-center gap-2 text-xs text-base-content/50 truncate">
-                        <th:block th:each="tag, tagStat : ${post.tags}" th:if="${tagStat.index < 3}">
-                          <a th:href="${tag.status.permalink}" class="hover:text-primary transition-colors"
-                            th:text="'#' + ${tag.spec.displayName}">#标签</a>
+            <!-- === 瞬间 Tab (仅当作者有瞬间时渲染) === -->
+            <th:block th:if="${hasMoments}">
+              <input type="radio" name="author_tab" role="tab"
+                class="tab text-base font-medium transition-all duration-300 hover:text-primary checked:text-primary checked:font-bold checked:border-primary"
+                th:attr="aria-label='瞬间 (' + ${authorMoments.total} + ')'" />
+              <div role="tabpanel" class="tab-content pt-6">
+                <div class="space-y-4">
+                  <article th:each="moment : ${authorMoments.items}" th:with="content=${moment.spec.content}"
+                    class="card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col min-w-0 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
+                    <!-- 文本 -->
+                    <div th:if="${not #strings.isEmpty(content.html)}"
+                      class="prose prose-sm max-w-none text-base-content/80 mb-4 prose-a:text-primary hover:prose-a:text-primary-focus leading-relaxed [&_a.tag]:hidden"
+                      th:utext="${content.html}"></div>
+                    <!-- 多媒体 -->
+                    <div th:if="${not #lists.isEmpty(content.medium)}" class="mb-4 mt-1">
+                      <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        <th:block th:each="momentItem : ${content.medium}">
+                          <a th:if="${momentItem.type.name() == 'PHOTO'}" th:href="${momentItem.url}" target="_blank"
+                            class="block aspect-square rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
+                            <img th:src="${momentItem.url}"
+                              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                              loading="lazy" />
+                          </a>
+                          <div th:if="${momentItem.type.name() == 'VIDEO'}"
+                            class="col-span-2 md:col-span-3 rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
+                            <video th:src="${momentItem.url}" controls="controls"
+                              class="w-full max-h-[400px] object-contain bg-black/5"></video>
+                          </div>
+                          <div th:if="${momentItem.type.name() == 'AUDIO'}"
+                            class="col-span-2 md:col-span-3 bg-base-200/50 rounded-xl p-3 border border-base-content/5">
+                            <audio th:src="${momentItem.url}" controls="controls"
+                              class="w-full h-10 outline-none"></audio>
+                          </div>
                         </th:block>
                       </div>
                     </div>
-
-                    <!-- 右侧：时间 + 统计 -->
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs text-base-content/40"
-                        th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</span>
-                      <div
-                        class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
-                        <span class="icon-[heroicons--eye] w-3 h-3"></span>
-                        <span th:text="${post.stats?.visit ?: 0}">0</span>
+                    <!-- 底部元信息 -->
+                    <div class="mt-auto pt-3 flex flex-wrap items-center justify-between gap-y-2">
+                      <div class="flex items-center gap-2 overflow-hidden">
+                        <div th:if="${moment.spec.tags != null and !moment.spec.tags.isEmpty()}"
+                          class="flex items-center gap-2 text-xs text-base-content/50 truncate">
+                          <th:block th:each="tag, tagStat : ${moment.spec.tags}" th:if="${tagStat.index < 3}">
+                            <a th:href="@{/moments(tag=${tag})}" class="hover:text-primary transition-colors"
+                              th:text="'#' + ${tag}">#标签</a>
+                          </th:block>
+                        </div>
                       </div>
-                      <div
-                        class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
-                        <span class="icon-[heroicons--chat-bubble-left] w-3 h-3"></span>
-                        <span th:text="${post.stats?.comment ?: 0}">0</span>
+                      <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5 text-xs text-base-content/40">
+                          <span
+                            th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm')}">2024-01-01</span>
+                          <span th:if="${moment.spec.visible != null and moment.spec.visible.name() == 'PRIVATE'}"
+                            class="text-warning/80" title="私密">
+                            <span class="icon-[heroicons--lock-closed] w-3 h-3"></span>
+                          </span>
+                          <span th:if="${moment.spec.visible != null and moment.spec.visible.name() == 'INTERNAL'}"
+                            class="text-info/80" title="仅登录可见">
+                            <span class="icon-[heroicons--users] w-3 h-3"></span>
+                          </span>
+                        </div>
+                        <div
+                          class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
+                          <span class="icon-[heroicons--heart] w-3 h-3"></span>
+                          <span th:text="${moment.stats?.upvote ?: 0}">0</span>
+                        </div>
+                        <div
+                          class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-base-200/50 text-[10px] text-base-content/60">
+                          <span class="icon-[heroicons--chat-bubble-left] w-3 h-3"></span>
+                          <span th:text="${moment.stats?.approvedComment ?: 0}">0</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 </div>
-              </article>
+                <!-- 查看全部 -->
+                <div th:if="${authorMoments.total > 5}" class="mt-4 text-center">
+                  <a th:href="@{/moments(owner=${author.metadata.name})}"
+                    class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-focus transition-colors">
+                    <span>查看所有瞬间</span>
+                    <span class="icon-[heroicons--arrow-right] w-4 h-4"></span>
+                  </a>
+                </div>
+              </div>
             </th:block>
-          </div>
 
-          <!-- 空状态 -->
-          <div th:if="${posts.total == 0}"
-            class="card bg-base-100/80 backdrop-blur-sm border border-base-content/5 rounded-xl p-12 text-center">
-            <span
-              class="icon-[heroicons--document-magnifying-glass] w-16 h-16 text-base-content/20 mx-auto mb-4"></span>
-            <p class="text-base-content/60">该作者暂未发布任何文章</p>
-          </div>
-
-          <!-- 分页 -->
-          <div th:if="${posts.totalPages > 1}" class="mt-8 flex items-center justify-center">
-            <div class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md">
-              <!-- 上一页 -->
-              <a th:href="${posts.prevUrl}"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-base-content/60 hover:text-base-content hover:bg-base-100 transition-all duration-200"
-                th:classappend="${!posts.hasPrevious} ? 'opacity-30 pointer-events-none' : ''">
-                <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
-              </a>
-              <!-- 页码 -->
-              <span class="px-4 text-xs font-semibold text-base-content/50 tabular-nums tracking-wide"
-                th:text="${posts.page} + ' / ' + ${posts.totalPages}">1 / 1</span>
-              <!-- 下一页 -->
-              <a th:href="${posts.nextUrl}"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-base-content/60 hover:text-base-content hover:bg-base-100 transition-all duration-200"
-                th:classappend="${!posts.hasNext} ? 'opacity-30 pointer-events-none' : ''">
-                <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
-              </a>
-            </div>
-          </div>
-        </div>
+          </div> <!-- end tabs -->
+        </th:block>
 
       </section>
 
