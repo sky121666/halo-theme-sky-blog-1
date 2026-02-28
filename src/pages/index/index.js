@@ -11,7 +11,17 @@ import './index.css';
 (function () {
   'use strict';
 
-  const CACHE_KEY = 'sky_weather_cache_v12';
+  // 天气引擎专属控制台拦截器
+  const WTLogger = {
+    info: (...args) => {
+      if (window.SYS_WEATHER_DEBUG) {
+        console.log('[BG]', ...args);
+      }
+    },
+    warn: (...args) => console.warn('[BG]', ...args)
+  };
+
+  const CACHE_KEY = 'sky_weather_cache_v13';
   const weatherNameMap = {
     'sunny': '☀️ 晴天',
     'cloudy': '☁️ 多云',
@@ -77,61 +87,153 @@ import './index.css';
   let effectLayer = null;
 
   function init() {
+    WTLogger.info('init() 开始执行');
     container = document.getElementById('weather-effect-root');
-    if (!container) return;
+    if (!container) {
+      WTLogger.warn('❌ weather-effect-root 元素不存在，背景类型可能未设为「天气联动」');
+      return;
+    }
+    WTLogger.info('✅ weather-effect-root 找到');
 
     effectLayer = container.querySelector('.weather-effect-layer');
-    if (!effectLayer) return;
+    if (!effectLayer) {
+      WTLogger.warn('❌ .weather-effect-layer 不存在');
+      return;
+    }
+    WTLogger.info('✅ effectLayer 找到');
 
     // 第一阶段：立即渲染（使用缓存或默认晴天）
     loadWeatherData();
+    WTLogger.info('初始渲染，currentState.type =', currentState.type);
     renderEffect();
     setupScrollListener();
 
     // 第二阶段：监听天气数据更新事件（来自天气卡片的真实数据）
     window.addEventListener('sky-weather-updated', (event) => {
       const newBg = event.detail?.weatherBg;
+      const rawData = event.detail?.rawData; // 获取附加的物理参数
+      WTLogger.info('收到 sky-weather-updated 事件，weatherBg =', newBg, 'rawData =', rawData);
 
-      if (newBg && newBg !== currentState.type) {
-        // 标准化天气类型
-        let normalizedBg = newBg;
-        if (newBg === 'rain') normalizedBg = 'rainy';
-        if (newBg === 'snow') normalizedBg = 'snowy';
-        if (newBg === 'fog') normalizedBg = 'foggy';
+      if (!newBg) return;
 
-        currentState.type = normalizedBg;
-        renderEffect();
+      let normalizedBg = newBg;
+      if (newBg === 'rain') normalizedBg = 'rainy';
+      if (newBg === 'snow') normalizedBg = 'snowy';
+      if (newBg === 'fog') normalizedBg = 'foggy';
+
+      WTLogger.info('切换背景 →', normalizedBg);
+      currentState.type = normalizedBg;
+
+      // 应用物理参数
+      if (rawData) {
+        applyPhysicsVariables(rawData);
       }
+
+      renderEffect();
     });
+    WTLogger.info('事件监听器已注册，init() 完成');
   }
 
   function loadWeatherData() {
+    WTLogger.info('loadWeatherData() 开始，读取 key:', CACHE_KEY);
     try {
       const cached = localStorage.getItem(CACHE_KEY);
+      WTLogger.info('localStorage 原始值:', cached ? '有数据' : '无数据（null）');
 
       if (cached) {
         const data = JSON.parse(cached);
         const bg = data.weatherBg;
+        WTLogger.info('缓存中的 weatherBg:', bg, '| location:', data.location);
 
         if (bg) {
-          // 标准化天气类型
           let normalizedBg = bg;
           if (bg === 'rain') normalizedBg = 'rainy';
           if (bg === 'snow') normalizedBg = 'snowy';
           if (bg === 'fog') normalizedBg = 'foggy';
 
           currentState.type = normalizedBg;
-          currentState.temp = parseFloat(data.weather?.temp || 20);
+          WTLogger.info('✅ 从缓存加载天气成功，type =', currentState.type);
+
+          if (data.weather) {
+            applyPhysicsVariables(data.weather);
+          } else {
+            // 缺失真实数据时的默认物理表现
+            applyPhysicsVariables({ temp: 20, humidity: 50, wind: '0 km/h' });
+          }
+
           return;
         }
       }
     } catch (e) {
-      // ignore
+      WTLogger.warn('localStorage 读取失败:', e);
     }
 
     const hour = new Date().getHours();
     currentState.type = (hour >= 18 || hour < 6) ? 'night-clear' : 'sunny';
+    applyPhysicsVariables({ temp: 20, humidity: 50, wind: '0 km/h' });
+    console.log('[BG] ⚠️ 无缓存，使用默认天气:', currentState.type);
   }
+
+  /**
+   * 核心物理引擎桥接：将真实气象数据解析为全局 CSS 变量挂载到容器树
+   */
+  function applyPhysicsVariables(rawData) {
+    if (!container || !rawData) return;
+    const weatherEffect = container.querySelector('.weather-effect');
+    if (!weatherEffect) return;
+
+    // 1. 获取温度 (Temp)，主要用于控制动画“生命力”表现(寒冷冻僵)
+    let temp = parseFloat(rawData.temp);
+    if (isNaN(temp)) temp = 20;
+    currentState.temp = temp;
+
+    // 计算生命力活跃系数 (0.1 ~ 1.0)
+    // 假设 20度为正常 1.0； < 5度逐渐冻僵
+    let lifeScale = 1.0;
+    if (temp < 10) {
+      lifeScale = Math.max(0.1, 1.0 - (10 - temp) * 0.1);
+    }
+    weatherEffect.style.setProperty('--life-scale', lifeScale.toFixed(2));
+
+    // 2. 解析风 (Wind Speed & Direction) -> Vector X 漂移方向和力道
+    // 通常 API 返回 "XX km/h"
+    let windSpeed = 0;
+    if (typeof rawData.wind === 'string') {
+      const match = rawData.wind.match(/(\d+(\.\d+)?)/);
+      if (match) windSpeed = parseFloat(match[1]);
+    } else if (typeof rawData.wind_speed === 'number') {
+      windSpeed = rawData.wind_speed;
+    }
+
+    // 提取风向 (0-360) 0 是北风向南吹，90 是东风向西吹 (X轴负方向)
+    let windDir = parseFloat(rawData.wind_direction) || 0;
+
+    // 风力映射：0是微风，20km/h是中风，50km/h是狂风
+    // x = 1.0 (正常速度), x = 0.2 (几乎停止), x = 4.0 (四倍速)
+    let windForce = Math.max(0.1, windSpeed / 10);
+    // 限制风速在极端情况下不要把动画吹穿帮
+    windForce = Math.min(windForce, 4.0);
+
+    // 判定左右方向（X轴正方向为向右吹）。
+    // 在气象学上，风向角是从北(0)经东(90)南(180)西(270)。
+    // 即：角在 0~180 (偏东风)，其实是往西吹，也就是向左（X轴负）。
+    // 角在 180~360 (偏西风)，是往东吹，也就是向右（X轴正）。
+    let vectorDirectionX = (windDir > 180 && windDir < 360) ? 1 : -1;
+    // 如果无风，默认向左慢飘（-1）
+    if (windSpeed === 0) vectorDirectionX = -1;
+
+    // x 轴向真正受到左右干预的风力
+    let windForceX = windForce * vectorDirectionX;
+
+    // 把纯风力标量和风偏移量X存入全局供后续 JS 使用
+    currentState.windForce = windForce;
+    currentState.windForceX = windForceX;
+
+    // 注入 CSS
+    weatherEffect.style.setProperty('--wind-force', windForce.toFixed(2));
+    weatherEffect.style.setProperty('--wind-force-x', windForceX.toFixed(2));
+  }
+
 
   function renderEffect() {
     if (!effectLayer) return;
@@ -175,6 +277,36 @@ import './index.css';
 
   // ☀️ 晴天：阳光草坪 (Stylized Lawn)
   function renderSunny() {
+    buildDaytimeMeadow();
+
+    // 5. 太阳 (特有)
+    const sunContainer = document.createElement('div');
+    sunContainer.className = 'sun-container';
+
+    const rays = document.createElement('div');
+    rays.className = 'sun-rays';
+    rays.innerHTML = SVGS.sunRays;
+    sunContainer.appendChild(rays);
+
+    const body = document.createElement('div');
+    body.className = 'sun-body';
+    body.innerHTML = SVGS.sunBody;
+    sunContainer.appendChild(body);
+
+    const glow = document.createElement('div');
+    glow.className = 'sun-glow-outer';
+    sunContainer.appendChild(glow);
+
+    effectLayer.appendChild(sunContainer);
+
+    // 6. 漂浮光斑 (通常伴随强阳光)
+    for (let i = 0; i < 15; i++) {
+      createBokeh();
+    }
+  }
+
+  // 构建通用的白天草坪场景 (供 Sunny 和 Cloudy 复用)
+  function buildDaytimeMeadow() {
     // 1. 构建场景容器
     const sceneContainer = document.createElement('div');
     sceneContainer.className = 'sunny-scene-container';
@@ -216,31 +348,6 @@ import './index.css';
     }
 
     effectLayer.appendChild(sceneContainer);
-
-    // 5. 太阳 (保留原逻辑)
-    const sunContainer = document.createElement('div');
-    sunContainer.className = 'sun-container';
-
-    const rays = document.createElement('div');
-    rays.className = 'sun-rays';
-    rays.innerHTML = SVGS.sunRays;
-    sunContainer.appendChild(rays);
-
-    const body = document.createElement('div');
-    body.className = 'sun-body';
-    body.innerHTML = SVGS.sunBody;
-    sunContainer.appendChild(body);
-
-    const glow = document.createElement('div');
-    glow.className = 'sun-glow-outer';
-    sunContainer.appendChild(glow);
-
-    effectLayer.appendChild(sunContainer);
-
-    // 6. 漂浮光斑 (保留)
-    for (let i = 0; i < 15; i++) {
-      createBokeh();
-    }
   }
 
   function createBokeh() {
@@ -265,7 +372,7 @@ import './index.css';
       renderStars(30, true);
       renderMoon(true);
     } else {
-      renderSunny(); // 白天多云：先渲染晴天场景
+      buildDaytimeMeadow(); // 白天多云：仅渲染通用的草地前景，不渲染太阳
     }
 
     // 生成卡通 SVG 云朵
@@ -284,8 +391,14 @@ import './index.css';
     const scale = 0.6 + Math.random() * 1.2;
     // 垂直分布范围
     const top = 5 + Math.random() * 50;
-    // 飘动时长：大云慢，小云快
-    const duration = 60 + (1.8 - scale) * 40 + Math.random() * 30;
+
+    // 物理映射: 风大则时间短，飘得快
+    const windForce = currentState.windForce || 1.0;
+    // 原本的时长：大云慢，小云快 (60~130s)
+    let baseDuration = 60 + (1.8 - scale) * 40 + Math.random() * 30;
+    // 受到风力影响
+    const duration = baseDuration / windForce;
+
     // 透明度
     const opacity = isNight ? (0.3 + Math.random() * 0.2) : (0.85 + Math.random() * 0.15);
     // 随机起始偏移，让云朵交错出现
@@ -540,9 +653,12 @@ import './index.css';
     const baseCount = isStormy ? width / 10 : width / 25;
     const count = Math.min(isStormy ? 150 : 60, Math.max(20, Math.floor(baseCount)));
 
+    const windForce = currentState.windForce || 1.0;
+    const windForceX = currentState.windForceX || -1.0; // 带有方向的X轴位移
+
     const config = isStormy
-      ? { count: count, speedBase: 14, wind: -6, thickness: 3, color: 'rgba(130, 180, 255, 0.8)' }
-      : { count: count, speedBase: 8, wind: -2, thickness: 2, color: 'rgba(174, 217, 255, 0.6)' };
+      ? { count: count, speedBase: 14 * Math.max(1, windForce * 0.8), wind: 6 * windForceX, thickness: 3, color: 'rgba(130, 180, 255, 0.8)' }
+      : { count: count, speedBase: 8 * Math.max(1, Math.sqrt(windForce)), wind: 2 * windForceX, thickness: 2, color: 'rgba(174, 217, 255, 0.6)' };
 
     // 创建容器
     const rainCanvas = document.createElement('canvas');
@@ -691,13 +807,19 @@ import './index.css';
 
     // 触发闪电
     function triggerLightning() {
-      flashOverlay.style.opacity = '0.7';
+      // 狂风暴雨（风力>2）的猛烈雷击
+      const isFierce = (currentState.windForce > 2.0);
+
+      flashOverlay.style.opacity = isFierce ? '0.9' : '0.6';
       setTimeout(() => { flashOverlay.style.opacity = '0'; }, 80);
-      setTimeout(() => { flashOverlay.style.opacity = '0.3'; }, 120);
+      setTimeout(() => { flashOverlay.style.opacity = isFierce ? '0.4' : '0.2'; }, 120);
       setTimeout(() => { flashOverlay.style.opacity = '0'; }, 200);
 
-      container.classList.add('weather-shake');
-      setTimeout(() => container.classList.remove('weather-shake'), 400);
+      // 只有猛烈暴风雪才引起屏幕物理抖动
+      if (isFierce) {
+        container.classList.add('weather-shake');
+        setTimeout(() => container.classList.remove('weather-shake'), 400);
+      }
 
       drawLightningBolt();
     }
@@ -719,7 +841,9 @@ import './index.css';
         const now = Date.now();
         if (now > nextLightningTime) {
           triggerLightning();
-          nextLightningTime = now + 2500 + Math.random() * 4000;
+          // 风速越大，闪电越频繁 (2500 -> 1000 基础间隔缩短)
+          const baseInterval = Math.max(800, 2000 - (currentState.windForce - 1) * 400);
+          nextLightningTime = now + baseInterval + Math.random() * 3000;
         }
       }
 
@@ -831,7 +955,12 @@ import './index.css';
 
       const isLarge = Math.random() < 0.3;
       const size = isLarge ? (12 + Math.random() * 10) : (4 + Math.random() * 8);
-      const duration = isLarge ? (6 + Math.random() * 4) : (3 + Math.random() * 5);
+
+      const windForce = currentState.windForce || 1.0;
+      const windForceX = currentState.windForceX || -1.0;
+      const baseDuration = isLarge ? (6 + Math.random() * 4) : (3 + Math.random() * 5);
+      // 风大雪飘得快，但不像云那么夸张，用 sqrt 平稳曲线
+      const duration = baseDuration / Math.max(0.5, Math.sqrt(windForce));
 
       if (Math.random() > 0.4) {
         flake.innerHTML = `<svg viewBox="0 0 24 24" class="w-full h-full fill-current"><circle cx="12" cy="12" r="8"/></svg>`;
@@ -839,7 +968,8 @@ import './index.css';
         flake.innerHTML = `<svg viewBox="0 0 24 24" class="w-full h-full stroke-current" stroke-width="2"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/></svg>`;
       }
 
-      const windOffset = 20; // 固定风偏
+      // 动态风偏 (原固定为 20), 引入方向矢量 windForceX
+      const windOffset = -20 * windForceX;
 
       flake.style.cssText = `
         left: ${Math.random() * 100}%;

@@ -22,6 +22,10 @@
     const lightTheme = /*[[${theme.config.nav.theme_settings.light_theme}]]*/ 'light';
     const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ 'dark';
 
+    // === 注入环境变量 ===
+    window.SYS_WEATHER_DEBUG = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false; // 旧兼容接口
+    window.SYS_GLOBAL_DEBUG = window.SYS_WEATHER_DEBUG; // 将来如果有全局其他 debug 可在此处叠加
+
     // 如果前端开关关闭，忽略 localStorage，强制使用默认主题
     const isDark = showThemeToggle && savedTheme
       ? (savedTheme === 'dark_theme')
@@ -35,7 +39,7 @@
     // === 全局字体按需加载 ===
     const bodyFont = /*[[${theme.config.general.font_settings.body_font}]]*/ 'font-default';
     const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ 'https://cdn.5ee.net/fonts';
-    
+
     // 加载字体文件
     if (bodyFont === 'font-lxgw-wenkai-bright') {
       const link = document.createElement('link');
@@ -48,7 +52,7 @@
       link.href = fontCdn + '/思源屏显臻宋/result.css';
       document.head.appendChild(link);
     }
-    
+
     // 应用字体类到 html 元素（全局生效）
     if (bodyFont && bodyFont !== 'font-default') {
       document.documentElement.classList.add(bodyFont);

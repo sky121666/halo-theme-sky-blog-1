@@ -609,21 +609,33 @@ function welcomeWeatherCard() {
     // ═══════ 主流程 ═══════
 
     async loadWeather() {
-      console.log('[Weather] 开始加载天气...');
       const cached = this.getCache();
       if (cached) {
-        console.log('[Weather] 命中缓存，城市:', cached.location);
+        if (window.SYS_WEATHER_DEBUG) console.log('[Weather] 命中缓存，城市:', cached.location);
         this.applyWeatherData(cached);
         this.loading = false;
+        // 缓存命中也需要通知 index.js 的背景引擎同步天气状态
+        // 通过 setTimeout 确保 index.js 的监听器已完成注册
+        if (cached.weatherBg) {
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('sky-weather-updated', {
+              detail: {
+                weatherBg: cached.weatherBg,
+                location: cached.location,
+                rawData: cached.weather // 包含 temp, humidity, wind 等物理参数
+              }
+            }));
+          }, 200);
+        }
         return;
       }
-      console.log('[Weather] 无缓存，显示默认数据，后台获取真实天气');
+      if (window.SYS_WEATHER_DEBUG) console.log('[Weather] 无缓存，显示默认数据，后台获取真实天气');
       this.applyWeatherData(this.getDefaultWeather());
       this.loading = false;
 
       try {
         const loc = await this.getLocationByPconline();
-        console.log('[Weather] 定位结果:', loc.city, '(来源:', loc.source + ')');
+        if (window.SYS_WEATHER_DEBUG) console.log('[Weather] 定位结果:', loc.city, '(来源:', loc.source + ')');
         if (!loc.city || loc.city === '未知') { console.warn('[Weather] 定位失败'); return; }
         await this.getWeatherByWttrProxy(loc);
       } catch (e) {
@@ -635,12 +647,10 @@ function welcomeWeatherCard() {
     // ═══════ IP 定位路由 ═══════
 
     async getLocationByPconline() {
-      console.log('[Weather] 通过 pconline 获取位置...');
       try {
         const data = await this.fetchWithTimeout('https://pconline.xoku.cn/', {}, 6000).then(r => r.json());
         const rawCity = data.city || data.addr || '';
         const city = rawCity.replace('市', '').trim() || '未知';
-        console.log('[Weather] pconline 返回:', city, data);
         const bad = city.includes('美国') || city.includes('CloudFlare') || city.includes('节点') || city === '未知';
         if (city && !bad) return { city, adcode: '', source: 'pconline' };
         console.warn('[Weather] pconline 返回异常城市，降级');
@@ -654,7 +664,7 @@ function welcomeWeatherCard() {
     // ═══════ 天气查询路由 ═══════
 
     async getWeatherByWttrProxy(loc) {
-      console.log('[Weather] Open-Meteo CF 反代请求:', loc.city);
+      if (window.SYS_WEATHER_DEBUG) console.log('[Weather] Open-Meteo CF 反代请求:', loc.city);
       try {
         const url = `https://pconline.xoku.cn/weather?city=${encodeURIComponent(loc.city)}`;
         const res = await this.fetchWithTimeout(url, {}, 8000);
@@ -674,13 +684,14 @@ function welcomeWeatherCard() {
             temp: data.temp,
             feels_like: data.feels_like,
             humidity: data.humidity,
+            wind_direction: data.wind_direction,
             description: data.description,
             wind: `${this.degToDir(data.wind_direction)} ${data.wind_speed}km/h`
           },
           weatherIcon: iconInfo.icon,
           weatherBg: iconInfo.bg
         };
-        console.log('[Weather] 天气请求成功:', wd.location + ',', wd.weather.description + ',', wd.weather.temp + '°C');
+        if (window.SYS_WEATHER_DEBUG) console.log('[Weather] 天气请求成功:', wd.location + ',', wd.weather.description + ',', wd.weather.temp + '°C');
         await this.loadSvgIcon(wd.weatherIcon);
         wd.weatherIconSvg = this.weatherIconSvg;
         this.applyWeatherData(wd);
@@ -767,9 +778,16 @@ function welcomeWeatherCard() {
     setCache(data) {
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, timestamp: Date.now() }));
-        if (data.weatherBg && data.weatherBg !== this._lastDispatchedBg) {
+        // 只要有数据就派发事件（去掉 weatherBg !== _lastDispatchedBg 的限制，因为物理参数可能在同种天气下变化）
+        if (data.weatherBg) {
           this._lastDispatchedBg = data.weatherBg;
-          window.dispatchEvent(new CustomEvent('sky-weather-updated', { detail: { weatherBg: data.weatherBg, location: data.location } }));
+          window.dispatchEvent(new CustomEvent('sky-weather-updated', {
+            detail: {
+              weatherBg: data.weatherBg,
+              location: data.location,
+              rawData: data.weather // 包含 temp, humidity, wind 等物理参数
+            }
+          }));
         }
       } catch (e) { }
     },

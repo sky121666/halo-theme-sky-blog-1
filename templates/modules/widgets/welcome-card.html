@@ -18,7 +18,7 @@
     'bg-gradient-to-br from-purple-600/15 via-slate-700/10 to-indigo-600/15 hover:border-purple-500/20': weatherBg === 'stormy',
     'bg-base-100/80 hover:border-primary/20': !weatherBg
   }" x-data="welcomeWeatherCard()" th:attr="
-    data-weather-provider=${theme.config.general.weather_settings?.enabled == false ? 'none' : 'auto'}
+    data-weather-provider='auto'
   ">
 
   <!-- 动态背景装饰 -->

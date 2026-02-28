@@ -260,19 +260,18 @@ spec:
               label: 字体 CDN 地址
               help: 自定义字体文件的 CDN 根路径，末尾不要加斜杠
               value: "https://cdn.5ee.net/fonts"
-              placeholder: "https://cdn.5ee.net/fonts"
-        - $formkit: group
-          name: weather_settings
-          label: 天气组件
-          value:
-            enabled: true
-          children:
-            - $formkit: toggle
-              name: enabled
-              label: 启用天气与定位卡片
-              help: "开启后，会在控制台侧边欢迎区域显示访客当地的天气情况"
-              value: true
 
+        - $formkit: group
+          name: debug_settings
+          label: 开发者与调试
+          value:
+            enable_weather_debug: false
+          children:
+            - $formkit: switch
+              name: enable_weather_debug
+              label: 开启天气组件 Debug 日志
+              help: "排查错误用。开启后会在浏览器 F12 控制台打印包含天气热力学地图、渲染流程、定位状态等关键日志。若需强制刷新天气缓存请执行：localStorage.removeItem('sky_weather_cache_v13')"
+              value: false
 
     - group: nav
 
@@ -3966,7 +3965,6 @@ spec:
               label: Dock 菜单
               value: primary
               if: $get(equipment_enable_custom_dock).value
-              help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮

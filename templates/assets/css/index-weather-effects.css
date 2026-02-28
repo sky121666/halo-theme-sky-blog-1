@@ -5,7 +5,11 @@
 
 :root {
   --weather-transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --wind-force: 0;
+  --wind-force: 1;
+  --temp-glow-hue: 210;
+  --temp-glow-opacity: 0;
+  --humidity-blur: 0px;
+  --humidity-opacity: 0;
 }
 
 /* ========================================
@@ -151,16 +155,16 @@
   border-radius: 5px 5px 0 0;
   z-index: 5;
   transform-origin: bottom center;
-  animation: grass-sway 4s ease-in-out infinite alternate;
+  animation: grass-sway calc(4s / var(--life-scale, 1)) ease-in-out infinite alternate;
 }
 
 @keyframes grass-sway {
   0% {
-    transform: rotate(-8deg);
+    transform: rotate(calc(-8deg + 15deg * var(--wind-force-x, 0)));
   }
 
   100% {
-    transform: rotate(8deg);
+    transform: rotate(calc(8deg + 15deg * var(--wind-force-x, 0)));
   }
 }
 
@@ -178,7 +182,7 @@
   height: 60px;
   transform-origin: bottom center;
   z-index: 4;
-  animation: flower-sway 5s ease-in-out infinite alternate;
+  animation: flower-sway calc(5s / var(--life-scale, 1)) ease-in-out infinite alternate;
 }
 
 /* 花茎 */
@@ -237,11 +241,11 @@
 
 @keyframes flower-sway {
   0% {
-    transform: rotate(-5deg) scale(0.95);
+    transform: rotate(calc(-5deg + 20deg * var(--wind-force-x, 0))) scale(0.95);
   }
 
   100% {
-    transform: rotate(5deg) scale(1.05);
+    transform: rotate(calc(5deg + 20deg * var(--wind-force-x, 0))) scale(1.05);
   }
 }
 
@@ -601,8 +605,42 @@
     opacity: 1;
     transform: scaleY(0.3);
   }
+}
 
-  /* 眨眼 */
+/* 眨眼 */
+
+.cloud-cartoon {
+  position: absolute;
+  width: 250px;
+  height: 80px;
+  /* 
+    风力形变公式 (拉宽 & 压扁)
+    --wind-force 平时微风是 ~0.5，大风是 2.0+ 甚至狂风 4.0
+    scaleX 基础 1.0，根据力拉伸 (每 1点 force 变宽 15%，最大1.5倍)
+    scaleY 基础 1.0，根据力压扁 (每 1点 force 压缩 10%，最小0.6倍)
+  */
+  --stretch-x: calc(1 + (var(--wind-force, 1) - 1) * 0.15);
+  --stretch-y: calc(1 - (var(--wind-force, 1) - 1) * 0.1);
+
+  transform: scale(var(--cloud-scale)) scaleX(var(--stretch-x)) scaleY(var(--stretch-y));
+  transform-origin: center center;
+  transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+  animation: cloud-drift-linear linear infinite;
+  /* 解决 SVG 在动画过程中可能会闪烁/像素化的问题 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 移除原有的固定飘动偏移动画 */
+@keyframes cloud-drift-linear {
+  0% {
+    transform: scale(var(--cloud-scale)) scaleX(var(--stretch-x)) scaleY(var(--stretch-y)) translateX(calc(100vw + 250px));
+  }
+
+  100% {
+    transform: scale(var(--cloud-scale)) scaleX(var(--stretch-x)) scaleY(var(--stretch-y)) translateX(-350px);
+  }
 }
 
 /* 幽灵鬼火 */
@@ -1072,6 +1110,15 @@
 
 .snow-flake-svg {
   position: absolute;
+  /* 
+    风暴雪透视拉伸 (Motion Blur 模拟)
+    大风雪会赋予非常高的 --wind-force (> 2.0)，此时雪花不该是圆的。
+    应该被拉伸成线状：scaleX 变细，scaleY 变宽（拉高）
+  */
+  --snow-stretch-y: calc(1 + (var(--wind-force, 1) - 1) * 0.8);
+  --snow-stretch-x: calc(1 - (var(--wind-force, 1) - 1) * 0.1);
+  transform: scale(var(--snow-stretch-x), var(--snow-stretch-y));
+
   animation: snow-fall linear infinite;
   /* 默认：白色雪花 + 蓝色阴影增加可见性 */
   filter: drop-shadow(0 0 4px rgba(100, 150, 200, 0.9)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
