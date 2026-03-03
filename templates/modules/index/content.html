@@ -1146,46 +1146,45 @@
 
         <!-- 已安装插件时显示内容 -->
         <th:block th:if="${pluginFinder.available('PluginLinks')}">
-          <th:block th:with="groups = ${linkFinder.groupBy()}">
-            <div th:if="${groups != null && !groups.isEmpty()}"
+          <!-- 获取并限制友链数据 -->
+          <th:block
+            th:with="links = ${linkFinder.listBy(linksSettings.links_groups != null && !linksSettings.links_groups.isEmpty() ? linksSettings.links_groups : null, linksSettings.links_count ?: 0)}">
+
+            <div th:if="${links != null && !links.isEmpty()}" id="index-links-grid"
               class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              <th:block th:each="group : ${groups}"
-                th:if="${linksSettings.links_groups == null || linksSettings.links_groups.isEmpty() || #lists.contains(linksSettings.links_groups, group.metadata.name)}">
-                <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener"
-                  th:title="${link.spec.description}"
-                  class="group flex flex-col items-center text-center gap-3 p-2 rounded-xl transition-opacity hover:opacity-80">
+              <a th:each="link : ${links}" th:href="${link.spec.url}" target="_blank" rel="noopener"
+                th:title="${link.spec.description}"
+                class="group flex flex-col items-center text-center gap-3 p-2 rounded-xl transition-opacity hover:opacity-80">
 
-                  <!-- 头像容器 -->
-                  <div class="relative transition-transform duration-300 group-hover:scale-105">
-                    <!-- 阴影 -->
-                    <div
-                      class="absolute inset-2 bg-black/20 rounded-full blur-md translate-y-2 opacity-0 group-hover:opacity-40 transition-opacity duration-300">
-                    </div>
-                    <!-- 头像主体 -->
-                    <div
-                      class="relative w-16 h-16 rounded-[1.25rem] bg-base-100 shadow-sm overflow-hidden ring-1 ring-base-content/5">
-                      <img th:if="${link.spec.logo != null && !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
-                        th:alt="${link.spec.displayName}" class="w-full h-full object-cover bg-base-200"
-                        loading="lazy" />
-                      <div th:if="${link.spec.logo == null || link.spec.logo.isEmpty()}"
-                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 text-base-content/40">
-                        <span class="text-xl font-bold"
-                          th:text="${#strings.substring(link.spec.displayName,0,1)}">L</span>
-                      </div>
+                <!-- 头像容器 -->
+                <div class="relative transition-transform duration-300 group-hover:scale-105">
+                  <!-- 阴影 -->
+                  <div
+                    class="absolute inset-2 bg-black/20 rounded-full blur-md translate-y-2 opacity-0 group-hover:opacity-40 transition-opacity duration-300">
+                  </div>
+                  <!-- 头像主体 -->
+                  <div
+                    class="relative w-16 h-16 rounded-[1.25rem] bg-base-100 shadow-sm overflow-hidden ring-1 ring-base-content/5">
+                    <img th:if="${link.spec.logo != null && !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
+                      th:alt="${link.spec.displayName}" class="w-full h-full object-cover bg-base-200" loading="lazy" />
+                    <div th:if="${link.spec.logo == null || link.spec.logo.isEmpty()}"
+                      class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 text-base-content/40">
+                      <span class="text-xl font-bold"
+                        th:text="${#strings.substring(link.spec.displayName,0,1)}">L</span>
                     </div>
                   </div>
+                </div>
 
-                  <div class="flex flex-col gap-0.5 w-full px-1">
-                    <span class="text-xs font-semibold text-base-content/90 truncate w-full"
-                      th:text="${link.spec.displayName}">链接名</span>
-                    <span class="text-[10px] text-base-content/40 truncate w-full"
-                      th:text="${link.spec.description ?: 'No description'}">描述</span>
-                  </div>
-                </a>
-              </th:block>
+                <div class="flex flex-col gap-0.5 w-full px-1">
+                  <span class="text-xs font-semibold text-base-content/90 truncate w-full"
+                    th:text="${link.spec.displayName}">链接名</span>
+                  <span class="text-[10px] text-base-content/40 truncate w-full"
+                    th:text="${link.spec.description ?: 'No description'}">描述</span>
+                </div>
+              </a>
             </div>
             <!-- 空状态 -->
-            <div th:if="${groups == null || groups.isEmpty()}" class="text-center py-12">
+            <div th:if="${links == null || links.isEmpty()}" class="text-center py-12">
               <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-base-200/50 mb-4">
                 <span class="icon-[heroicons--link] w-8 h-8 text-base-content/30"></span>
               </div>

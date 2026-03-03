@@ -1539,6 +1539,8 @@ spec:
             enable_links: true
             links_title: "友情链接"
             links_subtitle: "Friends & Partners"
+            links_groups: []
+            links_count: 12
           children:
             - $formkit: switch
               id: enable_links
@@ -1558,7 +1560,30 @@ spec:
               label: 模块副标题
               help: 友情链接模块的副标题文字
               value: "Friends & Partners"
-        # 悬浮控制栏设置
+            - $formkit: select
+              name: links_groups
+              if: $get(enable_links).value
+              label: 显示分组
+              help: 选择要在首页显示的友链分组，留空则显示所有分组
+              multiple: true
+              clearable: true
+              searchable: true
+              action: /apis/core.halo.run/v1alpha1/linkgroups
+              requestOption:
+                method: GET
+                pageField: page
+                sizeField: size
+                totalField: total
+                itemsField: items
+                labelField: spec.displayName
+                valueField: metadata.name
+            - $formkit: number
+              name: links_count
+              if: $get(enable_links).value
+              label: 显示数量
+              help: 首页最多显示的友链数量，0 为不限制
+              value: 12
+              validation: min:0
         - $formkit: group
           name: floating_dock
           label: 悬浮控制栏
