@@ -1540,7 +1540,7 @@ spec:
             links_title: "友情链接"
             links_subtitle: "Friends & Partners"
             links_groups: []
-            links_count: 12
+            links_count: 0
           children:
             - $formkit: switch
               id: enable_links
@@ -1581,8 +1581,8 @@ spec:
               name: links_count
               if: $get(enable_links).value
               label: 显示数量
-              help: 首页最多显示的友链数量，0 为不限制
-              value: 12
+              help: 首页最多展示的友链数量（仅前端截断，不限制后端加载，插件问题，暂不支持数量限制），0 为不限制
+              value: 0
               validation: min:0
         - $formkit: group
           name: floating_dock
