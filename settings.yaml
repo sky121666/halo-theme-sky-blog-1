@@ -3730,6 +3730,8 @@ spec:
                   value: simple
                 - label: 功能特性
                   value: features
+                - label: 动态插画
+                  value: illustration
             - $formkit: toggle
               id: card_effect
               name: card_effect

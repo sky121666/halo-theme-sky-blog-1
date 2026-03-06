@@ -2,6 +2,7 @@
 /*    Auth Theme: Split (分屏布局)            */
 /* ========================================== */
 @import '../auth-common.css';
+@import './illustration.css';
 
 .auth-page-split {
     min-height: 100vh;

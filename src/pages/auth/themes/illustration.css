@@ -1,0 +1,492 @@
+/* ========================================== */
+/*    Auth Theme: Split (Illustration 插画风格)   */
+/* ========================================== */
+
+/* 动画曲线常量：Q弹的果冻曲线 */
+:root {
+    --spring-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --smooth-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-brand-illustration {
+    background: #f3f3f5;
+    position: relative;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .auth-brand-illustration {
+        display: flex;
+    }
+}
+
+.art-scene {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    transition: all 0.3s ease;
+}
+
+/* ================= 基础物理层 ================= */
+.char {
+    position: absolute;
+    transform-origin: bottom center;
+}
+
+/* 呼吸包裹层 */
+.breathe-wrap {
+    width: 100%;
+    height: 100%;
+    transform-origin: bottom center;
+    /* 基础状态下的呼吸动画 */
+    animation: breathe 4s ease-in-out infinite;
+    animation-delay: calc(var(--delay) * 1s);
+    transition: transform 0.6s var(--spring-easing);
+}
+
+/* 面部表情层 (处理转头、摇头等) */
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s var(--smooth-easing);
+}
+
+/* ================= 五官样式与隔离层 ================= */
+.eye-white {
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* 眨眼动画 */
+    animation: blink-white 5s infinite;
+    animation-delay: calc(var(--delay) * 1.5s);
+    transition: transform 0.4s var(--spring-easing);
+}
+
+/* 隔离JS位移和CSS缩放的包裹层 */
+.pupil-wrap,
+.eye-dot-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+}
+
+.pupil {
+    background: #111;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s var(--spring-easing);
+}
+
+.eye-dot {
+    background: #111;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    /* 小眼睛眨眼动画 */
+    animation: blink-dot 5s infinite;
+    animation-delay: calc(var(--delay) * 1.5s);
+    transition: transform 0.4s var(--spring-easing), height 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+}
+
+.mouth-surprise {
+    position: absolute;
+    background: #111;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.4s var(--spring-easing);
+}
+
+.sad-lid {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    height: 55%;
+    background: inherit;
+    transform: translateY(-100%) rotate(10deg);
+    transition: all 0.4s var(--smooth-easing);
+    z-index: 2;
+}
+
+/* ================= 角色具体构造 ================= */
+
+/* 1. 紫色高个子 */
+.char-purple {
+    width: 130px;
+    height: 320px;
+    background: #8B5CF6;
+    border-radius: 8px 8px 0 0;
+    transform: skewX(-3deg);
+    bottom: 60px;
+    left: 18%;
+    z-index: 10;
+}
+
+.char-purple .eye-white {
+    width: 20px;
+    height: 20px;
+}
+
+.char-purple .eye-white.left {
+    top: 60px;
+    left: 35px;
+}
+
+.char-purple .eye-white.right {
+    top: 60px;
+    right: 35px;
+}
+
+.char-purple .pupil-wrap {
+    width: 10px;
+    height: 10px;
+}
+
+.char-purple .mouth-surprise {
+    width: 16px;
+    height: 16px;
+    top: 100px;
+    left: 57px;
+}
+
+.char-purple .sad-lid {
+    background-color: #8B5CF6;
+}
+
+/* 2. 黑色倾斜者 */
+.char-black {
+    width: 85px;
+    height: 210px;
+    background: #27272A;
+    border-radius: 8px 8px 0 0;
+    transform: skewX(-3deg);
+    bottom: 60px;
+    left: 42%;
+    z-index: 20;
+}
+
+.char-black .eye-white {
+    width: 18px;
+    height: 18px;
+}
+
+.char-black .eye-white.left {
+    top: 40px;
+    left: 18px;
+}
+
+.char-black .eye-white.right {
+    top: 40px;
+    right: 18px;
+}
+
+.char-black .pupil-wrap {
+    width: 9px;
+    height: 9px;
+}
+
+.char-black .mouth-surprise {
+    width: 12px;
+    height: 12px;
+    top: 70px;
+    left: 36px;
+}
+
+.char-black .sad-lid {
+    background-color: #27272A;
+}
+
+/* 3. 黄色小鸡/豆豆 */
+.char-yellow {
+    width: 90px;
+    height: 190px;
+    background: #FBBF24;
+    border-radius: 45px 45px 16px 16px;
+    transform: rotate(18deg);
+    transform-origin: bottom center;
+    bottom: 60px;
+    left: 55%;
+    z-index: 30;
+}
+
+.char-yellow .eye-dot-wrap {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 50px;
+    right: 25px;
+}
+
+.char-yellow .beak {
+    position: absolute;
+    width: 24px;
+    height: 5px;
+    background: #111;
+    top: 75px;
+    right: -8px;
+    border-radius: 3px;
+    transform: rotate(-25deg);
+    transition: all 0.4s var(--spring-easing);
+}
+
+/* 4. 橙色胖团子 */
+.char-orange {
+    width: 260px;
+    height: 150px;
+    background: #F97316;
+    border-radius: 130px 130px 20px 20px;
+    bottom: 60px;
+    left: 8%;
+    z-index: 40;
+}
+
+.char-orange .eye-dot-wrap.left {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 55px;
+    left: 80px;
+}
+
+.char-orange .eye-dot-wrap.right {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 55px;
+    left: 130px;
+}
+
+.char-orange .mouth-surprise {
+    width: 20px;
+    height: 20px;
+    top: 85px;
+    left: 103px;
+}
+
+/* 可爱腮红系统 */
+.blush {
+    position: absolute;
+    width: 16px;
+    height: 8px;
+    background: #ff4757;
+    opacity: 0;
+    border-radius: 50%;
+    filter: blur(2px);
+    transition: opacity 0.4s ease, background 0.4s ease;
+}
+
+.char-orange .blush.left {
+    top: 75px;
+    left: 70px;
+}
+
+.char-orange .blush.right {
+    top: 75px;
+    left: 140px;
+}
+
+.char-yellow .blush {
+    top: 70px;
+    right: 40px;
+}
+
+/* ================= 交互状态动画 ================= */
+
+/* 1. 输入中 (惊喜浮动 + 激动泛红) */
+.state-typing .breathe-wrap {
+    transform: translateY(-15px) scale(1.02);
+    animation-play-state: paused;
+}
+
+.state-typing .eye-white {
+    transform: scale(1.35);
+    animation: none;
+}
+
+.state-typing .pupil {
+    transform: scale(0.7);
+}
+
+.state-typing .eye-dot {
+    transform: scale(1.5);
+    animation: none;
+}
+
+.state-typing .mouth-surprise {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.state-typing .char-yellow .beak {
+    transform: rotate(-5deg);
+    right: -12px;
+    width: 30px;
+}
+
+.state-typing .blush {
+    opacity: 0.6;
+}
+
+/* 2. 看明文 (害羞/背过脸 + 脸红加深) */
+.state-peeking .breathe-wrap {
+    transform: translateY(5px);
+    animation-play-state: paused;
+}
+
+.state-peeking .face {
+    transform: translateX(-20px) rotateY(-20deg);
+}
+
+.state-peeking .eye-white {
+    transform: scaleY(0.1);
+    animation: none;
+}
+
+.state-peeking .pupil {
+    opacity: 0;
+}
+
+.state-peeking .eye-dot {
+    height: 4px;
+    width: 16px;
+    border-radius: 2px;
+    transform: none;
+    animation: none;
+}
+
+.state-peeking .char-yellow .beak {
+    transform: rotate(-10deg) translateX(-8px);
+}
+
+.state-peeking .blush {
+    opacity: 0.9;
+    background: #ff2a3f;
+}
+
+/* 3. 密码错误 (叹气/摇头) */
+.state-error .breathe-wrap {
+    transform: translateY(10px) scaleY(0.95);
+    animation-play-state: paused;
+}
+
+.state-error .face {
+    animation: head-shake 0.8s ease-in-out forwards;
+}
+
+.state-error .eye-white {
+    animation: none;
+}
+
+.state-error .eye-dot {
+    animation: none;
+}
+
+.state-error .sad-lid {
+    transform: translateY(0) rotate(15deg);
+}
+
+.state-error .char-purple .eye-white.left .sad-lid,
+.state-error .char-black .eye-white.left .sad-lid {
+    transform: translateY(0) rotate(-15deg);
+}
+
+.state-error .mouth-surprise {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+    height: 10px;
+    border-radius: 10px 10px 0 0;
+    background: transparent;
+    border: 3px solid #111;
+    border-bottom: none;
+    margin-top: 5px;
+}
+
+.state-error .char-yellow .beak {
+    transform: rotate(-40deg);
+}
+
+/* ================= 氛围生命力 Keyframes ================= */
+
+/* 微呼吸 */
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scaleY(1) translateY(0);
+    }
+
+    50% {
+        transform: scaleY(0.98) translateY(3px);
+    }
+}
+
+/* 眨眼 (大眼) - 快速闭合 */
+@keyframes blink-white {
+
+    0%,
+    94%,
+    98%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    96% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* 眨眼 (小黑眼) - 变成一条线 */
+@keyframes blink-dot {
+
+    0%,
+    94%,
+    98%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    96% {
+        transform: scaleY(0.2);
+    }
+}
+
+/* 错误摇头 */
+@keyframes head-shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-8px) rotate(-3deg);
+    }
+
+    40% {
+        transform: translateX(6px) rotate(2deg);
+    }
+
+    60% {
+        transform: translateX(-4px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translateX(2px) rotate(1deg);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
