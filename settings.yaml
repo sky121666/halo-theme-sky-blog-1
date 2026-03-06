@@ -874,6 +874,48 @@ spec:
     - group: index
       label: 首页
       formSchema:
+        # 自由排版与布局控制
+        - $formkit: group
+          name: index_layout
+          label: 自由排序控制器
+          value:
+            enabled: false
+            modules:
+              - id: heatmap
+              - id: docs
+              - id: tabs_group
+              - id: gallery
+              - id: links
+          children:
+            - $formkit: switch
+              id: index_enable_custom_layout
+              name: enabled
+              label: 开启模块自由排序
+              help: 关闭则默认按原固化顺序铺设。开启后可通过下方列表自由拖拽顺序（需保证底层各模块单独开关已开启）。
+            - $formkit: array
+              name: modules
+              label: 首页模块流
+              if: $get(index_enable_custom_layout).value
+              addLabel: 插入模块
+              itemLabels:
+                - type: text
+                  label: $value.id
+              children:
+                - $formkit: select
+                  name: id
+                  label: 选择功能模块
+                  options:
+                    - label: 热力图 (Heatmap)
+                      value: heatmap
+                    - label: 文档中心 (Docs)
+                      value: docs
+                    - label: 内容聚合区 (文章/瞬间/动态 Tab)
+                      value: tabs_group
+                    - label: 图库区 (Gallery)
+                      value: gallery
+                    - label: 友情链接区 (Links)
+                      value: links
+
         # 头部背景设置（包含总开关）
         - $formkit: group
           name: background_settings

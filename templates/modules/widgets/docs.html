@@ -1,0 +1,95 @@
+<th:block th:fragment="docs(context)">
+        <th:block th:with="docsSettings = ${theme.config.index.docs_settings}">
+          <section th:if="${docsSettings != null and docsSettings.enable_docs == true}"
+            class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5 sm:p-6 mb-8 mt-4 lg:mt-0">
+
+            <div class="flex items-center justify-between mb-5 px-1">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/10 flex items-center justify-center">
+                  <span class="icon-[heroicons--book-open] w-4 h-4 text-primary"></span>
+                </div>
+                <h2 class="text-lg font-bold text-base-content tracking-tight select-none"
+                  th:text="${docsSettings?.docs_title} ?: '文档中心'">文档中心</h2>
+              </div>
+              <a href="/docs"
+                class="group inline-flex items-center gap-1.5 text-xs font-semibold text-base-content/50 hover:text-primary transition-colors duration-300">
+                全部
+                <span
+                  class="icon-[heroicons--arrow-right] w-3 h-3 group-hover:translate-x-1 transition-transform duration-300"></span>
+              </a>
+            </div>
+
+            <th:block th:unless="${pluginFinder.available('plugin-docsme', '>=1.4.0')}">
+              <div class="text-center py-8 bg-base-100/50 rounded-2xl border border-base-content/5 border-dashed">
+                <p class="text-sm text-base-content/60 mb-3">需要安装或升级 Docsme 插件 (≥1.4.0)</p>
+                <a href="https://www.halo.run/store/apps/app-yffxw" target="_blank"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 rounded-md text-xs font-medium text-primary hover:bg-primary/20 transition-colors">
+                  <span class="icon-[material-symbols--download] w-3.5 h-3.5"></span> 获取
+                </a>
+              </div>
+            </th:block>
+
+            <th:block th:if="${pluginFinder.available('plugin-docsme', '>=1.4.0')}">
+              <th:block th:with="result = ${docsmeProjectsFinder.list(1, docsSettings.docs_count ?: 5)}">
+
+                <div th:if="${result != null and result.items != null and !result.items.isEmpty()}"
+                  class="flex flex-col rounded-xl border border-base-content/[0.04] bg-base-100/30 overflow-hidden divide-y divide-base-content/[0.04]">
+
+                  <a th:each="project : ${result.items}" th:href="${project.status.permalink}" class="group flex items-center justify-between px-4 py-3 sm:py-3.5
+                           hover:bg-primary/[0.03] transition-colors duration-200">
+
+                    <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
+                      <!-- 小图标 -->
+                      <div
+                        class="flex-shrink-0 relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl 
+                                  bg-gradient-to-br from-primary/10 to-secondary/10 ring-1 ring-base-content/5 
+                                  flex items-center justify-center group-hover:ring-primary/20 group-hover:scale-105 transition-all duration-300">
+                        <img th:if="${project.spec.icon != null and !project.spec.icon.isEmpty()}"
+                          th:src="${project.spec.icon}" th:alt="${project.spec.displayName}"
+                          class="w-4 h-4 sm:w-5 sm:h-5 object-contain" loading="lazy" />
+                        <span th:if="${project.spec.icon == null or project.spec.icon.isEmpty()}"
+                          class="icon-[heroicons--book-open] w-4 h-4 sm:w-5 sm:h-5 text-primary/60 group-hover:text-primary transition-colors"></span>
+
+                        <span th:if="${project.spec.authorizeRequired}"
+                          class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-error/10 ring-1 ring-error/20 flex items-center justify-center backdrop-blur-sm">
+                          <span class="icon-[heroicons--lock-closed] w-2 h-2 text-error/80"></span>
+                        </span>
+                      </div>
+
+                      <!-- 名字与一句话描述同行 (侧边排布) -->
+                      <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 min-w-0 flex-1 pr-4">
+                        <span
+                          class="text-sm font-semibold text-base-content truncate group-hover:text-primary transition-colors"
+                          th:text="${project.spec.displayName}">项目名</span>
+                        <span
+                          class="text-[11px] sm:text-xs text-base-content/40 truncate hidden sm:block max-w-[200px] lg:max-w-xs xl:max-w-md"
+                          th:text="${project.spec.description ?: '暂无相关描述'}">描述</span>
+                      </div>
+                    </div>
+
+                    <!-- 尾部状态与动作 -->
+                    <div class="flex items-center gap-4 flex-shrink-0">
+                      <span
+                        class="hidden sm:flex text-[10px] text-base-content/40 font-mono items-center gap-1 bg-base-content/5 px-2.5 py-1 rounded-md">
+                        <span class="icon-[heroicons--document-text] w-3 h-3"></span>
+                        <span th:text="${project.status.totalDocs}">0</span>
+                      </span>
+                      <span
+                        class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/20 group-hover:text-primary group-hover:translate-x-0.5 transition-all"></span>
+                    </div>
+
+                  </a>
+                </div>
+
+                <!-- 空状态 -->
+                <div th:if="${result == null or result.items == null or result.items.isEmpty()}"
+                  class="py-10 text-center">
+                  <span class="icon-[heroicons--book-open] w-8 h-8 text-base-content/20 mb-3 block mx-auto"></span>
+                  <p class="text-xs text-base-content/40 font-medium">暂无文档项目，准备大作中</p>
+                </div>
+              </th:block>
+            </th:block>
+          </section>
+        </th:block>
+</th:block>
