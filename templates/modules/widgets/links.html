@@ -1,105 +1,104 @@
 <th:block th:fragment="links(context)">
-    <th:block th:with="linksSettings = ${theme.config.index.links_settings}">
-      <section th:if="${linksSettings != null and linksSettings.enable_links == true}"
-        class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-6 sm:p-8 mt-16">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-2xl bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center">
-              <span class="icon-[heroicons--link] w-5 h-5 text-secondary"></span>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-base-content tracking-tight"
-                th:text="${linksSettings?.links_title} ?: '友情链接'">友情链接</h2>
-              <p class="text-xs text-base-content/40 font-medium mt-0.5"
-                th:text="${linksSettings?.links_subtitle} ?: 'Friends & Partners'">Friends & Partners</p>
-            </div>
+  <th:block th:with="linksSettings = ${theme.config.index.links_settings}">
+    <section th:if="${linksSettings != null and linksSettings.enable_links == true}"
+      class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-6 sm:p-8 mb-8 lg:mb-0">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center">
+            <span class="icon-[heroicons--link] w-5 h-5 text-secondary"></span>
           </div>
-          <a href="/links"
-            class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
-            View All
-            <span
-              class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></span>
+          <div>
+            <h2 class="text-xl font-bold text-base-content tracking-tight"
+              th:text="${linksSettings?.links_title} ?: '友情链接'">友情链接</h2>
+            <p class="text-xs text-base-content/40 font-medium mt-0.5"
+              th:text="${linksSettings?.links_subtitle} ?: 'Friends & Partners'">Friends & Partners</p>
+          </div>
+        </div>
+        <a href="/links"
+          class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
+          View All
+          <span
+            class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></span>
+        </a>
+      </div>
+
+      <!-- 未安装插件时的提醒 -->
+      <th:block th:unless="${pluginFinder.available('PluginLinks')}">
+        <div class="text-center py-12 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
+          <span class="icon-[heroicons--link] w-12 h-12 mx-auto text-base-content/20 mb-4 block"></span>
+          <p class="text-base-content/60 mb-4">需要安装友链插件来展示链接</p>
+          <a href="https://www.halo.run/store/apps/app-hfbQg" target="_blank"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary/20 transition-colors duration-300">
+            <span class="icon-[material-symbols--download] w-4 h-4"></span>
+            <span>下载友链插件</span>
           </a>
         </div>
+      </th:block>
 
-        <!-- 未安装插件时的提醒 -->
-        <th:block th:unless="${pluginFinder.available('PluginLinks')}">
-          <div class="text-center py-12 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
-            <span class="icon-[heroicons--link] w-12 h-12 mx-auto text-base-content/20 mb-4 block"></span>
-            <p class="text-base-content/60 mb-4">需要安装友链插件来展示链接</p>
-            <a href="https://www.halo.run/store/apps/app-hfbQg" target="_blank"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary/20 transition-colors duration-300">
-              <span class="icon-[material-symbols--download] w-4 h-4"></span>
-              <span>下载友链插件</span>
-            </a>
+      <!-- 已安装插件时显示内容 -->
+      <th:block th:if="${pluginFinder.available('PluginLinks')}">
+        <!-- 通过 groupBy() 获取所有分组，th:if 控制分组筛选 -->
+        <th:block th:with="groups = ${linkFinder.groupBy()}">
+          <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
+          <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+              var max = /*[[${linksSettings.links_count}]]*/ 0;
+              max = parseInt(max, 10);
+              if (max > 0) {
+                var links = document.querySelectorAll('#index-links-grid > a');
+                for (var i = max; i < links.length; i++) {
+                  links[i].style.display = 'none';
+                }
+              }
+            });
+          </script>
+
+          <div th:if="${groups != null && !groups.isEmpty()}" id="index-links-grid"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <th:block th:each="group : ${groups}"
+              th:if="${linksSettings.links_groups == null || linksSettings.links_groups.isEmpty() || #lists.contains(linksSettings.links_groups, group.metadata.name)}">
+              <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener"
+                th:title="${link.spec.description}"
+                class="group flex flex-col items-center text-center gap-3 p-2 rounded-xl transition-opacity hover:opacity-80">
+
+                <!-- 头像容器 -->
+                <div class="relative transition-transform duration-300 group-hover:scale-105">
+                  <!-- 阴影 -->
+                  <div
+                    class="absolute inset-2 bg-black/20 rounded-full blur-md translate-y-2 opacity-0 group-hover:opacity-40 transition-opacity duration-300">
+                  </div>
+                  <!-- 头像主体 -->
+                  <div
+                    class="relative w-16 h-16 rounded-[1.25rem] bg-base-100 shadow-sm overflow-hidden ring-1 ring-base-content/5">
+                    <img th:if="${link.spec.logo != null && !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
+                      th:alt="${link.spec.displayName}" class="w-full h-full object-cover bg-base-200" loading="lazy" />
+                    <div th:if="${link.spec.logo == null || link.spec.logo.isEmpty()}"
+                      class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 text-base-content/40">
+                      <span class="text-xl font-bold"
+                        th:text="${#strings.substring(link.spec.displayName,0,1)}">L</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-0.5 w-full px-1">
+                  <span class="text-xs font-semibold text-base-content/90 truncate w-full"
+                    th:text="${link.spec.displayName}">链接名</span>
+                  <span class="text-[10px] text-base-content/40 truncate w-full"
+                    th:text="${link.spec.description ?: 'No description'}">描述</span>
+                </div>
+              </a>
+            </th:block>
+          </div>
+          <!-- 空状态 -->
+          <div th:if="${groups == null || groups.isEmpty()}" class="text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-base-200/50 mb-4">
+              <span class="icon-[heroicons--link] w-8 h-8 text-base-content/30"></span>
+            </div>
+            <p class="text-base-content/40 font-medium">暂无友情链接</p>
           </div>
         </th:block>
-
-        <!-- 已安装插件时显示内容 -->
-        <th:block th:if="${pluginFinder.available('PluginLinks')}">
-          <!-- 通过 groupBy() 获取所有分组，th:if 控制分组筛选 -->
-          <th:block th:with="groups = ${linkFinder.groupBy()}">
-            <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
-            <script th:inline="javascript">
-              document.addEventListener('DOMContentLoaded', function () {
-                var max = /*[[${linksSettings.links_count}]]*/ 0;
-                max = parseInt(max, 10);
-                if (max > 0) {
-                  var links = document.querySelectorAll('#index-links-grid > a');
-                  for (var i = max; i < links.length; i++) {
-                    links[i].style.display = 'none';
-                  }
-                }
-              });
-            </script>
-
-            <div th:if="${groups != null && !groups.isEmpty()}" id="index-links-grid"
-              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              <th:block th:each="group : ${groups}"
-                th:if="${linksSettings.links_groups == null || linksSettings.links_groups.isEmpty() || #lists.contains(linksSettings.links_groups, group.metadata.name)}">
-                <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener"
-                  th:title="${link.spec.description}"
-                  class="group flex flex-col items-center text-center gap-3 p-2 rounded-xl transition-opacity hover:opacity-80">
-
-                  <!-- 头像容器 -->
-                  <div class="relative transition-transform duration-300 group-hover:scale-105">
-                    <!-- 阴影 -->
-                    <div
-                      class="absolute inset-2 bg-black/20 rounded-full blur-md translate-y-2 opacity-0 group-hover:opacity-40 transition-opacity duration-300">
-                    </div>
-                    <!-- 头像主体 -->
-                    <div
-                      class="relative w-16 h-16 rounded-[1.25rem] bg-base-100 shadow-sm overflow-hidden ring-1 ring-base-content/5">
-                      <img th:if="${link.spec.logo != null && !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
-                        th:alt="${link.spec.displayName}" class="w-full h-full object-cover bg-base-200"
-                        loading="lazy" />
-                      <div th:if="${link.spec.logo == null || link.spec.logo.isEmpty()}"
-                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 text-base-content/40">
-                        <span class="text-xl font-bold"
-                          th:text="${#strings.substring(link.spec.displayName,0,1)}">L</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-0.5 w-full px-1">
-                    <span class="text-xs font-semibold text-base-content/90 truncate w-full"
-                      th:text="${link.spec.displayName}">链接名</span>
-                    <span class="text-[10px] text-base-content/40 truncate w-full"
-                      th:text="${link.spec.description ?: 'No description'}">描述</span>
-                  </div>
-                </a>
-              </th:block>
-            </div>
-            <!-- 空状态 -->
-            <div th:if="${groups == null || groups.isEmpty()}" class="text-center py-12">
-              <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-base-200/50 mb-4">
-                <span class="icon-[heroicons--link] w-8 h-8 text-base-content/30"></span>
-              </div>
-              <p class="text-base-content/40 font-medium">暂无友情链接</p>
-            </div>
-          </th:block>
-        </th:block>
-      </section>
-    </th:block>
+      </th:block>
+    </section>
+  </th:block>
 </th:block>

@@ -1,89 +1,89 @@
 <th:block th:fragment="gallery(context)">
-    <th:block th:with="gallerySettings = ${theme.config.index.gallery_settings}">
-      <section th:if="${gallerySettings != null and gallerySettings.enable_gallery == true}"
-        class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-6 sm:p-8 mt-16">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-              <span class="icon-[heroicons--photo] w-5 h-5 text-primary"></span>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-base-content tracking-tight"
-                th:text="${gallerySettings?.gallery_title} ?: '图库'">图库</h2>
-              <p class="text-xs text-base-content/40 font-medium mt-0.5"
-                th:text="${gallerySettings?.gallery_subtitle} ?: 'Focus Moments'">Focus Moments</p>
-            </div>
+  <th:block th:with="gallerySettings = ${theme.config.index.gallery_settings}">
+    <section th:if="${gallerySettings != null and gallerySettings.enable_gallery == true}"
+      class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-6 sm:p-8 mb-8 lg:mb-0">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+            <span class="icon-[heroicons--photo] w-5 h-5 text-primary"></span>
           </div>
-          <a href="/photos"
-            class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
-            View All
-            <span
-              class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></span>
+          <div>
+            <h2 class="text-xl font-bold text-base-content tracking-tight"
+              th:text="${gallerySettings?.gallery_title} ?: '图库'">图库</h2>
+            <p class="text-xs text-base-content/40 font-medium mt-0.5"
+              th:text="${gallerySettings?.gallery_subtitle} ?: 'Focus Moments'">Focus Moments</p>
+          </div>
+        </div>
+        <a href="/photos"
+          class="group inline-flex items-center gap-1.5 text-sm font-medium text-base-content/50 hover:text-primary transition-colors duration-300">
+          View All
+          <span
+            class="icon-[heroicons--arrow-right] w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></span>
+        </a>
+      </div>
+
+      <!-- 未安装插件时的提醒 -->
+      <th:block th:unless="${pluginFinder.available('PluginPhotos')}">
+        <div class="text-center py-12 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
+          <span class="icon-[heroicons--photo] w-12 h-12 mx-auto text-base-content/20 mb-4 block"></span>
+          <p class="text-base-content/60 mb-4">需要安装图库插件来展示照片</p>
+          <a href="https://www.halo.run/store/apps/app-BmQJW" target="_blank"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary/20 transition-colors duration-300">
+            <span class="icon-[material-symbols--download] w-4 h-4"></span>
+            <span>下载图库插件</span>
           </a>
         </div>
+      </th:block>
 
-        <!-- 未安装插件时的提醒 -->
-        <th:block th:unless="${pluginFinder.available('PluginPhotos')}">
-          <div class="text-center py-12 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
-            <span class="icon-[heroicons--photo] w-12 h-12 mx-auto text-base-content/20 mb-4 block"></span>
-            <p class="text-base-content/60 mb-4">需要安装图库插件来展示照片</p>
-            <a href="https://www.halo.run/store/apps/app-BmQJW" target="_blank"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary/20 transition-colors duration-300">
-              <span class="icon-[material-symbols--download] w-4 h-4"></span>
-              <span>下载图库插件</span>
+      <!-- 已安装插件时显示内容 -->
+      <th:block th:if="${pluginFinder.available('PluginPhotos')}">
+        <th:block th:with="groups = ${photoFinder.groupBy()}">
+          <div th:if="${groups != null && !groups.isEmpty()}"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <a th:each="group : ${groups}" th:href="|/photos?group=${group.metadata.name}|"
+              class="group relative aspect-[4/3] rounded-[1.25rem] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer ring-1 ring-base-content/5 hover:ring-primary/30">
+
+              <!-- 背景图容器 -->
+              <div class="absolute inset-0 bg-base-200 overflow-hidden">
+                <img th:if="${group.photos != null && !group.photos.isEmpty()}" th:src="${group.photos[0].spec.url}"
+                  th:alt="${group.spec.displayName}"
+                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy" />
+                <div th:if="${group.photos == null || group.photos.isEmpty()}"
+                  class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300">
+                  <span class="icon-[heroicons--photo] w-12 h-12 text-base-content/15"></span>
+                </div>
+              </div>
+
+              <!-- 渐变遮罩 & 文字内容 -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <p class="text-white font-bold text-base sm:text-lg tracking-wide drop-shadow-lg truncate"
+                    th:text="${group.spec.displayName}">分组名称</p>
+                  <div class="flex items-center gap-2 mt-2">
+                    <span
+                      class="text-white/90 text-xs font-medium backdrop-blur-md bg-white/15 px-2.5 py-1 rounded-full border border-white/10"
+                      th:text="|${group.status.photoCount ?: 0} 张照片|">0 张照片</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 玻璃高光效果 -->
+              <div
+                class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none">
+              </div>
             </a>
           </div>
+          <!-- 空状态 -->
+          <div th:if="${groups == null || groups.isEmpty()}"
+            class="text-center py-16 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
+            <span class="icon-[heroicons--photo] w-12 h-12 mx-auto text-base-content/20 mb-3"></span>
+            <p class="text-base-content/40 font-medium">暂无图库分组</p>
+          </div>
         </th:block>
-
-        <!-- 已安装插件时显示内容 -->
-        <th:block th:if="${pluginFinder.available('PluginPhotos')}">
-          <th:block th:with="groups = ${photoFinder.groupBy()}">
-            <div th:if="${groups != null && !groups.isEmpty()}"
-              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              <a th:each="group : ${groups}" th:href="|/photos?group=${group.metadata.name}|"
-                class="group relative aspect-[4/3] rounded-[1.25rem] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer ring-1 ring-base-content/5 hover:ring-primary/30">
-
-                <!-- 背景图容器 -->
-                <div class="absolute inset-0 bg-base-200 overflow-hidden">
-                  <img th:if="${group.photos != null && !group.photos.isEmpty()}" th:src="${group.photos[0].spec.url}"
-                    th:alt="${group.spec.displayName}"
-                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy" />
-                  <div th:if="${group.photos == null || group.photos.isEmpty()}"
-                    class="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300">
-                    <span class="icon-[heroicons--photo] w-12 h-12 text-base-content/15"></span>
-                  </div>
-                </div>
-
-                <!-- 渐变遮罩 & 文字内容 -->
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                  <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                    <p class="text-white font-bold text-base sm:text-lg tracking-wide drop-shadow-lg truncate"
-                      th:text="${group.spec.displayName}">分组名称</p>
-                    <div class="flex items-center gap-2 mt-2">
-                      <span
-                        class="text-white/90 text-xs font-medium backdrop-blur-md bg-white/15 px-2.5 py-1 rounded-full border border-white/10"
-                        th:text="|${group.status.photoCount ?: 0} 张照片|">0 张照片</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 玻璃高光效果 -->
-                <div
-                  class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none">
-                </div>
-              </a>
-            </div>
-            <!-- 空状态 -->
-            <div th:if="${groups == null || groups.isEmpty()}"
-              class="text-center py-16 bg-base-100/50 rounded-3xl border border-base-content/5 border-dashed">
-              <span class="icon-[heroicons--photo] w-12 h-12 mx-auto text-base-content/20 mb-3"></span>
-              <p class="text-base-content/40 font-medium">暂无图库分组</p>
-            </div>
-          </th:block>
-        </th:block>
-      </section>
-    </th:block>
+      </th:block>
+    </section>
+  </th:block>
 </th:block>

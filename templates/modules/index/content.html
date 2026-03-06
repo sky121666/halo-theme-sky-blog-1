@@ -34,7 +34,7 @@
     <!-- 主内容区：内容 + 侧边栏 -->
     <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：热力图 + Tab切换 + 文章列表 -->
-      <section class="flex-1 min-w-0">
+      <section class="flex-1 min-w-0 flex flex-col gap-6 lg:gap-8">
         <!-- 默认排版流 (兼容老配置) -->
         <th:block th:unless="${theme.config.index.index_layout?.enabled}">
           <th:block th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
@@ -48,7 +48,8 @@
             <th:block th:switch="${module.id}">
               <th:block th:case="'heatmap'" th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
               <th:block th:case="'docs'" th:insert="~{modules/widgets/docs :: docs(context='main')}" />
-              <th:block th:case="'tabs_group'" th:insert="~{modules/widgets/tabs_group :: tabs_group(context='main')}" />
+              <th:block th:case="'tabs_group'"
+                th:insert="~{modules/widgets/tabs_group :: tabs_group(context='main')}" />
               <th:block th:case="'gallery'" th:insert="~{modules/widgets/gallery :: gallery(context='main')}" />
               <th:block th:case="'links'" th:insert="~{modules/widgets/links :: links(context='main')}" />
             </th:block>
@@ -68,10 +69,14 @@
     <!-- 默认底宽模块 (兼容老配置) -->
     <th:block th:unless="${theme.config.index.index_layout?.enabled}">
       <!-- 图库模块 -->
-      <th:block th:insert="~{modules/widgets/gallery :: gallery(context='main')}" />
-      
+      <div class="mt-10 lg:mt-16">
+        <th:block th:insert="~{modules/widgets/gallery :: gallery(context='main')}" />
+      </div>
+
       <!-- 友情链接模块 -->
-      <th:block th:insert="~{modules/widgets/links :: links(context='main')}" />
+      <div class="mt-10 lg:mt-16">
+        <th:block th:insert="~{modules/widgets/links :: links(context='main')}" />
+      </div>
     </th:block>
 
 
