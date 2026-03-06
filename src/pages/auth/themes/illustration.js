@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 事件绑定
     const handleFocus = () => setState('typing');
-    const handleBlur = () => { if (currentState === 'typing') setState('idle'); };
+    const handleBlur = () => { if (['typing', 'peeking'].includes(currentState)) setState('idle'); };
 
     textInputs.forEach(input => {
         input.addEventListener('focus', handleFocus);

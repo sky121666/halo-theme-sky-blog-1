@@ -52,7 +52,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    transition: transform 0.5s var(--smooth-easing);
+    transition: transform 0.5s var(--smooth-easing), opacity 0.3s ease;
 }
 
 /* ================= 五官样式与隔离层 ================= */
@@ -341,40 +341,15 @@
     opacity: 0.6;
 }
 
-/* 2. 看明文 (害羞/背过脸 + 脸红加深) */
+/* 2. 看明文 (害羞/背过身去不看) */
 .state-peeking .breathe-wrap {
     transform: translateY(5px);
     animation-play-state: paused;
 }
 
 .state-peeking .face {
-    transform: translateX(-20px) rotateY(-20deg);
-}
-
-.state-peeking .eye-white {
-    transform: scaleY(0.1);
-    animation: none;
-}
-
-.state-peeking .pupil {
+    transform: rotateY(180deg) translateX(10px);
     opacity: 0;
-}
-
-.state-peeking .eye-dot {
-    height: 4px;
-    width: 16px;
-    border-radius: 2px;
-    transform: none;
-    animation: none;
-}
-
-.state-peeking .char-yellow .beak {
-    transform: rotate(-10deg) translateX(-8px);
-}
-
-.state-peeking .blush {
-    opacity: 0.9;
-    background: #ff2a3f;
 }
 
 /* 3. 密码错误 (叹气/摇头) */
