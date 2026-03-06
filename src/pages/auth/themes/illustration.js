@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const trackers = document.querySelectorAll('.tracker');
     // 获取表单相关的输入体验容器
     const textInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
-    const pwdInputs = document.querySelectorAll('input[type="password"]');
-    // 适配现有的查看密码按钮逻辑
-    const togglePwdBtns = document.querySelectorAll('.form-input-group > button');
+    const pwdInputs = document.querySelectorAll('input[type="password"], input.password-field');
+    // 适配现有的查看密码按钮逻辑 (由 auth-common.js 所控)
+    const togglePwdBtns = document.querySelectorAll('.toggle-password-button');
 
     // 检查页面是否处于错误提示状态 (Spring Security 报错拦截)
     const hasErrorAlert = document.querySelector('.bg-error\\/10') !== null || new URLSearchParams(window.location.search).has('error');
@@ -95,10 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 劫持密码显示/隐藏按钮的点击交互
     togglePwdBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Vue/JS 更新属性可能晚于此处，所以我们延迟探测一下当前 input 的 type
+            // 原生的 auth-common.js 在点击后会切换 data-show 属性和 input.type
+            // 我们延迟 10ms 确保类型已经变成 text 后做判断
             setTimeout(() => {
-                const isTextNow = Array.from(pwdInputs).some(i => i.type === 'text') || btn.closest('.form-input-group').querySelector('input').type === 'text';
-                if (isTextNow) {
+                const wrapper = btn.closest('.toggle-password-display-flag');
+                if (!wrapper) return;
+
+                const isShowing = wrapper.dataset.show === 'true';
+                if (isShowing) {
                     setState('peeking');
                 } else {
                     setState(document.activeElement.tagName === 'INPUT' ? 'typing' : 'idle');
