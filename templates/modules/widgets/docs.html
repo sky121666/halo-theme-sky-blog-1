@@ -9,8 +9,12 @@
             class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/10 flex items-center justify-center">
             <span class="icon-[heroicons--book-open] w-4 h-4 text-primary"></span>
           </div>
-          <h2 class="text-lg font-bold text-base-content tracking-tight select-none"
-            th:text="${docsSettings?.docs_title} ?: '文档中心'">文档中心</h2>
+          <div>
+            <h2 class="text-lg font-bold text-base-content tracking-tight select-none"
+              th:text="${docsSettings?.docs_title} ?: '文档中心'">文档中心</h2>
+            <p class="text-xs text-base-content/40 font-medium mt-0.5"
+              th:text="${docsSettings?.docs_subtitle} ?: 'Documentation'">Documentation</p>
+          </div>
         </div>
         <a href="/docs"
           class="group inline-flex items-center gap-1.5 text-xs font-semibold text-base-content/50 hover:text-primary transition-colors duration-300">
