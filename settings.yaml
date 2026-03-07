@@ -3121,7 +3121,66 @@ spec:
           name: show_photo_info
           label: 显示图片信息
           help: 鼠标悬浮时显示标题和描述
-          value: false
+          value: true
+        - $formkit: switch
+          name: show_download_btn
+          label: 显示下载按钮
+          help: 鼠标悬浮时显示图片下载按钮
+          value: true
+        # ========== 布局外观 ==========
+        - $formkit: group
+          name: layout
+          label: 布局外观
+          value:
+            full_width: false
+            max_cols: 4
+            border_radius: 12
+            gap: 16
+          children:
+            - $formkit: toggle
+              name: full_width
+              label: 页面布局
+              render-type: text
+              size: 80
+              gap: 10
+              value: false
+              options:
+                - label: 居中
+                  value: false
+                - label: 全铺
+                  value: true
+            - $formkit: select
+              name: max_cols
+              label: 最大列数
+              help: 大屏下显示的最多列数，小屏会自动缩减
+              value: 4
+              options:
+                - label: 2 列
+                  value: 2
+                - label: 3 列
+                  value: 3
+                - label: 4 列（推荐）
+                  value: 4
+                - label: 5 列
+                  value: 5
+                - label: 6 列
+                  value: 6
+            - $formkit: number
+              name: border_radius
+              label: 图片圆角（px）
+              help: 卡片圆角大小，0 = 直角，24 = 大圆角
+              value: 12
+              min: 0
+              max: 24
+              step: 2
+            - $formkit: number
+              name: gap
+              label: 图片间距（px）
+              help: 图片之间的间距大小
+              value: 16
+              min: 0
+              max: 32
+              step: 4
         - $formkit: switch
           name: enable_comment
           label: 启用评论
