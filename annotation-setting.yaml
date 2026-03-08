@@ -64,3 +64,60 @@ spec:
       help: "每行一个参数。基础格式: KEY: VALUE。带进度条: KEY: VALUE | 百分比(0-100)，仅限4条数据"
       placeholder: "核心架构: Blackwell | 100\n显存容量: 32GB GDDR7 | 80\n热设计功耗: 450W | 65\n发布日期: 2025 Q1"
       rows: 4
+
+---
+
+# 菜单图标配置
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-menuitem-icon
+spec:
+  targetRef:
+    group: ""
+    kind: MenuItem
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "菜单图标"
+      help: "填入完整的 SVG 代码，将显示在导航菜单和悬浮控制栏中"
+      format: svg
+      value-only: true
+
+---
+
+# 分类图标配置
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-category-icon
+spec:
+  targetRef:
+    group: content.halo.run
+    kind: Category
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "分类图标"
+      help: "选择一个图标代表此分类"
+      format: svg
+      value-only: true
+
+---
+
+# 标签图标配置
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-tag-icon
+spec:
+  targetRef:
+    group: content.halo.run
+    kind: Tag
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "标签图标"
+      help: "选择一个图标代表此标签"
+      format: svg
+      value-only: true
