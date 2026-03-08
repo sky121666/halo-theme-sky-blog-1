@@ -9,8 +9,8 @@ import './doc.css';
 import '../../static/js/article-content.js';
 
 // 导入 TOC 公共工具函数
-import { 
-  buildDynamicTocTree, 
+import {
+  buildDynamicTocTree,
   createDynamicTocHTML,
   smoothScrollToHeading
 } from '../../common/js/toc-utils.js';
@@ -61,6 +61,28 @@ function initTOC() {
   const links = tocNav.querySelectorAll('.toc-link');
   let currentActive = null;
 
+  /**
+   * 将活跃的 TOC 条目滚动到 .toc-container 的可见区域内
+   * 使用 scrollIntoView + block:'nearest' 避免不必要的跳动
+   */
+  function scrollActiveTocItemIntoView(activeLink) {
+    const container = tocNav.closest('.toc-container');
+    if (!container) return;
+
+    const linkRect = activeLink.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    // 条目在容器上方不可见
+    if (linkRect.top < containerRect.top) {
+      activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    // 条目在容器下方不可见
+    else if (linkRect.bottom > containerRect.bottom) {
+      activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    // 已在可见区域内则不做任何操作
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -71,6 +93,8 @@ function initTOC() {
             links.forEach((l) => l.classList.remove('active'));
             activeLink.classList.add('active');
             currentActive = activeLink;
+            // 自动滚动目录容器，确保当前活跃项可见
+            scrollActiveTocItemIntoView(activeLink);
           }
         }
       });
@@ -176,7 +200,7 @@ function initDrawers() {
       tocOverlay.classList.add('open');
       tocDrawer.classList.add('open');
       document.body.style.overflow = 'hidden';
-      
+
       // 初始化目录内容
       if (tocDrawerNav && !tocDrawerNav.querySelector('.toc-list')) {
         const tocNav = document.getElementById('toc-nav');

@@ -14,7 +14,7 @@
   --doc-hover-bg: color-mix(in oklch, var(--color-primary) 8%, transparent);
   --doc-active-bg: color-mix(in oklch, var(--color-primary) 12%, transparent);
   --doc-sidebar-width: 260px;
-  --doc-toc-width: 220px;
+  --doc-toc-width: 260px;
   --doc-max-width: 1400px;
   --doc-nav-height: 64px;
   display: flex;
@@ -429,9 +429,9 @@
 }
 
 /* 目录容器样式已在 main.css (toc.css) 中定义 */
-/* 文档页特殊：缩小最大高度 */
+/* 文档页特殊：适当限制最大高度，配合自动滚动 */
 .doc-toc .toc-container {
-  max-height: min(60vh, 350px);
+  max-height: min(70vh, 500px);
 }
 
 /* ==================== 访问限制提示 ==================== */
@@ -619,60 +619,60 @@
  * ==================================================*/
 .doc-toc-overlay,
 .doc-sidebar-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .doc-toc-overlay.open,
 .doc-sidebar-overlay.open {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .doc-toc-drawer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 61;
-    height: 100%;
-    width: 85vw;
-    max-width: 360px;
-    background: var(--color-base-100);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 61;
+  height: 100%;
+  width: 85vw;
+  max-width: 360px;
+  background: var(--color-base-100);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
 }
 
 .doc-toc-drawer.open {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 .doc-sidebar-drawer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 61;
-    height: 100%;
-    width: 85vw;
-    max-width: 320px;
-    background: var(--color-base-100);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 61;
+  height: 100%;
+  width: 85vw;
+  max-width: 320px;
+  background: var(--color-base-100);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
 .doc-sidebar-drawer.open {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 /* ===================================================
@@ -706,11 +706,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    circle 120px at var(--glow-x, 50%) var(--glow-y, 50%),
-    color-mix(in srgb, var(--admonition-color) 10%, transparent) 0%,
-    transparent 100%
-  );
+  background: radial-gradient(circle 120px at var(--glow-x, 50%) var(--glow-y, 50%),
+      color-mix(in srgb, var(--admonition-color) 10%, transparent) 0%,
+      transparent 100%);
   opacity: var(--glow-opacity, 0);
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -761,11 +759,11 @@
   color: var(--color-base-content);
 }
 
-#article-content .admonition-content > *:first-child {
+#article-content .admonition-content>*:first-child {
   margin-top: 0;
 }
 
-#article-content .admonition-content > *:last-child {
+#article-content .admonition-content>*:last-child {
   margin-bottom: 0;
 }
 
