@@ -202,27 +202,73 @@
                       th:utext="${content.html}"></div>
                     <!-- 多媒体 -->
                     <div th:if="${not #lists.isEmpty(content.medium)}" class="mb-4 mt-1">
-                      <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+
+                      <!-- 单图 -->
+                      <th:block th:if="${#lists.size(content.medium) == 1}">
                         <th:block th:each="momentItem : ${content.medium}">
-                          <a th:if="${momentItem.type.name() == 'PHOTO'}" th:href="${momentItem.url}" target="_blank"
-                            class="block aspect-square rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
-                            <img th:src="${momentItem.url}"
-                              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                              loading="lazy" />
-                          </a>
+                          <div th:if="${momentItem.type.name() == 'PHOTO'}" class="moment-single-img-wrap">
+                            <img th:src="${momentItem.url}" class="max-h-72 object-cover" loading="lazy" />
+                          </div>
                           <div th:if="${momentItem.type.name() == 'VIDEO'}"
-                            class="col-span-2 md:col-span-3 rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
+                            class="rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
                             <video th:src="${momentItem.url}" controls="controls"
                               class="w-full max-h-[400px] object-contain bg-black/5"></video>
                           </div>
                           <div th:if="${momentItem.type.name() == 'AUDIO'}"
-                            class="col-span-2 md:col-span-3 bg-base-200/50 rounded-xl p-3 border border-base-content/5">
+                            class="bg-base-200/50 rounded-xl p-3 border border-base-content/5">
+                            <audio th:src="${momentItem.url}" controls="controls"
+                              class="w-full h-10 outline-none"></audio>
+                          </div>
+                        </th:block>
+                      </th:block>
+
+                      <!-- 多图网格 (动态排版 2-9图) -->
+                      <div th:if="${#lists.size(content.medium) > 1}" class="grid gap-1 rounded-xl overflow-hidden"
+                        th:classappend="${
+                          #lists.size(content.medium) == 2 ? 'grid-cols-2 w-3/4' :
+                          #lists.size(content.medium) == 3 ? 'grid-cols-3' :
+                          #lists.size(content.medium) == 4 ? 'grid-cols-2 w-3/4' :
+                          #lists.size(content.medium) == 5 ? 'grid-cols-6' :
+                          #lists.size(content.medium) == 6 ? 'grid-cols-3' :
+                          #lists.size(content.medium) == 7 ? 'grid-cols-12' :
+                          #lists.size(content.medium) == 8 ? 'grid-cols-6' : 'grid-cols-3'
+                        }">
+                        <th:block th:each="momentItem, mStat : ${content.medium}">
+                          <div th:if="${momentItem.type.name() == 'PHOTO' && mStat.index < 9}" class="moment-grid-item"
+                            th:classappend="${
+                              #lists.size(content.medium) == 3 && mStat.index == 0 ? 'col-span-2 row-span-2 aspect-square' :
+                              #lists.size(content.medium) == 3 && mStat.index > 0 ? 'col-span-1 aspect-square' :
+                              #lists.size(content.medium) == 5 && mStat.index < 2 ? 'col-span-3 aspect-[4/3]' :
+                              #lists.size(content.medium) == 5 && mStat.index >= 2 ? 'col-span-2 aspect-square' :
+                              #lists.size(content.medium) == 7 && mStat.index < 3 ? 'col-span-4 aspect-square' :
+                              #lists.size(content.medium) == 7 && mStat.index >= 3 ? 'col-span-3 aspect-square' :
+                              #lists.size(content.medium) == 8 && mStat.index < 2 ? 'col-span-3 aspect-[4/3]' :
+                              #lists.size(content.medium) == 8 && mStat.index >= 2 ? 'col-span-2 aspect-square' : 'aspect-square'
+                            }">
+                            <img th:src="${momentItem.url}" loading="lazy" />
+                            <div th:if="${mStat.index == 8 && #lists.size(content.medium) > 9}"
+                              class="absolute inset-0 bg-black/50 flex items-center justify-center" style="z-index:2">
+                              <span class="text-white text-xl font-semibold"
+                                th:text="'+' + (${#lists.size(content.medium)} - 9)">+3</span>
+                            </div>
+                          </div>
+                          <!-- 视频 -->
+                          <div th:if="${momentItem.type.name() == 'VIDEO' && mStat.index == 0}"
+                            class="col-span-full rounded-xl overflow-hidden bg-base-200 border border-base-content/5">
+                            <video th:src="${momentItem.url}" controls="controls"
+                              class="w-full max-h-[400px] object-contain bg-black/5"></video>
+                          </div>
+                          <!-- 音频 -->
+                          <div th:if="${momentItem.type.name() == 'AUDIO'}"
+                            class="col-span-full bg-base-200/50 rounded-xl p-3 border border-base-content/5">
                             <audio th:src="${momentItem.url}" controls="controls"
                               class="w-full h-10 outline-none"></audio>
                           </div>
                         </th:block>
                       </div>
+
                     </div>
+
                     <!-- 底部元信息 -->
                     <div class="mt-auto pt-3 flex flex-wrap items-center justify-between gap-y-2">
                       <div class="flex items-center gap-2 overflow-hidden">
