@@ -19,13 +19,16 @@
       <!-- 左侧：归档内容 -->
       <section class="flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
 
-        <!-- 页面标题区 - Apple风格简洁 -->
-        <header class="mb-10">
-          <div class="flex items-center justify-between">
+        <!-- 页面标题区 - Apple风格简洁 -> 衬线体优雅风格 -->
+        <header class="mb-14 border-b border-base-content/5 pb-8"
+          th:with="globalArchives = ${postFinder.archives(1, 100)}">
+          <div class="flex items-end justify-between">
             <div>
-              <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight">文章归档</h1>
-              <p class="text-base-content/50 mt-1" th:if="${archives != null and archives.items != null}">
-                共 <span class="font-medium text-base-content" th:text="${#lists.size(archives.items)}">0</span> 个年份的文章记录
+              <h1 class="text-4xl md:text-5xl font-serif text-base-content tracking-wider font-semibold">文章归档</h1>
+              <p class="text-[14px] text-base-content/40 mt-3 font-serif tracking-[0.05em]"
+                th:if="${globalArchives != null and globalArchives.items != null}">
+                共 <span class="font-sans font-medium text-base-content/80 px-[3px]"
+                  th:text="${#lists.size(globalArchives.items)}">0</span> 个年份的文章记录
               </p>
             </div>
           </div>
