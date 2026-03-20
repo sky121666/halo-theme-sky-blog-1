@@ -681,15 +681,7 @@ spec:
           value:
             show_quick_nav: true
             nav_title: "底部导航"
-            nav_links:
-              - name: "首页"
-                url: "/"
-              - name: "关于"
-                url: "/about"
-              - name: "联系"
-                url: "/contact"
-              - name: "RSS 订阅"
-                url: "/rss"
+            nav_menu: ""
           children:
             - $formkit: switch
               id: show_quick_nav
@@ -704,23 +696,13 @@ spec:
               if: $get(show_quick_nav).value
               label: 导航标题
               help: 快速导航区域的标题
-            - $formkit: array
-              name: nav_links
-              id: nav_links_field
-              key: nav_links_field
+            - $formkit: menuRadio
+              name: nav_menu
+              id: nav_menu_field
+              key: nav_menu_field
               if: $get(show_quick_nav).value
-              label: 导航链接
-              help: 配置快速导航的链接项
-              itemLabels:
-                - type: text
-                  label: $value.name
-              children:
-                - $formkit: text
-                  name: name
-                  label: 链接名称
-                - $formkit: text
-                  name: url
-                  label: 链接地址
+              label: 导航菜单
+              help: 选择要在页脚显示的菜单（在 Halo 后台「外观 → 菜单」中管理，菜单项支持图标）
         - $formkit: group
           name: social_settings
           label: 底部社交链接设置
@@ -794,17 +776,24 @@ spec:
                 url: "/terms"
               - name: "网站地图"
                 url: "/sitemap.xml"
+            copyright_icon: null
             copyright_text: "© 2025 Sky Blog •  Powered by Halo"
             show_icp_info: true
+            icp_icon: null
             icp_number: "京ICP备2024001234号-1"
+            icp_url: "https://beian.miit.gov.cn/"
             show_police_info: true
+            police_icon: null
             police_number: "京公网安备11010802024567号"
+            police_url: ""
             show_hosting_info: true
             hosting_links:
               - name: "CloudFlare CDN"
                 url: "https://www.cloudflare.com"
+                icon: null
               - name: "阿里云"
                 url: "https://www.aliyun.com"
+                icon: null
           children:
             - $formkit: switch
               id: show_legal_links
@@ -829,6 +818,13 @@ spec:
                 - $formkit: text
                   name: url
                   label: 链接地址
+            - $formkit: iconify
+              name: copyright_icon
+              key: copyright_icon_field
+              label: 版权图标
+              help: 版权文字前的可选图标，不选则不显示
+              format: svg
+              value-only: true
             - $formkit: text
               name: copyright_text
               label: 版权文字
@@ -839,6 +835,14 @@ spec:
               label: 显示ICP备案
               help: 是否显示ICP备案信息
               value: true
+            - $formkit: iconify
+              name: icp_icon
+              key: icp_icon_field
+              if: $get(show_icp_info).value
+              label: ICP备案图标
+              help: 自定义图标，不选则使用默认盾牌图标
+              format: svg
+              value-only: true
             - $formkit: text
               name: icp_number
               id: icp_number_field
@@ -846,12 +850,28 @@ spec:
               if: $get(show_icp_info).value
               label: ICP备案号
               help: ICP备案号码
+            - $formkit: text
+              name: icp_url
+              id: icp_url_field
+              key: icp_url_field
+              if: $get(show_icp_info).value
+              label: ICP备案链接
+              help: 留空使用默认 beian.miit.gov.cn
+              value: "https://beian.miit.gov.cn/"
             - $formkit: switch
               id: show_police_info
               name: show_police_info
               label: 显示公安备案
               help: 是否显示公安备案信息
               value: true
+            - $formkit: iconify
+              name: police_icon
+              key: police_icon_field
+              if: $get(show_police_info).value
+              label: 公安备案图标
+              help: 自定义图标，不选则使用默认公安徽标图片
+              format: svg
+              value-only: true
             - $formkit: text
               name: police_number
               id: police_number_field
@@ -859,6 +879,13 @@ spec:
               if: $get(show_police_info).value
               label: 公安备案号
               help: 公安备案号码
+            - $formkit: text
+              name: police_url
+              id: police_url_field
+              key: police_url_field
+              if: $get(show_police_info).value
+              label: 公安备案链接
+              help: 留空则自动从备案号提取生成
             - $formkit: switch
               id: show_hosting_info
               name: show_hosting_info
@@ -873,6 +900,8 @@ spec:
               label: 托管服务链接
               help: 配置CDN和托管服务相关链接
               itemLabels:
+                - type: iconify
+                  label: $value.icon
                 - type: text
                   label: $value.name
               children:
@@ -882,6 +911,12 @@ spec:
                 - $formkit: text
                   name: url
                   label: 链接地址
+                - $formkit: iconify
+                  name: icon
+                  label: 图标
+                  help: 从图标库中选择图标（可选）
+                  format: svg
+                  value-only: true
     - group: index
       label: 首页
       formSchema:
