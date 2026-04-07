@@ -344,8 +344,15 @@
 
                   <!-- 文字内容 -->
                   <div th:if="${content.html != null and !#strings.isEmpty(content.html)}"
-                    class="text-sm text-base-content/80 leading-relaxed line-clamp-4" th:utext="${content.html}">
+                    class="text-sm text-base-content/80 leading-relaxed line-clamp-4 [&_a.tag]:hidden" th:utext="${content.html}">
                     内容...</div>
+
+                  <!-- 标签 -->
+                  <div th:if="${moment.spec.tags != null and !moment.spec.tags.isEmpty()}"
+                    class="mt-2 flex flex-wrap gap-1.5">
+                    <a th:each="tag : ${moment.spec.tags}" th:href="@{/moments(tag=${tag})}"
+                      class="badge badge-sm badge-ghost text-primary" th:text="'#' + ${tag}">#标签</a>
+                  </div>
                 </div>
 
                 <!-- 媒体区域 -->
@@ -402,6 +409,8 @@
                     </th:block>
                   </div>
                 </div>
+
+
 
                 <!-- 互动信息 -->
                 <div
@@ -462,7 +471,14 @@
 
                   <!-- 内容 -->
                   <div th:if="${content.html != null and !#strings.isEmpty(content.html)}"
-                    class="text-base text-base-content/80 leading-relaxed mb-4" th:utext="${content.html}">内容...
+                    class="text-base text-base-content/80 leading-relaxed mb-2 [&_a.tag]:hidden" th:utext="${content.html}">内容...
+                  </div>
+
+                  <!-- 标签 -->
+                  <div th:if="${moment.spec.tags != null and !moment.spec.tags.isEmpty()}"
+                    class="mb-4 flex flex-wrap gap-1.5">
+                    <a th:each="tag : ${moment.spec.tags}" th:href="@{/moments(tag=${tag})}"
+                      class="badge badge-sm badge-ghost text-primary" th:text="'#' + ${tag}">#标签</a>
                   </div>
 
                   <!-- 媒体 -->
@@ -517,6 +533,8 @@
                       </th:block>
                     </div>
                   </div>
+
+
 
                   <!-- 互动 -->
                   <div class="flex items-center justify-between text-sm text-base-content/50">

@@ -100,6 +100,14 @@
                                     </span>
                                 </div>
 
+                                <!-- 标签 -->
+                                <div th:if="${moment.spec.tags != null and !moment.spec.tags.isEmpty()}"
+                                    class="flex flex-wrap gap-1 mt-1 overflow-hidden max-h-5">
+                                    <a th:each="tag : ${moment.spec.tags}" th:href="@{/moments(tag=${tag})}"
+                                        class="badge badge-sm border-white/20 bg-white/10 text-white/70 hover:text-primary transition-colors"
+                                        th:text="'#' + ${tag}">#标签</a>
+                                </div>
+
                                 <!-- 底部信息栏 -->
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="flex items-center space-x-1.5 md:space-x-2">
