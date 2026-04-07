@@ -89,11 +89,13 @@
         };
     </script>
     <script type="module" src="/js/main.js"></script>
-    <!-- Altcha Captcha Scripts (Halo Pro only) -->
+    <!-- Altcha Captcha Scripts (Halo Pro only, guarded for open-source compatibility) -->
+    <th:block th:if="${globalInfo != null and #strings.contains(globalInfo.toString(), 'captchaProvider')}">
     <th:block th:if="${#strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
         <script async defer src="/webjars/altcha/dist/altcha.i18n.js" type="module"></script>
         <script src="/js/altcha-lib.iife.js"></script>
         <script src="/js/altcha-utils.js"></script>
+    </th:block>
     </th:block>
 </th:block>
 <!-- 基础样式资源 -->
