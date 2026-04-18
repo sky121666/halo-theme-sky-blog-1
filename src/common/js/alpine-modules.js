@@ -832,6 +832,157 @@ function welcomeWeatherCard() {
   };
 }
 
+/**
+ * 在线统计组件
+ * 模板使用：templates/modules/widgets/online-stats.html
+ * 适配 plugin-online (Zyx-2012) 的统计 API
+ */
+function onlineStats() {
+  const API_SUMMARY = '/apis/online-user.zyx2012.cn/v1alpha1/stats/summary';
+  const API_STATS = '/apis/online-user.zyx2012.cn/v1alpha1/stats';
+  const MAX_HOT_PAGES = 5;
+
+  // 已知路由 → 友好名称
+  const KNOWN_ROUTES = {
+    '/': '首页',
+    '/archives': '归档',
+    '/links': '友链',
+    '/moments': '瞬间',
+    '/friends': '朋友圈',
+    '/photos': '相册',
+    '/about': '关于',
+    '/douban': '豆瓣',
+    '/bangumis': '追番',
+    '/equipments': '装备',
+    '/steam': 'Steam',
+  };
+
+  // 标题缓存（会话级）
+  const titleCache = {};
+
+  return {
+    loading: true,
+    error: false,
+    total: 0,
+    peak24h: 0,
+    activePages: 0,
+    wsActive: false,
+    updatedAt: '',
+    hotPages: [],
+    showHotPages: true,
+
+    init() {
+      this.showHotPages = this.$el.dataset.showHotPages !== 'false';
+      this.loadData();
+      window.addEventListener('online-monitor:registered', () => this.loadData());
+      window.addEventListener('online-monitor:path-changed', () => this.loadData());
+    },
+
+    async loadData() {
+      try {
+        const fetches = [fetch(API_SUMMARY)];
+        if (this.showHotPages) fetches.push(fetch(API_STATS));
+
+        const results = await Promise.allSettled(fetches);
+        const summaryRes = results[0];
+
+        if (summaryRes.status === 'fulfilled' && summaryRes.value.ok) {
+          const summary = await summaryRes.value.json();
+          this.total = summary.total || 0;
+          this.peak24h = summary.peak24h || 0;
+          this.activePages = summary.activePages || 0;
+          this.wsActive = summary.wsActive ?? false;
+
+          if (summary.updatedAt) {
+            const d = new Date(summary.updatedAt);
+            this.updatedAt = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} 更新`;
+          }
+        } else {
+          this.error = true;
+          return;
+        }
+
+        if (this.showHotPages && results[1]?.status === 'fulfilled' && results[1].value.ok) {
+          const stats = await results[1].value.json();
+          const pages = (Array.isArray(stats) ? stats : [])
+            .filter(p => p.count > 0)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, MAX_HOT_PAGES);
+
+          this.hotPages = pages.map(p => ({
+            ...p,
+            title: KNOWN_ROUTES[p.uri] || this.fallbackTitle(p.uri)
+          }));
+
+          this.resolveTitles(pages);
+        }
+
+        this.error = false;
+      } catch {
+        this.error = true;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    // URI → 可读回退名（去掉前缀路径，保留最后段）
+    fallbackTitle(uri) {
+      const segments = uri.replace(/\/$/, '').split('/').filter(Boolean);
+      if (segments.length === 0) return '首页';
+      const last = segments[segments.length - 1];
+      // 解码 URL 编码
+      try { return decodeURIComponent(last); } catch { return last; }
+    },
+
+    // 批量异步解析页面标题
+    async resolveTitles(pages) {
+      const tasks = pages.map(async (page) => {
+        if (KNOWN_ROUTES[page.uri]) return; // 已有友好名
+        if (titleCache[page.uri]) {
+          this.updatePageTitle(page.uri, titleCache[page.uri]);
+          return;
+        }
+        try {
+          const res = await fetch(page.uri, { method: 'GET', headers: { 'Accept': 'text/html' } });
+          if (!res.ok) return;
+          // 只读取前 8KB 提取 <title>
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let html = '';
+          while (html.length < 8192) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            html += decoder.decode(value, { stream: true });
+            const match = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+            if (match) {
+              reader.cancel();
+              let title = match[1].trim();
+              // 去除站点后缀 " - SiteName" 或 " | SiteName"
+              title = title.replace(/\s*[-|–—]\s*[^-|–—]+$/, '').trim();
+              if (title) {
+                titleCache[page.uri] = title;
+                this.updatePageTitle(page.uri, title);
+              }
+              return;
+            }
+          }
+          reader.cancel();
+        } catch {
+          // 解析失败静默忽略，保持 URI 回退名
+        }
+      });
+      await Promise.allSettled(tasks);
+    },
+
+    updatePageTitle(uri, title) {
+      const idx = this.hotPages.findIndex(p => p.uri === uri);
+      if (idx !== -1) {
+        this.hotPages[idx].title = title;
+      }
+    }
+  };
+}
+
 function initializeAll() {
   // 注册模板中使用的组件
   Alpine.data('floatingDock', createFloatingDock);
@@ -849,6 +1000,7 @@ function initializeAll() {
 
   // 小工具组件
   Alpine.data('welcomeWeatherCard', welcomeWeatherCard);
+  Alpine.data('onlineStats', onlineStats);
 }
 
 
@@ -864,5 +1016,6 @@ export {
   createSimpleFloatingDock,
   createDocFloatingDock,
   createDocCommentDrawer,
-  welcomeWeatherCard
+  welcomeWeatherCard,
+  onlineStats
 };

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--  在线统计组件 - plugin-online 适配          -->
+<!--  API: /apis/online-user.zyx2012.cn/v1alpha1 -->
+<!-- ========================================== -->
+
+<div th:fragment="online"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] overflow-hidden"
+  x-data="onlineStats()"
+  th:with="onlineCfg = ${theme.config.general.sidebar_settings?.online_stats_config}"
+  th:attr="data-show-hot-pages=${onlineCfg?.show_hot_pages != false}">
+
+  <!-- 加载 -->
+  <div x-show="loading" class="flex items-center justify-center py-16">
+    <span class="loading loading-ring loading-md text-base-content/30"></span>
+  </div>
+
+  <!-- 错误 -->
+  <div x-show="error && !loading" x-cloak class="py-12 text-center">
+    <span class="icon-[heroicons--wifi] w-6 h-6 text-base-content/20 block mx-auto mb-2"></span>
+    <p class="text-xs text-base-content/40">服务暂不可用</p>
+  </div>
+
+  <!-- 数据 -->
+  <div x-show="!loading && !error" x-cloak class="px-5 py-6">
+
+    <!-- 标题栏 -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-1.5 text-base-content/60">
+        <span class="icon-[heroicons--bolt] w-4 h-4"></span>
+        <span class="text-[11px] font-bold uppercase tracking-[0.15em]">Traffic</span>
+      </div>
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+          :class="wsActive ? 'bg-success' : 'bg-error'"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5"
+          :class="wsActive ? 'bg-success' : 'bg-error'"></span>
+      </span>
+    </div>
+
+    <!-- 核心数字 居中 -->
+    <div class="text-center mb-6">
+      <p class="text-5xl font-black text-base-content tabular-nums leading-none tracking-tight" x-text="total">0</p>
+      <p class="text-xs text-base-content/40 mt-2.5">当前在线访客</p>
+    </div>
+
+    <!-- 辅助指标 2列 -->
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="bg-base-content/[0.04] rounded-2xl py-3.5 px-3 text-center">
+        <p class="text-[10px] text-base-content/40 font-medium mb-1.5">24H 峰值</p>
+        <p class="text-xl font-extrabold text-base-content tabular-nums" x-text="peak24h">0</p>
+      </div>
+      <div class="bg-base-content/[0.04] rounded-2xl py-3.5 px-3 text-center">
+        <p class="text-[10px] text-base-content/40 font-medium mb-1.5">活跃页面</p>
+        <p class="text-xl font-extrabold text-base-content tabular-nums" x-text="activePages">0</p>
+      </div>
+    </div>
+
+    <!-- 热门分布 -->
+    <template x-if="showHotPages && hotPages.length > 0">
+      <div>
+        <p class="text-xs text-base-content/40 font-medium mb-3">热门分布</p>
+        <div class="space-y-1.5">
+          <template x-for="(page, index) in hotPages" :key="page.uri">
+            <a :href="page.viewUrl || page.uri"
+              class="group relative flex items-center justify-between py-2 px-3 rounded-xl overflow-hidden hover:bg-base-content/[0.03] transition-colors">
+              <!-- 进度条背景 -->
+              <div class="absolute inset-y-0 left-0 bg-primary/[0.06] rounded-xl transition-all duration-500"
+                :style="`width: ${Math.min(100, (page.count / hotPages[0].count) * 100)}%`"></div>
+              <!-- 内容 -->
+              <span class="relative text-xs text-base-content/60 truncate pr-3 group-hover:text-base-content transition-colors"
+                x-text="page.title || page.uri"></span>
+              <span class="relative text-xs font-bold text-base-content/70 tabular-nums shrink-0"
+                x-text="page.count"></span>
+            </a>
+          </template>
+        </div>
+      </div>
+    </template>
+
+    <!-- 底部更新时间 -->
+    <div class="text-center mt-4" x-show="updatedAt">
+      <span class="text-[10px] text-base-content/25 tabular-nums" x-text="'更新于 ' + updatedAt"></span>
+    </div>
+  </div>
+</div>
+
+</html>

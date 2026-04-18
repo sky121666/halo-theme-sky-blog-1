@@ -82,6 +82,10 @@
           <th:block th:replace="~{modules/widgets/archive-sidebar :: widget}" />
         </th:block>
 
+        <th:block th:if="${widgetType eq 'online_stats'}">
+          <th:block th:replace="~{modules/widgets/online-stats :: online}" />
+        </th:block>
+
       </th:block>
     </th:block>
   </th:block>

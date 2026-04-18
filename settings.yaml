@@ -219,6 +219,8 @@ spec:
                       value: steam_card
                     - label: 追番卡片
                       value: bangumi_card
+                    - label: 在线统计
+                      value: online_stats
             - $formkit: number
               name: popular_posts_count
               label: 热门文章数量
@@ -244,6 +246,17 @@ spec:
                   label: 默认地区（降级容灾）
                   help: '当访客的IP定位失效（如代理环境或服务宕机）时，天气组件强制获取该城市的默认天气数据防报错。例如: "北京"'
                   value: '北京'
+            - $formkit: group
+              name: online_stats_config
+              label: '在线统计（plugin-online）'
+              value:
+                show_hot_pages: true
+              children:
+                - $formkit: switch
+                  name: show_hot_pages
+                  label: 显示热门页面
+                  help: 是否在在线统计组件中显示热门页面排行
+                  value: true
         - $formkit: group
           name: font_settings
           label: 全局字体
