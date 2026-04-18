@@ -1885,6 +1885,8 @@ spec:
                       value: steam_card
                     - label: 追番卡片
                       value: bangumi_card
+                    - label: 在线统计
+                      value: online_stats
         - $formkit: group
           name: post_interaction
           label: 文章底部交互
@@ -2450,6 +2452,8 @@ spec:
                       value: steam_card
                     - label: 追番卡片
                       value: bangumi_card
+                    - label: 在线统计
+                      value: online_stats
             - $formkit: group
               name: archive_sidebar_config
               label: [归档]
