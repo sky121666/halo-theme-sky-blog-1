@@ -22,16 +22,6 @@ import './index.css';
   };
 
   const CACHE_KEY = 'sky_weather_cache_v13';
-  const weatherNameMap = {
-    'sunny': '☀️ 晴天',
-    'cloudy': '☁️ 多云',
-    'night-clear': '🌙 晴朗夜晚',
-    'night-cloudy': '🌥️ 多云夜晚',
-    'foggy': '🌫️ 雾天',
-    'rainy': '🌧️ 雨天',
-    'snowy': '❄️ 雪天',
-    'stormy': '⛈️ 雷暴'
-  };
 
   // SVG 资源库 - 纯 SVG 字符串
   const SVGS = {
@@ -378,11 +368,11 @@ import './index.css';
     // 生成卡通 SVG 云朵
     const cloudCount = isNight ? 5 : 8;
     for (let i = 0; i < cloudCount; i++) {
-      createCartoonCloud(isNight, i);
+      createCartoonCloud(isNight);
     }
   }
 
-  function createCartoonCloud(isNight, index) {
+  function createCartoonCloud(isNight) {
     const cloud = document.createElement('div');
     cloud.className = 'cloud-cartoon ' + (isNight ? 'night' : 'day');
     cloud.innerHTML = SVGS.cloud;

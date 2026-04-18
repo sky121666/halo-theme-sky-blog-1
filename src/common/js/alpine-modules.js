@@ -3,8 +3,6 @@
  * 只包含模板中实际使用的功能
  */
 
-/* global Alpine */
-
 /**
  * 悬浮 Dock 控制器
  * 模板使用：templates/modules/floating-dock.html, templates/modules/post/floating-dock.html
@@ -89,6 +87,7 @@ function createShareModal() {
     // 页面信息
     permalink: '',
     title: '',
+    qrcodePageUrl: '',
 
     // 状态
     isOpen: false,
@@ -116,6 +115,7 @@ function createShareModal() {
       const shareUrl = this.$el.dataset.shareUrl || this.$el.dataset.postUrl || '';
       const shareTitle = this.$el.dataset.shareTitle || this.$el.dataset.postTitle || '';
       const shareItemIdsStr = this.$el.dataset.shareItemIds || '';
+      this.qrcodePageUrl = this.$el.dataset.qrcodePageUrl || '/assets/qrcode/qrcode-share.html';
 
       this.shareItemIds = shareItemIdsStr ? shareItemIdsStr.split(',').map(s => s.trim()) : [];
       this.title = shareTitle || document.title;
@@ -167,7 +167,7 @@ function createShareModal() {
         await navigator.clipboard.writeText(this.permalink);
         this.copied = true;
         setTimeout(() => { this.copied = false; }, 2000);
-      } catch (err) {
+      } catch {
         // 复制失败静默处理
       }
     },
@@ -183,14 +183,11 @@ function createShareModal() {
       if (platform.type === 'native') {
         // 原生分享必须在用户手势中直接调用
         if (navigator.share) {
-          const self = this;
           navigator.share({
             title: this.title,
             url: this.permalink
-          }).then(() => {
-            self.closeModal();
-          }).catch((err) => {
-            self.closeModal();
+          }).finally(() => {
+            this.closeModal();
           });
         } else {
           // 不支持原生分享（非 HTTPS 或浏览器不支持）
@@ -223,7 +220,7 @@ function createShareModal() {
       const width = 400, height = 500;
       const left = (window.innerWidth - width) / 2;
       const top = (window.innerHeight - height) / 2;
-      const qrcodePageUrl = `/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html?url=${encodeURIComponent(this.permalink)}`;
+      const qrcodePageUrl = `${this.qrcodePageUrl}?url=${encodeURIComponent(this.permalink)}`;
       window.open(qrcodePageUrl, '微信扫码分享',
         `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=no,resizable=no`);
     }
@@ -559,7 +556,14 @@ function welcomeWeatherCard() {
   const CACHE_DURATION = 30 * 60 * 1000;
 
   // 清除旧缓存
-  try { for (let i = 1; i <= 12; i++) { const k = i === 1 ? 'sky_weather_cache' : `sky_weather_cache_v${i}`; localStorage.removeItem(k); } } catch (e) { }
+  try {
+    for (let i = 1; i <= 12; i++) {
+      const key = i === 1 ? 'sky_weather_cache' : `sky_weather_cache_v${i}`;
+      localStorage.removeItem(key);
+    }
+  } catch {
+    // 忽略旧缓存清理失败
+  }
 
   return {
     loading: true, weather: null, location: '', errorMsg: '', greeting: '', currentDate: '',
@@ -638,8 +642,8 @@ function welcomeWeatherCard() {
         if (window.SYS_WEATHER_DEBUG) console.log('[Weather] 定位结果:', loc.city, '(来源:', loc.source + ')');
         if (!loc.city || loc.city === '未知') { console.warn('[Weather] 定位失败'); return; }
         await this.getWeatherByWttrProxy(loc);
-      } catch (e) {
-        console.warn('[Weather] 天气获取失败:', e.message);
+      } catch (error) {
+        console.warn('[Weather] 天气获取失败:', error.message);
         this.errorMsg = '服务维护中';
       }
     },
@@ -661,8 +665,8 @@ function welcomeWeatherCard() {
 
         if (window.SYS_WEATHER_DEBUG) console.warn(`[Weather] IP定位返回异常城市(${city})，已降级启用默认地区: ${fallbackRegion}`);
         return { city: fallbackRegion, adcode: '', source: 'fallback_region' };
-      } catch (e) {
-        if (window.SYS_WEATHER_DEBUG) console.warn('[Weather] pconline 请求失败或被拦截:', e.message, `| 已降级启用默认地区: ${fallbackRegion}`);
+      } catch (error) {
+        if (window.SYS_WEATHER_DEBUG) console.warn('[Weather] pconline 请求失败或被拦截:', error.message, `| 已降级启用默认地区: ${fallbackRegion}`);
         return { city: fallbackRegion, adcode: '', source: 'fallback_region' };
       }
     },
@@ -702,9 +706,9 @@ function welcomeWeatherCard() {
         wd.weatherIconSvg = this.weatherIconSvg;
         this.applyWeatherData(wd);
         this.setCache(wd);
-      } catch (e) {
-        console.warn('[Weather] 天气查询失败:', e.message);
-        throw e;
+      } catch (error) {
+        console.warn('[Weather] 天气查询失败:', error.message);
+        throw error;
       }
     },
 
@@ -777,7 +781,9 @@ function welcomeWeatherCard() {
         const d = JSON.parse(c);
         if (Date.now() - d.timestamp > CACHE_DURATION) { localStorage.removeItem(CACHE_KEY); return null; }
         return d;
-      } catch (e) { return null; }
+      } catch {
+        return null;
+      }
     },
 
     _lastDispatchedBg: null,
@@ -795,7 +801,9 @@ function welcomeWeatherCard() {
             }
           }));
         }
-      } catch (e) { }
+      } catch {
+        // 忽略缓存写入失败
+      }
     },
 
     // ═══════ 通用工具 ═══════
@@ -817,7 +825,9 @@ function welcomeWeatherCard() {
           svg = svg.replace(/<svg/, '<svg class="w-full h-full"');
           this.weatherIconSvg = svg;
         } else { this.weatherIconSvg = ''; }
-      } catch (e) { this.weatherIconSvg = ''; }
+      } catch {
+        this.weatherIconSvg = '';
+      }
     }
   };
 }

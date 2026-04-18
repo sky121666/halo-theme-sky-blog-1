@@ -21,7 +21,8 @@
      x-data="shareModal"
      @open-share-modal.window="openModal()"
      th:attr="data-share-url=${shareUrl},
-              data-share-title=${shareTitle}"
+              data-share-title=${shareTitle},
+              data-qrcode-page-url=@{/assets/qrcode/qrcode-share.html}"
      th:data-share-item-ids="${shareItemIds != null ? #strings.listJoin(#lists.toList(shareItemIds), ',') : ''}">
 
   <!-- 弹窗容器 - 使用 teleport 确保在视口顶层 -->

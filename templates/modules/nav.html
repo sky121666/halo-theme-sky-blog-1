@@ -151,7 +151,7 @@
                       <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
                         th:alt="${currentUser.displayName}" class="object-cover" />
                       <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                        src="/themes/theme-sky-blog-1/assets/images/heihei.png" />
+                        th:src="@{/assets/images/heihei.png}" />
                     </div>
                   </div>
                 </div>
@@ -175,7 +175,7 @@
                           <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
                             th:alt="${currentUser.displayName}" class="object-cover" />
                           <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                            src="/themes/theme-sky-blog-1/assets/images/heihei.png" />
+                            th:src="@{/assets/images/heihei.png}" />
                         </div>
                       </div>
                       <div class="flex-1 min-w-0">
@@ -310,7 +310,7 @@
               <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
                 th:alt="${currentUser.displayName}" class="w-full h-full object-cover" />
               <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                src="/themes/theme-sky-blog-1/assets/images/heihei.png" class="w-full h-full object-cover" />
+                th:src="@{/assets/images/heihei.png}" class="w-full h-full object-cover" />
             </div>
           </a>
           <!-- 未登录：站点 Logo -->

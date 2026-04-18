@@ -5,8 +5,17 @@ import prettierConfig from "eslint-config-prettier";
 
 export default [
   {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "templates/assets/**",
+      "src/static/qrcode/qrcode.min.js",
+    ],
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        Alpine: "readonly",
+      },
     },
   },
   pluginJs.configs.recommended,

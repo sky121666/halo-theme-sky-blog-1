@@ -1,12 +1,13 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "scripts": {
     "build": "tsc && vite build && theme-package",
     "build-only": "tsc && vite build",
     "dev": "vite build --watch",
-    "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts",
+    "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-pattern src/static/qrcode/qrcode.min.js",
+    "format": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
     "prepare": "husky",
     "prettier": "prettier --write './**/*.{ts,json,yaml,yml,html}'"
   },

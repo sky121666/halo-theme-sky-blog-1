@@ -42,7 +42,6 @@ document.addEventListener('alpine:init', () => {
       this.items = cards.map(card => {
         const titleEl = card.querySelector('h3');
         const linkEl = card.querySelector('a');
-        const dateEl = card.querySelector('span');
         return {
           spec: { title: titleEl?.textContent?.trim() || '' },
           status: { permalink: linkEl?.getAttribute('href') || '#' },
@@ -225,7 +224,6 @@ document.addEventListener('alpine:init', () => {
       const items = cards.map(card => {
         const titleEl = card.querySelector('h3');
         const linkEl = card.querySelector('a');
-        const dateEl = card.querySelector('span');
         return {
           spec: { title: titleEl?.textContent?.trim() || '' },
           status: { permalink: linkEl?.getAttribute('href') || '#' },

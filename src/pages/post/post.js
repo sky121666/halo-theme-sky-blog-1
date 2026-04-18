@@ -3,8 +3,6 @@
  * 仅在文章页面加载的JavaScript功能
  */
 
-/* global Alpine */
-
 // 导入文章页面特定样式（已包含 article-content.css）
 import './post.css';
 
@@ -150,10 +148,10 @@ document.addEventListener('alpine:init', () => {
                         );
                     }
                 } else {
-                    const errorText = await response.text();
+                    await response.text();
                     // console.error('点赞失败:', response.status, errorText);
                 }
-            } catch (error) {
+            } catch {
                 // console.error('点赞请求错误:', error);
             }
         }
@@ -379,7 +377,7 @@ document.addEventListener('alpine:init', () => {
                         setTimeout(() => {
                             anchor.innerHTML = '<span class="icon-[heroicons--link] w-4 h-4"></span>';
                         }, 2000);
-                    } catch (err) {
+                    } catch {
                         // 复制失败静默处理
                     }
                 });
@@ -601,8 +599,6 @@ document.addEventListener('alpine:init', () => {
 
             // 增强的可见性检测 - 考虑部分可见情况
             const isFullyVisible = itemTop >= visibleTop && itemBottom <= visibleBottom;
-            const isPartiallyVisible = (itemTop < visibleBottom && itemBottom > visibleTop);
-
             // 如果元素不完全可见，计算最佳滚动位置
             if (!isFullyVisible) {
                 let targetScrollTop;
@@ -752,7 +748,7 @@ document.addEventListener('alpine:init', () => {
                             copyButton.textContent = '复制';
                             copyButton.classList.remove('bg-success', 'text-success-content');
                         }, 2000);
-                    } catch (copyError) {
+                    } catch {
                         // console.error('复制失败:', copyError);
                         copyButton.textContent = '复制失败';
                         setTimeout(() => {

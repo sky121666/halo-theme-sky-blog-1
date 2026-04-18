@@ -14,7 +14,7 @@
                 <span class="icon-[heroicons--archive-box] w-3.5 h-3.5"></span>
             </th:block>
 
-            <!-- Backward compatibility: purely CSS class name icon (like 'icon-[heroicons...]') -->
+            <!-- Backward compatibility: purely CSS class name icon -->
             <th:block
                 th:if="${cfg != null and cfg.icon != null and !#strings.isEmpty(cfg.icon) and !#strings.startsWith(cfg.icon, '<svg')}">
                 <span th:class="${cfg.icon + ' w-4 h-4'}"></span>

@@ -2,7 +2,7 @@
 
 > 基于 Vite + Tailwind CSS v4 + DaisyUI + Alpine.js 构建的现代化 Halo 2.0 博客主题
 
-[![Halo](https://img.shields.io/badge/Halo-2.22.9+-blue)](https://halo.run)
+[![Halo](https://img.shields.io/badge/Halo-2.23.0+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-20+-brightgreen)](https://nodejs.org)
 

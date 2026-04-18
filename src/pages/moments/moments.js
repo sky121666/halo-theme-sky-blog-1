@@ -2,6 +2,7 @@
  * 瞬间页面脚本
  */
 import './moments.css';
+import './moment-publish.js';
 
 /**
  * 瞬间点赞功能

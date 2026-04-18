@@ -3,7 +3,7 @@
  * 适用于所有使用 #article-content 的页面（post、doc、page、about 等）
  * 
  * 使用方式：
- * 1. 在模板 <head> 中引入：<script th:src="@{/themes/theme-sky-blog-1/assets/js/article-content.js}"></script>
+ * 1. 在模板 <head> 中引入：<script th:src="@{/assets/js/article-content.js}"></script>
  * 2. 脚本会自动在 DOMContentLoaded 时初始化
  */
 

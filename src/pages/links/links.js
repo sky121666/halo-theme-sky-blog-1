@@ -80,7 +80,7 @@ document.addEventListener('alpine:init', () => {
             message: error.message || '提交失败，请稍后重试',
           };
         }
-      } catch (e) {
+      } catch {
         this.result = {
           show: true,
           success: false,

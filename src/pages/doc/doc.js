@@ -143,8 +143,6 @@ function initSidebarFooterCollision() {
   const offset = navHeight + 16; // nav + 1rem
 
   function updateSidebarPositions() {
-    // 使用 document.documentElement.clientHeight 兼容性更好
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const footerRect = footer.getBoundingClientRect();
 
     // 计算 footer 顶部距离视口顶部的距离
