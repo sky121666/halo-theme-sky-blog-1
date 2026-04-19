@@ -116,6 +116,9 @@ export default defineConfig({
       },
     },
     assetsInlineLimit: 0,
+    watch: {
+      exclude: ['templates/assets/**']
+    }
   },
   plugins: [
     {
