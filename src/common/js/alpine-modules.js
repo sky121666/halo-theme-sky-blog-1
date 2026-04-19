@@ -13,13 +13,13 @@ function createFloatingDock() {
     isCommentDrawerOpen: false,
     scrollTimeout: null,
     scrollPercent: 0,
+    _scrollHandler: null,
 
     init() {
       this.updateVisibility();
 
       let ticking = false;
-
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.updateVisibility();
@@ -27,7 +27,15 @@ function createFloatingDock() {
           });
           ticking = true;
         }
-      }, { passive: true });
+      };
+      window.addEventListener('scroll', this._scrollHandler, { passive: true });
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
     },
 
     updateVisibility() {
@@ -234,6 +242,7 @@ function createShareModal() {
 function createCommentDrawer() {
   return {
     isOpen: false,
+    _closeHandler: null,
 
     init() {
       // 监听抽屉状态
@@ -245,9 +254,17 @@ function createCommentDrawer() {
       }
 
       // 监听关闭抽屉事件
-      window.addEventListener('close-comment-drawer', () => {
+      this._closeHandler = () => {
         this.closeDrawer();
-      });
+      };
+      window.addEventListener('close-comment-drawer', this._closeHandler);
+    },
+
+    destroy() {
+      if (this._closeHandler) {
+        window.removeEventListener('close-comment-drawer', this._closeHandler);
+        this._closeHandler = null;
+      }
     },
 
     closeDrawer() {
@@ -271,19 +288,22 @@ function createHeaderController() {
     showMoments: true,
     showPublishModal: false,
     isTablet: false,
+    _scrollHandler: null,
+    _resizeHandler: null,
 
     init() {
       // 检测设备类型
       this.detectDevice();
 
       // 监听窗口大小变化
-      window.addEventListener('resize', () => {
+      this._resizeHandler = () => {
         this.detectDevice();
-      });
+      };
+      window.addEventListener('resize', this._resizeHandler);
 
       // 监听滚动事件，使用节流优化性能
       let ticking = false;
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.updateScrollOffset();
@@ -291,7 +311,19 @@ function createHeaderController() {
           });
           ticking = true;
         }
-      });
+      };
+      window.addEventListener('scroll', this._scrollHandler);
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
+      if (this._resizeHandler) {
+        window.removeEventListener('resize', this._resizeHandler);
+        this._resizeHandler = null;
+      }
     },
 
     detectDevice() {
@@ -319,12 +351,13 @@ function createHeaderController() {
 function createNavbarController() {
   return {
     scrolled: false,
+    _scrollHandler: null,
 
     init() {
       // 使用 requestAnimationFrame 节流的滚动监听
       let ticking = false;
 
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             const newScrolled = window.scrollY > 20;
@@ -340,7 +373,15 @@ function createNavbarController() {
           });
           ticking = true;
         }
-      }, { passive: true });
+      };
+      window.addEventListener('scroll', this._scrollHandler, { passive: true });
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
     }
   };
 }
@@ -418,12 +459,13 @@ function createThemeToggle() {
 function createSimpleFloatingDock() {
   return {
     isVisible: false,
+    _scrollHandler: null,
 
     init() {
       this.updateVisibility();
 
       let ticking = false;
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.updateVisibility();
@@ -431,7 +473,15 @@ function createSimpleFloatingDock() {
           });
           ticking = true;
         }
-      }, { passive: true });
+      };
+      window.addEventListener('scroll', this._scrollHandler, { passive: true });
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
     },
 
     updateVisibility() {
@@ -453,12 +503,13 @@ function createSimpleFloatingDock() {
 function createDocFloatingDock() {
   return {
     isVisible: false,
+    _scrollHandler: null,
 
     init() {
       this.updateVisibility();
 
       let ticking = false;
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.updateVisibility();
@@ -466,7 +517,15 @@ function createDocFloatingDock() {
           });
           ticking = true;
         }
-      }, { passive: true });
+      };
+      window.addEventListener('scroll', this._scrollHandler, { passive: true });
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
     },
 
     updateVisibility() {
@@ -514,12 +573,13 @@ function createSideFloatingDock() {
   return {
     isVisible: false,
     isExpanded: false,
+    _scrollHandler: null,
 
     init() {
       this.updateVisibility();
 
       let ticking = false;
-      window.addEventListener('scroll', () => {
+      this._scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.updateVisibility();
@@ -527,7 +587,15 @@ function createSideFloatingDock() {
           });
           ticking = true;
         }
-      }, { passive: true });
+      };
+      window.addEventListener('scroll', this._scrollHandler, { passive: true });
+    },
+
+    destroy() {
+      if (this._scrollHandler) {
+        window.removeEventListener('scroll', this._scrollHandler);
+        this._scrollHandler = null;
+      }
     },
 
     updateVisibility() {

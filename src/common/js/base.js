@@ -112,7 +112,7 @@ window.SkyUtils = {
     if (!element) return;
 
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
+    const offsetPosition = elementPosition + window.scrollY - offset;
 
     window.scrollTo({
       top: offsetPosition,
@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
   observeImages();
   
   // 监听动态加载的图片（如无限滚动）
+  // 限定到 PJAX 内容容器，避免监听整棵 DOM 树的无关变化
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
@@ -297,7 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  observer.observe(document.body, { childList: true, subtree: true });
+  const observeTarget = document.getElementById('swup') || document.body;
+  observer.observe(observeTarget, { childList: true, subtree: true });
 });
 
 // 监听 Alpine.js 初始化完成

@@ -92,6 +92,8 @@ function generateEntries() {
   return entries;
 }
 
+const isWatchMode = process.argv.includes('--watch');
+
 export default defineConfig({
   build: {
     outDir: "templates/assets",
@@ -116,9 +118,8 @@ export default defineConfig({
       },
     },
     assetsInlineLimit: 0,
-    watch: {
-      exclude: ['templates/assets/**']
-    }
+    // watch 模式下排除输出目录，防止 closeBundle 的文件复制触发无限重建
+    ...(isWatchMode ? { watch: { exclude: ['templates/assets/**'] } } : {}),
   },
   plugins: [
     {

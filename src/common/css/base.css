@@ -7,7 +7,6 @@
  *   - Halo评论组件变量  
  *   - 主题自定义变量
  *   - 全局动画系统
- *   - 全局动画系统
  *   - 暗色模式组件微光效果
  *   - View Transitions API 支持 (Safari 18+/Chrome 111+)
  * 
@@ -16,13 +15,8 @@
  */
 
 /* ========================================== */
-/* View Transitions API Support               */
-/* ========================================== */
-@view-transition {
-    navigation: auto;
-}
-
 /* 页面切换时的持久化元素 */
+/* ========================================== */
 .navbar {
     view-transition-name: navbar;
 }
@@ -551,12 +545,14 @@ html.theme-transitioning * {
 
 /* 页面过渡动画 - 淡入淡出 */
 ::view-transition-old(root) {
-    animation: view-fade-out 0.2s ease-out both;
+    animation: view-fade-out 0.3s ease-out both;
+    background-color: var(--color-base-100);
 }
 
 ::view-transition-new(root) {
     animation: view-fade-in 0.3s ease-in both;
     animation-delay: 0.1s;
+    background-color: var(--color-base-100);
 }
 
 @keyframes view-fade-out {
@@ -703,13 +699,7 @@ body[x-data]:not([x-cloak]) {
     transition-delay: 250ms;
 }
 
-/* View Transition 优化：防止白色闪烁 */
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation-duration: 0.3s;
-    background-color: var(--color-base-100);
-    /* 强制背景色，防止透出白色 */
-}
+
 
 /* Alpine 缩放淡入（热力图等大块内容） */
 @keyframes alpine-scale-in {
