@@ -5,12 +5,13 @@
 
 // 导入页面样式（已包含 article-content.css）
 import './page.css';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 // 导入公共文章内容脚本
 import '../../static/js/article-content.js';
 
 // 页面初始化
-document.addEventListener('DOMContentLoaded', () => {
+runPageInit(() => {
   initPageContent();
 });
 
@@ -24,3 +25,5 @@ function initPageContent() {
   // 这里可以添加 page 页面特有的逻辑（如果需要）
   console.log('Page content initialized');
 }
+
+notifySwupPageReady();

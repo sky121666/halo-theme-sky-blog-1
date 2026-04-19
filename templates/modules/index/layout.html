@@ -40,6 +40,8 @@
       th:href="@{/assets/css/index-subtitle-effects.css?v={version}(version=${theme.spec.version})}" />
   </th:block>
 
+  <!-- 音乐播放器 CSS -->
+  <th:block th:replace="~{modules/music-player :: head}" />
 </head>
 
 <body th:with="bgConfig = ${theme.config.general.global_background},
@@ -58,13 +60,13 @@
     <!-- 导航栏 -->
     <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 首页头部区域 - 根据开关决定是否显示 -->
-    <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
-      <th:block th:replace="~{modules/index/header}" />
-    </th:block>
-
     <!-- 主要内容区域 -->
-    <main th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
+    <main id="swup" th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
+      <!-- 首页头部区域 - 放入 swup 容器，保证与首页正文共享同一 PJAX 生命周期 -->
+      <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
+        <th:block th:replace="~{modules/index/header}" />
+      </th:block>
+
       <th:block th:replace="${content}" />
     </main>
 
@@ -76,8 +78,12 @@
   <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.index}, 'basic')}" />
 
   <!-- JavaScript 文件 -->
+  <div id="swup-scripts" hidden>
+    <script type="module" th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
+  </div>
   <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <script type="module" th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}"></script>
+  <!-- 悬浮音乐播放器 -->
+  <th:block th:replace="~{modules/music-player :: player}" />
 </body>
 
 </html>

@@ -120,13 +120,9 @@
     <!-- 错误/无数据状态 - 不显示任何内容 -->
   </div>
 
-  <script>
+  <script data-swup-reload-script>
     // Steam 卡片脚本 (IIFE 防止重复声明)
     (function () {
-      // 防止重复执行
-      if (window._steamCardScriptLoaded) return;
-      window._steamCardScriptLoaded = true;
-
       const STEAM_CARD_CACHE_KEY = 'steam_card_cache';
       const STEAM_CARD_CACHE_TTL = 3 * 60 * 1000; // 3分钟
 
@@ -157,7 +153,8 @@
         }
       };
 
-      document.addEventListener('alpine:init', () => {
+      const registerSteamCard = () => {
+        if (!window.Alpine) return;
         // 防止重复注册
         if (Alpine.data && Alpine._steamCardRegistered) return;
         Alpine._steamCardRegistered = true;
@@ -226,7 +223,13 @@
             }
           }
         }));
-      });
+      };
+
+      if (window.Alpine) {
+        registerSteamCard();
+      } else {
+        document.addEventListener('alpine:init', registerSteamCard, { once: true });
+      }
     })();
   </script>
 </th:block>

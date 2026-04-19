@@ -212,7 +212,7 @@
                   <span>多</span>
                 </div>
                 <div class="heatmap-tooltip" id="article-tooltip"></div>
-                <script th:inline="javascript">
+                <script th:inline="javascript" data-swup-reload-script>
                   window.aboutPagePosts = [
                     /*[# th:each="post : ${recentPosts.items}"]*/
                     {title: /*[[${post.spec.title}]]*/ '', date: /*[[${post.spec.publishTime}]]*/ ''},
@@ -387,7 +387,7 @@
 
     <!-- GitHub 配置 -->
     <script th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}" 
-            th:inline="javascript">
+            th:inline="javascript" data-swup-reload-script>
       window.aboutGithubConfig = {
         username: /*[[${githubUsername}]]*/ '',
         statsHost: /*[[${#strings.isEmpty(githubStatsHost) ? 'https://github-readme-stats.xoku.cn' : githubStatsHost}]]*/ '',

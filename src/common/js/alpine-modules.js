@@ -816,18 +816,27 @@ function welcomeWeatherCard() {
       this.weatherBg = d.weatherBg || 'sunny';
     },
 
+    getInlineWeatherIcon(url) {
+      const iconName = (url?.split('/').pop() || '').replace('.svg', '');
+      const icons = {
+        'clear-day': `<svg viewBox="0 0 48 48" class="w-full h-full text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="24" cy="24" r="8" fill="currentColor" stroke="none"></circle><path d="M24 6v5M24 37v5M6 24h5M37 24h5M11.3 11.3l3.6 3.6M33.1 33.1l3.6 3.6M36.7 11.3l-3.6 3.6M14.9 33.1l-3.6 3.6"></path></svg>`,
+        'clear-night': `<svg viewBox="0 0 48 48" class="w-full h-full text-sky-200" fill="currentColor"><path d="M30.5 6.5c-7.3 1.8-12.7 8.3-12.7 16.1 0 9.2 7.5 16.7 16.7 16.7 2.4 0 4.6-.5 6.6-1.4-2.8 3.4-7 5.6-11.8 5.6-8.5 0-15.5-7-15.5-15.5 0-9.2 8.1-16.4 16.7-21.5Z"></path></svg>`,
+        'partly-cloudy-day': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><circle cx="18" cy="18" r="7" class="text-amber-400" fill="currentColor"></circle><path d="M18 6v4M18 26v4M6 18h4M26 18h4M10.5 10.5l2.8 2.8M23 23l2.8 2.8" class="text-amber-400" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><path d="M18 34h17a6 6 0 0 0 0-12 8.5 8.5 0 0 0-16.1-1.9A7 7 0 0 0 18 34Z" class="text-slate-400" fill="currentColor"></path></svg>`,
+        'partly-cloudy-night': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M17.5 11.5c-4.4 1.1-7.7 5-7.7 9.6 0 5.5 4.5 10 10 10 1.4 0 2.7-.3 4-.9-1.7 2-4.2 3.4-7.1 3.4-5.1 0-9.2-4.1-9.2-9.2 0-5.4 4.8-9.8 10-12.9Z" class="text-sky-200" fill="currentColor"></path><path d="M18 36h17a6 6 0 0 0 0-12 8.5 8.5 0 0 0-16.1-1.9A7 7 0 0 0 18 36Z" class="text-slate-400" fill="currentColor"></path></svg>`,
+        'cloudy': `<svg viewBox="0 0 48 48" class="w-full h-full text-slate-400" fill="currentColor"><path d="M12 35h24a8 8 0 1 0-1.4-15.9A11 11 0 0 0 13.1 22 6.5 6.5 0 0 0 12 35Z"></path></svg>`,
+        'fog': `<svg viewBox="0 0 48 48" class="w-full h-full text-slate-400" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 18h28"></path><path d="M6 24h36"></path><path d="M10 30h28"></path><path d="M14 36h20"></path></svg>`,
+        'drizzle': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M12 26h24a8 8 0 1 0-1.4-15.9A11 11 0 0 0 13.1 13 6.5 6.5 0 0 0 12 26Z" class="text-slate-400" fill="currentColor"></path><path d="M18 31l-2 5M24 33l-2 5M30 31l-2 5" class="text-sky-400" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path></svg>`,
+        'rain': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M12 24h24a8 8 0 1 0-1.4-15.9A11 11 0 0 0 13.1 11 6.5 6.5 0 0 0 12 24Z" class="text-slate-400" fill="currentColor"></path><path d="M17 29l-3 8M24 29l-3 10M31 29l-3 8" class="text-sky-500" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"></path></svg>`,
+        'snow': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M12 24h24a8 8 0 1 0-1.4-15.9A11 11 0 0 0 13.1 11 6.5 6.5 0 0 0 12 24Z" class="text-slate-400" fill="currentColor"></path><path d="M18 30v8M14.5 34h7M15.8 31.8l4.4 4.4M20.2 31.8l-4.4 4.4M30 30v8M26.5 34h7M27.8 31.8l4.4 4.4M32.2 31.8l-4.4 4.4" class="text-sky-100" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>`,
+        'thunderstorms': `<svg viewBox="0 0 48 48" class="w-full h-full" fill="none"><path d="M12 24h24a8 8 0 1 0-1.4-15.9A11 11 0 0 0 13.1 11 6.5 6.5 0 0 0 12 24Z" class="text-slate-500" fill="currentColor"></path><path d="m23 27-4 8h5l-2 7 7-10h-5l3-5Z" class="text-amber-400" fill="currentColor"></path></svg>`,
+        'not-available': `<svg viewBox="0 0 48 48" class="w-full h-full text-slate-400" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="24" cy="24" r="10"></circle><path d="M24 18v7"></path><path d="M24 33h.01"></path></svg>`,
+      };
+
+      return icons[iconName] || icons['not-available'];
+    },
+
     async loadSvgIcon(url) {
-      try {
-        const res = await fetch(url);
-        if (res.ok) {
-          let svg = await res.text();
-          svg = svg.replace(/<\?xml[^>]*\?>/g, '');
-          svg = svg.replace(/<svg/, '<svg class="w-full h-full"');
-          this.weatherIconSvg = svg;
-        } else { this.weatherIconSvg = ''; }
-      } catch {
-        this.weatherIconSvg = '';
-      }
+      this.weatherIconSvg = this.getInlineWeatherIcon(url);
     }
   };
 }
@@ -983,6 +992,81 @@ function onlineStats() {
   };
 }
 
+/**
+ * 音乐播放器 UI 控制器
+ * 模板使用：templates/modules/music-player.html
+ * 绑定 APlayer 引擎实例（window.__skyMusicPlayer），驱动自定义 UI
+ */
+function skyMusicPlayer() {
+  return {
+    ready: false, expanded: false, playing: false, showList: false,
+    title: '加载中...', artist: '', cover: '', progress: 0,
+    tracks: [], currentIndex: 0, _ap: null, _raf: null,
+
+    init() {
+      const ap = window.__skyMusicPlayer;
+      if (ap) this._bindAP(ap);
+      else window.addEventListener('sky:player:ready', e => this._bindAP(e.detail), { once: true });
+    },
+
+    _bindAP(ap) {
+      this._ap = ap;
+      this.tracks = ap.list.audios.map(a => ({ name: a.name, artist: a.artist }));
+      this._syncTrack();
+      this.ready = true;
+      ap.on('play', () => { this.playing = true; this._tickStart(); });
+      ap.on('pause', () => { this.playing = false; this._tickStop(); });
+      ap.on('listswitch', () => this._syncTrack());
+      ap.on('ended', () => this._syncTrack());
+    },
+
+    _syncTrack() {
+      const ap = this._ap;
+      if (!ap) return;
+      const a = ap.list.audios[ap.list.index];
+      if (a) {
+        this.title = a.name || 'Unknown';
+        this.artist = a.artist || '';
+        this.cover = a.cover || '';
+        this.currentIndex = ap.list.index;
+      }
+      this.playing = ap.audio ? !ap.audio.paused : false;
+      this._tickProg();
+    },
+
+    _tickStart() {
+      this._tickStop();
+      const f = () => { this._tickProg(); this._raf = requestAnimationFrame(f); };
+      this._raf = requestAnimationFrame(f);
+    },
+    _tickStop() { if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; } },
+    _tickProg() {
+      const ap = this._ap;
+      if (!ap?.audio) return;
+      const d = ap.audio.duration || 0;
+      this.progress = d > 0 ? (ap.audio.currentTime / d) * 100 : 0;
+    },
+
+    togglePlay() { this._ap?.toggle(); },
+    prev() { this._ap?.skipBack(); },
+    next() { this._ap?.skipForward(); },
+    seek(e) {
+      if (!this._ap) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+      const d = this._ap.audio.duration || 0;
+      if (d > 0) this._ap.seek(d * p);
+    },
+    switchTo(i) {
+      if (!this._ap) return;
+      this._ap.list.switch(i);
+      this._ap.play();
+      this.showList = false;
+    },
+    destroy() { this._tickStop(); }
+  };
+}
+
 function initializeAll() {
   // 注册模板中使用的组件
   Alpine.data('floatingDock', createFloatingDock);
@@ -1001,6 +1085,9 @@ function initializeAll() {
   // 小工具组件
   Alpine.data('welcomeWeatherCard', welcomeWeatherCard);
   Alpine.data('onlineStats', onlineStats);
+
+  // 音乐播放器
+  Alpine.data('skyMusicPlayer', skyMusicPlayer);
 }
 
 
@@ -1017,5 +1104,6 @@ export {
   createDocFloatingDock,
   createDocCommentDrawer,
   welcomeWeatherCard,
-  onlineStats
+  onlineStats,
+  skyMusicPlayer
 };

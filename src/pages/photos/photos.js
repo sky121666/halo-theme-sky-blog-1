@@ -4,8 +4,9 @@
  * - IntersectionObserver 无限滚动懒加载
  */
 import './photos.css';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+runPageInit(() => {
     const photoGrid = document.getElementById('photo-grid');
     if (!photoGrid) return;
 
@@ -240,3 +241,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window._photoObserver = observer;
     observer.observe(sentinel);
 });
+
+notifySwupPageReady();

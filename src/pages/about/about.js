@@ -4,6 +4,7 @@
  */
 
 import './about.css';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 // 导入公共文章内容脚本（CSS 已在 about.css 中导入）
 import '../../static/js/article-content.js';
@@ -493,7 +494,7 @@ import '../../static/js/article-content.js';
 
   // ============================= 初始化 =============================
   
-  document.addEventListener('DOMContentLoaded', function() {
+  runPageInit(function() {
     SF.initScrollReveal();
     SF.initStatCounter();
     SF.initArticleHeatmap();
@@ -504,3 +505,5 @@ import '../../static/js/article-content.js';
   });
 
 })(window, document);
+
+notifySwupPageReady();

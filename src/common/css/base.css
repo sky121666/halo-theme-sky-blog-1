@@ -946,3 +946,34 @@ article img[loading="lazy"] {
         transition: none;
     }
 }
+
+/* ===================================================
+ * Swup PJAX 过渡动画
+ * html[class~="swup-transition-fade"] 在切换期间由 swup 添加
+ * ==================================================*/
+
+/* 内容区域淡出 */
+html.is-changing .transition-fade {
+    opacity: 1;
+    transition: opacity 0.18s ease-out;
+}
+html.is-animating .transition-fade {
+    opacity: 0;
+}
+
+/* #swup 内容区默认加过渡类 */
+#swup {
+    transition: opacity 0.18s ease;
+}
+html.is-animating #swup {
+    opacity: 0;
+}
+
+/* 减少动画偏好：关闭 swup 过渡 */
+@media (prefers-reduced-motion: reduce) {
+    #swup,
+    html.is-changing .transition-fade {
+        transition: none !important;
+        opacity: 1 !important;
+    }
+}

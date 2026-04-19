@@ -25,6 +25,8 @@
   <th:block th:replace="~{modules/font-loader :: fonts}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+  <!-- 音乐播放器 CSS -->
+  <th:block th:replace="~{modules/music-player :: head}" />
 </head>
 
 <body th:with="bgConfig = ${theme.config.general.global_background},
@@ -53,7 +55,7 @@
       <th:block th:replace="~{modules/nav :: navbar}" />
 
       <!-- 主要内容区域 -->
-      <main class="flex-1 "
+      <main id="swup" class="flex-1 "
         th:with="listStyle=${cfg?.basic_info?.list_style ?: 'single_column'},
                                        maxWidth=${listStyle == 'single_column' ? (showSidebar ? 'max-w-5xl' : 'max-w-3xl') : (showSidebar ? 'max-w-6xl' : 'max-w-5xl')}">
         <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${maxWidth}">
@@ -79,7 +81,14 @@
   <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.friends_page_settings}, 'basic')}" />
 
   <!-- JavaScript -->
+  <div id="swup-scripts" hidden>
+    <script type="module" data-swup-reload-script>
+      window.__completeSwupPageInit?.();
+    </script>
+  </div>
   <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+  <!-- 悬浮音乐播放器 -->
+  <th:block th:replace="~{modules/music-player :: player}" />
 </body>
 
 </html>

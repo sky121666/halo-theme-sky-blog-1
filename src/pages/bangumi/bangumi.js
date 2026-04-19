@@ -3,6 +3,7 @@
  */
 
 import './bangumi.css';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 /**
  * 鼠标悬停切换背景
@@ -54,4 +55,5 @@ function initHoverBackground() {
   // });
 }
 
-document.addEventListener('DOMContentLoaded', initHoverBackground);
+runPageInit(initHoverBackground);
+notifySwupPageReady();

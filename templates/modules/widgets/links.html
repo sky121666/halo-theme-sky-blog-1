@@ -41,7 +41,7 @@
         <!-- 通过 groupBy() 获取所有分组，th:if 控制分组筛选 -->
         <th:block th:with="groups = ${linkFinder.groupBy()}">
           <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
-          <script th:inline="javascript">
+          <script th:inline="javascript" data-swup-reload-script>
             document.addEventListener('DOMContentLoaded', function () {
               var max = /*[[${linksSettings.links_count}]]*/ 0;
               max = parseInt(max, 10);

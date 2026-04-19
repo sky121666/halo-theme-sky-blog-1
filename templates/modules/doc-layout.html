@@ -33,6 +33,8 @@
 
   <!-- 文档项目自定义 head 内容（CSS/JS）- 需要 Docsme 插件支持 -->
   <th:block th:if="${project?.spec != null and project.spec['head'] != null}" th:utext="${project.spec['head']}" />
+  <!-- 音乐播放器 CSS -->
+  <th:block th:replace="~{modules/music-player :: head}" />
 </head>
 
 <body th:with="bgConfig = ${theme.config.general.global_background},
@@ -52,7 +54,7 @@
     <th:block th:replace="~{modules/nav :: navbar}" />
 
     <!-- 主要内容 -->
-    <section class="flex-1 w-full">
+    <section id="swup" class="flex-1 w-full">
       <th:block th:replace="${content}" />
     </section>
 
@@ -70,17 +72,20 @@
   </th:block>
 
   <!-- JavaScript -->
+  <div id="swup-scripts" hidden>
+    <!-- 文档页专用脚本 - 使用 ES Module -->
+    <script type="module" th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
+    <!-- 插件脚本（需要在 body 后加载） -->
+    <th:block th:if="${scripts != null}">
+      <th:block th:replace="${scripts}" />
+    </th:block>
+    <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
+    <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
+  </div>
   <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 文档页专用脚本 - 使用 ES Module -->
-  <script type="module" th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"></script>
 
-  <!-- 插件脚本（需要在 body 后加载） -->
-  <th:block th:if="${scripts != null}">
-    <th:block th:replace="${scripts}" />
-  </th:block>
-
-  <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
-  <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
+  <!-- 悬浮音乐播放器 -->
+  <th:block th:replace="~{modules/music-player :: player}" />
 </body>
 
 </html>

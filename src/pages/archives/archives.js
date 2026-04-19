@@ -3,9 +3,11 @@
  * 模板位置：templates/archives.html
  */
 import './archives.css';
+import { notifySwupPageReady, registerAlpinePageComponents } from '../../common/js/page-runtime.js';
 
 // Alpine.js 归档滚动组件
-document.addEventListener('alpine:init', () => {
+(function() {
+  function _registerAlpineComponents() {
   Alpine.data('archiveScroll', () => ({
     currentMonth: {},
 
@@ -29,4 +31,7 @@ document.addEventListener('alpine:init', () => {
       });
     },
   }));
-});
+}
+  registerAlpinePageComponents(_registerAlpineComponents);
+  notifySwupPageReady();
+})();

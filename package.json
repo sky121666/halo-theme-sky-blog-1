@@ -18,7 +18,10 @@
   },
   "dependencies": {
     "@iconify/tailwind4": "^1.2.0",
-    "alpinejs": "^3.15.3"
+    "@swup/head-plugin": "^2.3.1",
+    "@swup/scripts-plugin": "^2.1.0",
+    "alpinejs": "^3.15.3",
+    "swup": "^4.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

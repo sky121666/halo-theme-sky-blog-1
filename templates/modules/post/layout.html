@@ -23,6 +23,8 @@
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
 
+  <!-- 音乐播放器 CSS -->
+  <th:block th:replace="~{modules/music-player :: head}" />
 </head>
 
 <body th:with="bgConfig = ${theme.config.general.global_background},
@@ -43,7 +45,7 @@
     <th:block th:replace="~{modules/nav :: navbar}" />
 
     <!-- 主要内容区域 -->
-    <main class="flex-1 -mt-16">
+    <main id="swup" class="flex-1 -mt-16">
       <th:block th:replace="~{modules/post/content}" />
     </main>
 
@@ -61,8 +63,12 @@
   <th:block th:replace="~{modules/post/floating-dock :: tocDrawer}" />
 
   <!-- JavaScript 文件 - 使用 ES Module -->
-  <script type="module" th:src="@{/assets/js/post.js?v={version}(version=${theme.spec.version})}"></script>
+  <div id="swup-scripts" hidden>
+    <script type="module" th:src="@{/assets/js/post.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
+  </div>
   <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+  <!-- 悬浮音乐播放器 -->
+  <th:block th:replace="~{modules/music-player :: player}" />
 </body>
 
 </html>

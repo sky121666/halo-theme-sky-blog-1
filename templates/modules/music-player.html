@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--  悬浮音乐播放器                              -->
+<!--  APlayer 音频引擎 · 自定义 UI                -->
+<!--  收起 = 旋转黑胶唱片 · 展开 = 胶囊控制条      -->
+<!--  形变动画：同一容器 CSS transition 变形        -->
+<!-- ========================================== -->
+
+<th:block th:fragment="head"
+  th:if="${theme.config.music?.music_settings?.enable == true}">
+</th:block>
+
+<th:block th:fragment="player"
+  th:if="${theme.config.music?.music_settings?.enable == true}"
+  th:with="cfg = ${theme.config.music.music_settings},
+           pcfg = ${theme.config.music.player_config},
+           cdn = ${theme.config.music.cdn_config}">
+
+  <!-- APlayer JS -->
+  <script th:src="${cdn?.aplayer_js ?: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'}"></script>
+  <div id="sky-ap-engine" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0;"></div>
+
+  <!-- 初始化引擎 -->
+  <script th:inline="javascript">
+    (function() {
+      const root = document.getElementById('sky-ap-engine');
+      if (!root || root.dataset.ready === 'true' || !window.APlayer) return;
+      root.dataset.ready = 'true';
+      const server = /*[[${cfg.server ?: 'netease'}]]*/ 'netease';
+      const type = /*[[${cfg.type ?: 'playlist'}]]*/ 'playlist';
+      const id = /*[[${cfg.id}]]*/ '';
+      const apiTpl = /*[[${!#strings.isEmpty(cdn?.meting_api) ? cdn.meting_api : 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'}]]*/ 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r';
+      const api = apiTpl.replace(':server', encodeURIComponent(server)).replace(':type', encodeURIComponent(type)).replace(':id', encodeURIComponent(id)).replace(':r', String(Math.random()));
+      const norm = t => ({ name: t.name||t.title||'Unknown', artist: t.artist||t.author||'Unknown', url: t.url, cover: t.cover||t.pic||'' });
+      fetch(api).then(r=>r.json()).then(tracks => {
+        if (!Array.isArray(tracks)||!tracks.length) return;
+        const ap = new window.APlayer({ container: root, audio: tracks.map(norm), fixed: false, mini: false, mutex: true,
+          theme: /*[[${pcfg?.theme_color ?: '#fa233b'}]]*/ '#fa233b',
+          volume: /*[[${pcfg?.volume != null ? pcfg.volume / 100.0 : 0.7}]]*/ 0.7,
+          order: /*[[${pcfg?.order ?: 'list'}]]*/ 'list', autoplay: false, storageName: 'metingjs' });
+        window.__skyMusicPlayer = ap;
+        window.dispatchEvent(new CustomEvent('sky:player:ready', { detail: ap }));
+      }).catch(()=>{});
+    })();
+  </script>
+
+  <!-- 续播 + 状态保存（暴露 window.__skyMusicSave 供 swup 调用） -->
+  <script>
+    (function(){
+      'use strict';
+      const SK='sky_music_state';
+      function getAP(){return window.__skyMusicPlayer||null}
+
+      function save(){
+        try{
+          const ap=getAP();if(!ap?.audio)return;
+          sessionStorage.setItem(SK,JSON.stringify({
+            i:ap.list.index, t:ap.audio.currentTime||0,
+            p:ap.audio.paused, v:ap.audio.volume
+          }));
+        }catch(e){}
+      }
+
+      // Fix #3: 暴露给 swup visit:start 调用
+      window.__skyMusicSave = save;
+
+      function restore(){
+        try{
+          const raw=sessionStorage.getItem(SK);if(!raw)return;
+          const s=JSON.parse(raw);
+          const poll=setInterval(()=>{
+            const ap=getAP();if(!ap?.list?.audios?.length)return;clearInterval(poll);
+            if(s.i<ap.list.audios.length)ap.list.switch(s.i);
+            if(s.t>0)ap.seek(s.t);
+            if(s.v!==undefined)ap.volume(s.v);
+            if(!s.p){
+              const resume=async()=>{
+                window.removeEventListener('pointerdown',resume,true);
+                window.removeEventListener('keydown',resume,true);
+                try{await getAP()?.play()}catch(e){}
+              };
+              window.addEventListener('pointerdown',resume,{once:true,capture:true});
+              window.addEventListener('keydown',resume,{once:true,capture:true});
+            }
+          },200);
+          setTimeout(()=>clearInterval(poll),12000);
+        }catch(e){}
+      }
+
+      window.addEventListener('pagehide',save);
+      window.addEventListener('beforeunload',save);
+      document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
+
+      // Fix #4: 全页刷新时清理旧定时器
+      if(window.__skyMusicSaveTimer)clearInterval(window.__skyMusicSaveTimer);
+      window.__skyMusicSaveTimer=setInterval(save,2000);
+
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);
+      else restore();
+    })();
+  </script>
+
+  <!-- ===== UI ===== -->
+  <div id="sky-music-player" x-data="skyMusicPlayer()" x-show="ready"
+       x-transition:enter="transition ease-out duration-500"
+       x-transition:enter-start="opacity-0 translate-y-4"
+       x-transition:enter-end="opacity-100 translate-y-0"
+       class="sky-mp" :class="{ 'is-expanded': expanded }" style="display:none;">
+
+    <!-- 单一形变容器：圆形 ↔ 胶囊 -->
+    <div class="sky-mp-shell">
+
+      <!-- 左侧：唱片 / 封面区 -->
+      <div class="sky-mp-left" @click="togglePlay()">
+        <!-- 黑胶盘体（收起态可见） -->
+        <div class="sky-mp-disc" :class="{ 'is-spinning': playing && !expanded }">
+          <div class="sky-mp-disc-groove"></div>
+          <div class="sky-mp-disc-sheen"></div>
+          <div class="sky-mp-disc-label">
+            <img :src="cover" alt="" referrerpolicy="no-referrer" />
+          </div>
+          <div class="sky-mp-disc-spindle"></div>
+        </div>
+        <!-- 封面（展开态可见） -->
+        <div class="sky-mp-cover-wrap">
+          <img :src="cover" alt="" referrerpolicy="no-referrer" class="sky-mp-cover-img" />
+          <div class="sky-mp-cover-overlay" :class="{ 'show': playing }">
+            <svg x-show="!playing" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7z"/></svg>
+            <svg x-show="playing" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 展开按钮（收起态 hover 显示） -->
+      <button class="sky-mp-expand-btn" @click.stop="expanded = true" aria-label="展开播放器">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <!-- 右侧内容区（展开态滑入） -->
+      <div class="sky-mp-content">
+        <div class="sky-mp-info">
+          <div class="sky-mp-meta">
+            <span class="sky-mp-title" x-text="title"></span>
+            <span class="sky-mp-artist" x-text="artist"></span>
+          </div>
+          <div class="sky-mp-progress" @click.stop="seek($event)">
+            <div class="sky-mp-bar">
+              <div class="sky-mp-bar-fill" :style="'width:'+progress+'%'"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sky-mp-btns">
+          <button class="sky-mp-btn" @click.stop="prev()" aria-label="上一首">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="sky-mp-btn" @click.stop="next()" aria-label="下一首">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+          <button class="sky-mp-btn" @click.stop="showList=!showList" :class="{'is-active':showList}" aria-label="列表">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          </button>
+          <button class="sky-mp-btn sky-mp-btn-collapse" @click.stop="expanded=false;showList=false" aria-label="收起">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 播放列表 -->
+    <div class="sky-mp-list" x-show="showList && expanded" x-transition.opacity.duration.200ms>
+      <div class="sky-mp-list-inner">
+        <template x-for="(track,idx) in tracks" :key="idx">
+          <div class="sky-mp-list-row" :class="{'is-current':idx===currentIndex}" @click="switchTo(idx)">
+            <span class="sky-mp-list-name" x-text="track.name"></span>
+            <span class="sky-mp-list-artist" x-text="track.artist"></span>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- 播放状态小光点（收起态） -->
+    <div class="sky-mp-dot" :class="{ 'is-playing': playing && !expanded }"></div>
+  </div>
+
+  <!-- Alpine 组件 skyMusicPlayer 已移至 alpine-modules.js，随 Alpine.start() 同步注册 -->
+
+
+  <!-- ===== 样式 ===== -->
+  <style>
+    /* ========== 变量 ========== */
+    :root {
+      --mp-size: 54px;           /* 黑胶尺寸 */
+      --mp-expanded-w: 360px;    /* 展开宽度 */
+      --mp-expanded-h: 64px;     /* 展开高度 */
+      --mp-cover-exp: 42px;      /* 展开态封面尺寸 */
+      --mp-ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --mp-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --mp-dur: 0.45s;
+
+      --mp-bg: color-mix(in srgb, var(--color-base-100) 78%, transparent);
+      --mp-border: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+      --mp-shadow: 0 6px 24px -6px rgba(0,0,0,0.14), 0 0 0 0.5px rgba(0,0,0,0.06);
+      --mp-shadow-up: 0 12px 40px -8px rgba(0,0,0,0.22), 0 0 0 0.5px rgba(0,0,0,0.08);
+      --mp-c1: var(--color-base-content);
+      --mp-c2: color-mix(in srgb, var(--color-base-content) 50%, transparent);
+      --mp-c3: color-mix(in srgb, var(--color-base-content) 28%, transparent);
+      --mp-hover: color-mix(in srgb, var(--color-base-content) 6%, transparent);
+      --mp-bar-bg: color-mix(in srgb, var(--color-base-content) 10%, transparent);
+    }
+
+    [data-color-scheme="dark"] {
+      --mp-bg: color-mix(in srgb, var(--color-base-100) 62%, transparent);
+      --mp-border: color-mix(in srgb, var(--color-base-content) 12%, transparent);
+      --mp-shadow: 0 6px 24px -6px rgba(0,0,0,0.42), 0 0 0 0.5px rgba(255,255,255,0.06);
+      --mp-shadow-up: 0 12px 40px -8px rgba(0,0,0,0.52), 0 0 0 0.5px rgba(255,255,255,0.08);
+      --mp-hover: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+      --mp-bar-bg: color-mix(in srgb, var(--color-base-content) 14%, transparent);
+    }
+
+    /* APlayer 隐藏 */
+    #sky-ap-engine,#sky-ap-engine *{position:fixed!important;left:-9999px!important;top:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important;pointer-events:none!important;opacity:0!important}
+
+    /* ========== 容器 ========== */
+    .sky-mp {
+      position: fixed;
+      left: 16px;
+      bottom: 24px;
+      z-index: 39;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== 形变外壳 ========== */
+    .sky-mp-shell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: var(--mp-size);
+      height: var(--mp-size);
+      border-radius: calc(var(--mp-size) / 2);
+      overflow: hidden;
+      transition:
+        width var(--mp-dur) var(--mp-ease),
+        height var(--mp-dur) var(--mp-ease),
+        border-radius var(--mp-dur) var(--mp-ease),
+        background var(--mp-dur) var(--mp-ease),
+        box-shadow var(--mp-dur) var(--mp-ease),
+        backdrop-filter var(--mp-dur) var(--mp-ease);
+      /* 收起态：透明背景，阴影靠 disc 自带 */
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .is-expanded .sky-mp-shell {
+      width: min(var(--mp-expanded-w), calc(100vw - 32px));
+      height: var(--mp-expanded-h);
+      border-radius: 16px;
+      background: var(--mp-bg);
+      border: 1px solid var(--mp-border);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: var(--mp-shadow);
+    }
+
+    @media (hover: hover) {
+      .is-expanded .sky-mp-shell:hover {
+        box-shadow: var(--mp-shadow-up);
+        transform: translateY(-1px);
+      }
+      .is-expanded .sky-mp-shell { transition: width var(--mp-dur) var(--mp-ease), height var(--mp-dur) var(--mp-ease), border-radius var(--mp-dur) var(--mp-ease), background var(--mp-dur) var(--mp-ease), box-shadow 0.2s ease, transform 0.2s ease, backdrop-filter var(--mp-dur) var(--mp-ease); }
+    }
+
+    /* ========== 左侧：唱片 / 封面 ========== */
+    .sky-mp-left {
+      position: relative;
+      flex-shrink: 0;
+      width: var(--mp-size);
+      height: var(--mp-size);
+      cursor: pointer;
+      transition: width var(--mp-dur) var(--mp-ease), height var(--mp-dur) var(--mp-ease), margin var(--mp-dur) var(--mp-ease), border-radius var(--mp-dur) var(--mp-ease);
+    }
+
+    .is-expanded .sky-mp-left {
+      width: var(--mp-cover-exp);
+      height: var(--mp-cover-exp);
+      margin: 0 0 0 11px;
+      border-radius: 10px;
+    }
+
+    /* --- 黑胶盘体 --- */
+    .sky-mp-disc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        #1a1a1a 0%, #1d1d1d 26%,
+        #232323 27%, #1a1a1a 28%,
+        #222 40%, #1a1a1a 41%,
+        #232323 54%, #1a1a1a 55%,
+        #222 68%, #1a1a1a 69%,
+        #1d1d1d 82%, #171717 100%
+      );
+      box-shadow:
+        0 4px 16px rgba(0,0,0,0.35),
+        inset 0 0 0 1px rgba(255,255,255,0.06),
+        inset 0 0 16px rgba(255,255,255,0.02);
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .is-expanded .sky-mp-disc {
+      opacity: 0;
+      transform: scale(0.6) rotate(60deg);
+      pointer-events: none;
+    }
+
+    .sky-mp-disc.is-spinning {
+      animation: mp-spin 3.5s linear infinite;
+    }
+
+    @keyframes mp-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 沟槽纹理 */
+    .sky-mp-disc-groove {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: repeating-radial-gradient(
+        circle at center,
+        transparent 0px,
+        transparent 1.5px,
+        rgba(255,255,255,0.03) 1.5px,
+        rgba(255,255,255,0.03) 2px
+      );
+    }
+
+    /* 反光弧 */
+    .sky-mp-disc-sheen {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 200deg,
+        transparent 0deg,
+        rgba(255,255,255,0.07) 15deg,
+        transparent 50deg,
+        rgba(255,255,255,0.04) 150deg,
+        transparent 200deg,
+        rgba(255,255,255,0.06) 310deg,
+        transparent 350deg
+      );
+    }
+
+    /* 中心封面标签 */
+    .sky-mp-disc-label {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 50%; height: 50%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 8px rgba(0,0,0,0.4);
+    }
+
+    .sky-mp-disc-label img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* 中心轴孔 */
+    .sky-mp-disc-spindle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 3px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+
+    /* --- 展开态封面 --- */
+    .sky-mp-cover-wrap {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.25s ease 0.15s;
+    }
+
+    .is-expanded .sky-mp-cover-wrap {
+      opacity: 1;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    }
+
+    .sky-mp-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .sky-mp-cover-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.28);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .sky-mp-left:hover .sky-mp-cover-overlay { opacity: 1; }
+    .sky-mp-cover-overlay.show { opacity: 0.75; }
+
+    .sky-mp-cover-overlay svg { width: 18px; height: 18px; color: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4)); }
+
+    /* ========== 展开按钮（收起态） ========== */
+    .sky-mp-expand-btn {
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--mp-border);
+      background: var(--mp-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s var(--mp-ease-spring);
+      z-index: 5;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sky-mp-expand-btn svg { width: 12px; height: 12px; color: var(--mp-c2); }
+
+    .sky-mp:not(.is-expanded):hover .sky-mp-expand-btn {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    .sky-mp-expand-btn:hover { background: var(--color-primary); border-color: var(--color-primary); }
+    .sky-mp-expand-btn:hover svg { color: #fff; }
+    .sky-mp-expand-btn:active { transform: translateY(-50%) scale(0.85); }
+
+    .is-expanded .sky-mp-expand-btn { display: none; }
+
+    /* ========== 右侧内容 ========== */
+    .sky-mp-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      opacity: 0;
+      transform: translateX(-12px);
+      transition: opacity 0.3s ease 0.1s, transform 0.3s var(--mp-ease) 0.1s;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .is-expanded .sky-mp-content {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      visibility: visible;
+      transition-delay: 0.18s;
+    }
+
+    .sky-mp-info {
+      flex: 1; min-width: 0;
+      padding: 0 10px 0 14px;
+      display: flex; flex-direction: column; justify-content: center; gap: 7px;
+    }
+
+    .sky-mp-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+    .sky-mp-title {
+      font-size: 13px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2;
+      color: var(--mp-c1);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .sky-mp-artist {
+      font-size: 11px; font-weight: 400; line-height: 1.2;
+      color: var(--mp-c2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .sky-mp-progress { cursor: pointer; padding: 2px 0; }
+
+    .sky-mp-bar {
+      height: 3px; border-radius: 999px;
+      background: var(--mp-bar-bg); overflow: hidden;
+      position: relative;
+    }
+
+    .sky-mp-bar-fill {
+      height: 100%; border-radius: 999px;
+      background: var(--color-primary);
+      transition: width 0.15s linear;
+      position: relative;
+    }
+
+    /* 进度条末端发光点 */
+    .sky-mp-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: -1px; top: 50%;
+      transform: translateY(-50%);
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      box-shadow: 0 0 6px color-mix(in srgb, var(--color-primary) 50%, transparent);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .sky-mp-progress:hover .sky-mp-bar-fill::after { opacity: 1; }
+
+    /* 按钮组 */
+    .sky-mp-btns {
+      display: flex; align-items: center; gap: 1px;
+      padding-right: 8px; flex-shrink: 0;
+    }
+
+    .sky-mp-btn {
+      width: 30px; height: 30px; padding: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; background: transparent; border-radius: 8px;
+      color: var(--mp-c2); cursor: pointer;
+      transition: color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sky-mp-btn svg { width: 100%; height: 100%; }
+
+    @media (hover: hover) {
+      .sky-mp-btn:hover { color: var(--mp-c1); background: var(--mp-hover); transform: scale(1.08); }
+    }
+    .sky-mp-btn:active { transform: scale(0.9); }
+    .sky-mp-btn.is-active { color: var(--color-primary); }
+
+    .sky-mp-btn-collapse {
+      margin-left: 4px;
+      padding-left: 7px;
+      border-left: 1px solid var(--mp-border);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ========== 播放列表 ========== */
+    .sky-mp-list {
+      position: absolute; left: 0;
+      bottom: calc(var(--mp-expanded-h) + 8px);
+      width: min(var(--mp-expanded-w), calc(100vw - 32px));
+      max-height: 280px; border-radius: 14px;
+      border: 1px solid var(--mp-border);
+      background: var(--mp-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: var(--mp-shadow);
+      overflow: hidden;
+    }
+
+    .sky-mp-list-inner {
+      max-height: 280px; overflow-y: auto; overscroll-behavior: contain;
+    }
+    .sky-mp-list-inner::-webkit-scrollbar { width: 4px; }
+    .sky-mp-list-inner::-webkit-scrollbar-track { background: transparent; }
+    .sky-mp-list-inner::-webkit-scrollbar-thumb { background: var(--mp-c3); border-radius: 999px; }
+
+    .sky-mp-list-row {
+      display: flex; align-items: center; gap: 8px;
+      height: 42px; padding: 0 14px; cursor: pointer;
+      border-bottom: 1px solid color-mix(in srgb, var(--mp-border) 50%, transparent);
+      transition: background 0.12s ease;
+    }
+    .sky-mp-list-row:last-child { border-bottom: none; }
+
+    @media (hover:hover) { .sky-mp-list-row:hover { background: var(--mp-hover); } }
+
+    .sky-mp-list-row.is-current { background: color-mix(in srgb, var(--color-primary) 10%, transparent); }
+    .sky-mp-list-row.is-current .sky-mp-list-name { color: var(--color-primary); }
+
+    .sky-mp-list-name {
+      flex: 1; font-size: 12.5px; font-weight: 600; color: var(--mp-c1);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .sky-mp-list-artist {
+      flex-shrink: 0; font-size: 11px; font-weight: 400; color: var(--mp-c3);
+      max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ========== 状态光点（收起态） ========== */
+    .sky-mp-dot {
+      position: absolute;
+      right: -2px; bottom: -2px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--mp-c3);
+      border: 2px solid var(--color-base-100);
+      transition: background 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      z-index: 5;
+      opacity: 1;
+    }
+
+    .is-expanded .sky-mp-dot { opacity: 0; pointer-events: none; }
+
+    .sky-mp-dot.is-playing {
+      background: var(--color-primary);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 50%, transparent);
+      animation: mp-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes mp-pulse {
+      0%, 100% { box-shadow: 0 0 4px color-mix(in srgb, var(--color-primary) 30%, transparent); }
+      50% { box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 60%, transparent); }
+    }
+
+    /* ========== 移动端 ========== */
+    @media (max-width: 767px) {
+      :root { --mp-size: 48px; --mp-expanded-h: 56px; --mp-cover-exp: 36px; }
+      .sky-mp { left: 12px; bottom: 14px; }
+
+      .is-expanded .sky-mp-shell { border-radius: 14px; }
+      .sky-mp-info { padding: 0 8px 0 10px; gap: 5px; }
+      .sky-mp-artist { display: none; }
+      .sky-mp-btns { padding-right: 6px; }
+      .sky-mp-btn { width: 28px; height: 28px; padding: 5px; }
+      .sky-mp-list { width: calc(100vw - 24px); max-height: 220px; }
+    }
+  </style>
+
+</th:block>
+</html>

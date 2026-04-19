@@ -10,8 +10,10 @@
 
 // 导入页面样式（满足“每页 JS 需导入对应 CSS”的项目规范）
 import './categories.css';
+import { notifySwupPageReady, registerAlpinePageComponents } from '../../common/js/page-runtime.js';
 
-document.addEventListener('alpine:init', () => {
+(function() {
+  function _registerAlpineComponents() {
   /**
    * 分类集合页组件
    * 说明：用于 /categories 页面，实现“全部”和各分类的无刷新切换与滚动分页。
@@ -140,7 +142,7 @@ document.addEventListener('alpine:init', () => {
      * 拉取页面 HTML
      */
     async fetchPage(url) {
-      const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+      const res = await fetch(url);
       return await res.text();
     },
 
@@ -252,7 +254,7 @@ document.addEventListener('alpine:init', () => {
       if (!this.nextUrl || this.isLoading) return;
       this.isLoading = true;
       try {
-        const res = await fetch(this.nextUrl, { headers: { 'X-Requested-With': 'fetch' } });
+        const res = await fetch(this.nextUrl);
         const html = await res.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const listEl = doc.querySelector('#category-posts');
@@ -270,4 +272,7 @@ document.addEventListener('alpine:init', () => {
       }
     }
   }));
-});
+}
+  registerAlpinePageComponents(_registerAlpineComponents);
+  notifySwupPageReady();
+})();

@@ -31,7 +31,7 @@
 -->
 
 <!-- 分类集合内容片段：/categories -->
-<main class="relative" th:fragment="category-collection"
+<main class="relative" th:fragment="category-collection" x-data="categoriesPage()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -78,29 +78,34 @@
                              currentPage=${#numbers.formatInteger(pageParam, 0)}, 
                              posts=${postFinder.list({page: currentPage, size: pageSize})}">
             <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
-            <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
-              <th:block th:case="'modern'">
-                <th:block
-                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+            <div id="category-posts">
+              <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
+                <th:block th:case="'modern'">
+                  <th:block
+                    th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+                </th:block>
+                <th:block th:case="'media_text'">
+                  <th:block
+                    th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
+                </th:block>
+                <th:block th:case="'magazine'">
+                  <th:block
+                    th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
+                </th:block>
+                <th:block th:case="'minimal'">
+                  <th:block
+                    th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
+                </th:block>
+                <th:block th:case="*">
+                  <!-- 默认使用列表风格 -->
+                  <th:block
+                    th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
+                </th:block>
               </th:block>
-              <th:block th:case="'media_text'">
-                <th:block
-                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-              </th:block>
-              <th:block th:case="'magazine'">
-                <th:block
-                  th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
-              </th:block>
-              <th:block th:case="'minimal'">
-                <th:block
-                  th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
-              </th:block>
-              <th:block th:case="*">
-                <!-- 默认使用列表风格 -->
-                <th:block
-                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-              </th:block>
-            </th:block>
+            </div>
+
+            <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? '/categories?page=' + (posts.page + 1) : ''}" />
+            <div id="infinite-sentinel" class="h-px w-full"></div>
 
             <!-- 无文章提示 -->
             <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
@@ -131,7 +136,7 @@
 </main>
 
 <!-- 分类归档内容片段：/categories/:slug -->
-<main class="relative" th:fragment="category-archive"
+<main class="relative" th:fragment="category-archive" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -167,30 +172,35 @@
           </th:block>
         </th:block>
 
-        <!-- 文章列表（当前分类）：使用后台默认设置 -->
-        <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
-          <th:block th:case="'modern'">
-            <th:block
-              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+        <div id="category-posts">
+          <!-- 文章列表（当前分类）：使用后台默认设置 -->
+          <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
+            <th:block th:case="'modern'">
+              <th:block
+                th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+            </th:block>
+            <th:block th:case="'media_text'">
+              <th:block
+                th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
+            </th:block>
+            <th:block th:case="'magazine'">
+              <th:block
+                th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
+            </th:block>
+            <th:block th:case="'minimal'">
+              <th:block
+                th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
+            </th:block>
+            <th:block th:case="*">
+              <!-- 默认使用卡片风格 -->
+              <th:block
+                th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+            </th:block>
           </th:block>
-          <th:block th:case="'media_text'">
-            <th:block
-              th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-          </th:block>
-          <th:block th:case="'magazine'">
-            <th:block
-              th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
-          </th:block>
-          <th:block th:case="'minimal'">
-            <th:block
-              th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
-          </th:block>
-          <th:block th:case="*">
-            <!-- 默认使用卡片风格 -->
-            <th:block
-              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
-          </th:block>
-        </th:block>
+        </div>
+
+        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+        <div id="infinite-sentinel" class="h-px w-full"></div>
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
@@ -214,7 +224,7 @@
 </main>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制卡片风格 -->
-<main class="relative" th:fragment="category-archive-card"
+<main class="relative" th:fragment="category-archive-card" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -250,9 +260,14 @@
           </th:block>
         </th:block>
 
-        <!-- 文章列表（当前分类）：强制使用卡片风格 -->
-        <th:block
-          th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+        <div id="category-posts">
+          <!-- 文章列表（当前分类）：强制使用卡片风格 -->
+          <th:block
+            th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+        </div>
+
+        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+        <div id="infinite-sentinel" class="h-px w-full"></div>
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
@@ -276,7 +291,7 @@
 </main>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制列表风格 -->
-<main class="relative" th:fragment="category-archive-list"
+<main class="relative" th:fragment="category-archive-list" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -312,9 +327,14 @@
           </th:block>
         </th:block>
 
-        <!-- 文章列表（当前分类）：强制使用列表风格 -->
-        <th:block
-          th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
+        <div id="category-posts">
+          <!-- 文章列表（当前分类）：强制使用列表风格 -->
+          <th:block
+            th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
+        </div>
+
+        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+        <div id="infinite-sentinel" class="h-px w-full"></div>
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
@@ -338,7 +358,7 @@
 </main>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制杂志风格 -->
-<main class="relative" th:fragment="category-archive-magazine"
+<main class="relative" th:fragment="category-archive-magazine" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -374,9 +394,14 @@
           </th:block>
         </th:block>
 
-        <!-- 文章列表（当前分类）：强制使用杂志风格 -->
-        <th:block
-          th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
+        <div id="category-posts">
+          <!-- 文章列表（当前分类）：强制使用杂志风格 -->
+          <th:block
+            th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
+        </div>
+
+        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+        <div id="infinite-sentinel" class="h-px w-full"></div>
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
@@ -400,7 +425,7 @@
 </main>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制极简风格 -->
-<main class="relative" th:fragment="category-archive-minimal"
+<main class="relative" th:fragment="category-archive-minimal" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
@@ -436,9 +461,14 @@
           </th:block>
         </th:block>
 
-        <!-- 文章列表（当前分类）：强制使用极简风格 -->
-        <th:block
-          th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
+        <div id="category-posts">
+          <!-- 文章列表（当前分类）：强制使用极简风格 -->
+          <th:block
+            th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
+        </div>
+
+        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+        <div id="infinite-sentinel" class="h-px w-full"></div>
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(

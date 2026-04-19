@@ -43,8 +43,11 @@
     </div>
   </div>
 
-  <script th:inline="javascript">
-    document.addEventListener('alpine:init', () => {
+  <script th:inline="javascript" data-swup-reload-script>
+    (() => {
+      const registerGithubHeatmap = () => {
+        if (!window.Alpine) return;
+
       Alpine.data('githubHeatmap', () => ({
         loading: true,
         error: false,
@@ -131,7 +134,14 @@
           this.loadImage();
         }
       }));
-    });
+      };
+
+      if (window.Alpine) {
+        registerGithubHeatmap();
+      } else {
+        document.addEventListener('alpine:init', registerGithubHeatmap, { once: true });
+      }
+    })();
   </script>
 
 
@@ -176,13 +186,16 @@
               th:data-slug="${post.spec.slug}"></span>
           </th:block>
         </div>
+
+        <!-- 自定义 Tooltip：必须放在 articleHeatmap 根节点内部，避免 PJAX 下 x-ref 丢失根作用域 -->
+        <div x-ref="tooltip" class="heatmap-tooltip" style="display:none;"></div>
       </div>
 
-      <!-- 自定义 Tooltip -->
-      <div x-ref="tooltip" class="heatmap-tooltip" style="display:none;"></div>
+      <script data-swup-reload-script>
+        (() => {
+          const registerArticleHeatmap = () => {
+            if (!window.Alpine) return;
 
-      <script>
-        document.addEventListener('alpine:init', () => {
           Alpine.data('articleHeatmap', () => ({
             totalCount: 0,
             isEmpty: false,
@@ -456,7 +469,14 @@
               });
             }
           }));
-        });
+          };
+
+          if (window.Alpine) {
+            registerArticleHeatmap();
+          } else {
+            document.addEventListener('alpine:init', registerArticleHeatmap, { once: true });
+          }
+        })();
       </script>
     </th:block>
   </th:block>

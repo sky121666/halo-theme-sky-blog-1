@@ -10,18 +10,24 @@ import './post.css';
 import '../../static/js/article-content.js';
 
 // 导入 TOC 公共工具函数
-import { 
+import {
   buildDynamicTocTree, 
   createDynamicTocHTML, 
   smoothScrollToHeading,
   analyzeHeadingHierarchy 
 } from '../../common/js/toc-utils.js';
+import {
+    notifySwupPageReady,
+    registerAlpinePageComponents,
+    runPageInit
+} from '../../common/js/page-runtime.js';
 
 /**
  * 文章页 Alpine.js 组件
  * 使用 alpine:init 事件动态注册，避免加载顺序问题
  */
-document.addEventListener('alpine:init', () => {
+(function() {
+  function _registerAlpineComponents() {
     /**
      * 文章摘要打字机效果组件
      */
@@ -178,7 +184,9 @@ document.addEventListener('alpine:init', () => {
             }
         }
     }));
-});
+}
+  registerAlpinePageComponents(_registerAlpineComponents);
+})();
 
 /**
  * 文章页面功能管理器
@@ -847,8 +855,10 @@ document.addEventListener('alpine:init', () => {
      * 页面加载完成后初始化
      * 注意：setupContentLazyLoad 和 initAdmonitionGlow 由静态脚本 article-content.js 自动执行
      */
-    document.addEventListener('DOMContentLoaded', () => {
+    runPageInit(() => {
         pageManager.init();
     });
 
 })();
+
+notifySwupPageReady();

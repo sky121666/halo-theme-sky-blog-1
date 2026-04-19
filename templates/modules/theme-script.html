@@ -26,6 +26,12 @@
     window.SYS_WEATHER_DEBUG = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false; // 旧兼容接口
     window.SYS_GLOBAL_DEBUG = window.SYS_WEATHER_DEBUG; // 将来如果有全局其他 debug 可在此处叠加
 
+    // === PJAX 开关 ===
+    // 音乐播放器开启时强制启用 PJAX（续播依赖），否则读后台配置
+    const musicEnabled = /*[[${theme.config.music?.music_settings?.enable == true}]]*/ false;
+    const pjaxSetting = /*[[${theme.config.music?.music_settings?.enable_pjax != false}]]*/ true;
+    window.__skyPjaxEnabled = musicEnabled || pjaxSetting;
+
     // 如果前端开关关闭，忽略 localStorage，强制使用默认主题
     const isDark = showThemeToggle && savedTheme
       ? (savedTheme === 'dark_theme')

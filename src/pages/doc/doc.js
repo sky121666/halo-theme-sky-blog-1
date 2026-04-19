@@ -14,6 +14,7 @@ import {
   createDynamicTocHTML,
   smoothScrollToHeading
 } from '../../common/js/toc-utils.js';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 /**
  * 图片懒加载由 article-content.js 统一处理
@@ -269,8 +270,5 @@ function init() {
   initDrawers();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+runPageInit(init);
+notifySwupPageReady();

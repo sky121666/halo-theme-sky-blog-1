@@ -10,6 +10,11 @@
  */
 
 import './steam.css';
+import {
+  notifySwupPageReady,
+  registerAlpinePageComponents,
+  runPageInit
+} from '../../common/js/page-runtime.js';
 
 // 缓存配置
 const CACHE_KEY = 'steam_page_cache';
@@ -68,7 +73,8 @@ async function fetchAPI(endpoint, useCache = true) {
 /**
  * Alpine.js Steam 页面组件
  */
-document.addEventListener('alpine:init', () => {
+(function() {
+  function _registerAlpineComponents() {
   // 防止重复注册
   if (Alpine._steamPageRegistered) return;
   Alpine._steamPageRegistered = true;
@@ -184,12 +190,16 @@ document.addEventListener('alpine:init', () => {
       return 0;
     }
   }));
-});
+}
+  registerAlpinePageComponents(_registerAlpineComponents);
+})();
 
 // 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', () => {
+runPageInit(() => {
   observeImageLoad();
 });
+
+notifySwupPageReady();
 
 /**
  * 图片懒加载优化

@@ -4246,3 +4246,143 @@ spec:
               label: 返回顶部按钮
               if: $get(equipment_enable_custom_dock).value
               value: true
+    # ==========================================
+    #  悬浮音乐播放器 (APlayer + MetingJS)
+    # ==========================================
+    - group: music
+      label: 音乐播放器
+      formSchema:
+        - $formkit: group
+          name: music_settings
+          label: 基础设置
+          value:
+            enable: false
+            enable_pjax: true
+            server: netease
+            type: playlist
+            id: ''
+          children:
+            - $formkit: switch
+              name: enable
+              id: music_enable
+              label: 启用悬浮音乐播放器
+              help: 开启后在所有页面底部显示悬浮音乐播放器
+              value: false
+            - $formkit: switch
+              name: enable_pjax
+              id: music_enable_pjax
+              label: 启用 PJAX 无刷新切换
+              help: 开启后页面切换无刷新（推荐开启，关闭音乐播放器时可选择关闭以减少资源加载）
+              value: true
+            - $formkit: select
+              name: server
+              label: 音乐平台
+              if: $get(music_enable).value
+              value: netease
+              options:
+                - label: 网易云音乐
+                  value: netease
+                - label: QQ 音乐
+                  value: tencent
+                - label: 酷狗
+                  value: kugou
+                - label: 酷我
+                  value: kuwo
+                - label: 百度
+                  value: baidu
+            - $formkit: select
+              name: type
+              label: 资源类型
+              if: $get(music_enable).value
+              value: playlist
+              options:
+                - label: 歌单
+                  value: playlist
+                - label: 专辑
+                  value: album
+                - label: 歌手热门
+                  value: artist
+                - label: 单曲
+                  value: song
+            - $formkit: text
+              name: id
+              label: 资源 ID
+              if: $get(music_enable).value
+              help: '歌单/专辑/歌手/单曲的 ID（从音乐平台 URL 中获取）'
+              validation: required
+        - $formkit: group
+          name: player_config
+          label: 播放器配置
+          if: $get(music_enable).value
+          value:
+            theme_color: '#fa233b'
+            volume: 70
+            order: list
+            autoplay: false
+            list_folded: true
+            list_max_height: 250
+          children:
+            - $formkit: color
+              name: theme_color
+              label: 主题色
+              value: '#fa233b'
+            - $formkit: number
+              name: volume
+              label: 默认音量
+              help: '0-100，推荐 50-80'
+              value: 70
+              min: 0
+              max: 100
+              step: 5
+            - $formkit: select
+              name: order
+              label: 播放顺序
+              value: list
+              options:
+                - label: 列表循环
+                  value: list
+                - label: 随机播放
+                  value: random
+            - $formkit: switch
+              name: autoplay
+              label: 自动播放
+              help: '受浏览器策略限制，大部分浏览器会阻止自动播放'
+              value: false
+            - $formkit: switch
+              name: list_folded
+              label: 默认折叠歌单
+              value: true
+            - $formkit: number
+              name: list_max_height
+              label: 歌单最大高度 (px)
+              value: 250
+              min: 100
+              max: 500
+              step: 50
+        - $formkit: group
+          name: cdn_config
+          label: CDN / 代理设置
+          if: $get(music_enable).value
+          value:
+            aplayer_css: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
+            aplayer_js: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
+            meting_js: 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
+            meting_api: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'
+          children:
+            - $formkit: text
+              name: aplayer_css
+              label: APlayer CSS 地址
+              value: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
+            - $formkit: text
+              name: aplayer_js
+              label: APlayer JS 地址
+              value: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
+            - $formkit: text
+              name: meting_js
+              label: MetingJS 地址
+              value: 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
+            - $formkit: text
+              name: meting_api
+              label: Meting API 代理地址
+              help: '必填。官方 API 已失效，需使用第三方代理。格式：https://api.example.com/meting/?server=:server&type=:type&id=:id&r=:r'
+              value: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'

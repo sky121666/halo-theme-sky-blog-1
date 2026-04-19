@@ -3,6 +3,7 @@
  */
 import './moments.css';
 import './moment-publish.js';
+import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 /**
  * 瞬间点赞功能
@@ -53,7 +54,7 @@ window.handleMomentUpvote = async function(btn) {
 };
 
 // 页面加载后恢复点赞状态
-document.addEventListener('DOMContentLoaded', function() {
+runPageInit(function() {
   const upvotedNames = JSON.parse(localStorage.getItem('halo.upvoted.moment.names') || '[]');
   
   document.querySelectorAll('[data-moment-name]').forEach(function(btn) {
@@ -68,3 +69,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+notifySwupPageReady();

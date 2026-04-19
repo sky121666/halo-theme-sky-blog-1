@@ -3,13 +3,19 @@
  * 模板位置：templates/links.html
  */
 import './links.css';
+import {
+  notifySwupPageReady,
+  registerAlpinePageComponents,
+  runPageInit
+} from '../../common/js/page-runtime.js';
 
 // API 地址
 const LINK_SUBMIT_API = '/apis/anonymous.link.submit.kunkunyu.com/v1alpha1/linksubmits/-/submit';
 const LINK_GROUPS_API = '/apis/anonymous.link.submit.kunkunyu.com/v1alpha1/linkgroups';
 
 // Alpine.js 友链提交表单组件
-document.addEventListener('alpine:init', () => {
+(function() {
+  function _registerAlpineComponents() {
   Alpine.data('linkSubmitForm', () => ({
     form: {
       type: 'add',
@@ -105,10 +111,12 @@ document.addEventListener('alpine:init', () => {
       };
     },
   }));
-});
+}
+  registerAlpinePageComponents(_registerAlpineComponents);
+})();
 
 // 友链卡片交互增强
-document.addEventListener('DOMContentLoaded', () => {
+runPageInit(() => {
   // 图片加载失败时显示默认图标
   const linkImages = document.querySelectorAll('.link-card img');
   linkImages.forEach((img) => {
@@ -121,3 +129,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+notifySwupPageReady();
