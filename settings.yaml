@@ -824,7 +824,7 @@ spec:
               itemLabels:
                 - type: text
                   label: $value.name
-              children:
+              children: 
                 - $formkit: text
                   name: name
                   label: 链接名称
@@ -974,7 +974,7 @@ spec:
                       value: gallery
                     - label: 友情链接区 (Links)
                       value: links
-
+        
         # 头部背景设置（包含总开关）
         - $formkit: group
           name: background_settings
@@ -1441,7 +1441,7 @@ spec:
               insertControl: false
               removeControl: false
               addButton: false
-              children: 
+              children:
                 - $formkit: select
                   name: tab
                   label: ""
@@ -2111,7 +2111,7 @@ spec:
                   name: widget
                   label: 小工具类型
                   options: *widget_options
-
+        
         # 封面回退设置
         - $formkit: group
           name: cover_fallback
@@ -2228,7 +2228,7 @@ spec:
                   value: underline
                 - label: 玻璃拟态
                   value: glass
-        
+            
         # ===== 侧边栏设置 =====
         - $formkit: group
           name: sidebar_settings
@@ -2377,7 +2377,7 @@ spec:
               label: 启用评论
               help: 在归档页面底部显示评论区
               value: false
-        
+
         # ===== 侧边栏设置 =====
         - $formkit: group
           name: sidebar_settings
@@ -2676,7 +2676,7 @@ spec:
               label: 申请链接
               help: 申请按钮跳转的链接，默认为 /# (不跳转)
               placeholder: "/#"
-
+        
             # 本站信息配置
             - $formkit: text
               name: blogger_logo
@@ -2708,7 +2708,7 @@ spec:
               label: 站点描述
               help: 自定义站点描述，留空则使用系统副标题
               rows: 2
-
+        
         # 其他功能 (侧边栏与评论)
         # ===== 侧边栏设置 =====
         - $formkit: group
@@ -3827,7 +3827,7 @@ spec:
               label: 启用菜单抽屉
               help: 当屏幕较小左侧文档树隐藏时，可从悬浮控制栏打开菜单
               value: true
-
+        
     # ========================================
     # 认证页面设置
     # ========================================
@@ -3938,7 +3938,7 @@ spec:
               placeholder: "欢迎来到"
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: features_welcome_field
-            
+
             # 特性 1
             - $formkit: iconify
               name: feature_1_icon
@@ -3957,7 +3957,7 @@ spec:
               label: 特性 1 描述
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: auth_f1_desc_field
-
+        
             # 特性 2
             - $formkit: iconify
               name: feature_2_icon
@@ -3995,7 +3995,6 @@ spec:
               label: 特性 3 描述
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: auth_f3_desc_field
-
 
     - group: bangumi_settings
       label: 追番
@@ -4065,7 +4064,7 @@ spec:
           label: 插件配置提示
           help: 需要安装「Equipment 装备管理」插件
           children: []
-        
+
         # ===== 基础信息 =====
         - $formkit: group
           name: basic_info
@@ -4091,7 +4090,7 @@ spec:
               value: "分享我日常使用的硬件与软件"
               placeholder: "页面描述信息"
               rows: 2
-        
+
         # ===== 风格设置 =====
         - $formkit: group
           name: style_settings
@@ -4144,7 +4143,6 @@ spec:
               accepts:
                 - "image/*"
 
-        
         # ===== 功能设置 =====
         - $formkit: group
           name: feature_settings
@@ -4157,7 +4155,7 @@ spec:
               label: 启用评论
               help: 在装备页面底部显示评论区
               value: true
-        
+
         # ===== 侧边栏设置 =====
         - $formkit: group
           name: sidebar_settings
@@ -4220,7 +4218,7 @@ spec:
                   name: widget
                   label: 小工具类型
                   options: *widget_options
-        
+
         # ===== 悬浮控制栏设置 =====
         - $formkit: group
           name: floating_dock
@@ -4315,17 +4313,9 @@ spec:
           label: 播放器配置
           if: $get(music_enable).value
           value:
-            theme_color: '#fa233b'
             volume: 70
             order: list
-            autoplay: false
-            list_folded: true
-            list_max_height: 250
           children:
-            - $formkit: color
-              name: theme_color
-              label: 主题色
-              value: '#fa233b'
             - $formkit: number
               name: volume
               label: 默认音量
@@ -4343,44 +4333,18 @@ spec:
                   value: list
                 - label: 随机播放
                   value: random
-            - $formkit: switch
-              name: autoplay
-              label: 自动播放
-              help: '受浏览器策略限制，大部分浏览器会阻止自动播放'
-              value: false
-            - $formkit: switch
-              name: list_folded
-              label: 默认折叠歌单
-              value: true
-            - $formkit: number
-              name: list_max_height
-              label: 歌单最大高度 (px)
-              value: 250
-              min: 100
-              max: 500
-              step: 50
         - $formkit: group
           name: cdn_config
           label: CDN / 代理设置
           if: $get(music_enable).value
           value:
-            aplayer_css: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
             aplayer_js: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
-            meting_js: 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
             meting_api: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'
           children:
-            - $formkit: text
-              name: aplayer_css
-              label: APlayer CSS 地址
-              value: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
             - $formkit: text
               name: aplayer_js
               label: APlayer JS 地址
               value: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
-            - $formkit: text
-              name: meting_js
-              label: MetingJS 地址
-              value: 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
             - $formkit: text
               name: meting_api
               label: Meting API 代理地址

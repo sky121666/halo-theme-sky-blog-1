@@ -82,9 +82,8 @@
 
   <!-- JavaScript -->
   <div id="swup-scripts" hidden>
-    <script type="module" data-swup-reload-script>
-      window.__completeSwupPageInit?.();
-    </script>
+    <!-- friends 页无独立页面 JS，用普通脚本（同步执行）发送就绪信号 -->
+    <script data-swup-reload-script>window.__completeSwupPageInit?.();</script>
   </div>
   <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
   <!-- 悬浮音乐播放器 -->

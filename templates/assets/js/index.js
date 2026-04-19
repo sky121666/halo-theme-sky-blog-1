@@ -1,4 +1,4 @@
-import{a as se,n as le}from"./chunks/page-runtime-DNMVsAyY.js";(function(){const h={info:(...e)=>{window.SYS_WEATHER_DEBUG&&console.log("[BG]",...e)},warn:(...e)=>console.warn("[BG]",...e)},E="sky_weather_cache_v13",C={sunBody:`<svg viewBox="0 0 200 200" class="w-full h-full fill-current text-yellow-400">
+import{a as se,n as le}from"./chunks/page-runtime.js";(function(){const h={info:(...e)=>{window.SYS_WEATHER_DEBUG&&console.log("[BG]",...e)},warn:(...e)=>console.warn("[BG]",...e)},E="sky_weather_cache_v13",C={sunBody:`<svg viewBox="0 0 200 200" class="w-full h-full fill-current text-yellow-400">
                 <circle cx="100" cy="100" r="60" />
                 <g class="sun-face" fill="#cc9900">
                   <circle cx="75" cy="90" r="8" />

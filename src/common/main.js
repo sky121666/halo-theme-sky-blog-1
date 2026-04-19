@@ -63,6 +63,10 @@ if (window.__skyPjaxEnabled !== false) {
 
   const swup = new Swup({
     containers: ['#swup', '#swup-scripts'],
+    // Only wait for the dedicated PJAX containers. The default selector
+    // (`[class*="transition-"]`) matches decorative homepage animations
+    // like the typewriter subtitle and can stall navigation for seconds.
+    animationSelector: '#swup, .transition-fade',
     requestHeaders: {},
     ignoreVisit: (url) => {
       return (
@@ -83,64 +87,96 @@ if (window.__skyPjaxEnabled !== false) {
   });
 
   window.__swup = swup;
-  window.__swupPendingInit = false;
 
+  // 是否已收到页面就绪信号（内联脚本同步执行时设置）
+  let _currentSignaled = false;
+
+  /**
+   * 内联脚本信号入口（friends 等无独立页面 JS 的页面使用）。
+   * module JS 内 notifySwupPageReady() 也调用此函数，但 load 事件才是主要触发源。
+   */
   window.__completeSwupPageInit = () => {
-    clearTimeout(window.__swupInitTimeout);
-    if (!window.__swupPendingInit) {
-      return;
-    }
+    _currentSignaled = true;
+  };
 
-    window.__swupPendingInit = false;
-
+  /** Alpine 恢复动作，rAF 后执行确保 DOM paint 完成 */
+  function _resumeAlpine() {
     requestAnimationFrame(() => {
       if (window.Alpine?.flushAndStopDeferringMutations) {
         Alpine.flushAndStopDeferringMutations();
       } else {
         const container = document.getElementById('swup');
-        if (container && window.Alpine) {
-          Alpine.initTree(container);
-        }
+        if (container && window.Alpine) Alpine.initTree(container);
       }
-
-      if (window.SkyEvents) {
-        window.SkyEvents.onPageLoad();
-      }
+      window.SkyEvents?.onPageLoad();
     });
-  };
+  }
 
   swup.hooks.on('visit:start', () => {
-    if (typeof window.__skyMusicSave === 'function') {
-      window.__skyMusicSave();
-    }
+    if (typeof window.__skyMusicSave === 'function') window.__skyMusicSave();
     if (typeof window.__pageCleanup === 'function') {
       window.__pageCleanup();
       window.__pageCleanup = null;
     }
   });
 
+  // ① DOM 替换前：重置状态，暂停 Alpine MutationObserver，销毁旧页面组件树
   swup.hooks.before('content:replace', () => {
-    window.__swupPendingInit = true;
-    if (window.Alpine?.deferMutations) {
-      Alpine.deferMutations();
-    }
+    _currentSignaled = false;
+    if (window.Alpine?.deferMutations) Alpine.deferMutations();
     const container = document.getElementById('swup');
-    if (container && window.Alpine) {
-      Alpine.destroyTree(container);
+    if (container && window.Alpine) Alpine.destroyTree(container);
+  });
+
+  // ② DOM 替换后（ScriptsPlugin 已注入新脚本）
+  //
+  //  【信号机制】使用 script.load 事件而非 notifySwupPageReady() 作为主触发：
+  //    - 首次导航（模块未缓存）：下载 → 执行（Alpine.data 注册完）→ load 触发 ✅
+  //    - 再次导航（模块已缓存）：ES 模块不重新执行，但 Alpine.data 已在首次执行时
+  //      注册并持久存在 → load 事件仍快速触发 ✅
+  //    - 内联脚本页面（friends 等）：同步执行已置 _currentSignaled=true → 快速路径 ✅
+  //
+  //  【不阻塞 swup】handler 不返回 Promise → swup 立即继续 content:scroll / page:view
+  swup.hooks.on('content:replace', () => {
+    // 快速路径：内联脚本同步执行已发信号
+    if (_currentSignaled) {
+      _resumeAlpine();
+      return;
     }
 
-    clearTimeout(window.__swupInitTimeout);
-    window.__swupInitTimeout = setTimeout(() => {
-      if (window.__swupPendingInit) {
-        console.warn('[swup] __completeSwupPageInit 超时，自动恢复 Alpine');
-        window.__completeSwupPageInit();
-      }
-    }, 3000);
-  });
+    // 找到 ScriptsPlugin 刚注入的 type="module" 脚本
+    const swupScriptsEl = document.getElementById('swup-scripts');
+    const moduleScripts = swupScriptsEl
+      ? Array.from(swupScriptsEl.querySelectorAll('script[type="module"][src]'))
+      : [];
+
+    if (moduleScripts.length === 0) {
+      // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
+      setTimeout(_resumeAlpine, 100);
+      return;
+    }
+
+    // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
+    let resumed = false;
+    function tryResume() {
+      if (!resumed) { resumed = true; _resumeAlpine(); }
+    }
+
+    let pending = moduleScripts.length;
+    moduleScripts.forEach((script) => {
+      const settle = () => { if (--pending <= 0) tryResume(); };
+      script.addEventListener('load',  settle, { once: true });
+      script.addEventListener('error', settle, { once: true });
+    });
+
+    // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
+    setTimeout(tryResume, 5000);
+
+    // 不显式 return Promise → swup 立即继续，不阻塞导航管线
+  }, { after: true });
 
 } else {
   // PJAX 已关闭 — 设置 noop 桩，防止页面 JS 调用报错
   window.__swup = null;
-  window.__swupPendingInit = false;
   window.__completeSwupPageInit = () => {};
 }
