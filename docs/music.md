@@ -43,12 +43,8 @@ https://music.163.com/#/playlist?id=123456789
 
 | 配置项 | 说明 | 默认值 |
 |--------|------|--------|
-| **主题色** | 播放器强调色 | `#fa233b` |
-| **默认音量** | 0-100 | 70 |
+| **默认音量** | 0-100，推荐 50-80 | 70 |
 | **播放顺序** | 列表循环 / 随机播放 | 列表循环 |
-| **自动播放** | 受浏览器策略限制，大部分会被阻止 | 关闭 |
-| **默认折叠歌单** | 展开面板时是否默认收起歌单列表 | 开启 |
-| **歌单最大高度** | 歌单列表最大高度（px） | 250 |
 
 ---
 
@@ -56,10 +52,8 @@ https://music.163.com/#/playlist?id=123456789
 
 | 配置项 | 说明 | 默认值 |
 |--------|------|--------|
-| **APlayer CSS** | APlayer 样式文件地址 | jsDelivr CDN |
 | **APlayer JS** | APlayer 脚本文件地址 | jsDelivr CDN |
-| **MetingJS** | MetingJS 脚本地址 | jsDelivr CDN |
-| **Meting API 代理** | 歌曲数据接口地址 | `api.injahow.cn` |
+| **Meting API 代理** | 歌曲数据接口地址 | `https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r` |
 
 > **重要**：Meting 官方 API 已失效，必须配置可用的第三方代理。地址格式中 `:server`、`:type`、`:id`、`:r` 为占位符，会自动替换。
 
