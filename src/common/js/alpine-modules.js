@@ -1072,6 +1072,7 @@ function skyMusicPlayer() {
     tracks: [], currentIndex: 0, _ap: null, _raf: null,
 
     init() {
+      this._applyPosition();
       const ap = window.__skyMusicPlayer;
       if (ap) this._bindAP(ap);
       else window.addEventListener('sky:player:ready', e => this._bindAP(e.detail), { once: true });
@@ -1131,6 +1132,41 @@ function skyMusicPlayer() {
       this._ap.play();
       this.showList = false;
     },
+
+    // ═══════ 后台配置定位系统 ═══════
+
+    _applyPosition() {
+      const el = this.$el;
+      const pos = el.dataset.position || 'bottom-left';
+      const ox  = parseInt(el.dataset.offsetX) || 0;
+      const oy  = parseInt(el.dataset.offsetY) || 0;
+      const [v, h] = pos.split('-'); // vertical: top|middle|bottom, horizontal: left|center|right
+
+      // 重置所有定位状态
+      el.style.left = el.style.right = el.style.top = el.style.bottom = '';
+      el.classList.remove('sky-mp-h-center', 'sky-mp-v-middle', 'sky-mp-pos-top');
+
+      // 水平定位
+      if (h === 'left')       el.style.left  = Math.max(0, ox) + 'px';
+      else if (h === 'right') el.style.right = Math.max(0, ox) + 'px';
+      else {
+        // center：用 CSS class 基于 calc() 居中，避免 transform 与 x-transition 冲突
+        el.classList.add('sky-mp-h-center');
+        el.style.setProperty('--mp-h-nudge', ox + 'px');
+      }
+
+      // 垂直定位
+      if (v === 'top') {
+        el.style.top = Math.max(0, oy) + 'px';
+        el.classList.add('sky-mp-pos-top'); // 播放列表翻转到下方
+      } else if (v === 'bottom') {
+        el.style.bottom = Math.max(0, oy) + 'px';
+      } else {
+        el.classList.add('sky-mp-v-middle');
+        el.style.setProperty('--mp-v-nudge', oy + 'px');
+      }
+    },
+
     destroy() { this._tickStop(); }
   };
 }

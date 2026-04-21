@@ -14,6 +14,7 @@
     th:if="${theme.config.music?.music_settings?.enable == true}"
     th:with="cfg = ${theme.config.music.music_settings},
            pcfg = ${theme.config.music.player_config},
+           poscfg = ${theme.config.music.position_config},
            cdn = ${theme.config.music.cdn_config}"
   >
     <!-- APlayer JS -->
@@ -163,6 +164,7 @@
       x-transition:enter-end="opacity-100 translate-y-0"
       class="sky-mp"
       :class="{ 'is-expanded': expanded }"
+      th:attr="data-position=${poscfg?.default_position ?: 'bottom-left'},data-offset-x=${poscfg?.default_offset_x ?: 0},data-offset-y=${poscfg?.default_offset_y ?: 0}"
       style="display: none"
     >
       <!-- 单一形变容器：圆形 ↔ 胶囊 -->
@@ -321,11 +323,27 @@
       /* ========== 容器 ========== */
       .sky-mp {
         position: fixed;
+        /* 以下 left/bottom 仅作 CSS 初始占位；_applyPosition() 在元素可见前已覆盖实际值 */
         left: 16px;
         bottom: 24px;
-        z-index: 39;
+        z-index: 41; /* 高于悬浮 Dock (z-40)，确保可以交互 */
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
+      }
+
+      /* 居中定位：用 calc() 而非 transform，避免与 x-transition 冲突 */
+      .sky-mp.sky-mp-h-center {
+        left: calc(50% - var(--mp-size) / 2 + var(--mp-h-nudge, 0px)) !important;
+      }
+      .sky-mp.sky-mp-h-center.is-expanded {
+        left: calc(50% - min(var(--mp-expanded-w), calc(100vw - 32px)) / 2 + var(--mp-h-nudge, 0px)) !important;
+      }
+      .sky-mp.sky-mp-v-middle {
+        top: calc(50% - var(--mp-size) / 2 + var(--mp-v-nudge, 0px)) !important;
+        bottom: auto !important;
+      }
+      .sky-mp.sky-mp-v-middle.is-expanded {
+        top: calc(50% - var(--mp-expanded-h) / 2 + var(--mp-v-nudge, 0px)) !important;
       }
 
       /* ========== 形变外壳 ========== */
@@ -781,6 +799,12 @@
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         box-shadow: var(--mp-shadow);
         overflow: hidden;
+      }
+
+      /* 顶部位置时列表显示在播放器下方，避免溢出屏幕 */
+      .sky-mp.sky-mp-pos-top .sky-mp-list {
+        bottom: auto;
+        top: calc(var(--mp-expanded-h) + 8px);
       }
 
       .sky-mp-list-inner {

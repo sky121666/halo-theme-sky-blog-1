@@ -4334,6 +4334,55 @@ spec:
                 - label: 随机播放
                   value: random
         - $formkit: group
+          name: position_config
+          label: 位置与显示
+          if: $get(music_enable).value
+          value:
+            default_position: bottom-left
+            default_offset_x: 16
+            default_offset_y: 24
+          children:
+            - $formkit: select
+              name: default_position
+              label: 默认位置
+              help: 播放器在屏幕上的初始位置
+              value: bottom-left
+              options:
+                - label: 左上角
+                  value: top-left
+                - label: 顶部居中
+                  value: top-center
+                - label: 右上角
+                  value: top-right
+                - label: 左侧居中
+                  value: middle-left
+                - label: 正中央
+                  value: middle-center
+                - label: 右侧居中
+                  value: middle-right
+                - label: 左下角（默认）
+                  value: bottom-left
+                - label: 底部居中
+                  value: bottom-center
+                - label: 右下角
+                  value: bottom-right
+            - $formkit: number
+              name: default_offset_x
+              label: 水平微调（px）
+              help: '边角位置：距左/右边缘距离（默认 16）；居中位置：向右偏移量（0 = 正中，负值向左）'
+              value: 16
+              min: -500
+              max: 500
+              step: 4
+            - $formkit: number
+              name: default_offset_y
+              label: 垂直微调（px）
+              help: '边角位置：距上/下边缘距离（默认 24）；居中位置：向下偏移量（0 = 正中，负值向上）'
+              value: 24
+              min: -500
+              max: 500
+              step: 4
+        - $formkit: group
           name: cdn_config
           label: CDN / 代理设置
           if: $get(music_enable).value
