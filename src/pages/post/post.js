@@ -232,6 +232,21 @@ import {
     // AbortController for page-level event listeners — aborted on each PJAX navigation
     let _pageAbort = null;
 
+    function isPostPage() {
+        return Boolean(
+            document.getElementById('article-content') &&
+            document.querySelector('[data-post-name]')
+        );
+    }
+
+    function cleanupPostPage() {
+        _pageAbort?.abort();
+        _pageAbort = null;
+        document.body.style.overflow = '';
+        window.openPostTocDrawer = undefined;
+        window.closePostTocDrawer = undefined;
+    }
+
     /**
      * 文章页面管理器
      */
@@ -876,12 +891,17 @@ import {
         }
     };
 
-    /**
-     * 页面加载完成后初始化
-     */
-    runPageInit(() => {
+    const handlePageEnter = () => {
+        if (!isPostPage()) return;
         pageManager.init();
-    });
+    };
+
+    if (window.SkyPjax?.onPage) {
+        window.SkyPjax.onPage(handlePageEnter, { immediate: false });
+        window.SkyPjax.onCleanup(cleanupPostPage);
+    } else {
+        runPageInit(handlePageEnter);
+    }
 
 })();
 

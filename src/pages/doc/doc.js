@@ -16,6 +16,42 @@ import {
 } from '../../common/js/toc-utils.js';
 import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
+let _pageAbort = null;
+let _tocObserver = null;
+
+function getPageSignal() {
+  return _pageAbort?.signal;
+}
+
+function on(target, type, handler, options = {}) {
+  if (!target) return;
+  const opts = { ...options };
+  if (!Object.prototype.hasOwnProperty.call(opts, 'signal') && getPageSignal()) {
+    opts.signal = getPageSignal();
+  }
+  target.addEventListener(type, handler, opts);
+}
+
+function isDocPage() {
+  return Boolean(
+    document.querySelector('.doc-layout') &&
+    document.getElementById('article-content') &&
+    document.getElementById('toc-nav')
+  );
+}
+
+function cleanupDocPage() {
+  _tocObserver?.disconnect();
+  _tocObserver = null;
+  _pageAbort?.abort();
+  _pageAbort = null;
+  document.body.style.overflow = '';
+  window.openDocTocDrawer = undefined;
+  window.closeDocTocDrawer = undefined;
+  window.openDocSidebarDrawer = undefined;
+  window.closeDocSidebarDrawer = undefined;
+}
+
 /**
  * 图片懒加载由 article-content.js 统一处理
  * TOC 函数已从 toc-utils.js 导入
@@ -84,7 +120,8 @@ function initTOC() {
     // 已在可见区域内则不做任何操作
   }
 
-  const observer = new IntersectionObserver(
+  _tocObserver?.disconnect();
+  _tocObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -103,12 +140,13 @@ function initTOC() {
     { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
   );
 
-  headings.forEach((h) => observer.observe(h));
+  headings.forEach((h) => _tocObserver.observe(h));
 }
 
 // 版本选择器
 function initDropdowns() {
-  document.addEventListener(
+  on(
+    document,
     'click',
     (e) => {
       document.querySelectorAll('.doc-version-dropdown.show').forEach((d) => {
@@ -172,7 +210,7 @@ function initSidebarFooterCollision() {
 
   // 使用 passive 事件和 requestAnimationFrame 优化性能
   let ticking = false;
-  window.addEventListener('scroll', () => {
+  on(window, 'scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
         updateSidebarPositions();
@@ -184,7 +222,7 @@ function initSidebarFooterCollision() {
 
   // 初始化及窗口大小改变时更新
   updateSidebarPositions();
-  window.addEventListener('resize', updateSidebarPositions);
+  on(window, 'resize', updateSidebarPositions);
 }
 
 // 初始化抽屉
@@ -236,7 +274,7 @@ function initDrawers() {
   }
 
   // ESC 键关闭
-  document.addEventListener('keydown', (e) => {
+  on(document, 'keydown', (e) => {
     if (e.key === 'Escape') {
       if (tocDrawer?.classList.contains('open')) window.closeDocTocDrawer();
       if (sidebarDrawer?.classList.contains('open')) window.closeDocSidebarDrawer();
@@ -247,7 +285,7 @@ function initDrawers() {
 function bindTocDrawerEvents(container) {
   const links = container.querySelectorAll('.toc-link');
   links.forEach(link => {
-    link.addEventListener('click', (e) => {
+    on(link, 'click', (e) => {
       e.preventDefault();
       const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
       const heading = document.getElementById(headingId);
@@ -263,6 +301,8 @@ function bindTocDrawerEvents(container) {
 
 // 初始化
 function init() {
+  cleanupDocPage();
+  _pageAbort = new AbortController();
   // initLazyLoad(); - 已由 article-content.js 统一处理
   initTOC();
   initDropdowns();
@@ -270,5 +310,16 @@ function init() {
   initDrawers();
 }
 
-runPageInit(init);
+const handlePageEnter = () => {
+  if (!isDocPage()) return;
+  init();
+};
+
+if (window.SkyPjax?.onPage) {
+  window.SkyPjax.onPage(handlePageEnter, { immediate: false });
+  window.SkyPjax.onCleanup(cleanupDocPage);
+} else {
+  runPageInit(handlePageEnter);
+}
+
 notifySwupPageReady();
