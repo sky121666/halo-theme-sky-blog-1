@@ -1,93 +1,105 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (content)">
+  <!-- ========================================== -->
+  <!--        朋友圈页面布局                       -->
+  <!-- 路由：/friends                             -->
+  <!-- 插件：plugin-friends                       -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        朋友圈页面布局                       -->
-<!-- 路由：/friends                             -->
-<!-- 插件：plugin-friends                       -->
-<!-- ========================================== -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+    <meta name="view-transition" content="same-origin" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-  <meta name="view-transition" content="same-origin" />
+    <!-- 防止主题闪烁 -->
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-  <!-- 防止主题闪烁 -->
-  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <!-- 页面标题 -->
+    <title
+      th:text="${(theme.config.friends_page_settings?.basic_info?.page_title ?: '朋友圈')} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
+    >
+    </title>
+    <!-- 字体 -->
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <!-- 主题样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 音乐播放器 CSS -->
+    <th:block th:replace="~{modules/music-player :: head}" />
+  </head>
 
-  <!-- 页面标题 -->
-  <title
-    th:text="${(theme.config.friends_page_settings?.basic_info?.page_title ?: '朋友圈')} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')">
-  </title>
-  <!-- 字体 -->
-  <th:block th:replace="~{modules/font-loader :: fonts}" />
-  <!-- 主题样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 音乐播放器 CSS -->
-  <th:block th:replace="~{modules/music-player :: head}" />
-</head>
-
-<body th:with="bgConfig = ${theme.config.general.global_background},
+  <body
+    th:with="bgConfig = ${theme.config.general.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'},
                  cfg=${theme.config.friends_page_settings},"
-  th:class="'min-h-screen text-base-content relative ' + ${bgClass}">
+    th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+  >
+    <!-- 网格背景（仅当选择 grid 样式时显示） -->
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
 
-  <!-- 网格背景（仅当选择 grid 样式时显示） -->
-  <div th:if="${enableCustomBg and bgStyle == 'grid'}" class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]">
-  </div>
-
-  <div class="relative z-10">
-    <th:block
-      th:with="cfg=${theme.config.friends_page_settings}, 
+    <div class="relative z-10">
+      <th:block
+        th:with="cfg=${theme.config.friends_page_settings}, 
                sidebarCfg=${cfg.sidebar_settings},
                showSidebar=${sidebarCfg?.show_sidebar == true},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-      <!-- 加载屏幕 -->
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+      >
+        <!-- 加载屏幕 -->
+        <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-      <!-- 导航栏 -->
-      <th:block th:replace="~{modules/nav :: navbar}" />
+        <!-- 导航栏 -->
+        <th:block th:replace="~{modules/nav :: navbar}" />
 
-      <!-- 主要内容区域 -->
-      <main id="swup" class="flex-1 "
-        th:with="listStyle=${cfg?.basic_info?.list_style ?: 'single_column'},
-                                       maxWidth=${listStyle == 'single_column' ? (showSidebar ? 'max-w-5xl' : 'max-w-3xl') : (showSidebar ? 'max-w-6xl' : 'max-w-5xl')}">
-        <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${maxWidth}">
-          <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-            <!-- 主内容 -->
-            <div class="flex-1 min-w-0">
-              <th:block th:replace="${content}" />
+        <!-- 主要内容区域 -->
+        <main
+          id="swup"
+          class="flex-1"
+          th:with="listStyle=${cfg?.basic_info?.list_style ?: 'single_column'},
+                                       maxWidth=${listStyle == 'single_column' ? (showSidebar ? 'max-w-5xl' : 'max-w-3xl') : (showSidebar ? 'max-w-6xl' : 'max-w-5xl')}"
+        >
+          <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${maxWidth}">
+            <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+              <!-- 主内容 -->
+              <div class="min-w-0 flex-1">
+                <th:block th:replace="${content}" />
+              </div>
+              <!-- 侧边栏 -->
+              <aside th:if="${showSidebar}" class="sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block">
+                <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+              </aside>
             </div>
-            <!-- 侧边栏 -->
-            <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-              <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-            </aside>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <!-- 页脚 -->
-      <th:block th:replace="~{modules/footer :: footer}" />
-    </th:block>
-  </div>
+        <!-- 页脚 -->
+        <th:block th:replace="~{modules/footer :: footer}" />
+      </th:block>
+    </div>
 
-  <!-- 悬浮控制栏 -->
-  <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.friends_page_settings}, 'basic')}" />
+    <div id="swup-page-extras">
+      <!-- 悬浮控制栏 -->
+      <th:block
+        th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.friends_page_settings}, 'basic')}"
+      />
+    </div>
 
-  <!-- JavaScript -->
-  <div id="swup-scripts" hidden>
-    <!-- friends 页无独立页面 JS，用普通脚本（同步执行）发送就绪信号 -->
-    <script data-swup-reload-script>window.__completeSwupPageInit?.();</script>
-  </div>
-  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 悬浮音乐播放器 -->
-  <th:block th:replace="~{modules/music-player :: player}" />
-</body>
-
+    <!-- JavaScript -->
+    <div id="swup-scripts" hidden>
+      <!-- friends 页无独立页面 JS，用普通脚本（同步执行）发送就绪信号 -->
+      <script data-swup-reload-script>
+        window.__completeSwupPageInit?.();
+      </script>
+    </div>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+    <!-- 悬浮音乐播放器 -->
+    <th:block th:replace="~{modules/music-player :: player}" />
+  </body>
 </html>

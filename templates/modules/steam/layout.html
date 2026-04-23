@@ -1,84 +1,96 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (content)">
+  <!-- ========================================== -->
+  <!--        Steam 游戏库页面布局                 -->
+  <!-- 路由：/steam                               -->
+  <!-- 插件：plugin-steam                         -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        Steam 游戏库页面布局                 -->
-<!-- 路由：/steam                               -->
-<!-- 插件：plugin-steam                         -->
-<!-- ========================================== -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+    <meta name="view-transition" content="same-origin" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-  <meta name="view-transition" content="same-origin" />
+    <!-- 防止主题闪烁 -->
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-  <!-- 防止主题闪烁 -->
-  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <!-- 页面标题 -->
+    <title
+      th:text="${title ?: 'Steam 游戏库'} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
+    >
+      Steam 游戏库
+    </title>
 
-  <!-- 页面标题 -->
-  <title
-    th:text="${title ?: 'Steam 游戏库'} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')">
-    Steam 游戏库</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
+    <!-- 字体 -->
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <!-- 主题样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/steam.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 音乐播放器 CSS -->
+    <th:block th:replace="~{modules/music-player :: head}" />
+  </head>
 
-  <!-- 字体 -->
-  <th:block th:replace="~{modules/font-loader :: fonts}" />
-  <!-- 主题样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <link rel="stylesheet" th:href="@{/assets/css/steam.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 音乐播放器 CSS -->
-  <th:block th:replace="~{modules/music-player :: head}" />
-</head>
-
-<body th:with="bgConfig = ${theme.config.general.global_background},
+  <body
+    th:with="bgConfig = ${theme.config.general.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
-  th:class="'min-h-screen text-base-content relative ' + ${bgClass}" x-data="{ gameBg: null }"
-  x-init="fetch('/apis/api.steam.timxs.com/v1alpha1/profile').then(r => r.json()).then(d => { if(d.playing && d.summary?.gameid) gameBg = d.summary.gameid; }).catch(() => {})">
+    th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+    x-data="{ gameBg: null }"
+    x-init="fetch('/apis/api.steam.timxs.com/v1alpha1/profile').then(r => r.json()).then(d => { if(d.playing && d.summary?.gameid) gameBg = d.summary.gameid; }).catch(() => {})"
+  >
+    <!-- 动态游戏背景 (正在游玩时显示，异步加载) -->
+    <div x-show="gameBg" x-cloak class="pointer-events-none fixed inset-0 z-0">
+      <img
+        x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
+        class="h-full w-full object-cover opacity-20"
+        @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
+      />
+      <div class="via-base-100/80 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
+    </div>
 
-  <!-- 动态游戏背景 (正在游玩时显示，异步加载) -->
-  <div x-show="gameBg" x-cloak class="fixed inset-0 z-0 pointer-events-none">
-    <img x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
-      class="w-full h-full object-cover opacity-20"
-      @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'" />
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-base-100/80 to-base-100"></div>
-  </div>
+    <!-- 网格背景（仅当选择 grid 样式时显示） -->
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
 
-  <!-- 网格背景（仅当选择 grid 样式时显示） -->
-  <div th:if="${enableCustomBg and bgStyle == 'grid'}" class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]">
-  </div>
+    <div class="relative z-10">
+      <!-- 加载屏幕 -->
+      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-  <div class="relative z-10">
-    <!-- 加载屏幕 -->
-    <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+      <!-- 导航栏 -->
+      <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+      <!-- 主要内容区域 -->
+      <main id="swup" class="mt-6 flex-1 md:mt-8">
+        <th:block th:replace="${content}" />
+      </main>
 
-    <!-- 主要内容区域 -->
-    <main id="swup" class="flex-1 mt-6 md:mt-8">
-      <th:block th:replace="${content}" />
-    </main>
+      <!-- 页脚 -->
+      <th:block th:replace="~{modules/footer :: footer}" />
+    </div>
 
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
-  </div>
+    <div id="swup-page-extras">
+      <!-- 悬浮 Dock 控制栏 -->
+      <th:block th:replace="~{modules/floating-dock :: dock}" />
+    </div>
 
-  <!-- 悬浮 Dock 控制栏 -->
-  <th:block th:replace="~{modules/floating-dock :: dock}" />
-
-  <!-- JavaScript -->
-  <div id="swup-scripts" hidden>
-    <script type="module" th:src="@{/assets/js/steam.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
-  </div>
-  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 悬浮音乐播放器 -->
-  <th:block th:replace="~{modules/music-player :: player}" />
-</body>
-
+    <!-- JavaScript -->
+    <div id="swup-scripts" hidden>
+      <script
+        type="module"
+        th:src="@{/assets/js/steam.js?v={version}(version=${theme.spec.version})}"
+        data-swup-reload-script
+      ></script>
+    </div>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+    <!-- 悬浮音乐播放器 -->
+    <th:block th:replace="~{modules/music-player :: player}" />
+  </body>
 </html>

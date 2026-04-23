@@ -1,89 +1,112 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (content)">
+  <!-- 页面头部 -->
 
-<!-- 页面头部 -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+    <meta name="view-transition" content="same-origin" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-  <meta name="view-transition" content="same-origin" />
+    <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <!-- 关键 CSS 内联 -->
+    <th:block th:replace="~{modules/critical-css :: critical}" />
 
-  <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
-  <th:block th:replace="~{modules/theme-script :: inline-script}" />
-  <!-- 关键 CSS 内联 -->
-  <th:block th:replace="~{modules/critical-css :: critical}" />
+    <!-- 页面标题 -->
+    <title
+      th:text="${site.subtitle != null and !#strings.isEmpty(site.subtitle) ? site.title + ' - ' + site.subtitle : site.title}"
+    >
+    </title>
+    <!-- 字体 - 异步加载，不阻塞渲染 -->
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <!-- 主题样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 以下样式仅在启用首页头部时加载 -->
+    <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
+      <!-- 背景特效样式 - 只在选择 CSS 特效时加载 -->
+      <link
+        th:if="${theme.config.index.background_settings.background_type == 'effect'}"
+        rel="stylesheet"
+        th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}"
+      />
+      <!-- 天气联动特效样式 - 只在选择天气联动时加载 -->
+      <link
+        th:if="${theme.config.index.background_settings.background_type == 'weather'}"
+        rel="stylesheet"
+        th:href="@{/assets/css/index-weather-effects.css?v={version}(version=${theme.spec.version})}"
+      />
+      <!-- 标题特效样式 - 只在显示标题时加载 -->
+      <link
+        th:if="${theme.config.index.title_settings.show_title}"
+        rel="stylesheet"
+        th:href="@{/assets/css/index-title-effects.css?v={version}(version=${theme.spec.version})}"
+      />
+      <!-- 副标题特效样式 - 只在显示副标题时加载 -->
+      <link
+        th:if="${theme.config.index.subtitle_settings.show_subtitle}"
+        rel="stylesheet"
+        th:href="@{/assets/css/index-subtitle-effects.css?v={version}(version=${theme.spec.version})}"
+      />
+    </th:block>
 
-  <!-- 页面标题 -->
-  <title
-    th:text="${site.subtitle != null and !#strings.isEmpty(site.subtitle) ? site.title + ' - ' + site.subtitle : site.title}">
-  </title>
-  <!-- 字体 - 异步加载，不阻塞渲染 -->
-  <th:block th:replace="~{modules/font-loader :: fonts}" />
-  <!-- 主题样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 以下样式仅在启用首页头部时加载 -->
-  <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
-    <!-- 背景特效样式 - 只在选择 CSS 特效时加载 -->
-    <link th:if="${theme.config.index.background_settings.background_type == 'effect'}" rel="stylesheet"
-      th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}" />
-    <!-- 天气联动特效样式 - 只在选择天气联动时加载 -->
-    <link th:if="${theme.config.index.background_settings.background_type == 'weather'}" rel="stylesheet"
-      th:href="@{/assets/css/index-weather-effects.css?v={version}(version=${theme.spec.version})}" />
-    <!-- 标题特效样式 - 只在显示标题时加载 -->
-    <link th:if="${theme.config.index.title_settings.show_title}" rel="stylesheet"
-      th:href="@{/assets/css/index-title-effects.css?v={version}(version=${theme.spec.version})}" />
-    <!-- 副标题特效样式 - 只在显示副标题时加载 -->
-    <link th:if="${theme.config.index.subtitle_settings.show_subtitle}" rel="stylesheet"
-      th:href="@{/assets/css/index-subtitle-effects.css?v={version}(version=${theme.spec.version})}" />
-  </th:block>
+    <!-- 音乐播放器 CSS -->
+    <th:block th:replace="~{modules/music-player :: head}" />
+  </head>
 
-  <!-- 音乐播放器 CSS -->
-  <th:block th:replace="~{modules/music-player :: head}" />
-</head>
-
-<body th:with="bgConfig = ${theme.config.general.global_background},
+  <body
+    th:with="bgConfig = ${theme.config.general.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
-  th:class="'min-h-screen text-base-content relative ' + ${bgClass}">
+    th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+  >
+    <!-- 网格背景（仅当选择 grid 样式时显示） -->
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
+    <!-- 加载屏幕 -->
+    <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-  <!-- 网格背景（仅当选择 grid 样式时显示） -->
-  <div th:if="${enableCustomBg and bgStyle == 'grid'}" class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]">
-  </div>
-  <!-- 加载屏幕 -->
-  <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+    <div class="relative z-10">
+      <!-- 导航栏 -->
+      <th:block th:replace="~{modules/nav :: navbar}" />
 
-  <div class="relative z-10">
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+      <!-- 主要内容区域 -->
+      <main
+        id="swup"
+        th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'"
+      >
+        <!-- 首页头部区域 - 放入 swup 容器，保证与首页正文共享同一 PJAX 生命周期 -->
+        <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
+          <th:block th:replace="~{modules/index/header}" />
+        </th:block>
 
-    <!-- 主要内容区域 -->
-    <main id="swup" th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
-      <!-- 首页头部区域 - 放入 swup 容器，保证与首页正文共享同一 PJAX 生命周期 -->
-      <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
-        <th:block th:replace="~{modules/index/header}" />
-      </th:block>
+        <th:block th:replace="${content}" />
+      </main>
 
-      <th:block th:replace="${content}" />
-    </main>
+      <!-- 页脚 -->
+      <th:block th:replace="~{modules/footer :: footer}" />
+    </div>
 
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
-  </div>
+    <div id="swup-page-extras">
+      <!-- 悬浮 Dock 控制栏 -->
+      <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.index}, 'basic')}" />
+    </div>
 
-  <!-- 悬浮 Dock 控制栏 -->
-  <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.index}, 'basic')}" />
-
-  <!-- JavaScript 文件 -->
-  <div id="swup-scripts" hidden>
-    <script type="module" th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
-  </div>
-  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 悬浮音乐播放器 -->
-  <th:block th:replace="~{modules/music-player :: player}" />
-</body>
-
+    <!-- JavaScript 文件 -->
+    <div id="swup-scripts" hidden>
+      <script
+        type="module"
+        th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}"
+        data-swup-reload-script
+      ></script>
+    </div>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+    <!-- 悬浮音乐播放器 -->
+    <th:block th:replace="~{modules/music-player :: player}" />
+  </body>
 </html>

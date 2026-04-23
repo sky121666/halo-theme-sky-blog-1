@@ -1,91 +1,100 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (head, content, scripts, dock)">
-<!-- Docsme 文档专用布局 - 取消加载界面提升体验 -->
+  <!-- Docsme 文档专用布局 - 取消加载界面提升体验 -->
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-  <meta name="view-transition" content="same-origin" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+    <meta name="view-transition" content="same-origin" />
 
-  <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
-  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-  <!-- 页面标题 -->
-  <title
-    th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')">
-  </title>
+    <!-- 页面标题 -->
+    <title
+      th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
+    >
+    </title>
 
-  <!-- 字体 -->
-  <th:block th:replace="~{modules/font-loader :: fonts}" />
-  <!-- 主题样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 文章样式（包含文章内容和目录样式） -->
-  <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 文档页专用样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/doc.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 字体 -->
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <!-- 主题样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 文章样式（包含文章内容和目录样式） -->
+    <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 文档页专用样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/doc.css?v={version}(version=${theme.spec.version})}" />
 
-  <!-- 额外的 head 内容（仅 CSS） -->
-  <th:block th:if="${head != null}">
-    <th:block th:replace="${head}" />
-  </th:block>
+    <!-- 额外的 head 内容（仅 CSS） -->
+    <th:block th:if="${head != null}">
+      <th:block th:replace="${head}" />
+    </th:block>
 
-  <!-- 文档项目自定义 head 内容（CSS/JS）- 需要 Docsme 插件支持 -->
-  <th:block th:if="${project?.spec != null and project.spec['head'] != null}" th:utext="${project.spec['head']}" />
-  <!-- 音乐播放器 CSS -->
-  <th:block th:replace="~{modules/music-player :: head}" />
-</head>
+    <!-- 文档项目自定义 head 内容（CSS/JS）- 需要 Docsme 插件支持 -->
+    <th:block th:if="${project?.spec != null and project.spec['head'] != null}" th:utext="${project.spec['head']}" />
+    <!-- 音乐播放器 CSS -->
+    <th:block th:replace="~{modules/music-player :: head}" />
+  </head>
 
-<body th:with="bgConfig = ${theme.config.general.global_background},
+  <body
+    th:with="bgConfig = ${theme.config.general.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
-  th:class="'min-h-screen flex flex-col relative ' + ${bgClass}">
+    th:class="'min-h-screen relative flex flex-col ' + ${bgClass}"
+  >
+    <!-- 网格背景（仅当选择 grid 样式时显示） -->
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
 
-  <!-- 网格背景（仅当选择 grid 样式时显示） -->
-  <div th:if="${enableCustomBg and bgStyle == 'grid'}" class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]">
-  </div>
+    <div class="relative z-10">
+      <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
 
-  <div class="relative z-10">
-    <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
+      <!-- 主题导航栏 -->
+      <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 主题导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+      <!-- 主要内容 -->
+      <section id="swup" class="w-full flex-1">
+        <th:block th:replace="${content}" />
+      </section>
 
-    <!-- 主要内容 -->
-    <section id="swup" class="flex-1 w-full">
-      <th:block th:replace="${content}" />
-    </section>
+      <!-- 主题页脚 -->
+      <th:block th:replace="~{modules/footer :: footer}" />
+    </div>
 
-    <!-- 主题页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
-  </div>
+    <div id="swup-page-extras">
+      <!-- 悬浮 Dock（由各页面传入自定义 dock） -->
+      <th:block th:if="${dock != null}">
+        <th:block th:insert="${dock}" />
+      </th:block>
+      <!-- 如果没有传入自定义 dock，使用默认 dock -->
+      <th:block th:if="${dock == null}">
+        <th:block th:replace="~{modules/floating-dock :: dock}" />
+      </th:block>
+    </div>
 
-  <!-- 悬浮 Dock（由各页面传入自定义 dock） -->
-  <th:block th:if="${dock != null}">
-    <th:block th:insert="${dock}" />
-  </th:block>
-  <!-- 如果没有传入自定义 dock，使用默认 dock -->
-  <th:block th:if="${dock == null}">
-    <th:block th:replace="~{modules/floating-dock :: dock}" />
-  </th:block>
+    <!-- JavaScript -->
+    <div id="swup-scripts" hidden>
+      <!-- 文档页专用脚本 - 使用 ES Module -->
+      <script
+        type="module"
+        th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"
+        data-swup-reload-script
+      ></script>
+      <!-- 插件脚本（需要在 body 后加载） -->
+      <th:block th:if="${scripts != null}">
+        <th:block th:replace="${scripts}" />
+      </th:block>
+      <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
+      <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
+    </div>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
 
-  <!-- JavaScript -->
-  <div id="swup-scripts" hidden>
-    <!-- 文档页专用脚本 - 使用 ES Module -->
-    <script type="module" th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
-    <!-- 插件脚本（需要在 body 后加载） -->
-    <th:block th:if="${scripts != null}">
-      <th:block th:replace="${scripts}" />
-    </th:block>
-    <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
-    <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
-  </div>
-  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-
-  <!-- 悬浮音乐播放器 -->
-  <th:block th:replace="~{modules/music-player :: player}" />
-</body>
-
+    <!-- 悬浮音乐播放器 -->
+    <th:block th:replace="~{modules/music-player :: player}" />
+  </body>
 </html>

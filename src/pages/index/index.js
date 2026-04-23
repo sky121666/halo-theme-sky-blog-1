@@ -1025,6 +1025,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
  * 为moment-card元素添加动态光晕交互效果
  */
 window.handleMomentCardGlow = function (event, card) {
+  if (!event) return;
   // 获取卡片内的光效元素
   const glowElement = card.querySelector('.moment-glow');
   if (!glowElement) return;

@@ -1,85 +1,99 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (content)">
+  <!-- ========================================== -->
+  <!--        追番页面布局                         -->
+  <!-- 路由：/bangumis                            -->
+  <!-- 插件：plugin-bilibili-bangumi              -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        追番页面布局                         -->
-<!-- 路由：/bangumis                            -->
-<!-- 插件：plugin-bilibili-bangumi              -->
-<!-- ========================================== -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+    <meta name="view-transition" content="same-origin" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-  <meta name="view-transition" content="same-origin" />
+    <!-- 防止主题闪烁 -->
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-  <!-- 防止主题闪烁 -->
-  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <!-- 页面标题 -->
+    <title
+      th:text="'追番 - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
+    >
+      追番
+    </title>
 
-  <!-- 页面标题 -->
-  <title
-    th:text="'追番 - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')">
-    追番</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
+    <!-- 字体 -->
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <!-- 主题样式 -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/bangumi.css?v={version}(version=${theme.spec.version})}" />
+    <!-- 音乐播放器 CSS -->
+    <th:block th:replace="~{modules/music-player :: head}" />
+  </head>
 
-  <!-- 字体 -->
-  <th:block th:replace="~{modules/font-loader :: fonts}" />
-  <!-- 主题样式 -->
-  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <link rel="stylesheet" th:href="@{/assets/css/bangumi.css?v={version}(version=${theme.spec.version})}" />
-  <!-- 音乐播放器 CSS -->
-  <th:block th:replace="~{modules/music-player :: head}" />
-</head>
-
-<body th:with="bgConfig = ${theme.config.general.global_background},
+  <body
+    th:with="bgConfig = ${theme.config.general.global_background},
                enableCustomBg = ${bgConfig?.enable_custom == true},
                bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'},
                firstBangumi = ${bangumis != null && bangumis.items != null && bangumis.items.size() > 0} ? ${bangumis.items.get(0)} : null,
                bgCover = ${firstBangumi != null} ? ${firstBangumi.spec.cover} : null"
-  th:class="'min-h-screen text-base-content relative ' + ${bgClass}">
+    th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+  >
+    <!-- 动态番剧背景 -->
+    <div th:if="${bgCover != null}" class="pointer-events-none fixed inset-0 z-0" id="bangumi-bg-container">
+      <img
+        th:src="${#strings.contains(bgCover, '@') ? #strings.substringBefore(bgCover, '@') : bgCover}"
+        class="h-full w-full object-cover object-top transition-opacity duration-500"
+        style="opacity: 0.4"
+        referrerpolicy="no-referrer"
+        alt=""
+        id="bangumi-bg-img"
+      />
+      <div class="via-base-100/50 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
+    </div>
 
-  <!-- 动态番剧背景 -->
-  <div th:if="${bgCover != null}" class="fixed inset-0 z-0 pointer-events-none" id="bangumi-bg-container">
-    <img th:src="${#strings.contains(bgCover, '@') ? #strings.substringBefore(bgCover, '@') : bgCover}"
-      class="w-full h-full object-cover object-top transition-opacity duration-500" style="opacity: 0.4;"
-      referrerpolicy="no-referrer" alt="" id="bangumi-bg-img" />
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-base-100/50 to-base-100"></div>
-  </div>
+    <!-- 网格背景（仅当选择 grid 样式时显示） -->
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
 
-  <!-- 网格背景（仅当选择 grid 样式时显示） -->
-  <div th:if="${enableCustomBg and bgStyle == 'grid'}" class="fixed inset-0 pointer-events-none bg-grid-pattern z-[1]">
-  </div>
+    <div class="relative z-10">
+      <!-- 加载屏幕 -->
+      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
-  <div class="relative z-10">
-    <!-- 加载屏幕 -->
-    <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+      <!-- 导航栏 -->
+      <th:block th:replace="~{modules/nav :: navbar}" />
 
-    <!-- 导航栏 -->
-    <th:block th:replace="~{modules/nav :: navbar}" />
+      <!-- 主要内容区域 -->
+      <main id="swup" class="mt-6 flex-1 md:mt-8">
+        <th:block th:replace="${content}" />
+      </main>
 
-    <!-- 主要内容区域 -->
-    <main id="swup" class="flex-1 mt-6 md:mt-8">
-      <th:block th:replace="${content}" />
-    </main>
+      <!-- 页脚 -->
+      <th:block th:replace="~{modules/footer :: footer}" />
+    </div>
 
-    <!-- 页脚 -->
-    <th:block th:replace="~{modules/footer :: footer}" />
-  </div>
+    <div id="swup-page-extras">
+      <!-- 悬浮 Dock 控制栏 -->
+      <th:block th:replace="~{modules/floating-dock :: dock}" />
+    </div>
 
-  <!-- 悬浮 Dock 控制栏 -->
-  <th:block th:replace="~{modules/floating-dock :: dock}" />
-
-  <!-- JavaScript -->
-  <div id="swup-scripts" hidden>
-    <script type="module" th:src="@{/assets/js/bangumi.js?v={version}(version=${theme.spec.version})}" data-swup-reload-script></script>
-  </div>
-  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 悬浮音乐播放器 -->
-  <th:block th:replace="~{modules/music-player :: player}" />
-</body>
-
+    <!-- JavaScript -->
+    <div id="swup-scripts" hidden>
+      <script
+        type="module"
+        th:src="@{/assets/js/bangumi.js?v={version}(version=${theme.spec.version})}"
+        data-swup-reload-script
+      ></script>
+    </div>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+    <!-- 悬浮音乐播放器 -->
+    <th:block th:replace="~{modules/music-player :: player}" />
+  </body>
 </html>

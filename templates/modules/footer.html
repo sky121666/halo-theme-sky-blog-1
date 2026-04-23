@@ -1,295 +1,385 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <!-- ========================================== -->
+  <!--              页脚主容器                    -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--              页脚主容器                    -->
-<!-- ========================================== -->
-
-<!-- 主页脚容器 -->
-<footer th:with="dockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
+  <!-- 主页脚容器 -->
+  <footer
+    th:with="dockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
                  hasBottomDock = ${dockStyle != 'side' and theme.config.general.floating_dock?.enable_dock != false}"
-  th:class="${hasBottomDock} ? 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden pb-16' : 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden'"
-  th:fragment="footer">
+    th:class="${hasBottomDock} ? 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden pb-16' : 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden'"
+    th:fragment="footer"
+  >
+    <!-- 背景网格效果 -->
+    <div
+      class="absolute inset-0 opacity-[0.015]"
+      style="background-image: radial-gradient(circle, currentColor 1px, transparent 1px); background-size: 24px 24px"
+    ></div>
 
-  <!-- 背景网格效果 -->
-  <div class="absolute inset-0 opacity-[0.015]"
-    style="background-image: radial-gradient(circle, currentColor 1px, transparent 1px); background-size: 24px 24px;">
-  </div>
+    <!-- 背景装饰 - 多层光晕 -->
+    <div
+      class="from-primary/12 via-secondary/8 to-accent/12 animate-pulse-slow absolute -top-24 left-1/4 h-48 w-48 rounded-full bg-gradient-to-br blur-3xl"
+    ></div>
+    <div
+      class="from-accent/8 via-primary/6 to-secondary/8 absolute right-1/3 -bottom-16 h-40 w-40 rounded-full bg-gradient-to-tl blur-2xl"
+    ></div>
+    <div
+      class="from-primary/5 to-secondary/5 absolute top-1/2 left-1/2 h-32 w-32 rounded-full bg-gradient-to-r opacity-50 blur-2xl"
+    ></div>
 
-  <!-- 背景装饰 - 多层光晕 -->
-  <div
-    class="absolute -top-24 left-1/4 w-48 h-48 bg-gradient-to-br from-primary/12 via-secondary/8 to-accent/12 rounded-full blur-3xl animate-pulse-slow">
-  </div>
-  <div
-    class="absolute -bottom-16 right-1/3 w-40 h-40 bg-gradient-to-tl from-accent/8 via-primary/6 to-secondary/8 rounded-full blur-2xl">
-  </div>
-  <div
-    class="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-2xl opacity-50">
-  </div>
-
-  <!-- 页脚内容区域 -->
-  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
-
-    <!-- 主要内容区域 -->
-    <div class="pt-12 pb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-
-        <!-- 品牌信息 -->
-        <div class="md:col-span-2 lg:col-span-1" th:fragment="brand-section">
-          <div class="flex items-center gap-3 mb-4">
-            <!-- 站点图标 - 支持 Iconify、SVG 代码和图片上传 -->
-            <div class="w-10 h-10 flex items-center justify-center text-primary">
-              <!-- Iconify 图标选择器类型 - 兼容两种数据格式 -->
-              <span
-                th:if="${theme.config.footer.brand_settings.brand_icon_type == 'iconify' and theme.config.footer.brand_settings.brand_icon != null and !theme.config.footer.brand_settings.brand_icon.toString().startsWith('<svg')}"
-                th:utext="${theme.config.footer.brand_settings.brand_icon['value']}"
-                class="w-full h-full flex items-center justify-center text-2xl">
-              </span>
-              <span
-                th:if="${theme.config.footer.brand_settings.brand_icon_type == 'iconify' and theme.config.footer.brand_settings.brand_icon != null and theme.config.footer.brand_settings.brand_icon.toString().startsWith('<svg')}"
-                th:utext="${theme.config.footer.brand_settings.brand_icon}"
-                class="w-full h-full flex items-center justify-center">
-              </span>
-              <!-- SVG 代码类型 -->
-              <span th:if="${theme.config.footer.brand_settings.brand_icon_type == 'svg'}"
-                th:utext="${theme.config.footer.brand_settings.brand_icon_html}"
-                class="w-full h-full flex items-center justify-center">
-              </span>
-              <!-- 图片类型 -->
-              <img
-                th:if="${theme.config.footer.brand_settings.brand_icon_type == 'image' && !#strings.isEmpty(theme.config.footer.brand_settings.brand_icon_image)}"
-                th:src="${theme.config.footer.brand_settings.brand_icon_image}"
-                th:alt="${#strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title) ? site.title : theme.config.footer.brand_settings.custom_brand_title}"
-                class="w-full h-full object-contain" />
+    <!-- 页脚内容区域 -->
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-8">
+      <!-- 主要内容区域 -->
+      <div class="pt-12 pb-8">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+          <!-- 品牌信息 -->
+          <div class="md:col-span-2 lg:col-span-1" th:fragment="brand-section">
+            <div class="mb-4 flex items-center gap-3">
+              <!-- 站点图标 - 支持 Iconify、SVG 代码和图片上传 -->
+              <div class="text-primary flex h-10 w-10 items-center justify-center">
+                <!-- Iconify 图标选择器类型 - 兼容两种数据格式 -->
+                <span
+                  th:if="${theme.config.footer.brand_settings.brand_icon_type == 'iconify' and theme.config.footer.brand_settings.brand_icon != null and !theme.config.footer.brand_settings.brand_icon.toString().startsWith('<svg')}"
+                  th:utext="${theme.config.footer.brand_settings.brand_icon['value']}"
+                  class="flex h-full w-full items-center justify-center text-2xl"
+                >
+                </span>
+                <span
+                  th:if="${theme.config.footer.brand_settings.brand_icon_type == 'iconify' and theme.config.footer.brand_settings.brand_icon != null and theme.config.footer.brand_settings.brand_icon.toString().startsWith('<svg')}"
+                  th:utext="${theme.config.footer.brand_settings.brand_icon}"
+                  class="flex h-full w-full items-center justify-center"
+                >
+                </span>
+                <!-- SVG 代码类型 -->
+                <span
+                  th:if="${theme.config.footer.brand_settings.brand_icon_type == 'svg'}"
+                  th:utext="${theme.config.footer.brand_settings.brand_icon_html}"
+                  class="flex h-full w-full items-center justify-center"
+                >
+                </span>
+                <!-- 图片类型 -->
+                <img
+                  th:if="${theme.config.footer.brand_settings.brand_icon_type == 'image' && !#strings.isEmpty(theme.config.footer.brand_settings.brand_icon_image)}"
+                  th:src="${theme.config.footer.brand_settings.brand_icon_image}"
+                  th:alt="${#strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title) ? site.title : theme.config.footer.brand_settings.custom_brand_title}"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+              <div>
+                <h3
+                  class="text-base-content text-lg font-bold"
+                  th:if="${theme.config.footer.brand_settings.show_brand_title}"
+                >
+                  <th:block
+                    th:if="${not #strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title)}"
+                    th:text="${theme.config.footer.brand_settings.custom_brand_title}"
+                  ></th:block>
+                  <th:block
+                    th:if="${#strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title)}"
+                    th:text="${site.title}"
+                  ></th:block>
+                </h3>
+                <p
+                  class="text-base-content/50 mt-0.5 text-xs"
+                  th:if="${theme.config.footer.brand_settings.show_brand_subtitle and not #strings.isEmpty(theme.config.footer.brand_settings.brand_subtitle)}"
+                  th:text="${theme.config.footer.brand_settings.brand_subtitle}"
+                ></p>
+              </div>
             </div>
-            <div>
-              <h3 class="text-lg font-bold text-base-content"
-                th:if="${theme.config.footer.brand_settings.show_brand_title}">
-                <th:block th:if="${not #strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title)}"
-                  th:text="${theme.config.footer.brand_settings.custom_brand_title}"></th:block>
-                <th:block th:if="${#strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title)}"
-                  th:text="${site.title}"></th:block>
-              </h3>
-              <p class="text-xs text-base-content/50 mt-0.5"
-                th:if="${theme.config.footer.brand_settings.show_brand_subtitle and not #strings.isEmpty(theme.config.footer.brand_settings.brand_subtitle)}"
-                th:text="${theme.config.footer.brand_settings.brand_subtitle}"></p>
+
+            <!-- 站点运行天数 -->
+            <div
+              class="text-base-content/60 mt-4 flex items-center gap-2 text-sm"
+              th:if="${theme.config.footer.brand_settings.show_site_days}"
+            >
+              <span class="icon-[heroicons--signal] text-success h-4 w-4"></span>
+              <span>网站运行</span>
+              <span class="text-primary font-semibold tabular-nums" id="siteDays"></span>
+              <span>天</span>
             </div>
           </div>
 
-          <!-- 站点运行天数 -->
-          <div class="flex items-center gap-2 text-sm text-base-content/60 mt-4"
-            th:if="${theme.config.footer.brand_settings.show_site_days}">
-            <span class="icon-[heroicons--signal] w-4 h-4 text-success"></span>
-            <span>网站运行</span>
-            <span class="font-semibold text-primary tabular-nums" id="siteDays"></span>
-            <span>天</span>
-          </div>
-        </div>
-
-        <!-- 快速导航 -->
-        <div th:fragment="navigation-section" th:if="${theme.config.footer.navigation_settings.show_quick_nav and not #strings.isEmpty(theme.config.footer.navigation_settings.nav_menu)}">
-          <h4 class="font-semibold mb-4 text-base-content text-sm"
-            th:text="${theme.config.footer.navigation_settings.nav_title}"></h4>
-          <th:block th:with="footerMenu = ${menuFinder.getByName(theme.config.footer.navigation_settings.nav_menu)}">
-            <nav class="flex flex-wrap gap-x-4 gap-y-2" th:if="${footerMenu != null}">
-              <a th:each="item : ${footerMenu.menuItems}" th:href="${item.status.href}"
-                class="text-sm text-base-content/60 hover:text-primary transition-all hover:-translate-y-0.5 duration-300"
-                th:text="${item.status.displayName}"></a>
-            </nav>
-          </th:block>
-        </div>
-
-        <!-- 关注我们 -->
-        <div th:fragment="social-section" th:if="${theme.config.footer.social_settings.show_social_links}">
-          <h4 class="font-semibold mb-4 text-base-content text-sm"
-            th:text="${theme.config.footer.social_settings.social_title}"></h4>
-          <div class="flex flex-wrap gap-2">
-            <a th:each="social : ${theme.config.footer.social_settings.social_links}" th:href="${social.url}"
-              th:title="${social.name}" th:aria-label="${social.name}" target="_blank" rel="noopener"
-              class="w-9 h-9 flex items-center justify-center rounded-xl bg-base-200/50 text-base-content/60 transition-all hover:-translate-y-1 duration-300">
-              <th:block th:if="${social.icon != null and !social.icon.toString().startsWith('<svg')}"
-                th:utext="${social.icon['value']}">
-              </th:block>
-              <th:block th:if="${social.icon != null and social.icon.toString().startsWith('<svg')}"
-                th:utext="${social.icon}">
-              </th:block>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- 装饰分隔线 -->
-    <div class="relative flex items-center gap-2 py-4">
-      <div class="flex-1 h-px bg-gradient-to-r from-transparent via-base-content/10 to-base-content/5"></div>
-      <span class="icon-[heroicons--sparkles] w-3 h-3 text-base-content/10"></span>
-      <div class="flex-1 h-px bg-gradient-to-l from-transparent via-base-content/10 to-base-content/5"></div>
-    </div>
-
-    <!-- 底部版权信息 -->
-    <div class="pb-8" th:fragment="copyright-section">
-      <div class="flex flex-col gap-4">
-        <!-- 法律链接 -->
-        <div class="flex justify-center items-center gap-3 text-xs text-base-content/50"
-          th:if="${theme.config.footer.copyright_settings.show_legal_links}">
-          <th:block th:each="legal, iterStat : ${theme.config.footer.copyright_settings.legal_links}">
-            <a th:href="${legal.url}" th:text="${legal.name}"
-              class="hover:text-primary transition-colors relative group/link">
-              <span
-                class="absolute inset-x-0 -bottom-0.5 h-px bg-primary scale-x-0 group-hover/link:scale-x-100 transition-transform origin-left"></span>
-            </a>
-            <span th:if="${!iterStat.last}" class="text-base-content/15">•</span>
-          </th:block>
-        </div>
-
-        <!-- 版权文字 -->
-        <div class="text-center text-xs text-base-content/40 font-light flex items-center justify-center gap-1">
-          <!-- 版权图标（可选） -->
-          <th:block th:if="${theme.config.footer.copyright_settings.copyright_icon != null}">
-            <th:block th:with="cIcon = ${theme.config.footer.copyright_settings.copyright_icon}">
-              <span th:if="${cIcon != null and !cIcon.toString().startsWith('<svg')}" th:utext="${cIcon['value']}" class="w-3.5 h-3.5 flex items-center justify-center"></span>
-              <span th:if="${cIcon != null and cIcon.toString().startsWith('<svg')}" th:utext="${cIcon}" class="w-3.5 h-3.5 flex items-center justify-center"></span>
+          <!-- 快速导航 -->
+          <div
+            th:fragment="navigation-section"
+            th:if="${theme.config.footer.navigation_settings.show_quick_nav and not #strings.isEmpty(theme.config.footer.navigation_settings.nav_menu)}"
+          >
+            <h4
+              class="text-base-content mb-4 text-sm font-semibold"
+              th:text="${theme.config.footer.navigation_settings.nav_title}"
+            ></h4>
+            <th:block th:with="footerMenu = ${menuFinder.getByName(theme.config.footer.navigation_settings.nav_menu)}">
+              <nav class="flex flex-wrap gap-x-4 gap-y-2" th:if="${footerMenu != null}">
+                <a
+                  th:each="item : ${footerMenu.menuItems}"
+                  th:href="${item.status.href}"
+                  class="text-base-content/60 hover:text-primary text-sm transition-all duration-300 hover:-translate-y-0.5"
+                  th:text="${item.status.displayName}"
+                ></a>
+              </nav>
             </th:block>
-          </th:block>
-          <span th:text="${theme.config.footer.copyright_settings.copyright_text}"></span>
-        </div>
-
-        <!-- 备案信息 -->
-        <div class="text-center text-xs text-base-content/30 space-y-2">
-          <div class="flex flex-wrap justify-center items-center gap-2">
-            <a th:if="${theme.config.footer.copyright_settings.show_icp_info}"
-              th:href="${not #strings.isEmpty(theme.config.footer.copyright_settings.icp_url) ? theme.config.footer.copyright_settings.icp_url : 'https://beian.miit.gov.cn/'}"
-              target="_blank" rel="noopener"
-              class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
-              <!-- ICP 图标：自定义或默认 -->
-              <th:block th:with="icpIcon = ${theme.config.footer.copyright_settings.icp_icon}">
-                <th:block th:if="${icpIcon != null}">
-                  <span th:if="${!icpIcon.toString().startsWith('<svg')}" th:utext="${icpIcon['value']}" class="w-3 h-3 flex items-center justify-center"></span>
-                  <span th:if="${icpIcon.toString().startsWith('<svg')}" th:utext="${icpIcon}" class="w-3 h-3 flex items-center justify-center"></span>
-                </th:block>
-                <span th:if="${icpIcon == null}" class="icon-[heroicons--shield-check] w-3 h-3"></span>
-              </th:block>
-              <span th:text="${theme.config.footer.copyright_settings.icp_number}"></span>
-            </a>
-            <span
-              th:if="${theme.config.footer.copyright_settings.show_icp_info and theme.config.footer.copyright_settings.show_police_info}"
-              class="text-base-content/10">•</span>
-            <a th:if="${theme.config.footer.copyright_settings.show_police_info}" id="policeRecordLink"
-              th:href="${not #strings.isEmpty(theme.config.footer.copyright_settings.police_url) ? theme.config.footer.copyright_settings.police_url : '#'}"
-              target="_blank" rel="noopener"
-              class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
-              <!-- 公安图标：自定义或默认 -->
-              <th:block th:with="policeIcon = ${theme.config.footer.copyright_settings.police_icon}">
-                <th:block th:if="${policeIcon != null}">
-                  <span th:if="${!policeIcon.toString().startsWith('<svg')}" th:utext="${policeIcon['value']}" class="w-3 h-3 flex items-center justify-center"></span>
-                  <span th:if="${policeIcon.toString().startsWith('<svg')}" th:utext="${policeIcon}" class="w-3 h-3 flex items-center justify-center"></span>
-                </th:block>
-                <img th:if="${policeIcon == null}" src="https://img.alicdn.com/tfs/TB1..50QpXXXXX7XpXXXXXXXXXX-40-40.png" alt="公安备案"
-                  class="w-3 h-3 opacity-40" />
-              </th:block>
-              <span th:text="${theme.config.footer.copyright_settings.police_number}"></span>
-            </a>
           </div>
 
-          <!-- 托管信息 -->
-          <div th:if="${theme.config.footer.copyright_settings.show_hosting_info}"
-            class="flex flex-wrap justify-center items-center gap-2">
-            <th:block th:each="hosting, iterStat : ${theme.config.footer.copyright_settings.hosting_links}">
-              <a th:href="${hosting.url}" target="_blank" rel="noopener"
-                class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
-                <!-- 托管图标（可选） -->
-                <th:block th:if="${hosting.icon != null}">
-                  <th:block th:if="${!hosting.icon.toString().startsWith('<svg')}">
-                    <span th:utext="${hosting.icon['value']}" class="w-3 h-3 flex items-center justify-center"></span>
-                  </th:block>
-                  <th:block th:if="${hosting.icon.toString().startsWith('<svg')}">
-                    <span th:utext="${hosting.icon}" class="w-3 h-3 flex items-center justify-center"></span>
-                  </th:block>
+          <!-- 关注我们 -->
+          <div th:fragment="social-section" th:if="${theme.config.footer.social_settings.show_social_links}">
+            <h4
+              class="text-base-content mb-4 text-sm font-semibold"
+              th:text="${theme.config.footer.social_settings.social_title}"
+            ></h4>
+            <div class="flex flex-wrap gap-2">
+              <a
+                th:each="social : ${theme.config.footer.social_settings.social_links}"
+                th:href="${social.url}"
+                th:title="${social.name}"
+                th:aria-label="${social.name}"
+                target="_blank"
+                rel="noopener"
+                class="bg-base-200/50 text-base-content/60 flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <th:block
+                  th:if="${social.icon != null and !social.icon.toString().startsWith('<svg')}"
+                  th:utext="${social.icon['value']}"
+                >
                 </th:block>
-                <span th:text="${hosting.name}"></span>
+                <th:block
+                  th:if="${social.icon != null and social.icon.toString().startsWith('<svg')}"
+                  th:utext="${social.icon}"
+                >
+                </th:block>
               </a>
-              <span th:if="${!iterStat.last}" class="text-base-content/10">•</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 装饰分隔线 -->
+      <div class="relative flex items-center gap-2 py-4">
+        <div class="via-base-content/10 to-base-content/5 h-px flex-1 bg-gradient-to-r from-transparent"></div>
+        <span class="icon-[heroicons--sparkles] text-base-content/10 h-3 w-3"></span>
+        <div class="via-base-content/10 to-base-content/5 h-px flex-1 bg-gradient-to-l from-transparent"></div>
+      </div>
+
+      <!-- 底部版权信息 -->
+      <div class="pb-8" th:fragment="copyright-section">
+        <div class="flex flex-col gap-4">
+          <!-- 法律链接 -->
+          <div
+            class="text-base-content/50 flex items-center justify-center gap-3 text-xs"
+            th:if="${theme.config.footer.copyright_settings.show_legal_links}"
+          >
+            <th:block th:each="legal, iterStat : ${theme.config.footer.copyright_settings.legal_links}">
+              <a
+                th:href="${legal.url}"
+                th:text="${legal.name}"
+                class="hover:text-primary group/link relative transition-colors"
+              >
+                <span
+                  class="bg-primary absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 transition-transform group-hover/link:scale-x-100"
+                ></span>
+              </a>
+              <span th:if="${!iterStat.last}" class="text-base-content/15">•</span>
             </th:block>
-            <span th:if="${not #lists.isEmpty(theme.config.footer.copyright_settings.hosting_links)}"
-              class="text-base-content/10">•</span>
-            <a href="https://github.com/sky121666/halo-theme-sky-blog-1" target="_blank" rel="noopener"
-              class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
-              <span class="icon-[mdi--github] w-3 h-3"></span>
-              <span>Sky Theme</span>
-            </a>
           </div>
 
-          <!-- 如果没有托管信息，单独显示主题链接 -->
-          <div th:unless="${theme.config.footer.copyright_settings.show_hosting_info}">
-            <a href="https://github.com/sky121666/halo-theme-sky-blog-1" target="_blank" rel="noopener"
-              class="inline-flex items-center gap-1 hover:text-primary transition-all hover:scale-105">
-              <span class="icon-[mdi--github] w-3 h-3"></span>
-              <span>Sky Theme</span>
-            </a>
+          <!-- 版权文字 -->
+          <div class="text-base-content/40 flex items-center justify-center gap-1 text-center text-xs font-light">
+            <!-- 版权图标（可选） -->
+            <th:block th:if="${theme.config.footer.copyright_settings.copyright_icon != null}">
+              <th:block th:with="cIcon = ${theme.config.footer.copyright_settings.copyright_icon}">
+                <span
+                  th:if="${cIcon != null and !cIcon.toString().startsWith('<svg')}"
+                  th:utext="${cIcon['value']}"
+                  class="flex h-3.5 w-3.5 items-center justify-center"
+                ></span>
+                <span
+                  th:if="${cIcon != null and cIcon.toString().startsWith('<svg')}"
+                  th:utext="${cIcon}"
+                  class="flex h-3.5 w-3.5 items-center justify-center"
+                ></span>
+              </th:block>
+            </th:block>
+            <span th:text="${theme.config.footer.copyright_settings.copyright_text}"></span>
+          </div>
+
+          <!-- 备案信息 -->
+          <div class="text-base-content/30 space-y-2 text-center text-xs">
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <a
+                th:if="${theme.config.footer.copyright_settings.show_icp_info}"
+                th:href="${not #strings.isEmpty(theme.config.footer.copyright_settings.icp_url) ? theme.config.footer.copyright_settings.icp_url : 'https://beian.miit.gov.cn/'}"
+                target="_blank"
+                rel="noopener"
+                class="hover:text-primary inline-flex items-center gap-1 transition-all hover:scale-105"
+              >
+                <!-- ICP 图标：自定义或默认 -->
+                <th:block th:with="icpIcon = ${theme.config.footer.copyright_settings.icp_icon}">
+                  <th:block th:if="${icpIcon != null}">
+                    <span
+                      th:if="${!icpIcon.toString().startsWith('<svg')}"
+                      th:utext="${icpIcon['value']}"
+                      class="flex h-3 w-3 items-center justify-center"
+                    ></span>
+                    <span
+                      th:if="${icpIcon.toString().startsWith('<svg')}"
+                      th:utext="${icpIcon}"
+                      class="flex h-3 w-3 items-center justify-center"
+                    ></span>
+                  </th:block>
+                  <span th:if="${icpIcon == null}" class="icon-[heroicons--shield-check] h-3 w-3"></span>
+                </th:block>
+                <span th:text="${theme.config.footer.copyright_settings.icp_number}"></span>
+              </a>
+              <span
+                th:if="${theme.config.footer.copyright_settings.show_icp_info and theme.config.footer.copyright_settings.show_police_info}"
+                class="text-base-content/10"
+                >•</span
+              >
+              <a
+                th:if="${theme.config.footer.copyright_settings.show_police_info}"
+                id="policeRecordLink"
+                th:href="${not #strings.isEmpty(theme.config.footer.copyright_settings.police_url) ? theme.config.footer.copyright_settings.police_url : '#'}"
+                target="_blank"
+                rel="noopener"
+                class="hover:text-primary inline-flex items-center gap-1 transition-all hover:scale-105"
+              >
+                <!-- 公安图标：自定义或默认 -->
+                <th:block th:with="policeIcon = ${theme.config.footer.copyright_settings.police_icon}">
+                  <th:block th:if="${policeIcon != null}">
+                    <span
+                      th:if="${!policeIcon.toString().startsWith('<svg')}"
+                      th:utext="${policeIcon['value']}"
+                      class="flex h-3 w-3 items-center justify-center"
+                    ></span>
+                    <span
+                      th:if="${policeIcon.toString().startsWith('<svg')}"
+                      th:utext="${policeIcon}"
+                      class="flex h-3 w-3 items-center justify-center"
+                    ></span>
+                  </th:block>
+                  <img
+                    th:if="${policeIcon == null}"
+                    src="https://img.alicdn.com/tfs/TB1..50QpXXXXX7XpXXXXXXXXXX-40-40.png"
+                    alt="公安备案"
+                    class="h-3 w-3 opacity-40"
+                  />
+                </th:block>
+                <span th:text="${theme.config.footer.copyright_settings.police_number}"></span>
+              </a>
+            </div>
+
+            <!-- 托管信息 -->
+            <div
+              th:if="${theme.config.footer.copyright_settings.show_hosting_info}"
+              class="flex flex-wrap items-center justify-center gap-2"
+            >
+              <th:block th:each="hosting, iterStat : ${theme.config.footer.copyright_settings.hosting_links}">
+                <a
+                  th:href="${hosting.url}"
+                  target="_blank"
+                  rel="noopener"
+                  class="hover:text-primary inline-flex items-center gap-1 transition-all hover:scale-105"
+                >
+                  <!-- 托管图标（可选） -->
+                  <th:block th:if="${hosting.icon != null}">
+                    <th:block th:if="${!hosting.icon.toString().startsWith('<svg')}">
+                      <span th:utext="${hosting.icon['value']}" class="flex h-3 w-3 items-center justify-center"></span>
+                    </th:block>
+                    <th:block th:if="${hosting.icon.toString().startsWith('<svg')}">
+                      <span th:utext="${hosting.icon}" class="flex h-3 w-3 items-center justify-center"></span>
+                    </th:block>
+                  </th:block>
+                  <span th:text="${hosting.name}"></span>
+                </a>
+                <span th:if="${!iterStat.last}" class="text-base-content/10">•</span>
+              </th:block>
+              <span
+                th:if="${not #lists.isEmpty(theme.config.footer.copyright_settings.hosting_links)}"
+                class="text-base-content/10"
+                >•</span
+              >
+              <a
+                href="https://github.com/sky121666/halo-theme-sky-blog-1"
+                target="_blank"
+                rel="noopener"
+                class="hover:text-primary inline-flex items-center gap-1 transition-all hover:scale-105"
+              >
+                <span class="icon-[mdi--github] h-3 w-3"></span>
+                <span>Sky Theme</span>
+              </a>
+            </div>
+
+            <!-- 如果没有托管信息，单独显示主题链接 -->
+            <div th:unless="${theme.config.footer.copyright_settings.show_hosting_info}">
+              <a
+                href="https://github.com/sky121666/halo-theme-sky-blog-1"
+                target="_blank"
+                rel="noopener"
+                class="hover:text-primary inline-flex items-center gap-1 transition-all hover:scale-105"
+              >
+                <span class="icon-[mdi--github] h-3 w-3"></span>
+                <span>Sky Theme</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
+    <!-- 原生 JavaScript 页脚功能 -->
+    <script>
+      /**
+       * 计算站点运行天数
+       * @description 计算并更新站点运行天数显示
+       */
+      function calculateSiteDays() {
+        // 建站日期 - 从主题配置中获取
+        const startDateStr = "[[${theme.config.footer.brand_settings.site_start_date}]]";
+        const startDate = new Date(startDateStr);
+        const currentDate = new Date();
+        const timeDiff = currentDate.getTime() - startDate.getTime();
+        const siteDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-  <!-- 原生 JavaScript 页脚功能 -->
-  <script>
-    /**
-     * 计算站点运行天数
-     * @description 计算并更新站点运行天数显示
-     */
-    function calculateSiteDays() {
-      // 建站日期 - 从主题配置中获取
-      const startDateStr = '[[${theme.config.footer.brand_settings.site_start_date}]]';
-      const startDate = new Date(startDateStr);
-      const currentDate = new Date();
-      const timeDiff = currentDate.getTime() - startDate.getTime();
-      const siteDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-      // 更新页面显示
-      const siteDaysElement = document.getElementById('siteDays');
-      if (siteDaysElement) {
-        siteDaysElement.textContent = siteDays;
-      }
-    }
-
-    /**
-     * 初始化公安备案链接
-     * @description 仅在未配置自定义 URL 时，从备案号中提取数字并构建链接
-     */
-    function initPoliceRecordLink() {
-      const policeRecordLink = document.getElementById('policeRecordLink');
-      if (!policeRecordLink) return;
-
-      // 如果已配置了自定义 URL（非 # 和非空），则不需要 JS 生成
-      if (policeRecordLink.href && !policeRecordLink.href.endsWith('#')) return;
-
-      // 从主题配置获取公安备案号
-      const policeNumber = '[[${theme.config.footer.copyright_settings.police_number}]]';
-      if (policeNumber) {
-        const recordCode = policeNumber.replace(/[^0-9]/g, '');
-        if (recordCode) {
-          policeRecordLink.href = `http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${recordCode}`;
+        // 更新页面显示
+        const siteDaysElement = document.getElementById("siteDays");
+        if (siteDaysElement) {
+          siteDaysElement.textContent = siteDays;
         }
       }
-    }
 
-    /**
-     * 页面加载完成后初始化页脚功能
-     */
-    document.addEventListener('DOMContentLoaded', function () {
-      calculateSiteDays();
-      initPoliceRecordLink();
-    });
-  </script>
+      /**
+       * 初始化公安备案链接
+       * @description 仅在未配置自定义 URL 时，从备案号中提取数字并构建链接
+       */
+      function initPoliceRecordLink() {
+        const policeRecordLink = document.getElementById("policeRecordLink");
+        if (!policeRecordLink) return;
 
-  <!-- 系统页脚代码注入 -->
-  <halo:footer />
+        // 如果已配置了自定义 URL（非 # 和非空），则不需要 JS 生成
+        if (policeRecordLink.href && !policeRecordLink.href.endsWith("#")) return;
 
-</footer>
+        // 从主题配置获取公安备案号
+        const policeNumber = "[[${theme.config.footer.copyright_settings.police_number}]]";
+        if (policeNumber) {
+          const recordCode = policeNumber.replace(/[^0-9]/g, "");
+          if (recordCode) {
+            policeRecordLink.href = `http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${recordCode}`;
+          }
+        }
+      }
 
+      /**
+       * 页面加载完成后初始化页脚功能
+       */
+      document.addEventListener("DOMContentLoaded", function () {
+        calculateSiteDays();
+        initPoliceRecordLink();
+      });
+    </script>
 
-
+    <!-- 系统页脚代码注入 -->
+    <div id="swup-halo-footer">
+      <halo:footer />
+    </div>
+  </footer>
 </html>

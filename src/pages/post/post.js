@@ -37,20 +37,54 @@ import {
         fullText: '',
         charIndex: 0,
         typingSpeed: 50, // 打字速度（毫秒）
+        _typingTimer: null,
+        _cleanupRegistered: false,
 
         init() {
+            this.resetTypingState();
+
             // 从 data-text 属性获取完整文本
             const excerptEl = this.$refs.excerptText;
             if (excerptEl) {
                 this.fullText = excerptEl.dataset.text || '';
+                this.registerCleanup();
                 this.startTyping();
             }
         },
 
+        resetTypingState() {
+            this.clearTypingTimer();
+            this.typing = true;
+            this.text = '';
+            this.fullText = '';
+            this.charIndex = 0;
+        },
+
+        clearTypingTimer() {
+            if (this._typingTimer) {
+                clearTimeout(this._typingTimer);
+                this._typingTimer = null;
+            }
+        },
+
+        registerCleanup() {
+            if (this._cleanupRegistered) return;
+            this._cleanupRegistered = true;
+            document.addEventListener('sky:page-cleanup', () => {
+                this.clearTypingTimer();
+            }, { once: true });
+        },
+
         startTyping() {
+            const excerptEl = this.$refs.excerptText;
+            if (!excerptEl || !excerptEl.isConnected) {
+                this.clearTypingTimer();
+                return;
+            }
+
             if (this.charIndex < this.fullText.length) {
                 this.text += this.fullText.charAt(this.charIndex);
-                this.$refs.excerptText.textContent = this.text;
+                excerptEl.textContent = this.text;
                 this.charIndex++;
                 
                 // 根据标点符号调整打字速度
@@ -63,10 +97,10 @@ import {
                     delay = 150;
                 }
                 
-                setTimeout(() => this.startTyping(), delay);
+                this._typingTimer = setTimeout(() => this.startTyping(), delay);
             } else {
                 // 打字完成，隐藏光标
-                setTimeout(() => {
+                this._typingTimer = setTimeout(() => {
                     this.typing = false;
                 }, 500);
             }
@@ -195,7 +229,8 @@ import {
 (function () {
     'use strict';
 
-
+    // AbortController for page-level event listeners — aborted on each PJAX navigation
+    let _pageAbort = null;
 
     /**
      * 文章页面管理器
@@ -205,6 +240,11 @@ import {
          * 初始化所有功能
          */
         init() {
+            // 中止旧页监听器，创建新信号
+            _pageAbort?.abort();
+            _pageAbort = new AbortController();
+            this._signal = _pageAbort.signal;
+
             this.initWordCount();
             this.initHeadingAnchors();
             this.initTOC();
@@ -221,15 +261,18 @@ import {
             const overlay = document.getElementById('post-toc-overlay');
             const drawer = document.getElementById('post-toc-drawer');
             const drawerNav = document.getElementById('post-toc-drawer-nav');
-            
+
             if (!overlay || !drawer) return;
+
+            // 每次初始时清空小窗目录缓存，确保新文章目录正确生成
+            if (drawerNav) drawerNav.innerHTML = '';
 
             // 暴露全局方法
             window.openPostTocDrawer = () => {
                 overlay.classList.add('open');
                 drawer.classList.add('open');
                 document.body.style.overflow = 'hidden';
-                
+
                 // 初始化目录内容
                 if (drawerNav && !drawerNav.querySelector('.toc-list')) {
                     this.initTocDrawerContent(drawerNav);
@@ -242,12 +285,12 @@ import {
                 document.body.style.overflow = '';
             };
 
-            // ESC 键关闭
+            // ESC 键关闭（使用 abort signal 自动清理）
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && drawer.classList.contains('open')) {
                     window.closePostTocDrawer();
                 }
-            });
+            }, { signal: this._signal });
         },
 
         /**
@@ -450,24 +493,22 @@ import {
             const tocContainer = document.querySelector('.toc-container');
             if (!tocContainer) return;
 
-            // 创建 ResizeObserver 监听视口变化
             if (window.ResizeObserver) {
                 const resizeObserver = new ResizeObserver(() => {
                     this.updateTocLayout();
                 });
-
                 resizeObserver.observe(document.documentElement);
+                // ResizeObserver 无法使用 signal，使用 abort 信号手动断开
+                this._signal.addEventListener('abort', () => resizeObserver.disconnect(), { once: true });
             }
 
-            // 监听窗口大小变化（兼容性备选方案）
             window.addEventListener('resize', () => {
                 clearTimeout(this.resizeTimeout);
                 this.resizeTimeout = setTimeout(() => {
                     this.updateTocLayout();
                 }, 150);
-            });
+            }, { signal: this._signal });
 
-            // 初始化布局
             this.updateTocLayout();
         },
 
@@ -504,30 +545,24 @@ import {
             let isUpdating = false;
 
             const updateActiveSection = () => {
-                const scrollPosition = window.scrollY + 120; // 考虑导航栏高度的偏移量
+                const scrollPosition = window.scrollY + 120;
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
                 let activeIndex = -1;
 
-                // 检查是否滚动到页面底部
                 if (scrollPosition + windowHeight >= documentHeight - 50) {
-                    // 如果接近页面底部，高亮最后一个标题
                     activeIndex = headingElements.length - 1;
                 } else {
-                    // 找到当前最接近的标题
                     headingElements.forEach((headingElement, headingIndex) => {
                         const headingTop = headingElement.offsetTop;
                         const nextHeading = headingElements[headingIndex + 1];
                         const nextHeadingTop = nextHeading ? nextHeading.offsetTop : documentHeight;
-
-                        // 当前标题在视口范围内
                         if (headingTop <= scrollPosition && scrollPosition < nextHeadingTop) {
                             activeIndex = headingIndex;
                         }
                     });
                 }
 
-                // 更新高亮状态
                 this.updateTocHighlight(activeIndex);
                 isUpdating = false;
             };
@@ -539,10 +574,8 @@ import {
                 }
             };
 
-            // 监听滚动事件
-            window.addEventListener('scroll', handleScroll, { passive: true });
-
-            // 初始化时执行一次
+            // 使用 abort signal 自动清理
+            window.addEventListener('scroll', handleScroll, { passive: true, signal: this._signal });
             updateActiveSection();
         },
 
@@ -710,7 +743,6 @@ import {
             const updateProgress = () => {
                 const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
                 const scrollProgress = (window.scrollY / documentHeight) * 100;
-
                 progressBar.style.width = `${Math.min(scrollProgress, 100)}%`;
                 isUpdatingProgress = false;
             };
@@ -722,7 +754,7 @@ import {
                 }
             };
 
-            window.addEventListener('scroll', handleProgressScroll, { passive: true });
+            window.addEventListener('scroll', handleProgressScroll, { passive: true, signal: this._signal });
         },
 
         /**
@@ -836,24 +868,16 @@ import {
                 }
             };
 
-            window.addEventListener('scroll', handleScrollCheck, { passive: true });
+            window.addEventListener('scroll', handleScrollCheck, { passive: true, signal: this._signal });
 
             scrollTopButton.addEventListener('click', () => {
-                if ('scrollBehavior' in document.documentElement.style) {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                } else {
-                    window.scrollTo(0, 0);
-                }
-            });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, { signal: this._signal });
         }
     };
 
     /**
      * 页面加载完成后初始化
-     * 注意：setupContentLazyLoad 和 initAdmonitionGlow 由静态脚本 article-content.js 自动执行
      */
     runPageInit(() => {
         pageManager.init();

@@ -32,6 +32,71 @@
     const pjaxSetting = /*[[${theme.config.music?.music_settings?.enable_pjax != false}]]*/ true;
     window.__skyPjaxEnabled = musicEnabled || pjaxSetting;
 
+    // === PJAX 脚本生命周期工具 ===
+    // 暴露给后台注入脚本使用：
+    // - SkyPjax.once(key, fn): 全站只执行一次，适合点击特效、统计、播放器等全局脚本
+    // - SkyPjax.onPage(fn): 首屏和每次 PJAX 后执行，适合当前页面 DOM 初始化
+    // - SkyPjax.onCleanup(fn): PJAX 离开当前页前执行，适合清理监听器/定时器
+    const pjaxState = window.__skyPjaxState || {
+      onceKeys: new Set(),
+      pageCallbacks: new Set(),
+      cleanupCallbacks: new Set(),
+      currentPage: null,
+    };
+    window.__skyPjaxState = pjaxState;
+
+    const safeRun = function (fn, label) {
+      try {
+        return fn();
+      } catch (error) {
+        console.error('[SkyPjax] ' + label + ' failed:', error);
+      }
+    };
+
+    window.SkyPjax = window.SkyPjax || {
+      once(key, fn) {
+        if (!key || typeof fn !== 'function') return false;
+        const cacheKey = String(key);
+        if (pjaxState.onceKeys.has(cacheKey)) return false;
+        pjaxState.onceKeys.add(cacheKey);
+        safeRun(fn, 'once(' + cacheKey + ')');
+        return true;
+      },
+      onPage(fn, options) {
+        if (typeof fn !== 'function') return function () {};
+        const opts = options || {};
+        pjaxState.pageCallbacks.add(fn);
+        if (opts.immediate !== false && pjaxState.currentPage) {
+          safeRun(function () { fn(pjaxState.currentPage); }, 'onPage');
+        }
+        return function () {
+          pjaxState.pageCallbacks.delete(fn);
+        };
+      },
+      onCleanup(fn) {
+        if (typeof fn !== 'function') return function () {};
+        pjaxState.cleanupCallbacks.add(fn);
+        return function () {
+          pjaxState.cleanupCallbacks.delete(fn);
+        };
+      },
+      _runPage(detail) {
+        const pageDetail = detail || {};
+        pjaxState.currentPage = pageDetail;
+        pjaxState.pageCallbacks.forEach(function (fn) {
+          safeRun(function () { fn(pageDetail); }, 'page callback');
+        });
+        document.dispatchEvent(new CustomEvent('sky:page-load', { detail: pageDetail }));
+      },
+      _cleanup(detail) {
+        const cleanupDetail = detail || {};
+        pjaxState.cleanupCallbacks.forEach(function (fn) {
+          safeRun(function () { fn(cleanupDetail); }, 'cleanup callback');
+        });
+        document.dispatchEvent(new CustomEvent('sky:page-cleanup', { detail: cleanupDetail }));
+      },
+    };
+
     // 如果前端开关关闭，忽略 localStorage，强制使用默认主题
     const isDark = showThemeToggle && savedTheme
       ? (savedTheme === 'dark_theme')

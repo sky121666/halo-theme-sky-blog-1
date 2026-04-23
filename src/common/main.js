@@ -62,7 +62,7 @@ import SwupScriptsPlugin from '@swup/scripts-plugin';
 if (window.__skyPjaxEnabled !== false) {
 
   const swup = new Swup({
-    containers: ['#swup', '#swup-scripts'],
+    containers: ['#swup', '#swup-scripts', '#swup-page-extras'],
     // Only wait for the dedicated PJAX containers. The default selector
     // (`[class*="transition-"]`) matches decorative homepage animations
     // like the typewriter subtitle and can stall navigation for seconds.
@@ -109,10 +109,12 @@ if (window.__skyPjaxEnabled !== false) {
         if (container && window.Alpine) Alpine.initTree(container);
       }
       window.SkyEvents?.onPageLoad();
+      window.SkyPjax?._runPage?.({ initial: false, pjax: true, url: window.location.href });
     });
   }
 
   swup.hooks.on('visit:start', () => {
+    window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
     if (typeof window.__skyMusicSave === 'function') window.__skyMusicSave();
     if (typeof window.__pageCleanup === 'function') {
       window.__pageCleanup();
@@ -138,6 +140,28 @@ if (window.__skyPjaxEnabled !== false) {
   //
   //  【不阻塞 swup】handler 不返回 Promise → swup 立即继续 content:scroll / page:view
   swup.hooks.on('content:replace', () => {
+    // 只重放当前页面明确声明支持 PJAX 的脚本。
+    // 兼容两类标记：
+    //  - data-pjax：主题内约定
+    //  - .pjax：Halo / 插件常见约定（后端传递的普通脚本常见是这个）
+    //
+    // halo:footer 注入区保持常驻，避免全局脚本生成的 DOM 在切页时被替换掉。
+    const pjaxScripts = document.querySelectorAll('script[data-pjax], script.pjax');
+    if (!window.__skyLoadedPluginScripts) {
+      window.__skyLoadedPluginScripts = new Set();
+    }
+    pjaxScripts.forEach(script => {
+      // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
+      // 对于内联 script（无 src），每次都执行以初始化组件
+      if (script.src) {
+        if (window.__skyLoadedPluginScripts.has(script.src)) return;
+        window.__skyLoadedPluginScripts.add(script.src);
+      }
+      const newScript = document.createElement('script');
+      Array.from(script.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+      newScript.textContent = script.textContent;
+      script.parentNode.replaceChild(newScript, script);
+    });
     // 快速路径：内联脚本同步执行已发信号
     if (_currentSignaled) {
       _resumeAlpine();
@@ -179,4 +203,14 @@ if (window.__skyPjaxEnabled !== false) {
   // PJAX 已关闭 — 设置 noop 桩，防止页面 JS 调用报错
   window.__swup = null;
   window.__completeSwupPageInit = () => {};
+}
+
+const notifyInitialSkyPjaxPage = () => {
+  window.SkyPjax?._runPage?.({ initial: true, pjax: false, url: window.location.href });
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', notifyInitialSkyPjaxPage, { once: true });
+} else {
+  queueMicrotask(notifyInitialSkyPjaxPage);
 }
