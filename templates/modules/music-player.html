@@ -71,7 +71,7 @@
               mini: false,
               mutex: true,
               theme: resolveThemeColor(),
-              volume: /*[[${pcfg?.volume != null ? pcfg.volume / 100.0 : 0.7}]]*/ 0.7,
+              volume: /*[[${pcfg?.volume != null ? T(java.lang.Double).valueOf(pcfg.volume.toString()) / 100.0 : 0.7}]]*/ 0.7,
               order: /*[[${pcfg?.order ?: 'list'}]]*/ "list",
               autoplay: false,
               storageName: "metingjs",
