@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import { glob } from "glob";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from "fs";
 import { join, dirname } from "path";
 
 /**
@@ -93,6 +93,8 @@ function generateEntries() {
 }
 
 const isWatchMode = process.argv.includes('--watch');
+const packageJson = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8"));
+const assetVersion = packageJson.version;
 
 export default defineConfig({
   build: {
@@ -103,7 +105,8 @@ export default defineConfig({
       output: {
         format: 'es', // 使用 ES Module 格式，支持代码分割
         entryFileNames: 'js/[name].js',
-        chunkFileNames: 'js/chunks/[name].js',
+        // 入口文件通过模板中的 ?v=version 控制缓存，分包文件名追加版本，避免新入口命中旧 chunk
+        chunkFileNames: `js/chunks/[name]-${assetVersion}.js`,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith(".css")) {
             const name = assetInfo.name.replace('.css', '');
