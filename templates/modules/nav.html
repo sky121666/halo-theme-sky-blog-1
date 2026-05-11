@@ -7,7 +7,7 @@
   <!-- 主导航栏容器 -->
   <div th:fragment="navbar" class="drawer nav-wrapper sticky top-0 z-50" x-data="navbarController">
     <!-- 移动端抽屉开关 -->
-    <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" />
+    <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" aria-label="打开移动端菜单" />
 
     <!-- 导航栏内容区域 -->
     <div class="drawer-content">
@@ -34,6 +34,7 @@
                       <a
                         tabindex="0"
                         role="button"
+                        aria-haspopup="true"
                         class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
                       >
                         <span
@@ -93,6 +94,9 @@
               th:if="${theme.config.nav.right_settings.show_search and pluginFinder.available('PluginSearchWidget')}"
             >
               <button
+                type="button"
+                aria-label="打开搜索"
+                title="搜索"
                 class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
                 onclick="SearchWidget.open()"
               >
@@ -122,12 +126,14 @@
               th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
                         data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
                         data-default-theme=${theme.config.nav.theme_settings.default_theme}"
-              x-init="$nextTick(() => init())"
+              x-init="init()"
             >
               <button
+                type="button"
                 @click="toggleTheme()"
                 class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
                 :title="isAuto ? '当前跟随系统，点击切换浅色模式' : (!isDark ? '当前浅色模式，点击切换深色模式' : '当前深色模式，点击切换跟随系统')"
+                :aria-label="isAuto ? '当前跟随系统，点击切换浅色模式' : (!isDark ? '当前浅色模式，点击切换深色模式' : '当前深色模式，点击切换跟随系统')"
               >
                 <span
                   x-cloak
@@ -189,8 +195,14 @@
                 >
                   <div
                     role="button"
+                    tabindex="0"
+                    aria-label="打开用户菜单"
+                    aria-haspopup="menu"
+                    :aria-expanded="userMenuOpen.toString()"
                     class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
                     @click="userMenuOpen = !userMenuOpen"
+                    @keydown.enter.prevent="userMenuOpen = !userMenuOpen"
+                    @keydown.space.prevent="userMenuOpen = !userMenuOpen"
                   >
                     <div class="avatar avatar-online">
                       <div class="bg-base-200 ring-primary ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-1">
@@ -311,6 +323,11 @@
             <div class="-mr-1 lg:hidden">
               <label
                 for="mobile-menu-drawer"
+                role="button"
+                tabindex="0"
+                aria-label="打开移动端菜单"
+                aria-controls="mobile-menu-drawer"
+                title="菜单"
                 class="drawer-button flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
               >
                 <span
@@ -325,9 +342,10 @@
 
     <!-- ========== 移动端菜单抽屉 ========== -->
     <div class="drawer-side z-[100]">
-      <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <label for="mobile-menu-drawer" aria-label="关闭移动端菜单" class="drawer-overlay"></label>
 
       <aside
+        aria-label="移动端导航菜单"
         class="bg-base-100 border-base-content/6 drawer-slide-in relative flex h-screen w-[17rem] flex-col overflow-hidden border-r shadow-[4px_0_40px_-8px_rgba(0,0,0,0.12)]"
       >
         <!-- 滚动条美化样式 -->
@@ -478,7 +496,9 @@
                 <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
                   <div x-data="{ open: false }">
                     <button
+                      type="button"
                       @click="open = !open"
+                      :aria-expanded="open.toString()"
                       class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex w-full cursor-pointer items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
                     >
                       <span

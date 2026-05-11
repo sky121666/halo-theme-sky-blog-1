@@ -399,6 +399,7 @@ function createThemeToggle() {
     lightTheme: '',
     darkTheme: '',
     mediaQuery: null,
+    _onSystemChange: null,
 
     init() {
       this.lightTheme = this.$el.dataset.lightTheme || 'light';
@@ -414,9 +415,27 @@ function createThemeToggle() {
         this.isAuto = true;
         this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         this.isDark = this.mediaQuery.matches;
-        this.mediaQuery.addEventListener('change', this._onSystemChange);
+        this.addSystemThemeListener();
       } else {
         this.isDark = effectiveMode === 'dark_theme';
+      }
+    },
+
+    addSystemThemeListener() {
+      if (!this.mediaQuery || !this._onSystemChange) return;
+      if (typeof this.mediaQuery.addEventListener === 'function') {
+        this.mediaQuery.addEventListener('change', this._onSystemChange);
+      } else if (typeof this.mediaQuery.addListener === 'function') {
+        this.mediaQuery.addListener(this._onSystemChange);
+      }
+    },
+
+    removeSystemThemeListener() {
+      if (!this.mediaQuery || !this._onSystemChange) return;
+      if (typeof this.mediaQuery.removeEventListener === 'function') {
+        this.mediaQuery.removeEventListener('change', this._onSystemChange);
+      } else if (typeof this.mediaQuery.removeListener === 'function') {
+        this.mediaQuery.removeListener(this._onSystemChange);
       }
     },
 
@@ -442,14 +461,14 @@ function createThemeToggle() {
         localStorage.setItem('theme-mode', 'auto');
         this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         this.isDark = this.mediaQuery.matches;
-        this.mediaQuery.addEventListener('change', this._onSystemChange);
+        this.addSystemThemeListener();
         this.applyTheme();
         return;
       }
 
       // 离开 auto 模式时移除监听
       if (!this.isAuto && this.mediaQuery) {
-        this.mediaQuery.removeEventListener('change', this._onSystemChange);
+        this.removeSystemThemeListener();
         this.mediaQuery = null;
       }
 
@@ -827,7 +846,7 @@ function welcomeWeatherCard() {
     // WMO 标准天气代码映射 (Open-Meteo 使用)
     getWeatherMapFromWmoCode(code) {
       const n = this._isNight();
-      let icon = 'not-available';
+      let icon;
       let bg = n ? 'night-cloudy' : 'cloudy';
 
       if (code === 0) {

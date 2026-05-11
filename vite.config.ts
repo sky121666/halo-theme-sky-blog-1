@@ -3,29 +3,22 @@ import { glob } from "glob";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from "fs";
 import { join, dirname } from "path";
 
+function normalizePath(filePath: string): string {
+  return filePath.replace(/\\/g, "/");
+}
+
 /**
  * 复制静态资源到构建目录
- * 排除已通过 import 集成的文件
  */
 function copyStaticAssets() {
   const srcStaticDir = "src/static";
   const destAssetsDir = "templates/assets";
 
-  // 排除列表：这些文件已通过 import 集成到构建中
-  const excludeFiles = new Set([
-    "css/article-content.css", // 已通过 @import 集成到各页面 CSS
-    "js/article-content.js", // 已通过 import 集成到各页面 JS
-  ]);
-
   if (!existsSync(srcStaticDir)) {
     return;
   }
 
-  function getRelativePath(fullPath: string, basePath: string): string {
-    return fullPath.substring(basePath.length + 1);
-  }
-
-  function copyRecursive(src: string, dest: string, basePath: string = srcStaticDir) {
+  function copyRecursive(src: string, dest: string) {
     if (!existsSync(dest)) {
       mkdirSync(dest, { recursive: true });
     }
@@ -34,18 +27,12 @@ function copyStaticAssets() {
     items.forEach((item) => {
       const srcPath = join(src, item);
       const destPath = join(dest, item);
-      const relativePath = getRelativePath(srcPath, basePath);
 
       if (statSync(srcPath).isDirectory()) {
-        copyRecursive(srcPath, destPath, basePath);
+        copyRecursive(srcPath, destPath);
       } else {
-        // 跳过 README.md 和排除列表中的文件
+        // 跳过 README.md
         if (item === "README.md") {
-          return;
-        }
-
-        if (excludeFiles.has(relativePath)) {
-          console.log(`⏭️  跳过: ${relativePath} (通过构建系统处理)`);
           return;
         }
 
@@ -70,7 +57,7 @@ function generateEntries() {
   // 扫描页面JS文件
   const jsFiles = glob.sync("src/pages/**/*.js");
   jsFiles.forEach((file) => {
-    const normalized = file.replace(/\\/g, "/");
+    const normalized = normalizePath(file);
     const matches = normalized.match(/src\/pages\/([^\/]+)\/\1\.js$/);
     if (matches) {
       const pageName = matches[1];

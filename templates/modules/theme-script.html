@@ -122,8 +122,7 @@
       document.documentElement.setAttribute("data-theme", themeName);
       document.documentElement.setAttribute("data-color-scheme", themeMode);
 
-      // 监听系统主题变化（仅在 auto 模式下响应）
-      prefersDark.addEventListener("change", function (e) {
+      function handleSystemThemeChange(e) {
         var currentMode =
           showThemeToggle && localStorage.getItem("theme-mode") ? localStorage.getItem("theme-mode") : defaultTheme;
         if (currentMode !== "auto") return;
@@ -132,7 +131,14 @@
         var newThemeMode = newIsDark ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", newThemeName);
         document.documentElement.setAttribute("data-color-scheme", newThemeMode);
-      });
+      }
+
+      // 监听系统主题变化（仅在 auto 模式下响应）
+      if (typeof prefersDark.addEventListener === "function") {
+        prefersDark.addEventListener("change", handleSystemThemeChange);
+      } else if (typeof prefersDark.addListener === "function") {
+        prefersDark.addListener(handleSystemThemeChange);
+      }
 
       // === 全局字体按需加载 ===
       const bodyFont = /*[[${theme.config.general.font_settings.body_font}]]*/ "font-default";

@@ -332,9 +332,9 @@ function initMomentPublishModal() {
       });
     } catch (error) {
       if (error.name === 'AbortError') {
-        throw new Error('发布超时，请重试');
+        throw new Error('发布超时，请重试', { cause: error });
       }
-      throw new Error('网络错误');
+      throw new Error('网络错误', { cause: error });
     }
 
     if (!response.ok) {
