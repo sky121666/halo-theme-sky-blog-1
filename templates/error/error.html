@@ -1,207 +1,222 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" class="h-full">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${error.status} + ' - ' + ${#strings.defaultString(error.title, 'Error')}">Error</title>
-    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
     <script th:src="@{/assets/js/main.js}" defer></script>
     <style>
-        /* ============================= 高端按钮效果 (自 About 页面移植) ============================= */
-        .error-actions .btn {
-            position: relative;
-            overflow: hidden;
-            border: none;
-            isolation: isolate;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      /* ============================= 高端按钮效果 (自 About 页面移植) ============================= */
+      .error-actions .btn {
+        position: relative;
+        overflow: hidden;
+        border: none;
+        isolation: isolate;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* 主按钮 - 深色发光效果 */
+      .error-actions .btn-neutral {
+        background: var(--color-base-content);
+        color: var(--color-base-100);
+        box-shadow:
+          0 4px 15px color-mix(in oklch, var(--color-base-content) 30%, transparent),
+          inset 0 1px 0 color-mix(in oklch, white 15%, transparent);
+      }
+
+      .error-actions .btn-neutral::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          transparent 0%,
+          color-mix(in oklch, white 10%, transparent) 50%,
+          transparent 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      /* 流光扫过效果 */
+      .error-actions .btn-neutral::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, color-mix(in oklch, white 25%, transparent), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .error-actions .btn-neutral:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow:
+          0 8px 25px color-mix(in oklch, var(--color-base-content) 40%, transparent),
+          0 0 40px color-mix(in oklch, var(--color-primary) 20%, transparent),
+          inset 0 1px 0 color-mix(in oklch, white 20%, transparent);
+      }
+
+      .error-actions .btn-neutral:hover::before {
+        opacity: 1;
+      }
+
+      .error-actions .btn-neutral:hover::after {
+        left: 100%;
+      }
+
+      /* 次要按钮 - 边框发光效果 */
+      .error-actions .btn-outline {
+        background: transparent;
+        color: var(--color-base-content);
+        border: 2px solid color-mix(in oklch, var(--color-base-content) 30%, transparent);
+        box-shadow: 0 2px 10px color-mix(in oklch, var(--color-base-content) 10%, transparent);
+      }
+
+      /* 渐变边框动画背景 */
+      .error-actions .btn-outline::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: conic-gradient(
+          from 0deg,
+          var(--color-primary),
+          var(--color-secondary),
+          var(--color-accent),
+          var(--color-primary)
+        );
+        border-radius: inherit;
+        opacity: 0;
+        z-index: -2;
+        transition: opacity 0.4s ease;
+        animation: error-border-spin 3s linear infinite paused;
+      }
+
+      /* 内部背景遮罩 */
+      .error-actions .btn-outline::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        background: var(--color-base-100);
+        border-radius: inherit;
+        /* Fallback if var missing */
+        z-index: -1;
+        transition: background 0.3s ease;
+      }
+
+      @keyframes error-border-spin {
+        from {
+          transform: rotate(0deg);
         }
 
-        /* 主按钮 - 深色发光效果 */
-        .error-actions .btn-neutral {
-            background: var(--color-base-content);
-            color: var(--color-base-100);
-            box-shadow:
-                0 4px 15px color-mix(in oklch, var(--color-base-content) 30%, transparent),
-                inset 0 1px 0 color-mix(in oklch, white 15%, transparent);
+        to {
+          transform: rotate(360deg);
         }
+      }
 
-        .error-actions .btn-neutral::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg,
-                    transparent 0%,
-                    color-mix(in oklch, white 10%, transparent) 50%,
-                    transparent 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
+      .error-actions .btn-outline:hover {
+        transform: translateY(-4px) scale(1.02);
+        border-color: transparent;
+        color: var(--color-base-content);
+        box-shadow:
+          0 8px 30px color-mix(in oklch, var(--color-primary) 30%, transparent),
+          0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
+      }
 
-        /* 流光扫过效果 */
-        .error-actions .btn-neutral::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                    transparent,
-                    color-mix(in oklch, white 25%, transparent),
-                    transparent);
-            transition: left 0.6s ease;
-        }
+      .error-actions .btn-outline:hover::before {
+        opacity: 1;
+        animation-play-state: running;
+      }
 
-        .error-actions .btn-neutral:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow:
-                0 8px 25px color-mix(in oklch, var(--color-base-content) 40%, transparent),
-                0 0 40px color-mix(in oklch, var(--color-primary) 20%, transparent),
-                inset 0 1px 0 color-mix(in oklch, white 20%, transparent);
-        }
+      .error-actions .btn-outline:hover::after {
+        background: color-mix(in oklch, var(--color-primary) 5%, var(--color-base-100));
+      }
 
-        .error-actions .btn-neutral:hover::before {
-            opacity: 1;
-        }
+      /* 按钮文字层 */
+      .error-actions .btn span,
+      .error-actions .btn {
+        z-index: 1;
+      }
 
-        .error-actions .btn-neutral:hover::after {
-            left: 100%;
-        }
-
-        /* 次要按钮 - 边框发光效果 */
-        .error-actions .btn-outline {
-            background: transparent;
-            color: var(--color-base-content);
-            border: 2px solid color-mix(in oklch, var(--color-base-content) 30%, transparent);
-            box-shadow: 0 2px 10px color-mix(in oklch, var(--color-base-content) 10%, transparent);
-        }
-
-        /* 渐变边框动画背景 */
-        .error-actions .btn-outline::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: conic-gradient(from 0deg,
-                    var(--color-primary),
-                    var(--color-secondary),
-                    var(--color-accent),
-                    var(--color-primary));
-            border-radius: inherit;
-            opacity: 0;
-            z-index: -2;
-            transition: opacity 0.4s ease;
-            animation: error-border-spin 3s linear infinite paused;
-        }
-
-        /* 内部背景遮罩 */
-        .error-actions .btn-outline::after {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: var(--color-base-100);
-            border-radius: inherit;
-            /* Fallback if var missing */
-            z-index: -1;
-            transition: background 0.3s ease;
-        }
-
-        @keyframes error-border-spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .error-actions .btn-outline:hover {
-            transform: translateY(-4px) scale(1.02);
-            border-color: transparent;
-            color: var(--color-base-content);
-            box-shadow:
-                0 8px 30px color-mix(in oklch, var(--color-primary) 30%, transparent),
-                0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
-        }
-
-        .error-actions .btn-outline:hover::before {
-            opacity: 1;
-            animation-play-state: running;
-        }
-
-        .error-actions .btn-outline:hover::after {
-            background: color-mix(in oklch, var(--color-primary) 5%, var(--color-base-100));
-        }
-
-        /* 按钮文字层 */
-        .error-actions .btn span,
-        .error-actions .btn {
-            z-index: 1;
-        }
-
-        .error-actions .btn:active {
-            transform: translateY(-2px) scale(0.98);
-            transition-duration: 0.1s;
-        }
+      .error-actions .btn:active {
+        transform: translateY(-2px) scale(0.98);
+        transition-duration: 0.1s;
+      }
     </style>
-</head>
+  </head>
 
-<body
-    class="bg-base-100 h-full w-full flex flex-col items-center justify-center relative overflow-hidden font-sans text-base-content antialiased tracking-wide">
-
+  <body
+    class="bg-base-100 text-base-content relative flex h-full w-full flex-col items-center justify-center overflow-hidden font-sans tracking-wide antialiased"
+  >
     <!-- Subtle Grain/Dot Pattern -->
-    <div class="fixed inset-0 opacity-[0.03] pointer-events-none"
-        style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 24px 24px; mask-image: radial-gradient(circle at center, black 40%, transparent 100%); -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);">
-    </div>
+    <div
+      class="pointer-events-none fixed inset-0 opacity-[0.03]"
+      style="
+        background-image: radial-gradient(currentColor 1px, transparent 1px);
+        background-size: 24px 24px;
+        mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+      "
+    ></div>
 
     <!-- Top Status Bar -->
-    <div class="absolute top-8 right-8 text-xs font-mono opacity-30 select-none">
-        ERR::<span th:text="${error.status}">000</span>
+    <div class="absolute top-8 right-8 font-mono text-xs opacity-30 select-none">
+      ERR::<span th:text="${error.status}">000</span>
     </div>
 
     <!-- Main Content -->
     <div
-        class="z-10 text-center px-6 relative max-w-3xl transform transition-all duration-700 ease-out translate-y-0 opacity-100">
+      class="relative z-10 max-w-3xl translate-y-0 transform px-6 text-center opacity-100 transition-all duration-700 ease-out"
+    >
+      <!-- Status Code (Background Element) -->
+      <h1
+        class="text-base-content/[0.03] pointer-events-none absolute top-1/2 left-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 text-[10rem] leading-none font-black blur-sm select-none md:text-[16rem]"
+        th:text="${error.status}"
+      >
+        404
+      </h1>
 
-        <!-- Status Code (Background Element) -->
-        <h1 class="text-[10rem] md:text-[16rem] leading-none font-black text-base-content/[0.03] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none blur-sm"
-            th:text="${error.status}">404</h1>
+      <!-- Icon -->
+      <div
+        class="bg-base-200/50 text-base-content/80 mb-8 inline-flex h-20 w-20 items-center justify-center rounded-3xl shadow-inner"
+      >
+        <span th:if="${error.status == 404}" class="icon-[heroicons--map] h-10 w-10 opacity-60"></span>
+        <span th:if="${error.status == 500}" class="icon-[heroicons--server-stack] h-10 w-10 opacity-60"></span>
+        <span
+          th:if="${error.status != 404 and error.status != 500}"
+          class="icon-[heroicons--exclamation-triangle] h-10 w-10 opacity-60"
+        ></span>
+      </div>
 
-        <!-- Icon -->
-        <div
-            class="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-base-200/50 text-base-content/80 shadow-inner">
-            <span th:if="${error.status == 404}" class="icon-[heroicons--map] w-10 h-10 opacity-60"></span>
-            <span th:if="${error.status == 500}" class="icon-[heroicons--server-stack] w-10 h-10 opacity-60"></span>
-            <span th:if="${error.status != 404 and error.status != 500}"
-                class="icon-[heroicons--exclamation-triangle] w-10 h-10 opacity-60"></span>
-        </div>
+      <!-- Title -->
+      <h2
+        class="mb-4 text-3xl font-bold tracking-tight md:text-5xl"
+        th:text="${#strings.defaultString(error.title, 'Something Went Wrong')}"
+      >
+        Page Not Found
+      </h2>
 
-        <!-- Title -->
-        <h2 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight"
-            th:text="${#strings.defaultString(error.title, 'Something Went Wrong')}">Page Not Found</h2>
+      <!-- Detail -->
+      <p
+        class="text-base-content/60 border-primary/20 mx-auto mb-12 max-w-lg border-l-2 py-1 pl-4 text-left text-lg leading-relaxed md:border-l-0 md:pl-0 md:text-center md:text-xl"
+        th:text="${#strings.defaultString(error.detail, 'The content you are looking for is not available at the moment.')}"
+      ></p>
 
-        <!-- Detail -->
-        <p class="text-base-content/60 text-lg md:text-xl mb-12 max-w-lg mx-auto leading-relaxed border-l-2 border-primary/20 pl-4 py-1 text-left md:text-center md:border-l-0 md:pl-0"
-            th:text="${#strings.defaultString(error.detail, 'The content you are looking for is not available at the moment.')}">
-        </p>
-
-        <!-- Actions -->
-        <div class="error-actions flex flex-col sm:flex-row items-center justify-center gap-5">
-            <a href="/" class="btn btn-neutral btn-lg">
-                <span class="icon-[heroicons--home] w-5 h-5"></span>
-                返回首页
-            </a>
-            <button onclick="history.back()" class="btn btn-outline btn-lg">
-                返回上一页
-            </button>
-        </div>
+      <!-- Actions -->
+      <div class="error-actions flex flex-col items-center justify-center gap-5 sm:flex-row">
+        <a href="/" class="btn btn-neutral btn-lg">
+          <span class="icon-[heroicons--home] h-5 w-5"></span>
+          返回首页
+        </a>
+        <button onclick="history.back()" class="btn btn-outline btn-lg">返回上一页</button>
+      </div>
     </div>
 
     <!-- Bottom Decoration -->
-    <div class="fixed bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-50">
-    </div>
-
-</body>
-
+    <div
+      class="via-primary/30 fixed bottom-0 h-1 w-full bg-gradient-to-r from-transparent to-transparent opacity-50"
+    ></div>
+  </body>
 </html>

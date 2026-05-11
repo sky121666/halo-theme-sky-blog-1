@@ -1,45 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--        可复用加载屏幕组件                    -->
+  <!-- 所有页面共用，在 layout 中引用               -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        可复用加载屏幕组件                    -->
-<!-- 所有页面共用，在 layout 中引用               -->
-<!-- ========================================== -->
-
-<!-- 加载屏幕片段 -->
-<div th:fragment="loading-screen"
+  <!-- 加载屏幕片段 -->
+  <div
+    th:fragment="loading-screen"
     th:if="${theme.config.general != null && theme.config.general.loading_screen != null && theme.config.general.loading_screen.enable_loading}"
-    id="loading-screen" th:with="loadingSettings=${theme.config.general.loading_screen}"
-    th:attr="data-min-duration=${loadingSettings.min_duration ?: 500}">
-
+    id="loading-screen"
+    th:with="loadingSettings=${theme.config.general.loading_screen}"
+    th:attr="data-min-duration=${loadingSettings.min_duration ?: 500}"
+  >
     <!-- 动画内容（根据配置选择） -->
-    <div th:with="
+    <div
+      th:with="
     animationType=${loadingSettings.animation_type ?: 'css'},
     cssStyle=${loadingSettings.css_style ?: 'spinner'}
-  ">
-        <!-- CSS 动画 - Spinner -->
-        <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="loading-spinner"></div>
+  "
+    >
+      <!-- CSS 动画 - Spinner -->
+      <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="loading-spinner"></div>
 
-        <!-- CSS 动画 - Dots -->
-        <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="loading-dots">
-            <span></span><span></span><span></span>
-        </div>
+      <!-- CSS 动画 - Dots -->
+      <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
 
-        <!-- CSS 动画 - Bars -->
-        <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="loading-bars">
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
+      <!-- CSS 动画 - Bars -->
+      <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="loading-bars">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
 
-        <!-- CSS 动画 - Ring -->
-        <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="loading-ring"></div>
+      <!-- CSS 动画 - Ring -->
+      <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="loading-ring"></div>
 
-        <!-- 自定义 GIF -->
-        <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
-            th:src="${loadingSettings.custom_gif}" alt="加载中" class="loading-gif" />
+      <!-- 自定义 GIF -->
+      <img
+        th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
+        th:src="${loadingSettings.custom_gif}"
+        alt="加载中"
+        class="loading-gif"
+      />
     </div>
 
     <!-- 加载文字 -->
     <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
-</div>
-
+  </div>
 </html>

@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
-
-<!-- ========================================== -->
-<!--          通用分享弹窗组件                    -->
-<!-- ========================================== -->
-<!--
+  <!-- ========================================== -->
+  <!--          通用分享弹窗组件                    -->
+  <!-- ========================================== -->
+  <!--
   使用方式：
   <th:block th:replace="~{modules/share-modal :: shareModal(
     title='分享文章',
@@ -17,91 +16,102 @@
   <button @click="$dispatch('open-share-modal')">分享</button>
 -->
 
-<div th:fragment="shareModal(title, shareUrl, shareTitle, shareItemIds)"
-     x-data="shareModal"
-     @open-share-modal.window="openModal()"
-     th:attr="data-share-url=${shareUrl},
+  <div
+    th:fragment="shareModal(title, shareUrl, shareTitle, shareItemIds)"
+    x-data="shareModal"
+    @open-share-modal.window="openModal()"
+    th:attr="data-share-url=${shareUrl},
               data-share-title=${shareTitle},
               data-qrcode-page-url=@{/assets/qrcode/qrcode-share.html}"
-     th:data-share-item-ids="${shareItemIds != null ? #strings.listJoin(#lists.toList(shareItemIds), ',') : ''}">
+    th:data-share-item-ids="${shareItemIds != null ? #strings.listJoin(#lists.toList(shareItemIds), ',') : ''}"
+  >
+    <!-- 弹窗容器 - 使用 teleport 确保在视口顶层 -->
+    <template x-teleport="body">
+      <div x-show="isOpen" class="fixed inset-0 z-[9999]" x-cloak>
+        <!-- 遮罩 -->
+        <div
+          class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          x-show="isOpen"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          @click="closeModal()"
+        ></div>
 
-  <!-- 弹窗容器 - 使用 teleport 确保在视口顶层 -->
-  <template x-teleport="body">
-    <div x-show="isOpen" class="fixed inset-0 z-[9999]" x-cloak>
-      <!-- 遮罩 -->
-      <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"
-           x-show="isOpen"
-           x-transition:enter="transition ease-out duration-300"
-           x-transition:enter-start="opacity-0"
-           x-transition:enter-end="opacity-100"
-           x-transition:leave="transition ease-in duration-200"
-           x-transition:leave-start="opacity-100"
-           x-transition:leave-end="opacity-0"
-           @click="closeModal()"></div>
-      
-      <!-- 弹窗内容 - PC居中 / 移动端底部 -->
-      <div class="absolute inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div x-show="isOpen"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="translate-y-full sm:translate-y-0 sm:scale-95 sm:opacity-0"
-             x-transition:enter-end="translate-y-0 sm:scale-100 sm:opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="translate-y-0 sm:scale-100 sm:opacity-100"
-             x-transition:leave-end="translate-y-full sm:translate-y-0 sm:scale-95 sm:opacity-0"
-             class="w-full sm:w-auto sm:min-w-80">
-          <div class="bg-base-100 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden">
-            <!-- 移动端拖拽指示条 -->
-            <div class="flex justify-center pt-3 pb-1 sm:hidden">
-              <div class="w-10 h-1 bg-base-300 rounded-full"></div>
-            </div>
-            
-            <!-- 标题栏 -->
-            <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
-              <h3 class="text-base font-semibold" th:text="${title} ?: '分享'">分享</h3>
-              <button @click="closeModal()" class="btn btn-ghost btn-circle btn-sm">
-                <span class="icon-[heroicons--x-mark] size-5"></span>
-              </button>
-            </div>
-            
-            <!-- 分享平台 -->
-            <div class="p-5">
-              <div class="flex justify-center gap-5 flex-wrap">
-                <template x-for="item in activeShareItems" :key="item.id">
-                  <button type="button"
-                          @click="handleShare(item.id)" 
-                          class="flex flex-col items-center gap-2 w-14 active:scale-95 transition-transform">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center"
-                         :style="'background:' + item.color">
-                      <span class="size-6 text-white" :class="item.icon"></span>
-                    </div>
-                    <span class="text-xs text-base-content/60" x-text="item.name"></span>
-                  </button>
-                </template>
+        <!-- 弹窗内容 - PC居中 / 移动端底部 -->
+        <div class="absolute inset-0 flex items-end justify-center p-0 sm:items-center sm:p-4">
+          <div
+            x-show="isOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="translate-y-full sm:translate-y-0 sm:scale-95 sm:opacity-0"
+            x-transition:enter-end="translate-y-0 sm:scale-100 sm:opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-y-0 sm:scale-100 sm:opacity-100"
+            x-transition:leave-end="translate-y-full sm:translate-y-0 sm:scale-95 sm:opacity-0"
+            class="w-full sm:w-auto sm:min-w-80"
+          >
+            <div class="bg-base-100 overflow-hidden rounded-t-2xl shadow-2xl sm:rounded-2xl">
+              <!-- 移动端拖拽指示条 -->
+              <div class="flex justify-center pt-3 pb-1 sm:hidden">
+                <div class="bg-base-300 h-1 w-10 rounded-full"></div>
               </div>
-              
-              <!-- 无平台提示 -->
-              <div x-show="activeShareItems.length === 0" class="text-center py-4 text-base-content/50 text-sm">
-                <p>未配置分享平台</p>
-              </div>
-            </div>
-            
-            <!-- 链接复制区 -->
-            <div class="px-5 pb-5">
-              <div class="flex items-center gap-2 p-2.5 bg-base-200/60 rounded-xl">
-                <span class="icon-[heroicons--link] size-4 text-base-content/40 shrink-0 ml-1"></span>
-                <input type="text" x-model="permalink" readonly
-                       class="flex-1 bg-transparent text-sm text-base-content/60 outline-none truncate min-w-0" />
-                <button @click="copyUrl()" class="btn btn-sm btn-primary rounded-lg px-3 shrink-0">
-                  <span x-text="copied ? '已复制' : '复制'"></span>
+
+              <!-- 标题栏 -->
+              <div class="border-base-200 flex items-center justify-between border-b px-5 py-4">
+                <h3 class="text-base font-semibold" th:text="${title} ?: '分享'">分享</h3>
+                <button @click="closeModal()" class="btn btn-ghost btn-circle btn-sm">
+                  <span class="icon-[heroicons--x-mark] size-5"></span>
                 </button>
+              </div>
+
+              <!-- 分享平台 -->
+              <div class="p-5">
+                <div class="flex flex-wrap justify-center gap-5">
+                  <template x-for="item in activeShareItems" :key="item.id">
+                    <button
+                      type="button"
+                      @click="handleShare(item.id)"
+                      class="flex w-14 flex-col items-center gap-2 transition-transform active:scale-95"
+                    >
+                      <div
+                        class="flex h-12 w-12 items-center justify-center rounded-xl"
+                        :style="'background:' + item.color"
+                      >
+                        <span class="size-6 text-white" :class="item.icon"></span>
+                      </div>
+                      <span class="text-base-content/60 text-xs" x-text="item.name"></span>
+                    </button>
+                  </template>
+                </div>
+
+                <!-- 无平台提示 -->
+                <div x-show="activeShareItems.length === 0" class="text-base-content/50 py-4 text-center text-sm">
+                  <p>未配置分享平台</p>
+                </div>
+              </div>
+
+              <!-- 链接复制区 -->
+              <div class="px-5 pb-5">
+                <div class="bg-base-200/60 flex items-center gap-2 rounded-xl p-2.5">
+                  <span class="icon-[heroicons--link] text-base-content/40 ml-1 size-4 shrink-0"></span>
+                  <input
+                    type="text"
+                    x-model="permalink"
+                    readonly
+                    class="text-base-content/60 min-w-0 flex-1 truncate bg-transparent text-sm outline-none"
+                  />
+                  <button @click="copyUrl()" class="btn btn-sm btn-primary shrink-0 rounded-lg px-3">
+                    <span x-text="copied ? '已复制' : '复制'"></span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </template>
-
-</div>
-
+    </template>
+  </div>
 </html>

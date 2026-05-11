@@ -1,74 +1,78 @@
 <!-- 标题内容模块 -->
 <!-- 字体按需加载脚本 -->
 <script th:inline="javascript" data-swup-reload-script>
-    (function () {
-        // 获取当前使用的字体设置
-        const titleFont = /*[[${theme.config.index.title_settings.title_font}]]*/ 'font-default';
-        const subtitleFont = /*[[${theme.config.index.subtitle_settings.subtitle_font}]]*/ 'font-default';
-        const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ 'https://cdn.5ee.net/fonts';
+  (function () {
+    // 获取当前使用的字体设置
+    const titleFont = /*[[${theme.config.index.title_settings.title_font}]]*/ "font-default";
+    const subtitleFont = /*[[${theme.config.index.subtitle_settings.subtitle_font}]]*/ "font-default";
+    const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ "https://cdn.5ee.net/fonts";
 
-        // 已加载的字体跟踪
-        const loadedFonts = {};
+    // 已加载的字体跟踪
+    const loadedFonts = {};
 
-        // 加载字体的函数
-        function loadFont(fontName, fontPath) {
-            if (loadedFonts[fontName]) return; // 避免重复加载
+    // 加载字体的函数
+    function loadFont(fontName, fontPath) {
+      if (loadedFonts[fontName]) return; // 避免重复加载
 
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = fontPath;
-            document.head.appendChild(link);
-            loadedFonts[fontName] = true;
-        }
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = fontPath;
+      document.head.appendChild(link);
+      loadedFonts[fontName] = true;
+    }
 
-        // 根据主标题字体加载
-        if (titleFont === 'font-lxgw-wenkai-bright') {
-            loadFont('霞鹜文楷亮', fontCdn + '/LXGWBright-SemiLight/result.css');
-        }
-        else if (titleFont === 'font-siyuan-songti') {
-            loadFont('思源屏显臻宋', fontCdn + '/思源屏显臻宋/result.css');
-        }
+    // 根据主标题字体加载
+    if (titleFont === "font-lxgw-wenkai-bright") {
+      loadFont("霞鹜文楷亮", fontCdn + "/LXGWBright-SemiLight/result.css");
+    } else if (titleFont === "font-siyuan-songti") {
+      loadFont("思源屏显臻宋", fontCdn + "/思源屏显臻宋/result.css");
+    }
 
-        // 根据副标题字体加载
-        if (subtitleFont === 'font-lxgw-wenkai-bright') {
-            loadFont('霞鹜文楷亮', fontCdn + '/LXGWBright-SemiLight/result.css');
-        }
-        else if (subtitleFont === 'font-siyuan-songti') {
-            loadFont('思源屏显臻宋', fontCdn + '/思源屏显臻宋/result.css');
-        }
+    // 根据副标题字体加载
+    if (subtitleFont === "font-lxgw-wenkai-bright") {
+      loadFont("霞鹜文楷亮", fontCdn + "/LXGWBright-SemiLight/result.css");
+    } else if (subtitleFont === "font-siyuan-songti") {
+      loadFont("思源屏显臻宋", fontCdn + "/思源屏显臻宋/result.css");
+    }
 
-        // 英文字体和默认字体已在基础CSS中加载，无需动态处理
-    })();
+    // 英文字体和默认字体已在基础CSS中加载，无需动态处理
+  })();
 </script>
 
 <!-- 中层：标题内容 - 统一布局方案 -->
-<div class="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center
-            pb-32 sm:pb-36 md:pb-24 lg:pb-0
-            transition-all duration-700 ease-out"
-    :style="`transform: translateY(${scrollOffset * 0.3}px); opacity: ${1 - scrollOffset * 0.001}`">
+<div
+  class="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 pb-32 text-center transition-all duration-700 ease-out sm:pb-36 md:pb-24 lg:pb-0"
+  :style="`transform: translateY(${scrollOffset * 0.3}px); opacity: ${1 - scrollOffset * 0.001}`"
+>
+  <!-- 主标题 - 增强特效 -->
+  <h1
+    id="main-title"
+    th:if="${theme.config.index.title_settings.show_title}"
+    th:class="${'text-4xl animate-in fade-in zoom-in effect-base ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font} mb-3 font-bold text-white transition-all duration-700 sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl xl:text-8xl"
+    th:style="${!#strings.isEmpty(theme.config.index.title_settings.effect_color) ? '--title-color: ' + theme.config.index.title_settings.effect_color + '; animation-delay: 0.2s;' : 'animation-delay: 0.2s;'}"
+    th:data-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
+    th:data-original-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
+    th:data-decoration-effect="${theme.config.index.title_settings.decoration_effect}"
+  >
+    <span
+      th:text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
+      >Sky Blog</span
+    >
+  </h1>
 
-    <!-- 主标题 - 增强特效 -->
-    <h1 id="main-title" th:if="${theme.config.index.title_settings.show_title}"
-        th:class="${'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 sm:mb-4 md:mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base transition-all ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font}"
-        th:style="${!#strings.isEmpty(theme.config.index.title_settings.effect_color) ? '--title-color: ' + theme.config.index.title_settings.effect_color + '; animation-delay: 0.2s;' : 'animation-delay: 0.2s;'}"
-        th:data-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
-        th:data-original-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
-        th:data-decoration-effect="${theme.config.index.title_settings.decoration_effect}">
-        <span
-            th:text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}">Sky
-            Blog</span>
-    </h1>
-
-    <!-- 副标题 - 增强特效 -->
-    <div th:if="${theme.config.index.subtitle_settings.show_subtitle}"
-        class="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-8 max-w-xs sm:max-w-md md:max-w-2xl animate-in text-white fade-in slide-in-from-bottom-4 duration-700 transition-all"
-        style="animation-delay: 0.4s;">
-        <p id="subtitle"
-            th:class="${'transition-all duration-300 ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + theme.config.index.subtitle_settings.subtitle_effect}"
-            th:style="${!#strings.isEmpty(theme.config.index.subtitle_settings.subtitle_color) ? '--subtitle-color: ' + theme.config.index.subtitle_settings.subtitle_color : ''}"
-            th:text="${theme.config.index.subtitle_settings.subtitle_text}">
-            记录生活，分享思考，探索无限可能
-        </p>
-    </div>
-
+  <!-- 副标题 - 增强特效 -->
+  <div
+    th:if="${theme.config.index.subtitle_settings.show_subtitle}"
+    class="animate-in fade-in slide-in-from-bottom-4 mb-4 max-w-xs text-base text-white transition-all duration-700 sm:mb-6 sm:max-w-md sm:text-lg md:mb-8 md:max-w-2xl md:text-xl lg:text-2xl"
+    style="animation-delay: 0.4s"
+  >
+    <p
+      id="subtitle"
+      th:class="${'transition-all ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + theme.config.index.subtitle_settings.subtitle_effect} duration-300"
+      th:style="${!#strings.isEmpty(theme.config.index.subtitle_settings.subtitle_color) ? '--subtitle-color: ' + theme.config.index.subtitle_settings.subtitle_color : ''}"
+      th:text="${theme.config.index.subtitle_settings.subtitle_text}"
+    >
+      记录生活，分享思考，探索无限可能
+    </p>
+  </div>
 </div>

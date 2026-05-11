@@ -1,35 +1,44 @@
-<!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-    th:replace="~{gateway_fragments/layout:: layout(title = |退出登录 - ${site.title}|, head = null, body = ~{::body})}">
-<th:block th:fragment="body">
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{gateway_fragments/layout:: layout(title = |退出登录 - ${site.title}|, head = null, body = ~{::body})}"
+>
+  <th:block th:fragment="body">
     <!-- 大标题 -->
     <h1 class="auth-title">确认退出</h1>
     <p class="auth-subtitle">您确定要退出当前账户吗？</p>
 
     <!-- 用户信息卡片 -->
-    <div th:if="${currentUser != null}"
-        class="flex items-center gap-4 p-5 rounded-2xl bg-base-200/50 border border-base-content/5 mb-6">
-        <img th:src="${currentUser.spec.avatar ?: '/images/default-avatar.png'}"
-            th:alt="${currentUser.spec.displayName}"
-            class="w-14 h-14 rounded-full object-cover shadow-lg ring-2 ring-primary/20" />
-        <div class="flex-1 min-w-0">
-            <p class="font-bold text-lg text-base-content truncate" th:text="${currentUser.spec.displayName}">User</p>
-            <p class="text-sm text-base-content/50 truncate" th:text="'@' + ${currentUser.metadata.name}">@username</p>
-        </div>
+    <div
+      th:if="${currentUser != null}"
+      class="bg-base-200/50 border-base-content/5 mb-6 flex items-center gap-4 rounded-2xl border p-5"
+    >
+      <img
+        th:src="${currentUser.spec.avatar ?: '/images/default-avatar.png'}"
+        th:alt="${currentUser.spec.displayName}"
+        class="ring-primary/20 h-14 w-14 rounded-full object-cover shadow-lg ring-2"
+      />
+      <div class="min-w-0 flex-1">
+        <p class="text-base-content truncate text-lg font-bold" th:text="${currentUser.spec.displayName}">User</p>
+        <p class="text-base-content/50 truncate text-sm" th:text="'@' + ${currentUser.metadata.name}">@username</p>
+      </div>
     </div>
 
     <!-- 登出表单 -->
     <form th:action="@{/logout}" method="post" class="space-y-4">
-        <button type="submit"
-            class="w-full p-4 rounded-xl font-semibold text-error-content bg-gradient-to-r from-error to-error/80 hover:from-error/90 hover:to-error/70 transition-all duration-300 hover:shadow-lg hover:shadow-error/25">
-            退出登录
-        </button>
+      <button
+        type="submit"
+        class="text-error-content from-error to-error/80 hover:from-error/90 hover:to-error/70 hover:shadow-error/25 w-full rounded-xl bg-gradient-to-r p-4 font-semibold transition-all duration-300 hover:shadow-lg"
+      >
+        退出登录
+      </button>
 
-        <a th:href="@{/}"
-            class="block w-full p-4 rounded-xl font-semibold text-center text-base-content/70 bg-base-200/50 hover:bg-base-200 transition-all duration-300">
-            取消
-        </a>
+      <a
+        th:href="@{/}"
+        class="text-base-content/70 bg-base-200/50 hover:bg-base-200 block w-full rounded-xl p-4 text-center font-semibold transition-all duration-300"
+      >
+        取消
+      </a>
     </form>
-</th:block>
-
+  </th:block>
 </html>

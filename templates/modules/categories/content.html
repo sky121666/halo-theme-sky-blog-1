@@ -1,12 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--        分类页主体内容（索引与归档）          -->
+  <!-- 说明：结构参考 modules/post/content.html      -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        分类页主体内容（索引与归档）          -->
-<!-- 说明：结构参考 modules/post/content.html      -->
-<!-- ========================================== -->
-
-<!-- 
+  <!-- 
   模板系统说明：
   
   1. 模板文件：
@@ -30,90 +29,107 @@
      - 每页文章数量：page_size
 -->
 
-<!-- 分类集合内容片段：/categories -->
-<main class="relative" th:fragment="category-collection" x-data="categoriesPage()"
-  th:with="rootCfg = ${theme.config.category_settings},
+  <!-- 分类集合内容片段：/categories -->
+  <main
+    class="relative"
+    th:fragment="category-collection"
+    x-data="categoriesPage()"
+    th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与列表 -->
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与列表 -->
 
-  <!-- 主体内容区域（两列布局，与 post 一致） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与全部文章前 N（后台配置），并提供更多链接 -->
-      <section class="flex-1" th:classappend="${cfg.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <th:block th:with="categories = ${categoryFinder.listAsTree()}">
-          <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, null)}" />
+    <!-- 主体内容区域（两列布局，与 post 一致） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="lazy-anim flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与全部文章前 N（后台配置），并提供更多链接 -->
+        <section class="flex-1" th:classappend="${cfg.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+          <th:block th:with="categories = ${categoryFinder.listAsTree()}">
+            <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, null)}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, null)}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, null)}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, null)}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, null)}" />
+              </th:block>
             </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, null)}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, null)}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, null)}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, null)}" />
-            </th:block>
-          </th:block>
 
-          <!-- 无分类提示 -->
-          <th:block th:if="${#lists.isEmpty(categories)}">
-            <div class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-gray-600" th:text="#{page.categories.empty}">暂无分类</span>
-            </div>
-          </th:block>
+            <!-- 无分类提示 -->
+            <th:block th:if="${#lists.isEmpty(categories)}">
+              <div class="mt-6 flex items-center justify-center">
+                <span class="text-sm font-light text-gray-600" th:text="#{page.categories.empty}">暂无分类</span>
+              </div>
+            </th:block>
 
-          <!-- 有分类：在 /categories（全部）分页显示所有文章，风格由后台设置 -->
-          <th:block th:unless="${#lists.isEmpty(categories)}" th:with="pageSize=${site.post.categoryPageSize}, 
+            <!-- 有分类：在 /categories（全部）分页显示所有文章，风格由后台设置 -->
+            <th:block
+              th:unless="${#lists.isEmpty(categories)}"
+              th:with="pageSize=${site.post.categoryPageSize}, 
                              pageParam=${param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'}, 
                              currentPage=${#numbers.formatInteger(pageParam, 0)}, 
-                             posts=${postFinder.list({page: currentPage, size: pageSize})}">
-            <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
-            <div id="category-posts">
-              <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
-                <th:block th:case="'modern'">
-                  <th:block
-                    th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+                             posts=${postFinder.list({page: currentPage, size: pageSize})}"
+            >
+              <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
+              <div id="category-posts">
+                <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
+                  <th:block th:case="'modern'">
+                    <th:block
+                      th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}"
+                    />
+                  </th:block>
+                  <th:block th:case="'media_text'">
+                    <th:block
+                      th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}"
+                    />
+                  </th:block>
+                  <th:block th:case="'magazine'">
+                    <th:block
+                      th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}"
+                    />
+                  </th:block>
+                  <th:block th:case="'minimal'">
+                    <th:block
+                      th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}"
+                    />
+                  </th:block>
+                  <th:block th:case="*">
+                    <!-- 默认使用列表风格 -->
+                    <th:block
+                      th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}"
+                    />
+                  </th:block>
                 </th:block>
-                <th:block th:case="'media_text'">
-                  <th:block
-                    th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-                </th:block>
-                <th:block th:case="'magazine'">
-                  <th:block
-                    th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
-                </th:block>
-                <th:block th:case="'minimal'">
-                  <th:block
-                    th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
-                </th:block>
-                <th:block th:case="*">
-                  <!-- 默认使用列表风格 -->
-                  <th:block
-                    th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-                </th:block>
-              </th:block>
-            </div>
+              </div>
 
-            <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? '/categories?page=' + (posts.page + 1) : ''}" />
-            <div id="infinite-sentinel" class="h-px w-full"></div>
+              <input
+                id="initial-next-url"
+                type="hidden"
+                th:value="${posts.hasNext ? '/categories?page=' + (posts.page + 1) : ''}"
+              />
+              <div id="infinite-sentinel" class="h-px w-full"></div>
 
-            <!-- 无文章提示 -->
-            <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-gray-600" th:text="#{common.noPosts}">暂无文章</span>
-            </div>
+              <!-- 无文章提示 -->
+              <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
+                <span class="text-sm font-light text-gray-600" th:text="#{common.noPosts}">暂无文章</span>
+              </div>
 
-            <!-- 分页：上一页/下一页 + 下拉选择（索引页） -->
-            <th:block th:replace="~{modules/categories/pagination :: pagination(
+              <!-- 分页：上一页/下一页 + 下拉选择（索引页） -->
+              <th:block
+                th:replace="~{modules/categories/pagination :: pagination(
                 context=@{/categories/},
                 prevUrl=@{/categories(page=${posts.page - 1})},
                 nextUrl=@{/categories(page=${posts.page + 1})},
@@ -121,156 +137,104 @@
                 page=${posts.page},
                 hasPrevious=${posts.hasPrevious},
                 hasNext=${posts.hasNext}
-            )}" />
+            )}"
+              />
+            </th:block>
           </th:block>
-        </th:block>
-      </section>
+        </section>
 
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<!-- 分类归档内容片段：/categories/:slug -->
-<main class="relative" th:fragment="category-archive" x-data="categoryArchive()"
-  th:with="rootCfg = ${theme.config.category_settings},
+  <!-- 分类归档内容片段：/categories/:slug -->
+  <main
+    class="relative"
+    th:fragment="category-archive"
+    x-data="categoryArchive()"
+    th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
-  <!-- 主体内容区域（与 post 一致的两列布局） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
-        th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
-        <th:block th:with="categories=${categoryFinder.listAsTree()}">
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+    <!-- 主体内容区域（与 post 一致的两列布局） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+        <section
+          class="flex-1"
+          th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}"
+        >
+          <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
+          <th:block th:with="categories=${categoryFinder.listAsTree()}">
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
             </th:block>
           </th:block>
-        </th:block>
 
-        <div id="category-posts">
-          <!-- 文章列表（当前分类）：使用后台默认设置 -->
-          <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
-            <th:block th:case="'modern'">
-              <th:block
-                th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
+          <div id="category-posts">
+            <!-- 文章列表（当前分类）：使用后台默认设置 -->
+            <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
+              <th:block th:case="'modern'">
+                <th:block
+                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}"
+                />
+              </th:block>
+              <th:block th:case="'media_text'">
+                <th:block
+                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}"
+                />
+              </th:block>
+              <th:block th:case="'magazine'">
+                <th:block
+                  th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}"
+                />
+              </th:block>
+              <th:block th:case="'minimal'">
+                <th:block
+                  th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}"
+                />
+              </th:block>
+              <th:block th:case="*">
+                <!-- 默认使用卡片风格 -->
+                <th:block
+                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}"
+                />
+              </th:block>
             </th:block>
-            <th:block th:case="'media_text'">
-              <th:block
-                th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-            </th:block>
-            <th:block th:case="'magazine'">
-              <th:block
-                th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
-            </th:block>
-            <th:block th:case="'minimal'">
-              <th:block
-                th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
-            </th:block>
-            <th:block th:case="*">
-              <!-- 默认使用卡片风格 -->
-              <th:block
-                th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
-            </th:block>
-          </th:block>
-        </div>
+          </div>
 
-        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
-        <div id="infinite-sentinel" class="h-px w-full"></div>
+          <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+          <div id="infinite-sentinel" class="h-px w-full"></div>
 
-        <!-- 分页（案例片段复用） -->
-        <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
-            prevUrl=${posts.prevUrl},
-            nextUrl=${posts.nextUrl},
-            totalPages=${posts.totalPages},
-            page=${posts.page},
-            hasPrevious=${posts.hasPrevious},
-            hasNext=${posts.hasNext}
-        )}" />
-      </section>
-
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
-    </div>
-  </div>
-</main>
-
-<!-- 分类归档内容片段：/categories/:slug - 强制卡片风格 -->
-<main class="relative" th:fragment="category-archive-card" x-data="categoryArchive()"
-  th:with="rootCfg = ${theme.config.category_settings},
-               cfg = ${rootCfg.basic_info},
-               sidebarCfg = ${rootCfg.sidebar_settings},
-               globalSidebarCfg = ${theme.config.general.sidebar_settings},
-               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
-
-  <!-- 主体内容区域（与 post 一致的两列布局） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
-        th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <!-- 分类切换块 -->
-        <th:block th:with="categories=${categoryFinder.listAsTree()}">
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-          </th:block>
-        </th:block>
-
-        <div id="category-posts">
-          <!-- 文章列表（当前分类）：强制使用卡片风格 -->
+          <!-- 分页（案例片段复用） -->
           <th:block
-            th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
-        </div>
-
-        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
-        <div id="infinite-sentinel" class="h-px w-full"></div>
-
-        <!-- 分页（案例片段复用） -->
-        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            th:replace="~{modules/categories/pagination :: pagination(
             context=@{/categories/{slug}/(slug=${category.metadata.name})},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
@@ -278,66 +242,77 @@
             page=${posts.page},
             hasPrevious=${posts.hasPrevious},
             hasNext=${posts.hasNext}
-        )}" />
-      </section>
+        )}"
+          />
+        </section>
 
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<!-- 分类归档内容片段：/categories/:slug - 强制列表风格 -->
-<main class="relative" th:fragment="category-archive-list" x-data="categoryArchive()"
-  th:with="rootCfg = ${theme.config.category_settings},
+  <!-- 分类归档内容片段：/categories/:slug - 强制卡片风格 -->
+  <main
+    class="relative"
+    th:fragment="category-archive-card"
+    x-data="categoryArchive()"
+    th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
-  <!-- 主体内容区域（与 post 一致的两列布局） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
-        th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <!-- 分类切换块 -->
-        <th:block th:with="categories=${categoryFinder.listAsTree()}">
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+    <!-- 主体内容区域（与 post 一致的两列布局） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+        <section
+          class="flex-1"
+          th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}"
+        >
+          <!-- 分类切换块 -->
+          <th:block th:with="categories=${categoryFinder.listAsTree()}">
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
             </th:block>
           </th:block>
-        </th:block>
 
-        <div id="category-posts">
-          <!-- 文章列表（当前分类）：强制使用列表风格 -->
+          <div id="category-posts">
+            <!-- 文章列表（当前分类）：强制使用卡片风格 -->
+            <th:block
+              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}"
+            />
+          </div>
+
+          <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+          <div id="infinite-sentinel" class="h-px w-full"></div>
+
+          <!-- 分页（案例片段复用） -->
           <th:block
-            th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
-        </div>
-
-        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
-        <div id="infinite-sentinel" class="h-px w-full"></div>
-
-        <!-- 分页（案例片段复用） -->
-        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            th:replace="~{modules/categories/pagination :: pagination(
             context=@{/categories/{slug}/(slug=${category.metadata.name})},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
@@ -345,66 +320,77 @@
             page=${posts.page},
             hasPrevious=${posts.hasPrevious},
             hasNext=${posts.hasNext}
-        )}" />
-      </section>
+        )}"
+          />
+        </section>
 
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<!-- 分类归档内容片段：/categories/:slug - 强制杂志风格 -->
-<main class="relative" th:fragment="category-archive-magazine" x-data="categoryArchive()"
-  th:with="rootCfg = ${theme.config.category_settings},
+  <!-- 分类归档内容片段：/categories/:slug - 强制列表风格 -->
+  <main
+    class="relative"
+    th:fragment="category-archive-list"
+    x-data="categoryArchive()"
+    th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
-  <!-- 主体内容区域（与 post 一致的两列布局） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
-        th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <!-- 分类切换块 -->
-        <th:block th:with="categories=${categoryFinder.listAsTree()}">
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+    <!-- 主体内容区域（与 post 一致的两列布局） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+        <section
+          class="flex-1"
+          th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}"
+        >
+          <!-- 分类切换块 -->
+          <th:block th:with="categories=${categoryFinder.listAsTree()}">
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
             </th:block>
           </th:block>
-        </th:block>
 
-        <div id="category-posts">
-          <!-- 文章列表（当前分类）：强制使用杂志风格 -->
+          <div id="category-posts">
+            <!-- 文章列表（当前分类）：强制使用列表风格 -->
+            <th:block
+              th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}"
+            />
+          </div>
+
+          <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+          <div id="infinite-sentinel" class="h-px w-full"></div>
+
+          <!-- 分页（案例片段复用） -->
           <th:block
-            th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
-        </div>
-
-        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
-        <div id="infinite-sentinel" class="h-px w-full"></div>
-
-        <!-- 分页（案例片段复用） -->
-        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            th:replace="~{modules/categories/pagination :: pagination(
             context=@{/categories/{slug}/(slug=${category.metadata.name})},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
@@ -412,66 +398,77 @@
             page=${posts.page},
             hasPrevious=${posts.hasPrevious},
             hasNext=${posts.hasNext}
-        )}" />
-      </section>
+        )}"
+          />
+        </section>
 
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<!-- 分类归档内容片段：/categories/:slug - 强制极简风格 -->
-<main class="relative" th:fragment="category-archive-minimal" x-data="categoryArchive()"
-  th:with="rootCfg = ${theme.config.category_settings},
+  <!-- 分类归档内容片段：/categories/:slug - 强制杂志风格 -->
+  <main
+    class="relative"
+    th:fragment="category-archive-magazine"
+    x-data="categoryArchive()"
+    th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
-  <!-- 主体内容区域（与 post 一致的两列布局） -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
-        th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
-        <!-- 分类切换块 -->
-        <th:block th:with="categories=${categoryFinder.listAsTree()}">
-          <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
-            <th:block th:case="'pills'">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'chips'">
-              <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'underline'">
-              <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="'glass'">
-              <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
-            </th:block>
-            <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+    <!-- 主体内容区域（与 post 一致的两列布局） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+        <section
+          class="flex-1"
+          th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}"
+        >
+          <!-- 分类切换块 -->
+          <th:block th:with="categories=${categoryFinder.listAsTree()}">
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
             </th:block>
           </th:block>
-        </th:block>
 
-        <div id="category-posts">
-          <!-- 文章列表（当前分类）：强制使用极简风格 -->
+          <div id="category-posts">
+            <!-- 文章列表（当前分类）：强制使用杂志风格 -->
+            <th:block
+              th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}"
+            />
+          </div>
+
+          <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+          <div id="infinite-sentinel" class="h-px w-full"></div>
+
+          <!-- 分页（案例片段复用） -->
           <th:block
-            th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
-        </div>
-
-        <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
-        <div id="infinite-sentinel" class="h-px w-full"></div>
-
-        <!-- 分页（案例片段复用） -->
-        <th:block th:replace="~{modules/categories/pagination :: pagination(
+            th:replace="~{modules/categories/pagination :: pagination(
             context=@{/categories/{slug}/(slug=${category.metadata.name})},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
@@ -479,16 +476,96 @@
             page=${posts.page},
             hasPrevious=${posts.hasPrevious},
             hasNext=${posts.hasNext}
-        )}" />
-      </section>
+        )}"
+          />
+        </section>
 
-      <!-- 右侧：通用功能区块（不含文章目录） -->
-      <aside th:if="${sidebarCfg.show_sidebar != false}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
+  <!-- 分类归档内容片段：/categories/:slug - 强制极简风格 -->
+  <main
+    class="relative"
+    th:fragment="category-archive-minimal"
+    x-data="categoryArchive()"
+    th:with="rootCfg = ${theme.config.category_settings},
+               cfg = ${rootCfg.basic_info},
+               sidebarCfg = ${rootCfg.sidebar_settings},
+               globalSidebarCfg = ${theme.config.general.sidebar_settings},
+               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
+
+    <!-- 主体内容区域（与 post 一致的两列布局） -->
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
+        <section
+          class="flex-1"
+          th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}"
+        >
+          <!-- 分类切换块 -->
+          <th:block th:with="categories=${categoryFinder.listAsTree()}">
+            <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
+              <th:block th:case="'pills'">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'chips'">
+                <th:block th:replace="~{modules/categories/category-switch :: chips(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'underline'">
+                <th:block th:replace="~{modules/categories/category-switch :: underline(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="'glass'">
+                <th:block th:replace="~{modules/categories/category-switch :: glass(${categories}, ${category})}" />
+              </th:block>
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/categories/category-switch :: pills(${categories}, ${category})}" />
+              </th:block>
+            </th:block>
+          </th:block>
+
+          <div id="category-posts">
+            <!-- 文章列表（当前分类）：强制使用极简风格 -->
+            <th:block
+              th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}"
+            />
+          </div>
+
+          <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? posts.nextUrl : ''}" />
+          <div id="infinite-sentinel" class="h-px w-full"></div>
+
+          <!-- 分页（案例片段复用） -->
+          <th:block
+            th:replace="~{modules/categories/pagination :: pagination(
+            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            prevUrl=${posts.prevUrl},
+            nextUrl=${posts.nextUrl},
+            totalPages=${posts.totalPages},
+            page=${posts.page},
+            hasPrevious=${posts.hasPrevious},
+            hasNext=${posts.hasNext}
+        )}"
+          />
+        </section>
+
+        <!-- 右侧：通用功能区块（不含文章目录） -->
+        <aside
+          th:if="${sidebarCfg.show_sidebar != false}"
+          class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
+    </div>
+  </main>
 </html>

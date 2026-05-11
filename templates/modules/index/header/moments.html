@@ -116,7 +116,7 @@
               <!-- 根据索引动态设置响应式显示类 -->
               <div
                 th:if="${(hasText or hasMedia) and momentStat.index < 3}"
-                th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + (momentStat.index == 1 ? ' hidden md:flex' : '') + (momentStat.index == 2 ? ' hidden lg:flex' : ' flex')}"
+                th:class="${'moment-item hover-lift tablet-optimized justify-between' + (momentStat.index == 1 ? ' md:flex' : '') + (momentStat.index == 2 ? ' lg:flex' : ' flex')} hidden h-24 flex-col rounded-xl p-3 text-white backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md md:h-28 md:p-4"
                 th:classappend="${momentStat.index % 2 == 0 ? ' rotate-slight-left' : ' rotate-slight-right'}"
               >
                 <!-- 瞬间内容 -->

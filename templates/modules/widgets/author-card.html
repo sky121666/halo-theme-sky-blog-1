@@ -1,91 +1,128 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--   作者卡片组件 - 简约点缀风格               -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--   作者卡片组件 - 简约点缀风格               -->
-<!-- ========================================== -->
+  <th:block
+    th:fragment="card"
+    th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)},
+           isLoggedIn = ${currentUser != null and !#strings.equals(currentUser.name, 'anonymousUser')}"
+  >
+    <!-- ========== 已登录用户卡片 ========== -->
+    <a
+      th:if="${isLoggedIn}"
+      href="/uc"
+      class="bg-base-100/80 border-base-content/5 group hover:border-primary/20 relative block overflow-hidden rounded-2xl border p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:shadow-lg"
+    >
+      <!-- 背景装饰 -->
+      <div
+        class="from-success/10 to-primary/5 absolute -top-6 -right-6 h-20 w-20 rounded-full bg-gradient-to-br opacity-60 blur-xl transition-opacity group-hover:opacity-100"
+      ></div>
 
-<th:block th:fragment="card" th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)},
-           isLoggedIn = ${currentUser != null and !#strings.equals(currentUser.name, 'anonymousUser')}">
-
-  <!-- ========== 已登录用户卡片 ========== -->
-  <a th:if="${isLoggedIn}" href="/uc"
-    class="block bg-base-100/80 backdrop-blur-xl shadow-md border border-base-content/5 rounded-2xl p-4 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 relative overflow-hidden">
-
-    <!-- 背景装饰 -->
-    <div
-      class="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-success/10 to-primary/5 rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity">
-    </div>
-
-    <div class="relative flex items-center gap-3">
-      <!-- 头像 -->
-      <div class="relative shrink-0">
-        <div
-          class="w-10 h-10 rounded-xl overflow-hidden bg-base-200 ring-2 ring-base-content/5 group-hover:ring-primary/30 transition-all">
-          <img th:src="${currentUser.avatar}"
-            th:if="${currentUser.avatar != null and !#strings.isEmpty(currentUser.avatar)}"
-            th:alt="|${currentUser.displayName} 头像|" class="w-full h-full object-cover" />
-          <img th:src="${site.logo}" th:unless="${currentUser.avatar != null and !#strings.isEmpty(currentUser.avatar)}"
-            alt="站点头像" class="w-full h-full object-cover" />
+      <div class="relative flex items-center gap-3">
+        <!-- 头像 -->
+        <div class="relative shrink-0">
+          <div
+            class="bg-base-200 ring-base-content/5 group-hover:ring-primary/30 h-10 w-10 overflow-hidden rounded-xl ring-2 transition-all"
+          >
+            <img
+              th:src="${currentUser.avatar}"
+              th:if="${currentUser.avatar != null and !#strings.isEmpty(currentUser.avatar)}"
+              th:alt="|${currentUser.displayName} 头像|"
+              class="h-full w-full object-cover"
+            />
+            <img
+              th:src="${site.logo}"
+              th:unless="${currentUser.avatar != null and !#strings.isEmpty(currentUser.avatar)}"
+              alt="站点头像"
+              class="h-full w-full object-cover"
+            />
+          </div>
+          <!-- 在线状态点 -->
+          <div class="bg-success ring-base-100 absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full ring-2"></div>
         </div>
-        <!-- 在线状态点 -->
-        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full ring-2 ring-base-100"></div>
-      </div>
 
-      <!-- 信息 -->
-      <div class="flex-1 min-w-0">
-        <h3 class="text-sm font-semibold text-base-content truncate" th:text="${currentUser.displayName}">用户</h3>
-        <p th:if="${currentUser.bio != null and !#strings.isEmpty(currentUser.bio)}"
-          class="text-xs text-base-content/50 truncate mt-0.5" th:text="${currentUser.bio}">描述</p>
-        <p th:unless="${currentUser.bio != null and !#strings.isEmpty(currentUser.bio)}"
-          class="text-xs text-base-content/50 mt-0.5">已登录</p>
-      </div>
-
-      <!-- 箭头 -->
-      <span
-        class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0"></span>
-    </div>
-  </a>
-
-  <!-- ========== 未登录访客卡片 ========== -->
-  <a th:unless="${isLoggedIn}" href="/about"
-    class="block bg-base-100/80 backdrop-blur-xl shadow-md border border-base-content/5 rounded-2xl p-4 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 relative overflow-hidden"
-    th:with="profile = ${theme.config.about_settings.profile}">
-
-    <!-- 背景装饰 -->
-    <div
-      class="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-primary/10 to-accent/5 rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity">
-    </div>
-
-    <div class="relative flex items-center gap-3">
-      <!-- 头像 -->
-      <div class="relative shrink-0">
-        <div
-          class="w-10 h-10 rounded-xl overflow-hidden bg-base-200 ring-2 ring-base-content/5 group-hover:ring-primary/30 transition-all">
-          <img th:src="${profile?.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}"
-            th:alt="|${profile?.nickname ?: site.title} 头像|" class="w-full h-full object-cover" />
+        <!-- 信息 -->
+        <div class="min-w-0 flex-1">
+          <h3 class="text-base-content truncate text-sm font-semibold" th:text="${currentUser.displayName}">用户</h3>
+          <p
+            th:if="${currentUser.bio != null and !#strings.isEmpty(currentUser.bio)}"
+            class="text-base-content/50 mt-0.5 truncate text-xs"
+            th:text="${currentUser.bio}"
+          >
+            描述
+          </p>
+          <p
+            th:unless="${currentUser.bio != null and !#strings.isEmpty(currentUser.bio)}"
+            class="text-base-content/50 mt-0.5 text-xs"
+          >
+            已登录
+          </p>
         </div>
-        <!-- 装饰点 -->
-        <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-primary/60 rounded-full ring-2 ring-base-100"></div>
+
+        <!-- 箭头 -->
+        <span
+          class="icon-[heroicons--chevron-right] text-base-content/30 group-hover:text-primary h-4 w-4 shrink-0 transition-all group-hover:translate-x-0.5"
+        ></span>
       </div>
+    </a>
 
-      <!-- 信息 -->
-      <div class="flex-1 min-w-0">
-        <h3 class="text-sm font-semibold text-base-content truncate"
-          th:text="${profile?.nickname != null and !profile.nickname.isEmpty()} ? ${profile.nickname} : ${site.title}">
-          昵称</h3>
-        <p th:if="${profile?.bio != null and !profile.bio.isEmpty()}"
-          class="text-xs text-base-content/50 truncate mt-0.5" th:text="${profile.bio}">描述</p>
-        <p th:unless="${profile?.bio != null and !profile.bio.isEmpty()}" class="text-xs text-base-content/50 mt-0.5">
-          了解更多</p>
+    <!-- ========== 未登录访客卡片 ========== -->
+    <a
+      th:unless="${isLoggedIn}"
+      href="/about"
+      class="bg-base-100/80 border-base-content/5 group hover:border-primary/20 relative block overflow-hidden rounded-2xl border p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:shadow-lg"
+      th:with="profile = ${theme.config.about_settings.profile}"
+    >
+      <!-- 背景装饰 -->
+      <div
+        class="from-primary/10 to-accent/5 absolute -top-6 -right-6 h-20 w-20 rounded-full bg-gradient-to-br opacity-60 blur-xl transition-opacity group-hover:opacity-100"
+      ></div>
+
+      <div class="relative flex items-center gap-3">
+        <!-- 头像 -->
+        <div class="relative shrink-0">
+          <div
+            class="bg-base-200 ring-base-content/5 group-hover:ring-primary/30 h-10 w-10 overflow-hidden rounded-xl ring-2 transition-all"
+          >
+            <img
+              th:src="${profile?.avatar != null and !profile.avatar.isEmpty()} ? ${profile.avatar} : ${site.logo}"
+              th:alt="|${profile?.nickname ?: site.title} 头像|"
+              class="h-full w-full object-cover"
+            />
+          </div>
+          <!-- 装饰点 -->
+          <div
+            class="bg-primary/60 ring-base-100 absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full ring-2"
+          ></div>
+        </div>
+
+        <!-- 信息 -->
+        <div class="min-w-0 flex-1">
+          <h3
+            class="text-base-content truncate text-sm font-semibold"
+            th:text="${profile?.nickname != null and !profile.nickname.isEmpty()} ? ${profile.nickname} : ${site.title}"
+          >
+            昵称
+          </h3>
+          <p
+            th:if="${profile?.bio != null and !profile.bio.isEmpty()}"
+            class="text-base-content/50 mt-0.5 truncate text-xs"
+            th:text="${profile.bio}"
+          >
+            描述
+          </p>
+          <p th:unless="${profile?.bio != null and !profile.bio.isEmpty()}" class="text-base-content/50 mt-0.5 text-xs">
+            了解更多
+          </p>
+        </div>
+
+        <!-- 箭头 -->
+        <span
+          class="icon-[heroicons--chevron-right] text-base-content/30 group-hover:text-primary h-4 w-4 shrink-0 transition-all group-hover:translate-x-0.5"
+        ></span>
       </div>
-
-      <!-- 箭头 -->
-      <span
-        class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0"></span>
-    </div>
-  </a>
-
-</th:block>
-
+    </a>
+  </th:block>
 </html>

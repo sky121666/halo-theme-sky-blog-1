@@ -1,21 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--           文章目录组件                      -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--           文章目录组件                      -->
-<!-- ========================================== -->
-
-<div th:fragment="widget" id="toc-card"
-  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5 sidebar-card transition-all duration-300">
-  <h3 class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-4 flex items-center gap-2">
-    <span class="icon-[heroicons--list-bullet] w-4 h-4"></span>
-    <span>文章目录</span>
-  </h3>
-  <div class="toc-container overflow-y-auto pr-2 scrollbar-thin">
-    <nav id="toc-nav" class="space-y-1" role="navigation" aria-label="文章目录">
-      <!-- 目录将由 JavaScript 自动生成 -->
-    </nav>
+  <div
+    th:fragment="widget"
+    id="toc-card"
+    class="card bg-base-100/80 border-base-content/5 sidebar-card rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl transition-all duration-300"
+  >
+    <h3 class="text-base-content/40 mb-4 flex items-center gap-2 text-xs font-bold tracking-wider uppercase">
+      <span class="icon-[heroicons--list-bullet] h-4 w-4"></span>
+      <span>文章目录</span>
+    </h3>
+    <div class="toc-container scrollbar-thin overflow-y-auto pr-2">
+      <nav id="toc-nav" class="space-y-1" role="navigation" aria-label="文章目录">
+        <!-- 目录将由 JavaScript 自动生成 -->
+      </nav>
+    </div>
   </div>
-</div>
-
 </html>

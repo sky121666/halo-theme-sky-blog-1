@@ -1,36 +1,39 @@
 <!doctype html>
-<html xmlns:th="https://www.thymeleaf.org"
-    th:replace="~{gateway_fragments/layout :: layout(title = |登录 - ${site.title}|, head = null, body = ~{::body})}">
-<th:block th:fragment="body">
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{gateway_fragments/layout :: layout(title = |登录 - ${site.title}|, head = null, body = ~{::body})}"
+>
+  <th:block th:fragment="body">
     <!-- 大标题 -->
     <h1 class="auth-title">欢迎回来</h1>
     <p class="auth-subtitle">登录以继续访问您的账户</p>
 
     <!-- 登录表单 -->
     <div class="space-y-6">
-        <div th:replace="~{gateway_fragments/login::form}"></div>
+      <div th:replace="~{gateway_fragments/login::form}"></div>
 
-        <!-- 其他登录方式 -->
-        <div th:replace="~{gateway_fragments/login::formAuthProviders}"></div>
+      <!-- 其他登录方式 -->
+      <div th:replace="~{gateway_fragments/login::formAuthProviders}"></div>
 
-        <!-- 社交登录 -->
-        <div th:replace="~{gateway_fragments/common::socialAuthProviders}"></div>
+      <!-- 社交登录 -->
+      <div th:replace="~{gateway_fragments/common::socialAuthProviders}"></div>
     </div>
 
     <!-- 注册提示 -->
-    <div class="mt-8 text-center text-base-content/50">
-        <span>还没有账户？</span>
-        <a th:href="@{/signup}" class="text-primary font-semibold hover:underline ml-1">立即注册</a>
+    <div class="text-base-content/50 mt-8 text-center">
+      <span>还没有账户？</span>
+      <a th:href="@{/signup}" class="text-primary ml-1 font-semibold hover:underline">立即注册</a>
     </div>
 
     <!-- 返回首页 -->
     <div class="mt-4 text-center">
-        <a th:href="@{/}"
-            class="inline-flex items-center gap-2 text-sm text-base-content/40 hover:text-primary transition-colors">
-            <span class="icon-[heroicons--arrow-left] w-4 h-4"></span>
-            <span>返回首页</span>
-        </a>
+      <a
+        th:href="@{/}"
+        class="text-base-content/40 hover:text-primary inline-flex items-center gap-2 text-sm transition-colors"
+      >
+        <span class="icon-[heroicons--arrow-left] h-4 w-4"></span>
+        <span>返回首页</span>
+      </a>
     </div>
-</th:block>
-
+  </th:block>
 </html>

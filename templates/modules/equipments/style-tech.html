@@ -1,82 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--   装备页面 - 科技风 (Tech Style)            -->
+  <!--   3D卡片 + 暗色内容区布局                   -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--   装备页面 - 科技风 (Tech Style)            -->
-<!--   3D卡片 + 暗色内容区布局                   -->
-<!-- ========================================== -->
-
-<th:block th:fragment="style-tech" th:with="cfg = ${theme.config.equipment_settings?.basic_info},
+  <th:block
+    th:fragment="style-tech"
+    th:with="cfg = ${theme.config.equipment_settings?.basic_info},
              pageTitle = ${cfg?.page_title ?: '我的装备'},
              pageSubtitle = ${cfg?.page_subtitle ?: ''},
-             pageDesc = ${cfg?.page_description ?: '分享我日常使用的硬件与软件'}">
+             pageDesc = ${cfg?.page_description ?: '分享我日常使用的硬件与软件'}"
+  >
     <div id="equipment" x-data="{activeTab: 'all'}">
-
-        <!-- 页面头部（容器外） - Apple Style 一致性设计 -->
-        <header class="mb-10 px-1">
-            <div class="flex items-end justify-between">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight mb-2"
-                        th:text="${pageTitle}">我的装备</h1>
-                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-base-content/60">
-                        <span th:if="${!#strings.isEmpty(pageSubtitle)}" class="text-base-content/80"
-                            th:text="${pageSubtitle}">好物分享</span>
-                        <span th:if="${!#strings.isEmpty(pageSubtitle) and !#strings.isEmpty(pageDesc)}"
-                            class="hidden sm:inline-block w-1 h-1 rounded-full bg-base-content/20"></span>
-                        <p th:if="${!#strings.isEmpty(pageDesc)}" class="text-base-content/40" th:text="${pageDesc}">描述
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 统计胶囊 -->
-                <div
-                    class="hidden md:flex items-center gap-2.5 px-4 py-2 rounded-full bg-base-content/5 backdrop-blur-md border border-base-content/5">
-                    <span class="text-lg font-bold text-base-content tabular-nums"
-                        th:text="${equipments.total}">0</span>
-                    <span class="text-xs text-base-content/50 font-medium tracking-wide uppercase">Items</span>
-                </div>
+      <!-- 页面头部（容器外） - Apple Style 一致性设计 -->
+      <header class="mb-10 px-1">
+        <div class="flex items-end justify-between">
+          <div>
+            <h1 class="text-base-content mb-2 text-2xl font-bold tracking-tight md:text-3xl" th:text="${pageTitle}">
+              我的装备
+            </h1>
+            <div class="text-base-content/60 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium">
+              <span th:if="${!#strings.isEmpty(pageSubtitle)}" class="text-base-content/80" th:text="${pageSubtitle}"
+                >好物分享</span
+              >
+              <span
+                th:if="${!#strings.isEmpty(pageSubtitle) and !#strings.isEmpty(pageDesc)}"
+                class="bg-base-content/20 hidden h-1 w-1 rounded-full sm:inline-block"
+              ></span>
+              <p th:if="${!#strings.isEmpty(pageDesc)}" class="text-base-content/40" th:text="${pageDesc}">描述</p>
             </div>
-        </header>
+          </div>
 
-        <!-- 展示区容器 (毛玻璃效果) -->
-        <div class="equipment-showcase">
+          <!-- 统计胶囊 -->
+          <div
+            class="bg-base-content/5 border-base-content/5 hidden items-center gap-2.5 rounded-full border px-4 py-2 backdrop-blur-md md:flex"
+          >
+            <span class="text-base-content text-lg font-bold tabular-nums" th:text="${equipments.total}">0</span>
+            <span class="text-base-content/50 text-xs font-medium tracking-wide uppercase">Items</span>
+          </div>
+        </div>
+      </header>
 
-            <!-- Tab 导航 - 根据配置选择不同样式 -->
-            <th:block th:with="tabStyle = ${theme.config.equipment_settings?.style_settings?.tab_style ?: 'pills'}">
-                <th:block th:switch="${tabStyle}">
-                    <th:block th:case="'pills'">
-                        <th:block th:replace="~{modules/equipments/group-switch :: pills(${groups}, 'all')}" />
-                    </th:block>
-                    <th:block th:case="'chips'">
-                        <th:block th:replace="~{modules/equipments/group-switch :: chips(${groups}, 'all')}" />
-                    </th:block>
-                    <th:block th:case="'underline'">
-                        <th:block th:replace="~{modules/equipments/group-switch :: underline(${groups}, 'all')}" />
-                    </th:block>
-                    <th:block th:case="'glass'">
-                        <th:block th:replace="~{modules/equipments/group-switch :: glass(${groups}, 'all')}" />
-                    </th:block>
-                    <th:block th:case="*">
-                        <th:block th:replace="~{modules/equipments/group-switch :: pills(${groups}, 'all')}" />
-                    </th:block>
-                </th:block>
+      <!-- 展示区容器 (毛玻璃效果) -->
+      <div class="equipment-showcase">
+        <!-- Tab 导航 - 根据配置选择不同样式 -->
+        <th:block th:with="tabStyle = ${theme.config.equipment_settings?.style_settings?.tab_style ?: 'pills'}">
+          <th:block th:switch="${tabStyle}">
+            <th:block th:case="'pills'">
+              <th:block th:replace="~{modules/equipments/group-switch :: pills(${groups}, 'all')}" />
             </th:block>
+            <th:block th:case="'chips'">
+              <th:block th:replace="~{modules/equipments/group-switch :: chips(${groups}, 'all')}" />
+            </th:block>
+            <th:block th:case="'underline'">
+              <th:block th:replace="~{modules/equipments/group-switch :: underline(${groups}, 'all')}" />
+            </th:block>
+            <th:block th:case="'glass'">
+              <th:block th:replace="~{modules/equipments/group-switch :: glass(${groups}, 'all')}" />
+            </th:block>
+            <th:block th:case="*">
+              <th:block th:replace="~{modules/equipments/group-switch :: pills(${groups}, 'all')}" />
+            </th:block>
+          </th:block>
+        </th:block>
 
-            <!-- 全部视图：单一网格展示所有卡片 -->
-            <div x-show="activeTab === 'all'" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0">
+        <!-- 全部视图：单一网格展示所有卡片 -->
+        <div
+          x-show="activeTab === 'all'"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform translate-y-4"
+          x-transition:enter-end="opacity-100 transform translate-y-0"
+        >
+          <div class="equipment-grid">
+            <th:block th:each="equipment, stat : ${equipments.items}">
+              <th:block th:replace="~{modules/equipments/card :: equipment-card(${equipment}, ${null}, ${stat})}">
+              </th:block>
+            </th:block>
+          </div>
 
-                <div class="equipment-grid">
-                    <th:block th:each="equipment, stat : ${equipments.items}">
-                        <th:block
-                            th:replace="~{modules/equipments/card :: equipment-card(${equipment}, ${null}, ${stat})}">
-                        </th:block>
-                    </th:block>
-                </div>
-
-                <!-- 分页 -->
-                <th:block th:if="${equipments.totalPages > 1}" th:replace="~{modules/categories/pagination :: pagination(
+          <!-- 分页 -->
+          <th:block
+            th:if="${equipments.totalPages > 1}"
+            th:replace="~{modules/categories/pagination :: pagination(
                         context=@{/equipments/},
                         prevUrl=${equipments.prevUrl},
                         nextUrl=${equipments.nextUrl},
@@ -84,37 +90,38 @@
                         page=${equipments.page},
                         hasPrevious=${equipments.hasPrevious},
                         hasNext=${equipments.hasNext}
-                    )}" />
+                    )}"
+          />
+        </div>
+
+        <!-- 分组视图：按分组显示 -->
+        <th:block th:each="group : ${groups}">
+          <section
+            th:attr="data-group-id=${group.metadata.name}"
+            x-show="activeTab === $el.dataset.groupId"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform translate-y-4"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+          >
+            <!-- 装备网格 (CSS Grid) -->
+            <div class="equipment-grid" th:with="equipmentList = ${group.equipments}">
+              <th:block th:each="equipment, stat : ${equipmentList}">
+                <th:block th:replace="~{modules/equipments/card :: equipment-card(${equipment}, ${group}, ${stat})}">
+                </th:block>
+              </th:block>
             </div>
 
-            <!-- 分组视图：按分组显示 -->
-            <th:block th:each="group : ${groups}">
-                <section th:attr="data-group-id=${group.metadata.name}" x-show="activeTab === $el.dataset.groupId"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 transform translate-y-4"
-                    x-transition:enter-end="opacity-100 transform translate-y-0">
-
-
-                    <!-- 装备网格 (CSS Grid) -->
-                    <div class="equipment-grid" th:with="equipmentList = ${group.equipments}">
-                        <th:block th:each="equipment, stat : ${equipmentList}">
-                            <th:block
-                                th:replace="~{modules/equipments/card :: equipment-card(${equipment}, ${group}, ${stat})}">
-                            </th:block>
-                        </th:block>
-                    </div>
-
-                    <!-- 空状态 -->
-                    <div th:if="${group.equipments.isEmpty()}"
-                        class="py-16 flex flex-col items-center justify-center text-base-content/40 bg-base-100/50 backdrop-blur rounded-2xl border-2 border-dashed border-base-content/10">
-                        <span class="icon-[heroicons--inbox] w-12 h-12 mb-3 opacity-40"></span>
-                        <p class="text-sm">该分组暂无装备</p>
-                    </div>
-                </section>
-            </th:block>
-
-        </div>
+            <!-- 空状态 -->
+            <div
+              th:if="${group.equipments.isEmpty()}"
+              class="text-base-content/40 bg-base-100/50 border-base-content/10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed py-16 backdrop-blur"
+            >
+              <span class="icon-[heroicons--inbox] mb-3 h-12 w-12 opacity-40"></span>
+              <p class="text-sm">该分组暂无装备</p>
+            </div>
+          </section>
+        </th:block>
+      </div>
     </div>
-</th:block>
-
+  </th:block>
 </html>

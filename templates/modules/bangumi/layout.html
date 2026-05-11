@@ -42,7 +42,7 @@
                bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'},
                firstBangumi = ${bangumis != null && bangumis.items != null && bangumis.items.size() > 0} ? ${bangumis.items.get(0)} : null,
                bgCover = ${firstBangumi != null} ? ${firstBangumi.spec.cover} : null"
-    th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
+    th:class="'min-h-screen text-base-content ' + ${bgClass} relative"
   >
     <!-- 动态番剧背景 -->
     <div th:if="${bgCover != null}" class="pointer-events-none fixed inset-0 z-0" id="bangumi-bg-container">

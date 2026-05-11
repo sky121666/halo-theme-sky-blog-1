@@ -1,118 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--        追番页面主体内容                     -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        追番页面主体内容                     -->
-<!-- ========================================== -->
+  <main class="bangumi-page relative" th:fragment="bangumi-content">
+    <div class="mx-auto max-w-6xl px-4 py-8">
+      <!-- 页面头部 -->
+      <header class="bangumi-header bangumi-animate-in">
+        <h1 class="bangumi-title" th:text="${theme.config.bangumi_settings?.page_title} ?: '追番列表'">追番列表</h1>
+        <p
+          class="bangumi-subtitle"
+          th:text="${theme.config.bangumi_settings?.page_description} ?: '记录我的二次元之旅'"
+        >
+          记录我的二次元之旅
+        </p>
+      </header>
 
-<main class="bangumi-page relative" th:fragment="bangumi-content">
-
-  <div class="max-w-6xl mx-auto px-4 py-8">
-
-    <!-- 页面头部 -->
-    <header class="bangumi-header bangumi-animate-in">
-      <h1 class="bangumi-title" th:text="${theme.config.bangumi_settings?.page_title} ?: '追番列表'">追番列表</h1>
-      <p class="bangumi-subtitle" th:text="${theme.config.bangumi_settings?.page_description} ?: '记录我的二次元之旅'">记录我的二次元之旅</p>
-    </header>
-
-    <!-- 筛选栏 -->
-    <nav class="bangumi-nav bangumi-animate-in bangumi-stagger-1"
-         th:with="currentType = ${bangumis?.typeNum ?: 1}, currentStatus = ${bangumis?.status ?: 0}">
-      <div class="bangumi-nav-group">
-        <a th:href="@{/bangumis(typeNum=1, status=${currentStatus})}" 
-           th:classappend="${currentType == 1} ? 'active' : ''"
-           class="bangumi-nav-item">
-          <!-- 追番图标 -->
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-          </svg>
-          追番
-        </a>
-        <a th:href="@{/bangumis(typeNum=2, status=${currentStatus})}" 
-           th:classappend="${currentType == 2} ? 'active' : ''"
-           class="bangumi-nav-item">
-          <!-- 追剧图标 -->
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
-            <polyline points="17 2 12 7 7 2"/>
-          </svg>
-          追剧
-        </a>
-      </div>
-      <div class="bangumi-nav-divider"></div>
-      <div class="bangumi-nav-group">
-        <a th:href="@{/bangumis(typeNum=${currentType}, status=0)}" 
-           th:classappend="${currentStatus == 0} ? 'active' : ''"
-           class="bangumi-nav-item">全部</a>
-        <a th:href="@{/bangumis(typeNum=${currentType}, status=1)}" 
-           th:classappend="${currentStatus == 1} ? 'active' : ''"
-           class="bangumi-nav-item">想看</a>
-        <a th:href="@{/bangumis(typeNum=${currentType}, status=2)}" 
-           th:classappend="${currentStatus == 2} ? 'active' : ''"
-           class="bangumi-nav-item">在看</a>
-        <a th:href="@{/bangumis(typeNum=${currentType}, status=3)}" 
-           th:classappend="${currentStatus == 3} ? 'active' : ''"
-           class="bangumi-nav-item">已看</a>
-      </div>
-      <span th:if="${bangumis != null && bangumis.total > 0}" class="bangumi-count">
-        共 <strong th:text="${bangumis.total}">0</strong> 部
-      </span>
-    </nav>
-
-    <!-- 番剧列表 -->
-    <section th:if="${bangumis != null && bangumis.items != null}" class="bangumi-section bangumi-animate-in bangumi-stagger-2">
-      
-      <!-- 番剧卡片网格 -->
-      <div th:if="${!bangumis.items.isEmpty()}" class="bangumi-grid">
-        <th:block th:each="bangumi : ${bangumis.items}">
-          <a th:href="${bangumi.spec.url}" target="_blank" rel="noopener noreferrer" class="bangumi-card">
-            <!-- 封面 -->
-            <div class="bangumi-cover">
-              <img th:src="${#strings.contains(bangumi.spec.cover, '@') ? #strings.substringBefore(bangumi.spec.cover, '@') : bangumi.spec.cover}" 
-                   th:alt="${bangumi.spec.title}" 
-                   loading="lazy" 
-                   decoding="async"
-                   referrerpolicy="no-referrer" />
-              <!-- 评分角标 -->
-              <span th:if="${bangumi.spec.score != null && bangumi.spec.score != ''}" class="bangumi-score">
-                <span th:text="${bangumi.spec.score}">0</span>
-              </span>
-            </div>
-            <!-- 标题 -->
-            <div class="bangumi-info">
-              <h3 class="bangumi-name" th:text="${bangumi.spec.title}">番剧名称</h3>
-              <span th:if="${bangumi.spec.totalCount != null}" class="bangumi-ep" th:text="${bangumi.spec.totalCount}">全12话</span>
-            </div>
+      <!-- 筛选栏 -->
+      <nav
+        class="bangumi-nav bangumi-animate-in bangumi-stagger-1"
+        th:with="currentType = ${bangumis?.typeNum ?: 1}, currentStatus = ${bangumis?.status ?: 0}"
+      >
+        <div class="bangumi-nav-group">
+          <a
+            th:href="@{/bangumis(typeNum=1, status=${currentStatus})}"
+            th:classappend="${currentType == 1} ? 'active' : ''"
+            class="bangumi-nav-item"
+          >
+            <!-- 追番图标 -->
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              />
+            </svg>
+            追番
           </a>
-        </th:block>
-      </div>
-
-      <!-- 空状态 -->
-      <div th:if="${bangumis.items.isEmpty()}" class="bangumi-empty">
-        <div class="bangumi-empty-icon">📺</div>
-        <p>暂无追番数据</p>
-      </div>
-
-      <!-- 分页 -->
-      <div th:if="${bangumis.hasPrevious or bangumis.hasNext}" class="bangumi-pagination">
-        <a th:if="${bangumis.hasPrevious}" th:href="@{${bangumis.prevUrl}}" class="bangumi-page-btn">
-          <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
-        </a>
-        <span class="bangumi-page-info">
-          <span th:text="${bangumis.page}">1</span> / <span th:text="${bangumis.totalPages}">1</span>
+          <a
+            th:href="@{/bangumis(typeNum=2, status=${currentStatus})}"
+            th:classappend="${currentType == 2} ? 'active' : ''"
+            class="bangumi-nav-item"
+          >
+            <!-- 追剧图标 -->
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+              <polyline points="17 2 12 7 7 2" />
+            </svg>
+            追剧
+          </a>
+        </div>
+        <div class="bangumi-nav-divider"></div>
+        <div class="bangumi-nav-group">
+          <a
+            th:href="@{/bangumis(typeNum=${currentType}, status=0)}"
+            th:classappend="${currentStatus == 0} ? 'active' : ''"
+            class="bangumi-nav-item"
+            >全部</a
+          >
+          <a
+            th:href="@{/bangumis(typeNum=${currentType}, status=1)}"
+            th:classappend="${currentStatus == 1} ? 'active' : ''"
+            class="bangumi-nav-item"
+            >想看</a
+          >
+          <a
+            th:href="@{/bangumis(typeNum=${currentType}, status=2)}"
+            th:classappend="${currentStatus == 2} ? 'active' : ''"
+            class="bangumi-nav-item"
+            >在看</a
+          >
+          <a
+            th:href="@{/bangumis(typeNum=${currentType}, status=3)}"
+            th:classappend="${currentStatus == 3} ? 'active' : ''"
+            class="bangumi-nav-item"
+            >已看</a
+          >
+        </div>
+        <span th:if="${bangumis != null && bangumis.total > 0}" class="bangumi-count">
+          共 <strong th:text="${bangumis.total}">0</strong> 部
         </span>
-        <a th:if="${bangumis.hasNext}" th:href="@{${bangumis.nextUrl}}" class="bangumi-page-btn">
-          <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
-        </a>
+      </nav>
+
+      <!-- 番剧列表 -->
+      <section
+        th:if="${bangumis != null && bangumis.items != null}"
+        class="bangumi-section bangumi-animate-in bangumi-stagger-2"
+      >
+        <!-- 番剧卡片网格 -->
+        <div th:if="${!bangumis.items.isEmpty()}" class="bangumi-grid">
+          <th:block th:each="bangumi : ${bangumis.items}">
+            <a th:href="${bangumi.spec.url}" target="_blank" rel="noopener noreferrer" class="bangumi-card">
+              <!-- 封面 -->
+              <div class="bangumi-cover">
+                <img
+                  th:src="${#strings.contains(bangumi.spec.cover, '@') ? #strings.substringBefore(bangumi.spec.cover, '@') : bangumi.spec.cover}"
+                  th:alt="${bangumi.spec.title}"
+                  loading="lazy"
+                  decoding="async"
+                  referrerpolicy="no-referrer"
+                />
+                <!-- 评分角标 -->
+                <span th:if="${bangumi.spec.score != null && bangumi.spec.score != ''}" class="bangumi-score">
+                  <span th:text="${bangumi.spec.score}">0</span>
+                </span>
+              </div>
+              <!-- 标题 -->
+              <div class="bangumi-info">
+                <h3 class="bangumi-name" th:text="${bangumi.spec.title}">番剧名称</h3>
+                <span th:if="${bangumi.spec.totalCount != null}" class="bangumi-ep" th:text="${bangumi.spec.totalCount}"
+                  >全12话</span
+                >
+              </div>
+            </a>
+          </th:block>
+        </div>
+
+        <!-- 空状态 -->
+        <div th:if="${bangumis.items.isEmpty()}" class="bangumi-empty">
+          <div class="bangumi-empty-icon">📺</div>
+          <p>暂无追番数据</p>
+        </div>
+
+        <!-- 分页 -->
+        <div th:if="${bangumis.hasPrevious or bangumis.hasNext}" class="bangumi-pagination">
+          <a th:if="${bangumis.hasPrevious}" th:href="@{${bangumis.prevUrl}}" class="bangumi-page-btn">
+            <span class="icon-[heroicons--chevron-left] h-5 w-5"></span>
+          </a>
+          <span class="bangumi-page-info">
+            <span th:text="${bangumis.page}">1</span> / <span th:text="${bangumis.totalPages}">1</span>
+          </span>
+          <a th:if="${bangumis.hasNext}" th:href="@{${bangumis.nextUrl}}" class="bangumi-page-btn">
+            <span class="icon-[heroicons--chevron-right] h-5 w-5"></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 错误提示 -->
+      <div th:if="${bangumis == null}" class="bangumi-error bangumi-animate-in">
+        <p>追番数据加载失败，请检查插件配置</p>
       </div>
-    </section>
-
-    <!-- 错误提示 -->
-    <div th:if="${bangumis == null}" class="bangumi-error bangumi-animate-in">
-      <p>追番数据加载失败，请检查插件配置</p>
     </div>
-
-  </div>
-</main>
-
+  </main>
 </html>

@@ -1,96 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--   装备页面 - 主入口                          -->
+  <!--   根据settings中的mode引用不同风格模板        -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--   装备页面 - 主入口                          -->
-<!--   根据settings中的mode引用不同风格模板        -->
-<!-- ========================================== -->
+  <th:block th:replace="~{plugin:equipment:modules/style}"></th:block>
 
-<th:block th:replace="~{plugin:equipment:modules/style}"></th:block>
-
-<main class="equipment-page relative" th:fragment="equipment-content"
+  <main
+    class="equipment-page relative"
+    th:fragment="equipment-content"
     th:with="cfg = ${theme.config.equipment_settings},
              sidebarCfg = ${cfg?.sidebar_settings},
              globalSidebarCfg = ${theme.config.general.sidebar_settings},
              useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
              showSidebar = ${sidebarCfg?.show_sidebar == true},
-             sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+             sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <!-- 页面标题区 (仅非科技风且非优雅卡片模式时显示，优雅卡片使用 Hero 区域) -->
+      <header class="mb-10" th:if="${cfg?.style_settings?.mode != 'tech' and cfg?.style_settings?.mode != 'simple'}">
+        <h1
+          class="text-base-content text-2xl font-bold tracking-tight md:text-3xl"
+          th:text="${cfg?.basic_info?.page_title ?: '我的装备'}"
+        >
+          我的装备
+        </h1>
+        <p
+          class="text-base-content/50 mt-1"
+          th:text="${cfg?.basic_info?.page_description ?: '分享我日常使用的硬件与软件'}"
+        >
+          分享我日常使用的硬件与软件
+        </p>
+      </header>
 
-        <!-- 页面标题区 (仅非科技风且非优雅卡片模式时显示，优雅卡片使用 Hero 区域) -->
-        <header class="mb-10" th:if="${cfg?.style_settings?.mode != 'tech' and cfg?.style_settings?.mode != 'simple'}">
-            <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight"
-                th:text="${cfg?.basic_info?.page_title ?: '我的装备'}">我的装备</h1>
-            <p class="text-base-content/50 mt-1" th:text="${cfg?.basic_info?.page_description ?: '分享我日常使用的硬件与软件'}">
-                分享我日常使用的硬件与软件
-            </p>
-        </header>
+      <!-- 主体内容区域（支持两列布局） -->
+      <div class="flex gap-8" th:classappend="${showSidebar and sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 主内容区 -->
+        <section class="flex-1" th:classappend="${not showSidebar ? 'max-w-full' : ''}">
+          <th:block th:if="${not #lists.isEmpty(groups)}">
+            <!-- 使用 th:switch 确保只加载一个风格模板 -->
+            <th:block th:switch="${cfg?.style_settings?.mode}">
+              <!-- 科技风 (Tech) - 3D卡片 -->
+              <th:block th:case="'tech'">
+                <th:block th:replace="~{modules/equipments/style-tech :: style-tech}"></th:block>
+              </th:block>
 
-        <!-- 主体内容区域（支持两列布局） -->
-        <div class="flex gap-8" th:classappend="${showSidebar and sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+              <!-- 简约风 (Simple) -->
+              <th:block th:case="'simple'">
+                <th:block th:replace="~{modules/equipments/style-simple :: style-simple}"></th:block>
+              </th:block>
 
-            <!-- 主内容区 -->
-            <section class="flex-1" th:classappend="${not showSidebar ? 'max-w-full' : ''}">
+              <!-- 默认：使用科技风 -->
+              <th:block th:case="*">
+                <th:block th:replace="~{modules/equipments/style-tech :: style-tech}"></th:block>
+              </th:block>
+            </th:block>
+          </th:block>
 
-                <th:block th:if="${not #lists.isEmpty(groups)}">
-                    <!-- 使用 th:switch 确保只加载一个风格模板 -->
-                    <th:block th:switch="${cfg?.style_settings?.mode}">
-                        <!-- 科技风 (Tech) - 3D卡片 -->
-                        <th:block th:case="'tech'">
-                            <th:block th:replace="~{modules/equipments/style-tech :: style-tech}"></th:block>
-                        </th:block>
+          <!-- 空状态 -->
+          <div
+            th:if="${#lists.isEmpty(groups) && groups != null}"
+            class="text-base-content/40 flex flex-col items-center justify-center py-20"
+          >
+            <span class="icon-[heroicons--inbox-stack] mb-4 h-16 w-16 opacity-40"></span>
+            <p class="text-lg font-medium">暂无装备分组</p>
+          </div>
 
-                        <!-- 简约风 (Simple) -->
-                        <th:block th:case="'simple'">
-                            <th:block th:replace="~{modules/equipments/style-simple :: style-simple}"></th:block>
-                        </th:block>
+          <!-- 插件错误 -->
+          <div th:if="${groups == null}" class="text-base-content/40 flex flex-col items-center justify-center py-20">
+            <span class="icon-[heroicons--exclamation-triangle] text-warning/60 mb-4 h-16 w-16"></span>
+            <p class="text-lg font-medium">装备数据加载失败</p>
+          </div>
 
-                        <!-- 默认：使用科技风 -->
-                        <th:block th:case="*">
-                            <th:block th:replace="~{modules/equipments/style-tech :: style-tech}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
+          <!-- 评论区 -->
+          <th:block th:if="${cfg?.feature_settings?.enable_comment != false}">
+            <div class="mt-16 mb-5 flex items-center gap-3">
+              <div
+                class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br"
+              >
+                <span class="icon-[heroicons--chat-bubble-left-right] text-primary h-4 w-4"></span>
+              </div>
+              <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
+            </div>
+            <div class="bg-base-100/80 border-base-content/[0.06] card rounded-2xl border p-6 backdrop-blur-xl">
+              <halo:comment
+                th:if="${equipmentName != null}"
+                group="equipment.kunkunyu.com"
+                kind="EquipmentPage"
+                th:name="${equipmentName}"
+                colorScheme="system"
+              ></halo:comment>
+              <halo:comment
+                th:unless="${equipmentName != null}"
+                group="plugin.halo.run"
+                kind="Plugin"
+                th:name="${pluginName != null ? pluginName : 'PluginEquipment'}"
+                colorScheme="system"
+              >
+              </halo:comment>
+            </div>
+          </th:block>
+        </section>
 
-                <!-- 空状态 -->
-                <div th:if="${#lists.isEmpty(groups) && groups != null}"
-                    class="py-20 flex flex-col items-center justify-center text-base-content/40">
-                    <span class="icon-[heroicons--inbox-stack] w-16 h-16 mb-4 opacity-40"></span>
-                    <p class="text-lg font-medium">暂无装备分组</p>
-                </div>
-
-                <!-- 插件错误 -->
-                <div th:if="${groups == null}"
-                    class="py-20 flex flex-col items-center justify-center text-base-content/40">
-                    <span class="icon-[heroicons--exclamation-triangle] w-16 h-16 mb-4 text-warning/60"></span>
-                    <p class="text-lg font-medium">装备数据加载失败</p>
-                </div>
-
-                <!-- 评论区 -->
-                <th:block th:if="${cfg?.feature_settings?.enable_comment != false}">
-                    <div class="flex items-center gap-3 mb-5 mt-16">
-                        <div
-                            class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ">
-                            <span class="icon-[heroicons--chat-bubble-left-right] w-4 h-4 text-primary"></span>
-                        </div>
-                        <h2 class="text-lg font-semibold text-base-content">评论留言</h2>
-                    </div>
-                    <div class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6 card">
-                        <halo:comment th:if="${equipmentName != null}" group="equipment.kunkunyu.com"
-                            kind="EquipmentPage" th:name="${equipmentName}" colorScheme="system"></halo:comment>
-                        <halo:comment th:unless="${equipmentName != null}" group="plugin.halo.run" kind="Plugin"
-                            th:name="${pluginName != null ? pluginName : 'PluginEquipment'}" colorScheme="system">
-                        </halo:comment>
-                    </div>
-                </th:block>
-            </section>
-
-            <!-- 侧边栏 -->
-            <aside th:if="${showSidebar}" class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-                <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}"></th:block>
-            </aside>
-        </div>
+        <!-- 侧边栏 -->
+        <aside th:if="${showSidebar}" class="right-sidebar sticky top-20 hidden w-80 space-y-6 self-start lg:block">
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}"></th:block>
+        </aside>
+      </div>
     </div>
-</main>
-
+  </main>
 </html>

@@ -8,13 +8,13 @@ import { join, dirname } from "path";
  * 排除已通过 import 集成的文件
  */
 function copyStaticAssets() {
-  const srcStaticDir = 'src/static';
-  const destAssetsDir = 'templates/assets';
+  const srcStaticDir = "src/static";
+  const destAssetsDir = "templates/assets";
 
   // 排除列表：这些文件已通过 import 集成到构建中
   const excludeFiles = new Set([
-    'css/article-content.css',  // 已通过 @import 集成到各页面 CSS
-    'js/article-content.js',     // 已通过 import 集成到各页面 JS
+    "css/article-content.css", // 已通过 @import 集成到各页面 CSS
+    "js/article-content.js", // 已通过 import 集成到各页面 JS
   ]);
 
   if (!existsSync(srcStaticDir)) {
@@ -31,7 +31,7 @@ function copyStaticAssets() {
     }
 
     const items = readdirSync(src);
-    items.forEach(item => {
+    items.forEach((item) => {
       const srcPath = join(src, item);
       const destPath = join(dest, item);
       const relativePath = getRelativePath(srcPath, basePath);
@@ -40,7 +40,7 @@ function copyStaticAssets() {
         copyRecursive(srcPath, destPath, basePath);
       } else {
         // 跳过 README.md 和排除列表中的文件
-        if (item === 'README.md') {
+        if (item === "README.md") {
           return;
         }
 
@@ -65,12 +65,13 @@ function generateEntries() {
   const entries: Record<string, string> = {};
 
   // 公共资源入口
-  entries['main'] = 'src/common/main.js';
+  entries["main"] = "src/common/main.js";
 
   // 扫描页面JS文件
   const jsFiles = glob.sync("src/pages/**/*.js");
   jsFiles.forEach((file) => {
-    const matches = file.match(/src\/pages\/([^\/]+)\/\1\.js$/);
+    const normalized = file.replace(/\\/g, "/");
+    const matches = normalized.match(/src\/pages\/([^\/]+)\/\1\.js$/);
     if (matches) {
       const pageName = matches[1];
       entries[pageName] = file;
@@ -79,7 +80,7 @@ function generateEntries() {
   });
 
   // Auth 布局入口
-  const authLayouts = ['default', 'split', 'centered'];
+  const authLayouts = ["default", "split", "centered"];
   authLayouts.forEach((layout) => {
     const jsFile = `src/pages/auth/themes/${layout}.js`;
     if (existsSync(jsFile)) {
@@ -92,26 +93,26 @@ function generateEntries() {
   return entries;
 }
 
-const isWatchMode = process.argv.includes('--watch');
+const isWatchMode = process.argv.includes("--watch");
 const packageJson = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8"));
 const assetVersion = packageJson.version;
 
 export default defineConfig({
   build: {
     outDir: "templates/assets",
-    minify: 'esbuild',  // esbuild 压缩更快且不会产生变量名冲突
+    minify: "esbuild", // esbuild 压缩更快且不会产生变量名冲突
     rollupOptions: {
       input: generateEntries(),
       output: {
-        format: 'es', // 使用 ES Module 格式，支持代码分割
-        entryFileNames: 'js/[name].js',
+        format: "es", // 使用 ES Module 格式，支持代码分割
+        entryFileNames: "js/[name].js",
         // 入口文件通过模板中的 ?v=version 控制缓存，分包文件名追加版本，避免新入口命中旧 chunk
         chunkFileNames: `js/chunks/[name]-${assetVersion}.js`,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith(".css")) {
-            const name = assetInfo.name.replace('.css', '');
-            if (name === 'main') {
-              return 'css/main.css';
+            const name = assetInfo.name.replace(".css", "");
+            if (name === "main") {
+              return "css/main.css";
             }
             return `css/${name}.css`;
           }
@@ -122,14 +123,14 @@ export default defineConfig({
     },
     assetsInlineLimit: 0,
     // watch 模式下排除输出目录，防止 closeBundle 的文件复制触发无限重建
-    ...(isWatchMode ? { watch: { exclude: ['templates/assets/**'] } } : {}),
+    ...(isWatchMode ? { watch: { exclude: ["templates/assets/**"] } } : {}),
   },
   plugins: [
     {
-      name: 'copy-static-assets',
+      name: "copy-static-assets",
       closeBundle() {
         copyStaticAssets();
-      }
-    }
-  ]
+      },
+    },
+  ],
 });

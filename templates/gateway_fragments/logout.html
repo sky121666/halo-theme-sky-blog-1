@@ -4,26 +4,31 @@
 <!-- ========================================== -->
 
 <form th:fragment="form" class="space-y-6" th:action="@{/logout}" method="post">
-    <!-- 用户信息卡片 -->
-    <div th:if="${currentUser != null}"
-        class="flex items-center gap-4 p-4 rounded-2xl bg-base-200/50 border border-base-content/5">
-        <img th:src="${currentUser.spec.avatar ?: '/images/default-avatar.png'}"
-            th:alt="${currentUser.spec.displayName}" class="w-12 h-12 rounded-full object-cover shadow-md" />
-        <div class="flex-1 min-w-0">
-            <p class="font-semibold text-base-content truncate" th:text="${currentUser.spec.displayName}">User</p>
-            <p class="text-sm text-base-content/50 truncate" th:text="'@' + ${currentUser.metadata.name}">@username</p>
-        </div>
+  <!-- 用户信息卡片 -->
+  <div
+    th:if="${currentUser != null}"
+    class="bg-base-200/50 border-base-content/5 flex items-center gap-4 rounded-2xl border p-4"
+  >
+    <img
+      th:src="${currentUser.spec.avatar ?: '/images/default-avatar.png'}"
+      th:alt="${currentUser.spec.displayName}"
+      class="h-12 w-12 rounded-full object-cover shadow-md"
+    />
+    <div class="min-w-0 flex-1">
+      <p class="text-base-content truncate font-semibold" th:text="${currentUser.spec.displayName}">User</p>
+      <p class="text-base-content/50 truncate text-sm" th:text="'@' + ${currentUser.metadata.name}">@username</p>
     </div>
+  </div>
 
-    <!-- 确认登出按钮 -->
-    <div class="auth-actions space-y-3">
-        <button type="submit"
-            class="btn btn-error btn-lg w-full transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]">
-            确认退出
-        </button>
+  <!-- 确认登出按钮 -->
+  <div class="auth-actions space-y-3">
+    <button
+      type="submit"
+      class="btn btn-error btn-lg w-full transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
+    >
+      确认退出
+    </button>
 
-        <a th:href="@{/}" class="btn btn-ghost btn-lg w-full">
-            取消
-        </a>
-    </div>
+    <a th:href="@{/}" class="btn btn-ghost btn-lg w-full"> 取消 </a>
+  </div>
 </form>

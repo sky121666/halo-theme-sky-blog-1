@@ -1,159 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--        友情链接页主体内容 - Apple Style     -->
+  <!-- 支持分组展示，毛玻璃卡片布局                -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        友情链接页主体内容 - Apple Style     -->
-<!-- 支持分组展示，毛玻璃卡片布局                -->
-<!-- ========================================== -->
-
-<!-- 友链内容片段 -->
-<main class="relative" th:fragment="links-content"
-  th:with="rootCfg = ${theme.config.links_settings},
+  <!-- 友链内容片段 -->
+  <main
+    class="relative"
+    th:fragment="links-content"
+    th:with="rootCfg = ${theme.config.links_settings},
            cfg = ${rootCfg.basic_info},
            sidebarCfg = ${rootCfg.sidebar_settings},
            globalSidebarCfg = ${theme.config.general.sidebar_settings},
            useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-           sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 主内容区 -->
-      <section class="flex-1 min-w-0" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
+           sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 主内容区 -->
+        <section class="min-w-0 flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
+          <!-- 页面标题区 - Apple风格左对齐 -->
+          <header class="mb-10">
+            <div class="flex items-center justify-between">
+              <div>
+                <h1
+                  class="text-base-content text-2xl font-bold tracking-tight md:text-3xl"
+                  th:text="${cfg?.page_title ?: '友情链接'}"
+                >
+                  友情链接
+                </h1>
+                <p class="text-base-content/50 mt-1" th:text="${cfg?.page_description ?: '感谢这些优秀的网站与博客'}">
+                  感谢这些优秀的网站与博客
+                </p>
+              </div>
+            </div>
+          </header>
 
-        <!-- 页面标题区 - Apple风格左对齐 -->
-        <header class="mb-10">
-          <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight"
-                th:text="${cfg?.page_title ?: '友情链接'}">友情链接</h1>
-              <p class="text-base-content/50 mt-1" th:text="${cfg?.page_description ?: '感谢这些优秀的网站与博客'}">
-                感谢这些优秀的网站与博客
-              </p>
+          <!-- 分组展示 -->
+          <div class="space-y-10" th:if="${groups != null and !#lists.isEmpty(groups)}">
+            <th:block th:each="group, groupStat : ${groups}">
+              <!-- 分组区块 -->
+              <section class="link-group">
+                <!-- 分组标题 -->
+                <div class="mb-5 flex items-center gap-3">
+                  <div
+                    class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br"
+                  >
+                    <span class="icon-[heroicons--folder] text-primary h-4 w-4"></span>
+                  </div>
+                  <h2 class="text-base-content text-lg font-semibold" th:text="${group.spec.displayName}">分组名称</h2>
+                  <span
+                    class="text-base-content/40 bg-base-200/60 rounded-full px-2 py-0.5 text-xs"
+                    th:text="${#lists.size(group.links)}"
+                  ></span>
+                </div>
+
+                <!-- 链接卡片网格 - Apple Bento风格 -->
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <a
+                    th:each="link : ${group.links}"
+                    th:href="${link.spec.url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg"
+                  >
+                    <!-- Logo -->
+                    <div
+                      class="bg-base-200/60 ring-base-content/5 group-hover:ring-primary/30 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1 transition-all"
+                    >
+                      <img
+                        th:if="${link.spec.logo != null and !link.spec.logo.isEmpty()}"
+                        th:src="${link.spec.logo}"
+                        th:alt="${link.spec.displayName}"
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                        onerror="
+                          this.style.display = 'none';
+                          this.nextElementSibling.style.display = 'flex';
+                        "
+                      />
+                      <span
+                        class="icon-[heroicons--globe-alt] text-base-content/30 h-6 w-6"
+                        th:style="${link.spec.logo != null and !link.spec.logo.isEmpty() ? 'display:none' : ''}"
+                      ></span>
+                    </div>
+
+                    <!-- 信息 -->
+                    <div class="min-w-0 flex-1">
+                      <h3
+                        class="text-base-content group-hover:text-primary mb-0.5 line-clamp-1 text-sm font-medium transition-colors"
+                        th:text="${link.spec.displayName}"
+                      >
+                        网站名称
+                      </h3>
+                      <p
+                        class="text-base-content/50 line-clamp-1 text-xs"
+                        th:text="${link.spec.description ?: '暂无描述'}"
+                      >
+                        网站描述
+                      </p>
+                    </div>
+
+                    <!-- 外链图标 -->
+                    <div class="shrink-0">
+                      <span
+                        class="icon-[heroicons--arrow-right] text-base-content/20 group-hover:text-primary h-4 w-4 transition-all duration-300 group-hover:translate-x-1"
+                      ></span>
+                    </div>
+                  </a>
+                </div>
+              </section>
+            </th:block>
+          </div>
+
+          <!-- 无友链提示 -->
+          <div
+            th:if="${groups == null or #lists.isEmpty(groups)}"
+            class="bg-base-100/60 border-base-content/5 rounded-2xl border backdrop-blur-xl"
+          >
+            <div class="flex flex-col items-center justify-center py-20">
+              <div class="bg-base-200/60 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                <span class="icon-[heroicons--link-slash] text-base-content/30 h-8 w-8"></span>
+              </div>
+              <p class="text-base-content/50">暂无友情链接</p>
             </div>
           </div>
-        </header>
 
-        <!-- 分组展示 -->
-        <div class="space-y-10" th:if="${groups != null and !#lists.isEmpty(groups)}">
-          <th:block th:each="group, groupStat : ${groups}">
-            <!-- 分组区块 -->
-            <section class="link-group">
-              <!-- 分组标题 -->
-              <div class="flex items-center gap-3 mb-5">
-                <div
-                  class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                  <span class="icon-[heroicons--folder] w-4 h-4 text-primary"></span>
+          <!-- Link Exchange CTA Card (Compact & Interactive) -->
+          <!-- Link Exchange Area: Card + Modals -->
+          <div class="mt-8" th:if="${rootCfg?.apply_settings?.enable == true}">
+            <!-- 1. Apply Card (Compact Row Layout) -->
+            <div
+              class="glow-card bg-base-100/80 border-base-content/[0.06] flex flex-col items-center justify-between gap-6 rounded-2xl border p-6 backdrop-blur-xl md:flex-row"
+            >
+              <!-- Left: Text -->
+              <div class="min-w-0 flex-1 text-center md:text-left">
+                <div class="mb-1 flex items-center justify-center gap-3 md:justify-start">
+                  <div class="bg-primary/10 text-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                    <span class="icon-[heroicons--paper-airplane] h-4 w-4"></span>
+                  </div>
+                  <h3
+                    class="text-base-content text-lg font-bold"
+                    th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_title) ? rootCfg.apply_settings.apply_title : '加入友链星球'}"
+                  >
+                    加入友链星球
+                  </h3>
                 </div>
-                <h2 class="text-lg font-semibold text-base-content" th:text="${group.spec.displayName}">分组名称</h2>
-                <span class="text-xs text-base-content/40 bg-base-200/60 px-2 py-0.5 rounded-full"
-                  th:text="${#lists.size(group.links)}"></span>
+                <p
+                  class="text-base-content/60 pl-0 text-sm md:pl-11"
+                  th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_description) ? rootCfg.apply_settings.apply_description : '与我交换友链，一起探索更广阔的创作世界'}"
+                >
+                  与我交换友链，一起探索更广阔的创作世界
+                </p>
               </div>
 
-              <!-- 链接卡片网格 - Apple Bento风格 -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer"
-                  class="glow-card group relative flex items-center gap-4 p-4 
-                         bg-base-100/80 backdrop-blur-xl rounded-2xl 
-                         border border-base-content/[0.06] 
-                         shadow-sm hover:shadow-lg hover:border-base-content/10 hover:scale-[1.02]
-                         transition-all duration-300 ease-out cursor-pointer">
+              <!-- Right: Actions -->
+              <div class="flex shrink-0 items-center gap-3">
+                <!-- View Info Button (First) -->
+                <button
+                  onclick="document.getElementById('site-info-modal').showModal()"
+                  class="btn btn-ghost btn-sm md:btn-md bg-base-200/50 hover:bg-base-200 text-base-content rounded-xl font-bold transition-all"
+                >
+                  <span class="icon-[heroicons--information-circle] h-4 w-4"></span>
+                  <span class="hidden sm:inline">本站信息</span>
+                  <span class="sm:hidden">信息</span>
+                </button>
 
-                  <!-- Logo -->
-                  <div class="shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-base-200/60 flex items-center justify-center
-                               ring-1 ring-base-content/5 group-hover:ring-primary/30 transition-all">
-                    <img th:if="${link.spec.logo != null and !link.spec.logo.isEmpty()}" th:src="${link.spec.logo}"
-                      th:alt="${link.spec.displayName}" class="w-full h-full object-cover" loading="lazy"
-                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                    <span class="icon-[heroicons--globe-alt] w-6 h-6 text-base-content/30"
-                      th:style="${link.spec.logo != null and !link.spec.logo.isEmpty() ? 'display:none' : ''}"></span>
-                  </div>
-
-                  <!-- 信息 -->
-                  <div class="flex-1 min-w-0">
-                    <h3
-                      class="text-sm font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1 mb-0.5"
-                      th:text="${link.spec.displayName}">网站名称</h3>
-                    <p class="text-xs text-base-content/50 line-clamp-1" th:text="${link.spec.description ?: '暂无描述'}">
-                      网站描述</p>
-                  </div>
-
-                  <!-- 外链图标 -->
-                  <div class="shrink-0">
-                    <span class="icon-[heroicons--arrow-right] w-4 h-4 text-base-content/20 
-                                 group-hover:text-primary group-hover:translate-x-1 
-                                 transition-all duration-300"></span>
-                  </div>
+                <!-- Apply Button (Second/Right - Primary) -->
+                <button
+                  th:if="${pluginFinder.available('link-submit')}"
+                  onclick="document.getElementById('link-submit-modal').showModal()"
+                  class="btn btn-primary btn-sm md:btn-md shadow-primary/20 hover:shadow-primary/30 rounded-xl font-bold shadow-lg transition-all"
+                >
+                  <span class="icon-[heroicons--plus] h-4 w-4"></span>
+                  <span class="hidden sm:inline">立即申请</span>
+                  <span class="sm:hidden">申请</span>
+                </button>
+                <!-- Fallback -->
+                <a
+                  th:unless="${pluginFinder.available('link-submit')}"
+                  href="https://www.halo.run/store/apps/app-glejqzwk"
+                  target="_blank"
+                  class="btn btn-warning btn-sm md:btn-md rounded-xl shadow-lg"
+                >
+                  <span class="icon-[heroicons--arrow-down-tray] h-4 w-4"></span>
+                  安装插件
                 </a>
               </div>
-            </section>
-          </th:block>
-        </div>
-
-        <!-- 无友链提示 -->
-        <div th:if="${groups == null or #lists.isEmpty(groups)}"
-          class="bg-base-100/60 backdrop-blur-xl rounded-2xl border border-base-content/5">
-          <div class="flex flex-col items-center justify-center py-20">
-            <div class="w-16 h-16 rounded-2xl bg-base-200/60 flex items-center justify-center mb-4">
-              <span class="icon-[heroicons--link-slash] w-8 h-8 text-base-content/30"></span>
-            </div>
-            <p class="text-base-content/50">暂无友情链接</p>
-          </div>
-        </div>
-
-        <!-- Link Exchange CTA Card (Compact & Interactive) -->
-        <!-- Link Exchange Area: Card + Modals -->
-        <div class="mt-8" th:if="${rootCfg?.apply_settings?.enable == true}">
-
-          <!-- 1. Apply Card (Compact Row Layout) -->
-          <div
-            class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-
-            <!-- Left: Text -->
-            <div class="text-center md:text-left flex-1 min-w-0">
-              <div class="flex items-center justify-center md:justify-start gap-3 mb-1">
-                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                  <span class="icon-[heroicons--paper-airplane] w-4 h-4"></span>
-                </div>
-                <h3 class="text-lg font-bold text-base-content"
-                  th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_title) ? rootCfg.apply_settings.apply_title : '加入友链星球'}">
-                  加入友链星球
-                </h3>
-              </div>
-              <p class="text-sm text-base-content/60 pl-0 md:pl-11"
-                th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_description) ? rootCfg.apply_settings.apply_description : '与我交换友链，一起探索更广阔的创作世界'}">
-                与我交换友链，一起探索更广阔的创作世界
-              </p>
             </div>
 
-            <!-- Right: Actions -->
-            <div class="flex items-center gap-3 shrink-0">
-              <!-- View Info Button (First) -->
-              <button onclick="document.getElementById('site-info-modal').showModal()"
-                class="btn btn-ghost btn-sm md:btn-md bg-base-200/50 hover:bg-base-200 text-base-content rounded-xl transition-all font-bold">
-                <span class="icon-[heroicons--information-circle] w-4 h-4"></span>
-                <span class="hidden sm:inline">本站信息</span>
-                <span class="sm:hidden">信息</span>
-              </button>
-
-              <!-- Apply Button (Second/Right - Primary) -->
-              <button th:if="${pluginFinder.available('link-submit')}"
-                onclick="document.getElementById('link-submit-modal').showModal()"
-                class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all font-bold">
-                <span class="icon-[heroicons--plus] w-4 h-4"></span>
-                <span class="hidden sm:inline">立即申请</span>
-                <span class="sm:hidden">申请</span>
-              </button>
-              <!-- Fallback -->
-              <a th:unless="${pluginFinder.available('link-submit')}"
-                href="https://www.halo.run/store/apps/app-glejqzwk" target="_blank"
-                class="btn btn-warning btn-sm md:btn-md rounded-xl shadow-lg">
-                <span class="icon-[heroicons--arrow-down-tray] w-4 h-4"></span>
-                安装插件
-              </a>
-            </div>
-          </div>
-
-          <!-- 2. Site Info Modal (Refined Left-Layout) -->
-          <dialog id="site-info-modal" class="modal modal-bottom sm:modal-middle" x-data="{ 
+            <!-- 2. Site Info Modal (Refined Left-Layout) -->
+            <dialog
+              id="site-info-modal"
+              class="modal modal-bottom sm:modal-middle"
+              x-data="{ 
                  copy(text, $el) {
                      navigator.clipboard.writeText(text).then(() => {
                          const originalIcon = $el.innerHTML;
@@ -161,233 +202,324 @@
                          setTimeout(() => { $el.innerHTML = originalIcon; }, 2000);
                      });
                  }
-             }">
-            <div class="modal-box bg-base-100/95 backdrop-blur-2xl border border-base-content/10 max-w-lg">
-              <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-              </form>
+             }"
+            >
+              <div class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl">
+                <form method="dialog">
+                  <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">✕</button>
+                </form>
 
-              <h3 class="font-bold text-lg mb-6 flex items-center gap-2 text-primary">
-                <span class="icon-[heroicons--information-circle] w-6 h-6"></span>
-                <span>本站信息</span>
-              </h3>
+                <h3 class="text-primary mb-6 flex items-center gap-2 text-lg font-bold">
+                  <span class="icon-[heroicons--information-circle] h-6 w-6"></span>
+                  <span>本站信息</span>
+                </h3>
 
-              <div class="space-y-4">
-                <!-- Name -->
-                <div class="flex items-center justify-between pb-3 border-b border-base-content/5">
-                  <span class="text-sm font-medium text-base-content/70">站点名称</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-sm font-bold text-base-content truncate select-all"
-                      th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}">My
-                      Blog</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary"
-                      th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}"
-                      @click="copy($el.dataset.text, $el)" title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-                    </button>
+                <div class="space-y-4">
+                  <!-- Name -->
+                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
+                    <span class="text-base-content/70 text-sm font-medium">站点名称</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span
+                        class="text-base-content truncate text-sm font-bold select-all"
+                        th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}"
+                        >My Blog</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <!-- URL -->
-                <div class="flex items-center justify-between pb-3 border-b border-base-content/5">
-                  <span class="text-sm font-medium text-base-content/70">网站地址</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-sm font-mono text-base-content truncate select-all"
-                      th:text="${site.url}">https://example.com</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary" th:data-text="${site.url}"
-                      @click="copy($el.dataset.text, $el)" title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-                    </button>
+                  <!-- URL -->
+                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
+                    <span class="text-base-content/70 text-sm font-medium">网站地址</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span class="text-base-content truncate font-mono text-sm select-all" th:text="${site.url}"
+                        >https://example.com</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:data-text="${site.url}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <!-- Email -->
-                <div class="flex items-center justify-between pb-3 border-b border-base-content/5"
-                  th:if="${!#strings.isEmpty(rootCfg.apply_settings.blogger_email)}">
-                  <span class="text-sm font-medium text-base-content/70">联系邮箱</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-sm font-mono text-base-content truncate select-all"
-                      th:text="${rootCfg.apply_settings.blogger_email}">admin@example.com</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary"
-                      th:data-text="${rootCfg.apply_settings.blogger_email}" @click="copy($el.dataset.text, $el)"
-                      title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-                    </button>
+                  <!-- Email -->
+                  <div
+                    class="border-base-content/5 flex items-center justify-between border-b pb-3"
+                    th:if="${!#strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
+                  >
+                    <span class="text-base-content/70 text-sm font-medium">联系邮箱</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span
+                        class="text-base-content truncate font-mono text-sm select-all"
+                        th:text="${rootCfg.apply_settings.blogger_email}"
+                        >admin@example.com</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:data-text="${rootCfg.apply_settings.blogger_email}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <!-- Description -->
-                <div class="flex items-center justify-between pb-3 border-b border-base-content/5">
-                  <span class="text-sm font-medium text-base-content/70 shrink-0">站点描述</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-sm text-base-content truncate select-all"
-                      th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
-                      th:text="${desc}">Site Description...</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary"
-                      th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
-                      th:data-text="${desc}" @click="copy($el.dataset.text, $el)" title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-                    </button>
+                  <!-- Description -->
+                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
+                    <span class="text-base-content/70 shrink-0 text-sm font-medium">站点描述</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span
+                        class="text-base-content truncate text-sm select-all"
+                        th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
+                        th:text="${desc}"
+                        >Site Description...</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
+                        th:data-text="${desc}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <!-- Logo -->
-                <div class="flex items-center justify-between pb-3 border-b border-base-content/5">
-                  <span class="text-sm font-medium text-base-content/70">Logo 地址</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-xs font-mono text-base-content/80 truncate select-all"
-                      th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}">...</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary"
-                      th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}"
-                      @click="copy($el.dataset.text, $el)" title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
-                    </button>
+                  <!-- Logo -->
+                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
+                    <span class="text-base-content/70 text-sm font-medium">Logo 地址</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span
+                        class="text-base-content/80 truncate font-mono text-xs select-all"
+                        th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}"
+                        >...</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <!-- RSS -->
-                <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium text-base-content/70">RSS 地址</span>
-                  <div class="flex items-center gap-2 max-w-[70%]">
-                    <span class="text-xs font-mono text-base-content/80 truncate select-all" th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
+                  <!-- RSS -->
+                  <div class="flex items-center justify-between">
+                    <span class="text-base-content/70 text-sm font-medium">RSS 地址</span>
+                    <div class="flex max-w-[70%] items-center gap-2">
+                      <span
+                        class="text-base-content/80 truncate font-mono text-xs select-all"
+                        th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
                                       urlStr=${#strings.toString(site.url)},
                                       baseUrl=${urlStr.endsWith('/') ? #strings.substring(urlStr, 0, urlStr.length() - 1) : urlStr},
                                       fullRssUrl=${rssPath.startsWith('http') ? rssPath : baseUrl + rssPath}"
-                      th:text="${fullRssUrl}">.../rss.xml</span>
-                    <button class="btn btn-xs btn-ghost btn-square text-primary" th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
+                        th:text="${fullRssUrl}"
+                        >.../rss.xml</span
+                      >
+                      <button
+                        class="btn btn-xs btn-ghost btn-square text-primary"
+                        th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
                                          urlStr=${#strings.toString(site.url)},
                                          baseUrl=${urlStr.endsWith('/') ? #strings.substring(urlStr, 0, urlStr.length() - 1) : urlStr},
                                          fullRssUrl=${rssPath.startsWith('http') ? rssPath : baseUrl + rssPath}"
-                      th:data-text="${fullRssUrl}" @click="copy($el.dataset.text, $el)" title="复制">
-                      <span class="icon-[heroicons--document-duplicate] w-4 h-4"></span>
+                        th:data-text="${fullRssUrl}"
+                        @click="copy($el.dataset.text, $el)"
+                        title="复制"
+                      >
+                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <form method="dialog" class="modal-backdrop"><button>close</button></form>
+            </dialog>
+
+            <!-- 3. Link Submit Modal (Form) - Restored from original logic -->
+            <dialog
+              id="link-submit-modal"
+              class="modal modal-bottom sm:modal-middle"
+              th:if="${pluginFinder.available('link-submit')}"
+            >
+              <div
+                class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl"
+                x-data="linkSubmitForm()"
+              >
+                <div class="mb-6 flex items-center justify-between">
+                  <h3 class="text-base-content text-lg font-bold">提交友链申请</h3>
+                  <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost">✕</button></form>
+                </div>
+
+                <form @submit.prevent="submitLink" class="space-y-5">
+                  <!-- Top: Essential Info -->
+                  <div class="form-control">
+                    <label class="label"
+                      ><span class="label-text text-base-content/80 font-medium"
+                        >网站名称 <span class="text-error">*</span></span
+                      ></label
+                    >
+                    <input
+                      type="text"
+                      x-model="form.displayName"
+                      required
+                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full transition-all focus:ring-1"
+                      placeholder="例如：我的博客"
+                    />
+                  </div>
+
+                  <div class="form-control">
+                    <label class="label"
+                      ><span class="label-text text-base-content/80 font-medium"
+                        >网站地址 <span class="text-error">*</span></span
+                      ></label
+                    >
+                    <input
+                      type="url"
+                      x-model="form.url"
+                      required
+                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-sm transition-all focus:ring-1"
+                      placeholder="https://example.com"
+                    />
+                  </div>
+
+                  <div class="form-control">
+                    <label class="label"
+                      ><span class="label-text text-base-content/80 font-medium"
+                        >联系邮箱 <span class="text-error">*</span></span
+                      ></label
+                    >
+                    <input
+                      type="email"
+                      x-model="form.email"
+                      required
+                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full transition-all focus:ring-1"
+                      placeholder="用于接收审核通知"
+                    />
+                  </div>
+
+                  <div class="form-control">
+                    <label class="label"
+                      ><span class="label-text text-base-content/80 font-medium">网站描述</span></label
+                    >
+                    <textarea
+                      x-model="form.description"
+                      rows="3"
+                      class="textarea textarea-bordered bg-base-100 focus:border-primary focus:ring-primary w-full resize-none leading-relaxed transition-all focus:ring-1"
+                      placeholder="一句话介绍你的网站..."
+                    ></textarea>
+                  </div>
+
+                  <!-- Middle: Assets (Grid) -->
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="form-control">
+                      <label class="label"
+                        ><span class="label-text text-base-content/80 font-medium">Logo 地址</span></label
+                      >
+                      <input
+                        type="url"
+                        x-model="form.logo"
+                        class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-xs transition-all focus:ring-1"
+                        placeholder="https://..."
+                      />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"
+                        ><span class="label-text text-base-content/80 font-medium">RSS 地址</span></label
+                      >
+                      <input
+                        type="url"
+                        x-model="form.rssUrl"
+                        class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-xs transition-all focus:ring-1"
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Bottom: Group -->
+                  <div class="form-control" x-show="groups.length > 0">
+                    <label class="label"
+                      ><span class="label-text text-base-content/80 font-medium">申请分组</span></label
+                    >
+                    <select
+                      x-model="form.groupName"
+                      class="select select-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-normal transition-all focus:ring-1"
+                    >
+                      <option value="">选择一个合适的分组...</option>
+                      <template x-for="group in groups" :key="group.groupName">
+                        <option :value="group.groupName" x-text="group.displayName"></option>
+                      </template>
+                    </select>
+                  </div>
+
+                  <div x-show="result.show" x-transition>
+                    <div class="alert shadow-sm" :class="result.success ? 'alert-success' : 'alert-error'">
+                      <span class="icon-[heroicons--information-circle] h-5 w-5"></span>
+                      <span x-text="result.message"></span>
+                    </div>
+                  </div>
+
+                  <div class="pt-2">
+                    <button
+                      type="submit"
+                      :disabled="submitting"
+                      class="btn btn-primary btn-block shadow-primary/20 rounded-xl shadow-lg"
+                    >
+                      <span x-show="submitting" class="loading loading-spinner loading-xs"></span>
+                      <span x-text="submitting ? '正在提交...' : '提交申请'"></span>
                     </button>
                   </div>
-                </div>
-
+                </form>
               </div>
-            </div>
-            <form method="dialog" class="modal-backdrop"><button>close</button></form>
-          </dialog>
+              <form method="dialog" class="modal-backdrop"><button>close</button></form>
+            </dialog>
+          </div>
 
-          <!-- 3. Link Submit Modal (Form) - Restored from original logic -->
-          <dialog id="link-submit-modal" class="modal modal-bottom sm:modal-middle"
-            th:if="${pluginFinder.available('link-submit')}">
-            <div class="modal-box bg-base-100/95 backdrop-blur-2xl border border-base-content/10 max-w-lg"
-              x-data="linkSubmitForm()">
-
-              <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-bold text-base-content">提交友链申请</h3>
-                <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost">✕</button></form>
+          <!-- 评论区 -->
+          <section class="mt-12" th:if="${cfg?.enable_comment != false}">
+            <div class="mb-5 flex items-center gap-3">
+              <div
+                class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br"
+              >
+                <span class="icon-[mdi--comment-text-outline] text-primary h-4 w-4"></span>
               </div>
-
-              <form @submit.prevent="submitLink" class="space-y-5">
-                <!-- Top: Essential Info -->
-                <div class="form-control">
-                  <label class="label"><span class="label-text font-medium text-base-content/80">网站名称 <span
-                        class="text-error">*</span></span></label>
-                  <input type="text" x-model="form.displayName" required
-                    class="input input-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                    placeholder="例如：我的博客" />
-                </div>
-
-                <div class="form-control">
-                  <label class="label"><span class="label-text font-medium text-base-content/80">网站地址 <span
-                        class="text-error">*</span></span></label>
-                  <input type="url" x-model="form.url" required
-                    class="input input-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono text-sm"
-                    placeholder="https://example.com" />
-                </div>
-
-                <div class="form-control">
-                  <label class="label"><span class="label-text font-medium text-base-content/80">联系邮箱 <span
-                        class="text-error">*</span></span></label>
-                  <input type="email" x-model="form.email" required
-                    class="input input-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                    placeholder="用于接收审核通知" />
-                </div>
-
-                <div class="form-control">
-                  <label class="label"><span class="label-text font-medium text-base-content/80">网站描述</span></label>
-                  <textarea x-model="form.description" rows="3"
-                    class="textarea textarea-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none leading-relaxed"
-                    placeholder="一句话介绍你的网站..."></textarea>
-                </div>
-
-                <!-- Middle: Assets (Grid) -->
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium text-base-content/80">Logo
-                        地址</span></label>
-                    <input type="url" x-model="form.logo"
-                      class="input input-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono text-xs"
-                      placeholder="https://..." />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium text-base-content/80">RSS 地址</span></label>
-                    <input type="url" x-model="form.rssUrl"
-                      class="input input-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono text-xs"
-                      placeholder="https://..." />
-                  </div>
-                </div>
-
-                <!-- Bottom: Group -->
-                <div class="form-control" x-show="groups.length > 0">
-                  <label class="label"><span class="label-text font-medium text-base-content/80">申请分组</span></label>
-                  <select x-model="form.groupName"
-                    class="select select-bordered w-full bg-base-100 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-normal">
-                    <option value="">选择一个合适的分组...</option>
-                    <template x-for="group in groups" :key="group.groupName">
-                      <option :value="group.groupName" x-text="group.displayName"></option>
-                    </template>
-                  </select>
-                </div>
-
-                <div x-show="result.show" x-transition>
-                  <div class="alert shadow-sm" :class="result.success ? 'alert-success' : 'alert-error'">
-                    <span class="icon-[heroicons--information-circle] w-5 h-5"></span>
-                    <span x-text="result.message"></span>
-                  </div>
-                </div>
-
-                <div class="pt-2">
-                  <button type="submit" :disabled="submitting"
-                    class="btn btn-primary btn-block rounded-xl shadow-lg shadow-primary/20">
-                    <span x-show="submitting" class="loading loading-spinner loading-xs"></span>
-                    <span x-text="submitting ? '正在提交...' : '提交申请'"></span>
-                  </button>
-                </div>
-              </form>
+              <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
             </div>
-            <form method="dialog" class="modal-backdrop"><button>close</button></form>
-          </dialog>
-        </div>
-
-        <!-- 评论区 -->
-        <section class="mt-12" th:if="${cfg?.enable_comment != false}">
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-              <span class="icon-[mdi--comment-text-outline] w-4 h-4 text-primary"></span>
+            <div class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 backdrop-blur-xl">
+              <halo:comment
+                group="plugin.halo.run"
+                kind="Plugin"
+                th:name="${pluginName != null ? pluginName : 'links'}"
+                th:attr="displayName=${cfg?.page_title ?: '友情链接'}, subject-title=${cfg?.page_title ?: '友情链接'}"
+                colorScheme="system"
+              >
+              </halo:comment>
             </div>
-            <h2 class="text-lg font-semibold text-base-content">评论留言</h2>
-          </div>
-          <div class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
-            <halo:comment group="plugin.halo.run" kind="Plugin" th:name="${pluginName != null ? pluginName : 'links'}"
-              th:attr="displayName=${cfg?.page_title ?: '友情链接'}, subject-title=${cfg?.page_title ?: '友情链接'}"
-              colorScheme="system">
-            </halo:comment>
-          </div>
+          </section>
         </section>
 
-      </section>
-
-      <!-- 右侧边栏 -->
-      <aside th:if="${sidebarCfg?.show_sidebar == true}"
-        class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧边栏 -->
+        <aside
+          th:if="${sidebarCfg?.show_sidebar == true}"
+          class="sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
-
+  </main>
 </html>

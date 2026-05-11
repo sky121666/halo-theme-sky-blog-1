@@ -35,7 +35,7 @@
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
-    th:class="'min-h-screen relative flex flex-col ' + ${bgClass}"
+    th:class="'min-h-screen ' + ${bgClass} relative flex flex-col"
   >
     <!-- 网格背景（仅当选择 grid 样式时显示） -->
     <div

@@ -3,8 +3,8 @@
 <!-- 设计：浅色 + 极简 + 网格背景 + Clip 效果   -->
 <!-- ========================================== -->
 <th:block th:fragment="content">
-
-  <th:block th:with="
+  <th:block
+    th:with="
     cfg=${theme.config.about_settings},
     nickname=${cfg?.profile?.nickname ?: site.title},
     role=${cfg?.profile?.role ?: 'Full Stack Developer'},
@@ -40,10 +40,9 @@
     ctaTitle=${cfg?.cta?.title ?: '让我们一起打造卓越的数字体验'},
     ctaBtnText=${cfg?.cta?.button_text ?: '立即开始'},
     ctaBtnLink=${cfg?.cta?.button_link ?: '#sf-comments'}
-  ">
-
+  "
+  >
     <div class="about-squareform">
-
       <!-- ========== Hero - 居中极简 ========== -->
       <section class="sf-hero">
         <div class="sf-hero-content" data-reveal="fade-up">
@@ -52,43 +51,56 @@
             <span class="sf-badge-dot"></span>
             <span th:text="${role}">Full Stack Developer</span>
           </div>
-          
+
           <!-- 超大标题 -->
           <h1 class="sf-hero-title">
             <span class="sf-title-line" th:text="${nickname}">SQUAREFORM</span>
           </h1>
-          
+
           <!-- 简介 -->
           <p class="sf-hero-desc" th:utext="${bio}">
-            Translating imagination into interactive, responsive, and timeless digital solutions that connect users and brands.
+            Translating imagination into interactive, responsive, and timeless digital solutions that connect users and
+            brands.
           </p>
-          
+
           <!-- CTA 按钮 -->
           <div class="sf-hero-actions">
-            <a th:if="${showPrimaryBtn}" 
-               th:href="${primaryBtnLink}" 
-               th:text="${primaryBtnText}"
-               class="btn btn-neutral btn-lg">查看作品</a>
-            <a th:if="${showSecondaryBtn}" 
-               th:href="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? secondaryBtnLink : (socialLinks != null && !socialLinks.isEmpty() ? socialLinks[0]?.url : '#')}" 
-               th:target="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? '_self' : '_blank'}"
-               th:text="${secondaryBtnText}"
-               class="btn btn-outline btn-lg">联系我</a>
+            <a
+              th:if="${showPrimaryBtn}"
+              th:href="${primaryBtnLink}"
+              th:text="${primaryBtnText}"
+              class="btn btn-neutral btn-lg"
+              >查看作品</a
+            >
+            <a
+              th:if="${showSecondaryBtn}"
+              th:href="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? secondaryBtnLink : (socialLinks != null && !socialLinks.isEmpty() ? socialLinks[0]?.url : '#')}"
+              th:target="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? '_self' : '_blank'}"
+              th:text="${secondaryBtnText}"
+              class="btn btn-outline btn-lg"
+              >联系我</a
+            >
           </div>
-          
+
           <!-- 社交图标 - 黑色小方块 -->
           <div th:if="${socialLinks != null && !socialLinks.isEmpty()}" class="sf-social-icons">
-            <a th:each="social : ${socialLinks}" 
-               th:if="${social.url != null && !social.url.isEmpty()}"
-               th:href="${social.url}" 
-               target="_blank" 
-               rel="noopener"
-               class="sf-social-icon tooltip"
-               th:attr="data-tip=${social.name}">
-              <span th:if="${social.icon != null and !social.icon.toString().startsWith('<svg')}"
-                    th:utext="${tech.icon['value']}"></span>
-              <span th:if="${social.icon != null and social.icon.toString().startsWith('<svg')}"
-                    th:utext="${social.icon}"></span>
+            <a
+              th:each="social : ${socialLinks}"
+              th:if="${social.url != null && !social.url.isEmpty()}"
+              th:href="${social.url}"
+              target="_blank"
+              rel="noopener"
+              class="sf-social-icon tooltip"
+              th:attr="data-tip=${social.name}"
+            >
+              <span
+                th:if="${social.icon != null and !social.icon.toString().startsWith('<svg')}"
+                th:utext="${tech.icon['value']}"
+              ></span>
+              <span
+                th:if="${social.icon != null and social.icon.toString().startsWith('<svg')}"
+                th:utext="${social.icon}"
+              ></span>
             </a>
           </div>
         </div>
@@ -101,30 +113,48 @@
             <!-- 第一组 -->
             <th:block th:each="tech : ${techStack}">
               <span class="sf-tech-tag">
-                <span class="sf-tech-icon" th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon['value']}"></span>
-                <span class="sf-tech-icon" th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon}"></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon['value']}"
+                ></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon}"
+                ></span>
                 <span th:text="${tech.name}">Tech</span>
               </span>
             </th:block>
             <!-- 第二组 -->
             <th:block th:each="tech : ${techStack}">
               <span class="sf-tech-tag">
-                <span class="sf-tech-icon" th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon['value']}"></span>
-                <span class="sf-tech-icon" th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon}"></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon['value']}"
+                ></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon}"
+                ></span>
                 <span th:text="${tech.name}">Tech</span>
               </span>
             </th:block>
             <!-- 第三组（确保无缝） -->
             <th:block th:each="tech : ${techStack}">
               <span class="sf-tech-tag">
-                <span class="sf-tech-icon" th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon['value']}"></span>
-                <span class="sf-tech-icon" th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
-                      th:utext="${tech.icon}"></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon['value']}"
+                ></span>
+                <span
+                  class="sf-tech-icon"
+                  th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon}"
+                ></span>
                 <span th:text="${tech.name}">Tech</span>
               </span>
             </th:block>
@@ -135,22 +165,23 @@
       <!-- ========== 关于介绍 ========== -->
       <section class="sf-section">
         <div class="sf-container">
-          <div class="sf-section-header" data-reveal="fade-up">
-       
-          </div>
-          
+          <div class="sf-section-header" data-reveal="fade-up"></div>
+
           <!-- 统计数据 -->
-          <div th:if="${showSiteStats}" 
-               class="sf-stats-grid" 
-               th:with="siteStats=${siteStatsFinder.getStats()}"
-               data-reveal="fade-up" data-reveal-delay="200">
+          <div
+            th:if="${showSiteStats}"
+            class="sf-stats-grid"
+            th:with="siteStats=${siteStatsFinder.getStats()}"
+            data-reveal="fade-up"
+            data-reveal-delay="200"
+          >
             <div class="sf-stat-item" data-stat-value th:attr="data-target=${siteStats?.post ?: 0}">
               <div>
                 <span class="sf-stat-number">0</span>
                 <span class="sf-stat-plus">+</span>
               </div>
               <span class="sf-stat-label">Articles Published</span>
-                </div>
+            </div>
             <div class="sf-stat-item" data-stat-value th:attr="data-target=${siteStats?.category ?: 0}">
               <div>
                 <span class="sf-stat-number">0</span>
@@ -162,9 +193,9 @@
               <div>
                 <span class="sf-stat-number">0</span>
                 <span class="sf-stat-plus">+</span>
-                </div>
+              </div>
               <span class="sf-stat-label">Comments</span>
-                </div>
+            </div>
             <div class="sf-stat-item" data-stat-value th:attr="data-target=${siteStats?.visit ?: 0}">
               <div>
                 <span class="sf-stat-number">0</span>
@@ -183,22 +214,36 @@
             <span class="sf-section-tag">我的创作</span>
             <h2 class="sf-section-title">创作历程</h2>
           </div>
-          
+
           <div class="sf-projects-grid">
-            
             <!-- 文章热力图 -->
-            <div th:if="${showArticleHeatmap}" 
-                 class="sf-project-card sf-card-wide" 
-                 data-reveal="fade-up" data-reveal-delay="100">
+            <div
+              th:if="${showArticleHeatmap}"
+              class="sf-project-card sf-card-wide"
+              data-reveal="fade-up"
+              data-reveal-delay="100"
+            >
               <th:block th:with="recentPosts = ${postFinder.list({page: 1, size: 500})}">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <path d="M14 2v6h6" />
+                      <path d="M16 13H8" />
+                      <path d="M16 17H8" />
+                      <path d="M10 9H8" />
+                    </svg>
                   </div>
                   <h3 class="sf-card-title">写作活跃度</h3>
-                  <span class="sf-card-badge">
-                    <span id="article-count">0</span> 篇
-                  </span>
+                  <span class="sf-card-badge"> <span id="article-count">0</span> 篇 </span>
                 </div>
                 <div class="sf-heatmap-wrapper" id="article-heatmap-container">
                   <div class="heatmap-canvas"></div>
@@ -215,7 +260,7 @@
                 <script th:inline="javascript" data-swup-reload-script>
                   window.aboutPagePosts = [
                     /*[# th:each="post : ${recentPosts.items}"]*/
-                    {title: /*[[${post.spec.title}]]*/ '', date: /*[[${post.spec.publishTime}]]*/ ''},
+                    { title: /*[[${post.spec.title}]]*/ "", date: /*[[${post.spec.publishTime}]]*/ "" },
                     /*[/]*/
                   ];
                 </script>
@@ -223,28 +268,49 @@
             </div>
 
             <!-- GitHub 热力图 - 全屏 -->
-            <div th:if="${githubUsername != null && !githubUsername.isEmpty() && showGithubCalendar}" 
-                 class="sf-project-card sf-card-wide" 
-                 data-reveal="fade-up" data-reveal-delay="200">
+            <div
+              th:if="${githubUsername != null && !githubUsername.isEmpty() && showGithubCalendar}"
+              class="sf-project-card sf-card-wide"
+              data-reveal="fade-up"
+              data-reveal-delay="200"
+            >
               <div class="sf-card-header">
                 <div class="sf-card-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+                    />
+                  </svg>
                 </div>
                 <h3 class="sf-card-title">GitHub 贡献</h3>
-                <a th:href="${'https://github.com/' + githubUsername}" 
-                   target="_blank" 
-                   class="sf-card-link">
+                <a th:href="${'https://github.com/' + githubUsername}" target="_blank" class="sf-card-link">
                   <span th:text="${'@' + githubUsername}">@username</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7h10v10M7 17L17 7"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path d="M7 7h10v10M7 17L17 7" />
+                  </svg>
                 </a>
               </div>
               <div class="sf-github-wrapper" id="github-heatmap-container" th:attr="data-username=${githubUsername}">
                 <div class="sf-loading">
                   <span class="loading loading-dots loading-md"></span>
                 </div>
-                <img class="github-heatmap-img" alt="GitHub Contributions" style="display:none;" />
+                <img class="github-heatmap-img" alt="GitHub Contributions" style="display: none" />
               </div>
-              <span id="about-color-probe" class="hidden bg-primary text-base-content"></span>
+              <span id="about-color-probe" class="bg-primary text-base-content hidden"></span>
             </div>
 
             <!-- GitHub Stats -->
@@ -252,7 +318,18 @@
               <div class="sf-project-card" data-reveal="fade-up" data-reveal-delay="300">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M3 3v18h18" />
+                      <path d="m19 9-5 5-4-4-3 3" />
+                    </svg>
                   </div>
                   <h3 class="sf-card-title">统计数据</h3>
                 </div>
@@ -260,11 +337,26 @@
                   <img id="github-stats-img" alt="GitHub Stats" loading="lazy" />
                 </div>
               </div>
-              
+
               <div class="sf-project-card" data-reveal="fade-up" data-reveal-delay="400">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4a2 2 0 0 1 2-2h2"/><path d="M20 7V4a2 2 0 0 0-2-2h-2"/><path d="M4 17v3a2 2 0 0 0 2 2h2"/><path d="M20 17v3a2 2 0 0 1-2 2h-2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M4 7V4a2 2 0 0 1 2-2h2" />
+                      <path d="M20 7V4a2 2 0 0 0-2-2h-2" />
+                      <path d="M4 17v3a2 2 0 0 0 2 2h2" />
+                      <path d="M20 17v3a2 2 0 0 1-2 2h-2" />
+                      <path d="M8 12h8" />
+                      <path d="M12 8v8" />
+                    </svg>
                   </div>
                   <h3 class="sf-card-title">常用语言</h3>
                 </div>
@@ -273,7 +365,6 @@
                 </div>
               </div>
             </th:block>
-            
           </div>
         </div>
       </section>
@@ -284,55 +375,77 @@
           <div class="sf-section-header" data-reveal="fade-up">
             <span class="sf-section-tag">开发工具</span>
             <h2 class="sf-section-title">技术栈</h2>
-        </div>
+          </div>
 
           <div class="sf-toolkit-grid" data-reveal="fade-up" data-reveal-delay="200">
             <th:block th:each="tech, stat : ${techStack}">
-              <div class="sf-tool-card" th:if="${stat.index < 6}" 
-                   th:with="percent=${tech.proficiency != null ? tech.proficiency : (95 - stat.index * 5)}">
-                <div class="sf-tool-icon" 
-                     th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
-                     th:utext="${tech.icon['value']}"></div>
-                <div class="sf-tool-icon" 
-                     th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
-                     th:utext="${tech.icon}"></div>
+              <div
+                class="sf-tool-card"
+                th:if="${stat.index < 6}"
+                th:with="percent=${tech.proficiency != null ? tech.proficiency : (95 - stat.index * 5)}"
+              >
+                <div
+                  class="sf-tool-icon"
+                  th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon['value']}"
+                ></div>
+                <div
+                  class="sf-tool-icon"
+                  th:if="${tech.icon != null and tech.icon.toString().startsWith('<svg')}"
+                  th:utext="${tech.icon}"
+                ></div>
                 <h4 class="sf-tool-name" th:text="${tech.name}">Tool</h4>
-                <progress class="progress w-full" 
-                          th:value="${percent}" max="100"></progress>
-                <span class="sf-tool-percent" 
-                      th:text="'熟练度: ' + ${percent} + '%'">熟练度: 95%</span>
-            </div>
+                <progress class="progress w-full" th:value="${percent}" max="100"></progress>
+                <span class="sf-tool-percent" th:text="'熟练度: ' + ${percent} + '%'">熟练度: 95%</span>
+              </div>
             </th:block>
           </div>
         </div>
       </section>
 
       <!-- ========== 位置 ========== -->
-      <section th:if="${showLocation && locationLat != null && locationLng != null}" 
-               class="sf-section">
+      <section th:if="${showLocation && locationLat != null && locationLng != null}" class="sf-section">
         <div class="sf-container">
           <div class="sf-location-card" data-reveal="fade-up">
             <div class="sf-location-info">
               <span class="sf-section-tag">我的位置</span>
               <h3 class="sf-location-name" th:text="${locationName ?: '位置'}">北京</h3>
-              <p class="sf-location-desc" 
-                 th:if="${locationDesc != null}" 
-                 th:text="${locationDesc}"></p>
+              <p class="sf-location-desc" th:if="${locationDesc != null}" th:text="${locationDesc}"></p>
               <div class="sf-location-coords">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L12 22l6.5-7.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8"/></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="10" r="3" />
+                  <path
+                    d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L12 22l6.5-7.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8"
+                  />
+                </svg>
                 <span th:text="${locationLat} + '°N, ' + ${locationLng} + '°E'">39.9042°N, 116.4074°E</span>
               </div>
-              <a th:href="${'https://uri.amap.com/marker?position=' + locationLng + ',' + locationLat + '&name=' + locationName + '&coordinate=gaode&callnative=1'}"
-                 target="_blank"
-                 class="btn btn-neutral btn-sm gap-2 mt-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <a
+                th:href="${'https://uri.amap.com/marker?position=' + locationLng + ',' + locationLat + '&name=' + locationName + '&coordinate=gaode&callnative=1'}"
+                target="_blank"
+                class="btn btn-neutral btn-sm mt-4 gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  />
+                </svg>
                 在高德地图中查看
               </a>
             </div>
-            <div class="sf-location-map" 
-                 id="location-map"
-                 th:attr="data-lat=${locationLat},data-lng=${locationLng},data-name=${locationName},data-desc=${locationDesc}">
-            </div>
+            <div
+              class="sf-location-map"
+              id="location-map"
+              th:attr="data-lat=${locationLat},data-lng=${locationLng},data-name=${locationName},data-desc=${locationDesc}"
+            ></div>
           </div>
         </div>
       </section>
@@ -354,48 +467,48 @@
       <section th:if="${showCta}" class="sf-section">
         <div class="sf-container">
           <div class="sf-cta-card" data-reveal="fade-up">
-            <h2 class="sf-cta-title" th:text="${ctaTitle}">
-              让我们一起打造卓越的数字体验 — 立即开始您的下一个项目
-        </h2>
-            <a th:href="${ctaBtnLink}" 
-               th:text="${ctaBtnText}"
-               class="btn btn-neutral btn-lg sf-cta-btn">立即开始</a>
+            <h2 class="sf-cta-title" th:text="${ctaTitle}">让我们一起打造卓越的数字体验 — 立即开始您的下一个项目</h2>
+            <a th:href="${ctaBtnLink}" th:text="${ctaBtnText}" class="btn btn-neutral btn-lg sf-cta-btn">立即开始</a>
           </div>
         </div>
       </section>
 
       <!-- ========== 评论 ========== -->
-      <section id="sf-comments"
-               th:if="${enableComment && (singlePage.spec.allowComment == null || singlePage.spec.allowComment)}"
-               class="sf-section">
+      <section
+        id="sf-comments"
+        th:if="${enableComment && (singlePage.spec.allowComment == null || singlePage.spec.allowComment)}"
+        class="sf-section"
+      >
         <div class="sf-container">
           <div class="sf-section-header" data-reveal="fade-up">
             <span class="sf-section-tag">联系我</span>
             <h2 class="sf-section-title">留言板</h2>
           </div>
           <div class="sf-comment-card" data-reveal="fade-up" data-reveal-delay="200">
-            <halo:comment 
-              group="content.halo.run" 
-              kind="SinglePage" 
+            <halo:comment
+              group="content.halo.run"
+              kind="SinglePage"
               th:name="${singlePage.metadata.name}"
-              colorScheme="auto" />
+              colorScheme="auto"
+            />
           </div>
         </div>
       </section>
-
     </div>
 
     <!-- GitHub 配置 -->
-    <script th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}" 
-            th:inline="javascript" data-swup-reload-script>
+    <script
+      th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}"
+      th:inline="javascript"
+      data-swup-reload-script
+    >
       window.aboutGithubConfig = {
-        username: /*[[${githubUsername}]]*/ '',
-        statsHost: /*[[${#strings.isEmpty(githubStatsHost) ? 'https://github-readme-stats.xoku.cn' : githubStatsHost}]]*/ '',
-        locale: /*[[${#strings.isEmpty(githubLocale) ? '' : githubLocale}]]*/ '',
-        theme: /*[[${#strings.isEmpty(githubTheme) ? '' : githubTheme}]]*/ ''
+        username: /*[[${githubUsername}]]*/ "",
+        statsHost:
+          /*[[${#strings.isEmpty(githubStatsHost) ? 'https://github-readme-stats.xoku.cn' : githubStatsHost}]]*/ "",
+        locale: /*[[${#strings.isEmpty(githubLocale) ? '' : githubLocale}]]*/ "",
+        theme: /*[[${#strings.isEmpty(githubTheme) ? '' : githubTheme}]]*/ "",
       };
     </script>
-    
   </th:block>
-
 </th:block>

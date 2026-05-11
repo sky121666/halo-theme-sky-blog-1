@@ -5,118 +5,122 @@
 
 <!-- 基础静态资源（必须引入） -->
 <th:block th:fragment="basicStaticResources">
-    <th:block th:replace="~{gateway_fragments/common::basicStyleResources}"></th:block>
-    <th:block th:replace="~{gateway_fragments/common::basicScriptResources}"></th:block>
+  <th:block th:replace="~{gateway_fragments/common::basicStyleResources}"></th:block>
+  <th:block th:replace="~{gateway_fragments/common::basicScriptResources}"></th:block>
 </th:block>
 
 <!-- 基础脚本资源 -->
 <th:block th:fragment="basicScriptResources">
-    <!-- RSA 密码加密 (Halo 2.23+ 官方架构：加密逻辑放在 common.html) -->
-    <th:block th:if="${not #strings.isEmpty(publicKey)} and ${fragmentTemplateName} == 'login_local'">
-        <script src="/webjars/jsencrypt/bin/jsencrypt.min.js" defer></script>
-        <script th:inline="javascript" type="text/javascript">
-            const publicKey = /*[[${publicKey}]]*/ "";
+  <!-- RSA 密码加密 (Halo 2.23+ 官方架构：加密逻辑放在 common.html) -->
+  <th:block th:if="${not #strings.isEmpty(publicKey)} and ${fragmentTemplateName} == 'login_local'">
+    <script src="/webjars/jsencrypt/bin/jsencrypt.min.js" defer></script>
+    <script th:inline="javascript" type="text/javascript">
+      const publicKey = /*[[${publicKey}]]*/ "";
 
-            function encryptPassword(password) {
-                const encrypt = new JSEncrypt();
-                encrypt.setPublicKey(publicKey);
-                return encrypt.encrypt(password);
-            }
+      function encryptPassword(password) {
+        const encrypt = new JSEncrypt();
+        encrypt.setPublicKey(publicKey);
+        return encrypt.encrypt(password);
+      }
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const loginForm = document.getElementById("login-form");
-                loginForm.addEventListener("submit", function (event) {
-                    const plainPasswordInput = document.getElementById("plainPassword");
-                    const passwordInput = document.getElementById("password");
-                    passwordInput.value = encryptPassword(plainPasswordInput.value);
-                });
-            });
-        </script>
-    </th:block>
-
-    <script th:inline="javascript">
-        const i18nResources = {
-            sendVerificationCodeSuccess: '发送成功',
-            sendVerificationCodeFailed: '发送失败',
-            sendVerificationCodeSending: '发送中...',
-            passwordConfirmationFailed: '两次密码输入不一致',
-        };
-
-        // 密码确认验证
-        window.setupPasswordConfirmation = function (passwordId, confirmPasswordId) {
-            const password = document.getElementById(passwordId);
-            const confirmPassword = document.getElementById(confirmPasswordId);
-            if (!password || !confirmPassword) return;
-
-            function validate() {
-                const msg = password.value !== confirmPassword.value
-                    ? (window.i18nResources?.passwordConfirmationFailed || "密码不一致")
-                    : '';
-                confirmPassword.setCustomValidity(msg);
-            }
-            password.addEventListener('input', validate);
-            confirmPassword.addEventListener('input', validate);
-        };
-
-        // 发送验证码
-        window.sendVerificationCode = function (button, sendRequest) {
-            let countdown = 60;
-            const originalText = button.textContent;
-
-            button.addEventListener('click', async function () {
-                if (button.disabled) return;
-                button.disabled = true;
-                button.textContent = '发送中...';
-
-                try {
-                    await sendRequest();
-                    const timer = setInterval(function () {
-                        countdown--;
-                        button.textContent = countdown + 's';
-                        if (countdown <= 0) {
-                            clearInterval(timer);
-                            button.textContent = originalText;
-                            button.disabled = false;
-                            countdown = 60;
-                        }
-                    }, 1000);
-                } catch (error) {
-                    button.textContent = originalText;
-                    button.disabled = false;
-                    alert(error.message || '发送失败');
-                }
-            });
-        };
+      document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.getElementById("login-form");
+        loginForm.addEventListener("submit", function (event) {
+          const plainPasswordInput = document.getElementById("plainPassword");
+          const passwordInput = document.getElementById("password");
+          passwordInput.value = encryptPassword(plainPasswordInput.value);
+        });
+      });
     </script>
-    <script type="module" src="/js/main.js"></script>
-    <!-- Altcha Captcha Scripts (Halo Pro only, guarded for open-source compatibility) -->
-    <th:block th:if="${globalInfo != null and #strings.contains(globalInfo.toString(), 'captchaProvider')}">
+  </th:block>
+
+  <script th:inline="javascript">
+    const i18nResources = {
+      sendVerificationCodeSuccess: "发送成功",
+      sendVerificationCodeFailed: "发送失败",
+      sendVerificationCodeSending: "发送中...",
+      passwordConfirmationFailed: "两次密码输入不一致",
+    };
+
+    // 密码确认验证
+    window.setupPasswordConfirmation = function (passwordId, confirmPasswordId) {
+      const password = document.getElementById(passwordId);
+      const confirmPassword = document.getElementById(confirmPasswordId);
+      if (!password || !confirmPassword) return;
+
+      function validate() {
+        const msg =
+          password.value !== confirmPassword.value
+            ? window.i18nResources?.passwordConfirmationFailed || "密码不一致"
+            : "";
+        confirmPassword.setCustomValidity(msg);
+      }
+      password.addEventListener("input", validate);
+      confirmPassword.addEventListener("input", validate);
+    };
+
+    // 发送验证码
+    window.sendVerificationCode = function (button, sendRequest) {
+      let countdown = 60;
+      const originalText = button.textContent;
+
+      button.addEventListener("click", async function () {
+        if (button.disabled) return;
+        button.disabled = true;
+        button.textContent = "发送中...";
+
+        try {
+          await sendRequest();
+          const timer = setInterval(function () {
+            countdown--;
+            button.textContent = countdown + "s";
+            if (countdown <= 0) {
+              clearInterval(timer);
+              button.textContent = originalText;
+              button.disabled = false;
+              countdown = 60;
+            }
+          }, 1000);
+        } catch (error) {
+          button.textContent = originalText;
+          button.disabled = false;
+          alert(error.message || "发送失败");
+        }
+      });
+    };
+  </script>
+  <script type="module" src="/js/main.js"></script>
+  <!-- Altcha Captcha Scripts (Halo Pro only, guarded for open-source compatibility) -->
+  <th:block th:if="${globalInfo != null and #strings.contains(globalInfo.toString(), 'captchaProvider')}">
     <th:block th:if="${#strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
-        <script async defer src="/webjars/altcha/dist/altcha.i18n.js" type="module"></script>
-        <script src="/js/altcha-lib.iife.js"></script>
-        <script src="/js/altcha-utils.js"></script>
+      <script async defer src="/webjars/altcha/dist/altcha.i18n.js" type="module"></script>
+      <script src="/js/altcha-lib.iife.js"></script>
+      <script src="/js/altcha-utils.js"></script>
     </th:block>
-    </th:block>
+  </th:block>
 </th:block>
 <!-- 基础样式资源 -->
 <th:block th:fragment="basicStyleResources">
-    <link rel="stylesheet" href="/webjars/normalize.css/8.0.1/normalize.css" />
-
+  <link rel="stylesheet" href="/webjars/normalize.css/8.0.1/normalize.css" />
 </th:block>
 
 <!-- ========================================== -->
 <!--    站点 Logo                               -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="haloLogo">
-    <div class="flex justify-center mb-8">
-        <a href="/" class="flex items-center gap-3 group transition-all duration-300 hover:scale-105">
-            <!-- Logo 图片 -->
-            <img th:if="${site.logo != null and !site.logo.isEmpty()}" th:src="${site.logo}" th:alt="${site.title}"
-                class="w-10 h-10 rounded-xl shadow-lg" />
-            <!-- 站点名称 -->
-            <span class="text-2xl font-bold text-base-content tracking-tight" th:text="${site.title}">Site Title</span>
-        </a>
-    </div>
+  <div class="mb-8 flex justify-center">
+    <a href="/" class="group flex items-center gap-3 transition-all duration-300 hover:scale-105">
+      <!-- Logo 图片 -->
+      <img
+        th:if="${site.logo != null and !site.logo.isEmpty()}"
+        th:src="${site.logo}"
+        th:alt="${site.title}"
+        class="h-10 w-10 rounded-xl shadow-lg"
+      />
+      <!-- 站点名称 -->
+      <span class="text-base-content text-2xl font-bold tracking-tight" th:text="${site.title}">Site Title</span>
+    </a>
+  </div>
 </div>
 
 <!-- ========================================== -->
@@ -126,151 +130,162 @@
 <!--    社交账号登录                            -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="socialAuthProviders">
-    <th:block th:unless="${#lists.isEmpty(socialAuthProviders)}">
-        <!-- 分隔线 -->
-        <div class="flex items-center gap-4 my-6">
-            <div class="flex-1 h-px bg-base-content/10"></div>
-            <span class="text-xs text-base-content/40 uppercase tracking-wider">其他登录方式</span>
-            <div class="flex-1 h-px bg-base-content/10"></div>
-        </div>
+  <th:block th:unless="${#lists.isEmpty(socialAuthProviders)}">
+    <!-- 分隔线 -->
+    <div class="my-6 flex items-center gap-4">
+      <div class="bg-base-content/10 h-px flex-1"></div>
+      <span class="text-base-content/40 text-xs tracking-wider uppercase">其他登录方式</span>
+      <div class="bg-base-content/10 h-px flex-1"></div>
+    </div>
 
-        <!-- 社交登录按钮列表 (Grid Layout) -->
-        <div class="auth-provider-grid">
-            <th:block th:each="provider : ${socialAuthProviders}">
-                <form class="social-auth-provider-form w-full"
-                    th:action="|/login/social/${provider.metadata.name}?remember-me=false|" method="post">
-                    <button type="submit" class="auth-provider-btn">
-                        <img th:src="${provider.spec.logo}" th:alt="|${provider.spec.displayName}'s icon|" />
-                        <span th:text="${provider.spec.displayName}">Provider</span>
-                    </button>
-                </form>
-            </th:block>
-        </div>
-    </th:block>
+    <!-- 社交登录按钮列表 (Grid Layout) -->
+    <div class="auth-provider-grid">
+      <th:block th:each="provider : ${socialAuthProviders}">
+        <form
+          class="social-auth-provider-form w-full"
+          th:action="|/login/social/${provider.metadata.name}?remember-me=false|"
+          method="post"
+        >
+          <button type="submit" class="auth-provider-btn">
+            <img th:src="${provider.spec.logo}" th:alt="|${provider.spec.displayName}'s icon|" />
+            <span th:text="${provider.spec.displayName}">Provider</span>
+          </button>
+        </form>
+      </th:block>
+    </div>
+  </th:block>
 
-    <!-- Remember Me 联动脚本 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const rememberMeCheckbox = document.getElementById("remember-me");
-            const socialAuthProviders = document.querySelectorAll(".social-auth-provider-form");
+  <!-- Remember Me 联动脚本 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const rememberMeCheckbox = document.getElementById("remember-me");
+      const socialAuthProviders = document.querySelectorAll(".social-auth-provider-form");
 
-            if (rememberMeCheckbox) {
-                rememberMeCheckbox.addEventListener("change", function (e) {
-                    const rememberMe = e.target.checked;
-                    socialAuthProviders.forEach((form) => {
-                        const url = new URL(form.action, window.location.origin);
-                        url.searchParams.set("remember-me", rememberMe ? "true" : "false");
-                        form.action = url.pathname + url.search;
-                    });
-                });
-            }
+      if (rememberMeCheckbox) {
+        rememberMeCheckbox.addEventListener("change", function (e) {
+          const rememberMe = e.target.checked;
+          socialAuthProviders.forEach((form) => {
+            const url = new URL(form.action, window.location.origin);
+            url.searchParams.set("remember-me", rememberMe ? "true" : "false");
+            form.action = url.pathname + url.search;
+          });
         });
-    </script>
+      }
+    });
+  </script>
 </div>
 
 <!-- ========================================== -->
 <!--    表单登录方式切换                         -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="formAuthProviders">
-    <th:block th:unless="${#lists.isEmpty(formAuthProviders)}">
-        <!-- 分隔线 -->
-        <div class="flex items-center gap-4 my-6">
-            <div class="flex-1 h-px bg-base-content/10"></div>
-            <span class="text-xs text-base-content/40 uppercase tracking-wider">其他方式</span>
-            <div class="flex-1 h-px bg-base-content/10"></div>
-        </div>
+  <th:block th:unless="${#lists.isEmpty(formAuthProviders)}">
+    <!-- 分隔线 -->
+    <div class="my-6 flex items-center gap-4">
+      <div class="bg-base-content/10 h-px flex-1"></div>
+      <span class="text-base-content/40 text-xs tracking-wider uppercase">其他方式</span>
+      <div class="bg-base-content/10 h-px flex-1"></div>
+    </div>
 
-        <!-- 其他登录方式 (Grid Layout) -->
-        <div class="auth-provider-grid">
-            <th:block th:each="provider : ${formAuthProviders}">
-                <a th:href="'/login?method=' + ${provider.metadata.name}" class="auth-provider-btn">
-                    <img th:src="${provider.spec.logo}" th:alt="|${provider.spec.displayName}'s icon|" />
-                    <span
-                        th:text="${#messages.msgOrNull('formAuthProviders.' + provider.metadata.name + '.displayName') ?: provider.spec.displayName}">Method</span>
-                </a>
-            </th:block>
-        </div>
-    </th:block>
+    <!-- 其他登录方式 (Grid Layout) -->
+    <div class="auth-provider-grid">
+      <th:block th:each="provider : ${formAuthProviders}">
+        <a th:href="'/login?method=' + ${provider.metadata.name}" class="auth-provider-btn">
+          <img th:src="${provider.spec.logo}" th:alt="|${provider.spec.displayName}'s icon|" />
+          <span
+            th:text="${#messages.msgOrNull('formAuthProviders.' + provider.metadata.name + '.displayName') ?: provider.spec.displayName}"
+            >Method</span
+          >
+        </a>
+      </th:block>
+    </div>
+  </th:block>
 </div>
 
 <!-- ========================================== -->
 <!--    注册提示（登录页显示）                   -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="signupNoticeContent">
-    <div th:if="${globalInfo.allowRegistration}" class="text-center mt-6 text-sm text-base-content/60">
-        <span>还没有账户?</span>
-        <a th:href="@{/signup}" class="text-primary hover:underline font-medium ml-1">立即注册</a>
-    </div>
+  <div th:if="${globalInfo.allowRegistration}" class="text-base-content/60 mt-6 text-center text-sm">
+    <span>还没有账户?</span>
+    <a th:href="@{/signup}" class="text-primary ml-1 font-medium hover:underline">立即注册</a>
+  </div>
 </div>
 
 <!-- ========================================== -->
 <!--    登录提示（注册页显示）                   -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="loginNoticeContent">
-    <div th:if="${globalInfo.allowRegistration}" class="text-center mt-6 text-sm text-base-content/60">
-        <span>已有账户?</span>
-        <a th:href="@{/login}" class="text-primary hover:underline font-medium ml-1">立即登录</a>
-    </div>
+  <div th:if="${globalInfo.allowRegistration}" class="text-base-content/60 mt-6 text-center text-sm">
+    <span>已有账户?</span>
+    <a th:href="@{/login}" class="text-primary ml-1 font-medium hover:underline">立即登录</a>
+  </div>
 </div>
 
 <!-- ========================================== -->
 <!--    返回站点链接                             -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="returnToSiteContent">
-    <div class="text-center mt-6">
-        <a th:href="@{/}"
-            class="inline-flex items-center gap-2 text-sm text-base-content/50 hover:text-primary transition-colors">
-            <span class="icon-[heroicons--arrow-left] w-4 h-4"></span>
-            <span>返回首页</span>
-        </a>
-    </div>
+  <div class="mt-6 text-center">
+    <a
+      th:href="@{/}"
+      class="text-base-content/50 hover:text-primary inline-flex items-center gap-2 text-sm transition-colors"
+    >
+      <span class="icon-[heroicons--arrow-left] h-4 w-4"></span>
+      <span>返回首页</span>
+    </a>
+  </div>
 </div>
 
 <!-- ========================================== -->
 <!--    语言切换器                               -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="languageSwitcher">
-    <div class="flex justify-center mt-8">
-        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-base-200/50 text-sm">
-            <span class="icon-[heroicons--language] w-4 h-4 text-base-content/50"></span>
-            <select id="language-select" onchange="changeLanguage()"
-                class="select select-ghost select-xs bg-transparent border-none focus:outline-none text-base-content/70">
-                <option value="en" th:selected="${#locale.toLanguageTag} == 'en'">English</option>
-                <option value="es" th:selected="${#locale.toLanguageTag} == 'es'">Español</option>
-                <option value="zh-CN" th:selected="${#locale.toLanguageTag} == 'zh-CN'">简体中文</option>
-                <option value="zh-TW" th:selected="${#locale.toLanguageTag} == 'zh-TW'">繁體中文</option>
-            </select>
-        </div>
+  <div class="mt-8 flex justify-center">
+    <div class="bg-base-200/50 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm">
+      <span class="icon-[heroicons--language] text-base-content/50 h-4 w-4"></span>
+      <select
+        id="language-select"
+        onchange="changeLanguage()"
+        class="select select-ghost select-xs text-base-content/70 border-none bg-transparent focus:outline-none"
+      >
+        <option value="en" th:selected="${#locale.toLanguageTag} == 'en'">English</option>
+        <option value="es" th:selected="${#locale.toLanguageTag} == 'es'">Español</option>
+        <option value="zh-CN" th:selected="${#locale.toLanguageTag} == 'zh-CN'">简体中文</option>
+        <option value="zh-TW" th:selected="${#locale.toLanguageTag} == 'zh-TW'">繁體中文</option>
+      </select>
     </div>
-    <script type="text/javascript">
-        function changeLanguage() {
-            const selectedLanguage = document.getElementById("language-select").value;
-            const currentURL = new URL(window.location.href);
-            currentURL.searchParams.set("language", selectedLanguage);
-            history.replaceState(null, "", currentURL.toString());
-            window.location.reload();
-        }
-    </script>
+  </div>
+  <script type="text/javascript">
+    function changeLanguage() {
+      const selectedLanguage = document.getElementById("language-select").value;
+      const currentURL = new URL(window.location.href);
+      currentURL.searchParams.set("language", selectedLanguage);
+      history.replaceState(null, "", currentURL.toString());
+      window.location.reload();
+    }
+  </script>
 </div>
 
 <!-- ========================================== -->
 <!--    密码重置方式                             -->
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="passwordResetMethods">
-    <th:block th:unless="${#lists.isEmpty(otherMethods)}">
-        <div class="flex items-center gap-4 my-6">
-            <div class="flex-1 h-px bg-base-content/10"></div>
-            <span class="text-xs text-base-content/40 uppercase tracking-wider">其他方式</span>
-            <div class="flex-1 h-px bg-base-content/10"></div>
-        </div>
-        <div class="flex flex-wrap justify-center gap-3">
-            <th:block th:each="method : ${otherMethods}">
-                <a th:href="${method.href}" class="btn btn-ghost btn-sm gap-2">
-                    <img th:src="${method.icon}" th:alt="|${method.name}'s icon|" class="w-4 h-4" />
-                    <span
-                        th:text="${#messages.msgOrNull('passwordResetMethods.' + method.name + '.displayName') ?: method.name}">Method</span>
-                </a>
-            </th:block>
-        </div>
-    </th:block>
+  <th:block th:unless="${#lists.isEmpty(otherMethods)}">
+    <div class="my-6 flex items-center gap-4">
+      <div class="bg-base-content/10 h-px flex-1"></div>
+      <span class="text-base-content/40 text-xs tracking-wider uppercase">其他方式</span>
+      <div class="bg-base-content/10 h-px flex-1"></div>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3">
+      <th:block th:each="method : ${otherMethods}">
+        <a th:href="${method.href}" class="btn btn-ghost btn-sm gap-2">
+          <img th:src="${method.icon}" th:alt="|${method.name}'s icon|" class="h-4 w-4" />
+          <span th:text="${#messages.msgOrNull('passwordResetMethods.' + method.name + '.displayName') ?: method.name}"
+            >Method</span
+          >
+        </a>
+      </th:block>
+    </div>
+  </th:block>
 </div>

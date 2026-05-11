@@ -1,24 +1,27 @@
 <!doctype html>
-<html xmlns:th="https://www.thymeleaf.org"
-    th:replace="~{gateway_fragments/layout:: layout(title = |重置密码 - ${site.title}|, head = null, body = ~{::body})}">
-<th:block th:fragment="body">
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{gateway_fragments/layout:: layout(title = |重置密码 - ${site.title}|, head = null, body = ~{::body})}"
+>
+  <th:block th:fragment="body">
     <!-- 大标题 -->
     <h1 class="auth-title">设置新密码</h1>
     <p class="auth-subtitle" th:text="'为 ' + ${username} + ' 创建新的登录密码'">为用户设置新密码</p>
 
     <!-- 表单 -->
     <div class="space-y-6">
-        <form th:replace="~{gateway_fragments/password_reset_email_reset::form}"></form>
+      <form th:replace="~{gateway_fragments/password_reset_email_reset::form}"></form>
     </div>
 
     <!-- 返回登录 -->
     <div class="mt-8 text-center">
-        <a th:href="@{/login}"
-            class="inline-flex items-center gap-2 text-sm text-base-content/50 hover:text-primary transition-colors">
-            <span class="icon-[heroicons--arrow-left] w-4 h-4"></span>
-            <span>返回登录</span>
-        </a>
+      <a
+        th:href="@{/login}"
+        class="text-base-content/50 hover:text-primary inline-flex items-center gap-2 text-sm transition-colors"
+      >
+        <span class="icon-[heroicons--arrow-left] h-4 w-4"></span>
+        <span>返回登录</span>
+      </a>
     </div>
-</th:block>
-
+  </th:block>
 </html>

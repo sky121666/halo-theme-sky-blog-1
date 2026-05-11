@@ -1,465 +1,594 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--              标准导航栏组件                -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--              标准导航栏组件                -->
-<!-- ========================================== -->
+  <!-- 主导航栏容器 -->
+  <div th:fragment="navbar" class="drawer nav-wrapper sticky top-0 z-50" x-data="navbarController">
+    <!-- 移动端抽屉开关 -->
+    <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" />
 
-<!-- 主导航栏容器 -->
-<div th:fragment="navbar" class="drawer sticky top-0 z-50 nav-wrapper" x-data="navbarController">
+    <!-- 导航栏内容区域 -->
+    <div class="drawer-content">
+      <nav class="navbar">
+        <div class="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 px-2 sm:gap-4 sm:px-6 lg:px-8">
+          <!-- Logo 区域 -->
+          <div class="flex-shrink-0">
+            <a href="/" class="flex items-center gap-2.5 text-lg font-bold sm:text-xl">
+              <th:block th:replace="~{modules/logo :: icon('w-8 h-8')}" />
+              <th:block th:replace="~{modules/logo :: title}" />
+            </a>
+          </div>
 
-  <!-- 移动端抽屉开关 -->
-  <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" />
+          <!-- 主菜单区域（桌面端） -->
+          <div class="hidden flex-1 justify-end lg:flex">
+            <nav class="flex items-center gap-0.5">
+              <th:block
+                th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}"
+              >
+                <div th:each="menuItem : ${primaryMenu.menuItems}" class="group relative">
+                  <!-- 带子菜单的菜单项 -->
+                  <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
+                    <div class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown">
+                      <a
+                        tabindex="0"
+                        role="button"
+                        class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
+                      >
+                        <span
+                          th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                          th:utext="${menuItem.metadata.annotations['icon']}"
+                          class="nav-icon-svg h-4 w-4 flex-shrink-0"
+                        >
+                        </span>
+                        <span th:text="${menuItem.status.displayName}"></span>
+                        <span
+                          class="icon-[heroicons--chevron-down] text-base-content/40 h-3 w-3 transition-transform group-hover/dropdown:rotate-180"
+                        ></span>
+                      </a>
+                      <ul
+                        tabindex="0"
+                        class="dropdown-content menu bg-base-100/95 shadow-base-content/5 border-base-content/10 invisible z-50 mt-2 w-48 rounded-xl border p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all delay-75 duration-200 group-hover/dropdown:visible group-hover/dropdown:opacity-100 before:absolute before:-top-3 before:right-0 before:left-0 before:h-3 before:content-['']"
+                      >
+                        <li th:each="childItem : ${menuItem.children}" class="w-full">
+                          <a
+                            th:href="@{${childItem.status.href}}"
+                            th:target="${childItem.spec.target?.value}"
+                            th:title="${childItem.status.displayName}"
+                            class="text-base-content/70 hover:text-base-content hover:bg-primary/10 rounded-lg text-sm transition-all duration-200"
+                          >
+                            <span class="truncate" th:text="${childItem.status.displayName}"></span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </th:block>
 
-  <!-- 导航栏内容区域 -->
-  <div class="drawer-content">
-    <nav class="navbar">
-      <div class="max-w-7xl mx-auto w-full px-2 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
-
-        <!-- Logo 区域 -->
-        <div class="flex-shrink-0">
-          <a href="/" class="text-lg sm:text-xl font-bold flex items-center gap-2.5">
-            <th:block th:replace="~{modules/logo :: icon('w-8 h-8')}" />
-            <th:block th:replace="~{modules/logo :: title}" />
-          </a>
-        </div>
-
-        <!-- 主菜单区域（桌面端） -->
-        <div class="hidden lg:flex flex-1 justify-end">
-          <nav class="flex items-center gap-0.5">
-            <th:block
-              th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
-              <div th:each="menuItem : ${primaryMenu.menuItems}" class="relative group">
-
-                <!-- 带子菜单的菜单项 -->
-                <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <div class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown">
-                    <a tabindex="0" role="button"
-                      class="nav-menu-item flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200">
+                  <!-- 普通菜单项（无子菜单） -->
+                  <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
+                    <a
+                      th:href="@{${menuItem.status.href}}"
+                      th:target="${menuItem.spec.target?.value}"
+                      class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
+                    >
                       <span
-                        th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
-                        th:utext="${menuItem.metadata.annotations['icon']}" class="w-4 h-4 nav-icon-svg flex-shrink-0">
+                        th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                        th:utext="${menuItem.metadata.annotations['icon']}"
+                        class="nav-icon-svg h-4 w-4 flex-shrink-0"
+                      >
                       </span>
                       <span th:text="${menuItem.status.displayName}"></span>
-                      <span
-                        class="icon-[heroicons--chevron-down] w-3 h-3 text-base-content/40 transition-transform group-hover/dropdown:rotate-180"></span>
                     </a>
-                    <ul tabindex="0"
-                      class="dropdown-content menu z-50 w-48 p-1.5 mt-2
-                             bg-base-100/95 backdrop-blur-md 
-                             rounded-xl shadow-xl shadow-base-content/5
-                             border border-base-content/10
-                             opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible
-                             transition-all duration-200 delay-75
-                             before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
-                      <li th:each="childItem : ${menuItem.children}" class="w-full">
-                        <a th:href="@{${childItem.status.href}}" th:target="${childItem.spec.target?.value}"
-                          th:title="${childItem.status.displayName}"
-                          class="rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
-                          <span class="truncate" th:text="${childItem.status.displayName}"></span>
-                        </a>
-                      </li>
-                    </ul>
+                  </th:block>
+                </div>
+              </th:block>
+            </nav>
+          </div>
+
+          <!-- 功能区域（右侧操作区） -->
+          <div class="flex flex-shrink-0 items-center gap-1.5 sm:gap-2">
+            <!-- 搜索功能 -->
+            <div
+              th:if="${theme.config.nav.right_settings.show_search and pluginFinder.available('PluginSearchWidget')}"
+            >
+              <button
+                class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                onclick="SearchWidget.open()"
+              >
+                <th:block
+                  th:if="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}"
+                >
+                  <span
+                    th:utext="${theme.config.nav.right_settings.search_icon}"
+                    class="text-base-content/60 hover:text-primary h-5 w-5 transition-colors [&>svg]:h-full [&>svg]:w-full"
+                  ></span>
+                </th:block>
+                <th:block
+                  th:unless="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}"
+                >
+                  <span
+                    class="icon-[heroicons--magnifying-glass] text-base-content/60 hover:text-primary h-5 w-5 transition-colors"
+                  ></span>
+                </th:block>
+              </button>
+            </div>
+
+            <!-- 主题切换功能 -->
+            <div
+              th:if="${theme.config.nav.theme_settings.show_theme_toggle}"
+              class="relative"
+              x-data="createThemeToggle()"
+              th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
+                        data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
+                        data-default-theme=${theme.config.nav.theme_settings.default_theme}"
+              x-init="$nextTick(() => init())"
+            >
+              <button
+                @click="toggleTheme()"
+                class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                :title="isAuto ? '当前跟随系统，点击切换浅色模式' : (!isDark ? '当前浅色模式，点击切换深色模式' : '当前深色模式，点击切换跟随系统')"
+              >
+                <span
+                  x-cloak
+                  x-show="!isDark && !isAuto"
+                  class="text-base-content/60 hover:text-primary h-5 w-5 transition-colors [&>svg]:h-full [&>svg]:w-full"
+                >
+                  <th:block
+                    th:if="${theme.config.nav.theme_settings.light_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.light_icon)}"
+                  >
+                    <span
+                      th:utext="${theme.config.nav.theme_settings.light_icon}"
+                      class="block h-full w-full [&>svg]:h-full [&>svg]:w-full"
+                    ></span>
+                  </th:block>
+                  <th:block
+                    th:unless="${theme.config.nav.theme_settings.light_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.light_icon)}"
+                  >
+                    <span class="icon-[heroicons--sun] h-full w-full"></span>
+                  </th:block>
+                </span>
+                <span
+                  x-cloak
+                  x-show="isDark && !isAuto"
+                  class="text-base-content/60 hover:text-primary h-5 w-5 transition-colors [&>svg]:h-full [&>svg]:w-full"
+                >
+                  <th:block
+                    th:if="${theme.config.nav.theme_settings.dark_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.dark_icon)}"
+                  >
+                    <span
+                      th:utext="${theme.config.nav.theme_settings.dark_icon}"
+                      class="block h-full w-full [&>svg]:h-full [&>svg]:w-full"
+                    ></span>
+                  </th:block>
+                  <th:block
+                    th:unless="${theme.config.nav.theme_settings.dark_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.dark_icon)}"
+                  >
+                    <span class="icon-[heroicons--moon] h-full w-full"></span>
+                  </th:block>
+                </span>
+                <span
+                  x-cloak
+                  x-show="isAuto"
+                  class="text-base-content/60 hover:text-primary h-5 w-5 transition-colors [&>svg]:h-full [&>svg]:w-full"
+                >
+                  <span class="icon-[heroicons--computer-desktop] h-full w-full"></span>
+                </span>
+              </button>
+            </div>
+
+            <!-- 用户操作功能 -->
+            <div th:if="${theme.config.nav.right_settings.show_user_actions}" class="flex items-center">
+              <div th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}">
+                <!-- 已登录用户 -->
+                <div
+                  th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}"
+                  class="group/user relative"
+                  x-data="{ userMenuOpen: false }"
+                  @click.outside="userMenuOpen = false"
+                >
+                  <div
+                    role="button"
+                    class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
+                    @click="userMenuOpen = !userMenuOpen"
+                  >
+                    <div class="avatar avatar-online">
+                      <div class="bg-base-200 ring-primary ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-1">
+                        <img
+                          th:if="${!#strings.isEmpty(currentUser.avatar)}"
+                          th:src="${currentUser.avatar}"
+                          th:alt="${currentUser.displayName}"
+                          class="object-cover"
+                        />
+                        <img
+                          th:unless="${!#strings.isEmpty(currentUser.avatar)}"
+                          th:src="@{/assets/images/heihei.png}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 用户下拉菜单 -->
+                  <div
+                    x-show="userMenuOpen"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                    x-cloak
+                    class="menu bg-base-100/95 shadow-base-content/5 border-base-content/10 absolute right-0 z-50 mt-2 -mr-1 w-56 rounded-xl border p-2 pt-3 shadow-xl backdrop-blur-md"
+                  >
+                    <div class="px-2 py-2">
+                      <div class="flex items-center gap-3">
+                        <div class="avatar avatar-online">
+                          <div
+                            class="bg-base-200 ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-1"
+                          >
+                            <img
+                              th:if="${!#strings.isEmpty(currentUser.avatar)}"
+                              th:src="${currentUser.avatar}"
+                              th:alt="${currentUser.displayName}"
+                              class="object-cover"
+                            />
+                            <img
+                              th:unless="${!#strings.isEmpty(currentUser.avatar)}"
+                              th:src="@{/assets/images/heihei.png}"
+                            />
+                          </div>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                          <p
+                            class="text-base-content truncate text-sm font-medium"
+                            th:text="${currentUser.displayName}"
+                          ></p>
+                          <p class="text-base-content/50 truncate text-xs" th:text="${currentUser.name}"></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="divider my-1 opacity-50"></div>
+                    <li>
+                      <a
+                        href="/console"
+                        class="text-base-content/70 hover:text-base-content hover:bg-primary/10 flex items-center gap-3 rounded-lg text-sm transition-all duration-200"
+                      >
+                        <span class="icon-[heroicons--cog-8-tooth] h-4 w-4"></span>
+                        <span>控制台</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/uc"
+                        class="text-base-content/70 hover:text-base-content hover:bg-primary/10 flex items-center gap-3 rounded-lg text-sm transition-all duration-200"
+                      >
+                        <span class="icon-[heroicons--user] h-4 w-4"></span>
+                        <span>个人中心</span>
+                      </a>
+                    </li>
+                    <div class="divider my-1 opacity-50"></div>
+                    <li>
+                      <a
+                        href="/logout"
+                        class="text-error/70 hover:text-error hover:bg-error/10 flex items-center gap-3 rounded-lg text-sm transition-all duration-200"
+                      >
+                        <span class="icon-[heroicons--arrow-left-on-rectangle] h-4 w-4"></span>
+                        <span>退出登录</span>
+                      </a>
+                    </li>
+                  </div>
+                </div>
+
+                <!-- 未登录用户 -->
+                <a
+                  th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}"
+                  href="/login"
+                  class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                  title="登录"
+                  aria-label="登录"
+                >
+                  <th:block
+                    th:if="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}"
+                  >
+                    <span
+                      th:utext="${theme.config.nav.right_settings.login_icon}"
+                      class="text-base-content/60 hover:text-primary h-5 w-5 transition-colors [&>svg]:h-full [&>svg]:w-full"
+                    ></span>
+                  </th:block>
+                  <th:block
+                    th:unless="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}"
+                  >
+                    <span
+                      class="icon-[heroicons--user] text-base-content/60 hover:text-primary h-5 w-5 transition-colors"
+                    ></span>
+                  </th:block>
+                </a>
+              </div>
+            </div>
+
+            <!-- 移动端菜单按钮 -->
+            <div class="-mr-1 lg:hidden">
+              <label
+                for="mobile-menu-drawer"
+                class="drawer-button flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
+              >
+                <span
+                  class="icon-[heroicons--bars-3] text-base-content/60 hover:text-primary h-5 w-5 transition-colors"
+                ></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- ========== 移动端菜单抽屉 ========== -->
+    <div class="drawer-side z-[100]">
+      <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+
+      <aside
+        class="bg-base-100 border-base-content/6 drawer-slide-in relative flex h-screen w-[17rem] flex-col overflow-hidden border-r shadow-[4px_0_40px_-8px_rgba(0,0,0,0.12)]"
+      >
+        <!-- 滚动条美化样式 -->
+        <style>
+          #mobile-nav-scroll::-webkit-scrollbar {
+            width: 3px;
+          }
+
+          #mobile-nav-scroll::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          #mobile-nav-scroll::-webkit-scrollbar-thumb {
+            background: oklch(var(--bc) / 0.12);
+            border-radius: 999px;
+            transition: background 0.2s;
+          }
+
+          #mobile-nav-scroll::-webkit-scrollbar-thumb:hover {
+            background: oklch(var(--bc) / 0.25);
+          }
+
+          /* 头像区点阵纹理 */
+          .sidebar-header-texture {
+            background-image: radial-gradient(circle, oklch(var(--bc) / 0.06) 1px, transparent 1px);
+            background-size: 16px 16px;
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+          }
+        </style>
+
+        <!-- 層次装饰光晕 -->
+        <!-- 左上 primary 光晕 -->
+        <div class="bg-primary/8 pointer-events-none absolute -top-16 -left-8 h-52 w-52 rounded-full blur-3xl"></div>
+        <!-- 右下 second 对角光晕 (与左上呗应) -->
+        <div
+          class="bg-secondary/6 pointer-events-none absolute -right-10 -bottom-20 h-48 w-48 rounded-full blur-3xl"
+        ></div>
+        <!-- 右侧渐变光边（增加立体感）-->
+        <div
+          class="via-base-content/10 pointer-events-none absolute inset-y-0 right-0 w-[1px] bg-gradient-to-b from-transparent to-transparent"
+        ></div>
+
+        <!-- ===== 头部：居中头像/Logo + 名称 + 统计 ===== -->
+        <div
+          class="sidebar-header-texture relative overflow-hidden px-6 pt-8 pb-5"
+          th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)},
+                 isLoggedIn = ${!#strings.equals(currentUser.name, 'anonymousUser')}"
+        >
+          <div class="flex flex-col items-center">
+            <!-- 已登录：用户头像 -->
+            <a th:if="${isLoggedIn}" href="/uc" class="group mb-3">
+              <div
+                class="ring-primary/20 ring-offset-base-100 group-hover:ring-primary/50 shadow-primary/10 h-18 w-18 overflow-hidden rounded-full shadow-lg ring-2 ring-offset-2 transition-all duration-300"
+              >
+                <img
+                  th:if="${!#strings.isEmpty(currentUser.avatar)}"
+                  th:src="${currentUser.avatar}"
+                  th:alt="${currentUser.displayName}"
+                  class="h-full w-full object-cover"
+                />
+                <img
+                  th:unless="${!#strings.isEmpty(currentUser.avatar)}"
+                  th:src="@{/assets/images/heihei.png}"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+            </a>
+            <!-- 未登录：站点 Logo -->
+            <a th:unless="${isLoggedIn}" href="/" class="group mb-3">
+              <div
+                class="bg-base-200 ring-base-content/10 ring-offset-base-100 group-hover:ring-primary/30 shadow-base-content/5 flex h-18 w-18 items-center justify-center overflow-hidden rounded-full shadow-lg ring-2 ring-offset-2 transition-all duration-300"
+              >
+                <th:block th:replace="~{modules/logo :: icon('w-10 h-10')}" />
+              </div>
+            </a>
+
+            <!-- 名称 -->
+            <a
+              th:if="${isLoggedIn}"
+              href="/uc"
+              class="text-base-content hover:text-primary text-sm font-semibold transition-colors"
+              th:text="${currentUser.displayName}"
+              >用户名</a
+            >
+            <a
+              th:unless="${isLoggedIn}"
+              href="/"
+              class="text-base-content hover:text-primary text-sm font-semibold transition-colors"
+              th:text="${siteTitle}"
+              >站点名称</a
+            >
+
+            <!-- 副标题 -->
+            <p
+              th:unless="${isLoggedIn}"
+              class="text-base-content/40 mt-1 text-xs"
+              th:text="${#strings.abbreviate(siteSubtitle ?: '', 24)}"
+            >
+              一段简介
+            </p>
+          </div>
+
+          <!-- 统计数据行 -->
+          <div
+            class="mt-5 flex items-center justify-center gap-6"
+            th:with="allPosts = ${postFinder.list({page: 1, size: 1})},
+                   allTags = ${tagFinder.listAll()},
+                   allCategories = ${categoryFinder.listAsTree()}"
+          >
+            <a href="/archives" class="group flex flex-col items-center">
+              <span
+                class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
+                th:text="${allPosts.total}"
+                >0</span
+              >
+              <span class="text-base-content/40 mt-1 text-xs">文章</span>
+            </a>
+            <div class="bg-base-content/10 h-6 w-px"></div>
+            <a href="/tags" class="group flex flex-col items-center">
+              <span
+                class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
+                th:text="${#lists.size(allTags)}"
+                >0</span
+              >
+              <span class="text-base-content/40 mt-1 text-xs">标签</span>
+            </a>
+            <div class="bg-base-content/10 h-6 w-px"></div>
+            <a href="/categories" class="group flex flex-col items-center">
+              <span
+                class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
+                th:text="${#lists.size(allCategories)}"
+                >0</span
+              >
+              <span class="text-base-content/40 mt-1 text-xs">分类</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== 菜单区域 ===== -->
+        <div id="mobile-nav-scroll" class="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
+          <nav class="space-y-0.5 pb-4">
+            <th:block
+              th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}"
+            >
+              <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}">
+                <!-- 带子菜单 -->
+                <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
+                  <div x-data="{ open: false }">
+                    <button
+                      @click="open = !open"
+                      class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex w-full cursor-pointer items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
+                    >
+                      <span
+                        class="text-base-content/40 group-hover:text-primary/70 h-5 w-5 flex-shrink-0 transition-colors duration-200"
+                      >
+                        <th:block
+                          th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                        >
+                          <span
+                            th:utext="${menuItem.metadata.annotations['icon']}"
+                            class="nav-icon-svg h-full w-full"
+                          ></span>
+                        </th:block>
+                        <th:block
+                          th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                        >
+                          <span class="icon-[heroicons--folder] h-full w-full"></span>
+                        </th:block>
+                      </span>
+                      <span
+                        class="flex-1 text-left text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
+                        th:text="${menuItem.status.displayName}"
+                        >菜单项</span
+                      >
+                      <span
+                        class="icon-[heroicons--chevron-down] text-base-content/25 h-3.5 w-3.5 flex-shrink-0 transition-transform duration-300"
+                        :class="{ 'rotate-180': open }"
+                      ></span>
+                    </button>
+                    <div
+                      x-show="open"
+                      x-cloak
+                      x-transition:enter="transition ease-out duration-200"
+                      x-transition:enter-start="opacity-0 -translate-y-1"
+                      x-transition:enter-end="opacity-100 translate-y-0"
+                      x-transition:leave="transition ease-in duration-150"
+                      x-transition:leave-start="opacity-100 translate-y-0"
+                      x-transition:leave-end="opacity-0 -translate-y-1"
+                      class="border-base-content/8 mt-0.5 ml-4 space-y-0.5 border-l pb-1 pl-5"
+                    >
+                      <a
+                        th:each="childItem : ${menuItem.children}"
+                        th:href="@{${childItem.status.href}}"
+                        th:target="${childItem.spec.target?.value}"
+                        class="text-base-content/50 hover:text-base-content hover:bg-base-content/5 flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all duration-200"
+                      >
+                        <th:block
+                          th:if="${childItem.metadata?.annotations != null &amp;&amp; childItem.metadata.annotations['icon'] != null}"
+                        >
+                          <span
+                            th:utext="${childItem.metadata.annotations['icon']}"
+                            class="nav-icon-svg text-base-content/35 h-4 w-4 flex-shrink-0"
+                          ></span>
+                        </th:block>
+                        <th:block
+                          th:unless="${childItem.metadata?.annotations != null &amp;&amp; childItem.metadata.annotations['icon'] != null}"
+                        >
+                          <span class="bg-base-content/20 h-1.5 w-1.5 flex-shrink-0 rounded-full"></span>
+                        </th:block>
+                        <span
+                          class="transition-transform duration-300 group-hover:translate-x-1"
+                          th:text="${childItem.status.displayName}"
+                          >子项</span
+                        >
+                      </a>
+                    </div>
                   </div>
                 </th:block>
 
-                <!-- 普通菜单项（无子菜单） -->
+                <!-- 无子菜单 -->
                 <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}"
-                    class="nav-menu-item flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200">
+                  <a
+                    th:href="@{${menuItem.status.href}}"
+                    th:target="${menuItem.spec.target?.value}"
+                    class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
+                  >
                     <span
-                      th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
-                      th:utext="${menuItem.metadata.annotations['icon']}" class="w-4 h-4 nav-icon-svg flex-shrink-0">
+                      class="text-base-content/40 group-hover:text-primary/70 h-5 w-5 flex-shrink-0 transition-colors duration-200"
+                    >
+                      <th:block
+                        th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                      >
+                        <span
+                          th:utext="${menuItem.metadata.annotations['icon']}"
+                          class="nav-icon-svg h-full w-full"
+                        ></span>
+                      </th:block>
+                      <th:block
+                        th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                      >
+                        <span class="icon-[heroicons--link] h-full w-full"></span>
+                      </th:block>
                     </span>
-                    <span th:text="${menuItem.status.displayName}"></span>
+                    <span
+                      class="text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
+                      th:text="${menuItem.status.displayName}"
+                      >菜单项</span
+                    >
                   </a>
                 </th:block>
-
               </div>
             </th:block>
           </nav>
         </div>
 
-        <!-- 功能区域（右侧操作区） -->
-        <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-
-          <!-- 搜索功能 -->
-          <div th:if="${theme.config.nav.right_settings.show_search and pluginFinder.available('PluginSearchWidget')}">
-            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-              onclick="SearchWidget.open();">
-              <th:block
-                th:if="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}">
-                <span th:utext="${theme.config.nav.right_settings.search_icon}"
-                  class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors"></span>
-              </th:block>
-              <th:block
-                th:unless="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}">
-                <span
-                  class="icon-[heroicons--magnifying-glass] w-5 h-5 text-base-content/60 hover:text-primary transition-colors"></span>
-              </th:block>
-            </button>
-          </div>
-
-          <!-- 主题切换功能 -->
-          <div th:if="${theme.config.nav.theme_settings.show_theme_toggle}" class="relative"
-            x-data="createThemeToggle()" th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
-                        data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
-                        data-default-theme=${theme.config.nav.theme_settings.default_theme}"
-            x-init="$nextTick(() => init())">
-            <button @click="toggleTheme()"
-              class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-              :title="isDark ? '切换到浅色模式' : '切换到深色模式'">
-              <span x-cloak x-show="!isDark"
-                class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors">
-                <th:block
-                  th:if="${theme.config.nav.theme_settings.light_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.light_icon)}">
-                  <span th:utext="${theme.config.nav.theme_settings.light_icon}"
-                    class="block w-full h-full [&>svg]:w-full [&>svg]:h-full"></span>
-                </th:block>
-                <th:block
-                  th:unless="${theme.config.nav.theme_settings.light_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.light_icon)}">
-                  <span class="icon-[heroicons--sun] w-full h-full"></span>
-                </th:block>
-              </span>
-              <span x-cloak x-show="isDark"
-                class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors">
-                <th:block
-                  th:if="${theme.config.nav.theme_settings.dark_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.dark_icon)}">
-                  <span th:utext="${theme.config.nav.theme_settings.dark_icon}"
-                    class="block w-full h-full [&>svg]:w-full [&>svg]:h-full"></span>
-                </th:block>
-                <th:block
-                  th:unless="${theme.config.nav.theme_settings.dark_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.dark_icon)}">
-                  <span class="icon-[heroicons--moon] w-full h-full"></span>
-                </th:block>
-              </span>
-            </button>
-          </div>
-
-          <!-- 用户操作功能 -->
-          <div th:if="${theme.config.nav.right_settings.show_user_actions}" class="flex items-center">
-            <div th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}">
-
-              <!-- 已登录用户 -->
-              <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}" class="relative group/user"
-                x-data="{ userMenuOpen: false }" @click.outside="userMenuOpen = false">
-                <div role="button"
-                  class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
-                  @click="userMenuOpen = !userMenuOpen">
-                  <div class="avatar avatar-online">
-                    <div class="w-8 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
-                      <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
-                        th:alt="${currentUser.displayName}" class="object-cover" />
-                      <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                        th:src="@{/assets/images/heihei.png}" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 用户下拉菜单 -->
-                <div x-show="userMenuOpen" x-transition:enter="transition ease-out duration-200"
-                  x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
-                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                  x-transition:leave="transition ease-in duration-150"
-                  x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                  x-transition:leave-end="opacity-0 scale-95 -translate-y-1" x-cloak class="absolute right-0 z-50 menu w-56 mt-2 p-2 pt-3 -mr-1
-                         bg-base-100/95 backdrop-blur-md 
-                         rounded-xl shadow-xl shadow-base-content/5
-                         border border-base-content/10">
-
-                  <div class="px-2 py-2">
-                    <div class="flex items-center gap-3">
-                      <div class="avatar avatar-online">
-                        <div
-                          class="w-10 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
-                          <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
-                            th:alt="${currentUser.displayName}" class="object-cover" />
-                          <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                            th:src="@{/assets/images/heihei.png}" />
-                        </div>
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-base-content truncate" th:text="${currentUser.displayName}">
-                        </p>
-                        <p class="text-xs text-base-content/50 truncate" th:text="${currentUser.name}"></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="divider my-1 opacity-50"></div>
-                  <li>
-                    <a href="/console"
-                      class="flex items-center gap-3 rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
-                      <span class="icon-[heroicons--cog-8-tooth] w-4 h-4"></span>
-                      <span>控制台</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/uc"
-                      class="flex items-center gap-3 rounded-lg text-sm text-base-content/70 hover:text-base-content hover:bg-primary/10 transition-all duration-200">
-                      <span class="icon-[heroicons--user] w-4 h-4"></span>
-                      <span>个人中心</span>
-                    </a>
-                  </li>
-                  <div class="divider my-1 opacity-50"></div>
-                  <li>
-                    <a href="/logout"
-                      class="flex items-center gap-3 rounded-lg text-sm text-error/70 hover:text-error hover:bg-error/10 transition-all duration-200">
-                      <span class="icon-[heroicons--arrow-left-on-rectangle] w-4 h-4"></span>
-                      <span>退出登录</span>
-                    </a>
-                  </li>
-                </div>
-              </div>
-
-              <!-- 未登录用户 -->
-              <a th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}" href="/login"
-                class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-                title="登录" aria-label="登录">
-                <th:block
-                  th:if="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}">
-                  <span th:utext="${theme.config.nav.right_settings.login_icon}"
-                    class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors"></span>
-                </th:block>
-                <th:block
-                  th:unless="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}">
-                  <span
-                    class="icon-[heroicons--user] w-5 h-5 text-base-content/60 hover:text-primary transition-colors"></span>
-                </th:block>
-              </a>
-
-            </div>
-          </div>
-
-          <!-- 移动端菜单按钮 -->
-          <div class="lg:hidden -mr-1">
-            <label for="mobile-menu-drawer"
-              class="w-8 h-8 rounded-full flex items-center justify-center drawer-button cursor-pointer hover:scale-110 transition-transform">
-              <span
-                class="icon-[heroicons--bars-3] w-5 h-5 text-base-content/60 hover:text-primary transition-colors"></span>
-            </label>
-          </div>
-
-        </div>
-      </div>
-    </nav>
+        <!-- 底部遮罩淡出 -->
+        <div
+          class="from-base-100 pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-6 bg-gradient-to-t to-transparent"
+        ></div>
+      </aside>
+    </div>
   </div>
-
-  <!-- ========== 移动端菜单抽屉 ========== -->
-  <div class="drawer-side z-[100]">
-    <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-
-    <aside class="h-screen w-[17rem] flex flex-col relative overflow-hidden
-                  bg-base-100 border-r border-base-content/6
-                  shadow-[4px_0_40px_-8px_rgba(0,0,0,0.12)]
-                  drawer-slide-in">
-
-      <!-- 滚动条美化样式 -->
-      <style>
-        #mobile-nav-scroll::-webkit-scrollbar {
-          width: 3px;
-        }
-
-        #mobile-nav-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        #mobile-nav-scroll::-webkit-scrollbar-thumb {
-          background: oklch(var(--bc) / 0.12);
-          border-radius: 999px;
-          transition: background 0.2s;
-        }
-
-        #mobile-nav-scroll::-webkit-scrollbar-thumb:hover {
-          background: oklch(var(--bc) / 0.25);
-        }
-
-        /* 头像区点阵纹理 */
-        .sidebar-header-texture {
-          background-image: radial-gradient(circle,
-              oklch(var(--bc) / 0.06) 1px,
-              transparent 1px);
-          background-size: 16px 16px;
-          -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-          mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-        }
-      </style>
-
-      <!-- 層次装饰光晕 -->
-      <!-- 左上 primary 光晕 -->
-      <div class="absolute -top-16 -left-8 w-52 h-52 bg-primary/8 rounded-full blur-3xl pointer-events-none"></div>
-      <!-- 右下 second 对角光晕 (与左上呗应) -->
-      <div class="absolute -bottom-20 -right-10 w-48 h-48 bg-secondary/6 rounded-full blur-3xl pointer-events-none">
-      </div>
-      <!-- 右侧渐变光边（增加立体感）-->
-      <div
-        class="absolute inset-y-0 right-0 w-[1px] bg-gradient-to-b from-transparent via-base-content/10 to-transparent pointer-events-none">
-      </div>
-
-      <!-- ===== 头部：居中头像/Logo + 名称 + 统计 ===== -->
-      <div class="relative px-6 pt-8 pb-5 sidebar-header-texture overflow-hidden" th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)},
-                 isLoggedIn = ${!#strings.equals(currentUser.name, 'anonymousUser')}">
-
-        <div class="flex flex-col items-center">
-          <!-- 已登录：用户头像 -->
-          <a th:if="${isLoggedIn}" href="/uc" class="group mb-3">
-            <div class="w-18 h-18 rounded-full overflow-hidden
-                        ring-2 ring-primary/20 ring-offset-2 ring-offset-base-100
-                        group-hover:ring-primary/50 transition-all duration-300
-                        shadow-lg shadow-primary/10">
-              <img th:if="${!#strings.isEmpty(currentUser.avatar)}" th:src="${currentUser.avatar}"
-                th:alt="${currentUser.displayName}" class="w-full h-full object-cover" />
-              <img th:unless="${!#strings.isEmpty(currentUser.avatar)}"
-                th:src="@{/assets/images/heihei.png}" class="w-full h-full object-cover" />
-            </div>
-          </a>
-          <!-- 未登录：站点 Logo -->
-          <a th:unless="${isLoggedIn}" href="/" class="group mb-3">
-            <div class="w-18 h-18 rounded-full overflow-hidden bg-base-200
-                        ring-2 ring-base-content/10 ring-offset-2 ring-offset-base-100
-                        group-hover:ring-primary/30 transition-all duration-300
-                        shadow-lg shadow-base-content/5
-                        flex items-center justify-center">
-              <th:block th:replace="~{modules/logo :: icon('w-10 h-10')}" />
-            </div>
-          </a>
-
-          <!-- 名称 -->
-          <a th:if="${isLoggedIn}" href="/uc"
-            class="text-sm font-semibold text-base-content hover:text-primary transition-colors"
-            th:text="${currentUser.displayName}">用户名</a>
-          <a th:unless="${isLoggedIn}" href="/"
-            class="text-sm font-semibold text-base-content hover:text-primary transition-colors"
-            th:text="${siteTitle}">站点名称</a>
-
-          <!-- 副标题 -->
-          <p th:unless="${isLoggedIn}" class="text-xs text-base-content/40 mt-1"
-            th:text="${#strings.abbreviate(siteSubtitle ?: '', 24)}">一段简介</p>
-        </div>
-
-        <!-- 统计数据行 -->
-        <div class="flex items-center justify-center gap-6 mt-5" th:with="allPosts = ${postFinder.list({page: 1, size: 1})},
-                   allTags = ${tagFinder.listAll()},
-                   allCategories = ${categoryFinder.listAsTree()}">
-          <a href="/archives" class="flex flex-col items-center group">
-            <span
-              class="text-lg font-mono font-bold tracking-tight text-base-content group-hover:text-primary group-hover:scale-110 transition-all duration-300"
-              th:text="${allPosts.total}">0</span>
-            <span class="text-xs text-base-content/40 mt-1">文章</span>
-          </a>
-          <div class="w-px h-6 bg-base-content/10"></div>
-          <a href="/tags" class="flex flex-col items-center group">
-            <span
-              class="text-lg font-mono font-bold tracking-tight text-base-content group-hover:text-primary group-hover:scale-110 transition-all duration-300"
-              th:text="${#lists.size(allTags)}">0</span>
-            <span class="text-xs text-base-content/40 mt-1">标签</span>
-          </a>
-          <div class="w-px h-6 bg-base-content/10"></div>
-          <a href="/categories" class="flex flex-col items-center group">
-            <span
-              class="text-lg font-mono font-bold tracking-tight text-base-content group-hover:text-primary group-hover:scale-110 transition-all duration-300"
-              th:text="${#lists.size(allCategories)}">0</span>
-            <span class="text-xs text-base-content/40 mt-1">分类</span>
-          </a>
-        </div>
-      </div>
-
-
-
-      <!-- ===== 菜单区域 ===== -->
-      <div id="mobile-nav-scroll" class="flex-1 px-3 py-4 overflow-y-auto overscroll-contain">
-        <nav class="space-y-0.5 pb-4">
-          <th:block
-            th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
-            <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}">
-
-              <!-- 带子菜单 -->
-              <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                <div x-data="{ open: false }">
-                  <button @click="open = !open" class="w-full group flex items-center gap-3.5 px-4 py-3 rounded-xl
-                           text-base-content/60 hover:text-base-content hover:bg-base-content/5
-                           transition-all duration-200 cursor-pointer">
-                    <span
-                      class="flex-shrink-0 w-5 h-5 text-base-content/40 group-hover:text-primary/70 transition-colors duration-200">
-                      <th:block
-                        th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                        <span th:utext="${menuItem.metadata.annotations['icon']}"
-                          class="w-full h-full nav-icon-svg"></span>
-                      </th:block>
-                      <th:block
-                        th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                        <span class="icon-[heroicons--folder] w-full h-full"></span>
-                      </th:block>
-                    </span>
-                    <span
-                      class="flex-1 text-sm font-medium text-left transition-transform duration-300 group-hover:translate-x-1"
-                      th:text="${menuItem.status.displayName}">菜单项</span>
-                    <span
-                      class="icon-[heroicons--chevron-down] w-3.5 h-3.5 text-base-content/25 transition-transform duration-300 flex-shrink-0"
-                      :class="{ 'rotate-180': open }"></span>
-                  </button>
-                  <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 -translate-y-1"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 translate-y-0"
-                    x-transition:leave-end="opacity-0 -translate-y-1"
-                    class="mt-0.5 ml-4 pl-5 border-l border-base-content/8 space-y-0.5 pb-1">
-                    <a th:each="childItem : ${menuItem.children}" th:href="@{${childItem.status.href}}"
-                      th:target="${childItem.spec.target?.value}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-base-content/50
-                             hover:text-base-content hover:bg-base-content/5 transition-all duration-200">
-                      <th:block
-                        th:if="${childItem.metadata?.annotations != null &amp;&amp; childItem.metadata.annotations['icon'] != null}">
-                        <span th:utext="${childItem.metadata.annotations['icon']}"
-                          class="w-4 h-4 nav-icon-svg flex-shrink-0 text-base-content/35"></span>
-                      </th:block>
-                      <th:block
-                        th:unless="${childItem.metadata?.annotations != null &amp;&amp; childItem.metadata.annotations['icon'] != null}">
-                        <span class="w-1.5 h-1.5 rounded-full bg-base-content/20 flex-shrink-0"></span>
-                      </th:block>
-                      <span class="transition-transform duration-300 group-hover:translate-x-1"
-                        th:text="${childItem.status.displayName}">子项</span>
-                    </a>
-                  </div>
-                </div>
-              </th:block>
-
-              <!-- 无子菜单 -->
-              <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="group flex items-center gap-3.5 px-4 py-3 rounded-xl
-                         text-base-content/60 hover:text-base-content hover:bg-base-content/5
-                         transition-all duration-200">
-                  <span
-                    class="flex-shrink-0 w-5 h-5 text-base-content/40 group-hover:text-primary/70 transition-colors duration-200">
-                    <th:block
-                      th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                      <span th:utext="${menuItem.metadata.annotations['icon']}"
-                        class="w-full h-full nav-icon-svg"></span>
-                    </th:block>
-                    <th:block
-                      th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
-                      <span class="icon-[heroicons--link] w-full h-full"></span>
-                    </th:block>
-                  </span>
-                  <span class="text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
-                    th:text="${menuItem.status.displayName}">菜单项</span>
-                </a>
-              </th:block>
-
-            </div>
-          </th:block>
-        </nav>
-      </div>
-
-      <!-- 底部遮罩淡出 -->
-      <div
-        class="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-base-100 to-transparent pointer-events-none z-10">
-      </div>
-
-    </aside>
-  </div>
-
-</div>
-
-
 </html>

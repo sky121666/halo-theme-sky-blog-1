@@ -19,7 +19,6 @@ spec:
       help: "选择装备分组的图标"
 
 ---
-
 # 装备卡片样式配置 (战术终端版)
 apiVersion: v1alpha1
 kind: AnnotationSetting
@@ -48,7 +47,7 @@ spec:
         - label: "主题色"
           value: "theme"
       value: "gold"
-    
+
     # 自定义颜色 (仅 custom 模式生效)
     - $formkit: "color"
       if: "$get(cardStyle).value === 'custom'"
@@ -56,7 +55,7 @@ spec:
       label: "自定义颜色"
       help: "选择一个自定义的强调色"
       value: "#8b5cf6"
-    
+
     # 规格参数 (多行文本，支持进度条)
     - $formkit: "textarea"
       name: "specs"
@@ -66,7 +65,6 @@ spec:
       rows: 4
 
 ---
-
 # 菜单图标配置
 apiVersion: v1alpha1
 kind: AnnotationSetting
@@ -85,7 +83,6 @@ spec:
       value-only: true
 
 ---
-
 # 分类图标配置
 apiVersion: v1alpha1
 kind: AnnotationSetting
@@ -104,7 +101,6 @@ spec:
       value-only: true
 
 ---
-
 # 标签图标配置
 apiVersion: v1alpha1
 kind: AnnotationSetting

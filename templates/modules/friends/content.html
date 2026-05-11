@@ -1,169 +1,205 @@
 <!-- 朋友圈内容 - Apple Style V7 (Unified Sidebar Glow) -->
-<div th:fragment="friends-content" th:with="rootCfg=${theme.config.friends_page_settings},
+<div
+  th:fragment="friends-content"
+  th:with="rootCfg=${theme.config.friends_page_settings},
               cfg=${rootCfg.basic_info},
               pageTitle=${cfg?.page_title ?: '朋友圈'},
               pageDesc=${cfg?.page_description ?: '订阅朋友们的最新动态'},
-              listStyle=${cfg?.list_style ?: 'single_column'}">
-
+              listStyle=${cfg?.list_style ?: 'single_column'}"
+>
   <!-- 页面标题区域 - Apple风格简洁标题 -->
   <header class="mb-10">
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight" th:text="${pageTitle}">朋友圈</h1>
-        <p class="text-sm text-base-content/50 mt-1.5 font-medium" th:text="${pageDesc}">订阅朋友们的最新动态</p>
+        <h1 class="text-base-content text-2xl font-bold tracking-tight md:text-3xl" th:text="${pageTitle}">朋友圈</h1>
+        <p class="text-base-content/50 mt-1.5 text-sm font-medium" th:text="${pageDesc}">订阅朋友们的最新动态</p>
       </div>
       <!-- Apple Style Counter Pill -->
-      <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-base-200/70 backdrop-blur-md">
-        <span class="text-lg font-bold text-base-content tabular-nums" th:text="${friends.total}">0</span>
-        <span class="text-xs text-base-content/50 font-medium">Updates</span>
+      <div class="bg-base-200/70 flex items-center gap-2.5 rounded-full px-4 py-2 backdrop-blur-md">
+        <span class="text-base-content text-lg font-bold tabular-nums" th:text="${friends.total}">0</span>
+        <span class="text-base-content/50 text-xs font-medium">Updates</span>
       </div>
     </div>
   </header>
 
   <!-- ==================== 单列样式 - Apple News Card ==================== -->
   <div th:if="${listStyle == 'single_column'}" class="space-y-5">
-    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="card group relative bg-base-100/90 backdrop-blur-xl rounded-[1.25rem] 
-                    border border-base-content/[0.06] shadow-lg
-                    hover:shadow-xl hover:-translate-y-0.5
-                    motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out 
-                    cursor-pointer overflow-visible z-0 hover:z-10">
-
+    <article
+      th:each="friend, iterStat : ${friends.items}"
+      th:with="spec = ${friend.spec}"
+      class="card group bg-base-100/90 border-base-content/[0.06] relative z-0 cursor-pointer overflow-visible rounded-[1.25rem] border shadow-lg backdrop-blur-xl hover:z-10 hover:-translate-y-0.5 hover:shadow-xl motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out"
+    >
       <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block p-5 md:p-6">
         <!-- Author Row -->
-        <div class="flex items-center gap-4 mb-4">
+        <div class="mb-4 flex items-center gap-4">
           <!-- Avatar -->
           <div class="relative shrink-0">
             <!-- Halo Glow -->
             <div
-              class="absolute -inset-2 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-lg opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
-            </div>
+              class="from-primary/30 via-secondary/20 to-accent/30 absolute -inset-2 rounded-xl bg-gradient-to-br opacity-0 blur-lg group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500"
+            ></div>
 
-            <img th:src="${spec.logo}" th:alt="|${spec.author} 头像|" class="relative w-12 h-12 rounded-xl object-cover ring-1 ring-base-content/10 
-                        group-hover:ring-primary/30 motion-safe:transition-all motion-safe:duration-300"
-              loading="lazy" />
+            <img
+              th:src="${spec.logo}"
+              th:alt="|${spec.author} 头像|"
+              class="ring-base-content/10 group-hover:ring-primary/30 relative h-12 w-12 rounded-xl object-cover ring-1 motion-safe:transition-all motion-safe:duration-300"
+              loading="lazy"
+            />
           </div>
 
           <!-- Author Info -->
-          <div class="flex-1 min-w-0">
+          <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2">
-              <span class="font-bold text-lg text-base-content truncate" th:text="${spec.author}">作者</span>
-              <span class="shrink-0 w-1 h-1 rounded-full bg-base-content/20"></span>
-              <time class="shrink-0 text-xs text-base-content/40 font-medium tabular-nums" th:if="${spec.pubDate}"
-                th:text="${#dates.format(spec.pubDate, 'MM-dd HH:mm')}">时间</time>
+              <span class="text-base-content truncate text-lg font-bold" th:text="${spec.author}">作者</span>
+              <span class="bg-base-content/20 h-1 w-1 shrink-0 rounded-full"></span>
+              <time
+                class="text-base-content/40 shrink-0 text-xs font-medium tabular-nums"
+                th:if="${spec.pubDate}"
+                th:text="${#dates.format(spec.pubDate, 'MM-dd HH:mm')}"
+                >时间</time
+              >
             </div>
             <!-- Site Domain Badge -->
-            <span class="text-xs text-base-content/40 font-medium mt-0.5 block truncate">Friends Feed</span>
+            <span class="text-base-content/40 mt-0.5 block truncate text-xs font-medium">Friends Feed</span>
           </div>
 
           <!-- Straight Arrow Icon -->
-          <span class="icon-[heroicons--arrow-right] w-5 h-5 text-base-content/20 shrink-0
-                       group-hover:text-primary group-hover:translate-x-1 
-                       motion-safe:transition-all motion-safe:duration-300"></span>
+          <span
+            class="icon-[heroicons--arrow-right] text-base-content/20 group-hover:text-primary h-5 w-5 shrink-0 group-hover:translate-x-1 motion-safe:transition-all motion-safe:duration-300"
+          ></span>
         </div>
 
         <!-- Title (Bold, Apple News Style) -->
-        <h2 class="text-lg font-bold text-base-content leading-snug mb-2.5 line-clamp-2
-                   group-hover:text-primary motion-safe:transition-colors motion-safe:duration-300"
-          th:text="${spec.title}">标题</h2>
+        <h2
+          class="text-base-content group-hover:text-primary mb-2.5 line-clamp-2 text-lg leading-snug font-bold motion-safe:transition-colors motion-safe:duration-300"
+          th:text="${spec.title}"
+        >
+          标题
+        </h2>
 
         <!-- Description -->
-        <p th:if="${spec.description}" class="text-sm text-base-content/60 line-clamp-2 leading-relaxed"
-          th:text="${spec.description}">描述</p>
+        <p
+          th:if="${spec.description}"
+          class="text-base-content/60 line-clamp-2 text-sm leading-relaxed"
+          th:text="${spec.description}"
+        >
+          描述
+        </p>
       </a>
     </article>
   </div>
 
   <!-- ==================== 双列样式 - Bento Grid ==================== -->
-  <div th:if="${listStyle == 'two_columns'}" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <article th:each="friend, iterStat : ${friends.items}" th:with="spec = ${friend.spec}" class="card group relative bg-base-100/90 backdrop-blur-xl rounded-2xl 
-                    border border-base-content/[0.06] shadow-lg
-                    hover:shadow-xl
-                    motion-safe:hover:scale-[1.02] motion-safe:hover:-translate-y-0.5
-                    motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out 
-                    cursor-pointer overflow-visible z-0 hover:z-10">
-
-      <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block p-5 h-full flex flex-col">
+  <div th:if="${listStyle == 'two_columns'}" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+    <article
+      th:each="friend, iterStat : ${friends.items}"
+      th:with="spec = ${friend.spec}"
+      class="card group bg-base-100/90 border-base-content/[0.06] relative z-0 cursor-pointer overflow-visible rounded-2xl border shadow-lg backdrop-blur-xl hover:z-10 hover:shadow-xl motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.02]"
+    >
+      <a th:href="${spec.postLink}" target="_blank" rel="noopener" class="block flex h-full flex-col p-5">
         <!-- Header: Avatar + Author + Date Badge -->
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-3 min-w-0">
+        <div class="mb-4 flex items-center justify-between">
+          <div class="flex min-w-0 items-center gap-3">
             <!-- Avatar with Halo -->
             <div class="relative shrink-0">
               <div
-                class="absolute -inset-1.5 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-md opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
-              </div>
-              <img th:src="${spec.logo}" th:alt="|${spec.author} 头像|" class="relative w-10 h-10 rounded-xl object-cover ring-1 ring-base-content/10 
-                          group-hover:ring-primary/30 motion-safe:transition-all" loading="lazy" />
+                class="from-primary/30 via-secondary/20 to-accent/30 absolute -inset-1.5 rounded-xl bg-gradient-to-br opacity-0 blur-md group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500"
+              ></div>
+              <img
+                th:src="${spec.logo}"
+                th:alt="|${spec.author} 头像|"
+                class="ring-base-content/10 group-hover:ring-primary/30 relative h-10 w-10 rounded-xl object-cover ring-1 motion-safe:transition-all"
+                loading="lazy"
+              />
             </div>
-            <span class="text-sm font-bold text-base-content truncate" th:text="${spec.author}">作者</span>
+            <span class="text-base-content truncate text-sm font-bold" th:text="${spec.author}">作者</span>
           </div>
           <!-- Date Badge -->
-          <time class="shrink-0 text-[11px] text-base-content/40 font-medium 
-                       px-2.5 py-1 rounded-lg bg-base-200/60 tabular-nums" th:if="${spec.pubDate}"
-            th:text="${#dates.format(spec.pubDate, 'MM-dd')}">日期</time>
+          <time
+            class="text-base-content/40 bg-base-200/60 shrink-0 rounded-lg px-2.5 py-1 text-[11px] font-medium tabular-nums"
+            th:if="${spec.pubDate}"
+            th:text="${#dates.format(spec.pubDate, 'MM-dd')}"
+            >日期</time
+          >
         </div>
 
         <!-- Title (Bold, 2 lines) -->
-        <h3 class="text-base font-bold text-base-content line-clamp-2 mb-2.5 flex-1
-                   group-hover:text-primary motion-safe:transition-colors motion-safe:duration-300 leading-snug"
-          th:text="${spec.title}">标题</h3>
+        <h3
+          class="text-base-content group-hover:text-primary mb-2.5 line-clamp-2 flex-1 text-base leading-snug font-bold motion-safe:transition-colors motion-safe:duration-300"
+          th:text="${spec.title}"
+        >
+          标题
+        </h3>
 
         <!-- Description (2 lines) -->
-        <p th:if="${spec.description}" class="text-sm text-base-content/50 line-clamp-2 leading-relaxed mb-4"
-          th:text="${spec.description}">描述...</p>
+        <p
+          th:if="${spec.description}"
+          class="text-base-content/50 mb-4 line-clamp-2 text-sm leading-relaxed"
+          th:text="${spec.description}"
+        >
+          描述...
+        </p>
 
         <!-- Footer: Divider + Read More -->
-        <div class="flex items-center justify-between mt-auto pt-3.5 border-t border-base-content/[0.06]">
-          <span class="text-xs text-base-content/40 font-medium">Read Post</span>
+        <div class="border-base-content/[0.06] mt-auto flex items-center justify-between border-t pt-3.5">
+          <span class="text-base-content/40 text-xs font-medium">Read Post</span>
           <!-- Straight Arrow Icon -->
-          <span class="icon-[heroicons--arrow-right] w-4 h-4 text-base-content/30 
-                       group-hover:text-primary group-hover:translate-x-1 
-                       motion-safe:transition-all motion-safe:duration-300"></span>
+          <span
+            class="icon-[heroicons--arrow-right] text-base-content/30 group-hover:text-primary h-4 w-4 group-hover:translate-x-1 motion-safe:transition-all motion-safe:duration-300"
+          ></span>
         </div>
       </a>
     </article>
   </div>
 
   <!-- ==================== 空状态 - Apple Style ==================== -->
-  <div th:if="${#lists.isEmpty(friends.items)}"
-    class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/5 shadow-sm">
+  <div
+    th:if="${#lists.isEmpty(friends.items)}"
+    class="bg-base-100/80 border-base-content/5 rounded-2xl border shadow-sm backdrop-blur-xl"
+  >
     <div class="flex flex-col items-center justify-center py-24">
       <div
-        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-base-200/80 to-base-200/40 flex items-center justify-center mb-5 shadow-sm">
-        <span class="icon-[heroicons--inbox] w-8 h-8 text-base-content/25"></span>
+        class="from-base-200/80 to-base-200/40 mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-sm"
+      >
+        <span class="icon-[heroicons--inbox] text-base-content/25 h-8 w-8"></span>
       </div>
-      <h3 class="text-base font-semibold text-base-content/60">暂无朋友动态</h3>
-      <p class="text-sm text-base-content/40 mt-1.5 font-medium">No updates from friends yet</p>
+      <h3 class="text-base-content/60 text-base font-semibold">暂无朋友动态</h3>
+      <p class="text-base-content/40 mt-1.5 text-sm font-medium">No updates from friends yet</p>
     </div>
   </div>
 
   <!-- ==================== 分页 - Apple Pill Nav ==================== -->
   <div th:if="${friends.hasPrevious() || friends.hasNext()}" class="mt-12 flex items-center justify-center">
-    <div class="inline-flex items-center p-1 rounded-full bg-base-200/60 backdrop-blur-md">
+    <div class="bg-base-200/60 inline-flex items-center rounded-full p-1 backdrop-blur-md">
       <!-- Previous Button -->
-      <a th:href="@{${friends.prevUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
-                text-base-content/60 hover:text-base-content hover:bg-base-100 
-                motion-safe:transition-all motion-safe:duration-200"
-        th:classappend="${!friends.hasPrevious()} ? 'opacity-30 pointer-events-none' : ''">
-        <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
+      <a
+        th:href="@{${friends.prevUrl}}"
+        class="text-base-content/60 hover:text-base-content hover:bg-base-100 flex h-9 w-9 items-center justify-center rounded-full motion-safe:transition-all motion-safe:duration-200"
+        th:classappend="${!friends.hasPrevious()} ? 'opacity-30 pointer-events-none' : ''"
+      >
+        <span class="icon-[heroicons--chevron-left] h-5 w-5"></span>
       </a>
 
       <!-- Page Indicator -->
-      <span class="px-4 text-xs font-semibold text-base-content/50 tabular-nums tracking-wide"
-        th:text="${friends.page} + ' / ' + ${friends.totalPages}">1 / 1</span>
+      <span
+        class="text-base-content/50 px-4 text-xs font-semibold tracking-wide tabular-nums"
+        th:text="${friends.page} + ' / ' + ${friends.totalPages}"
+        >1 / 1</span
+      >
 
       <!-- Next Button -->
-      <a th:href="@{${friends.nextUrl}}" class="w-9 h-9 flex items-center justify-center rounded-full 
-                text-base-content/60 hover:text-base-content hover:bg-base-100 
-                motion-safe:transition-all motion-safe:duration-200"
-        th:classappend="${!friends.hasNext()} ? 'opacity-30 pointer-events-none' : ''">
-        <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
+      <a
+        th:href="@{${friends.nextUrl}}"
+        class="text-base-content/60 hover:text-base-content hover:bg-base-100 flex h-9 w-9 items-center justify-center rounded-full motion-safe:transition-all motion-safe:duration-200"
+        th:classappend="${!friends.hasNext()} ? 'opacity-30 pointer-events-none' : ''"
+      >
+        <span class="icon-[heroicons--chevron-right] h-5 w-5"></span>
       </a>
     </div>
   </div>
 
   <!-- ==================== 底部提示 ==================== -->
-  <div th:if="${!#lists.isEmpty(friends.items) and !friends.hasNext()}" class="text-center mt-12 mb-4">
-    <span class="text-xs text-base-content/25 font-medium tracking-widest">— END —</span>
+  <div th:if="${!#lists.isEmpty(friends.items) and !friends.hasNext()}" class="mt-12 mb-4 text-center">
+    <span class="text-base-content/25 text-xs font-medium tracking-widest">— END —</span>
   </div>
-
 </div>

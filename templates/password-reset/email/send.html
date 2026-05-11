@@ -1,33 +1,36 @@
 <!doctype html>
-<html xmlns:th="https://www.thymeleaf.org"
-    th:replace="~{gateway_fragments/layout:: layout(title = |找回密码 - ${site.title}|, head = null, body = ~{::body})}">
-<th:block th:fragment="body">
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{gateway_fragments/layout:: layout(title = |找回密码 - ${site.title}|, head = null, body = ~{::body})}"
+>
+  <th:block th:fragment="body">
     <!-- 大标题 -->
     <th:block th:if="${sent}">
-        <h1 class="auth-title">邮件已发送</h1>
-        <p class="auth-subtitle">请检查您的邮箱并点击重置链接</p>
+      <h1 class="auth-title">邮件已发送</h1>
+      <p class="auth-subtitle">请检查您的邮箱并点击重置链接</p>
     </th:block>
     <th:block th:unless="${sent}">
-        <h1 class="auth-title">找回密码</h1>
-        <p class="auth-subtitle">输入您的邮箱地址，我们将发送重置链接</p>
+      <h1 class="auth-title">找回密码</h1>
+      <p class="auth-subtitle">输入您的邮箱地址，我们将发送重置链接</p>
     </th:block>
 
     <!-- 表单 -->
     <div class="space-y-6">
-        <form th:replace="~{gateway_fragments/password_reset_email_send::form}"></form>
+      <form th:replace="~{gateway_fragments/password_reset_email_send::form}"></form>
 
-        <!-- 其他重置方式 -->
-        <div th:replace="~{gateway_fragments/common::passwordResetMethods}"></div>
+      <!-- 其他重置方式 -->
+      <div th:replace="~{gateway_fragments/common::passwordResetMethods}"></div>
     </div>
 
     <!-- 返回登录 -->
     <div class="mt-8 text-center">
-        <a th:href="@{/login}"
-            class="inline-flex items-center gap-2 text-sm text-base-content/50 hover:text-primary transition-colors">
-            <span class="icon-[heroicons--arrow-left] w-4 h-4"></span>
-            <span>返回登录</span>
-        </a>
+      <a
+        th:href="@{/login}"
+        class="text-base-content/50 hover:text-primary inline-flex items-center gap-2 text-sm transition-colors"
+      >
+        <span class="icon-[heroicons--arrow-left] h-4 w-4"></span>
+        <span>返回登录</span>
+      </a>
     </div>
-</th:block>
-
+  </th:block>
 </html>

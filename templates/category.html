@@ -1,8 +1,6 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- 页面：分类归档（/categories/:slug）使用统一布局，结构与 post 一致 -->
 
-<!-- 页面：分类归档（/categories/:slug）使用统一布局，结构与 post 一致 -->
-
-<th:block th:replace="~{modules/categories/layout :: html (~{modules/categories/content :: category-archive})}" />
-
+  <th:block th:replace="~{modules/categories/layout :: html (~{modules/categories/content :: category-archive})}" />
 </html>

@@ -1,161 +1,204 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--        归档页主体内容                       -->
+  <!-- 支持多种展示风格：时间线、卡片、紧凑        -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--        归档页主体内容                       -->
-<!-- 支持多种展示风格：时间线、卡片、紧凑        -->
-<!-- ========================================== -->
-
-<!-- 归档内容片段 -->
-<main class="relative" th:fragment="archive-content"
-  th:with="rootCfg = ${theme.config.archive_settings},
+  <!-- 归档内容片段 -->
+  <main
+    class="relative"
+    th:fragment="archive-content"
+    th:with="rootCfg = ${theme.config.archive_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
-      <!-- 左侧：归档内容 -->
-      <section class="flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
-
-        <!-- 页面标题区 - Apple风格简洁 -> 衬线体优雅风格 -->
-        <header class="mb-14 border-b border-base-content/5 pb-8"
-          th:with="globalArchives = ${postFinder.archives(1, 100)}">
-          <div class="flex items-end justify-between">
-            <div>
-              <h1 class="text-4xl md:text-5xl font-serif text-base-content tracking-wider font-semibold">文章归档</h1>
-              <p class="text-[14px] text-base-content/40 mt-3 font-serif tracking-[0.05em]"
-                th:if="${globalArchives != null and globalArchives.items != null}">
-                共 <span class="font-sans font-medium text-base-content/80 px-[3px]"
-                  th:text="${#lists.size(globalArchives.items)}">0</span> 个年份的文章记录
-              </p>
-            </div>
-          </div>
-        </header>
-
-
-
-        <!-- 归档时间线 -->
-        <div class="archive-timeline space-y-12" th:if="${archives != null and archives.items != null}"
-          x-data="archiveScroll()" @scroll.window="updateCurrentMonth()">
-          <th:block th:each="archive : ${archives.items}">
-            <!-- 年份标题 -->
-            <div th:id="${'year-' + archive.year}" class="relative" th:attr="data-year=${archive.year}">
-              <!-- 年份标记（粘性，显示当前月份） -->
-              <div class="sticky top-20 z-10 mb-6">
-                <div
-                  class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-content shadow-xl shadow-primary/30 backdrop-blur-sm">
-                  <span class="icon-[heroicons--calendar] w-5 h-5"></span>
-                  <span class="text-xl font-bold" th:text="${archive.year}"></span>
-                  <span class="text-sm opacity-90 font-medium"
-                    th:attr="data-year=${archive.year}, data-default-month=${archive.months[0].month}"
-                    x-text="currentMonth[$el.dataset.year] ? currentMonth[$el.dataset.year] + '月' : $el.dataset.defaultMonth + '月'">
-                  </span>
-                </div>
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+  >
+    <div class="mx-auto max-w-7xl px-4 py-8">
+      <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+        <!-- 左侧：归档内容 -->
+        <section class="flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
+          <!-- 页面标题区 - Apple风格简洁 -> 衬线体优雅风格 -->
+          <header
+            class="border-base-content/5 mb-14 border-b pb-8"
+            th:with="globalArchives = ${postFinder.archives(1, 100)}"
+          >
+            <div class="flex items-end justify-between">
+              <div>
+                <h1 class="text-base-content font-serif text-4xl font-semibold tracking-wider md:text-5xl">文章归档</h1>
+                <p
+                  class="text-base-content/40 mt-3 font-serif text-[14px] tracking-[0.05em]"
+                  th:if="${globalArchives != null and globalArchives.items != null}"
+                >
+                  共
+                  <span
+                    class="text-base-content/80 px-[3px] font-sans font-medium"
+                    th:text="${#lists.size(globalArchives.items)}"
+                    >0</span
+                  >
+                  个年份的文章记录
+                </p>
               </div>
+            </div>
+          </header>
 
-              <!-- 月份列表 -->
-              <div class="space-y-8 pl-4 border-l-2 border-primary/20 ml-4">
-                <th:block th:each="monthData : ${archive.months}">
-                  <!-- 月份标题 -->
-                  <div class="relative month-section" th:id="${'month-' + archive.year + '-' + monthData.month}"
-                    th:attr="data-year=${archive.year}, data-month=${monthData.month}">
-                    <!-- 时间线节点 -->
+          <!-- 归档时间线 -->
+          <div
+            class="archive-timeline space-y-12"
+            th:if="${archives != null and archives.items != null}"
+            x-data="archiveScroll()"
+            @scroll.window="updateCurrentMonth()"
+          >
+            <th:block th:each="archive : ${archives.items}">
+              <!-- 年份标题 -->
+              <div th:id="${'year-' + archive.year}" class="relative" th:attr="data-year=${archive.year}">
+                <!-- 年份标记（粘性，显示当前月份） -->
+                <div class="sticky top-20 z-10 mb-6">
+                  <div
+                    class="from-primary via-primary to-primary/90 text-primary-content shadow-primary/30 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-br px-6 py-3 shadow-xl backdrop-blur-sm"
+                  >
+                    <span class="icon-[heroicons--calendar] h-5 w-5"></span>
+                    <span class="text-xl font-bold" th:text="${archive.year}"></span>
+                    <span
+                      class="text-sm font-medium opacity-90"
+                      th:attr="data-year=${archive.year}, data-default-month=${archive.months[0].month}"
+                      x-text="currentMonth[$el.dataset.year] ? currentMonth[$el.dataset.year] + '月' : $el.dataset.defaultMonth + '月'"
+                    >
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 月份列表 -->
+                <div class="border-primary/20 ml-4 space-y-8 border-l-2 pl-4">
+                  <th:block th:each="monthData : ${archive.months}">
+                    <!-- 月份标题 -->
                     <div
-                      class="absolute -left-[1.35rem] top-1 w-4 h-4 rounded-full bg-primary shadow-md shadow-primary/50 border-2 border-base-100">
-                    </div>
+                      class="month-section relative"
+                      th:id="${'month-' + archive.year + '-' + monthData.month}"
+                      th:attr="data-year=${archive.year}, data-month=${monthData.month}"
+                    >
+                      <!-- 时间线节点 -->
+                      <div
+                        class="bg-primary shadow-primary/50 border-base-100 absolute top-1 -left-[1.35rem] h-4 w-4 rounded-full border-2 shadow-md"
+                      ></div>
 
-                    <!-- 月份标签 -->
-                    <div class="mb-4 pl-6">
-                      <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-base-200/80 text-base-content shadow-sm">
-                        <span th:text="${monthData.month + ' 月'}"></span>
-                        <span class="text-xs opacity-60 font-medium"
-                          th:text="'(' + ${#lists.size(monthData.posts)} + ' 篇)'"></span>
-                      </span>
-                    </div>
+                      <!-- 月份标签 -->
+                      <div class="mb-4 pl-6">
+                        <span
+                          class="bg-base-200/80 text-base-content inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm"
+                        >
+                          <span th:text="${monthData.month + ' 月'}"></span>
+                          <span
+                            class="text-xs font-medium opacity-60"
+                            th:text="'(' + ${#lists.size(monthData.posts)} + ' 篇)'"
+                          ></span>
+                        </span>
+                      </div>
 
-                    <!-- 文章列表 -->
-                    <div class="pl-6 space-y-3">
-                      <article th:each="post : ${monthData.posts}"
-                        th:with="isPinned = ${post.spec.pinned == true},
+                      <!-- 文章列表 -->
+                      <div class="space-y-3 pl-6">
+                        <article
+                          th:each="post : ${monthData.posts}"
+                          th:with="isPinned = ${post.spec.pinned == true},
                                         isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                                         isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-                        class="glow-card group relative flex items-start gap-4 p-4 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/[0.06] hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer">
-                        <!-- 整卡片可点击链接 -->
-                        <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
+                          class="glow-card group bg-base-100/90 border-base-content/[0.06] hover:border-primary/30 hover:shadow-primary/10 relative flex cursor-pointer items-start gap-4 rounded-2xl border p-4 backdrop-blur-xl transition-all duration-300 hover:shadow-xl"
+                        >
+                          <!-- 整卡片可点击链接 -->
+                          <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
 
-                        <!-- 日期标记 -->
-                        <div
-                          class="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 flex flex-col items-center justify-center text-center group-hover:border-primary/40 group-hover:shadow-md group-hover:shadow-primary/20 transition-all">
-                          <span class="text-xl font-bold text-primary leading-none"
-                            th:text="${#dates.format(post.spec.publishTime, 'dd')}"></span>
-                          <span class="text-[10px] text-primary/60 uppercase font-medium mt-0.5"
-                            th:text="${#dates.format(post.spec.publishTime, 'EEE')}"></span>
-                        </div>
-
-                        <!-- 文章信息 -->
-                        <div class="flex-1 min-w-0">
-                          <!-- 标题 + 角标 -->
-                          <div class="flex items-center gap-2 mb-1">
-                            <h3
-                              class="text-base font-medium text-base-content group-hover:text-primary transition-colors line-clamp-1"
-                              th:text="${post.spec.title}">文章标题</h3>
-                            <span th:if="${isPrivate}"
-                              class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-warning text-warning-content">
-                              <span class="icon-[heroicons--eye-slash] w-2.5 h-2.5"></span>仅自己
-                            </span>
-                            <span th:if="${isLocked}"
-                              class="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-error/90 text-error-content">
-                              <span class="icon-[heroicons--lock-closed] w-2.5 h-2.5"></span>
-                            </span>
+                          <!-- 日期标记 -->
+                          <div
+                            class="from-primary/10 to-primary/5 border-primary/20 group-hover:border-primary/40 group-hover:shadow-primary/20 flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl border bg-gradient-to-br text-center transition-all group-hover:shadow-md"
+                          >
+                            <span
+                              class="text-primary text-xl leading-none font-bold"
+                              th:text="${#dates.format(post.spec.publishTime, 'dd')}"
+                            ></span>
+                            <span
+                              class="text-primary/60 mt-0.5 text-[10px] font-medium uppercase"
+                              th:text="${#dates.format(post.spec.publishTime, 'EEE')}"
+                            ></span>
                           </div>
-                          <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/60">
-                            <!-- 分类 -->
-                            <span th:if="${!#lists.isEmpty(post.categories)}" class="inline-flex items-center gap-1">
-                              <span class="icon-[heroicons--folder] w-3.5 h-3.5"></span>
-                              <a th:href="${post.categories[0].status.permalink}"
-                                th:text="${post.categories[0].spec.displayName}"
-                                class="relative z-20 hover:text-primary"></a>
-                            </span>
-                            <!-- 标签 -->
-                            <span th:if="${!#lists.isEmpty(post.tags)}" class="inline-flex items-center gap-1">
-                              <span class="icon-[heroicons--tag] w-3.5 h-3.5"></span>
-                              <a th:href="${post.tags[0].status.permalink}" th:text="${post.tags[0].spec.displayName}"
-                                class="relative z-20 hover:text-primary"></a>
-                            </span>
-                            <!-- 阅读量 -->
-                            <span class="inline-flex items-center gap-1">
-                              <span class="icon-[heroicons--eye] w-3.5 h-3.5"></span>
-                              <span th:text="${post.stats.visit ?: 0}"></span>
-                            </span>
-                          </div>
-                        </div>
 
-                        <!-- 箭头指示 -->
-                        <div class="shrink-0 self-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span class="icon-[heroicons--arrow-right] w-5 h-5 text-primary"></span>
-                        </div>
-                      </article>
+                          <!-- 文章信息 -->
+                          <div class="min-w-0 flex-1">
+                            <!-- 标题 + 角标 -->
+                            <div class="mb-1 flex items-center gap-2">
+                              <h3
+                                class="text-base-content group-hover:text-primary line-clamp-1 text-base font-medium transition-colors"
+                                th:text="${post.spec.title}"
+                              >
+                                文章标题
+                              </h3>
+                              <span
+                                th:if="${isPrivate}"
+                                class="bg-warning text-warning-content inline-flex shrink-0 items-center gap-0.5 rounded px-1.5 py-0.5 text-[9px] font-medium"
+                              >
+                                <span class="icon-[heroicons--eye-slash] h-2.5 w-2.5"></span>仅自己
+                              </span>
+                              <span
+                                th:if="${isLocked}"
+                                class="bg-error/90 text-error-content inline-flex shrink-0 items-center gap-0.5 rounded px-1.5 py-0.5 text-[9px] font-medium"
+                              >
+                                <span class="icon-[heroicons--lock-closed] h-2.5 w-2.5"></span>
+                              </span>
+                            </div>
+                            <div class="text-base-content/60 flex flex-wrap items-center gap-3 text-xs">
+                              <!-- 分类 -->
+                              <span th:if="${!#lists.isEmpty(post.categories)}" class="inline-flex items-center gap-1">
+                                <span class="icon-[heroicons--folder] h-3.5 w-3.5"></span>
+                                <a
+                                  th:href="${post.categories[0].status.permalink}"
+                                  th:text="${post.categories[0].spec.displayName}"
+                                  class="hover:text-primary relative z-20"
+                                ></a>
+                              </span>
+                              <!-- 标签 -->
+                              <span th:if="${!#lists.isEmpty(post.tags)}" class="inline-flex items-center gap-1">
+                                <span class="icon-[heroicons--tag] h-3.5 w-3.5"></span>
+                                <a
+                                  th:href="${post.tags[0].status.permalink}"
+                                  th:text="${post.tags[0].spec.displayName}"
+                                  class="hover:text-primary relative z-20"
+                                ></a>
+                              </span>
+                              <!-- 阅读量 -->
+                              <span class="inline-flex items-center gap-1">
+                                <span class="icon-[heroicons--eye] h-3.5 w-3.5"></span>
+                                <span th:text="${post.stats.visit ?: 0}"></span>
+                              </span>
+                            </div>
+                          </div>
+
+                          <!-- 箭头指示 -->
+                          <div class="shrink-0 self-center opacity-0 transition-opacity group-hover:opacity-100">
+                            <span class="icon-[heroicons--arrow-right] text-primary h-5 w-5"></span>
+                          </div>
+                        </article>
+                      </div>
                     </div>
-                  </div>
-                </th:block>
+                  </th:block>
+                </div>
               </div>
-            </div>
-          </th:block>
-        </div>
+            </th:block>
+          </div>
 
-        <!-- 无归档提示 -->
-        <div th:if="${archives == null or archives.items == null or #lists.isEmpty(archives.items)}"
-          class="flex flex-col items-center justify-center py-20 text-center">
-          <span class="icon-[heroicons--archive-box-x-mark] w-16 h-16 text-base-content/30 mb-4"></span>
-          <p class="text-base-content/60">暂无归档文章</p>
-        </div>
+          <!-- 无归档提示 -->
+          <div
+            th:if="${archives == null or archives.items == null or #lists.isEmpty(archives.items)}"
+            class="flex flex-col items-center justify-center py-20 text-center"
+          >
+            <span class="icon-[heroicons--archive-box-x-mark] text-base-content/30 mb-4 h-16 w-16"></span>
+            <p class="text-base-content/60">暂无归档文章</p>
+          </div>
 
-        <!-- 分页 -->
-        <th:block th:if="${archives != null and archives.totalPages > 1}">
-          <th:block th:replace="~{modules/categories/pagination :: pagination(
+          <!-- 分页 -->
+          <th:block th:if="${archives != null and archives.totalPages > 1}">
+            <th:block
+              th:replace="~{modules/categories/pagination :: pagination(
               context=@{/archives/},
               prevUrl=${archives.prevUrl},
               nextUrl=${archives.nextUrl},
@@ -163,32 +206,38 @@
               page=${archives.page},
               hasPrevious=${archives.hasPrevious},
               hasNext=${archives.hasNext}
-          )}" />
-        </th:block>
+          )}"
+            />
+          </th:block>
 
-        <!-- 评论区 -->
-        <section class="mt-12" th:if="${theme.config.archive_settings.basic_info.enable_comment == true}">
-          <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
-            <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
-            评论留言
-          </h2>
-          <div class="glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
-            <div class="card-body p-6 sm:p-8">
-              <halo:comment group="content.halo.run" kind="SinglePage"
-                th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}" colorScheme="system">
-              </halo:comment>
+          <!-- 评论区 -->
+          <section class="mt-12" th:if="${theme.config.archive_settings.basic_info.enable_comment == true}">
+            <h2 class="text-base-content mb-6 flex items-center gap-2 text-xl font-bold">
+              <span class="icon-[mdi--comment-text-outline] text-primary h-5 w-5"></span>
+              评论留言
+            </h2>
+            <div class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border backdrop-blur-xl">
+              <div class="card-body p-6 sm:p-8">
+                <halo:comment
+                  group="content.halo.run"
+                  kind="SinglePage"
+                  th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}"
+                  colorScheme="system"
+                >
+                </halo:comment>
+              </div>
             </div>
-          </div>
+          </section>
         </section>
-      </section>
 
-      <!-- 右侧：侧边栏 -->
-      <aside th:if="${sidebarCfg?.show_sidebar == true}"
-        class="right-sidebar w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
-      </aside>
+        <!-- 右侧：侧边栏 -->
+        <aside
+          th:if="${sidebarCfg?.show_sidebar == true}"
+          class="right-sidebar sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block"
+        >
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
-
+  </main>
 </html>

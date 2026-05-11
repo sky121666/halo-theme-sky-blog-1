@@ -16,8 +16,8 @@ spec:
             css_style: bars
             loading_text: "Loading..."
             min_duration: 300
-            custom_svg: ''
-            custom_gif: ''
+            custom_svg: ""
+            custom_gif: ""
           children:
             - $formkit: switch
               id: enable_loading
@@ -237,18 +237,18 @@ spec:
               max: 10
             - $formkit: group
               name: welcome_card_config
-              label: '欢迎天气卡片'
+              label: "欢迎天气卡片"
               value:
-                fallback_region: '北京'
+                fallback_region: "北京"
               children:
                 - $formkit: text
                   name: fallback_region
                   label: 默认地区（降级容灾）
                   help: '当访客的IP定位失效（如代理环境或服务宕机）时，天气组件强制获取该城市的默认天气数据防报错。例如: "北京"'
-                  value: '北京'
+                  value: "北京"
             - $formkit: group
               name: online_stats_config
-              label: '在线统计（plugin-online）'
+              label: "在线统计（plugin-online）"
               value:
                 show_hot_pages: true
               children:
@@ -307,7 +307,7 @@ spec:
           value:
             logo_type: none
             logo_icon: null
-            logo_icon_html: ''
+            logo_icon_html: ""
             logo_image: ""
             show_logo_title: true
             custom_logo_title: "5ee.net"
@@ -348,7 +348,7 @@ spec:
               help: 直接输入 SVG 或其他 HTML 代码，将在页面中直接渲染
               language: html
               height: 120
-              value: ''
+              value: ""
             - $formkit: attachment
               name: logo_image
               key: logo_image_field
@@ -386,7 +386,7 @@ spec:
           label: 主题设置
           value:
             show_theme_toggle: true
-            default_theme: dark_theme
+            default_theme: auto
             light_theme: light
             dark_theme: dark
             light_icon: null
@@ -421,12 +421,14 @@ spec:
               render-type: text
               size: 80
               gap: 10
-              value: dark_theme
+              value: auto
               options:
                 - label: 浅色主题
                   value: light_theme
                 - label: 深色主题
                   value: dark_theme
+                - label: 跟随系统
+                  value: auto
             - $formkit: toggle
               name: light_theme
               label: 浅色主题
@@ -597,7 +599,7 @@ spec:
           value:
             brand_icon_type: iconify
             brand_icon: null
-            brand_icon_html: ''
+            brand_icon_html: ""
             brand_icon_image: ""
             show_brand_title: true
             custom_brand_title: ""
@@ -640,7 +642,7 @@ spec:
               help: 直接输入 SVG 或其他 HTML 代码，将在页面中直接渲染
               language: html
               height: 120
-              value: ''
+              value: ""
             - $formkit: attachment
               name: brand_icon_image
               key: brand_icon_image_field
@@ -824,7 +826,7 @@ spec:
               itemLabels:
                 - type: text
                   label: $value.name
-              children: 
+              children:
                 - $formkit: text
                   name: name
                   label: 链接名称
@@ -974,7 +976,7 @@ spec:
                       value: gallery
                     - label: 友情链接区 (Links)
                       value: links
-        
+
         # 头部背景设置（包含总开关）
         - $formkit: group
           name: background_settings
@@ -2048,7 +2050,7 @@ spec:
                   value: underline
                 - label: 玻璃拟态
                   value: glass
-        
+
         # ===== 侧边栏设置 =====
         - $formkit: group
           name: sidebar_settings
@@ -2111,7 +2113,7 @@ spec:
                   name: widget
                   label: 小工具类型
                   options: *widget_options
-        
+
         # 封面回退设置
         - $formkit: group
           name: cover_fallback
@@ -2228,7 +2230,7 @@ spec:
                   value: underline
                 - label: 玻璃拟态
                   value: glass
-            
+
         # ===== 侧边栏设置 =====
         - $formkit: group
           name: sidebar_settings
@@ -2676,7 +2678,7 @@ spec:
               label: 申请链接
               help: 申请按钮跳转的链接，默认为 /# (不跳转)
               placeholder: "/#"
-        
+
             # 本站信息配置
             - $formkit: text
               name: blogger_logo
@@ -2708,7 +2710,7 @@ spec:
               label: 站点描述
               help: 自定义站点描述，留空则使用系统副标题
               rows: 2
-        
+
         # 其他功能 (侧边栏与评论)
         # ===== 侧边栏设置 =====
         - $formkit: group
@@ -3629,7 +3631,7 @@ spec:
     # Docsme 文档插件设置
     # =========================================
     - group: docsme
-      label: 文档 
+      label: 文档
       formSchema:
         # 文档内容页设置 (doc.html)
         - $formkit: group
@@ -3827,7 +3829,7 @@ spec:
               label: 启用菜单抽屉
               help: 当屏幕较小左侧文档树隐藏时，可从悬浮控制栏打开菜单
               value: true
-        
+
     # ========================================
     # 认证页面设置
     # ========================================
@@ -3915,7 +3917,7 @@ spec:
               name: auth_logo
               label: 功能区 Logo
               help: 留空则使用站点默认 Logo
-              accepts: ['image/*']
+              accepts: ["image/*"]
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: auth_logo_field
             - $formkit: text
@@ -3929,7 +3931,7 @@ spec:
               name: auth_side_image
               label: 侧边栏背景图
               help: 自定义侧边栏的背景图片，上传后将覆盖默认的渐变背景
-              accepts: ['image/*']
+              accepts: ["image/*"]
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: auth_side_image_field
             - $formkit: text
@@ -3957,7 +3959,7 @@ spec:
               label: 特性 1 描述
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'features'
               key: auth_f1_desc_field
-        
+
             # 特性 2
             - $formkit: iconify
               name: feature_2_icon
@@ -4258,7 +4260,7 @@ spec:
             enable_pjax: true
             server: netease
             type: playlist
-            id: ''
+            id: ""
           children:
             - $formkit: switch
               name: enable
@@ -4306,7 +4308,7 @@ spec:
               name: id
               label: 资源 ID
               if: $get(music_enable).value
-              help: '歌单/专辑/歌手/单曲的 ID（从音乐平台 URL 中获取）'
+              help: "歌单/专辑/歌手/单曲的 ID（从音乐平台 URL 中获取）"
               validation: required
         - $formkit: group
           name: player_config
@@ -4319,7 +4321,7 @@ spec:
             - $formkit: number
               name: volume
               label: 默认音量
-              help: '0-100，推荐 50-80'
+              help: "0-100，推荐 50-80"
               value: 70
               min: 0
               max: 100
@@ -4369,7 +4371,7 @@ spec:
             - $formkit: number
               name: default_offset_x
               label: 水平微调（px）
-              help: '边角位置：距左/右边缘距离（默认 16）；居中位置：向右偏移量（0 = 正中，负值向左）'
+              help: "边角位置：距左/右边缘距离（默认 16）；居中位置：向右偏移量（0 = 正中，负值向左）"
               value: 16
               min: -500
               max: 500
@@ -4377,7 +4379,7 @@ spec:
             - $formkit: number
               name: default_offset_y
               label: 垂直微调（px）
-              help: '边角位置：距上/下边缘距离（默认 24）；居中位置：向下偏移量（0 = 正中，负值向上）'
+              help: "边角位置：距上/下边缘距离（默认 24）；居中位置：向下偏移量（0 = 正中，负值向上）"
               value: 24
               min: -500
               max: 500
@@ -4387,15 +4389,15 @@ spec:
           label: CDN / 代理设置
           if: $get(music_enable).value
           value:
-            aplayer_js: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
-            meting_api: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'
+            aplayer_js: "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"
+            meting_api: "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r"
           children:
             - $formkit: text
               name: aplayer_js
               label: APlayer JS 地址
-              value: 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
+              value: "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"
             - $formkit: text
               name: meting_api
               label: Meting API 代理地址
-              help: '必填。官方 API 已失效，需使用第三方代理。格式：https://api.example.com/meting/?server=:server&type=:type&id=:id&r=:r'
-              value: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r'
+              help: "必填。官方 API 已失效，需使用第三方代理。格式：https://api.example.com/meting/?server=:server&type=:type&id=:id&r=:r"
+              value: "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r"

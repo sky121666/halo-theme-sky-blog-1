@@ -1,9 +1,7 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- 页面：朋友圈（/friends）-->
+  <!-- 插件：plugin-friends -->
 
-<!-- 页面：朋友圈（/friends）-->
-<!-- 插件：plugin-friends -->
-
-<th:block th:replace="~{modules/friends/layout :: html (~{modules/friends/content :: friends-content})}" />
-
+  <th:block th:replace="~{modules/friends/layout :: html (~{modules/friends/content :: friends-content})}" />
 </html>

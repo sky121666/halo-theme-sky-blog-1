@@ -1,20 +1,17 @@
 <!--  Header - 模块化版本 -->
-<div class="relative 
-            min-h-[75vh] max-h-[85vh] 
-            md:min-h-[80vh] md:max-h-[85vh]
-            lg:min-h-screen lg:max-h-screen  
-            overflow-hidden z-10 
-            transition-all duration-500 ease-out" x-data="headerController()">
-    <!-- 背景模块 -->
-    <th:block th:replace="~{modules/index/header/background}"></th:block>
+<div
+  class="relative z-10 max-h-[85vh] min-h-[75vh] overflow-hidden transition-all duration-500 ease-out md:max-h-[85vh] md:min-h-[80vh] lg:max-h-screen lg:min-h-screen"
+  x-data="headerController()"
+>
+  <!-- 背景模块 -->
+  <th:block th:replace="~{modules/index/header/background}"></th:block>
 
-    <!-- 标题模块 -->
-    <th:block th:replace="~{modules/index/header/title}"></th:block>
+  <!-- 标题模块 -->
+  <th:block th:replace="~{modules/index/header/title}"></th:block>
 
-    <!-- 瞬间模块 -->
-    <th:block th:replace="~{modules/index/header/moments}"></th:block>
+  <!-- 瞬间模块 -->
+  <th:block th:replace="~{modules/index/header/moments}"></th:block>
 
-    <!-- 过渡动画模块 -->
-    <th:block th:replace="~{modules/index/header/transition}"></th:block>
-
+  <!-- 过渡动画模块 -->
+  <th:block th:replace="~{modules/index/header/transition}"></th:block>
 </div>

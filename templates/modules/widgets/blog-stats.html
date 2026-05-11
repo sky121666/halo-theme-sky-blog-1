@@ -1,60 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--  博客统计组件 - Premium Refined Style    -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--  博客统计组件 - Premium Refined Style    -->
-<!-- ========================================== -->
-
-<div th:fragment="stats"
-  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
-  th:with="stats = ${siteStatsFinder.getStats()}">
-
-  <!-- 统计网格 - 2x2 精致布局 -->
-  <div class="grid grid-cols-2 gap-3">
-    <!-- 文章数 -->
-    <div
-      class="relative overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-4 group hover:from-primary/10 hover:to-primary/20 transition-all cursor-default">
-      <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-      <div class="relative">
-        <span class="icon-[heroicons--document-text] w-5 h-5 text-primary mb-2 block"></span>
-        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.post}">0</p>
-        <p class="text-xs text-base-content/50 mt-0.5">篇文章</p>
+  <div
+    th:fragment="stats"
+    class="card bg-base-100/80 border-base-content/5 rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl"
+    th:with="stats = ${siteStatsFinder.getStats()}"
+  >
+    <!-- 统计网格 - 2x2 精致布局 -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- 文章数 -->
+      <div
+        class="from-primary/5 to-primary/10 group hover:from-primary/10 hover:to-primary/20 relative cursor-default overflow-hidden rounded-2xl bg-gradient-to-br p-4 transition-all"
+      >
+        <div class="bg-primary/5 absolute top-0 right-0 h-16 w-16 translate-x-1/2 -translate-y-1/2 rounded-full"></div>
+        <div class="relative">
+          <span class="icon-[heroicons--document-text] text-primary mb-2 block h-5 w-5"></span>
+          <p class="text-base-content text-2xl font-bold tracking-tight" th:text="${stats.post}">0</p>
+          <p class="text-base-content/50 mt-0.5 text-xs">篇文章</p>
+        </div>
       </div>
-    </div>
 
-    <!-- 分类数 -->
-    <div
-      class="relative overflow-hidden bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-2xl p-4 group hover:from-secondary/10 hover:to-secondary/20 transition-all cursor-default">
-      <div class="absolute top-0 right-0 w-16 h-16 bg-secondary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-      <div class="relative">
-        <span class="icon-[heroicons--folder] w-5 h-5 text-secondary mb-2 block"></span>
-        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.category}">0</p>
-        <p class="text-xs text-base-content/50 mt-0.5">个分类</p>
+      <!-- 分类数 -->
+      <div
+        class="from-secondary/5 to-secondary/10 group hover:from-secondary/10 hover:to-secondary/20 relative cursor-default overflow-hidden rounded-2xl bg-gradient-to-br p-4 transition-all"
+      >
+        <div
+          class="bg-secondary/5 absolute top-0 right-0 h-16 w-16 translate-x-1/2 -translate-y-1/2 rounded-full"
+        ></div>
+        <div class="relative">
+          <span class="icon-[heroicons--folder] text-secondary mb-2 block h-5 w-5"></span>
+          <p class="text-base-content text-2xl font-bold tracking-tight" th:text="${stats.category}">0</p>
+          <p class="text-base-content/50 mt-0.5 text-xs">个分类</p>
+        </div>
       </div>
-    </div>
 
-    <!-- 评论数 -->
-    <div
-      class="relative overflow-hidden bg-gradient-to-br from-accent/5 to-accent/10 rounded-2xl p-4 group hover:from-accent/10 hover:to-accent/20 transition-all cursor-default">
-      <div class="absolute top-0 right-0 w-16 h-16 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-      <div class="relative">
-        <span class="icon-[heroicons--chat-bubble-left-right] w-5 h-5 text-accent mb-2 block"></span>
-        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.comment}">0</p>
-        <p class="text-xs text-base-content/50 mt-0.5">条评论</p>
+      <!-- 评论数 -->
+      <div
+        class="from-accent/5 to-accent/10 group hover:from-accent/10 hover:to-accent/20 relative cursor-default overflow-hidden rounded-2xl bg-gradient-to-br p-4 transition-all"
+      >
+        <div class="bg-accent/5 absolute top-0 right-0 h-16 w-16 translate-x-1/2 -translate-y-1/2 rounded-full"></div>
+        <div class="relative">
+          <span class="icon-[heroicons--chat-bubble-left-right] text-accent mb-2 block h-5 w-5"></span>
+          <p class="text-base-content text-2xl font-bold tracking-tight" th:text="${stats.comment}">0</p>
+          <p class="text-base-content/50 mt-0.5 text-xs">条评论</p>
+        </div>
       </div>
-    </div>
 
-    <!-- 访问量 -->
-    <div
-      class="relative overflow-hidden bg-gradient-to-br from-info/5 to-info/10 rounded-2xl p-4 group hover:from-info/10 hover:to-info/20 transition-all cursor-default">
-      <div class="absolute top-0 right-0 w-16 h-16 bg-info/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-      <div class="relative">
-        <span class="icon-[heroicons--eye] w-5 h-5 text-info mb-2 block"></span>
-        <p class="text-2xl font-bold text-base-content tracking-tight" th:text="${stats.visit}">0</p>
-        <p class="text-xs text-base-content/50 mt-0.5">次访问</p>
+      <!-- 访问量 -->
+      <div
+        class="from-info/5 to-info/10 group hover:from-info/10 hover:to-info/20 relative cursor-default overflow-hidden rounded-2xl bg-gradient-to-br p-4 transition-all"
+      >
+        <div class="bg-info/5 absolute top-0 right-0 h-16 w-16 translate-x-1/2 -translate-y-1/2 rounded-full"></div>
+        <div class="relative">
+          <span class="icon-[heroicons--eye] text-info mb-2 block h-5 w-5"></span>
+          <p class="text-base-content text-2xl font-bold tracking-tight" th:text="${stats.visit}">0</p>
+          <p class="text-base-content/50 mt-0.5 text-xs">次访问</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 </html>

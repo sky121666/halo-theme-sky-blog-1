@@ -1,169 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--           文章归档侧边栏组件                  -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--           文章归档侧边栏组件                  -->
-<!-- ========================================== -->
-
-<th:block th:fragment="widget" th:with="globalArchives = ${postFinder.archives(1, 100)}">
+  <th:block th:fragment="widget" th:with="globalArchives = ${postFinder.archives(1, 100)}">
     <div th:if="${globalArchives != null and globalArchives.items != null}" class="archive-sidebar-widget mb-8">
-        <h3 class="text-[11px] font-bold text-base-content/40 uppercase tracking-[0.15em] pl-3 mb-5 flex items-center gap-2.5"
-            th:with="cfg = ${theme.config.archive_settings?.sidebar_settings?.archive_sidebar_config}">
-            <!-- Default icon if nothing is set -->
-            <th:block th:if="${cfg == null or cfg.icon == null or #strings.isEmpty(cfg.icon)}">
-                <span class="icon-[heroicons--archive-box] w-3.5 h-3.5"></span>
-            </th:block>
+      <h3
+        class="text-base-content/40 mb-5 flex items-center gap-2.5 pl-3 text-[11px] font-bold tracking-[0.15em] uppercase"
+        th:with="cfg = ${theme.config.archive_settings?.sidebar_settings?.archive_sidebar_config}"
+      >
+        <!-- Default icon if nothing is set -->
+        <th:block th:if="${cfg == null or cfg.icon == null or #strings.isEmpty(cfg.icon)}">
+          <span class="icon-[heroicons--archive-box] h-3.5 w-3.5"></span>
+        </th:block>
 
-            <!-- Backward compatibility: purely CSS class name icon -->
-            <th:block
-                th:if="${cfg != null and cfg.icon != null and !#strings.isEmpty(cfg.icon) and !#strings.startsWith(cfg.icon, '<svg')}">
-                <span th:class="${cfg.icon + ' w-4 h-4'}"></span>
-            </th:block>
+        <!-- Backward compatibility: purely CSS class name icon -->
+        <th:block
+          th:if="${cfg != null and cfg.icon != null and !#strings.isEmpty(cfg.icon) and !#strings.startsWith(cfg.icon, '<svg')}"
+        >
+          <span th:class="${cfg.icon + ' h-4'} w-4"></span>
+        </th:block>
 
-            <!-- New implementation: SVG code returned from formkit iconify with value-only=true -->
-            <th:block
-                th:if="${cfg != null and cfg.icon != null and !#strings.isEmpty(cfg.icon) and #strings.startsWith(cfg.icon, '<svg')}">
-                <span class="w-4 h-4 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
-                    th:utext="${cfg.icon}"></span>
-            </th:block>
+        <!-- New implementation: SVG code returned from formkit iconify with value-only=true -->
+        <th:block
+          th:if="${cfg != null and cfg.icon != null and !#strings.isEmpty(cfg.icon) and #strings.startsWith(cfg.icon, '<svg')}"
+        >
+          <span
+            class="flex h-4 w-4 items-center justify-center [&>svg]:h-full [&>svg]:w-full"
+            th:utext="${cfg.icon}"
+          ></span>
+        </th:block>
 
-            <span th:text="${cfg?.title ?: '归档探索'}">归档探索</span>
-        </h3>
+        <span th:text="${cfg?.title ?: '归档探索'}">归档探索</span>
+      </h3>
 
-        <!-- 归档树形菜单 -->
-        <div class="space-y-2">
-            <div th:each="archive, iterStat : ${globalArchives.items}" class="archive-year-group">
-                <!-- 年份头部 -->
-                <button type="button"
-                    class="w-full flex items-center justify-between py-2.5 px-3 rounded-xl hover:bg-base-content/5 transition-colors group text-base-content archive-toggle-btn"
-                    th:data-year="${archive.year}" th:data-expanded="${iterStat.first}">
-                    <div
-                        class="flex items-center gap-2.5 font-bold text-[15px] group-hover:text-primary transition-colors">
-                        <span
-                            class="icon-[heroicons--calendar-days] w-[18px] h-[18px] opacity-40 group-hover:opacity-100 transition-opacity archive-year-icon"></span>
-                        <span th:text="${archive.year}" class="tracking-wide"></span>
-                    </div>
-                    <span
-                        class="icon-[heroicons--chevron-down] w-3.5 h-3.5 transition-transform duration-300 opacity-30 group-hover:opacity-100 archive-chevron"
-                        th:classappend="${iterStat.first ? 'rotate-180' : ''}"></span>
-                </button>
-
-                <!-- 月份列表 (利用 grid 动画实现平滑折叠) -->
-                <div class="grid transition-all duration-300 ease-out archive-list-wrapper"
-                    th:classappend="${iterStat.first ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}">
-                    <div class="overflow-hidden">
-                        <div class="ml-[38px] mt-1 space-y-0.5 border-l-2 border-base-content/10 mb-2">
-                            <a th:each="monthData : ${archive.months}"
-                                th:href="@{/archives/{year}/{month}(year=${archive.year},month=${monthData.month})}"
-                                class="archive-month-link flex items-center justify-between py-1.5 pl-4 pr-3 rounded-r-xl text-[13.5px] transition-all relative left-[-2px] border-l-2 border-transparent text-base-content/60 hover:text-primary hover:bg-primary/5">
-                                <span th:text="${monthData.month} + '月'"></span>
-                                <span class="text-[11px] font-medium opacity-40 font-mono"
-                                    th:text="${#lists.size(monthData.posts)}"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <!-- 归档树形菜单 -->
+      <div class="space-y-2">
+        <div th:each="archive, iterStat : ${globalArchives.items}" class="archive-year-group">
+          <!-- 年份头部 -->
+          <button
+            type="button"
+            class="hover:bg-base-content/5 group text-base-content archive-toggle-btn flex w-full items-center justify-between rounded-xl px-3 py-2.5 transition-colors"
+            th:data-year="${archive.year}"
+            th:data-expanded="${iterStat.first}"
+          >
+            <div class="group-hover:text-primary flex items-center gap-2.5 text-[15px] font-bold transition-colors">
+              <span
+                class="icon-[heroicons--calendar-days] archive-year-icon h-[18px] w-[18px] opacity-40 transition-opacity group-hover:opacity-100"
+              ></span>
+              <span th:text="${archive.year}" class="tracking-wide"></span>
             </div>
+            <span
+              class="icon-[heroicons--chevron-down] archive-chevron h-3.5 w-3.5 opacity-30 transition-transform duration-300 group-hover:opacity-100"
+              th:classappend="${iterStat.first ? 'rotate-180' : ''}"
+            ></span>
+          </button>
+
+          <!-- 月份列表 (利用 grid 动画实现平滑折叠) -->
+          <div
+            class="archive-list-wrapper grid transition-all duration-300 ease-out"
+            th:classappend="${iterStat.first ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
+          >
+            <div class="overflow-hidden">
+              <div class="border-base-content/10 mt-1 mb-2 ml-[38px] space-y-0.5 border-l-2">
+                <a
+                  th:each="monthData : ${archive.months}"
+                  th:href="@{/archives/{year}/{month}(year=${archive.year},month=${monthData.month})}"
+                  class="archive-month-link text-base-content/60 hover:text-primary hover:bg-primary/5 relative left-[-2px] flex items-center justify-between rounded-r-xl border-l-2 border-transparent py-1.5 pr-3 pl-4 text-[13.5px] transition-all"
+                >
+                  <span th:text="${monthData.month} + '月'"></span>
+                  <span
+                    class="font-mono text-[11px] font-medium opacity-40"
+                    th:text="${#lists.size(monthData.posts)}"
+                  ></span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Native JS Toggle Script -->
-        <script data-swup-reload-script>
-            (function () {
-                const initArchiveSidebar = () => {
-                    document.querySelectorAll('.archive-sidebar-widget .archive-toggle-btn').forEach(btn => {
-                        if (btn.dataset.initialized) return;
-                        btn.dataset.initialized = 'true';
+      <!-- Native JS Toggle Script -->
+      <script data-swup-reload-script>
+        (function () {
+          const initArchiveSidebar = () => {
+            document.querySelectorAll(".archive-sidebar-widget .archive-toggle-btn").forEach((btn) => {
+              if (btn.dataset.initialized) return;
+              btn.dataset.initialized = "true";
 
-                        const setExpandedState = (btn, isExpanded) => {
-                            btn.setAttribute('data-expanded', isExpanded);
+              const setExpandedState = (btn, isExpanded) => {
+                btn.setAttribute("data-expanded", isExpanded);
 
-                            if (isExpanded) {
-                                btn.classList.add('text-primary', 'bg-base-content/5');
-                                const icon = btn.querySelector('.archive-year-icon');
-                                if (icon) icon.classList.replace('opacity-40', 'text-primary');
-                                if (icon) icon.classList.remove('opacity-40');
-                            } else {
-                                btn.classList.remove('text-primary', 'bg-base-content/5');
-                                const icon = btn.querySelector('.archive-year-icon');
-                                if (icon) icon.classList.add('opacity-40');
-                                if (icon) icon.classList.remove('text-primary');
-                            }
-
-                            const chevron = btn.querySelector('.archive-chevron');
-                            if (isExpanded) {
-                                chevron.classList.add('rotate-180');
-                            } else {
-                                chevron.classList.remove('rotate-180');
-                            }
-
-                            const wrapper = btn.nextElementSibling;
-                            if (isExpanded) {
-                                wrapper.classList.remove('grid-rows-[0fr]');
-                                wrapper.classList.add('grid-rows-[1fr]');
-                            } else {
-                                wrapper.classList.remove('grid-rows-[1fr]');
-                                wrapper.classList.add('grid-rows-[0fr]');
-                            }
-                        };
-
-                        // Handle initial active state from DOM attributes 
-                        if (btn.getAttribute('data-expanded') === 'true') {
-                            setExpandedState(btn, true);
-                        }
-
-                        btn.addEventListener('click', () => {
-                            const isExpanded = btn.getAttribute('data-expanded') === 'true';
-                            setExpandedState(btn, !isExpanded);
-                        });
-
-                        // Expose setter for external active routing logic
-                        btn._setExpandedState = setExpandedState;
-                    });
-
-                    // Highlight active route logic
-                    const currentPath = window.location.pathname;
-                    if (currentPath.includes('/archives/')) {
-                        const pathParts = currentPath.split('/');
-                        const yearIndex = pathParts.indexOf('archives') + 1;
-                        if (yearIndex < pathParts.length) {
-                            const activeYear = pathParts[yearIndex];
-
-                            // Find matching year group button
-                            const activeBtn = document.querySelector(`.archive-sidebar-widget .archive-toggle-btn[data-year="${activeYear}"]`);
-                            if (activeBtn) {
-                                // Collapse all first
-                                document.querySelectorAll('.archive-sidebar-widget .archive-toggle-btn').forEach(btn => {
-                                    if (btn._setExpandedState) btn._setExpandedState(btn, false);
-                                });
-                                // Expand active
-                                if (activeBtn._setExpandedState) activeBtn._setExpandedState(activeBtn, true);
-                            }
-
-                            // Highlight exact month link
-                            document.querySelectorAll('.archive-sidebar-widget .archive-month-link').forEach(link => {
-                                // check relative URLs matching path
-                                const linkPath = new URL(link.href).pathname;
-                                if (linkPath === currentPath) {
-                                    link.classList.remove('text-base-content/60', 'border-transparent');
-                                    link.classList.add('text-primary', 'bg-primary/5', 'font-bold', 'border-primary');
-                                } else {
-                                    link.classList.add('text-base-content/60', 'border-transparent');
-                                    link.classList.remove('text-primary', 'bg-primary/5', 'font-bold', 'border-primary');
-                                }
-                            });
-                        }
-                    }
-                };
-
-                // 确保在DOM加载或是Pjax加载后执行
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initArchiveSidebar);
+                if (isExpanded) {
+                  btn.classList.add("text-primary", "bg-base-content/5");
+                  const icon = btn.querySelector(".archive-year-icon");
+                  if (icon) icon.classList.replace("opacity-40", "text-primary");
+                  if (icon) icon.classList.remove("opacity-40");
                 } else {
-                    initArchiveSidebar();
+                  btn.classList.remove("text-primary", "bg-base-content/5");
+                  const icon = btn.querySelector(".archive-year-icon");
+                  if (icon) icon.classList.add("opacity-40");
+                  if (icon) icon.classList.remove("text-primary");
                 }
-            })();
-        </script>
-    </div>
-</th:block>
 
+                const chevron = btn.querySelector(".archive-chevron");
+                if (isExpanded) {
+                  chevron.classList.add("rotate-180");
+                } else {
+                  chevron.classList.remove("rotate-180");
+                }
+
+                const wrapper = btn.nextElementSibling;
+                if (isExpanded) {
+                  wrapper.classList.remove("grid-rows-[0fr]");
+                  wrapper.classList.add("grid-rows-[1fr]");
+                } else {
+                  wrapper.classList.remove("grid-rows-[1fr]");
+                  wrapper.classList.add("grid-rows-[0fr]");
+                }
+              };
+
+              // Handle initial active state from DOM attributes
+              if (btn.getAttribute("data-expanded") === "true") {
+                setExpandedState(btn, true);
+              }
+
+              btn.addEventListener("click", () => {
+                const isExpanded = btn.getAttribute("data-expanded") === "true";
+                setExpandedState(btn, !isExpanded);
+              });
+
+              // Expose setter for external active routing logic
+              btn._setExpandedState = setExpandedState;
+            });
+
+            // Highlight active route logic
+            const currentPath = window.location.pathname;
+            if (currentPath.includes("/archives/")) {
+              const pathParts = currentPath.split("/");
+              const yearIndex = pathParts.indexOf("archives") + 1;
+              if (yearIndex < pathParts.length) {
+                const activeYear = pathParts[yearIndex];
+
+                // Find matching year group button
+                const activeBtn = document.querySelector(
+                  `.archive-sidebar-widget .archive-toggle-btn[data-year="${activeYear}"]`,
+                );
+                if (activeBtn) {
+                  // Collapse all first
+                  document.querySelectorAll(".archive-sidebar-widget .archive-toggle-btn").forEach((btn) => {
+                    if (btn._setExpandedState) btn._setExpandedState(btn, false);
+                  });
+                  // Expand active
+                  if (activeBtn._setExpandedState) activeBtn._setExpandedState(activeBtn, true);
+                }
+
+                // Highlight exact month link
+                document.querySelectorAll(".archive-sidebar-widget .archive-month-link").forEach((link) => {
+                  // check relative URLs matching path
+                  const linkPath = new URL(link.href).pathname;
+                  if (linkPath === currentPath) {
+                    link.classList.remove("text-base-content/60", "border-transparent");
+                    link.classList.add("text-primary", "bg-primary/5", "font-bold", "border-primary");
+                  } else {
+                    link.classList.add("text-base-content/60", "border-transparent");
+                    link.classList.remove("text-primary", "bg-primary/5", "font-bold", "border-primary");
+                  }
+                });
+              }
+            }
+          };
+
+          // 确保在DOM加载或是Pjax加载后执行
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initArchiveSidebar);
+          } else {
+            initArchiveSidebar();
+          }
+        })();
+      </script>
+    </div>
+  </th:block>
 </html>

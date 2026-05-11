@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--          主题切换内联脚本（防闪烁）          -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--          主题切换内联脚本（防闪烁）          -->
-<!-- ========================================== -->
-
-<!--
+  <!--
   此脚本必须在 <head> 中尽早执行，在页面渲染前应用主题
   避免页面加载时的主题闪烁问题
   
@@ -13,122 +12,149 @@
   1. 如果前端开关开启 && localStorage 有缓存 → 使用缓存主题
   2. 否则 → 使用默认配置主题
 -->
-<script th:fragment="inline-script" th:inline="javascript">
-  (function () {
-    // === 主题初始化 ===
-    const showThemeToggle = /*[[${theme.config.nav.theme_settings.show_theme_toggle}]]*/ true;
-    const savedTheme = localStorage.getItem('theme-mode');
-    const defaultTheme = /*[[${theme.config.nav.theme_settings.default_theme}]]*/ 'dark_theme';
-    const lightTheme = /*[[${theme.config.nav.theme_settings.light_theme}]]*/ 'light';
-    const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ 'dark';
+  <script th:fragment="inline-script" th:inline="javascript">
+    (function () {
+      // === 主题初始化 ===
+      const showThemeToggle = /*[[${theme.config.nav.theme_settings.show_theme_toggle}]]*/ true;
+      const savedTheme = localStorage.getItem("theme-mode");
+      const defaultTheme = /*[[${theme.config.nav.theme_settings.default_theme}]]*/ "dark_theme";
+      const lightTheme = /*[[${theme.config.nav.theme_settings.light_theme}]]*/ "light";
+      const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ "dark";
 
-    // === 注入环境变量 ===
-    window.SYS_WEATHER_DEBUG = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false; // 旧兼容接口
-    window.SYS_GLOBAL_DEBUG = window.SYS_WEATHER_DEBUG; // 将来如果有全局其他 debug 可在此处叠加
+      // === 注入环境变量 ===
+      window.SYS_WEATHER_DEBUG = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false; // 旧兼容接口
+      window.SYS_GLOBAL_DEBUG = window.SYS_WEATHER_DEBUG; // 将来如果有全局其他 debug 可在此处叠加
 
-    // === PJAX 开关 ===
-    // 音乐播放器开启时强制启用 PJAX（续播依赖），否则读后台配置
-    const musicEnabled = /*[[${theme.config.music?.music_settings?.enable == true}]]*/ false;
-    const pjaxSetting = /*[[${theme.config.music?.music_settings?.enable_pjax != false}]]*/ true;
-    window.__skyPjaxEnabled = musicEnabled || pjaxSetting;
+      // === PJAX 开关 ===
+      // 音乐播放器开启时强制启用 PJAX（续播依赖），否则读后台配置
+      const musicEnabled = /*[[${theme.config.music?.music_settings?.enable == true}]]*/ false;
+      const pjaxSetting = /*[[${theme.config.music?.music_settings?.enable_pjax != false}]]*/ true;
+      window.__skyPjaxEnabled = musicEnabled || pjaxSetting;
 
-    // === PJAX 脚本生命周期工具 ===
-    // 暴露给后台注入脚本使用：
-    // - SkyPjax.once(key, fn): 全站只执行一次，适合点击特效、统计、播放器等全局脚本
-    // - SkyPjax.onPage(fn): 首屏和每次 PJAX 后执行，适合当前页面 DOM 初始化
-    // - SkyPjax.onCleanup(fn): PJAX 离开当前页前执行，适合清理监听器/定时器
-    const pjaxState = window.__skyPjaxState || {
-      onceKeys: new Set(),
-      pageCallbacks: new Set(),
-      cleanupCallbacks: new Set(),
-      currentPage: null,
-    };
-    window.__skyPjaxState = pjaxState;
+      // === PJAX 脚本生命周期工具 ===
+      // 暴露给后台注入脚本使用：
+      // - SkyPjax.once(key, fn): 全站只执行一次，适合点击特效、统计、播放器等全局脚本
+      // - SkyPjax.onPage(fn): 首屏和每次 PJAX 后执行，适合当前页面 DOM 初始化
+      // - SkyPjax.onCleanup(fn): PJAX 离开当前页前执行，适合清理监听器/定时器
+      const pjaxState = window.__skyPjaxState || {
+        onceKeys: new Set(),
+        pageCallbacks: new Set(),
+        cleanupCallbacks: new Set(),
+        currentPage: null,
+      };
+      window.__skyPjaxState = pjaxState;
 
-    const safeRun = function (fn, label) {
-      try {
-        return fn();
-      } catch (error) {
-        console.error('[SkyPjax] ' + label + ' failed:', error);
-      }
-    };
-
-    window.SkyPjax = window.SkyPjax || {
-      once(key, fn) {
-        if (!key || typeof fn !== 'function') return false;
-        const cacheKey = String(key);
-        if (pjaxState.onceKeys.has(cacheKey)) return false;
-        pjaxState.onceKeys.add(cacheKey);
-        safeRun(fn, 'once(' + cacheKey + ')');
-        return true;
-      },
-      onPage(fn, options) {
-        if (typeof fn !== 'function') return function () {};
-        const opts = options || {};
-        pjaxState.pageCallbacks.add(fn);
-        if (opts.immediate !== false && pjaxState.currentPage) {
-          safeRun(function () { fn(pjaxState.currentPage); }, 'onPage');
+      const safeRun = function (fn, label) {
+        try {
+          return fn();
+        } catch (error) {
+          console.error("[SkyPjax] " + label + " failed:", error);
         }
-        return function () {
-          pjaxState.pageCallbacks.delete(fn);
-        };
-      },
-      onCleanup(fn) {
-        if (typeof fn !== 'function') return function () {};
-        pjaxState.cleanupCallbacks.add(fn);
-        return function () {
-          pjaxState.cleanupCallbacks.delete(fn);
-        };
-      },
-      _runPage(detail) {
-        const pageDetail = detail || {};
-        pjaxState.currentPage = pageDetail;
-        pjaxState.pageCallbacks.forEach(function (fn) {
-          safeRun(function () { fn(pageDetail); }, 'page callback');
-        });
-        document.dispatchEvent(new CustomEvent('sky:page-load', { detail: pageDetail }));
-      },
-      _cleanup(detail) {
-        const cleanupDetail = detail || {};
-        pjaxState.cleanupCallbacks.forEach(function (fn) {
-          safeRun(function () { fn(cleanupDetail); }, 'cleanup callback');
-        });
-        document.dispatchEvent(new CustomEvent('sky:page-cleanup', { detail: cleanupDetail }));
-      },
-    };
+      };
 
-    // 如果前端开关关闭，忽略 localStorage，强制使用默认主题
-    const isDark = showThemeToggle && savedTheme
-      ? (savedTheme === 'dark_theme')
-      : (defaultTheme === 'dark_theme');
-    const themeName = isDark ? darkTheme : lightTheme;
-    const themeMode = isDark ? 'dark' : 'light';
+      window.SkyPjax = window.SkyPjax || {
+        once(key, fn) {
+          if (!key || typeof fn !== "function") return false;
+          const cacheKey = String(key);
+          if (pjaxState.onceKeys.has(cacheKey)) return false;
+          pjaxState.onceKeys.add(cacheKey);
+          safeRun(fn, "once(" + cacheKey + ")");
+          return true;
+        },
+        onPage(fn, options) {
+          if (typeof fn !== "function") return function () {};
+          const opts = options || {};
+          pjaxState.pageCallbacks.add(fn);
+          if (opts.immediate !== false && pjaxState.currentPage) {
+            safeRun(function () {
+              fn(pjaxState.currentPage);
+            }, "onPage");
+          }
+          return function () {
+            pjaxState.pageCallbacks.delete(fn);
+          };
+        },
+        onCleanup(fn) {
+          if (typeof fn !== "function") return function () {};
+          pjaxState.cleanupCallbacks.add(fn);
+          return function () {
+            pjaxState.cleanupCallbacks.delete(fn);
+          };
+        },
+        _runPage(detail) {
+          const pageDetail = detail || {};
+          pjaxState.currentPage = pageDetail;
+          pjaxState.pageCallbacks.forEach(function (fn) {
+            safeRun(function () {
+              fn(pageDetail);
+            }, "page callback");
+          });
+          document.dispatchEvent(new CustomEvent("sky:page-load", { detail: pageDetail }));
+        },
+        _cleanup(detail) {
+          const cleanupDetail = detail || {};
+          pjaxState.cleanupCallbacks.forEach(function (fn) {
+            safeRun(function () {
+              fn(cleanupDetail);
+            }, "cleanup callback");
+          });
+          document.dispatchEvent(new CustomEvent("sky:page-cleanup", { detail: cleanupDetail }));
+        },
+      };
 
-    document.documentElement.setAttribute('data-theme', themeName);
-    document.documentElement.setAttribute('data-color-scheme', themeMode);
+      // === 解析系统主题偏好 ===
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
 
-    // === 全局字体按需加载 ===
-    const bodyFont = /*[[${theme.config.general.font_settings.body_font}]]*/ 'font-default';
-    const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ 'https://cdn.5ee.net/fonts';
+      // 计算当前是否为暗色模式
+      // 优先级：localStorage > 默认配置，auto 模式跟随系统
+      function resolveIsDark() {
+        const effectiveMode = showThemeToggle && savedTheme ? savedTheme : defaultTheme;
+        if (effectiveMode === "auto") {
+          return prefersDark.matches;
+        }
+        return effectiveMode === "dark_theme";
+      }
 
-    // 加载字体文件
-    if (bodyFont === 'font-lxgw-wenkai-bright') {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = fontCdn + '/LXGWBright-SemiLight/result.css';
-      document.head.appendChild(link);
-    } else if (bodyFont === 'font-siyuan-songti') {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = fontCdn + '/思源屏显臻宋/result.css';
-      document.head.appendChild(link);
-    }
+      const isDark = resolveIsDark();
+      const themeName = isDark ? darkTheme : lightTheme;
+      const themeMode = isDark ? "dark" : "light";
 
-    // 应用字体类到 html 元素（全局生效）
-    if (bodyFont && bodyFont !== 'font-default') {
-      document.documentElement.classList.add(bodyFont);
-    }
-  })();
-</script>
+      document.documentElement.setAttribute("data-theme", themeName);
+      document.documentElement.setAttribute("data-color-scheme", themeMode);
 
+      // 监听系统主题变化（仅在 auto 模式下响应）
+      prefersDark.addEventListener("change", function (e) {
+        var currentMode =
+          showThemeToggle && localStorage.getItem("theme-mode") ? localStorage.getItem("theme-mode") : defaultTheme;
+        if (currentMode !== "auto") return;
+        var newIsDark = e.matches;
+        var newThemeName = newIsDark ? darkTheme : lightTheme;
+        var newThemeMode = newIsDark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", newThemeName);
+        document.documentElement.setAttribute("data-color-scheme", newThemeMode);
+      });
+
+      // === 全局字体按需加载 ===
+      const bodyFont = /*[[${theme.config.general.font_settings.body_font}]]*/ "font-default";
+      const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ "https://cdn.5ee.net/fonts";
+
+      // 加载字体文件
+      if (bodyFont === "font-lxgw-wenkai-bright") {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = fontCdn + "/LXGWBright-SemiLight/result.css";
+        document.head.appendChild(link);
+      } else if (bodyFont === "font-siyuan-songti") {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = fontCdn + "/思源屏显臻宋/result.css";
+        document.head.appendChild(link);
+      }
+
+      // 应用字体类到 html 元素（全局生效）
+      if (bodyFont && bodyFont !== "font-default") {
+        document.documentElement.classList.add(bodyFont);
+      }
+    })();
+  </script>
 </html>

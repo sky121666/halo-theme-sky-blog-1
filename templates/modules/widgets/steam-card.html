@@ -1,237 +1,277 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--   Steam Mini Profile 卡片组件              -->
+  <!--   使用 REST API 异步加载，不阻塞页面渲染    -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--   Steam Mini Profile 卡片组件              -->
-<!--   使用 REST API 异步加载，不阻塞页面渲染    -->
-<!-- ========================================== -->
-
-<th:block th:fragment="card">
-  <!-- Steam 卡片容器 - 使用 Alpine.js 异步加载 -->
-  <div x-data="steamCard()" x-init="init()" class="steam-card-wrapper">
-
-    <!-- 加载状态 -->
-    <div x-show="loading"
-      class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] overflow-hidden p-5">
-      <div class="flex items-center gap-4 animate-pulse">
-        <div class="w-14 h-14 rounded-xl bg-base-content/10"></div>
-        <div class="flex-1 space-y-2">
-          <div class="h-4 bg-base-content/10 rounded w-24"></div>
-          <div class="h-3 bg-base-content/10 rounded w-16"></div>
+  <th:block th:fragment="card">
+    <!-- Steam 卡片容器 - 使用 Alpine.js 异步加载 -->
+    <div x-data="steamCard()" x-init="init()" class="steam-card-wrapper">
+      <!-- 加载状态 -->
+      <div
+        x-show="loading"
+        class="card bg-base-100/80 border-base-content/5 overflow-hidden rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl"
+      >
+        <div class="flex animate-pulse items-center gap-4">
+          <div class="bg-base-content/10 h-14 w-14 rounded-xl"></div>
+          <div class="flex-1 space-y-2">
+            <div class="bg-base-content/10 h-4 w-24 rounded"></div>
+            <div class="bg-base-content/10 h-3 w-16 rounded"></div>
+          </div>
+        </div>
+        <div class="border-base-content/5 mt-3 flex items-center border-t pt-3">
+          <div class="flex-1 space-y-1 text-center">
+            <div class="bg-base-content/10 mx-auto h-2 w-6 rounded"></div>
+            <div class="bg-base-content/10 mx-auto h-3 w-8 rounded"></div>
+          </div>
+          <div class="flex-1 space-y-1 text-center">
+            <div class="bg-base-content/10 mx-auto h-2 w-6 rounded"></div>
+            <div class="bg-base-content/10 mx-auto h-3 w-8 rounded"></div>
+          </div>
+          <div class="flex-1 space-y-1 text-center">
+            <div class="bg-base-content/10 mx-auto h-2 w-6 rounded"></div>
+            <div class="bg-base-content/10 mx-auto h-3 w-8 rounded"></div>
+          </div>
         </div>
       </div>
-      <div class="flex items-center pt-3 mt-3 border-t border-base-content/5">
-        <div class="flex-1 text-center space-y-1">
-          <div class="h-2 bg-base-content/10 rounded w-6 mx-auto"></div>
-          <div class="h-3 bg-base-content/10 rounded w-8 mx-auto"></div>
+
+      <!-- 实际内容 -->
+      <a
+        x-show="!loading && profile"
+        x-cloak
+        href="/steam"
+        class="card bg-base-100/80 border-base-content/5 group relative block overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl"
+        :class="profile?.playing ? 'ring-2 ring-accent/50 hover:ring-accent/70' : 'hover:border-primary/20'"
+      >
+        <!-- 游戏中背景 -->
+        <div x-show="gameHeaderUrl" class="absolute inset-0 z-0">
+          <img
+            :src="gameHeaderUrl"
+            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            referrerpolicy="no-referrer"
+            @error="gameHeaderUrl = null"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20"></div>
         </div>
-        <div class="flex-1 text-center space-y-1">
-          <div class="h-2 bg-base-content/10 rounded w-6 mx-auto"></div>
-          <div class="h-3 bg-base-content/10 rounded w-8 mx-auto"></div>
+
+        <!-- Steam Logo 水印 -->
+        <div
+          x-show="!profile?.playing"
+          class="text-base-content/5 group-hover:text-base-content/8 pointer-events-none absolute -right-6 -bottom-6 z-0 rotate-[-15deg] transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-10deg]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0C5.373 0 0 5.373 0 12c0 3.167 1.223 5.922 3.167 8.08L6.8 15.6c-.347-.723-.593-1.468-.593-2.31c0-2.872 2.328-5.2 5.2-5.2c2.872 0 5.2 2.328 5.2 5.2s-2.328 5.2-5.2 5.2c-.407 0-.796-.106-1.168-.2l-2.73 3.937A11.96 11.96 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0m.593 14.4c-.722 0-1.2-.478-1.2-1.2c0-.722.478-1.2 1.2-1.2s1.2.478 1.2 1.2s-.478 1.2-1.2 1.2m0-3.6c-2.003 0-3.6 1.6-3.6 3.6c0 1.215.545 2.155 1.348 2.805l-2.09 3.016a2.4 2.4 0 0 1-.362-.023a2.4 2.4 0 1 1 1.706-3.924l2.257-3.256c.236.052.48.082.74.082c1.997 0 3.6-1.603 3.6-3.6s-1.603-3.6-3.6-3.6"
+            />
+          </svg>
         </div>
-        <div class="flex-1 text-center space-y-1">
-          <div class="h-2 bg-base-content/10 rounded w-6 mx-auto"></div>
-          <div class="h-3 bg-base-content/10 rounded w-8 mx-auto"></div>
+
+        <!-- 内容层 -->
+        <div class="relative z-10 flex items-center gap-4 p-5">
+          <!-- 头像 -->
+          <div class="relative shrink-0">
+            <div
+              class="h-14 w-14 overflow-hidden rounded-xl shadow-md ring-2 transition-all"
+              :class="profile?.playing ? 'ring-accent' : ((profile?.summary?.personaState || profile?.summary?.personastate) == 1 ? 'ring-success' : 'ring-base-content/10')"
+            >
+              <img
+                :src="profile?.summary?.avatar || profile?.summary?.avatarfull || profile?.summary?.avatarFull"
+                :alt="profile?.summary?.personaname || profile?.summary?.personaName"
+                class="h-full w-full object-cover"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+            <div
+              class="ring-base-100 absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full ring-2"
+              :class="profile?.playing ? 'bg-accent animate-pulse' : ((profile?.summary?.personaState || profile?.summary?.personastate) == 1 ? 'bg-success' : 'bg-base-content/30')"
+            ></div>
+          </div>
+
+          <!-- 用户信息 -->
+          <div class="min-w-0 flex-1">
+            <h3
+              class="truncate text-sm font-bold"
+              :class="profile?.playing ? 'text-white' : 'text-base-content'"
+              x-text="profile?.summary?.personaname || profile?.summary?.personaName || 'Steam User'"
+            ></h3>
+            <div class="mt-0.5 truncate text-xs">
+              <span x-show="profile?.playing" class="text-accent inline-flex items-center gap-1 font-medium">
+                <span class="bg-accent h-1.5 w-1.5 shrink-0 animate-pulse rounded-full"></span>
+                <span class="truncate" x-text="profile?.statusText">正在游玩</span>
+              </span>
+              <span x-show="!profile?.playing && profile?.summary?.personaState == 1" class="text-success">在线</span>
+              <span
+                x-show="!profile?.playing && profile?.summary?.personaState != 1"
+                class="text-base-content/50"
+                x-text="profile?.statusText"
+                >离线</span
+              >
+            </div>
+          </div>
         </div>
-      </div>
+
+        <!-- 底部统计栏 -->
+        <div class="relative z-10 px-4 pb-3">
+          <div
+            class="flex items-center border-t pt-2"
+            :class="profile?.playing ? 'border-white/20' : 'border-base-content/5'"
+          >
+            <div class="flex-1 text-center">
+              <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">
+                Lv
+              </div>
+              <div
+                class="text-xs font-bold"
+                :class="profile?.playing ? 'text-white' : 'text-base-content'"
+                x-text="badges?.playerLevel || '-'"
+              ></div>
+            </div>
+            <div class="h-4 w-px" :class="profile?.playing ? 'bg-white/20' : 'bg-base-content/10'"></div>
+            <div class="flex-1 text-center">
+              <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">
+                游戏
+              </div>
+              <div
+                class="text-xs font-bold"
+                :class="profile?.playing ? 'text-white' : 'text-base-content'"
+                x-text="stats?.totalGames || '-'"
+              ></div>
+            </div>
+            <div class="h-4 w-px" :class="profile?.playing ? 'bg-white/20' : 'bg-base-content/10'"></div>
+            <div class="flex-1 text-center">
+              <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">
+                时长
+              </div>
+              <div
+                class="text-xs font-bold"
+                :class="profile?.playing ? 'text-white' : 'text-base-content'"
+                x-text="stats ? Math.floor(stats.totalPlaytimeMinutes / 60) + 'h' : '-'"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 错误/无数据状态 - 不显示任何内容 -->
     </div>
 
-    <!-- 实际内容 -->
-    <a x-show="!loading && profile" x-cloak href="/steam"
-      class="card block bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] overflow-hidden group hover:shadow-xl transition-all duration-300 relative"
-      :class="profile?.playing ? 'ring-2 ring-accent/50 hover:ring-accent/70' : 'hover:border-primary/20'">
+    <script data-swup-reload-script>
+      // Steam 卡片脚本 (IIFE 防止重复声明)
+      (function () {
+        const STEAM_CARD_CACHE_KEY = "steam_card_cache";
+        const STEAM_CARD_CACHE_TTL = 3 * 60 * 1000; // 3分钟
 
-      <!-- 游戏中背景 -->
-      <div x-show="gameHeaderUrl" class="absolute inset-0 z-0">
-        <img :src="gameHeaderUrl"
-          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          referrerpolicy="no-referrer" @error="gameHeaderUrl = null" />
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20"></div>
-      </div>
-
-      <!-- Steam Logo 水印 -->
-      <div x-show="!profile?.playing"
-        class="absolute -right-6 -bottom-6 text-base-content/5 rotate-[-15deg] pointer-events-none z-0 transition-all duration-500 group-hover:rotate-[-10deg] group-hover:scale-110 group-hover:text-base-content/8">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 0C5.373 0 0 5.373 0 12c0 3.167 1.223 5.922 3.167 8.08L6.8 15.6c-.347-.723-.593-1.468-.593-2.31c0-2.872 2.328-5.2 5.2-5.2c2.872 0 5.2 2.328 5.2 5.2s-2.328 5.2-5.2 5.2c-.407 0-.796-.106-1.168-.2l-2.73 3.937A11.96 11.96 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0m.593 14.4c-.722 0-1.2-.478-1.2-1.2c0-.722.478-1.2 1.2-1.2s1.2.478 1.2 1.2s-.478 1.2-1.2 1.2m0-3.6c-2.003 0-3.6 1.6-3.6 3.6c0 1.215.545 2.155 1.348 2.805l-2.09 3.016a2.4 2.4 0 0 1-.362-.023a2.4 2.4 0 1 1 1.706-3.924l2.257-3.256c.236.052.48.082.74.082c1.997 0 3.6-1.603 3.6-3.6s-1.603-3.6-3.6-3.6" />
-        </svg>
-      </div>
-
-      <!-- 内容层 -->
-      <div class="relative z-10 p-5 flex items-center gap-4">
-        <!-- 头像 -->
-        <div class="relative shrink-0">
-          <div class="w-14 h-14 rounded-xl overflow-hidden ring-2 shadow-md transition-all"
-            :class="profile?.playing ? 'ring-accent' : ((profile?.summary?.personaState || profile?.summary?.personastate) == 1 ? 'ring-success' : 'ring-base-content/10')">
-            <img :src="profile?.summary?.avatar || profile?.summary?.avatarfull || profile?.summary?.avatarFull"
-              :alt="profile?.summary?.personaname || profile?.summary?.personaName" class="w-full h-full object-cover"
-              referrerpolicy="no-referrer" />
-          </div>
-          <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ring-2 ring-base-100"
-            :class="profile?.playing ? 'bg-accent animate-pulse' : ((profile?.summary?.personaState || profile?.summary?.personastate) == 1 ? 'bg-success' : 'bg-base-content/30')">
-          </div>
-        </div>
-
-        <!-- 用户信息 -->
-        <div class="flex-1 min-w-0">
-          <h3 class="text-sm font-bold truncate" :class="profile?.playing ? 'text-white' : 'text-base-content'"
-            x-text="profile?.summary?.personaname || profile?.summary?.personaName || 'Steam User'"></h3>
-          <div class="mt-0.5 text-xs truncate">
-            <span x-show="profile?.playing" class="inline-flex items-center gap-1 text-accent font-medium">
-              <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0"></span>
-              <span class="truncate" x-text="profile?.statusText">正在游玩</span>
-            </span>
-            <span x-show="!profile?.playing && profile?.summary?.personaState == 1" class="text-success">在线</span>
-            <span x-show="!profile?.playing && profile?.summary?.personaState != 1" class="text-base-content/50"
-              x-text="profile?.statusText">离线</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 底部统计栏 -->
-      <div class="relative z-10 px-4 pb-3">
-        <div class="flex items-center pt-2 border-t"
-          :class="profile?.playing ? 'border-white/20' : 'border-base-content/5'">
-          <div class="flex-1 text-center">
-            <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">Lv
-            </div>
-            <div class="text-xs font-bold" :class="profile?.playing ? 'text-white' : 'text-base-content'"
-              x-text="badges?.playerLevel || '-'"></div>
-          </div>
-          <div class="w-px h-4" :class="profile?.playing ? 'bg-white/20' : 'bg-base-content/10'"></div>
-          <div class="flex-1 text-center">
-            <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">游戏
-            </div>
-            <div class="text-xs font-bold" :class="profile?.playing ? 'text-white' : 'text-base-content'"
-              x-text="stats?.totalGames || '-'"></div>
-          </div>
-          <div class="w-px h-4" :class="profile?.playing ? 'bg-white/20' : 'bg-base-content/10'"></div>
-          <div class="flex-1 text-center">
-            <div class="text-[10px] font-medium" :class="profile?.playing ? 'text-white/60' : 'text-base-content/40'">时长
-            </div>
-            <div class="text-xs font-bold" :class="profile?.playing ? 'text-white' : 'text-base-content'"
-              x-text="stats ? Math.floor(stats.totalPlaytimeMinutes / 60) + 'h' : '-'"></div>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <!-- 错误/无数据状态 - 不显示任何内容 -->
-  </div>
-
-  <script data-swup-reload-script>
-    // Steam 卡片脚本 (IIFE 防止重复声明)
-    (function () {
-      const STEAM_CARD_CACHE_KEY = 'steam_card_cache';
-      const STEAM_CARD_CACHE_TTL = 3 * 60 * 1000; // 3分钟
-
-      const steamCardCache = {
-        get(key) {
-          try {
-            const data = localStorage.getItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
-            if (!data) return null;
-            const { value, expiry } = JSON.parse(data);
-            if (Date.now() > expiry) {
-              localStorage.removeItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
+        const steamCardCache = {
+          get(key) {
+            try {
+              const data = localStorage.getItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
+              if (!data) return null;
+              const { value, expiry } = JSON.parse(data);
+              if (Date.now() > expiry) {
+                localStorage.removeItem(`${STEAM_CARD_CACHE_KEY}_${key}`);
+                return null;
+              }
+              return value;
+            } catch {
               return null;
             }
-            return value;
-          } catch {
-            return null;
-          }
-        },
-        set(key, value) {
-          try {
-            localStorage.setItem(`${STEAM_CARD_CACHE_KEY}_${key}`, JSON.stringify({
-              value,
-              expiry: Date.now() + STEAM_CARD_CACHE_TTL
-            }));
-          } catch {
-            // 忽略缓存写入失败
-          }
-        }
-      };
-
-      const registerSteamCard = () => {
-        if (!window.Alpine) return;
-        // 防止重复注册
-        if (Alpine.data && Alpine._steamCardRegistered) return;
-        Alpine._steamCardRegistered = true;
-
-        Alpine.data('steamCard', () => ({
-          loading: true,
-          profile: null,
-          stats: null,
-          badges: null,
-          gameHeaderUrl: null,
-          _initialized: false,
-
-          async init() {
-            // 防止重复初始化
-            if (this._initialized) return;
-            this._initialized = true;
-
+          },
+          set(key, value) {
             try {
-              // 尝试从缓存读取
-              const cachedProfile = steamCardCache.get('profile');
-              const cachedStats = steamCardCache.get('stats');
-              const cachedBadges = steamCardCache.get('badges');
-
-              // 如果全部命中缓存，直接使用
-              if (cachedProfile && cachedStats && cachedBadges) {
-                this.profile = cachedProfile;
-                this.stats = cachedStats;
-                this.badges = cachedBadges;
-              } else {
-                // 否则请求 API
-                const [profileRes, statsRes, badgesRes] = await Promise.all([
-                  cachedProfile ? Promise.resolve(cachedProfile) :
-                    fetch('/apis/api.steam.timxs.com/v1alpha1/profile')
-                      .then(r => r.ok ? r.json() : null)
-                      .catch(() => null),
-                  cachedStats ? Promise.resolve(cachedStats) :
-                    fetch('/apis/api.steam.timxs.com/v1alpha1/stats')
-                      .then(r => r.ok ? r.json() : null)
-                      .catch(() => null),
-                  cachedBadges ? Promise.resolve(cachedBadges) :
-                    fetch('/apis/api.steam.timxs.com/v1alpha1/badges')
-                      .then(r => r.ok ? r.json() : null)
-                      .catch(() => null)
-                ]);
-
-                this.profile = profileRes;
-                this.stats = statsRes;
-                this.badges = badgesRes;
-
-                // 写入缓存
-                if (profileRes) steamCardCache.set('profile', profileRes);
-                if (statsRes) steamCardCache.set('stats', statsRes);
-                if (badgesRes) steamCardCache.set('badges', badgesRes);
-              }
-
-              // 设置游戏背景图
-              const gameId = this.profile?.summary?.gameId || this.profile?.summary?.gameid;
-              if (this.profile?.playing && gameId) {
-                this.gameHeaderUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
-              }
-
-            } catch (e) {
-              // Silent fail
-            } finally {
-              this.loading = false;
+              localStorage.setItem(
+                `${STEAM_CARD_CACHE_KEY}_${key}`,
+                JSON.stringify({
+                  value,
+                  expiry: Date.now() + STEAM_CARD_CACHE_TTL,
+                }),
+              );
+            } catch {
+              // 忽略缓存写入失败
             }
-          }
-        }));
-      };
+          },
+        };
 
-      if (window.Alpine) {
-        registerSteamCard();
-      } else {
-        document.addEventListener('alpine:init', registerSteamCard, { once: true });
-      }
-    })();
-  </script>
-</th:block>
+        const registerSteamCard = () => {
+          if (!window.Alpine) return;
+          // 防止重复注册
+          if (Alpine.data && Alpine._steamCardRegistered) return;
+          Alpine._steamCardRegistered = true;
 
+          Alpine.data("steamCard", () => ({
+            loading: true,
+            profile: null,
+            stats: null,
+            badges: null,
+            gameHeaderUrl: null,
+            _initialized: false,
+
+            async init() {
+              // 防止重复初始化
+              if (this._initialized) return;
+              this._initialized = true;
+
+              try {
+                // 尝试从缓存读取
+                const cachedProfile = steamCardCache.get("profile");
+                const cachedStats = steamCardCache.get("stats");
+                const cachedBadges = steamCardCache.get("badges");
+
+                // 如果全部命中缓存，直接使用
+                if (cachedProfile && cachedStats && cachedBadges) {
+                  this.profile = cachedProfile;
+                  this.stats = cachedStats;
+                  this.badges = cachedBadges;
+                } else {
+                  // 否则请求 API
+                  const [profileRes, statsRes, badgesRes] = await Promise.all([
+                    cachedProfile
+                      ? Promise.resolve(cachedProfile)
+                      : fetch("/apis/api.steam.timxs.com/v1alpha1/profile")
+                          .then((r) => (r.ok ? r.json() : null))
+                          .catch(() => null),
+                    cachedStats
+                      ? Promise.resolve(cachedStats)
+                      : fetch("/apis/api.steam.timxs.com/v1alpha1/stats")
+                          .then((r) => (r.ok ? r.json() : null))
+                          .catch(() => null),
+                    cachedBadges
+                      ? Promise.resolve(cachedBadges)
+                      : fetch("/apis/api.steam.timxs.com/v1alpha1/badges")
+                          .then((r) => (r.ok ? r.json() : null))
+                          .catch(() => null),
+                  ]);
+
+                  this.profile = profileRes;
+                  this.stats = statsRes;
+                  this.badges = badgesRes;
+
+                  // 写入缓存
+                  if (profileRes) steamCardCache.set("profile", profileRes);
+                  if (statsRes) steamCardCache.set("stats", statsRes);
+                  if (badgesRes) steamCardCache.set("badges", badgesRes);
+                }
+
+                // 设置游戏背景图
+                const gameId = this.profile?.summary?.gameId || this.profile?.summary?.gameid;
+                if (this.profile?.playing && gameId) {
+                  this.gameHeaderUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+                }
+              } catch (e) {
+                // Silent fail
+              } finally {
+                this.loading = false;
+              }
+            },
+          }));
+        };
+
+        if (window.Alpine) {
+          registerSteamCard();
+        } else {
+          document.addEventListener("alpine:init", registerSteamCard, { once: true });
+        }
+      })();
+    </script>
+  </th:block>
 </html>

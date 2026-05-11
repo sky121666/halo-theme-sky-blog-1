@@ -1,12 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--           动态侧边栏渲染                     -->
+  <!-- 支持传入页面配置，优先使用页面定制配置          -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--           动态侧边栏渲染                     -->
-<!-- 支持传入页面配置，优先使用页面定制配置          -->
-<!-- ========================================== -->
-
-<!-- 
+  <!-- 
   参数说明：
   - pageCfg: 页面侧边栏配置（可选）
   - 如果 pageCfg.enable_custom_sidebar == true，使用页面配置
@@ -16,7 +15,9 @@
   1. 旧格式: sidebar_widgets 数组 [{widget: 'xxx'}, ...]
   2. 新格式: enabled_widgets 字符串数组 ['xxx', 'yyy', ...]
 -->
-<th:block th:fragment="dynamic(pageCfg)" th:with="globalCfg = ${theme.config.general.sidebar_settings},
+  <th:block
+    th:fragment="dynamic(pageCfg)"
+    th:with="globalCfg = ${theme.config.general.sidebar_settings},
            useCustom = ${pageCfg?.enable_custom_sidebar == true},
            customWidgets = ${pageCfg?.sidebar_widgets},
            globalWidgets = ${globalCfg?.widgets},
@@ -27,69 +28,65 @@
              {widget: 'tags'},
              {widget: 'popular_posts'}
            } },
-           baseWidgets = ${globalWidgets != null && !#lists.isEmpty(globalWidgets) ? globalWidgets : defaultWidgets}">
+           baseWidgets = ${globalWidgets != null && !#lists.isEmpty(globalWidgets) ? globalWidgets : defaultWidgets}"
+  >
+    <!-- 确定要渲染的组件列表 -->
+    <!-- 优先级: 启用定制 -> sidebar_widgets -> 全局配置 -->
+    <th:block
+      th:with="renderList = ${useCustom && customWidgets != null && !#lists.isEmpty(customWidgets) ? customWidgets : baseWidgets}"
+    >
+      <th:block th:each="item : ${renderList}">
+        <!-- 解析小工具类型：支持对象格式 {widget: 'name'} 和字符串格式 'name' -->
+        <th:block th:with="widgetType = ${item instanceof T(java.lang.String) ? item : item.widget}">
+          <th:block th:if="${widgetType eq 'welcome_card'}">
+            <th:block th:replace="~{modules/widgets/welcome-card :: card}" />
+          </th:block>
 
-  <!-- 确定要渲染的组件列表 -->
-  <!-- 优先级: 启用定制 -> sidebar_widgets -> 全局配置 -->
-  <th:block
-    th:with="renderList = ${useCustom && customWidgets != null && !#lists.isEmpty(customWidgets) ? customWidgets : baseWidgets}">
+          <th:block th:if="${widgetType eq 'author_card'}">
+            <th:block th:replace="~{modules/widgets/author-card :: card}" />
+          </th:block>
 
-    <th:block th:each="item : ${renderList}">
-      <!-- 解析小工具类型：支持对象格式 {widget: 'name'} 和字符串格式 'name' -->
-      <th:block th:with="widgetType = ${item instanceof T(java.lang.String) ? item : item.widget}">
+          <th:block th:if="${widgetType eq 'steam_card'}">
+            <th:block th:replace="~{modules/widgets/steam-card :: card}" />
+          </th:block>
 
-        <th:block th:if="${widgetType eq 'welcome_card'}">
-          <th:block th:replace="~{modules/widgets/welcome-card :: card}" />
+          <th:block th:if="${widgetType eq 'bangumi_card'}">
+            <th:block th:replace="~{modules/widgets/bangumi-card :: card}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'blog_stats'}">
+            <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'categories'}">
+            <th:block th:replace="~{modules/widgets/categories :: list}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'tags'}">
+            <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'popular_posts'}">
+            <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'recent_posts'}">
+            <th:block th:replace="~{modules/widgets/recent-posts :: list}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'toc'}">
+            <th:block th:replace="~{modules/post/toc :: widget}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'archive_sidebar'}">
+            <th:block th:replace="~{modules/widgets/archive-sidebar :: widget}" />
+          </th:block>
+
+          <th:block th:if="${widgetType eq 'online_stats'}">
+            <th:block th:replace="~{modules/widgets/online-stats :: online}" />
+          </th:block>
         </th:block>
-
-        <th:block th:if="${widgetType eq 'author_card'}">
-          <th:block th:replace="~{modules/widgets/author-card :: card}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'steam_card'}">
-          <th:block th:replace="~{modules/widgets/steam-card :: card}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'bangumi_card'}">
-          <th:block th:replace="~{modules/widgets/bangumi-card :: card}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'blog_stats'}">
-          <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'categories'}">
-          <th:block th:replace="~{modules/widgets/categories :: list}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'tags'}">
-          <th:block th:replace="~{modules/widgets/tags :: cloud}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'popular_posts'}">
-          <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'recent_posts'}">
-          <th:block th:replace="~{modules/widgets/recent-posts :: list}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'toc'}">
-          <th:block th:replace="~{modules/post/toc :: widget}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'archive_sidebar'}">
-          <th:block th:replace="~{modules/widgets/archive-sidebar :: widget}" />
-        </th:block>
-
-        <th:block th:if="${widgetType eq 'online_stats'}">
-          <th:block th:replace="~{modules/widgets/online-stats :: online}" />
-        </th:block>
-
       </th:block>
     </th:block>
   </th:block>
-
-</th:block>
-
 </html>

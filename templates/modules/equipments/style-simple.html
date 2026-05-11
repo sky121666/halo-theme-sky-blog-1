@@ -1,59 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- ========================================== -->
+  <!--   装备页面 - 优雅卡片风格 (Simple Style)     -->
+  <!--   4列网格 + Hero 头图 + 分组区域             -->
+  <!-- ========================================== -->
 
-<!-- ========================================== -->
-<!--   装备页面 - 优雅卡片风格 (Simple Style)     -->
-<!--   4列网格 + Hero 头图 + 分组区域             -->
-<!-- ========================================== -->
+  <th:block th:fragment="style-simple">
+    <div
+      id="equipment"
+      th:with="cfg=${theme.config.equipment_settings?.basic_info},
+                                 styleCfg=${theme.config.equipment_settings?.style_settings}"
+    >
+      <!-- ========== Hero 区域 ========== -->
+      <section
+        class="eq-hero"
+        th:with="heroBg=${styleCfg?.hero_background ?: 'https://www.dmoe.cc/random.php'}"
+        th:style="'--hero-bg: url(' + ${heroBg} + ')'"
+      >
+        <div class="eq-hero-overlay"></div>
+        <div class="eq-hero-content">
+          <span class="eq-hero-subtitle" th:text="${cfg?.page_subtitle ?: '好物分享'}">好物</span>
+          <h1 class="eq-hero-title" th:text="${cfg?.page_title ?: '实物装备推荐'}">实物装备推荐</h1>
+          <p class="eq-hero-desc" th:text="${cfg?.page_description ?: '分享我日常使用的硬件与软件'}">描述文字</p>
+        </div>
+      </section>
 
-<th:block th:fragment="style-simple">
-    <div id="equipment" th:with="cfg=${theme.config.equipment_settings?.basic_info},
-                                 styleCfg=${theme.config.equipment_settings?.style_settings}">
-
-        <!-- ========== Hero 区域 ========== -->
-        <section class="eq-hero" th:with="heroBg=${styleCfg?.hero_background ?: 'https://www.dmoe.cc/random.php'}"
-            th:style="'--hero-bg: url(' + ${heroBg} + ')'">
-            <div class="eq-hero-overlay"></div>
-            <div class="eq-hero-content">
-                <span class="eq-hero-subtitle" th:text="${cfg?.page_subtitle ?: '好物分享'}">好物</span>
-                <h1 class="eq-hero-title" th:text="${cfg?.page_title ?: '实物装备推荐'}">实物装备推荐</h1>
-                <p class="eq-hero-desc" th:text="${cfg?.page_description ?: '分享我日常使用的硬件与软件'}">
-                    描述文字
-                </p>
+      <!-- ========== 分组列表 ========== -->
+      <div class="mt-12 space-y-16">
+        <th:block th:each="group : ${groups}">
+          <section class="eq-group">
+            <!-- 分组标题 -->
+            <div class="eq-group-header">
+              <h2 class="eq-group-title" th:text="${group.spec.displayName}">分组名</h2>
+              <p th:if="${group.spec.description}" class="eq-group-desc" th:text="${group.spec.description}">
+                分组描述
+              </p>
             </div>
 
-        </section>
+            <!-- 4列卡片网格 -->
+            <div class="eq-grid" th:with="equipmentList = ${group.equipments}">
+              <th:block th:each="equipment, stat : ${equipmentList}">
+                <th:block
+                  th:replace="~{modules/equipments/card-simple :: equipment-card(${equipment}, ${group}, ${stat})}"
+                >
+                </th:block>
+              </th:block>
 
-        <!-- ========== 分组列表 ========== -->
-        <div class="space-y-16 mt-12">
-            <th:block th:each="group : ${groups}">
-                <section class="eq-group">
-                    <!-- 分组标题 -->
-                    <div class="eq-group-header">
-                        <h2 class="eq-group-title" th:text="${group.spec.displayName}">分组名</h2>
-                        <p th:if="${group.spec.description}" class="eq-group-desc" th:text="${group.spec.description}">
-                            分组描述</p>
-                    </div>
-
-                    <!-- 4列卡片网格 -->
-                    <div class="eq-grid" th:with="equipmentList = ${group.equipments}">
-                        <th:block th:each="equipment, stat : ${equipmentList}">
-                            <th:block
-                                th:replace="~{modules/equipments/card-simple :: equipment-card(${equipment}, ${group}, ${stat})}">
-                            </th:block>
-                        </th:block>
-
-                        <!-- 空状态 -->
-                        <div th:if="${group.equipments.isEmpty()}"
-                            class="col-span-full py-16 flex flex-col items-center justify-center text-base-content/40 bg-base-100/50 backdrop-blur rounded-2xl border-2 border-dashed border-base-content/10">
-                            <span class="icon-[heroicons--inbox] w-12 h-12 mb-3 opacity-40"></span>
-                            <p class="text-sm">该分组暂无装备</p>
-                        </div>
-                    </div>
-                </section>
-            </th:block>
-        </div>
+              <!-- 空状态 -->
+              <div
+                th:if="${group.equipments.isEmpty()}"
+                class="text-base-content/40 bg-base-100/50 border-base-content/10 col-span-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed py-16 backdrop-blur"
+              >
+                <span class="icon-[heroicons--inbox] mb-3 h-12 w-12 opacity-40"></span>
+                <p class="text-sm">该分组暂无装备</p>
+              </div>
+            </div>
+          </section>
+        </th:block>
+      </div>
     </div>
-</th:block>
-
+  </th:block>
 </html>

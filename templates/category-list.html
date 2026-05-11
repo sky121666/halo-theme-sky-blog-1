@@ -1,8 +1,8 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- 自定义模板：强制使用列表风格（忽略全局设置） -->
 
-<!-- 自定义模板：强制使用列表风格（忽略全局设置） -->
-
-<th:block th:replace="~{modules/categories/layout :: html (~{modules/categories/content :: category-archive-list})}" />
-
+  <th:block
+    th:replace="~{modules/categories/layout :: html (~{modules/categories/content :: category-archive-list})}"
+  />
 </html>

@@ -395,51 +395,77 @@ function createNavbarController() {
 function createThemeToggle() {
   return {
     isDark: false,
+    isAuto: false,
     lightTheme: '',
     darkTheme: '',
+    mediaQuery: null,
 
     init() {
-      // 在初始化时保存主题配置到组件实例
       this.lightTheme = this.$el.dataset.lightTheme || 'light';
       this.darkTheme = this.$el.dataset.darkTheme || 'dark';
       const defaultTheme = this.$el.dataset.defaultTheme || 'dark_theme';
 
-      // 从 localStorage 读取用户偏好
       const savedTheme = localStorage.getItem('theme-mode');
+      const effectiveMode = savedTheme || defaultTheme;
 
-      // 确定当前主题状态（同步到组件状态，不触发切换）
-      this.isDark = savedTheme ? (savedTheme === 'dark_theme') : (defaultTheme === 'dark_theme');
+      this._onSystemChange = this.onSystemChange.bind(this);
 
-      // 注意：不调用 applyTheme()，因为主题已经在 <head> 内联脚本中设置好了
-      // 这里只是同步状态到组件，避免闪烁
+      if (effectiveMode === 'auto') {
+        this.isAuto = true;
+        this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        this.isDark = this.mediaQuery.matches;
+        this.mediaQuery.addEventListener('change', this._onSystemChange);
+      } else {
+        this.isDark = effectiveMode === 'dark_theme';
+      }
     },
 
-    toggleTheme() {
-      this.isDark = !this.isDark;
-      const themeMode = this.isDark ? 'dark_theme' : 'light_theme';
-
-      localStorage.setItem('theme-mode', themeMode);
+    onSystemChange(e) {
+      if (!this.isAuto) return;
+      this.isDark = e.matches;
       this.applyTheme();
     },
 
-    /**
-     * 应用主题到 HTML 元素
-     * 同时设置 data-theme（具体主题名）和 data-color-scheme（light/dark 标识）
-     * 切换时临时禁用过渡，防止闪烁
-     */
+    toggleTheme() {
+      if (this.isAuto) {
+        // auto → light
+        this.isAuto = false;
+        this.isDark = false;
+        localStorage.setItem('theme-mode', 'light_theme');
+      } else if (!this.isDark) {
+        // light → dark
+        this.isDark = true;
+        localStorage.setItem('theme-mode', 'dark_theme');
+      } else {
+        // dark → auto
+        this.isAuto = true;
+        localStorage.setItem('theme-mode', 'auto');
+        this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        this.isDark = this.mediaQuery.matches;
+        this.mediaQuery.addEventListener('change', this._onSystemChange);
+        this.applyTheme();
+        return;
+      }
+
+      // 离开 auto 模式时移除监听
+      if (!this.isAuto && this.mediaQuery) {
+        this.mediaQuery.removeEventListener('change', this._onSystemChange);
+        this.mediaQuery = null;
+      }
+
+      this.applyTheme();
+    },
+
     applyTheme() {
       const themeName = this.isDark ? this.darkTheme : this.lightTheme;
       const themeMode = this.isDark ? 'dark' : 'light';
       const html = document.documentElement;
 
-      // 临时禁用所有过渡
       html.classList.add('theme-transitioning');
 
-      // 应用新主题
       html.setAttribute('data-theme', themeName);
       html.setAttribute('data-color-scheme', themeMode);
 
-      // 下一帧恢复过渡
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           html.classList.remove('theme-transitioning');

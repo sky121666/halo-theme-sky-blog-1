@@ -5,69 +5,93 @@
 
 <!-- 登录表单 -->
 <div th:fragment="form" class="space-y-5">
-    <!-- 错误提示 -->
-    <div class="p-4 rounded-xl bg-error/10 border border-error/20 text-error text-sm flex items-start gap-3"
-        role="alert" th:if="${param.error.size() > 0}" th:with="error = ${param.error[0]}">
-        <span class="icon-[heroicons--exclamation-circle] w-5 h-5 shrink-0 mt-0.5"></span>
-        <div>
-            <span th:if="${error == 'invalid-credential'}">用户名或密码错误，请重试</span>
-            <span th:if="${error == 'rate-limit-exceeded'}">登录尝试次数过多，请稍后再试</span>
-            <span th:if="${error == 'account-disabled'}">该账户已被禁用</span>
-        </div>
+  <!-- 错误提示 -->
+  <div
+    class="bg-error/10 border-error/20 text-error flex items-start gap-3 rounded-xl border p-4 text-sm"
+    role="alert"
+    th:if="${param.error.size() > 0}"
+    th:with="error = ${param.error[0]}"
+  >
+    <span class="icon-[heroicons--exclamation-circle] mt-0.5 h-5 w-5 shrink-0"></span>
+    <div>
+      <span th:if="${error == 'invalid-credential'}">用户名或密码错误，请重试</span>
+      <span th:if="${error == 'rate-limit-exceeded'}">登录尝试次数过多，请稍后再试</span>
+      <span th:if="${error == 'account-disabled'}">该账户已被禁用</span>
+    </div>
+  </div>
+
+  <!-- 成功提示 -->
+  <div
+    class="bg-success/10 border-success/20 text-success flex items-start gap-3 rounded-xl border p-4 text-sm"
+    role="alert"
+    th:if="${param.logout.size() > 0}"
+  >
+    <span class="icon-[heroicons--check-circle] mt-0.5 h-5 w-5 shrink-0"></span>
+    <span>已成功退出登录</span>
+  </div>
+  <div
+    class="bg-success/10 border-success/20 text-success flex items-start gap-3 rounded-xl border p-4 text-sm"
+    role="alert"
+    th:if="${param.signup.size() > 0}"
+  >
+    <span class="icon-[heroicons--check-circle] mt-0.5 h-5 w-5 shrink-0"></span>
+    <span>注册成功！请登录您的账户</span>
+  </div>
+  <div
+    class="bg-info/10 border-info/20 text-info flex items-start gap-3 rounded-xl border p-4 text-sm"
+    role="alert"
+    th:if="${param.oauth2_bind.size() > 0}"
+  >
+    <span class="icon-[heroicons--information-circle] mt-0.5 h-5 w-5 shrink-0"></span>
+    <span>请绑定您的账户以完成登录</span>
+  </div>
+  <div
+    class="bg-success/10 border-success/20 text-success flex items-start gap-3 rounded-xl border p-4 text-sm"
+    role="alert"
+    th:if="${param.password_reset.size() > 0}"
+  >
+    <span class="icon-[heroicons--check-circle] mt-0.5 h-5 w-5 shrink-0"></span>
+    <span>密码已重置，请使用新密码登录</span>
+  </div>
+
+  <!-- 统一表单容器 -->
+  <!-- 重要：保留 halo-form class 以兼容 Passkey 插件的 JS 选择器 -->
+  <form
+    class="halo-form space-y-5"
+    name="login-form"
+    id="login-form"
+    th:action="${authProvider.spec.authenticationUrl}"
+    th:method="${authProvider.spec.method}"
+  >
+    <!-- 动态表单内容 (Passkey 或 Standard) -->
+    <!-- 注意：Passkey 模版会嵌入到这里，它自带了 script 阻止默认提交 -->
+    <div th:replace="~{__${fragmentTemplateName}__::form}"></div>
+
+    <!-- 记住我 (仅非 Passkey 显示，或视 Passkey 需求而定) -->
+    <div th:if="${authProvider.spec.rememberMeSupport}" class="flex items-center gap-3">
+      <input
+        type="checkbox"
+        id="remember-me"
+        name="remember-me"
+        value="true"
+        th:checked="${rememberMe}"
+        class="border-base-content/20 text-primary focus:ring-primary h-5 w-5 cursor-pointer rounded-md border-2 focus:ring-offset-0"
+      />
+      <label for="remember-me" class="text-base-content/70 cursor-pointer select-none">保持登录状态</label>
     </div>
 
-    <!-- 成功提示 -->
-    <div class="p-4 rounded-xl bg-success/10 border border-success/20 text-success text-sm flex items-start gap-3"
-        role="alert" th:if="${param.logout.size() > 0}">
-        <span class="icon-[heroicons--check-circle] w-5 h-5 shrink-0 mt-0.5"></span>
-        <span>已成功退出登录</span>
+    <!-- Altcha 验证码 -->
+    <div halo:captcha class="w-full"></div>
+
+    <!-- 提交按钮 (公共按钮，所有登录方式共享) -->
+    <!-- Passkey 的 JS 会自动劫持这个按钮并修改其文字 -->
+    <div class="pt-2">
+      <button type="submit" class="premium-btn">登 录</button>
     </div>
-    <div class="p-4 rounded-xl bg-success/10 border border-success/20 text-success text-sm flex items-start gap-3"
-        role="alert" th:if="${param.signup.size() > 0}">
-        <span class="icon-[heroicons--check-circle] w-5 h-5 shrink-0 mt-0.5"></span>
-        <span>注册成功！请登录您的账户</span>
-    </div>
-    <div class="p-4 rounded-xl bg-info/10 border border-info/20 text-info text-sm flex items-start gap-3" role="alert"
-        th:if="${param.oauth2_bind.size() > 0}">
-        <span class="icon-[heroicons--information-circle] w-5 h-5 shrink-0 mt-0.5"></span>
-        <span>请绑定您的账户以完成登录</span>
-    </div>
-    <div class="p-4 rounded-xl bg-success/10 border border-success/20 text-success text-sm flex items-start gap-3"
-        role="alert" th:if="${param.password_reset.size() > 0}">
-        <span class="icon-[heroicons--check-circle] w-5 h-5 shrink-0 mt-0.5"></span>
-        <span>密码已重置，请使用新密码登录</span>
-    </div>
-
-    <!-- 统一表单容器 -->
-    <!-- 重要：保留 halo-form class 以兼容 Passkey 插件的 JS 选择器 -->
-    <form class="halo-form space-y-5" name="login-form" id="login-form"
-        th:action="${authProvider.spec.authenticationUrl}" th:method="${authProvider.spec.method}">
-
-        <!-- 动态表单内容 (Passkey 或 Standard) -->
-        <!-- 注意：Passkey 模版会嵌入到这里，它自带了 script 阻止默认提交 -->
-        <div th:replace="~{__${fragmentTemplateName}__::form}"></div>
-
-        <!-- 记住我 (仅非 Passkey 显示，或视 Passkey 需求而定) -->
-        <div th:if="${authProvider.spec.rememberMeSupport}" class="flex items-center gap-3">
-            <input type="checkbox" id="remember-me" name="remember-me" value="true" th:checked="${rememberMe}"
-                class="w-5 h-5 rounded-md border-2 border-base-content/20 text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" />
-            <label for="remember-me" class="text-base-content/70 cursor-pointer select-none">保持登录状态</label>
-        </div>
-
-        <!-- Altcha 验证码 -->
-        <div halo:captcha class="w-full"></div>
-
-        <!-- 提交按钮 (公共按钮，所有登录方式共享) -->
-        <!-- Passkey 的 JS 会自动劫持这个按钮并修改其文字 -->
-        <div class="pt-2">
-            <button type="submit" class="premium-btn">
-                登 录
-            </button>
-        </div>
-    </form>
+  </form>
 </div>
 
 <!-- 其他登录方式 -->
 <div th:remove="tag" th:fragment="formAuthProviders">
-    <th:block th:replace="~{gateway_fragments/common::formAuthProviders}"></th:block>
+  <th:block th:replace="~{gateway_fragments/common::formAuthProviders}"></th:block>
 </div>
