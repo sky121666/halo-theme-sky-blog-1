@@ -1,30 +1,42 @@
 <!-- 单页面内容 -->
 <th:block th:fragment="content">
+  <article id="page-container">
+    <!-- 页面标题 -->
+    <header id="page-header">
+      <h1 id="page-title" th:text="${singlePage.spec.title}">页面标题</h1>
+    </header>
 
-<article id="page-container">
-  
-  <!-- 页面标题 -->
-  <header id="page-header">
-    <h1 id="page-title" th:text="${singlePage.spec.title}">页面标题</h1>
-  </header>
+    <!-- 分割线 -->
+    <div class="divider"></div>
 
-  <!-- 分割线 -->
-  <div class="divider"></div>
+    <!-- 文章内容 -->
+    <div
+      id="article-content"
+      th:utext="${#strings.replace(#strings.replace(#strings.replace(singlePage.content.content, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}"
+    >
+      <p>页面内容...</p>
+    </div>
 
-  <!-- 文章内容 -->
-  <div id="article-content"
-    th:utext="${#strings.replace(#strings.replace(#strings.replace(singlePage.content.content, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}">
-    <p>页面内容...</p>
-  </div>
+    <!-- 底部分割线 -->
+    <div class="divider"></div>
 
-  <!-- 底部分割线 -->
-  <div class="divider"></div>
+    <!-- 底部提示 -->
+    <footer id="page-footer">
+      <p>如有疑问，请通过站点提供的联系方式与我们取得联系。</p>
+    </footer>
 
-  <!-- 底部提示 -->
-  <footer id="page-footer">
-    <p>如有疑问，请通过站点提供的联系方式与我们取得联系。</p>
-  </footer>
-
-</article>
-
+    <!-- 单页评论也是 Restricted Reading「评论后可见」模式的解锁锚点。 -->
+    <section id="page-comments" th:if="${singlePage.spec.allowComment == null || singlePage.spec.allowComment}">
+      <h2 id="page-comments-title">评论留言</h2>
+      <div id="page-comments-card">
+        <halo:comment
+          group="content.halo.run"
+          kind="SinglePage"
+          th:attr="name=${singlePage.metadata.name}"
+          colorScheme="system"
+        >
+        </halo:comment>
+      </div>
+    </section>
+  </article>
 </th:block>

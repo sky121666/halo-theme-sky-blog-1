@@ -3,7 +3,8 @@
  */
 
 import './index.css';
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
+import { skyDebug } from '../../common/js/debug.js';
+import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 /**
  * 天气联动背景效果 - 终极卡通真实感融合版 (V3)
@@ -16,10 +17,10 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
   const WTLogger = {
     info: (...args) => {
       if (window.SYS_WEATHER_DEBUG) {
-        console.log('[BG]', ...args);
+        skyDebug.log('weather-bg', ...args);
       }
     },
-    warn: (...args) => console.warn('[BG]', ...args)
+    warn: (...args) => skyDebug.warn('weather-bg', ...args)
   };
 
   const CACHE_KEY = 'sky_weather_cache_v13';
@@ -97,17 +98,18 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     loadWeatherData();
     WTLogger.info('初始渲染，currentState.type =', currentState.type);
     renderEffect();
-    setupScrollListener();
+    const cleanupScrollListener = setupScrollListener();
     // 存储具名监听器引用（供 cleanup 使用）
     let _weatherHandler = null;
-    let _scrollHandler = null;
-    let _mousemoveHandler = null;
 
     // 第二阶段：监听天气数据更新事件（来自天气卡片的真实数据）
     _weatherHandler = (event) => {
       const newBg = event.detail?.weatherBg;
       const rawData = event.detail?.rawData;
-      WTLogger.info('收到 sky-weather-updated 事件，weatherBg =', newBg, 'rawData =', rawData);
+      WTLogger.info('收到 sky-weather-updated 事件', {
+        weatherBg: newBg,
+        hasWeatherData: Boolean(rawData),
+      });
 
       if (!newBg) return;
 
@@ -125,21 +127,15 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     window.addEventListener('sky-weather-updated', _weatherHandler);
     WTLogger.info('事件监听器已注册，init() 完成');
 
-    // 注册 swup cleanup（离开首页时调用）
-    window.__pageCleanup = () => {
+    return () => {
       WTLogger.info('执行 index.js cleanup');
       if (_weatherHandler) window.removeEventListener('sky-weather-updated', _weatherHandler);
-      if (_scrollHandler) window.removeEventListener('scroll', _scrollHandler);
-      if (_mousemoveHandler) document.removeEventListener('mousemove', _mousemoveHandler);
-      if (window.__indexScrollHandler) {
-        window.removeEventListener('scroll', window.__indexScrollHandler);
-        window.__indexScrollHandler = null;
-      }
-      // 清理天气场景内部 setInterval/RAF
-      if (effectLayer?.lastElementChild?._cleanup) {
-        effectLayer.lastElementChild._cleanup();
-      }
-      _weatherHandler = _scrollHandler = _mousemoveHandler = null;
+      cleanupScrollListener?.();
+      // 清理天气场景内部 setInterval/RAF/Observer。
+      Array.from(effectLayer?.children || []).forEach((child) => child._cleanup?.());
+      _weatherHandler = null;
+      container = null;
+      effectLayer = null;
     };
   }
 
@@ -152,7 +148,10 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
       if (cached) {
         const data = JSON.parse(cached);
         const bg = data.weatherBg;
-        WTLogger.info('缓存中的 weatherBg:', bg, '| location:', data.location);
+        WTLogger.info('缓存天气状态', {
+          weatherBg: bg,
+          hasLocation: Boolean(data.location),
+        });
 
         if (bg) {
           let normalizedBg = bg;
@@ -180,7 +179,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     const hour = new Date().getHours();
     currentState.type = (hour >= 18 || hour < 6) ? 'night-clear' : 'sunny';
     applyPhysicsVariables({ temp: 20, humidity: 50, wind: '0 km/h' });
-    console.log('[BG] ⚠️ 无缓存，使用默认天气:', currentState.type);
+    WTLogger.info('无缓存，使用默认天气', currentState.type);
   }
 
   /**
@@ -247,10 +246,8 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
   function renderEffect() {
     if (!effectLayer) return;
 
-    // 清理旧场景（如果有清理函数）
-    if (effectLayer.lastElementChild && typeof effectLayer.lastElementChild._cleanup === 'function') {
-      effectLayer.lastElementChild._cleanup();
-    }
+    // 清理旧场景。夜景等场景会追加星星/月亮，cleanup 不一定在最后一个子节点。
+    Array.from(effectLayer.children).forEach((child) => child._cleanup?.());
 
     effectLayer.innerHTML = '';
 
@@ -441,6 +438,14 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     const sceneContainer = document.createElement('div');
     sceneContainer.className = 'night-scene-container';
     sceneContainer.id = 'night-scene';
+    const removalTimers = new Set();
+    const scheduleRemoval = (element, delay) => {
+      const timer = window.setTimeout(() => {
+        removalTimers.delete(timer);
+        element.remove();
+      }, delay);
+      removalTimers.add(timer);
+    };
 
     // 2. 恐怖远山 (Wolf Castle Vibes)
     const mountains = ['sm-1', 'sm-2'];
@@ -485,7 +490,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
       sceneContainer.appendChild(eyes);
 
       // 眨眼几次后消失
-      setTimeout(() => eyes.remove(), 4000);
+      scheduleRemoval(eyes, 4000);
     };
 
     const eyeInterval = setInterval(createEyes, 2000);
@@ -502,7 +507,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
       sceneContainer.appendChild(fly);
 
       // 动画更长一点
-      setTimeout(() => fly.remove(), 8000);
+      scheduleRemoval(fly, 8000);
     };
 
     const fireflyInterval = setInterval(createGhostFirefly, 1500);
@@ -511,6 +516,8 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     sceneContainer._cleanup = () => {
       clearInterval(eyeInterval);
       clearInterval(fireflyInterval);
+      removalTimers.forEach((timer) => window.clearTimeout(timer));
+      removalTimers.clear();
     };
   }
   function renderMoon(isCloudy) {
@@ -552,6 +559,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     const sceneContainer = document.createElement('div');
     sceneContainer.className = 'mist-scene-container';
     sceneContainer.id = 'mist-scene';
+    const animations = new Set();
 
     // 1. 太阳
     const sun = document.createElement('div');
@@ -617,7 +625,11 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
 
       sceneContainer.appendChild(puff);
 
-      animation.onfinish = () => puff.remove();
+      animations.add(animation);
+      animation.onfinish = () => {
+        animations.delete(animation);
+        puff.remove();
+      };
     };
 
     // 启动定时器
@@ -637,6 +649,8 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     sceneContainer._cleanup = () => {
       clearInterval(puffInterval);
       document.removeEventListener('mousemove', handleParallax);
+      animations.forEach((animation) => animation.cancel());
+      animations.clear();
     };
   }
 
@@ -700,6 +714,14 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     let splashes = [];
     let animationId = null;
     let nextLightningTime = 0;
+    const effectTimers = new Set();
+    const scheduleEffect = (callback, delay) => {
+      const timer = window.setTimeout(() => {
+        effectTimers.delete(timer);
+        callback();
+      }, delay);
+      effectTimers.add(timer);
+    };
 
     // 初始化 Canvas 尺寸
     function resize() {
@@ -811,7 +833,7 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
       ctxLight.stroke();
       ctxLight.shadowBlur = 0;
 
-      setTimeout(() => ctxLight.clearRect(0, 0, w, h), 120);
+      scheduleEffect(() => ctxLight.clearRect(0, 0, w, h), 120);
     }
 
     // 触发闪电
@@ -820,14 +842,14 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
       const isFierce = (currentState.windForce > 2.0);
 
       flashOverlay.style.opacity = isFierce ? '0.9' : '0.6';
-      setTimeout(() => { flashOverlay.style.opacity = '0'; }, 80);
-      setTimeout(() => { flashOverlay.style.opacity = isFierce ? '0.4' : '0.2'; }, 120);
-      setTimeout(() => { flashOverlay.style.opacity = '0'; }, 200);
+      scheduleEffect(() => { flashOverlay.style.opacity = '0'; }, 80);
+      scheduleEffect(() => { flashOverlay.style.opacity = isFierce ? '0.4' : '0.2'; }, 120);
+      scheduleEffect(() => { flashOverlay.style.opacity = '0'; }, 200);
 
       // 只有猛烈暴风雪才引起屏幕物理抖动
       if (isFierce) {
         container.classList.add('weather-shake');
-        setTimeout(() => container.classList.remove('weather-shake'), 400);
+        scheduleEffect(() => container.classList.remove('weather-shake'), 400);
       }
 
       drawLightningBolt();
@@ -868,6 +890,9 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     cleanupContainer.style.display = 'none';
     cleanupContainer._cleanup = () => {
       cancelAnimationFrame(animationId);
+      clearTimeout(resizeTimeout);
+      effectTimers.forEach((timer) => window.clearTimeout(timer));
+      effectTimers.clear();
       window.removeEventListener('resize', handleResize); // 移除正确的 listener
     };
     // ... (rest of renderRainSystem)
@@ -998,33 +1023,32 @@ import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.j
     const scrollMask = container.querySelector('.scroll-mask');
     if (!scrollMask) return;
     let ticking = false;
-    // 具名函数，便于 cleanup 时移除
-    window.__indexScrollHandler = () => {
+    let scrollFrame = null;
+    const handleScroll = () => {
       if (!ticking) {
-        requestAnimationFrame(() => {
+        scrollFrame = requestAnimationFrame(() => {
           scrollMask.style.opacity = window.scrollY > 50 ? '0.3' : '0';
           ticking = false;
+          scrollFrame = null;
         });
         ticking = true;
       }
     };
-    window.addEventListener('scroll', window.__indexScrollHandler, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollFrame != null) cancelAnimationFrame(scrollFrame);
+    };
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      init();
-    });
-  } else {
-    init();
-  }
+  registerPageLifecycle(init, { entry: 'index' });
 })();
 
 /**
  * 瞬间卡片鼠标跟随发光效果
  * 为moment-card元素添加动态光晕交互效果
  */
-window.handleMomentCardGlow = function (event, card) {
+function handleMomentCardGlow(event, card) {
   if (!event) return;
   // 获取卡片内的光效元素
   const glowElement = card.querySelector('.moment-glow');
@@ -1040,29 +1064,41 @@ window.handleMomentCardGlow = function (event, card) {
   // 更新光效位置，使其跟随鼠标移动
   glowElement.style.left = x + 'px';
   glowElement.style.top = y + 'px';
-};
+}
 
 /**
  * 显示瞬间卡片发光效果
  * @param {HTMLElement} card - 卡片元素
  */
-window.showMomentCardGlow = function (card) {
+function showMomentCardGlow(card) {
   const glow = card.querySelector('.moment-glow');
   if (glow) {
     glow.style.opacity = '1';
   }
-};
+}
 
 /**
  * 隐藏瞬间卡片发光效果
  * @param {HTMLElement} card - 卡片元素
  */
-window.hideMomentCardGlow = function (card) {
+function hideMomentCardGlow(card) {
   const glow = card.querySelector('.moment-glow');
   if (glow) {
     glow.style.opacity = '0';
   }
-};
+}
+
+registerPageLifecycle(() => {
+  window.handleMomentCardGlow = handleMomentCardGlow;
+  window.showMomentCardGlow = showMomentCardGlow;
+  window.hideMomentCardGlow = hideMomentCardGlow;
+
+  return () => {
+    if (window.handleMomentCardGlow === handleMomentCardGlow) window.handleMomentCardGlow = undefined;
+    if (window.showMomentCardGlow === showMomentCardGlow) window.showMomentCardGlow = undefined;
+    if (window.hideMomentCardGlow === hideMomentCardGlow) window.hideMomentCardGlow = undefined;
+  };
+}, { entry: 'index' });
 
 /**
  * 首页标题特效控制器
@@ -1149,9 +1185,13 @@ window.hideMomentCardGlow = function (card) {
   /**
    * 页面加载完成后初始化
    */
-  runPageInit(() => {
+  registerPageLifecycle(() => {
     TitleEffectsManager.init();
-  });
+    return () => {
+      TitleEffectsManager.titleElement = null;
+      TitleEffectsManager.originalText = '';
+    };
+  }, { entry: 'index' });
 
 })();
 

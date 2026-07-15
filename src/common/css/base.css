@@ -4,7 +4,9 @@
  * 功能：全局CSS变量定义、Halo组件适配、动画系统、暗色模式优化
  * 内容：
  *   - Halo搜索组件变量
- *   - Halo评论组件变量  
+ *   - Halo评论组件变量
+ *   - Halo联系表单变量
+ *   - 友链提交组件变量
  *   - 主题自定义变量
  *   - 全局动画系统
  *   - 暗色模式组件微光效果
@@ -18,11 +20,11 @@
 /* 页面切换时的持久化元素 */
 /* ========================================== */
 .navbar {
-    view-transition-name: navbar;
+  view-transition-name: navbar;
 }
 
 .footer {
-    view-transition-name: footer;
+  view-transition-name: footer;
 }
 
 /* 
@@ -35,10 +37,10 @@
 /* 全局网格背景效果                           */
 /* ========================================== */
 .bg-grid-pattern {
-    background-image:
-        linear-gradient(to right, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px),
-        linear-gradient(to bottom, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px);
-    background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 /* ===================================================
@@ -46,107 +48,125 @@
  * 将 Halo 搜索和评论组件适配到 DaisyUI 5 主题系统
  * ==================================================*/
 :root {
-    /* 基础样式变量 */
-    --halo-search-widget-base-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-    /* 颜色变量 - Halo 搜索组件适配 (Spotlight Style) */
-    /* 1. 基础排版与形状 */
-    --halo-search-widget-base-font-size: 0.875rem;
-    --halo-search-widget-base-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-    --halo-search-widget-base-rounded: 0.5rem;
-    /* 8px - 干练圆角 */
+  /* 基础样式变量 */
+  --halo-search-widget-base-font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+  /* 颜色变量 - Halo 搜索组件适配 (Spotlight Style) */
+  /* 1. 基础排版与形状 */
+  --halo-search-widget-base-font-size: 0.875rem;
+  --halo-search-widget-base-font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+  --halo-search-widget-base-rounded: 0.5rem;
+  /* 8px - 干练圆角 */
 
-    /* 2. 核心颜色 (Light Mode - Clean) */
-    --halo-search-widget-base-bg-color: var(--color-base-100);
-    /* 搜索框：纯净白/底色 */
-    --halo-search-widget-modal-bg-color: var(--color-base-100);
-    /* 模态框：纯净白/底色 */
-    --halo-search-widget-modal-layer-color: color-mix(in oklch, var(--color-base-300) 40%, transparent);
-    /* 遮罩：适度遮挡 */
+  /* 2. 核心颜色 (Light Mode - Clean) */
+  --halo-search-widget-base-bg-color: var(--color-base-100);
+  /* 搜索框：纯净白/底色 */
+  --halo-search-widget-modal-bg-color: var(--color-base-100);
+  /* 模态框：纯净白/底色 */
+  --halo-search-widget-modal-layer-color: color-mix(in oklch, var(--color-base-300) 40%, transparent);
+  /* 遮罩：适度遮挡 */
 
-    /* 3. 文本与内容 */
-    --halo-search-widget-primary-color: var(--color-primary);
-    --halo-search-widget-content-color: var(--color-base-content);
-    --halo-search-widget-muted-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
+  /* 3. 文本与内容 */
+  --halo-search-widget-primary-color: var(--color-primary);
+  --halo-search-widget-content-color: var(--color-base-content);
+  --halo-search-widget-muted-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
 
-    /* 4. 交互组件 */
-    --halo-search-widget-hit-bg-color: transparent;
-    /* 结果项：默认透明，去卡片化 */
-    --halo-search-widget-divider-color: color-mix(in oklch, var(--color-base-content) 5%, transparent);
-    /* 极淡分割线 */
-    --halo-search-widget-kbd-border-color: color-mix(in oklch, var(--color-base-content) 10%, transparent);
-    --halo-search-widget-kbd-shadow: 0 1px 2px 0 color-mix(in oklch, var(--color-base-content) 5%, transparent);
+  /* 4. 交互组件 */
+  --halo-search-widget-hit-bg-color: transparent;
+  /* 结果项：默认透明，去卡片化 */
+  --halo-search-widget-divider-color: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+  /* 极淡分割线 */
+  --halo-search-widget-kbd-border-color: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+  --halo-search-widget-kbd-shadow: 0 1px 2px 0 color-mix(in oklch, var(--color-base-content) 5%, transparent);
 
-    /* 修复字体加载问题 */
-    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* link-submit 1.0.7 官方 LinkSubmitWidget 主题变量 */
+  --link-submit-widget-base-font-size: 1rem;
+  --link-submit-widget-base-font-family: var(--font-sans);
+  --link-submit-widget-base-rounded: 1rem;
+  --link-submit-widget-base-bg-color: var(--color-base-100);
+  --link-submit-widget-modal-layer-color: rgb(0 0 0 / 45%);
+  --link-submit-widget-form-bg-color: var(--color-base-100);
+  --link-submit-widget-form-border-color: var(--color-base-300);
+  --link-submit-widget-form-text-color: var(--color-base-content);
+  --link-submit-widget-form-label-color: var(--color-base-content);
+  --link-submit-widget-form-placeholder-color: color-mix(in oklch, var(--color-base-content) 48%, transparent);
+  --link-submit-widget-form-button-bg-color: var(--color-primary);
+  --link-submit-widget-form-button-text-color: var(--color-primary-content);
+  --link-submit-widget-form-button-hover-bg-color: color-mix(in oklch, var(--color-primary) 88%, black);
 
+  /* 修复字体加载问题 */
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
+  /* 主题颜色变量，使用DaisyUI的颜色系统 */
+  --sky-primary: var(--color-primary);
+  --sky-secondary: var(--color-secondary);
+  --sky-accent: var(--color-accent);
+  --bg: var(--color-base-100);
+  --title-color: var(--color-white);
+  /* 发光效果尺寸 */
+  --glow-size: 20px;
+  /* 发光强度级别 */
+  --glow-intensity-light: 0.3;
+  --glow-intensity-medium: 0.6;
+  --glow-intensity-strong: 0.8;
 
-    /* 主题颜色变量，使用DaisyUI的颜色系统 */
-    --sky-primary: var(--color-primary);
-    --sky-secondary: var(--color-secondary);
-    --sky-accent: var(--color-accent);
-    --bg: var(--color-base-100);
-    --title-color: var(--color-white);
-    /* 发光效果尺寸 */
-    --glow-size: 20px;
-    /* 发光强度级别 */
-    --glow-intensity-light: 0.3;
-    --glow-intensity-medium: 0.6;
-    --glow-intensity-strong: 0.8;
+  --sky-container: var(--color-base-300);
 
-    --sky-container: var(--color-base-300);
+  /* ========================================== */
+  /* Apple Bento Design Tokens                  */
+  /* ========================================== */
 
-    /* ========================================== */
-    /* Apple Bento Design Tokens                  */
-    /* ========================================== */
+  /* Bento Card Radius */
+  --radius-bento-sm: 1rem;
+  /* 16px - 小卡片 */
+  --radius-bento-md: 1.25rem;
+  /* 20px - 中卡片 */
+  --radius-bento-lg: 1.5rem;
+  /* 24px - 大卡片/热力图 */
+  --radius-bento-xl: 2rem;
+  /* 32px - 超大卡片/Section */
 
-    /* Bento Card Radius */
-    --radius-bento-sm: 1rem;
-    /* 16px - 小卡片 */
-    --radius-bento-md: 1.25rem;
-    /* 20px - 中卡片 */
-    --radius-bento-lg: 1.5rem;
-    /* 24px - 大卡片/热力图 */
-    --radius-bento-xl: 2rem;
-    /* 32px - 超大卡片/Section */
+  /* Bento Shadows */
+  --shadow-bento: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
+  --shadow-bento-hover: 0 8px 32px -4px rgba(0, 0, 0, 0.12);
+  --shadow-bento-elevated: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
 
-    /* Bento Shadows */
-    --shadow-bento: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
-    --shadow-bento-hover: 0 8px 32px -4px rgba(0, 0, 0, 0.12);
-    --shadow-bento-elevated: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
+  /* ========================================== */
+  /* 自适应阴影系统 - 亮/暗主题自动切换          */
+  /* 亮色：柔和阴影 / 暗色：微光边缘             */
+  /* ========================================== */
 
-    /* ========================================== */
-    /* 自适应阴影系统 - 亮/暗主题自动切换          */
-    /* 亮色：柔和阴影 / 暗色：微光边缘             */
-    /* ========================================== */
+  /* 阴影颜色变量 - 亮色模式默认值 */
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-color-md: rgba(0, 0, 0, 0.12);
+  --shadow-color-lg: rgba(0, 0, 0, 0.16);
 
-    /* 阴影颜色变量 - 亮色模式默认值 */
-    --shadow-color: rgba(0, 0, 0, 0.08);
-    --shadow-color-md: rgba(0, 0, 0, 0.12);
-    --shadow-color-lg: rgba(0, 0, 0, 0.16);
+  /* 组件阴影 - 小 (按钮、标签、小卡片) */
+  --art-shadow-sm: 0 1px 3px var(--shadow-color), 0 1px 2px -1px var(--shadow-color);
 
-    /* 组件阴影 - 小 (按钮、标签、小卡片) */
-    --art-shadow-sm: 0 1px 3px var(--shadow-color), 0 1px 2px -1px var(--shadow-color);
+  /* 组件阴影 - 中 (卡片、面板) */
+  --art-shadow-md: 0 4px 6px -1px var(--shadow-color-md), 0 2px 4px -2px var(--shadow-color);
 
-    /* 组件阴影 - 中 (卡片、面板) */
-    --art-shadow-md: 0 4px 6px -1px var(--shadow-color-md), 0 2px 4px -2px var(--shadow-color);
+  /* 组件阴影 - 大 (模态框、弹出层) */
+  --art-shadow-lg: 0 10px 15px -3px var(--shadow-color-lg), 0 4px 6px -4px var(--shadow-color-md);
 
-    /* 组件阴影 - 大 (模态框、弹出层) */
-    --art-shadow-lg: 0 10px 15px -3px var(--shadow-color-lg), 0 4px 6px -4px var(--shadow-color-md);
+  /* 组件阴影 - 超大 (聚焦元素) */
+  --art-shadow-xl: 0 20px 25px -5px var(--shadow-color-lg), 0 8px 10px -6px var(--shadow-color-md);
 
-    /* 组件阴影 - 超大 (聚焦元素) */
-    --art-shadow-xl: 0 20px 25px -5px var(--shadow-color-lg), 0 8px 10px -6px var(--shadow-color-md);
+  /* 内阴影 - 输入框、凹陷效果 */
+  --art-shadow-inner: inset 0 2px 4px var(--shadow-color);
 
-    /* 内阴影 - 输入框、凹陷效果 */
-    --art-shadow-inner: inset 0 2px 4px var(--shadow-color);
-
-    /* Apple Animation Timing */
-    --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
-    --ease-apple-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --duration-fast: 150ms;
-    --duration-normal: 300ms;
-    --duration-slow: 500ms;
+  /* Apple Animation Timing */
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-apple-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
 }
 
 /* ========================================== */
@@ -156,115 +176,162 @@
 
 /* 评论组件变量 - 使用 DaisyUI 5 变量 */
 html {
-    /* 主色 - 使用 DaisyUI primary */
-    --halo-cw-primary-1-color: var(--color-primary);
-    --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent);
-    --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent);
+  /* 主色 - 使用 DaisyUI primary */
+  --halo-cw-primary-1-color: var(--color-primary);
+  --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent);
+  --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent);
 
-    /* 文本色 - 使用 DaisyUI base-content */
-    --halo-cw-text-1-color: var(--color-base-content);
-    --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent);
-    --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
+  /* 文本色 - 使用 DaisyUI base-content */
+  --halo-cw-text-1-color: var(--color-base-content);
+  --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent);
+  --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
 
-    /* 背景/边框色 - 使用 DaisyUI base 系列 */
-    --halo-cw-muted-1-color: var(--color-base-300);
-    --halo-cw-muted-2-color: var(--color-base-200);
-    --halo-cw-muted-3-color: var(--color-base-100);
+  /* 背景/边框色 - 使用 DaisyUI base 系列 */
+  --halo-cw-muted-1-color: var(--color-base-300);
+  --halo-cw-muted-2-color: var(--color-base-200);
+  --halo-cw-muted-3-color: var(--color-base-100);
 
-    /* 基础样式 - 使用 DaisyUI 变量 */
-    --halo-cw-base-rounded: var(--radius-box, 0.5rem);
-    --halo-cw-avatar-rounded: 9999px;
-    --halo-cw-avatar-size: 2.5rem;
-    --halo-cw-base-font-size: 0.875rem;
-    --halo-cw-base-font-family: inherit;
+  /* 基础样式 - 使用 DaisyUI 变量 */
+  --halo-cw-base-rounded: var(--radius-box, 0.5rem);
+  --halo-cw-avatar-rounded: 9999px;
+  --halo-cw-avatar-size: 2.5rem;
+  --halo-cw-base-font-size: 0.875rem;
+  --halo-cw-base-font-family: inherit;
 
-    /* Emoji 选择器 */
-    --halo-cw-emoji-picker-color-border: var(--color-base-300);
-    --halo-cw-emoji-picker-color-border-over: var(--color-primary);
+  /* Emoji 选择器 */
+  --halo-cw-emoji-picker-color-border: var(--color-base-300);
+  --halo-cw-emoji-picker-color-border-over: var(--color-primary);
+}
+
+/* ========================================== */
+/* Halo 联系表单 1.6.3 主题变量适配            */
+/* 全局加载，覆盖正文嵌入、贴边按钮和页面弹窗   */
+/* ========================================== */
+halo-contact-form,
+halo-contact-form-auto-loader {
+  --halo-contact-form-font-family: inherit;
+  --halo-contact-form-font-size: 1rem;
+  --halo-contact-form-line-height: 1.5;
+  --halo-contact-form-border-radius: 0.5rem;
+  --halo-contact-form-width-submit: auto;
+  --halo-contact-form-color-primary: var(--color-primary);
+  --halo-contact-form-color-label: var(--color-base-content);
+  --halo-contact-form-color-input: var(--color-base-content);
+  --halo-contact-form-color-input-selection: color-mix(in srgb, var(--color-primary) 22%, transparent);
+  --halo-contact-form-color-border: var(--color-base-300);
+  --halo-contact-form-color-danger: var(--color-error);
+  --halo-contact-form-color-help: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+  --halo-contact-form-color-button: var(--color-primary-content);
+  --halo-contact-form-color-button-hover: var(--color-primary-content);
+  --halo-contact-form-focus-ring-color: color-mix(in srgb, var(--color-primary) 32%, transparent);
+  --halo-contact-form-error-ring-color: color-mix(in srgb, var(--color-error) 60%, transparent);
+  --halo-contact-form-error-ring-focus-color: color-mix(in srgb, var(--color-error) 32%, transparent);
+  --halo-contact-form-bg-input: var(--color-base-100);
+  --halo-contact-form-bg-decorator: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--color-base-content) 7%, transparent),
+    transparent
+  );
+  --halo-contact-form-auto-color-modal-bg: var(--color-base-100);
+  color-scheme: light;
+}
+
+[data-color-scheme="dark"] halo-contact-form,
+[data-color-scheme="dark"] halo-contact-form-auto-loader {
+  color-scheme: dark;
+}
+
+halo-contact-form {
+  display: block;
+  max-width: 100%;
+}
+
+#article-content halo-contact-form {
+  margin: 1.5em 0;
 }
 
 /* 深色模式覆盖 - 使用高优先级选择器 */
 html[data-color-scheme="dark"],
 .dark,
 .color-scheme-dark {
-    /* 暗色模式阴影 - 微光边缘效果 */
-    --shadow-color: rgba(255, 255, 255, 0.04);
-    --shadow-color-md: rgba(255, 255, 255, 0.06);
-    --shadow-color-lg: rgba(255, 255, 255, 0.08);
+  /* 暗色模式阴影 - 微光边缘效果 */
+  --shadow-color: rgba(255, 255, 255, 0.04);
+  --shadow-color-md: rgba(255, 255, 255, 0.06);
+  --shadow-color-lg: rgba(255, 255, 255, 0.08);
 
-    /* 暗色模式组件阴影 - 带微光 */
-    --art-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--shadow-color);
-    --art-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--shadow-color-md);
-    --art-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--shadow-color-lg);
-    --art-shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--shadow-color-lg);
-    --art-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  /* 暗色模式组件阴影 - 带微光 */
+  --art-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--shadow-color);
+  --art-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--shadow-color-md);
+  --art-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--shadow-color-lg);
+  --art-shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--shadow-color-lg);
+  --art-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 
-    --halo-cw-primary-1-color: var(--color-primary) !important;
-    --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
-    --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
+  --halo-cw-primary-1-color: var(--color-primary) !important;
+  --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
+  --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
 
-    --halo-cw-text-1-color: var(--color-base-content) !important;
-    --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent) !important;
-    --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent) !important;
+  --halo-cw-text-1-color: var(--color-base-content) !important;
+  --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent) !important;
+  --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent) !important;
 
-    --halo-cw-muted-1-color: var(--color-base-300) !important;
-    --halo-cw-muted-2-color: var(--color-base-200) !important;
-    --halo-cw-muted-3-color: var(--color-base-100) !important;
+  --halo-cw-muted-1-color: var(--color-base-300) !important;
+  --halo-cw-muted-2-color: var(--color-base-200) !important;
+  --halo-cw-muted-3-color: var(--color-base-100) !important;
 
-    --halo-cw-emoji-picker-color-border: var(--color-base-300) !important;
-    --halo-cw-emoji-picker-color-border-over: var(--color-primary) !important;
+  --halo-cw-emoji-picker-color-border: var(--color-base-300) !important;
+  --halo-cw-emoji-picker-color-border-over: var(--color-primary) !important;
 
-    /* Search Widget Dark Mode Overrides (Minimalist List Style) */
-    --halo-search-widget-base-bg-color: color-mix(in srgb, var(--color-base-100), #fff 4%) !important;
-    --halo-search-widget-modal-bg-color: color-mix(in srgb, var(--color-base-100), #fff 6%) !important;
-    --halo-search-widget-modal-layer-color: rgba(0, 0, 0, 0.7) !important;
+  /* Search Widget Dark Mode Overrides (Minimalist List Style) */
+  --halo-search-widget-base-bg-color: color-mix(in srgb, var(--color-base-100), #fff 4%) !important;
+  --halo-search-widget-modal-bg-color: color-mix(in srgb, var(--color-base-100), #fff 6%) !important;
+  --halo-search-widget-modal-layer-color: rgba(0, 0, 0, 0.7) !important;
 
-    /* 结果列表：透明背景，依靠选中态区分 */
-    --halo-search-widget-hit-bg-color: transparent !important;
+  /* 结果列表：透明背景，依靠选中态区分 */
+  --halo-search-widget-hit-bg-color: transparent !important;
 
-    --halo-search-widget-divider-color: rgba(255, 255, 255, 0.05) !important;
-    --halo-search-widget-kbd-border-color: rgba(255, 255, 255, 0.1) !important;
-    --halo-search-widget-muted-color: rgba(255, 255, 255, 0.4) !important;
+  --halo-search-widget-divider-color: rgba(255, 255, 255, 0.05) !important;
+  --halo-search-widget-kbd-border-color: rgba(255, 255, 255, 0.1) !important;
+  --halo-search-widget-muted-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 /* 评论组件按钮文字颜色修复 */
 halo-comment::part(submit-button),
 halo-comment button[type="submit"] {
-    color: var(--color-primary-content) !important;
+  color: var(--color-primary-content) !important;
 }
 
 /* 评论组件链接颜色统一 */
 halo-comment a {
-    color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 halo-comment a:hover {
-    color: color-mix(in srgb, var(--color-primary) 80%, var(--color-base-content));
+  color: color-mix(in srgb, var(--color-primary) 80%, var(--color-base-content));
 }
 
 /* 滚动条修复 - 防止页面跳动 */
 body {
-    scrollbar-gutter: stable;
+  scrollbar-gutter: stable;
 }
 
 /* 主题切换时禁用所有过渡 - 防止闪烁 */
 /* JavaScript 在切换主题时会临时添加此类 */
 html.theme-transitioning,
 html.theme-transitioning * {
-    transition: none !important;
+  transition: none !important;
 }
 
 /* 平板端优化和流畅动画系统 */
 /* 自定义缓动函数 */
 :root {
-    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
-    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-    /* Subtle bounce, not harsh */
-    --ease-natural: cubic-bezier(0.16, 1, 0.3, 1);
-    /* Expo-out style */
-    --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    /* Apple-like smooth */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Subtle bounce, not harsh */
+  --ease-natural: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Expo-out style */
+  --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Apple-like smooth */
 }
 
 /* 
@@ -275,133 +342,135 @@ html.theme-transitioning * {
 
 /* 平板端专用动画类 */
 @media (min-width: 768px) and (max-width: 1023px) {
-    .tablet-optimized {
-        transform: scale(0.98);
-        transition: transform 0.3s var(--ease-smooth);
-    }
+  .tablet-optimized {
+    transform: scale(0.98);
+    transition: transform 0.3s var(--ease-smooth);
+  }
 
-    .tablet-optimized:hover {
-        transform: scale(1);
-    }
+  .tablet-optimized:hover {
+    transform: scale(1);
+  }
 
-    /* 平板端减少动画强度 */
-    .animate-smooth-fade-in {
-        animation-duration: 0.3s;
-    }
+  /* 平板端减少动画强度 */
+  .animate-smooth-fade-in {
+    animation-duration: 0.3s;
+  }
 
-    .animate-gentle-scale {
-        animation-duration: 0.25s;
-    }
+  .animate-gentle-scale {
+    animation-duration: 0.25s;
+  }
 
-    .animate-natural-slide-up {
-        animation-duration: 0.4s;
-    }
+  .animate-natural-slide-up {
+    animation-duration: 0.4s;
+  }
 }
 
 /* 流畅的淡入动画 - 更柔和的进入 */
 @keyframes smooth-fade-in {
-    0% {
-        opacity: 0;
-        transform: translateY(8px);
-        /* 减少距离，更优雅 */
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    /* 减少距离，更优雅 */
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 柔和的缩放动画 - 几乎无感知的微缩放 */
 @keyframes gentle-scale {
-    0% {
-        transform: scale(0.98);
-        /* 更微妙的起始 */
-        opacity: 0;
-    }
+  0% {
+    transform: scale(0.98);
+    /* 更微妙的起始 */
+    opacity: 0;
+  }
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* 自然的滑入动画 - 更流畅的上升 */
 @keyframes natural-slide-up {
-    0% {
-        opacity: 0;
-        transform: translateY(12px);
-        /* 减少距离 */
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    /* 减少距离 */
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 动画工具类 - 使用优雅的缓动曲线 */
 .animate-smooth-fade-in {
-    animation: smooth-fade-in 0.5s var(--ease-elegant) forwards;
+  animation: smooth-fade-in 0.5s var(--ease-elegant) forwards;
 }
 
 .animate-gentle-scale {
-    animation: gentle-scale 0.4s var(--ease-elegant) forwards;
+  animation: gentle-scale 0.4s var(--ease-elegant) forwards;
 }
 
 .animate-natural-slide-up {
-    animation: natural-slide-up 0.6s var(--ease-elegant) forwards;
+  animation: natural-slide-up 0.6s var(--ease-elegant) forwards;
 }
 
 /* 悬停效果增强 - 仅桌面端 */
 @media (hover: hover) {
-    .hover-lift {
-        transition: transform 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
-    }
+  .hover-lift {
+    transition:
+      transform 0.2s var(--ease-smooth),
+      box-shadow 0.2s var(--ease-smooth);
+  }
 
-    .hover-lift:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
 }
 
 /* 触摸设备 active 状态 */
 @media (hover: none) and (pointer: coarse) {
-    .hover-lift:active {
-        transform: translateY(-1px);
-    }
+  .hover-lift:active {
+    transform: translateY(-1px);
+  }
 }
 
 /* 响应式动画延迟 */
 .stagger-1 {
-    animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 
 .stagger-2 {
-    animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .stagger-3 {
-    animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .stagger-4 {
-    animation-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 .stagger-5 {
-    animation-delay: 0.5s;
+  animation-delay: 0.5s;
 }
 
 /* 修复模态框打开时滚动条消失导致的页面跳动 */
 @supports not (scrollbar-gutter: stable) {
-    :root {
-        --scrollbar-width: calc(100vw - 100%);
-    }
+  :root {
+    --scrollbar-width: calc(100vw - 100%);
+  }
 
-    body[style*="overflow: hidden"] {
-        padding-right: var(--scrollbar-width);
-    }
+  body[style*="overflow: hidden"] {
+    padding-right: var(--scrollbar-width);
+  }
 }
 
 /* 深色模式组件微光效果 - 使用 data-color-scheme 统一判断亮暗模式 */
@@ -409,30 +478,30 @@ html.theme-transitioning * {
 
 /* 卡片组件阴影 */
 [data-color-scheme="dark"] .card {
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
 [data-color-scheme="dark"] .card:hover {
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
 /* 发光卡片效果 - 不影响布局的独立发光类 */
 [data-color-scheme="dark"] .glow-card {
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
 [data-color-scheme="dark"] .glow-card:hover {
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
 /* 模态框阴影 */
 [data-color-scheme="dark"] .modal-box {
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
 /* 抽屉侧边栏阴影 */
-[data-color-scheme="dark"] .drawer-side>div {
-    box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+[data-color-scheme="dark"] .drawer-side > div {
+  box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
 /* ===================================================
@@ -441,7 +510,7 @@ html.theme-transitioning * {
 
 /* 侧边栏卡片过渡效果 */
 .sidebar-card {
-    transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 /* ===================================================
@@ -471,65 +540,65 @@ html.theme-transitioning * {
  * ==================================================*/
 
 .tag-aurora {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.125rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.125rem;
 
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.5;
-    text-decoration: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
 
-    /* 使用文案颜色 */
-    background: none;
-    color: var(--color-base-content);
-    border: none;
-    padding: 0;
+  /* 使用文案颜色 */
+  background: none;
+  color: var(--color-base-content);
+  border: none;
+  padding: 0;
 
-    transition: opacity 0.15s ease;
-    cursor: pointer;
+  transition: opacity 0.15s ease;
+  cursor: pointer;
 }
 
 .tag-aurora:hover {
-    opacity: 0.7;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
+  opacity: 0.7;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .tag-aurora:active {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .tag-aurora-prefix {
-    opacity: 0.5;
-    font-weight: 400;
+  opacity: 0.5;
+  font-weight: 400;
 }
 
 /* 加载动画 GIF 尺寸 */
 .loading-gif {
-    width: 64px;
-    height: 64px;
-    object-fit: contain;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
 }
 
 /* 滚动容器细滚动条 */
 .scrollbar-thin {
-    scrollbar-width: thin;
+  scrollbar-width: thin;
 }
 
 /* 公共淡入上升动画 - 多页面共用 */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===================================================
@@ -540,119 +609,119 @@ html.theme-transitioning * {
 
 /* 启用页面导航过渡（MPA同文档导航） */
 @view-transition {
-    navigation: auto;
+  navigation: auto;
 }
 
 /* 页面过渡动画 - 淡入淡出 */
 ::view-transition-old(root) {
-    animation: view-fade-out 0.3s ease-out both;
-    background-color: var(--color-base-100);
+  animation: view-fade-out 0.3s ease-out both;
+  background-color: var(--color-base-100);
 }
 
 ::view-transition-new(root) {
-    animation: view-fade-in 0.3s ease-in both;
-    animation-delay: 0.1s;
-    background-color: var(--color-base-100);
+  animation: view-fade-in 0.3s ease-in both;
+  animation-delay: 0.1s;
+  background-color: var(--color-base-100);
 }
 
 @keyframes view-fade-out {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-    to {
-        opacity: 0;
-        transform: scale(0.98);
-    }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
 }
 
 @keyframes view-fade-in {
-    from {
-        opacity: 0;
-        transform: scale(1.02);
-    }
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* 减少动作偏好 - 尊重用户设置 */
 @media (prefers-reduced-motion: reduce) {
-    @view-transition {
-        navigation: none;
-    }
+  @view-transition {
+    navigation: none;
+  }
 
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation: none;
-    }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 /* Alpine.js x-cloak 支持 - 隐藏未初始化内容 */
 [x-cloak] {
-    display: none !important;
+  display: none !important;
 }
 
 /* Alpine 初始化后的渐入动画 - 细腻贝塞尔曲线 */
 [x-data]:not([x-cloak]) {
-    --stagger-delay: 0ms;
-    animation: alpine-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) var(--stagger-delay) both;
+  --stagger-delay: 0ms;
+  animation: alpine-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) var(--stagger-delay) both;
 }
 
 /* 交错延迟 - 不同组件依次出现 */
 [x-data]:not([x-cloak]):nth-of-type(1) {
-    --stagger-delay: 0ms;
+  --stagger-delay: 0ms;
 }
 
 [x-data]:not([x-cloak]):nth-of-type(2) {
-    --stagger-delay: 60ms;
+  --stagger-delay: 60ms;
 }
 
 [x-data]:not([x-cloak]):nth-of-type(3) {
-    --stagger-delay: 120ms;
+  --stagger-delay: 120ms;
 }
 
 [x-data]:not([x-cloak]):nth-of-type(4) {
-    --stagger-delay: 180ms;
+  --stagger-delay: 180ms;
 }
 
 [x-data]:not([x-cloak]):nth-of-type(5) {
-    --stagger-delay: 240ms;
+  --stagger-delay: 240ms;
 }
 
-[x-data]:not([x-cloak]):nth-of-type(n+6) {
-    --stagger-delay: 300ms;
+[x-data]:not([x-cloak]):nth-of-type(n + 6) {
+  --stagger-delay: 300ms;
 }
 
 /* 不同类型组件使用不同动画 */
 .heatmap-card[x-data]:not([x-cloak]) {
-    animation-name: alpine-scale-in;
+  animation-name: alpine-scale-in;
 }
 
 .card[x-data]:not([x-cloak]) {
-    animation-name: alpine-slide-up;
+  animation-name: alpine-slide-up;
 }
 
 /* 修复：防止 body 或顶级容器应用 transform 动画导致 fixed 定位失效 (如 Live2D 看板娘) */
 body[x-data]:not([x-cloak]) {
-    animation: none !important;
-    transform: none !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 /* 基础淡入（默认） */
 @keyframes alpine-fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========================================== */
@@ -661,98 +730,95 @@ body[x-data]:not([x-cloak]) {
 
 /* 初始状态：透明并下沉 */
 .lazy-anim {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
 /* 激活状态：显现并上浮 */
 .lazy-anim.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* 交错延迟 - 让列表元素依次出现 */
-.lazy-anim-stagger>*:nth-child(1) {
-    transition-delay: 0ms;
+.lazy-anim-stagger > *:nth-child(1) {
+  transition-delay: 0ms;
 }
 
-.lazy-anim-stagger>*:nth-child(2) {
-    transition-delay: 50ms;
+.lazy-anim-stagger > *:nth-child(2) {
+  transition-delay: 50ms;
 }
 
-.lazy-anim-stagger>*:nth-child(3) {
-    transition-delay: 100ms;
+.lazy-anim-stagger > *:nth-child(3) {
+  transition-delay: 100ms;
 }
 
-.lazy-anim-stagger>*:nth-child(4) {
-    transition-delay: 150ms;
+.lazy-anim-stagger > *:nth-child(4) {
+  transition-delay: 150ms;
 }
 
-.lazy-anim-stagger>*:nth-child(5) {
-    transition-delay: 200ms;
+.lazy-anim-stagger > *:nth-child(5) {
+  transition-delay: 200ms;
 }
 
-.lazy-anim-stagger>*:nth-child(n+6) {
-    transition-delay: 250ms;
+.lazy-anim-stagger > *:nth-child(n + 6) {
+  transition-delay: 250ms;
 }
-
-
 
 /* Alpine 缩放淡入（热力图等大块内容） */
 @keyframes alpine-scale-in {
-    from {
-        opacity: 0;
-        transform: scale(0.96) translateY(8px);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* 滑入（卡片） */
 @keyframes alpine-slide-up {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 慢速脉冲动画 - 用于装饰元素 */
 @keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.8;
-        transform: scale(1.05);
-    }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
 }
 
 .animate-pulse-slow {
-    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* 尊重用户减少动画偏好 */
 @media (prefers-reduced-motion: reduce) {
-    [x-data]:not([x-cloak]) {
-        animation: none;
-    }
+  [x-data]:not([x-cloak]) {
+    animation: none;
+  }
 }
-
 
 /* ===================================================
  * 全局字体类 - 正文字体选择
@@ -763,16 +829,14 @@ body[x-data]:not([x-cloak]) {
 /* 霞鹜文楷亮 - 推荐中文 */
 html.font-lxgw-wenkai-bright,
 html.font-lxgw-wenkai-bright body {
-    font-family: 'LXGW WenKai Screen', 'LXGW WenKai', system-ui, sans-serif;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", system-ui, sans-serif;
 }
 
 /* 思源屏显臻宋 - 优雅阅读 */
 html.font-siyuan-songti,
 html.font-siyuan-songti body {
-    font-family: '思源屏显臻宋', 'Source Han Serif SC', 'Noto Serif CJK SC', serif;
+  font-family: "思源屏显臻宋", "Source Han Serif SC", "Noto Serif CJK SC", serif;
 }
-
-
 
 /* ===================================================
  * 图片懒加载优化 - 骨架屏 + 淡入效果
@@ -780,53 +844,55 @@ html.font-siyuan-songti body {
 
 /* 图片容器 - 防止布局抖动 */
 .img-lazy-container {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(90deg,
-            color-mix(in oklch, var(--color-base-content) 5%, transparent) 25%,
-            color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
-            color-mix(in oklch, var(--color-base-content) 5%, transparent) 75%);
-    background-size: 200% 100%;
-    animation: img-skeleton-shimmer 1.5s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--color-base-content) 5%, transparent) 25%,
+    color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
+    color-mix(in oklch, var(--color-base-content) 5%, transparent) 75%
+  );
+  background-size: 200% 100%;
+  animation: img-skeleton-shimmer 1.5s ease-in-out infinite;
 }
 
 @keyframes img-skeleton-shimmer {
-    0% {
-        background-position: 200% 0;
-    }
+  0% {
+    background-position: 200% 0;
+  }
 
-    100% {
-        background-position: -200% 0;
-    }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* 图片加载中状态 */
 img[loading="lazy"] {
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 /* 图片加载完成 */
 img[loading="lazy"].loaded,
 img[loading="lazy"]:not([src=""]):not([src*="data:"]) {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* 文章卡片封面图优化 */
 article img[loading="lazy"] {
-    background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+  background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
 }
 
 /* 头像图片 - 圆形骨架 */
 .avatar img[loading="lazy"]:not(.loaded) {
-    background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+  background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
 }
 
 /* 修复移动端底部布局问题 */
 @media (max-width: 767px) {
-    body {
-        padding-bottom: 0 !important;
-    }
+  body {
+    padding-bottom: 0 !important;
+  }
 }
 
 /* ===================================================
@@ -841,100 +907,98 @@ article img[loading="lazy"] {
 
 /* 单图容器 */
 .moment-single-img-wrap {
-    position: relative;
-    display: inline-block;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .moment-single-img-wrap img {
-    display: block;
-    transition:
-        transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
-        filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, filter;
+  display: block;
+  transition:
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, filter;
 }
 
 @media (hover: hover) {
-    .moment-single-img-wrap:hover img {
-        transform: scale(1.04);
-        filter: brightness(1.06);
-    }
+  .moment-single-img-wrap:hover img {
+    transform: scale(1.04);
+    filter: brightness(1.06);
+  }
 }
 
 /* 多图网格每个图片容器 */
 .moment-grid-item {
-    position: relative;
-    overflow: hidden;
-    background-color: color-mix(in oklch, var(--color-base-content) 6%, transparent);
-    cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in oklch, var(--color-base-content) 6%, transparent);
+  cursor: pointer;
 }
 
 .moment-grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition:
-        transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
-        filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, filter;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition:
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, filter;
 }
 
 /* 极淡遮罩覆盖层 - 默认微暗，hover 后光感上升消失 */
 .moment-grid-item::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.06);
-    transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.06);
+  transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 1;
 }
 
 @media (hover: hover) {
-    .moment-grid-item:hover img {
-        transform: scale(1.04);
-        filter: brightness(1.06);
-    }
+  .moment-grid-item:hover img {
+    transform: scale(1.04);
+    filter: brightness(1.06);
+  }
 
-    .moment-grid-item:hover::after {
-        opacity: 0;
-    }
+  .moment-grid-item:hover::after {
+    opacity: 0;
+  }
 }
 
 /* 暗色模式下亮度差异更小，避免过曝 */
 [data-color-scheme="dark"] .moment-grid-item img,
 [data-color-scheme="dark"] .moment-single-img-wrap img {
-    transition:
-        transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
-        filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-color-scheme="dark"] .moment-grid-item::after {
-    background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 @media (hover: hover) {
-
-    [data-color-scheme="dark"] .moment-grid-item:hover img,
-    [data-color-scheme="dark"] .moment-single-img-wrap:hover img {
-        filter: brightness(1.1);
-    }
+  [data-color-scheme="dark"] .moment-grid-item:hover img,
+  [data-color-scheme="dark"] .moment-single-img-wrap:hover img {
+    filter: brightness(1.1);
+  }
 }
 
 /* 尊重减少动画设置 */
 @media (prefers-reduced-motion: reduce) {
+  .moment-grid-item img,
+  .moment-single-img-wrap img {
+    transition: none;
+  }
 
-    .moment-grid-item img,
-    .moment-single-img-wrap img {
-        transition: none;
-    }
-
-    .moment-grid-item::after {
-        transition: none;
-    }
+  .moment-grid-item::after {
+    transition: none;
+  }
 }
 
 /* ===================================================
@@ -944,26 +1008,26 @@ article img[loading="lazy"] {
 
 /* 内容区域淡出 */
 html.is-changing .transition-fade {
-    opacity: 1;
-    transition: opacity 0.18s ease-out;
+  opacity: 1;
+  transition: opacity 0.18s ease-out;
 }
 html.is-animating .transition-fade {
-    opacity: 0;
+  opacity: 0;
 }
 
 /* #swup 内容区默认加过渡类 */
 #swup {
-    transition: opacity 0.18s ease;
+  transition: opacity 0.18s ease;
 }
 html.is-animating #swup {
-    opacity: 0;
+  opacity: 0;
 }
 
 /* 减少动画偏好：关闭 swup 过渡 */
 @media (prefers-reduced-motion: reduce) {
-    #swup,
-    html.is-changing .transition-fade {
-        transition: none !important;
-        opacity: 1 !important;
-    }
+  #swup,
+  html.is-changing .transition-fade {
+    transition: none !important;
+    opacity: 1 !important;
+  }
 }

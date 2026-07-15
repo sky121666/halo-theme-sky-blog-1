@@ -84,9 +84,9 @@
                target="_blank" 
                rel="noopener"
                class="sf-social-icon tooltip"
-               th:attr="data-tip=${social.name}">
+               th:attr="data-tip=${social.name},aria-label=${social.name}">
               <span th:if="${social.icon != null and !social.icon.toString().startsWith('<svg')}"
-                    th:utext="${tech.icon['value']}"></span>
+                    th:utext="${social.icon['value']}"></span>
               <span th:if="${social.icon != null and social.icon.toString().startsWith('<svg')}"
                     th:utext="${social.icon}"></span>
             </a>

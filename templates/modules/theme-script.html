@@ -22,8 +22,77 @@
       const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ "dark";
 
       // === 注入环境变量 ===
-      window.SYS_WEATHER_DEBUG = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false; // 旧兼容接口
-      window.SYS_GLOBAL_DEBUG = window.SYS_WEATHER_DEBUG; // 将来如果有全局其他 debug 可在此处叠加
+      // 配置迁移顺序：新开发者模式 → 旧全局 Debug → 最早期天气 Debug。
+      // 这样旧配置中显式关闭 enable_global_debug 时，不会被仍开启的天气 Debug 误打开全局日志。
+      const developerMode = /*[[${theme.config.general.debug_settings.enable_developer_mode ?: theme.config.general.debug_settings.enable_global_debug ?: theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false;
+      const weatherDebug = /*[[${theme.config.general.debug_settings.enable_weather_debug ?: false}]]*/ false;
+      window.SYS_GLOBAL_DEBUG = developerMode === true;
+      window.SYS_WEATHER_DEBUG = window.SYS_GLOBAL_DEBUG && weatherDebug === true;
+
+      // 主题统一诊断出口。关闭开发者模式时全部为 no-op；开启时过滤敏感键、原始 DOM 和深层对象。
+      const sensitiveKeyPattern = /(authorization|cookie|password|secret|token|csrf|pat|session|city|location|address|email|phone|content|body|html|payload|file|query|search|hash|rawdata)/i;
+      const sanitizeDebugString = function (value) {
+        const withoutUrlDetails = String(value).replace(/https?:\/\/[^\s]+/gi, function (candidate) {
+          try {
+            const url = new URL(candidate);
+            return url.origin + url.pathname;
+          } catch {
+            return "[url]";
+          }
+        });
+        return withoutUrlDetails.length > 300 ? withoutUrlDetails.slice(0, 300) + "…" : withoutUrlDetails;
+      };
+      const sanitizeDebugValue = function (value, key, depth) {
+        if (sensitiveKeyPattern.test(String(key || ""))) return "[redacted]";
+        if (typeof value === "string") return sanitizeDebugString(value);
+        if (value == null || typeof value === "number" || typeof value === "boolean") return value;
+        if (value instanceof Error) return { name: value.name, message: sanitizeDebugString(value.message) };
+        if (value instanceof URL) return value.pathname;
+        if (typeof Element !== "undefined" && value instanceof Element) {
+          return "<" + value.tagName.toLowerCase() + (value.id ? "#" + value.id : "") + ">";
+        }
+        if (depth >= 2) return "[object]";
+        if (Array.isArray(value)) {
+          return value.slice(0, 20).map(function (item) {
+            return sanitizeDebugValue(item, "", depth + 1);
+          });
+        }
+        if (typeof value === "object") {
+          const result = {};
+          Object.entries(value)
+            .slice(0, 30)
+            .forEach(function (entry) {
+              result[entry[0]] = sanitizeDebugValue(entry[1], entry[0], depth + 1);
+            });
+          return result;
+        }
+        return String(value);
+      };
+      const writeDebug = function (level, scope, args) {
+        if (!window.SYS_GLOBAL_DEBUG) return;
+        const method = typeof console[level] === "function" ? level : "log";
+        const safeArgs = Array.from(args || []).map(function (value) {
+          return sanitizeDebugValue(value, "", 0);
+        });
+        console[method]("[SkyDebug:" + String(scope || "theme") + "]", ...safeArgs);
+      };
+      window.SkyDebug = {
+        enabled: function () {
+          return window.SYS_GLOBAL_DEBUG === true;
+        },
+        log: function (scope) {
+          writeDebug("log", scope, Array.prototype.slice.call(arguments, 1));
+        },
+        warn: function (scope) {
+          writeDebug("warn", scope, Array.prototype.slice.call(arguments, 1));
+        },
+        error: function (scope) {
+          writeDebug("error", scope, Array.prototype.slice.call(arguments, 1));
+        },
+        event: function (scope, name, detail) {
+          writeDebug("log", scope, [name, detail || {}]);
+        },
+      };
 
       // === PJAX 开关 ===
       // 音乐播放器开启时强制启用 PJAX（续播依赖），否则读后台配置
@@ -46,9 +115,15 @@
 
       const safeRun = function (fn, label) {
         try {
-          return fn();
+          const result = fn();
+          if (result && typeof result.catch === "function") {
+            return result.catch(function (error) {
+              window.SkyDebug.error("pjax", label + " failed", error);
+            });
+          }
+          return result;
         } catch (error) {
-          console.error("[SkyPjax] " + label + " failed:", error);
+          window.SkyDebug.error("pjax", label + " failed", error);
         }
       };
 

@@ -19,23 +19,24 @@
  * 样式文件导入
  * 按加载顺序排列，确保样式优先级正确
  * ==================================================*/
-import './css/tailwind.css';        // Tailwind CSS 4 + DaisyUI 5 配置
-import './css/nav-enhancements.css'; // 导航栏增强样式
-import './css/base.css';             // 全局基础样式和变量
-import './css/floating-dock.css';    // 悬浮控制栏样式
-import './css/loading-screen.css';   // 页面加载屏幕
-import './css/toc.css';              // TOC 目录导航公共样式
+import "./css/tailwind.css"; // Tailwind CSS 4 + DaisyUI 5 配置
+import "./css/nav-enhancements.css"; // 导航栏增强样式
+import "./css/base.css"; // 全局基础样式和变量
+import "./css/floating-dock.css"; // 悬浮控制栏样式
+import "./css/loading-screen.css"; // 页面加载屏幕
+import "./css/toc.css"; // TOC 目录导航公共样式
 
 /* ===================================================
  * 脚本文件导入
  * ==================================================*/
-import './js/base.js';  // 全局工具函数和事件处理
+import "./js/base.js"; // 全局工具函数和事件处理
+import { skyDebug } from "./js/debug.js";
 
 /* ===================================================
  * Alpine.js 响应式框架
  * ==================================================*/
-import { initializeAll } from './js/alpine-modules.js';  // Alpine组件注册
-import Alpine from 'alpinejs';                           // Alpine核心
+import { initializeAll } from "./js/alpine-modules.js"; // Alpine组件注册
+import Alpine from "alpinejs"; // Alpine核心
 
 // 挂载Alpine到全局对象，供模板使用
 window.Alpine = Alpine;
@@ -44,7 +45,7 @@ window.Alpine = Alpine;
  * Alpine.js 初始化钩子
  * 在Alpine启动前注册所有组件
  */
-document.addEventListener('alpine:init', () => {
+document.addEventListener("alpine:init", () => {
   initializeAll();
 });
 
@@ -55,26 +56,41 @@ Alpine.start();
  * Swup PJAX — 页面无刷新切换
  * 受 theme-script.html 中 window.__skyPjaxEnabled 控制
  * ==================================================*/
-import Swup from 'swup';
-import SwupHeadPlugin from '@swup/head-plugin';
-import SwupScriptsPlugin from '@swup/scripts-plugin';
+import Swup from "swup";
+import SwupHeadPlugin from "@swup/head-plugin";
+import SwupScriptsPlugin from "@swup/scripts-plugin";
+
+function isRouteOrDescendant(url, route) {
+  try {
+    const resolved = new URL(url, window.location.href);
+    return (
+      resolved.origin === window.location.origin &&
+      (resolved.pathname === route || resolved.pathname.startsWith(`${route}/`))
+    );
+  } catch {
+    return false;
+  }
+}
 
 if (window.__skyPjaxEnabled !== false) {
-
+  const SKY_PJAX_CONTAINERS = ["#swup", "#swup-scripts", "#swup-page-extras"];
   const swup = new Swup({
-    containers: ['#swup', '#swup-scripts', '#swup-page-extras'],
+    containers: SKY_PJAX_CONTAINERS,
     // Only wait for the dedicated PJAX containers. The default selector
     // (`[class*="transition-"]`) matches decorative homepage animations
     // like the typewriter subtitle and can stall navigation for seconds.
-    animationSelector: '#swup, .transition-fade',
+    animationSelector: "#swup, .transition-fade",
     requestHeaders: {},
-    ignoreVisit: (url) => {
+    ignoreVisit: (url, { el } = {}) => {
       return (
-        url.startsWith('/login') ||
-        url.startsWith('/signup') ||
-        url.startsWith('/uc') ||
-        url.startsWith('/console') ||
-        url.startsWith('/logout')
+        Boolean(el?.closest("[data-no-swup]")) ||
+        isRouteOrDescendant(url, "/login") ||
+        isRouteOrDescendant(url, "/signup") ||
+        isRouteOrDescendant(url, "/uc") ||
+        isRouteOrDescendant(url, "/console") ||
+        isRouteOrDescendant(url, "/logout") ||
+        isRouteOrDescendant(url, "/dishes") ||
+        isRouteOrDescendant(url, "/schedule-calendar")
       );
     },
     plugins: [
@@ -88,6 +104,65 @@ if (window.__skyPjaxEnabled !== false) {
 
   window.__swup = swup;
 
+  let navigationId = 0;
+  let pageGeneration = 0;
+  const visitDebugState = new WeakMap();
+  const debugPath = (value) => {
+    try {
+      const url = new URL(value || window.location.href, window.location.href);
+      return url.pathname;
+    } catch {
+      return String(value || "");
+    }
+  };
+  const getVisitDebug = (visit) => {
+    if (!visit || typeof visit !== "object") {
+      return { id: 0, startedAt: performance.now(), from: debugPath(), to: debugPath() };
+    }
+    let state = visitDebugState.get(visit);
+    if (!state) {
+      state = {
+        id: ++navigationId,
+        startedAt: performance.now(),
+        from: debugPath(visit.from?.url),
+        to: debugPath(visit.to?.url),
+      };
+      visitDebugState.set(visit, state);
+    }
+    return state;
+  };
+  const finishVisitDebug = (visit, event) => {
+    const state = getVisitDebug(visit);
+    skyDebug.event("pjax", event, {
+      id: state.id,
+      from: state.from,
+      to: state.to,
+      durationMs: Math.round(performance.now() - state.startedAt),
+    });
+  };
+
+  swup.hooks.on("visit:start", (visit) => {
+    const state = getVisitDebug(visit);
+    skyDebug.event("pjax", "visit:start", {
+      id: state.id,
+      from: state.from,
+      to: state.to,
+      history: visit.history?.action || "push",
+    });
+  });
+  swup.hooks.on("page:view", (visit) => finishVisitDebug(visit, "page:view"));
+  swup.hooks.on("visit:end", (visit) => finishVisitDebug(visit, "visit:end"));
+  swup.hooks.on("visit:abort", (visit) => finishVisitDebug(visit, "visit:abort"));
+  swup.hooks.on("fetch:error", (visit, detail) => {
+    const state = getVisitDebug(visit);
+    skyDebug.error("pjax", "fetch:error", { id: state.id, path: debugPath(detail.url), status: detail.status });
+  });
+  swup.hooks.on("fetch:timeout", (visit, detail) => {
+    const state = getVisitDebug(visit);
+    skyDebug.warn("pjax", "fetch:timeout", { id: state.id, path: debugPath(detail.url) });
+  });
+  skyDebug.event("pjax", "init", { containers: SKY_PJAX_CONTAINERS.length });
+
   // 是否已收到页面就绪信号（内联脚本同步执行时设置）
   let _currentSignaled = false;
 
@@ -95,27 +170,42 @@ if (window.__skyPjaxEnabled !== false) {
    * 内联脚本信号入口（friends 等无独立页面 JS 的页面使用）。
    * module JS 内 notifySwupPageReady() 也调用此函数，但 load 事件才是主要触发源。
    */
-  window.__completeSwupPageInit = () => {
-    _currentSignaled = true;
+  window.__completeSwupPageInit = (detail = {}) => {
+    const source = detail.source || "inline";
+    if (source === "inline") _currentSignaled = true;
+    skyDebug.event("pjax", "page:ready-signal", { source });
   };
 
+  // main.js 作为 defer module 执行时，首屏中位于 halo:footer 的插件脚本已经运行。
+  // 先登记这些脚本，避免第一次 PJAX 切页时把常驻插件核心重复执行一遍。
+  window.__skyLoadedPluginScripts =
+    window.__skyLoadedPluginScripts ||
+    new Set(
+      Array.from(document.querySelectorAll("script[data-pjax][src], script.pjax[src]"))
+        .map((script) => script.src)
+        .filter(Boolean),
+    );
+  window.__skyLoadingPluginScripts = window.__skyLoadingPluginScripts || new Set();
+
   function dispatchPjaxCompatibilityEvents(detail) {
-    ['pjax:success', 'pjax:complete', 'pjax:end', 'swup:contentReplaced', 'swup:page:view'].forEach((name) => {
-      document.dispatchEvent(new CustomEvent(name, {
-        detail,
-        bubbles: true,
-        cancelable: true,
-      }));
+    ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced", "swup:page:view"].forEach((name) => {
+      document.dispatchEvent(
+        new CustomEvent(name, {
+          detail,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
     });
   }
 
   function getLightGalleryInlineScripts(includeExecuted = false) {
-    return Array.from(document.querySelectorAll('script:not([src])')).filter((script) => {
-      const code = script.textContent || '';
+    return Array.from(document.querySelectorAll("script:not([src])")).filter((script) => {
+      const code = script.textContent || "";
       return (
-        code.includes('lightGallery(') &&
-        code.includes('DOMContentLoaded') &&
-        (includeExecuted || script.getAttribute('data-sky-lightgallery-inline-executed') !== 'true')
+        code.includes("lightGallery(") &&
+        code.includes("DOMContentLoaded") &&
+        (includeExecuted || script.getAttribute("data-sky-lightgallery-inline-executed") !== "true")
       );
     });
   }
@@ -123,7 +213,7 @@ if (window.__skyPjaxEnabled !== false) {
   function hasLightGalleryPluginMarkup() {
     return Boolean(
       document.querySelector('script[src*="/plugins/PluginLightGallery/assets/static/js/"]') ||
-      getLightGalleryInlineScripts(true).length > 0
+      getLightGalleryInlineScripts(true).length > 0,
     );
   }
 
@@ -132,8 +222,8 @@ if (window.__skyPjaxEnabled !== false) {
     if (scripts.length === 0) return getLightGalleryInlineScripts(true).length > 0;
 
     scripts.forEach((script) => {
-      script.setAttribute('data-sky-lightgallery-inline-executed', 'true');
-      const runner = document.createElement('script');
+      script.setAttribute("data-sky-lightgallery-inline-executed", "true");
+      const runner = document.createElement("script");
       runner.textContent = `
         (function () {
           var originalAddEventListener = document.addEventListener;
@@ -145,7 +235,7 @@ if (window.__skyPjaxEnabled !== false) {
             return originalAddEventListener.call(this, type, listener, options);
           };
           try {
-            ${script.textContent || ''}
+            ${script.textContent || ""}
           } finally {
             document.addEventListener = originalAddEventListener;
           }
@@ -164,17 +254,22 @@ if (window.__skyPjaxEnabled !== false) {
     if (window.__skyLightGalleryLoadedScripts.has(src)) return Promise.resolve();
 
     return new Promise((resolve) => {
-      const staleScript = Array.from(document.querySelectorAll('script[src]'))
-        .find((script) => script.src === src && script.getAttribute('data-sky-lightgallery-executed') !== 'true');
-      const script = document.createElement('script');
+      const staleScript = Array.from(document.querySelectorAll("script[src]")).find(
+        (script) => script.src === src && script.getAttribute("data-sky-lightgallery-executed") !== "true",
+      );
+      const script = document.createElement("script");
       script.src = src;
       script.async = false;
-      script.setAttribute('data-sky-lightgallery-executed', 'true');
+      script.setAttribute("data-sky-lightgallery-executed", "true");
       script.onload = () => {
         window.__skyLightGalleryLoadedScripts.add(src);
+        skyDebug.event("lightgallery", "script:load", { path: debugPath(src) });
         resolve();
       };
-      script.onerror = () => resolve();
+      script.onerror = () => {
+        skyDebug.error("lightgallery", "script:error", { path: debugPath(src) });
+        resolve();
+      };
       if (staleScript?.parentNode) {
         staleScript.parentNode.replaceChild(script, staleScript);
       } else {
@@ -184,15 +279,17 @@ if (window.__skyPjaxEnabled !== false) {
   }
 
   function ensureLightGalleryReady() {
-    if (typeof window.lightGallery === 'function') return Promise.resolve(true);
+    if (typeof window.lightGallery === "function") return Promise.resolve(true);
     if (window.__skyLightGalleryReadyPromise) return window.__skyLightGalleryReadyPromise;
 
-    const scripts = Array.from(document.querySelectorAll('script[src*="/plugins/PluginLightGallery/assets/static/js/"]'))
+    const scripts = Array.from(
+      document.querySelectorAll('script[src*="/plugins/PluginLightGallery/assets/static/js/"]'),
+    )
       .map((script) => script.src)
       .filter(Boolean)
       .sort((a, b) => {
-        const aCore = a.includes('/lightgallery.min.js') || a.includes('/lightgallery.js');
-        const bCore = b.includes('/lightgallery.min.js') || b.includes('/lightgallery.js');
+        const aCore = a.includes("/lightgallery.min.js") || a.includes("/lightgallery.js");
+        const bCore = b.includes("/lightgallery.min.js") || b.includes("/lightgallery.js");
         if (aCore === bCore) return 0;
         return aCore ? -1 : 1;
       });
@@ -201,7 +298,7 @@ if (window.__skyPjaxEnabled !== false) {
 
     window.__skyLightGalleryReadyPromise = scripts
       .reduce((chain, src) => chain.then(() => loadLightGalleryScript(src)), Promise.resolve())
-      .then(() => typeof window.lightGallery === 'function')
+      .then(() => typeof window.lightGallery === "function")
       .finally(() => {
         window.__skyLightGalleryReadyPromise = null;
       });
@@ -215,6 +312,8 @@ if (window.__skyPjaxEnabled !== false) {
     const token = ++lightGalleryInitToken;
     let attempts = 0;
 
+    skyDebug.event("lightgallery", "init:scheduled", { token });
+
     const run = () => {
       if (token !== lightGalleryInitToken) return;
       if (!hasLightGalleryPluginMarkup()) return;
@@ -222,8 +321,12 @@ if (window.__skyPjaxEnabled !== false) {
       attempts += 1;
       ensureLightGalleryReady().then((ready) => {
         if (token !== lightGalleryInitToken) return;
-        if (ready && runLightGalleryInlineScripts()) return;
+        if (ready && runLightGalleryInlineScripts()) {
+          skyDebug.event("lightgallery", "init:complete", { token, attempts });
+          return;
+        }
         if (attempts < 50) window.setTimeout(run, 100);
+        else skyDebug.warn("lightgallery", "init:timeout", { token, attempts });
       });
     };
 
@@ -235,42 +338,95 @@ if (window.__skyPjaxEnabled !== false) {
     initNow: () => ensureLightGalleryReady().then((ready) => ready && runLightGalleryInlineScripts()),
   };
 
-  document.addEventListener('sky:page-load', (event) => {
+  document.addEventListener("sky:page-load", (event) => {
     if (event.detail?.pjax) scheduleLightGalleryPjaxInit();
   });
 
   /** Alpine 恢复动作，rAF 后执行确保 DOM paint 完成 */
-  function _resumeAlpine() {
+  function _resumeAlpine(reason, expectedGeneration) {
     requestAnimationFrame(() => {
+      if (expectedGeneration !== pageGeneration) {
+        skyDebug.event("pjax", "alpine:resume-skip", {
+          reason,
+          expectedGeneration,
+          currentGeneration: pageGeneration,
+        });
+        return;
+      }
+      const mode = window.Alpine?.flushAndStopDeferringMutations ? "flush" : "init-tree";
       if (window.Alpine?.flushAndStopDeferringMutations) {
         Alpine.flushAndStopDeferringMutations();
-      } else {
-        const container = document.getElementById('swup');
-        if (container && window.Alpine) Alpine.initTree(container);
+      } else if (window.Alpine) {
+        SKY_PJAX_CONTAINERS.forEach((selector) => {
+          const container = document.querySelector(selector);
+          if (container) Alpine.initTree(container);
+        });
       }
       window.SkyEvents?.onPageLoad();
       const pageDetail = { initial: false, pjax: true, url: window.location.href };
       window.SkyPjax?._runPage?.(pageDetail);
       dispatchPjaxCompatibilityEvents(pageDetail);
+      skyDebug.event("pjax", "alpine:resume", { reason, mode, path: debugPath() });
     });
   }
 
-  swup.hooks.on('visit:start', () => {
-    window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
-    if (typeof window.__skyMusicSave === 'function') window.__skyMusicSave();
-    if (typeof window.__pageCleanup === 'function') {
-      window.__pageCleanup();
-      window.__pageCleanup = null;
-    }
-  });
-
   // ① DOM 替换前：重置状态，暂停 Alpine MutationObserver，销毁旧页面组件树
-  swup.hooks.before('content:replace', () => {
-    _currentSignaled = false;
-    if (window.Alpine?.deferMutations) Alpine.deferMutations();
-    const container = document.getElementById('swup');
-    if (container && window.Alpine) Alpine.destroyTree(container);
-  });
+  swup.hooks.before(
+    "content:replace",
+    (visit) => {
+      const debugState = getVisitDebug(visit);
+      const incomingDocument = visit.to.document;
+      const missingSelectors = SKY_PJAX_CONTAINERS.filter((selector) => !incomingDocument?.querySelector(selector));
+      const supportsSkyPjax = missingSelectors.length === 0;
+      skyDebug.event("pjax", "content:replace:before", {
+        id: debugState.id,
+        to: debugState.to,
+        supportsSkyPjax,
+        missingSelectors,
+      });
+      if (!supportsSkyPjax) {
+        // 404、维护页和插件独立响应没有主题容器，必须在清理旧页面之前退出 PJAX。
+        // Swup 此时已写入目标历史记录。先退回上一条正常文档，再整页打开目标，
+        // 避免浏览器“返回”时只恢复 URL、却仍保留 404 / 插件独立页面的文档。
+        const target = visit.to.url + (visit.to.hash || "");
+        pageGeneration += 1;
+        skyDebug.event("pjax", "full-reload:fallback", {
+          id: debugState.id,
+          target: debugPath(target),
+          reason: "missing-pjax-containers",
+        });
+        visit.abort();
+        swup.options.skipPopStateHandling = () => {
+          window.location.assign(target);
+          return true;
+        };
+        window.history.back();
+        return undefined;
+      }
+
+      debugState.generation = ++pageGeneration;
+
+      window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
+      skyDebug.event("pjax", "page:cleanup", { id: debugState.id, path: debugPath() });
+      if (typeof window.__skyMusicSave === "function") window.__skyMusicSave();
+      if (typeof window.__pageCleanup === "function") {
+        window.__pageCleanup();
+        window.__pageCleanup = null;
+      }
+
+      _currentSignaled = false;
+      if (window.Alpine?.deferMutations) Alpine.deferMutations();
+      if (window.Alpine) {
+        SKY_PJAX_CONTAINERS.forEach((selector) => {
+          const container = document.querySelector(selector);
+          if (container) Alpine.destroyTree(container);
+        });
+      }
+      skyDebug.event("pjax", "alpine:destroy", { id: debugState.id, containers: SKY_PJAX_CONTAINERS.length });
+      return undefined;
+    },
+    { priority: -100 },
+  );
 
   // ② DOM 替换后（ScriptsPlugin 已注入新脚本）
   //
@@ -281,78 +437,124 @@ if (window.__skyPjaxEnabled !== false) {
   //    - 内联脚本页面（friends 等）：同步执行已置 _currentSignaled=true → 快速路径 ✅
   //
   //  【不阻塞 swup】handler 不返回 Promise → swup 立即继续 content:scroll / page:view
-  swup.hooks.on('content:replace', () => {
-    // 只重放当前页面明确声明支持 PJAX 的脚本。
-    // 兼容两类标记：
-    //  - data-pjax：主题内约定
-    //  - .pjax：Halo / 插件常见约定（后端传递的普通脚本常见是这个）
-    //
-    // halo:footer 注入区保持常驻，避免全局脚本生成的 DOM 在切页时被替换掉。
-    const pjaxScripts = document.querySelectorAll('script[data-pjax], script.pjax');
-    if (!window.__skyLoadedPluginScripts) {
-      window.__skyLoadedPluginScripts = new Set();
-    }
-    pjaxScripts.forEach(script => {
-      // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
-      // 对于内联 script（无 src），每次都执行以初始化组件
-      if (script.src) {
-        if (window.__skyLoadedPluginScripts.has(script.src)) return;
-        window.__skyLoadedPluginScripts.add(script.src);
+  swup.hooks.on(
+    "content:replace",
+    (visit) => {
+      const debugState = getVisitDebug(visit);
+      const expectedGeneration = debugState.generation || pageGeneration;
+      // 只重放当前页面明确声明支持 PJAX 的脚本。
+      // 兼容两类标记：
+      //  - data-pjax：主题内约定
+      //  - .pjax：Halo / 插件常见约定（后端传递的普通脚本常见是这个）
+      //
+      // halo:footer 注入区保持常驻，避免全局脚本生成的 DOM 在切页时被替换掉。
+      const pjaxScripts = document.querySelectorAll("script[data-pjax], script.pjax");
+      skyDebug.event("pjax", "script:scan", { id: debugState.id, count: pjaxScripts.length });
+      const loadedPluginScripts = window.__skyLoadedPluginScripts;
+      const loadingPluginScripts = window.__skyLoadingPluginScripts;
+      pjaxScripts.forEach((script) => {
+        // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
+        // 对于内联 script（无 src），每次都执行以初始化组件
+        if (script.src) {
+          if (loadedPluginScripts.has(script.src) || loadingPluginScripts.has(script.src)) {
+            skyDebug.event("pjax", "script:skip", { id: debugState.id, path: debugPath(script.src) });
+            return;
+          }
+          loadingPluginScripts.add(script.src);
+        }
+        const newScript = document.createElement("script");
+        Array.from(script.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+        newScript.textContent = script.textContent;
+        if (script.src) {
+          const source = script.src;
+          newScript.addEventListener(
+            "load",
+            () => {
+              loadingPluginScripts.delete(source);
+              loadedPluginScripts.add(source);
+              skyDebug.event("pjax", "script:load", { id: debugState.id, path: debugPath(source) });
+            },
+            { once: true },
+          );
+          newScript.addEventListener(
+            "error",
+            () => {
+              loadingPluginScripts.delete(source);
+              loadedPluginScripts.delete(source);
+              skyDebug.error("pjax", "script:error", { id: debugState.id, path: debugPath(source) });
+            },
+            { once: true },
+          );
+        }
+        script.parentNode.replaceChild(newScript, script);
+      });
+      // 快速路径：内联脚本同步执行已发信号
+      if (_currentSignaled) {
+        _resumeAlpine("inline-signal", expectedGeneration);
+        return;
       }
-      const newScript = document.createElement('script');
-      Array.from(script.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-      newScript.textContent = script.textContent;
-      script.parentNode.replaceChild(newScript, script);
-    });
-    // 快速路径：内联脚本同步执行已发信号
-    if (_currentSignaled) {
-      _resumeAlpine();
-      return;
-    }
 
-    // 找到 ScriptsPlugin 刚注入的 type="module" 脚本
-    const swupScriptsEl = document.getElementById('swup-scripts');
-    const moduleScripts = swupScriptsEl
-      ? Array.from(swupScriptsEl.querySelectorAll('script[type="module"][src]'))
-      : [];
+      // 找到 ScriptsPlugin 刚注入的 type="module" 脚本
+      const swupScriptsEl = document.getElementById("swup-scripts");
+      const moduleScripts = swupScriptsEl
+        ? Array.from(swupScriptsEl.querySelectorAll('script[type="module"][src]'))
+        : [];
 
-    if (moduleScripts.length === 0) {
-      // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
-      setTimeout(_resumeAlpine, 100);
-      return;
-    }
+      if (moduleScripts.length === 0) {
+        // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
+        setTimeout(() => _resumeAlpine("no-module-fallback", expectedGeneration), 100);
+        return;
+      }
 
-    // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
-    let resumed = false;
-    function tryResume() {
-      if (!resumed) { resumed = true; _resumeAlpine(); }
-    }
+      // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
+      let resumed = false;
+      let fallbackTimer = null;
+      function tryResume(reason) {
+        if (!resumed) {
+          resumed = true;
+          if (fallbackTimer) window.clearTimeout(fallbackTimer);
+          _resumeAlpine(reason, expectedGeneration);
+        }
+      }
 
-    let pending = moduleScripts.length;
-    moduleScripts.forEach((script) => {
-      const settle = () => { if (--pending <= 0) tryResume(); };
-      script.addEventListener('load',  settle, { once: true });
-      script.addEventListener('error', settle, { once: true });
-    });
+      let pending = moduleScripts.length;
+      moduleScripts.forEach((script) => {
+        const settle = (event) => {
+          const log = event.type === "error" ? skyDebug.error : skyDebug.event;
+          log("pjax", `module:${event.type}`, {
+            id: debugState.id,
+            path: debugPath(script.src),
+          });
+          if (--pending <= 0) tryResume("module-settled");
+        };
+        script.addEventListener("load", settle, { once: true });
+        script.addEventListener("error", settle, { once: true });
+      });
 
-    // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
-    setTimeout(tryResume, 5000);
+      // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
+      fallbackTimer = window.setTimeout(() => {
+        skyDebug.warn("pjax", "module:timeout", { id: debugState.id, pending });
+        tryResume("module-timeout");
+      }, 5000);
 
-    // 不显式 return Promise → swup 立即继续，不阻塞导航管线
-  }, { after: true });
-
+      // 不显式 return Promise → swup 立即继续，不阻塞导航管线
+    },
+    { after: true },
+  );
 } else {
   // PJAX 已关闭 — 设置 noop 桩，防止页面 JS 调用报错
   window.__swup = null;
   window.__completeSwupPageInit = () => {};
+  skyDebug.event("pjax", "disabled", { path: window.location.pathname });
 }
 
 const notifyInitialSkyPjaxPage = () => {
   window.SkyPjax?._runPage?.({ initial: true, pjax: false, url: window.location.href });
+  skyDebug.event("page", "initial:mount", { path: window.location.pathname });
 };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', notifyInitialSkyPjaxPage, { once: true });
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", notifyInitialSkyPjaxPage, { once: true });
 } else {
   queueMicrotask(notifyInitialSkyPjaxPage);
 }

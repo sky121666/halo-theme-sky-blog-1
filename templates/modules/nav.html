@@ -27,14 +27,25 @@
               <th:block
                 th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}"
               >
-                <div th:each="menuItem : ${primaryMenu.menuItems}" class="group relative">
+                <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}" class="group relative">
                   <!-- 带子菜单的菜单项 -->
                   <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                    <div class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown">
-                      <a
-                        tabindex="0"
-                        role="button"
-                        aria-haspopup="true"
+                    <div
+                      x-data="{ open: false }"
+                      @click.outside="open = false"
+                      @focusout="if (!$el.contains($event.relatedTarget)) open = false"
+                      @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
+                      class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown"
+                    >
+                      <button
+                        type="button"
+                        x-ref="trigger"
+                        th:id="|desktop-menu-trigger-${iterStat.index}|"
+                        th:attr="aria-controls=|desktop-submenu-${iterStat.index}|"
+                        aria-haspopup="menu"
+                        :aria-expanded="open.toString()"
+                        @click="open = !open"
+                        @keydown.arrow-down.prevent="open = true; $nextTick(() => $refs.menu?.querySelector('a')?.focus())"
                         class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
                       >
                         <span
@@ -46,14 +57,20 @@
                         <span th:text="${menuItem.status.displayName}"></span>
                         <span
                           class="icon-[heroicons--chevron-down] text-base-content/40 h-3 w-3 transition-transform group-hover/dropdown:rotate-180"
+                          :class="{ 'rotate-180': open }"
+                          aria-hidden="true"
                         ></span>
-                      </a>
+                      </button>
                       <ul
-                        tabindex="0"
+                        x-ref="menu"
+                        th:id="|desktop-submenu-${iterStat.index}|"
+                        role="menu"
+                        :class="{ '!visible !opacity-100': open }"
                         class="dropdown-content menu bg-base-100/95 shadow-base-content/5 border-base-content/10 invisible z-50 mt-2 w-48 rounded-xl border p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all delay-75 duration-200 group-hover/dropdown:visible group-hover/dropdown:opacity-100 before:absolute before:-top-3 before:right-0 before:left-0 before:h-3 before:content-['']"
                       >
-                        <li th:each="childItem : ${menuItem.children}" class="w-full">
+                        <li th:each="childItem : ${menuItem.children}" role="none" class="w-full">
                           <a
+                            role="menuitem"
                             th:href="@{${childItem.status.href}}"
                             th:target="${childItem.spec.target?.value}"
                             th:title="${childItem.status.displayName}"
@@ -494,9 +511,16 @@
               <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}">
                 <!-- 带子菜单 -->
                 <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <div x-data="{ open: false }">
+                  <div
+                    x-data="{ open: false }"
+                    @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
+                  >
                     <button
                       type="button"
+                      x-ref="trigger"
+                      th:id="|mobile-menu-trigger-${iterStat.index}|"
+                      th:attr="aria-controls=|mobile-submenu-${iterStat.index}|"
+                      aria-haspopup="true"
                       @click="open = !open"
                       :aria-expanded="open.toString()"
                       class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex w-full cursor-pointer items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
@@ -529,6 +553,9 @@
                       ></span>
                     </button>
                     <div
+                      th:id="|mobile-submenu-${iterStat.index}|"
+                      role="region"
+                      th:attr="aria-labelledby=|mobile-menu-trigger-${iterStat.index}|"
                       x-show="open"
                       x-cloak
                       x-transition:enter="transition ease-out duration-200"

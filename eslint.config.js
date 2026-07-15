@@ -24,7 +24,13 @@ export default [
   {
     files: ["**/*.{js,ts}"],
     rules: {
-      // Add your custom rules here
+      "no-console": "error",
+    },
+  },
+  {
+    files: ["src/common/js/debug.js"],
+    rules: {
+      "no-console": "off",
     },
   },
 ];

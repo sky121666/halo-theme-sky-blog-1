@@ -88,15 +88,20 @@
         </div>
 
         <!-- ========== Tab 切换 (DaisyUI Radio Tabs, 无 JS) ========== -->
-        <!-- 兼容基线：PluginMoments v1.16.0；作者页瞬间 Tab 使用 momentFinder.list({owner, sort})。 -->
-        <th:block th:with="authorMoments = ${momentFinder.list({
-          page: 1,
-          size: 5,
-          owner: author.metadata.name,
-          sort: {'spec.releaseTime,desc'}
-        })}, hasMoments = ${authorMoments != null and authorMoments.total > 0}">
+        <!-- 兼容基线：PluginMoments v1.16.1；作者页瞬间 Tab 使用 momentFinder.list({owner, sort})。 -->
+        <th:block th:with="
+          hasMomentsPlugin = ${pluginFinder.available('PluginMoments', '>=1.16.1')},
+          authorMoments = ${hasMomentsPlugin ? momentFinder.list({
+            page: 1,
+            size: 5,
+            owner: author.metadata.name,
+            sort: {'spec.releaseTime,desc'}
+          }) : null},
+          hasMoments = ${hasMomentsPlugin and authorMoments != null and authorMoments.total > 0}">
 
-          <div role="tablist" class="tabs tabs-bordered mb-8">
+          <div role="tablist" class="tabs tabs-bordered mb-8"
+            data-plugin-moments-contract="PluginMoments>=1.16.1"
+            th:attr="data-plugin-moments-available=${hasMomentsPlugin}">
 
             <!-- === 文章 Tab (默认选中) === -->
             <input type="radio" name="author_tab" role="tab"

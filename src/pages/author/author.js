@@ -4,11 +4,11 @@
  */
 
 import './author.css';
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
+import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 // 页面初始化
-runPageInit(() => {
+registerPageLifecycle(() => {
   // 作者页面目前只展示文章列表，无需额外JS逻辑
-});
+}, { entry: 'author' });
 
 notifySwupPageReady();

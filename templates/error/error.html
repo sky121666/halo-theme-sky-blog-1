@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" class="h-full">
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" class="h-full">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${error.status} + ' - ' + ${#strings.defaultString(error.title, 'Error')}">Error</title>
-    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
-    <script th:src="@{/assets/js/main.js}" defer></script>
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${error.status} + ' - ' + ${#strings.defaultString(error.title, '页面访问错误')} + ' - ' + ${site.title}">
+        页面访问错误
+    </title>
+    <link rel="icon" type="image/x-icon" th:href="${site.favicon}">
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}">
     <style>
         /* ============================= 高端按钮效果 (自 About 页面移植) ============================= */
         .error-actions .btn {
@@ -144,6 +148,25 @@
             transform: translateY(-2px) scale(0.98);
             transition-duration: 0.1s;
         }
+
+        .error-actions .btn:focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 4px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .error-actions .btn,
+            .error-actions .btn::before,
+            .error-actions .btn::after {
+                animation: none;
+                transition: none;
+            }
+
+            .error-actions .btn:hover,
+            .error-actions .btn:active {
+                transform: none;
+            }
+        }
     </style>
 </head>
 
@@ -151,25 +174,26 @@
     class="bg-base-100 h-full w-full flex flex-col items-center justify-center relative overflow-hidden font-sans text-base-content antialiased tracking-wide">
 
     <!-- Subtle Grain/Dot Pattern -->
-    <div class="fixed inset-0 opacity-[0.03] pointer-events-none"
+    <div aria-hidden="true" class="fixed inset-0 opacity-[0.03] pointer-events-none"
         style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 24px 24px; mask-image: radial-gradient(circle at center, black 40%, transparent 100%); -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);">
     </div>
 
     <!-- Top Status Bar -->
-    <div class="absolute top-8 right-8 text-xs font-mono opacity-30 select-none">
+    <div aria-hidden="true" class="absolute top-8 right-8 text-xs font-mono opacity-30 select-none">
         ERR::<span th:text="${error.status}">000</span>
     </div>
 
     <!-- Main Content -->
-    <div
+    <main
         class="z-10 text-center px-6 relative max-w-3xl transform transition-all duration-700 ease-out translate-y-0 opacity-100">
 
         <!-- Status Code (Background Element) -->
-        <h1 class="text-[10rem] md:text-[16rem] leading-none font-black text-base-content/[0.03] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none blur-sm"
-            th:text="${error.status}">404</h1>
+        <div aria-hidden="true"
+            class="text-[10rem] md:text-[16rem] leading-none font-black text-base-content/[0.03] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none blur-sm"
+            th:text="${error.status}">404</div>
 
         <!-- Icon -->
-        <div
+        <div aria-hidden="true"
             class="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-base-200/50 text-base-content/80 shadow-inner">
             <span th:if="${error.status == 404}" class="icon-[heroicons--map] w-10 h-10 opacity-60"></span>
             <span th:if="${error.status == 500}" class="icon-[heroicons--server-stack] w-10 h-10 opacity-60"></span>
@@ -178,28 +202,30 @@
         </div>
 
         <!-- Title -->
-        <h2 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight"
-            th:text="${#strings.defaultString(error.title, 'Something Went Wrong')}">Page Not Found</h2>
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight"
+            th:text="${#strings.defaultString(error.title, '页面访问错误')}">页面访问错误</h1>
 
         <!-- Detail -->
         <p class="text-base-content/60 text-lg md:text-xl mb-12 max-w-lg mx-auto leading-relaxed border-l-2 border-primary/20 pl-4 py-1 text-left md:text-center md:border-l-0 md:pl-0"
-            th:text="${#strings.defaultString(error.detail, 'The content you are looking for is not available at the moment.')}">
+            th:text="${#strings.defaultString(error.detail, '当前无法访问此内容，请稍后重试。')}">
         </p>
 
         <!-- Actions -->
         <div class="error-actions flex flex-col sm:flex-row items-center justify-center gap-5">
-            <a href="/" class="btn btn-neutral btn-lg">
-                <span class="icon-[heroicons--home] w-5 h-5"></span>
+            <a th:href="@{/}" class="btn btn-neutral btn-lg">
+                <span aria-hidden="true" class="icon-[heroicons--home] w-5 h-5"></span>
                 返回首页
             </a>
-            <button onclick="history.back()" class="btn btn-outline btn-lg">
+            <button type="button" onclick="history.length > 1 ? history.back() : location.assign('/')"
+                class="btn btn-outline btn-lg">
                 返回上一页
             </button>
         </div>
-    </div>
+    </main>
 
     <!-- Bottom Decoration -->
-    <div class="fixed bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-50">
+    <div aria-hidden="true"
+        class="fixed bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-50">
     </div>
 
 </body>

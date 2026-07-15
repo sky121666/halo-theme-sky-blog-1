@@ -164,13 +164,21 @@
       x-transition:enter-end="opacity-100 translate-y-0"
       class="sky-mp"
       :class="{ 'is-expanded': expanded }"
+      role="region"
+      aria-label="音乐播放器"
       th:attr="data-position=${poscfg?.default_position ?: 'bottom-left'},data-offset-x=${poscfg?.default_offset_x ?: 0},data-offset-y=${poscfg?.default_offset_y ?: 0}"
       style="display: none"
     >
       <!-- 单一形变容器：圆形 ↔ 胶囊 -->
       <div class="sky-mp-shell">
         <!-- 左侧：唱片 / 封面区 -->
-        <div class="sky-mp-left" @click="togglePlay()">
+        <button
+          type="button"
+          class="sky-mp-left"
+          @click="togglePlay()"
+          :aria-label="playing ? '暂停当前歌曲' : '播放当前歌曲'"
+          :aria-pressed="playing.toString()"
+        >
           <!-- 黑胶盘体（收起态可见） -->
           <div class="sky-mp-disc" :class="{ 'is-spinning': playing && !expanded }">
             <div class="sky-mp-disc-groove"></div>
@@ -191,10 +199,17 @@
               </svg>
             </div>
           </div>
-        </div>
+        </button>
 
         <!-- 展开按钮（收起态 hover 显示） -->
-        <button class="sky-mp-expand-btn" @click.stop="expanded = true" aria-label="展开播放器">
+        <button
+          type="button"
+          class="sky-mp-expand-btn"
+          @click.stop="expanded = true"
+          aria-label="展开播放器"
+          aria-controls="sky-music-content"
+          :aria-expanded="expanded.toString()"
+        >
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -208,39 +223,58 @@
         </button>
 
         <!-- 右侧内容区（展开态滑入） -->
-        <div class="sky-mp-content">
+        <div id="sky-music-content" class="sky-mp-content">
           <div class="sky-mp-info">
             <div class="sky-mp-meta">
               <span class="sky-mp-title" x-text="title"></span>
               <span class="sky-mp-artist" x-text="artist"></span>
             </div>
-            <div class="sky-mp-progress" @click.stop="seek($event)">
+            <div
+              class="sky-mp-progress"
+              role="slider"
+              tabindex="0"
+              aria-label="播放进度"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :aria-valuenow="Math.round(progress)"
+              :aria-valuetext="Math.round(progress) + '%'"
+              @click.stop="seek($event)"
+              @keydown.arrow-right.stop.prevent="if (_ap?.audio) _ap.seek(Math.min(_ap.audio.duration || 0, _ap.audio.currentTime + 5))"
+              @keydown.arrow-left.stop.prevent="if (_ap?.audio) _ap.seek(Math.max(0, _ap.audio.currentTime - 5))"
+              @keydown.home.stop.prevent="_ap?.seek(0)"
+              @keydown.end.stop.prevent="if (_ap?.audio) _ap.seek(_ap.audio.duration || 0)"
+            >
               <div class="sky-mp-bar">
                 <div class="sky-mp-bar-fill" :style="'width:'+progress+'%'"></div>
               </div>
             </div>
           </div>
           <div class="sky-mp-btns">
-            <button class="sky-mp-btn" @click.stop="prev()" aria-label="上一首">
+            <button type="button" class="sky-mp-btn" @click.stop="prev()" aria-label="上一首">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
             </button>
-            <button class="sky-mp-btn" @click.stop="next()" aria-label="下一首">
+            <button type="button" class="sky-mp-btn" @click.stop="next()" aria-label="下一首">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
             </button>
             <button
+              type="button"
               class="sky-mp-btn"
               @click.stop="showList=!showList"
               :class="{'is-active':showList}"
-              aria-label="列表"
+              aria-label="播放列表"
+              aria-controls="sky-music-playlist"
+              :aria-expanded="(showList && expanded).toString()"
             >
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
               </svg>
             </button>
             <button
+              type="button"
               class="sky-mp-btn sky-mp-btn-collapse"
               @click.stop="expanded=false;showList=false"
               aria-label="收起"
+              aria-controls="sky-music-content"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -258,19 +292,32 @@
       </div>
 
       <!-- 播放列表 -->
-      <div class="sky-mp-list" x-show="showList && expanded" x-transition.opacity.duration.200ms>
+      <div
+        id="sky-music-playlist"
+        class="sky-mp-list"
+        role="region"
+        aria-label="播放列表"
+        x-show="showList && expanded"
+        x-transition.opacity.duration.200ms
+      >
         <div class="sky-mp-list-inner">
           <template x-for="(track,idx) in tracks" :key="idx">
-            <div class="sky-mp-list-row" :class="{'is-current':idx===currentIndex}" @click="switchTo(idx)">
+            <button
+              type="button"
+              class="sky-mp-list-row"
+              :class="{'is-current':idx===currentIndex}"
+              :aria-current="idx === currentIndex ? 'true' : null"
+              @click="switchTo(idx)"
+            >
               <span class="sky-mp-list-name" x-text="track.name"></span>
               <span class="sky-mp-list-artist" x-text="track.artist"></span>
-            </div>
+            </button>
           </template>
         </div>
       </div>
 
       <!-- 播放状态小光点（收起态） -->
-      <div class="sky-mp-dot" :class="{ 'is-playing': playing && !expanded }"></div>
+      <div class="sky-mp-dot" :class="{ 'is-playing': playing && !expanded }" aria-hidden="true"></div>
     </div>
 
     <!-- Alpine 组件 skyMusicPlayer 已移至 alpine-modules.js，随 Alpine.start() 同步注册 -->
@@ -401,6 +448,9 @@
         flex-shrink: 0;
         width: var(--mp-size);
         height: var(--mp-size);
+        padding: 0;
+        border: 0;
+        background: transparent;
         cursor: pointer;
         transition:
           width var(--mp-dur) var(--mp-ease),
@@ -414,6 +464,11 @@
         height: var(--mp-cover-exp);
         margin: 0 0 0 11px;
         border-radius: 10px;
+      }
+
+      .sky-mp-left:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 3px;
       }
 
       /* --- 黑胶盘体 --- */
@@ -624,6 +679,13 @@
         transform: translateY(-50%) scale(0.85);
       }
 
+      .sky-mp-expand-btn:focus-visible {
+        opacity: 1;
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+        transform: translateY(-50%) scale(1);
+      }
+
       .is-expanded .sky-mp-expand-btn {
         display: none;
       }
@@ -693,6 +755,12 @@
       .sky-mp-progress {
         cursor: pointer;
         padding: 2px 0;
+      }
+
+      .sky-mp-progress:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 3px;
+        border-radius: 999px;
       }
 
       .sky-mp-bar {
@@ -827,8 +895,13 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        width: 100%;
         height: 42px;
         padding: 0 14px;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: left;
         cursor: pointer;
         border-bottom: 1px solid color-mix(in srgb, var(--mp-border) 50%, transparent);
         transition: background 0.12s ease;

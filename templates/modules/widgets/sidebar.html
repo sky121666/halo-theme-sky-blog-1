@@ -6,12 +6,12 @@
 <!-- 支持传入页面配置，优先使用页面定制配置          -->
 <!-- ========================================== -->
 
-<!-- 
+<!--
   参数说明：
   - pageCfg: 页面侧边栏配置（可选）
   - 如果 pageCfg.enable_custom_sidebar == true，使用页面配置
   - 否则使用全局 sidebar_settings
-  
+
   支持两种配置格式：
   1. 旧格式: sidebar_widgets 数组 [{widget: 'xxx'}, ...]
   2. 新格式: enabled_widgets 字符串数组 ['xxx', 'yyy', ...]
@@ -46,11 +46,15 @@
           <th:block th:replace="~{modules/widgets/author-card :: card}" />
         </th:block>
 
-        <th:block th:if="${widgetType eq 'steam_card'}">
+        <th:block
+          th:if="${widgetType eq 'steam_card' and pluginFinder.available('steam', '>=1.0.0')}"
+        >
           <th:block th:replace="~{modules/widgets/steam-card :: card}" />
         </th:block>
 
-        <th:block th:if="${widgetType eq 'bangumi_card'}">
+        <th:block
+          th:if="${widgetType eq 'bangumi_card' and pluginFinder.available('plugin-bilibili-bangumi', '>=1.4.0')}"
+        >
           <th:block th:replace="~{modules/widgets/bangumi-card :: card}" />
         </th:block>
 
@@ -82,7 +86,7 @@
           <th:block th:replace="~{modules/widgets/archive-sidebar :: widget}" />
         </th:block>
 
-        <th:block th:if="${widgetType eq 'online_stats'}">
+        <th:block th:if="${widgetType eq 'online_stats' and pluginFinder.available('online', '>=1.0.5')}">
           <th:block th:replace="~{modules/widgets/online-stats :: online}" />
         </th:block>
 

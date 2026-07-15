@@ -4,7 +4,8 @@
  */
 
 import './about.css';
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
+import { skyDebug } from '../../common/js/debug.js';
+import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 // 导入公共文章内容脚本（CSS 已在 about.css 中导入）
 import '../../static/js/article-content.js';
@@ -13,6 +14,23 @@ import '../../static/js/article-content.js';
   'use strict';
   
   const SF = {};
+  const animationFrames = new Set();
+
+  SF.requestAnimationFrame = function(callback) {
+    const frame = window.requestAnimationFrame(function(timestamp) {
+      animationFrames.delete(frame);
+      callback(timestamp);
+    });
+    animationFrames.add(frame);
+    return frame;
+  };
+
+  SF.cancelAnimationFrames = function() {
+    animationFrames.forEach(function(frame) {
+      window.cancelAnimationFrame(frame);
+    });
+    animationFrames.clear();
+  };
   
   // ============================= 滚动 Reveal =============================
   
@@ -34,6 +52,10 @@ import '../../static/js/article-content.js';
     revealElements.forEach(function(el) {
       revealObserver.observe(el);
     });
+
+    return function() {
+      revealObserver.disconnect();
+    };
   };
 
   // ============================= 数字滚动 =============================
@@ -54,6 +76,10 @@ import '../../static/js/article-content.js';
     statElements.forEach(function(el) {
       counterObserver.observe(el);
     });
+
+    return function() {
+      counterObserver.disconnect();
+    };
   };
 
   // easeOutQuart 缓动函数 - 更丝滑的动画曲线
@@ -88,13 +114,13 @@ import '../../static/js/article-content.js';
       numberElement.textContent = formatNumber(currentValue);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        SF.requestAnimationFrame(animate);
       } else {
         numberElement.textContent = formatNumber(targetValue);
       }
     }
 
-    requestAnimationFrame(animate);
+    SF.requestAnimationFrame(animate);
   };
 
   // ============================= 文章热力图 =============================
@@ -107,6 +133,7 @@ import '../../static/js/article-content.js';
     if (!posts.length) return;
 
     const canvas = container.querySelector('.heatmap-canvas');
+    const controller = new AbortController();
     const countEl = document.getElementById('article-count');
     if (countEl) countEl.textContent = posts.length;
 
@@ -219,12 +246,16 @@ import '../../static/js/article-content.js';
         
         tooltip.style.left = left + 'px';
         tooltip.style.top = top + 'px';
-      });
+      }, { signal: controller.signal });
       
       cell.addEventListener('mouseleave', function() {
         if (tooltip) tooltip.style.display = 'none';
-      });
+      }, { signal: controller.signal });
     });
+
+    return function() {
+      controller.abort();
+    };
   };
 
   // ============================= GitHub =============================
@@ -253,7 +284,7 @@ import '../../static/js/article-content.js';
         return v.toString(16).padStart(2, '0');
       }).join('');
     } catch (e) {
-      console.log('[GitHub] colorToHex error:', e);
+      skyDebug.warn('about', 'GitHub colorToHex 转换失败', e);
       return defaultHex;
     }
   }
@@ -389,7 +420,7 @@ import '../../static/js/article-content.js';
       mutations.forEach(function(mutation) {
         if (mutation.attributeName === 'data-theme' || mutation.attributeName === 'data-color-scheme') {
           // 延迟一帧确保样式已更新
-          requestAnimationFrame(function() {
+          SF.requestAnimationFrame(function() {
             SF.updateGitHubColors();
           });
         }
@@ -400,6 +431,10 @@ import '../../static/js/article-content.js';
       attributes: true,
       attributeFilter: ['data-theme', 'data-color-scheme']
     });
+
+    return function() {
+      observer.disconnect();
+    };
   };
 
   // ============================= 静态地图（高德/腾讯） =============================
@@ -453,6 +488,7 @@ import '../../static/js/article-content.js';
   SF.initToolkitProgress = function() {
     const progressBars = document.querySelectorAll('.sf-tool-progress');
     if (!progressBars.length) return;
+    const timers = new Set();
     
     const progressObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
@@ -460,9 +496,11 @@ import '../../static/js/article-content.js';
           entry.target.classList.add('animated');
           const width = entry.target.style.width;
           entry.target.style.width = '0';
-          setTimeout(function() {
+          const timer = window.setTimeout(function() {
+            timers.delete(timer);
             entry.target.style.width = width;
           }, 100);
+          timers.add(timer);
         }
       });
     }, { threshold: 0.5 });
@@ -470,12 +508,24 @@ import '../../static/js/article-content.js';
     progressBars.forEach(function(bar) {
       progressObserver.observe(bar);
     });
+
+    return function() {
+      progressObserver.disconnect();
+      timers.forEach(function(timer) {
+        window.clearTimeout(timer);
+      });
+      timers.clear();
+    };
   };
 
   // ============================= 平滑滚动 =============================
   
   SF.initSmoothScroll = function() {
-    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    if (!anchors.length) return;
+    const controller = new AbortController();
+
+    anchors.forEach(function(anchor) {
       anchor.addEventListener('click', function(e) {
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
@@ -488,21 +538,43 @@ import '../../static/js/article-content.js';
             block: 'start'
           });
         }
-      });
+      }, { signal: controller.signal });
     });
+
+    return function() {
+      controller.abort();
+    };
   };
 
   // ============================= 初始化 =============================
   
-  runPageInit(function() {
-    SF.initScrollReveal();
-    SF.initStatCounter();
-    SF.initArticleHeatmap();
-    SF.initGitHub();
-    SF.initToolkitProgress();
-    SF.initSmoothScroll();
-    setTimeout(SF.initLocation, 500);
-  });
+  registerPageLifecycle(function() {
+    if (!document.querySelector('.about-squareform')) return;
+
+    const cleanupTasks = [];
+    [
+      SF.initScrollReveal(),
+      SF.initStatCounter(),
+      SF.initArticleHeatmap(),
+      SF.initGitHub(),
+      SF.initToolkitProgress(),
+      SF.initSmoothScroll(),
+    ]
+      .forEach(function(task) {
+        if (typeof task === 'function') cleanupTasks.push(task);
+      });
+    const locationTimer = window.setTimeout(SF.initLocation, 500);
+
+    return function() {
+      window.clearTimeout(locationTimer);
+      cleanupTasks.forEach(function(task) {
+        task();
+      });
+      SF.cancelAnimationFrames();
+      window.aboutPagePosts = undefined;
+      window.aboutGithubConfig = undefined;
+    };
+  }, { entry: 'about' });
 
 })(window, document);
 

@@ -1,5 +1,6 @@
 <!-- 首页内容区 -->
-<th:block th:fragment="main-content"
+<th:block
+  th:fragment="main-content"
   th:with="githubUsername = ${theme.config.about_settings.github.username},
                    profile = ${theme.config.about_settings.profile},
                    indexCfg = ${theme.config.index},
@@ -9,7 +10,8 @@
                    momentsSettings = ${indexCfg.moments_settings},
                    sidebarCfg = ${indexCfg.sidebar_settings},
                    hasFriendsPlugin = ${pluginFinder.available('plugin-friends', '>=1.4.6')},
-                   hasMomentsPlugin = ${pluginFinder.available('PluginMoments', '>=1.16.0')},
+                   hasLinksPlugin = ${pluginFinder.available('PluginLinks', '>=2.0.0')},
+                   hasMomentsPlugin = ${pluginFinder.available('PluginMoments', '>=1.16.1')},
                    showFriendsTab = ${hasFriendsPlugin and friendsSettings.show_friends_tab != false},
                    showMomentsTab = ${hasMomentsPlugin and momentsSettings.show_moments_tab != false},
                    showPostsTab = ${postSettings.show_posts != false},
@@ -26,15 +28,14 @@
                    momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'},
                    globalSidebarCfg = ${theme.config.general.sidebar_settings},
                    useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-                   sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
-
-  <div
-    th:class="${theme.config.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
-
+                   sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+>
+  <!-- prettier-ignore -->
+  <div th:class="${theme.config.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
     <!-- 主内容区：内容 + 侧边栏 -->
-    <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+    <div class="lazy-anim flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：热力图 + Tab切换 + 文章列表 -->
-      <section class="flex-1 min-w-0 flex flex-col gap-6 lg:gap-8">
+      <section class="flex min-w-0 flex-1 flex-col gap-6 lg:gap-8">
         <!-- 默认排版流 (兼容老配置) -->
         <th:block th:unless="${theme.config.index.index_layout?.enabled}">
           <th:block th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
@@ -48,8 +49,10 @@
             <th:block th:switch="${module.id}">
               <th:block th:case="'heatmap'" th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
               <th:block th:case="'docs'" th:insert="~{modules/widgets/docs :: docs(context='main')}" />
-              <th:block th:case="'tabs_group'"
-                th:insert="~{modules/widgets/tabs_group :: tabs_group(context='main')}" />
+              <th:block
+                th:case="'tabs_group'"
+                th:insert="~{modules/widgets/tabs_group :: tabs_group(context='main')}"
+              />
               <th:block th:case="'gallery'" th:insert="~{modules/widgets/gallery :: gallery(context='main')}" />
               <th:block th:case="'links'" th:insert="~{modules/widgets/links :: links(context='main')}" />
             </th:block>
@@ -58,7 +61,7 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block sticky top-20 self-start">
+      <aside th:if="${showSidebar}" class="sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block">
         <!-- 动态小工具 -->
         <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
       </aside>
@@ -78,11 +81,5 @@
         <th:block th:insert="~{modules/widgets/links :: links(context='main')}" />
       </div>
     </th:block>
-
-
-
-
   </div>
-
-
 </th:block>
