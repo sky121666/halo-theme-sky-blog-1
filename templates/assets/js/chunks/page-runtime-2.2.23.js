@@ -1,1 +1,0 @@
-function e(n){if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",n,{once:!0});return}n()}function t(n){if(window.Alpine){n(window.Alpine);return}document.addEventListener("alpine:init",()=>{window.Alpine&&n(window.Alpine)},{once:!0})}function i(){window.__completeSwupPageInit?.()}export{t as n,e as r,i as t};

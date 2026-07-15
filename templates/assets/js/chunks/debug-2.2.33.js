@@ -1,0 +1,1 @@
+function n(e,r,...t){const o=window.SkyDebug;o?.enabled?.()&&o[e]?.(r,...t)}var a=Object.freeze({enabled(){return window.SkyDebug?.enabled?.()===!0},log(e,...r){n("log",e,...r)},warn(e,...r){n("warn",e,...r)},error(e,...r){n("error",e,...r)},event(e,r,t={}){n("event",e,r,t)}});export{a as t};

@@ -1,17 +1,22 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.23",
+  "version": "2.2.33",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "build": "tsc && vite build && theme-package",
-    "build-only": "tsc && vite build",
+    "build": "tsc && node scripts/verify-plugin-contracts.mjs && vite build && theme-package",
+    "build-only": "tsc && node scripts/verify-plugin-contracts.mjs && vite build",
     "dev": "vite build --watch",
     "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-pattern src/static/qrcode/qrcode.min.js",
     "format": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
     "prepare": "husky",
     "prettier": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
     "verify:plugins": "node scripts/verify-plugin-pages.mjs",
-    "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs"
+    "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs",
+    "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
+    "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs"
   },
   "lint-staged": {
     "*.{ts,json,yaml,yml,html}": [
