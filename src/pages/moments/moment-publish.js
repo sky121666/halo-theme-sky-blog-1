@@ -1,3 +1,6 @@
+import { skyDebug } from '../../common/js/debug.js';
+import { registerPageLifecycle } from '../../common/js/page-runtime.js';
+
 const BLOCKED_EXTENSIONS = ['.svg', '.html', '.htm', '.js', '.exe', '.bat', '.sh', '.php'];
 
 const MEDIA_ACCEPTS = {
@@ -35,9 +38,35 @@ function initMomentPublishModal() {
 
   modal.dataset.initialized = 'true';
 
+  const controller = new AbortController();
+  const { signal } = controller;
   const ownerName = modal.dataset.ownerName || '';
   let selectedTags = [];
   let uploadedMedia = [];
+  let refreshTimer = null;
+  const pendingDelays = new Map();
+
+  function wait(delay) {
+    return new Promise((resolve, reject) => {
+      if (signal.aborted) {
+        reject(signal.reason || new DOMException('Aborted', 'AbortError'));
+        return;
+      }
+
+      const onAbort = () => {
+        window.clearTimeout(timer);
+        pendingDelays.delete(timer);
+        reject(signal.reason || new DOMException('Aborted', 'AbortError'));
+      };
+      const timer = window.setTimeout(() => {
+        signal.removeEventListener('abort', onAbort);
+        pendingDelays.delete(timer);
+        resolve();
+      }, delay);
+      pendingDelays.set(timer, onAbort);
+      signal.addEventListener('abort', onAbort, { once: true });
+    });
+  }
 
   function isBlockedExtension(fileName) {
     const ext = `.${fileName.split('.').pop()}`.toLowerCase();
@@ -229,7 +258,8 @@ function initMomentPublishModal() {
 
     const response = await fetch('/apis/uc.api.storage.halo.run/v1alpha1/attachments/-/upload', {
       method: 'POST',
-      body: formData
+      body: formData,
+      signal,
     });
 
     if (!response.ok) {
@@ -247,8 +277,8 @@ function initMomentPublishModal() {
 
     if (!url && attachment.metadata?.name) {
       for (let i = 0; i < 5; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const checkRes = await fetch(`/api/v1alpha1/attachments/${attachment.metadata.name}`);
+        await wait(500);
+        const checkRes = await fetch(`/api/v1alpha1/attachments/${attachment.metadata.name}`, { signal });
         if (checkRes.ok) {
           const updated = await checkRes.json();
           url = updated.status?.permalink || updated.spec?.permalink;
@@ -328,7 +358,7 @@ function initMomentPublishModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(momentData),
-        signal: AbortSignal.timeout(30000)
+        signal: AbortSignal.any([signal, AbortSignal.timeout(30000)])
       });
     } catch (error) {
       if (error.name === 'AbortError') {
@@ -352,7 +382,7 @@ function initMomentPublishModal() {
 
   async function refreshMomentsList() {
     try {
-      const response = await fetch(window.location.href);
+      const response = await fetch(window.location.href, { signal });
       const html = await response.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
@@ -363,7 +393,8 @@ function initMomentPublishModal() {
         currentList.innerHTML = newList.innerHTML;
       }
     } catch (error) {
-      console.error('刷新失败:', error);
+      if (signal.aborted) return;
+      skyDebug.error('moment-publish', '刷新失败', error);
       window.location.reload();
     }
   }
@@ -431,17 +462,20 @@ function initMomentPublishModal() {
             uploadedMedia.push(media);
           }
         } catch (error) {
+          if (signal.aborted) return;
           errors.push(`${file.name}: ${error.message}`);
         }
       }
 
+      if (signal.aborted) return;
       updateMediaPreview();
 
       if (errors.length > 0) {
         alert(`部分文件上传失败：\n${errors.join('\n')}`);
       }
     } catch (error) {
-      console.error('上传失败:', error);
+      if (signal.aborted) return;
+      skyDebug.error('moment-publish', '上传失败', error);
       alert('上传失败，请重试');
     } finally {
       if (publishBtn) {
@@ -558,10 +592,11 @@ function initMomentPublishModal() {
         getElement('moment-tags').value = '';
         getElement('moment-tags-input-row').style.display = 'none';
         closeMomentModal();
-        setTimeout(refreshMomentsList, 500);
+        refreshTimer = window.setTimeout(refreshMomentsList, 500);
       }
     } catch (error) {
-      console.error('发布异常:', error);
+      if (signal.aborted) return;
+      skyDebug.error('moment-publish', '发布异常', error);
       alert(`发布失败: ${error.message}`);
     } finally {
       if (publishBtn) {
@@ -569,7 +604,7 @@ function initMomentPublishModal() {
         publishBtn.textContent = '发布';
       }
     }
-  });
+  }, { signal });
 
   contentInput?.addEventListener('keydown', (event) => {
     if (event.ctrlKey && event.key === 'Enter') {
@@ -580,11 +615,37 @@ function initMomentPublishModal() {
         form?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       }
     }
-  });
+  }, { signal });
+
+  const globalBindings = {
+    openMomentModal: window.openMomentModal,
+    closeMomentModal: window.closeMomentModal,
+    selectImages: window.selectImages,
+    selectVideo: window.selectVideo,
+    selectAudio: window.selectAudio,
+    handleFileSelect: window.handleFileSelect,
+    removeMedia: window.removeMedia,
+    updateCharCount: window.updateCharCount,
+    toggleTagInput: window.toggleTagInput,
+    addMomentTag: window.addMomentTag,
+    removeMomentTag: window.removeMomentTag,
+    showEmojiSelector: window.showEmojiSelector,
+    hideEmojiSelector: window.hideEmojiSelector,
+  };
+
+  return () => {
+    controller.abort();
+    window.clearTimeout(refreshTimer);
+    pendingDelays.forEach((onAbort, timer) => {
+      window.clearTimeout(timer);
+      signal.removeEventListener('abort', onAbort);
+    });
+    pendingDelays.clear();
+    modal.dataset.initialized = 'false';
+    Object.entries(globalBindings).forEach(([name, handler]) => {
+      if (window[name] === handler) window[name] = undefined;
+    });
+  };
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initMomentPublishModal, { once: true });
-} else {
-  initMomentPublishModal();
-}
+registerPageLifecycle(initMomentPublishModal, { entry: 'moments' });

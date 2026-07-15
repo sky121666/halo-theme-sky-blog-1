@@ -1,11 +1,9 @@
 <!-- ========================================== -->
 <!--     瞬间列表页 - 朋友圈+苹果风格               -->
-<!-- 兼容基线：PluginMoments v1.16.0；路由注入 moments/tags，分页使用 prevUrl/nextUrl。 -->
+<!-- 兼容基线：PluginMoments v1.16.1；路由注入 moments/tags，分页使用 prevUrl/nextUrl。 -->
 <!-- 当前媒体渲染覆盖 PHOTO/VIDEO/AUDIO/POST；POST 仅使用 url/originType 渲染关联内容卡。 -->
 <!-- ========================================== -->
-<th:block th:fragment="content">
-
-  <th:block th:with="
+<div th:fragment="content" th:with="
     rootCfg=${theme.config.moments_settings},
     cfg=${rootCfg.basic_info},
     sidebarCfg=${rootCfg.sidebar_settings},
@@ -21,7 +19,7 @@
     globalSidebarCfg = ${theme.config.general.sidebar_settings},
     useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
     sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}
-  ">
+">
 
     <div class="mx-auto px-4 py-6 md:py-10" th:classappend="${showSidebar} ? 'max-w-5xl' : 'max-w-2xl'">
       <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
@@ -63,20 +61,25 @@
                   <!-- 头部：头像 + 用户名 + 时间 -->
                   <div class="flex items-center gap-3 mb-3">
                     <div class="avatar">
-                      <a th:href="@{/authors/{name}(name=${moment.owner.name})}"
+                      <a th:if="${moment.owner?.name != null}" th:href="@{/authors/{name}(name=${moment.owner?.name})}"
                         class="w-11 h-11 rounded-xl bg-base-200 block transition-transform active:scale-95">
-                        <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}"
-                          th:alt="${moment.owner.displayName}" />
+                        <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner?.avatar}"
+                          th:alt="${moment.owner?.displayName}" />
                         <div th:if="${moment.owner?.avatar == null}"
                           class="w-full h-full flex items-center justify-center text-base-content/40 font-semibold"
-                          th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner.displayName, 0, 1) : 'U'}">
+                          th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner?.displayName, 0, 1) : 'U'}">
                           U</div>
                       </a>
+                      <div th:unless="${moment.owner?.name != null}"
+                        class="w-11 h-11 rounded-xl bg-base-200 flex items-center justify-center text-base-content/40 font-semibold"
+                        aria-label="作者已注销">U</div>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <a th:href="@{/authors/{name}(name=${moment.owner.name})}"
+                      <a th:if="${moment.owner?.name != null}" th:href="@{/authors/{name}(name=${moment.owner?.name})}"
                         class="font-semibold text-primary text-sm truncate hover:underline"
                         th:text="${moment.owner?.displayName ?: '匿名用户'}">用户名</a>
+                      <span th:unless="${moment.owner?.name != null}"
+                        class="font-semibold text-base-content/60 text-sm truncate">作者已注销</span>
                       <div class="flex items-center gap-1.5 mt-0.5 text-xs text-base-content/40">
                         <span th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">11-27 14:00</span>
                         <span th:if="${moment.spec.visible != null and moment.spec.visible.name() == 'PRIVATE'}"
@@ -106,6 +109,7 @@
                           th:if="${medium.type.name == 'PHOTO'}"
                           th:href="${medium.url}"
                           th:attr="data-src=${medium.url}"
+                          data-no-swup
                           class="moment-single-img-wrap"
                         >
                           <img th:src="${medium.url}" alt="瞬间图片" class="max-h-72 object-cover" loading="lazy" />
@@ -140,17 +144,17 @@
                           #lists.size(nonPostMedia) == 8 ? 'grid-cols-6' : 'grid-cols-3'
                         }">
                       <th:block th:each="medium, stat : ${nonPostMedia}">
-                        <a th:if="${medium.type.name == 'PHOTO' && stat.index < 9}" th:href="${medium.url}"
-                          th:attr="data-src=${medium.url}" class="moment-grid-item"
+                        <a th:if="${medium.type.name == 'PHOTO' && stat.index lt 9}" th:href="${medium.url}"
+                          th:attr="data-src=${medium.url}" data-no-swup class="moment-grid-item"
                           th:classappend="${
                             #lists.size(nonPostMedia) == 3 && stat.index == 0 ? 'col-span-2 row-span-2 aspect-square' :
-                            #lists.size(nonPostMedia) == 3 && stat.index > 0 ? 'col-span-1 aspect-square' :
-                            #lists.size(nonPostMedia) == 5 && stat.index < 2 ? 'col-span-3 aspect-[4/3]' :
-                            #lists.size(nonPostMedia) == 5 && stat.index >= 2 ? 'col-span-2 aspect-square' :
-                            #lists.size(nonPostMedia) == 7 && stat.index < 3 ? 'col-span-4 aspect-square' :
-                            #lists.size(nonPostMedia) == 7 && stat.index >= 3 ? 'col-span-3 aspect-square' :
-                            #lists.size(nonPostMedia) == 8 && stat.index < 2 ? 'col-span-3 aspect-[4/3]' :
-                            #lists.size(nonPostMedia) == 8 && stat.index >= 2 ? 'col-span-2 aspect-square' : 'aspect-square'
+                            #lists.size(nonPostMedia) == 3 && stat.index gt 0 ? 'col-span-1 aspect-square' :
+                            #lists.size(nonPostMedia) == 5 && stat.index lt 2 ? 'col-span-3 aspect-[4/3]' :
+                            #lists.size(nonPostMedia) == 5 && stat.index ge 2 ? 'col-span-2 aspect-square' :
+                            #lists.size(nonPostMedia) == 7 && stat.index lt 3 ? 'col-span-4 aspect-square' :
+                            #lists.size(nonPostMedia) == 7 && stat.index ge 3 ? 'col-span-3 aspect-square' :
+                            #lists.size(nonPostMedia) == 8 && stat.index lt 2 ? 'col-span-3 aspect-[4/3]' :
+                            #lists.size(nonPostMedia) == 8 && stat.index ge 2 ? 'col-span-2 aspect-square' : 'aspect-square'
                           }">
                           <img th:src="${medium.url}" alt="瞬间图片" loading="lazy" />
                           <div th:if="${stat.index == 8 && #lists.size(nonPostMedia) > 9}"
@@ -343,7 +347,7 @@
                   class="btn btn-ghost btn-sm btn-square hover:bg-primary/10 hover:text-primary" title="音频">
                   <span class="icon-[heroicons--musical-note] w-5 h-5"></span>
                 </button>
-                <button type="button" id="moment-emoji-btn"
+                <button type="button" id="moment-emoji-btn" data-emoji-trigger
                   onclick="showEmojiSelector(document.getElementById('moment-content'), this)"
                   class="btn btn-ghost btn-sm btn-square hover:bg-primary/10 hover:text-primary" title="表情">
                   <span class="icon-[heroicons--face-smile] w-5 h-5"></span>
@@ -375,6 +379,4 @@
 
     </div>
 
-  </th:block>
-
-</th:block>
+</div>

@@ -1,14 +1,16 @@
 import './equipment.css'
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
+import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 /**
  * 装备页面 - 3D 装备收藏卡交互
  * 战术终端版
  */
-runPageInit(() => {
+registerPageLifecycle(() => {
     const cards = document.querySelectorAll('.card-wrap');
 
     if (cards.length === 0) return;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     cards.forEach(card => {
         // 3D 物理交互
@@ -33,13 +35,13 @@ runPageInit(() => {
             card.style.setProperty('--ptr-y', `${yPct * 100}%`);
 
             card.style.setProperty('--opacity', '1');
-        });
+        }, { signal });
 
         card.addEventListener('mouseleave', () => {
             card.style.setProperty('--tilt-x', '0deg');
             card.style.setProperty('--tilt-y', '0deg');
             card.style.setProperty('--opacity', '0');
-        });
+        }, { signal });
 
         // 触摸支持
         card.addEventListener('touchmove', (e) => {
@@ -61,14 +63,16 @@ runPageInit(() => {
             card.style.setProperty('--ptr-x', `${xPct * 100}%`);
             card.style.setProperty('--ptr-y', `${yPct * 100}%`);
             card.style.setProperty('--opacity', '1');
-        }, { passive: true });
+        }, { passive: true, signal });
 
         card.addEventListener('touchend', () => {
             card.style.setProperty('--tilt-x', '0deg');
             card.style.setProperty('--tilt-y', '0deg');
             card.style.setProperty('--opacity', '0');
-        });
+        }, { signal });
     });
-});
+
+    return () => controller.abort();
+}, { entry: 'equipment' });
 
 notifySwupPageReady();

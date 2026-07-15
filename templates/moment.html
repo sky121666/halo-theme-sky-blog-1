@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
 <!-- 瞬间详情页 - 插件模板 /moments/{name} -->
-<!-- 兼容基线：PluginMoments v1.16.0；详情路由消费 moment/title/templateId。 -->
+<!-- 兼容基线：PluginMoments v1.16.1；详情路由消费 moment/title/templateId，并兼容作者被删除后的空 owner。 -->
 <th:block th:replace="~{modules/moments/layout :: html(~{modules/moments/detail :: content})}" />
 </html>

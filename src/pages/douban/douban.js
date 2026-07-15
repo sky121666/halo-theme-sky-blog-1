@@ -1,7 +1,13 @@
 import "./douban.css";
-import { notifySwupPageReady, runPageInit } from "../../common/js/page-runtime.js";
+import { skyDebug } from "../../common/js/debug.js";
+import { notifySwupPageReady, registerPageLifecycle } from "../../common/js/page-runtime.js";
 
 const API_BASE = "/apis/api.douban.moony.la/v1alpha1/doubanmovies";
+const QUERY_KEYS = ["dataType", "genre", "page", "size", "type", "status"];
+const JAVA_INT_MAX = 2147483647;
+const MAX_PAGE_SIZE = 1000;
+const DEFAULT_PAGE_SIZE = 20;
+const VALID_STATUSES = new Set(["done", "doing", "mark"]);
 const TYPE_ICONS = {
   movie: "icon-[heroicons--film]",
   book: "icon-[heroicons--book-open]",
@@ -73,7 +79,7 @@ function normalizeGenre(genre) {
   };
 }
 
-function createCard(item) {
+function createCard(item, signal) {
   const spec = item?.spec || {};
   const faves = item?.faves || {};
   const article = createEl("article", "douban-card-wrap");
@@ -91,8 +97,8 @@ function createCard(item) {
     img.decoding = "async";
     img.referrerPolicy = "no-referrer";
     if (img.complete && img.naturalHeight !== 0) img.classList.add("loaded");
-    img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
-    img.addEventListener("error", () => img.classList.add("load-error"), { once: true });
+    img.addEventListener("load", () => img.classList.add("loaded"), { once: true, signal });
+    img.addEventListener("error", () => img.classList.add("load-error"), { once: true, signal });
     cover.appendChild(img);
   }
 
@@ -142,19 +148,80 @@ function buildUrl(path, params) {
   return url;
 }
 
+function parseBoundedPositiveInteger(value, fallback, max) {
+  if (value == null || value === "") return { value: fallback, normalized: false };
+
+  const raw = String(value);
+  if (!/^[1-9]\d*$/.test(raw)) return { value: fallback, normalized: true };
+
+  const parsed = Number(raw);
+  if (!Number.isSafeInteger(parsed) || parsed > max) return { value: fallback, normalized: true };
+  return { value: parsed, normalized: false };
+}
+
+function maxPageForSize(size) {
+  return Math.floor(JAVA_INT_MAX / size) + 1;
+}
+
+function readQueryState(defaultSize) {
+  const params = new URL(window.location.href).searchParams;
+  const sizeResult = parseBoundedPositiveInteger(params.get("size"), defaultSize, MAX_PAGE_SIZE);
+  const pageResult = parseBoundedPositiveInteger(params.get("page"), 1, maxPageForSize(sizeResult.value));
+  const requestedStatus = params.get("status") || "done";
+  const status = VALID_STATUSES.has(requestedStatus) ? requestedStatus : "done";
+
+  return {
+    state: {
+      dataType: params.get("dataType") || "",
+      genre: params.get("genre") || "",
+      page: pageResult.value,
+      size: sizeResult.value,
+      type: params.get("type") || "",
+      status,
+    },
+    normalized: sizeResult.normalized || pageResult.normalized || status !== requestedStatus,
+  };
+}
+
+function isSameQueryState(current, next) {
+  return QUERY_KEYS.every((key) => current[key] === next[key]);
+}
+
+function syncQueryState(state, method = "push") {
+  const url = new URL(window.location.href);
+  QUERY_KEYS.forEach((key) => {
+    const value = state[key];
+    if (value == null || value === "") {
+      url.searchParams.delete(key);
+    } else {
+      url.searchParams.set(key, String(value));
+    }
+  });
+
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (nextUrl === currentUrl) return;
+
+  const nextHistoryState = {
+    ...(window.history.state || {}),
+    url: nextUrl,
+    skyDouban: { ...state },
+  };
+  window.history[method === "replace" ? "replaceState" : "pushState"](nextHistoryState, "", nextUrl);
+}
+
 function initDoubanPage() {
   const root = document.querySelector(".douban-page");
   if (!root) return;
 
-  const pageSize = Number(root.dataset.pageSize || 20);
-  const state = {
-    page: 1,
-    size: pageSize,
-    status: "done",
-    type: "",
-    dataType: "",
-    genre: "",
-  };
+  const controller = new AbortController();
+  const { signal } = controller;
+  const pagePathname = window.location.pathname;
+  const pageSize = parseBoundedPositiveInteger(root.dataset.pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE).value;
+  const initialQuery = readQueryState(pageSize);
+  const state = initialQuery.state;
+  let itemsRequest = null;
+  let genresRequest = null;
 
   const els = {
     total: root.querySelector("[data-douban-total]"),
@@ -164,6 +231,9 @@ function initDoubanPage() {
     loading: root.querySelector("[data-douban-loading]"),
     empty: root.querySelector("[data-douban-empty]"),
     error: root.querySelector("[data-douban-error]"),
+    errorTitle: root.querySelector("[data-douban-error-title]"),
+    errorDescription: root.querySelector("[data-douban-error-description]"),
+    reset: root.querySelector("[data-douban-reset]"),
     pagination: root.querySelector("[data-douban-pagination]"),
     pageInfo: root.querySelector("[data-douban-page-info]"),
     prev: root.querySelector("[data-douban-prev]"),
@@ -179,7 +249,7 @@ function initDoubanPage() {
   };
 
   const renderItems = (result) => {
-    els.grid.replaceChildren(...result.items.map(createCard));
+    els.grid.replaceChildren(...result.items.map((item) => createCard(item, signal)));
     if (els.total) els.total.textContent = String(result.total);
     if (els.pageInfo) els.pageInfo.textContent = `${result.page} / ${Math.max(result.totalPages, 1)}`;
     if (els.prev) els.prev.disabled = !result.hasPrevious;
@@ -189,32 +259,74 @@ function initDoubanPage() {
     setHidden(els.pagination, result.totalPages <= 1);
   };
 
+  const renderError = (error) => {
+    const status = Number(error?.status || 0);
+    let title = "豆瓣数据加载失败";
+    let description = "暂时无法连接豆瓣服务，请稍后重试。";
+    let canReset = false;
+
+    if (status === 400 || status === 404) {
+      title = "筛选条件不可用";
+      description = "当前筛选条件无法被插件处理，可恢复默认筛选后重试。";
+      canReset = true;
+    } else if (status >= 500) {
+      title = "豆瓣插件服务异常";
+      description = "插件接口返回服务错误；主题已拦截非法分页参数，请检查插件日志或稍后重试。";
+    }
+
+    if (els.errorTitle) els.errorTitle.textContent = title;
+    if (els.errorDescription) els.errorDescription.textContent = description;
+    setHidden(els.reset, !canReset);
+    setHidden(els.grid, true);
+    setHidden(els.empty, true);
+    setHidden(els.pagination, true);
+    setHidden(els.error, false);
+    skyDebug.warn("douban", "列表加载失败", { status, error });
+  };
+
   const loadItems = async () => {
+    itemsRequest?.abort();
+    const request = new AbortController();
+    itemsRequest = request;
+    const query = { ...state };
+
     setHidden(els.loading, false);
     setHidden(els.error, true);
 
     try {
-      const response = await fetch(buildUrl(API_BASE, state));
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const response = await fetch(buildUrl(API_BASE, query), { signal: request.signal });
+      if (!response.ok) {
+        const error = new Error(`HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
       const result = normalizeListResult(await response.json());
+      if (signal.aborted || request.signal.aborted || itemsRequest !== request) return;
       renderItems(result);
       state.page = result.page;
+      if (result.page !== query.page) syncQueryState(state, "replace");
     } catch (error) {
-      console.warn("[Douban] load failed:", error.message);
-      setHidden(els.grid, true);
-      setHidden(els.empty, true);
-      setHidden(els.pagination, true);
-      setHidden(els.error, false);
+      if (signal.aborted || request.signal.aborted || itemsRequest !== request) return;
+      renderError(error);
     } finally {
-      setHidden(els.loading, true);
+      if (itemsRequest === request) {
+        itemsRequest = null;
+        if (!signal.aborted) setHidden(els.loading, true);
+      }
     }
   };
 
   const loadGenres = async () => {
+    genresRequest?.abort();
+    const request = new AbortController();
+    genresRequest = request;
+    const type = state.type;
+
     try {
-      const response = await fetch(buildUrl(`${API_BASE}/-/genres`, { type: state.type }));
+      const response = await fetch(buildUrl(`${API_BASE}/-/genres`, { type }), { signal: request.signal });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const genres = await response.json();
+      if (signal.aborted || request.signal.aborted || genresRequest !== request) return;
       const buttons = [
         createFilterButton({
           label: "全部题材",
@@ -240,15 +352,20 @@ function initDoubanPage() {
       els.genres.replaceChildren(...buttons);
       setHidden(els.genres, buttons.length <= 1);
     } catch {
-      setHidden(els.genres, true);
+      if (!signal.aborted && !request.signal.aborted && genresRequest === request) {
+        setHidden(els.genres, true);
+      }
+    } finally {
+      if (genresRequest === request) genresRequest = null;
     }
   };
 
   const loadTypes = async () => {
     try {
-      const response = await fetch(`${API_BASE}/-/types`);
+      const response = await fetch(`${API_BASE}/-/types`, { signal });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const types = await response.json();
+      if (signal.aborted) return;
       const buttons = [
         createFilterButton({
           label: "全部",
@@ -274,35 +391,90 @@ function initDoubanPage() {
     }
   };
 
+  const restoreQueryState = () => {
+    if (signal.aborted || window.location.pathname !== pagePathname) return;
+    const nextQuery = readQueryState(pageSize);
+    const nextState = nextQuery.state;
+    if (nextQuery.normalized) syncQueryState(nextState, "replace");
+    if (isSameQueryState(state, nextState)) return;
+    Object.assign(state, nextState);
+    updateButtons();
+    loadGenres();
+    loadItems();
+  };
+
   root.addEventListener("click", (event) => {
-    const filterButton = event.target.closest("[data-douban-filter]");
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    if (target.closest("[data-douban-retry]")) {
+      loadItems();
+      return;
+    }
+
+    if (target.closest("[data-douban-reset]")) {
+      Object.assign(state, {
+        dataType: "",
+        genre: "",
+        page: 1,
+        size: pageSize,
+        type: "",
+        status: "done",
+      });
+      syncQueryState(state, "replace");
+      updateButtons();
+      loadGenres();
+      loadItems();
+      return;
+    }
+
+    const filterButton = target.closest("[data-douban-filter]");
     if (filterButton) {
       const filter = filterButton.dataset.doubanFilter;
       state[filter] = filterButton.dataset.value || "";
       state.page = 1;
       if (filter === "type") state.genre = "";
       updateButtons();
+      syncQueryState(state);
       if (filter === "type") loadGenres();
       loadItems();
       return;
     }
 
-    if (event.target.closest("[data-douban-prev]") && state.page > 1) {
+    if (target.closest("[data-douban-prev]") && state.page > 1) {
       state.page -= 1;
+      syncQueryState(state);
       loadItems();
       return;
     }
 
-    if (event.target.closest("[data-douban-next]")) {
+    if (target.closest("[data-douban-next]")) {
+      if (state.page >= maxPageForSize(state.size)) return;
       state.page += 1;
+      syncQueryState(state);
       loadItems();
     }
-  });
+  }, { signal });
 
+  window.addEventListener("popstate", restoreQueryState, { signal });
+
+  if (initialQuery.normalized) {
+    syncQueryState(state, "replace");
+    skyDebug.event("douban", "query:normalized", { page: state.page, size: state.size, status: state.status });
+  }
+  updateButtons();
   loadTypes();
   loadGenres();
   loadItems();
+
+  return () => {
+    controller.abort();
+    itemsRequest?.abort();
+    genresRequest?.abort();
+    itemsRequest = null;
+    genresRequest = null;
+  };
 }
 
-runPageInit(initDoubanPage);
+registerPageLifecycle(initDoubanPage, { entry: "douban" });
 notifySwupPageReady();

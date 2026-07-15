@@ -6,10 +6,7 @@
   <!-- 插件：plugin-douban                         -->
   <!-- ========================================== -->
 
-  <head
-    th:with="pageTitle=${title ?: '豆瓣记录'},
-             pageDesc='电影、图书、音乐和游戏收藏记录'"
-  >
+  <head th:with="pageTitle=${title ?: '豆瓣记录'}">
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,20 +20,11 @@
       豆瓣记录
     </title>
 
-    <meta name="description" th:content="${pageDesc}" />
-    <meta name="keywords" th:content="'豆瓣, 电影, 图书, 音乐, 游戏, ' + ${site.title}" />
-    <meta property="og:title" th:content="${pageTitle}" />
-    <meta property="og:description" th:content="${pageDesc}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" th:content="@{/douban}" />
-    <meta property="og:site_name" th:content="${site.title}" />
-
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
-    <link rel="canonical" th:href="@{/douban}" />
 
     <th:block th:replace="~{modules/font-loader :: fonts}" />
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version='2.2.23')}" />
-    <link rel="stylesheet" th:href="@{/assets/css/douban.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/douban.css?v={version}(version=${theme.spec.version})}" />
     <th:block th:replace="~{modules/music-player :: head}" />
   </head>
 
@@ -48,15 +36,6 @@
     class="text-base-content relative min-h-screen"
     th:classappend="${bgClass}"
   >
-    <div class="douban-bg pointer-events-none fixed inset-0 z-0" aria-hidden="true">
-      <div class="douban-bg-mask absolute inset-0"></div>
-    </div>
-
-    <div
-      th:if="${enableCustomBg and bgStyle == 'grid'}"
-      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-    ></div>
-
     <div class="relative z-10">
       <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
       <th:block th:replace="~{modules/nav :: navbar}" />
@@ -69,17 +48,26 @@
     </div>
 
     <div id="swup-page-extras">
+      <!-- 页面专属背景必须跟随 PJAX extras 容器进入和离开。 -->
+      <div class="douban-bg pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+        <div class="douban-bg-mask absolute inset-0"></div>
+      </div>
+      <div
+        th:if="${enableCustomBg and bgStyle == 'grid'}"
+        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+      ></div>
+
       <th:block th:replace="~{modules/floating-dock :: dock}" />
     </div>
 
     <div id="swup-scripts" hidden>
       <script
         type="module"
-        th:src="@{/assets/js/douban.js?v={version}(version='2.2.23')}"
+        th:src="@{/assets/js/douban.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script
       ></script>
     </div>
-    <script type="module" th:src="@{/assets/js/main.js?v={version}(version='2.2.23')}"></script>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
     <th:block th:replace="~{modules/music-player :: player}" />
   </body>
 </html>

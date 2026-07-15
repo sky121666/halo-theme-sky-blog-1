@@ -21,11 +21,11 @@
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <!-- 文章样式（包含文章内容和目录样式） -->
-    <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
     <!-- 文档页专用样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/doc.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/doc.css?v={version}(version=${theme.spec.version})}" />
 
     <!-- 额外的 head 内容（仅 CSS） -->
     <th:block th:if="${head != null}">
@@ -82,7 +82,7 @@
       <!-- 文档页专用脚本 - 使用 ES Module -->
       <script
         type="module"
-        th:src="@{/assets/js/doc.js?v={version}(version='2.2.23')}"
+        th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script
       ></script>
       <!-- 插件脚本（需要在 body 后加载） -->
@@ -92,7 +92,7 @@
       <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
       <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
     </div>
-    <script type="module" th:src="@{/assets/js/main.js?v={version}(version='2.2.23')}"></script>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
 
     <!-- 悬浮音乐播放器 -->
     <th:block th:replace="~{modules/music-player :: player}" />

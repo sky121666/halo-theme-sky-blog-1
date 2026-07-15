@@ -60,16 +60,25 @@
         <th:block th:with="groups = ${linkFinder.groupBy()}">
           <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
           <script th:inline="javascript" data-swup-reload-script>
-            document.addEventListener("DOMContentLoaded", function () {
-              var max = /*[[${linksSettings.links_count}]]*/ 0;
-              max = parseInt(max, 10);
-              if (max > 0) {
-                var links = document.querySelectorAll("#index-links-grid > a");
-                for (var i = max; i < links.length; i++) {
-                  links[i].style.display = "none";
+            (function () {
+              function applyLimit() {
+                var grid = document.getElementById("index-links-grid");
+                if (!grid) return;
+
+                var links = grid.querySelectorAll(":scope > a");
+                var max = /*[[${linksSettings.links_count}]]*/ 0;
+                max = parseInt(max, 10);
+                for (var i = 0; i < links.length; i++) {
+                  links[i].hidden = max > 0 && i >= max;
                 }
               }
-            });
+
+              if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", applyLimit, { once: true });
+              } else {
+                applyLimit();
+              }
+            })();
           </script>
 
           <div

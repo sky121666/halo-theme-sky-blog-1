@@ -71,8 +71,12 @@
 
         <div class="douban-error" data-douban-error hidden>
           <span class="icon-[heroicons--exclamation-triangle] text-warning mb-4 h-14 w-14"></span>
-          <p class="text-base font-medium">豆瓣数据加载失败</p>
-          <p class="mt-1 text-sm opacity-70">请检查 plugin-douban 配置和同步状态。</p>
+          <p class="text-base font-medium" data-douban-error-title>豆瓣数据加载失败</p>
+          <p class="mt-1 text-sm opacity-70" data-douban-error-description>暂时无法连接豆瓣服务，请稍后重试。</p>
+          <div class="mt-4 flex flex-wrap justify-center gap-2">
+            <button class="btn btn-sm btn-primary" type="button" data-douban-retry>重新加载</button>
+            <button class="btn btn-sm btn-ghost" type="button" data-douban-reset hidden>恢复默认筛选</button>
+          </div>
         </div>
 
         <div class="douban-pagination" data-douban-pagination hidden>

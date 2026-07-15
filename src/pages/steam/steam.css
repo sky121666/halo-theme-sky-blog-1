@@ -71,7 +71,7 @@
   transition: opacity 0.3s;
 }
 
-.steam-game-card-image:has(img:not(.loaded))::before {
+.steam-game-card-image:has(img[src]:not(.loaded))::before {
   opacity: 1;
 }
 
@@ -84,11 +84,11 @@
 }
 
 /* 亮色主题下增强动态游戏背景可见度 */
-[data-color-scheme="light"] body>.fixed.inset-0>img {
+[data-color-scheme="light"] .steam-game-bg>img {
   opacity: 0.55 !important;
 }
 
-[data-color-scheme="light"] body>.fixed.inset-0>.absolute {
+[data-color-scheme="light"] .steam-game-bg>.absolute {
   background: linear-gradient(to bottom, transparent 0%, var(--color-base-100) 70%, var(--color-base-100) 100%);
 }
 
@@ -995,9 +995,14 @@
 }
 
 .steam-game-card-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   aspect-ratio: 460 / 215;
   overflow: hidden;
+  background: color-mix(in srgb, var(--color-base-content) 5%, transparent);
 }
 
 .steam-game-card-image img {
@@ -1009,6 +1014,34 @@
 
 .steam-game-card:hover .steam-game-card-image img {
   transform: scale(1.05);
+}
+
+.steam-game-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--color-base-content);
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+
+.steam-game-unavailable-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 25%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-neutral) 88%, transparent);
+  color: var(--color-neutral-content);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 /* 游戏库网格 - 响应式布局 */

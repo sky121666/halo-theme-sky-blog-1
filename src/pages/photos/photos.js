@@ -4,6 +4,7 @@
  * - IntersectionObserver 无限滚动懒加载
  */
 import "./photos.css";
+import { skyDebug } from "../../common/js/debug.js";
 import { notifySwupPageReady, runPageInit } from "../../common/js/page-runtime.js";
 
 function initPhotosPage() {
@@ -14,6 +15,7 @@ function initPhotosPage() {
   if (!photoGrid) return;
 
   let disposed = false;
+  const requestController = new AbortController();
   const cleanupTasks = [];
   const addCleanupTask = (task) => {
     if (typeof task === "function") cleanupTasks.push(task);
@@ -31,7 +33,64 @@ function initPhotosPage() {
       event.stopPropagation();
     }
   };
+  const handleGridKeydown = (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    const trigger = event.target.closest("img[data-photo-lightbox-trigger]");
+    if (!trigger || !photoGrid.contains(trigger)) return;
+
+    event.preventDefault();
+    trigger.click();
+  };
   photoGrid.addEventListener("click", handleGridClick);
+  photoGrid.addEventListener("keydown", handleGridKeydown);
+
+  function ensureLightGalleryImageContract(item) {
+    const img = item?.matches?.("img") ? item : item?.querySelector?.("img");
+    if (!img) return null;
+
+    const src = img.getAttribute("data-src") || img.getAttribute("src") || img.currentSrc || "";
+    if (src && !img.getAttribute("data-src")) {
+      img.setAttribute("data-src", src);
+    }
+
+    img.setAttribute("data-photo-lightbox-trigger", "");
+    img.setAttribute("role", "button");
+    img.tabIndex = 0;
+    if (!img.getAttribute("aria-label")) {
+      img.setAttribute("aria-label", `打开图片：${img.alt?.trim() || "未命名图片"}`);
+    }
+
+    return img;
+  }
+
+  function getLightGalleryInstance() {
+    const ids = [photoGrid.getAttribute("lg-uid"), photoGrid.getAttribute("data-lg-id")].filter(Boolean);
+    return ids.map((id) => window.lgData?.[id]).find(Boolean) || null;
+  }
+
+  function syncLightGalleryItems() {
+    if (disposed) return;
+
+    allPhotoItems.forEach((item) => ensureLightGalleryImageContract(item));
+
+    const instance = getLightGalleryInstance();
+    if (!instance) {
+      window.SkyLightGallery?.initNow?.();
+      return;
+    }
+
+    if (typeof instance.refresh === "function") {
+      instance.refresh();
+      return;
+    }
+
+    if (typeof instance.destroy !== "function" || typeof window.lightGallery !== "function") return;
+
+    const settings = instance.s ? { ...instance.s } : { selector: "img" };
+    instance.destroy(true);
+    window.lightGallery(photoGrid, settings);
+  }
 
   let masonryCols = 0;
   let masonryColNodes = [];
@@ -165,7 +224,10 @@ function initPhotosPage() {
   let nextUrlEl = document.getElementById("next-page-url");
   const loadingSpinner = document.getElementById("loading-spinner");
   const noMoreData = document.getElementById("no-more-data");
+  const loadError = document.getElementById("photos-load-error");
+  const retryButton = document.getElementById("photos-load-retry");
   let observer = null;
+  let handleRetry = null;
 
   let cleaned = false;
   let unregisterPjaxCleanup = null;
@@ -174,10 +236,13 @@ function initPhotosPage() {
     if (cleaned) return;
     cleaned = true;
     disposed = true;
+    requestController.abort();
     clearTimeout(resizeTimer);
     cleanupTasks.splice(0).forEach((task) => task());
     photoGrid.removeEventListener("click", handleGridClick);
+    photoGrid.removeEventListener("keydown", handleGridKeydown);
     window.removeEventListener("resize", handleResize);
+    if (handleRetry) retryButton?.removeEventListener("click", handleRetry);
     observer?.disconnect();
     unregisterPjaxCleanup?.();
     unregisterPjaxCleanup = null;
@@ -208,9 +273,11 @@ function initPhotosPage() {
     if (disposed || isLoading || !nextUrlEl) return;
     isLoading = true;
     if (loadingSpinner) loadingSpinner.classList.remove("hidden");
+    loadError?.classList.add("hidden");
 
     try {
-      const response = await fetch(nextUrlEl.href);
+      const response = await fetch(nextUrlEl.href, { signal: requestController.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const doc = new DOMParser().parseFromString(await response.text(), "text/html");
       if (disposed) return;
       const newItems = doc.querySelectorAll(".photo-item");
@@ -269,6 +336,8 @@ function initPhotosPage() {
           appendToShortest(item);
           bindImageLoad(img);
         });
+
+        syncLightGalleryItems();
       }
 
       const newNextUrlEl = doc.querySelector("#next-page-url");
@@ -284,7 +353,10 @@ function initPhotosPage() {
         }
       }
     } catch (e) {
-      console.error("[图库] 加载失败:", e);
+      if (disposed || e?.name === "AbortError") return;
+      skyDebug.error("photos", "加载失败", e);
+      observer?.disconnect();
+      loadError?.classList.remove("hidden");
     } finally {
       isLoading = false;
       if (loadingSpinner) loadingSpinner.classList.add("hidden");
@@ -298,11 +370,18 @@ function initPhotosPage() {
     { rootMargin: "300px" },
   );
 
+  handleRetry = () => {
+    loadError?.classList.add("hidden");
+    if (sentinel) observer?.observe(sentinel);
+    loadMorePhotos();
+  };
+  retryButton?.addEventListener("click", handleRetry);
+
   observer.observe(sentinel);
 }
 
 if (window.SkyPjax?.onPage) {
-  window.SkyPjax.onPage(initPhotosPage);
+  window.SkyPjax.onPage(initPhotosPage, { immediate: false });
 } else {
   runPageInit(initPhotosPage);
 }

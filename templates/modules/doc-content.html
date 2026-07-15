@@ -195,9 +195,9 @@
             <span>评论交流</span>
           </div>
         </div>
-        <!-- Halo 评论组件 - 使用 docInfo.doc.metadata.name 作为评论关联名称 -->
+        <!-- Halo 评论组件 - Docsme 1.7 使用 DocTree 作为评论关联资源 -->
         <div class="card-body p-4 sm:p-6">
-          <halo:comment group="run.halo.docsme" kind="Doc" th:attr="name=${docInfo.doc.metadata.name}"
+          <halo:comment group="doc.halo.run" kind="DocTree" th:attr="name=${docTree.metadata.name}"
             colorScheme="system" />
         </div>
       </div>

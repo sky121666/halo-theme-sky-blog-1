@@ -29,8 +29,8 @@
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version='2.2.23')}" />
-    <link rel="stylesheet" th:href="@{/assets/css/bangumi.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/bangumi.css?v={version}(version=${theme.spec.version})}" />
     <!-- 音乐播放器 CSS -->
     <th:block th:replace="~{modules/music-player :: head}" />
   </head>
@@ -44,25 +44,6 @@
                bgCover = ${firstBangumi != null} ? ${firstBangumi.spec.cover} : null"
     th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
   >
-    <!-- 动态番剧背景 -->
-    <div th:if="${bgCover != null}" class="pointer-events-none fixed inset-0 z-0" id="bangumi-bg-container">
-      <img
-        th:src="${#strings.contains(bgCover, '@') ? #strings.substringBefore(bgCover, '@') : bgCover}"
-        class="h-full w-full object-cover object-top transition-opacity duration-500"
-        style="opacity: 0.4"
-        referrerpolicy="no-referrer"
-        alt=""
-        id="bangumi-bg-img"
-      />
-      <div class="via-base-100/50 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
-    </div>
-
-    <!-- 网格背景（仅当选择 grid 样式时显示） -->
-    <div
-      th:if="${enableCustomBg and bgStyle == 'grid'}"
-      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-    ></div>
-
     <div class="relative z-10">
       <!-- 加载屏幕 -->
       <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
@@ -80,6 +61,23 @@
     </div>
 
     <div id="swup-page-extras">
+      <!-- 页面专属背景必须跟随 PJAX extras 容器进入和离开。 -->
+      <div th:if="${bgCover != null}" class="pointer-events-none fixed inset-0 z-0" id="bangumi-bg-container">
+        <img
+          th:src="${#strings.contains(bgCover, '@') ? #strings.substringBefore(bgCover, '@') : bgCover}"
+          class="h-full w-full object-cover object-top transition-opacity duration-500"
+          style="opacity: 0.4"
+          referrerpolicy="no-referrer"
+          alt=""
+          id="bangumi-bg-img"
+        />
+        <div class="via-base-100/50 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
+      </div>
+      <div
+        th:if="${enableCustomBg and bgStyle == 'grid'}"
+        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+      ></div>
+
       <!-- 悬浮 Dock 控制栏 -->
       <th:block th:replace="~{modules/floating-dock :: dock}" />
     </div>
@@ -88,11 +86,11 @@
     <div id="swup-scripts" hidden>
       <script
         type="module"
-        th:src="@{/assets/js/bangumi.js?v={version}(version='2.2.23')}"
+        th:src="@{/assets/js/bangumi.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script
       ></script>
     </div>
-    <script type="module" th:src="@{/assets/js/main.js?v={version}(version='2.2.23')}"></script>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
     <!-- 悬浮音乐播放器 -->
     <th:block th:replace="~{modules/music-player :: player}" />
   </body>

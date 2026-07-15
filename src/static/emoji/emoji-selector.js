@@ -3,6 +3,12 @@
  * 修复点击隐藏功能
  */
 
+(() => {
+  'use strict';
+
+  // Swup ScriptsPlugin 会在返回瞬间页时重新执行本文件，先清理旧闭包实例。
+  window.__skyEmojiSelectorCleanup?.();
+
 // 常用表情数据
 const EMOJI_DATA = [
   '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
@@ -34,6 +40,7 @@ class EmojiSelector {
     this.selectorElement = null;
     this.isVisible = false;
     this.globalClickHandler = null;
+    this.globalClickTimer = null;
     this.init();
   }
 
@@ -87,7 +94,10 @@ class EmojiSelector {
     this.selectorElement.classList.add('show');
     
     // 添加全局点击监听（延迟添加，避免立即触发）
-    setTimeout(() => {
+    this.clearGlobalClickTimer();
+    this.globalClickTimer = window.setTimeout(() => {
+      this.globalClickTimer = null;
+      if (!this.isVisible || !this.selectorElement?.isConnected) return;
       this.addGlobalClickListener();
     }, 100);
   }
@@ -99,9 +109,16 @@ class EmojiSelector {
     this.isVisible = false;
     this.selectorElement.classList.remove('show');
     this.currentTarget = null;
+    this.clearGlobalClickTimer();
     
     // 移除全局点击监听
     this.removeGlobalClickListener();
+  }
+
+  clearGlobalClickTimer() {
+    if (this.globalClickTimer === null) return;
+    window.clearTimeout(this.globalClickTimer);
+    this.globalClickTimer = null;
   }
 
   /**
@@ -120,7 +137,7 @@ class EmojiSelector {
       if (this.selectorElement.contains(e.target)) return;
       
       // 如果点击的是表情按钮，不处理
-      if (e.target.closest('#emoji-trigger-btn')) return;
+      if (e.target.closest('[data-emoji-trigger]')) return;
       
       // 点击其他任何地方都隐藏表情选择器
       this.hide();
@@ -217,6 +234,8 @@ class EmojiSelector {
    * 销毁表情选择器
    */
   destroy() {
+    this.isVisible = false;
+    this.clearGlobalClickTimer();
     this.removeGlobalClickListener();
     if (this.selectorElement) {
       this.selectorElement.remove();
@@ -255,13 +274,26 @@ function hideEmojiSelector() {
   }
 }
 
-// 页面卸载时清理
-window.addEventListener('beforeunload', () => {
+function cleanupEmojiSelector() {
   if (emojiSelectorInstance) {
     emojiSelectorInstance.destroy();
+    emojiSelectorInstance = null;
   }
-});
+
+  if (window.showEmojiSelector === showEmojiSelector) window.showEmojiSelector = undefined;
+  if (window.hideEmojiSelector === hideEmojiSelector) window.hideEmojiSelector = undefined;
+  if (window.__skyEmojiSelectorCleanup === cleanupEmojiSelector) {
+    window.__skyEmojiSelectorCleanup = undefined;
+  }
+  window.removeEventListener('beforeunload', cleanupEmojiSelector);
+  document.removeEventListener('sky:page-cleanup', cleanupEmojiSelector);
+}
 
 // 导出全局函数
 window.showEmojiSelector = showEmojiSelector;
 window.hideEmojiSelector = hideEmojiSelector;
+window.__skyEmojiSelectorCleanup = cleanupEmojiSelector;
+window.addEventListener('beforeunload', cleanupEmojiSelector, { once: true });
+document.addEventListener('sky:page-cleanup', cleanupEmojiSelector, { once: true });
+
+})();

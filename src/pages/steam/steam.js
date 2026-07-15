@@ -10,10 +10,11 @@
  */
 
 import './steam.css';
+import { skyDebug } from '../../common/js/debug.js';
 import {
   notifySwupPageReady,
   registerAlpinePageComponents,
-  runPageInit
+  registerPageLifecycle
 } from '../../common/js/page-runtime.js';
 
 // 缓存配置
@@ -57,7 +58,7 @@ const cache = {
 /**
  * API 请求封装
  */
-async function fetchAPI(endpoint, useCache = true) {
+async function fetchAPI(endpoint, useCache = true, signal) {
   const cacheKey = endpoint.replace(/[^a-z0-9]/gi, '_');
 
   if (useCache) {
@@ -65,17 +66,17 @@ async function fetchAPI(endpoint, useCache = true) {
     if (cached) return cached;
   }
 
-  const data = await fetchSteamEndpoint(endpoint);
+  const data = await fetchSteamEndpoint(endpoint, signal);
   if (useCache) cache.set(cacheKey, data);
   return data;
 }
 
-async function fetchSteamEndpoint(endpoint) {
+async function fetchSteamEndpoint(endpoint, signal) {
   let lastError;
 
   for (const base of API_BASES) {
     try {
-      const response = await fetch(`${base}${endpoint}`);
+      const response = await fetch(`${base}${endpoint}`, { signal });
       if (response.ok) return await response.json();
       lastError = new Error(`API error: ${response.status}`);
     } catch (error) {
@@ -103,7 +104,15 @@ async function fetchSteamEndpoint(endpoint) {
     recentGames: [],
     games: { items: [], page: 1, totalPages: 1 },
     error: null,
+    errors: {
+      profile: null,
+      stats: null,
+      badges: null,
+      recent: null,
+      games: null,
+    },
     _initialized: false,
+    _abortController: null,
 
     // 加载状态
     loading: {
@@ -121,6 +130,7 @@ async function fetchSteamEndpoint(endpoint) {
       // 防止重复初始化
       if (this._initialized) return;
       this._initialized = true;
+      this._abortController = new AbortController();
 
       // 并行加载所有数据
       await Promise.all([
@@ -131,67 +141,98 @@ async function fetchSteamEndpoint(endpoint) {
         this.loadGames(1)
       ]);
 
+      const signal = this._abortController?.signal;
+      if (!signal || signal.aborted) return;
+
       // 初始化热力图
       this.$nextTick(() => {
-        initHeatmap();
+        if (!signal.aborted) initHeatmap(signal);
       });
     },
 
+    destroy() {
+      this._abortController?.abort();
+      this._abortController = null;
+    },
+
     async loadProfile() {
+      const signal = this._abortController?.signal;
+      this.loading.profile = true;
+      this.error = null;
+      this.errors.profile = null;
       try {
-        this.profile = await fetchAPI('/profile');
+        this.profile = await fetchAPI('/profile', true, signal);
       } catch (e) {
-        console.error('[Steam] profile 加载失败:', e);
+        if (signal?.aborted) return;
+        skyDebug.error('steam', 'profile 加载失败', e);
         this.error = 'Steam 资料加载失败';
+        this.errors.profile = this.error;
       } finally {
-        this.loading.profile = false;
+        if (!signal?.aborted) this.loading.profile = false;
       }
     },
 
     async loadStats() {
+      const signal = this._abortController?.signal;
+      this.loading.stats = true;
+      this.errors.stats = null;
       try {
-        this.stats = await fetchAPI('/stats');
+        this.stats = await fetchAPI('/stats', true, signal);
       } catch (e) {
-        console.error('[Steam] stats 加载失败:', e);
+        if (signal?.aborted) return;
+        skyDebug.error('steam', 'stats 加载失败', e);
+        this.errors.stats = '统计数据加载失败';
       } finally {
-        this.loading.stats = false;
+        if (!signal?.aborted) this.loading.stats = false;
       }
     },
 
     async loadBadges() {
+      const signal = this._abortController?.signal;
+      this.loading.badges = true;
+      this.errors.badges = null;
       try {
-        this.badges = await fetchAPI('/badges');
+        this.badges = await fetchAPI('/badges', true, signal);
       } catch (e) {
-        console.error('[Steam] badges 加载失败:', e);
+        if (signal?.aborted) return;
+        skyDebug.error('steam', 'badges 加载失败', e);
+        this.errors.badges = '徽章数据加载失败';
       } finally {
-        this.loading.badges = false;
+        if (!signal?.aborted) this.loading.badges = false;
       }
     },
 
     async loadRecent() {
+      const signal = this._abortController?.signal;
+      this.loading.recent = true;
+      this.errors.recent = null;
       try {
         const limit = this.config.recentGamesLimit || 10;
-        const data = await fetchAPI(`/recent?limit=${limit}`);
+        const data = await fetchAPI(`/recent?limit=${limit}`, true, signal);
         this.recentGames = Array.isArray(data) ? data : [];
       } catch (e) {
-        console.error('[Steam] recent 加载失败:', e);
-        this.recentGames = [];
+        if (signal?.aborted) return;
+        skyDebug.error('steam', 'recent 加载失败', e);
+        this.errors.recent = '最近游玩加载失败';
       } finally {
-        this.loading.recent = false;
+        if (!signal?.aborted) this.loading.recent = false;
       }
     },
 
     async loadGames(page = 1) {
+      const signal = this._abortController?.signal;
       this.loading.games = true;
+      this.errors.games = null;
       try {
         const size = this.config.gamesPageSize || 20;
-        const data = await fetchAPI(`/games?page=${page}&size=${size}`, false);
+        const data = await fetchAPI(`/games?page=${page}&size=${size}`, false, signal);
         this.games = data || { items: [], page: 1, totalPages: 1 };
       } catch (e) {
-        console.error('[Steam] games 加载失败:', e);
-        this.games = { items: [], page: 1, totalPages: 1 };
+        if (signal?.aborted) return;
+        skyDebug.error('steam', 'games 加载失败', e);
+        this.errors.games = '游戏库加载失败';
       } finally {
-        this.loading.games = false;
+        if (!signal?.aborted) this.loading.games = false;
       }
     },
 
@@ -210,36 +251,51 @@ async function fetchSteamEndpoint(endpoint) {
   registerAlpinePageComponents(_registerAlpineComponents);
 })();
 
-// 页面加载完成后初始化
-runPageInit(() => {
-  observeImageLoad();
-});
+// 页面加载完成后初始化。页面模块会被缓存，必须通过 PJAX 生命周期重新 mount。
+registerPageLifecycle(() => {
+  const root = document.querySelector('.steam-page');
+  if (!root) return;
+
+  const cleanupImageObserver = observeImageLoad(root);
+  return () => {
+    cleanupImageObserver();
+    window.steamPageConfig = undefined;
+  };
+}, { entry: 'steam' });
 
 notifySwupPageReady();
 
 /**
  * 图片懒加载优化
  */
-function observeImageLoad() {
+function observeImageLoad(root) {
+  const controller = new AbortController();
+  const { signal } = controller;
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
         if (node.nodeType === 1) {
           const images = node.querySelectorAll?.('.steam-game-img, .steam-badge-img, .steam-avatar-img') || [];
-          images.forEach(setupImageHandlers);
+          images.forEach((image) => setupImageHandlers(image, signal));
           if (node.matches?.('.steam-game-img, .steam-badge-img, .steam-avatar-img')) {
-            setupImageHandlers(node);
+            setupImageHandlers(node, signal);
           }
         }
       });
     });
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
-  document.querySelectorAll('.steam-game-img, .steam-badge-img, .steam-avatar-img').forEach(setupImageHandlers);
+  observer.observe(root, { childList: true, subtree: true });
+  root.querySelectorAll('.steam-game-img, .steam-badge-img, .steam-avatar-img')
+    .forEach((image) => setupImageHandlers(image, signal));
+
+  return () => {
+    observer.disconnect();
+    controller.abort();
+  };
 }
 
-function setupImageHandlers(img) {
+function setupImageHandlers(img, signal) {
   if (img.dataset.handled) return;
   img.dataset.handled = 'true';
 
@@ -248,21 +304,21 @@ function setupImageHandlers(img) {
   } else {
     img.addEventListener('load', function () {
       this.classList.add('loaded');
-    });
+    }, { once: true, signal });
     img.addEventListener('error', function () {
       if (!this.src || this.src === window.location.href || this.src.endsWith('/steam')) {
         return;
       }
       this.classList.add('loaded');
       this.src = 'data:image/svg+xml,%3Csvg viewBox="0 0 460 215"%3E%3Crect fill="%231b2838" width="460" height="215"/%3E%3Ctext x="50%25" y="50%25" fill="%2366c0f4" font-size="24" text-anchor="middle" dy=".3em"%3E🎮%3C/text%3E%3C/svg%3E';
-    });
+    }, { once: true, signal });
   }
 }
 
 /**
  * 热力图初始化
  */
-async function initHeatmap() {
+async function initHeatmap(signal) {
   const gridEl = document.getElementById('steam-heatmap-grid');
   const loadingEl = document.getElementById('steam-heatmap-loading');
   const emptyEl = document.getElementById('steam-heatmap-empty');
@@ -281,7 +337,8 @@ async function initHeatmap() {
       return;
     }
 
-    const data = await fetchHeatmapData(apiUrl, heatmapDays);
+    const data = await fetchHeatmapData(apiUrl, heatmapDays, signal);
+    if (signal?.aborted) return;
 
     if (loadingEl) loadingEl.style.display = 'none';
 
@@ -300,13 +357,14 @@ async function initHeatmap() {
     renderCustomHeatmap(gridEl, dateMap, heatmapDays, tooltipEl);
 
   } catch (error) {
-    console.error('[Steam] 热力图加载失败:', error);
+    if (signal?.aborted) return;
+    skyDebug.error('steam', '热力图加载失败', error);
     if (loadingEl) loadingEl.style.display = 'none';
     if (errorEl) errorEl.style.display = 'flex';
   }
 }
 
-async function fetchHeatmapData(baseUrl, days) {
+async function fetchHeatmapData(baseUrl, days, signal) {
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
@@ -332,7 +390,7 @@ async function fetchHeatmapData(baseUrl, days) {
     url.searchParams.set('size', days);
 
     try {
-      const response = await fetch(url.toString());
+      const response = await fetch(url.toString(), { signal });
       if (response.ok) return await response.json();
       lastError = new Error(`Failed to fetch heatmap data: ${response.status}`);
     } catch (error) {

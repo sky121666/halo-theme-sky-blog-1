@@ -1,6 +1,6 @@
 <!-- ========================================== -->
 <!--        瞬间详情页（跳转使用）                 -->
-<!-- 兼容基线：PluginMoments v1.16.0；插件变量：moment，评论 subject 为 moment.halo.run/Moment。 -->
+<!-- 兼容基线：PluginMoments v1.16.1；插件变量：moment，评论 subject 为 moment.halo.run/Moment。 -->
 <!-- ========================================== -->
 <th:block th:fragment="content">
 
@@ -30,20 +30,25 @@
           <!-- 头部：头像 + 用户名 + 时间 -->
           <div class="flex items-center gap-3 mb-3">
             <div class="avatar">
-              <a th:href="@{/authors/{name}(name=${moment.owner.name})}"
+              <a th:if="${moment.owner?.name != null}" th:href="@{/authors/{name}(name=${moment.owner?.name})}"
                 class="w-11 h-11 rounded-xl bg-base-200 block transition-transform active:scale-95">
-                <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}"
-                  th:alt="${moment.owner.displayName}" />
+                <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner?.avatar}"
+                  th:alt="${moment.owner?.displayName}" />
                 <div th:if="${moment.owner?.avatar == null}"
                   class="w-full h-full flex items-center justify-center text-base-content/40 font-semibold"
-                  th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner.displayName, 0, 1) : 'U'}">
+                  th:text="${moment.owner?.displayName != null ? #strings.substring(moment.owner?.displayName, 0, 1) : 'U'}">
                   U</div>
               </a>
+              <div th:unless="${moment.owner?.name != null}"
+                class="w-11 h-11 rounded-xl bg-base-200 flex items-center justify-center text-base-content/40 font-semibold"
+                aria-label="作者已注销">U</div>
             </div>
             <div class="flex-1 min-w-0">
-              <a th:href="@{/authors/{name}(name=${moment.owner.name})}"
+              <a th:if="${moment.owner?.name != null}" th:href="@{/authors/{name}(name=${moment.owner?.name})}"
                 class="font-semibold text-primary text-sm truncate hover:underline"
                 th:text="${moment.owner?.displayName ?: '匿名用户'}">用户名</a>
+              <span th:unless="${moment.owner?.name != null}"
+                class="font-semibold text-base-content/60 text-sm truncate">作者已注销</span>
               <div class="text-xs text-base-content/40"
                 th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}">11-27 14:00</div>
             </div>
@@ -64,6 +69,7 @@
                   th:if="${medium.type.name == 'PHOTO'}"
                   th:href="${medium.url}"
                   th:attr="data-src=${medium.url}"
+                  data-no-swup
                   class="moment-single-img-wrap"
                 >
                   <img th:src="${medium.url}" alt="瞬间图片" class="max-h-72 object-cover" loading="lazy" />
@@ -99,7 +105,7 @@
                 }">
               <th:block th:each="medium, stat : ${nonPostMedia}">
                 <a th:if="${medium.type.name == 'PHOTO' && stat.index < 9}" th:href="${medium.url}"
-                  th:attr="data-src=${medium.url}" class="moment-grid-item" th:classappend="${
+                  th:attr="data-src=${medium.url}" data-no-swup class="moment-grid-item" th:classappend="${
                     #lists.size(nonPostMedia) == 3 && stat.index == 0 ? 'col-span-2 row-span-2 aspect-square' :
                     #lists.size(nonPostMedia) == 3 && stat.index > 0 ? 'col-span-1 aspect-square' :
                     #lists.size(nonPostMedia) == 5 && stat.index < 2 ? 'col-span-3 aspect-[4/3]' :

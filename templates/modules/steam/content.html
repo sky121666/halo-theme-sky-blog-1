@@ -3,7 +3,7 @@
 
 <!-- ========================================== -->
 <!--        Steam 游戏库主体内容 (异步加载)      -->
-<!-- 兼容基线：halo-plugin-steam v0.4.0；当前运行态优先消费 /apis/api.steam.timxs.com/v1alpha1/*，并兼容文档中的 /apis/api.steam.halo.run/v1alpha1/*。 -->
+<!-- 兼容基线：halo-plugin-steam v1.0.0；消费 /apis/api.steam.timxs.com/v1alpha1/*，并兼容旧版 appid 字段。 -->
 <!-- ========================================== -->
 
 <main class="steam-page relative" th:fragment="steam-content" x-data="steamPage()" x-init="init()">
@@ -11,9 +11,11 @@
   <div class="max-w-6xl mx-auto px-4 py-8">
 
     <!-- 错误提示 -->
-    <div x-show="error" x-cloak class="alert alert-warning mb-6 rounded-2xl steam-animate-in">
+    <div x-show="error" x-cloak class="alert alert-warning mb-6 rounded-2xl steam-animate-in"
+      data-steam-section-error="profile" role="alert" aria-live="polite">
       <span class="icon-[heroicons--exclamation-triangle] w-5 h-5"></span>
       <span x-text="error">部分 Steam 数据加载失败，请稍后刷新重试或检查插件配置。</span>
+      <button type="button" class="btn btn-sm" @click="loadProfile()">重试资料</button>
     </div>
 
     <!-- ========================================== -->
@@ -126,6 +128,12 @@
           </div>
         </div>
 
+        <div x-show="!loading.badges && errors.badges" x-cloak class="alert alert-warning steam-sidebar-card"
+          data-steam-section-error="badges" role="alert" aria-live="polite">
+          <span x-text="errors.badges">徽章数据加载失败</span>
+          <button type="button" class="btn btn-xs" @click="loadBadges()">重试</button>
+        </div>
+
         <!-- 统计信息 - 骨架屏 -->
         <div x-show="loading.stats" class="steam-sidebar-card steam-stats-list">
           <div class="steam-stat-item">
@@ -157,6 +165,12 @@
             <span class="steam-stat-value text-primary"
               x-text="((stats?.recentPlaytimeMinutes || 0) / 60).toFixed(1) + 'h'">0h</span>
           </div>
+        </div>
+
+        <div x-show="!loading.stats && errors.stats" x-cloak class="alert alert-warning steam-sidebar-card"
+          data-steam-section-error="stats" role="alert" aria-live="polite">
+          <span x-text="errors.stats">统计数据加载失败</span>
+          <button type="button" class="btn btn-xs" @click="loadStats()">重试</button>
         </div>
       </div>
     </div>
@@ -192,9 +206,20 @@
       <!-- 实际内容 -->
       <div x-show="!loading.recent && recentGames.length > 0" x-cloak class="steam-library-grid">
         <template x-for="(game, idx) in recentGames.filter(g => (g.appid || g.appId)).slice(0, 10)" :key="(game.appid || game.appId) + '-' + idx">
-          <a :href="'https://store.steampowered.com/app/' + (game.appid || game.appId)" target="_blank" class="steam-game-card">
+          <a :href="config.enableGameLink ? 'https://store.steampowered.com/app/' + (game.appid || game.appId) : null"
+            :target="config.enableGameLink ? '_blank' : null" :rel="config.enableGameLink ? 'noopener noreferrer' : null"
+            :aria-disabled="!config.enableGameLink" @click="if (!config.enableGameLink) $event.preventDefault()"
+            class="steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
             <div class="steam-game-card-image">
-              <img :src="game.headerImageUrl" :alt="game.name" loading="lazy" decoding="async" class="steam-game-img" />
+              <img x-show="game.headerImageUrl || game.realHeaderImage"
+                :src="game.headerImageUrl || game.realHeaderImage || null" :alt="game.name" loading="lazy"
+                decoding="async" class="steam-game-img" />
+              <div x-show="!game.headerImageUrl && !game.realHeaderImage" class="steam-game-image-placeholder"
+                aria-hidden="true">
+                <span class="icon-[heroicons--photo] w-7 h-7"></span>
+                <span>暂无封面</span>
+              </div>
+              <span x-show="game.delisted" x-cloak class="steam-game-unavailable-badge">不可用</span>
             </div>
             <div class="steam-game-card-info">
               <div class="steam-game-card-name" x-text="game.name">Game</div>
@@ -213,8 +238,14 @@
         </template>
       </div>
 
+      <div x-show="!loading.recent && errors.recent" x-cloak class="alert alert-warning"
+        data-steam-section-error="recent" role="alert" aria-live="polite">
+        <span x-text="errors.recent">最近游玩加载失败</span>
+        <button type="button" class="btn btn-sm" @click="loadRecent()">重试</button>
+      </div>
+
       <!-- 空状态 -->
-      <div x-show="!loading.recent && recentGames.length === 0" x-cloak class="steam-empty-state">
+      <div x-show="!loading.recent && !errors.recent && recentGames.length === 0" x-cloak class="steam-empty-state">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无最近游玩</div>
       </div>
@@ -248,12 +279,22 @@
 
       <!-- 实际内容 -->
       <div x-show="!loading.games && games.items.length > 0" x-cloak class="steam-library-grid">
-        <template x-for="(game, idx) in games.items.filter(g => (g.appid || g.appId) && g.headerImageUrl)"
+        <template x-for="(game, idx) in games.items.filter(g => (g.appid || g.appId))"
           :key="(game.appid || game.appId) + '-games-' + idx">
-          <a th:if="${enableGameLink}" :href="'https://store.steampowered.com/app/' + (game.appid || game.appId)"
-            target="_blank" class="steam-game-card">
+          <a :href="config.enableGameLink ? 'https://store.steampowered.com/app/' + (game.appid || game.appId) : null"
+            :target="config.enableGameLink ? '_blank' : null" :rel="config.enableGameLink ? 'noopener noreferrer' : null"
+            :aria-disabled="!config.enableGameLink" @click="if (!config.enableGameLink) $event.preventDefault()"
+            class="steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
             <div class="steam-game-card-image">
-              <img :src="game.headerImageUrl" :alt="game.name" loading="lazy" decoding="async" class="steam-game-img" />
+              <img x-show="game.headerImageUrl || game.realHeaderImage"
+                :src="game.headerImageUrl || game.realHeaderImage || null" :alt="game.name" loading="lazy"
+                decoding="async" class="steam-game-img" />
+              <div x-show="!game.headerImageUrl && !game.realHeaderImage" class="steam-game-image-placeholder"
+                aria-hidden="true">
+                <span class="icon-[heroicons--photo] w-7 h-7"></span>
+                <span>暂无封面</span>
+              </div>
+              <span x-show="game.delisted" x-cloak class="steam-game-unavailable-badge">不可用</span>
             </div>
             <div class="steam-game-card-info">
               <div class="steam-game-card-name" x-text="game.name">Game</div>
@@ -267,8 +308,14 @@
         </template>
       </div>
 
+      <div x-show="!loading.games && errors.games" x-cloak class="alert alert-warning"
+        data-steam-section-error="games" role="alert" aria-live="polite">
+        <span x-text="errors.games">游戏库加载失败</span>
+        <button type="button" class="btn btn-sm" @click="loadGames(games.page || 1)">重试</button>
+      </div>
+
       <!-- 空状态 -->
-      <div x-show="!loading.games && games.items.length === 0" x-cloak class="steam-empty-state">
+      <div x-show="!loading.games && !errors.games && games.items.length === 0" x-cloak class="steam-empty-state">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无游戏数据</div>
         <div class="steam-empty-desc">游戏库为空，请检查 Steam 账号设置</div>

@@ -41,11 +41,23 @@
             ></div>
 
             <img
+              th:if="${spec.logo != null and !spec.logo.isEmpty()}"
               th:src="${spec.logo}"
-              th:alt="|${spec.author} 头像|"
+              th:alt="|${spec.author ?: '朋友'} 头像|"
               class="ring-base-content/10 group-hover:ring-primary/30 relative h-12 w-12 rounded-xl object-cover ring-1 motion-safe:transition-all motion-safe:duration-300"
               loading="lazy"
+              onerror="
+                this.hidden = true;
+                this.nextElementSibling.hidden = false;
+              "
             />
+            <span
+              th:hidden="${spec.logo != null and !spec.logo.isEmpty()}"
+              aria-hidden="true"
+              class="ring-base-content/10 text-base-content/40 bg-base-200 relative flex h-12 w-12 items-center justify-center rounded-xl ring-1"
+            >
+              <span class="icon-[heroicons--user] h-6 w-6"></span>
+            </span>
           </div>
 
           <!-- Author Info -->
@@ -107,11 +119,23 @@
                 class="from-primary/30 via-secondary/20 to-accent/30 absolute -inset-1.5 rounded-xl bg-gradient-to-br opacity-0 blur-md group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500"
               ></div>
               <img
+                th:if="${spec.logo != null and !spec.logo.isEmpty()}"
                 th:src="${spec.logo}"
-                th:alt="|${spec.author} 头像|"
+                th:alt="|${spec.author ?: '朋友'} 头像|"
                 class="ring-base-content/10 group-hover:ring-primary/30 relative h-10 w-10 rounded-xl object-cover ring-1 motion-safe:transition-all"
                 loading="lazy"
+                onerror="
+                  this.hidden = true;
+                  this.nextElementSibling.hidden = false;
+                "
               />
+              <span
+                th:hidden="${spec.logo != null and !spec.logo.isEmpty()}"
+                aria-hidden="true"
+                class="ring-base-content/10 text-base-content/40 bg-base-200 relative flex h-10 w-10 items-center justify-center rounded-xl ring-1"
+              >
+                <span class="icon-[heroicons--user] h-5 w-5"></span>
+              </span>
             </div>
             <span class="text-base-content truncate text-sm font-bold" th:text="${spec.author}">作者</span>
           </div>

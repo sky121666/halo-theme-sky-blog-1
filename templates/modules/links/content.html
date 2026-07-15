@@ -9,9 +9,11 @@
   <!-- 友链内容片段 -->
   <main
     class="relative"
+    data-links-page
     th:fragment="links-content"
     th:with="rootCfg = ${theme.config.links_settings},
            cfg = ${rootCfg.basic_info},
+           hasLinkSubmitPlugin = ${pluginFinder.available('link-submit', '>=1.0.7')},
            sidebarCfg = ${rootCfg.sidebar_settings},
            globalSidebarCfg = ${theme.config.general.sidebar_settings},
            useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
@@ -38,11 +40,49 @@
             </div>
           </header>
 
-          <!-- 分组展示 -->
-          <div class="space-y-10" th:if="${groups != null and !#lists.isEmpty(groups)}">
-            <th:block th:each="group, groupStat : ${groups}">
+          <!-- PluginLinks 2.0.0 官方 group 路由：simpleGroups 生成筛选，links 承载当前分组结果。 -->
+          <nav
+            class="mb-8 flex gap-2 overflow-x-auto pb-2"
+            aria-label="友链分组"
+            data-link-group-navigation
+            th:if="${simpleGroups != null and !#lists.isEmpty(simpleGroups)}"
+          >
+            <a
+              th:href="@{/links}"
+              data-link-group-filter="all"
+              th:attr="aria-current=${#strings.isEmpty(group) ? 'page' : null}"
+              th:classappend="${#strings.isEmpty(group) ? 'bg-primary text-primary-content border-primary' : ''}"
+              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+            >
+              全部
+            </a>
+            <a
+              th:each="groupOption : ${simpleGroups}"
+              th:href="@{/links(group=${groupOption.metadata.name})}"
+              th:text="${groupOption.spec.displayName ?: '未命名分组'}"
+              th:data-link-group-filter="${groupOption.metadata.name}"
+              th:attr="aria-current=${group == groupOption.metadata.name ? 'page' : null}"
+              th:classappend="${group == groupOption.metadata.name ? 'bg-primary text-primary-content border-primary' : ''}"
+              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+            >
+              分组
+            </a>
+          </nav>
+
+          <!-- 分组展示。循环变量不得命名为 group，否则会遮蔽路由注入的 group 字符串。 -->
+          <div
+            class="space-y-10"
+            data-link-groups
+            th:if="${#strings.isEmpty(group) ? (groups != null and !#lists.isEmpty(groups)) : (links != null and !#lists.isEmpty(links))}"
+          >
+            <th:block th:each="linkGroup : ${groups}">
               <!-- 分组区块 -->
-              <section class="link-group">
+              <section
+                class="link-group"
+                th:if="${#strings.isEmpty(group) or linkGroup.metadata.name == group}"
+                th:with="displayLinks=${#strings.isEmpty(group) ? linkGroup.links : links}"
+                th:data-link-group-section="${linkGroup.metadata.name}"
+              >
                 <!-- 分组标题 -->
                 <div class="mb-5 flex items-center gap-3">
                   <div
@@ -50,17 +90,25 @@
                   >
                     <span class="icon-[heroicons--folder] text-primary h-4 w-4"></span>
                   </div>
-                  <h2 class="text-base-content text-lg font-semibold" th:text="${group.spec.displayName}">分组名称</h2>
+                  <h2
+                    class="text-base-content text-lg font-semibold"
+                    th:text="${linkGroup.spec.displayName ?: '未分组'}"
+                  >
+                    分组名称
+                  </h2>
                   <span
                     class="text-base-content/40 bg-base-200/60 rounded-full px-2 py-0.5 text-xs"
-                    th:text="${#lists.size(group.links)}"
+                    th:text="${displayLinks == null ? 0 : #lists.size(displayLinks)}"
                   ></span>
                 </div>
 
                 <!-- 链接卡片网格 - Apple Bento风格 -->
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                  th:if="${displayLinks != null and !#lists.isEmpty(displayLinks)}"
+                >
                   <a
-                    th:each="link : ${group.links}"
+                    th:each="link : ${displayLinks}"
                     th:href="${link.spec.url}"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -111,20 +159,32 @@
                     </div>
                   </a>
                 </div>
+                <p
+                  class="text-base-content/50 rounded-2xl border border-dashed py-8 text-center text-sm"
+                  th:if="${displayLinks == null or #lists.isEmpty(displayLinks)}"
+                >
+                  该分组暂无友情链接
+                </p>
               </section>
             </th:block>
           </div>
 
           <!-- 无友链提示 -->
           <div
-            th:if="${groups == null or #lists.isEmpty(groups)}"
+            th:if="${#strings.isEmpty(group) ? (groups == null or #lists.isEmpty(groups)) : (links == null or #lists.isEmpty(links))}"
+            data-links-empty
             class="bg-base-100/60 border-base-content/5 rounded-2xl border backdrop-blur-xl"
           >
             <div class="flex flex-col items-center justify-center py-20">
               <div class="bg-base-200/60 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
                 <span class="icon-[heroicons--link-slash] text-base-content/30 h-8 w-8"></span>
               </div>
-              <p class="text-base-content/50">暂无友情链接</p>
+              <p
+                class="text-base-content/50"
+                th:text="${#strings.isEmpty(group) ? '暂无友情链接' : '该分组不存在或暂无友情链接'}"
+              >
+                暂无友情链接
+              </p>
             </div>
           </div>
 
@@ -170,26 +230,75 @@
 
                 <!-- Apply Button (Second/Right - Primary) -->
                 <button
-                  th:if="${pluginFinder.available('link-submit')}"
-                  onclick="document.getElementById('link-submit-modal').showModal()"
+                  th:if="${hasLinkSubmitPlugin}"
+                  type="button"
+                  data-link-submit-trigger
+                  data-link-submit-script="/plugins/link-submit/assets/static/link-submit-widget.iife.js?version=1.0.7"
+                  data-link-submit-style="/plugins/link-submit/assets/static/var.css?version=1.0.7"
+                  aria-describedby="link-submit-runtime-status"
                   class="btn btn-primary btn-sm md:btn-md shadow-primary/20 hover:shadow-primary/30 rounded-xl font-bold shadow-lg transition-all"
                 >
                   <span class="icon-[heroicons--plus] h-4 w-4"></span>
                   <span class="hidden sm:inline">立即申请</span>
                   <span class="sm:hidden">申请</span>
                 </button>
-                <!-- Fallback -->
-                <a
-                  th:unless="${pluginFinder.available('link-submit')}"
-                  href="https://www.halo.run/store/apps/app-glejqzwk"
-                  target="_blank"
-                  class="btn btn-warning btn-sm md:btn-md rounded-xl shadow-lg"
-                >
-                  <span class="icon-[heroicons--arrow-down-tray] h-4 w-4"></span>
-                  安装插件
-                </a>
+                <!-- 插件不可用或官方组件资源加载失败时，使用站点自己的申请渠道。 -->
+                <th:block th:with="applyUrl=${#strings.trim(rootCfg.apply_settings.apply_url ?: '')}">
+                  <a
+                    th:if="${!applyUrl.isEmpty() and applyUrl != '#' and applyUrl != '/#'}"
+                    th:href="${applyUrl}"
+                    th:target="${#strings.startsWith(applyUrl, 'http')} ? '_blank' : null"
+                    th:hidden="${hasLinkSubmitPlugin}"
+                    data-link-submit-fallback
+                    rel="noopener"
+                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
+                  >
+                    <span class="icon-[heroicons--arrow-top-right-on-square] h-4 w-4"></span>
+                    前往申请
+                  </a>
+                  <a
+                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment != false}"
+                    href="#links-comments"
+                    th:hidden="${hasLinkSubmitPlugin}"
+                    data-link-submit-fallback
+                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
+                  >
+                    <span class="icon-[heroicons--chat-bubble-left-right] h-4 w-4"></span>
+                    留言申请
+                  </a>
+                  <a
+                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment == false and !#strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
+                    th:href="|mailto:${rootCfg.apply_settings.blogger_email}|"
+                    th:hidden="${hasLinkSubmitPlugin}"
+                    data-link-submit-fallback
+                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
+                  >
+                    <span class="icon-[heroicons--envelope] h-4 w-4"></span>
+                    邮件申请
+                  </a>
+                  <button
+                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment == false and #strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
+                    type="button"
+                    th:hidden="${hasLinkSubmitPlugin}"
+                    data-link-submit-fallback
+                    disabled
+                    class="btn btn-disabled btn-sm md:btn-md rounded-xl"
+                  >
+                    暂未开放申请
+                  </button>
+                </th:block>
               </div>
             </div>
+            <p
+              th:if="${hasLinkSubmitPlugin}"
+              id="link-submit-runtime-status"
+              data-link-submit-status
+              role="status"
+              aria-live="polite"
+              tabindex="-1"
+              hidden
+              class="text-warning mt-3 text-sm"
+            ></p>
 
             <!-- 2. Site Info Modal (Refined Left-Layout) -->
             <dialog
@@ -347,156 +456,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <form method="dialog" class="modal-backdrop"><button>close</button></form>
-            </dialog>
-
-            <!-- 3. Link Submit Modal (Form) - Restored from original logic -->
-            <dialog
-              id="link-submit-modal"
-              class="modal modal-bottom sm:modal-middle"
-              th:if="${pluginFinder.available('link-submit')}"
-            >
-              <div
-                class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl"
-                x-data="linkSubmitForm()"
-              >
-                <div class="mb-6 flex items-center justify-between">
-                  <h3 class="text-base-content text-lg font-bold">提交友链申请</h3>
-                  <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost">✕</button></form>
-                </div>
-
-                <form @submit.prevent="submitLink" class="space-y-5">
-                  <!-- Top: Essential Info -->
-                  <div class="form-control">
-                    <label class="label"
-                      ><span class="label-text text-base-content/80 font-medium"
-                        >网站名称 <span class="text-error">*</span></span
-                      ></label
-                    >
-                    <input
-                      type="text"
-                      x-model="form.displayName"
-                      required
-                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full transition-all focus:ring-1"
-                      placeholder="例如：我的博客"
-                    />
-                  </div>
-
-                  <div class="form-control">
-                    <label class="label"
-                      ><span class="label-text text-base-content/80 font-medium"
-                        >网站地址 <span class="text-error">*</span></span
-                      ></label
-                    >
-                    <input
-                      type="url"
-                      x-model="form.url"
-                      required
-                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-sm transition-all focus:ring-1"
-                      placeholder="https://example.com"
-                    />
-                  </div>
-
-                  <div class="form-control">
-                    <label class="label"
-                      ><span class="label-text text-base-content/80 font-medium"
-                        >联系邮箱 <span class="text-error">*</span></span
-                      ></label
-                    >
-                    <input
-                      type="email"
-                      x-model="form.email"
-                      required
-                      class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full transition-all focus:ring-1"
-                      placeholder="用于接收审核通知"
-                    />
-                  </div>
-
-                  <div class="form-control">
-                    <label class="label"
-                      ><span class="label-text text-base-content/80 font-medium">网站描述</span></label
-                    >
-                    <textarea
-                      x-model="form.description"
-                      rows="3"
-                      class="textarea textarea-bordered bg-base-100 focus:border-primary focus:ring-primary w-full resize-none leading-relaxed transition-all focus:ring-1"
-                      placeholder="一句话介绍你的网站..."
-                    ></textarea>
-                  </div>
-
-                  <!-- Middle: Assets (Grid) -->
-                  <div class="grid grid-cols-2 gap-4">
-                    <div class="form-control">
-                      <label class="label"
-                        ><span class="label-text text-base-content/80 font-medium">Logo 地址</span></label
-                      >
-                      <input
-                        type="url"
-                        x-model="form.logo"
-                        class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-xs transition-all focus:ring-1"
-                        placeholder="https://..."
-                      />
-                    </div>
-                    <div class="form-control">
-                      <label class="label"
-                        ><span class="label-text text-base-content/80 font-medium">RSS 地址</span></label
-                      >
-                      <input
-                        type="url"
-                        x-model="form.rssUrl"
-                        class="input input-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-mono text-xs transition-all focus:ring-1"
-                        placeholder="https://..."
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Bottom: Group -->
-                  <div class="form-control" x-show="groups.length > 0">
-                    <label class="label"
-                      ><span class="label-text text-base-content/80 font-medium">申请分组</span></label
-                    >
-                    <select
-                      x-model="form.groupName"
-                      class="select select-bordered bg-base-100 focus:border-primary focus:ring-primary w-full font-normal transition-all focus:ring-1"
-                    >
-                      <option value="">选择一个合适的分组...</option>
-                      <template x-for="group in groups" :key="group.groupName">
-                        <option :value="group.groupName" x-text="group.displayName"></option>
-                      </template>
-                    </select>
-                  </div>
-
-                  <div x-show="result.show" x-transition>
-                    <div class="alert shadow-sm" :class="result.success ? 'alert-success' : 'alert-error'">
-                      <span class="icon-[heroicons--information-circle] h-5 w-5"></span>
-                      <span x-text="result.message"></span>
-                    </div>
-                  </div>
-
-                  <div x-show="messageFallback" x-transition class="space-y-2">
-                    <textarea
-                      x-model="markdown"
-                      readonly
-                      rows="6"
-                      class="textarea textarea-bordered bg-base-100 w-full font-mono text-xs leading-relaxed"
-                    ></textarea>
-                    <p class="text-base-content/50 text-xs">复制后可粘贴到下方评论区留言申请。</p>
-                  </div>
-
-                  <div class="pt-2">
-                    <button
-                      type="submit"
-                      :disabled="submitting"
-                      class="btn btn-primary btn-block shadow-primary/20 rounded-xl shadow-lg"
-                    >
-                      <span x-show="submitting" class="loading loading-spinner loading-xs"></span>
-                      <span
-                        x-text="messageFallback ? (copied ? '已复制，去留言' : '复制申请内容') : (submitting ? '正在提交...' : '提交申请')"
-                      ></span>
-                    </button>
-                  </div>
-                </form>
               </div>
               <form method="dialog" class="modal-backdrop"><button>close</button></form>
             </dialog>

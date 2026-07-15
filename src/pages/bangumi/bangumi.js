@@ -3,7 +3,7 @@
  */
 
 import './bangumi.css';
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
+import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 /**
  * 鼠标悬停切换背景
@@ -14,6 +14,15 @@ function initHoverBackground() {
 
   const originalSrc = bgImg.src;
   let currentSrc = originalSrc;
+  const controller = new AbortController();
+  const timers = new Set();
+  const schedule = (callback, delay) => {
+    const timer = window.setTimeout(() => {
+      timers.delete(timer);
+      callback();
+    }, delay);
+    timers.add(timer);
+  };
 
   // 监听所有番剧卡片的悬停
   document.querySelectorAll('.bangumi-card').forEach(card => {
@@ -27,17 +36,17 @@ function initHoverBackground() {
         bgImg.style.opacity = '0';
         
         // 切换图片
-        setTimeout(() => {
+        schedule(() => {
           bgImg.src = newSrc;
           currentSrc = newSrc;
         }, 200);
         
         // 淡入
-        setTimeout(() => {
+        schedule(() => {
           bgImg.style.opacity = '0.4';
         }, 250);
       }
-    });
+    }, { signal: controller.signal });
   });
 
   // 鼠标离开卡片区域时恢复原背景（可选）
@@ -53,7 +62,12 @@ function initHoverBackground() {
   //     }, 250);
   //   }
   // });
+  return () => {
+    controller.abort();
+    timers.forEach((timer) => window.clearTimeout(timer));
+    timers.clear();
+  };
 }
 
-runPageInit(initHoverBackground);
+registerPageLifecycle(initHoverBackground, { entry: 'bangumi' });
 notifySwupPageReady();

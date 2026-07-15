@@ -8,9 +8,7 @@
 
   <head
     th:with="cfg = ${theme.config.equipment_settings?.basic_info},
-           pageTitle = ${cfg?.page_title ?: '装备'},
-           pageSubtitle = ${cfg?.page_subtitle ?: ''},
-           pageDesc = ${cfg?.page_description ?: '分享我日常使用的硬件与软件'}"
+           pageTitle = ${cfg?.page_title ?: '装备'}"
   >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,26 +26,8 @@
       装备
     </title>
 
-    <!-- SEO Meta -->
-    <meta name="description" th:content="${pageDesc}" />
-    <meta name="keywords" th:content="'装备, 好物, ' + ${site.title}" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" th:content="${pageTitle}" />
-    <meta property="og:description" th:content="${pageDesc}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" th:content="@{/equipments}" />
-    <meta property="og:site_name" th:content="${site.title}" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" th:content="${pageTitle}" />
-    <meta name="twitter:description" th:content="${pageDesc}" />
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
-    <!-- Canonical URL -->
-    <link rel="canonical" th:href="@{/equipments}" />
 
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
@@ -56,8 +36,8 @@
       rel="stylesheet"
     />
     <!-- 主题样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version='2.2.23')}" />
-    <link rel="stylesheet" th:href="@{/assets/css/equipment.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/equipment.css?v={version}(version=${theme.spec.version})}" />
 
     <!-- 音乐播放器 CSS -->
     <th:block th:replace="~{modules/music-player :: head}" />
@@ -101,11 +81,11 @@
     <div id="swup-scripts" hidden>
       <script
         type="module"
-        th:src="@{/assets/js/equipment.js?v={version}(version='2.2.23')}"
+        th:src="@{/assets/js/equipment.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script
       ></script>
     </div>
-    <script type="module" th:src="@{/assets/js/main.js?v={version}(version='2.2.23')}"></script>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
     <!-- 悬浮音乐播放器 -->
     <th:block th:replace="~{modules/music-player :: player}" />
   </body>

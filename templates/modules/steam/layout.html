@@ -29,8 +29,8 @@
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version='2.2.23')}" />
-    <link rel="stylesheet" th:href="@{/assets/css/steam.css?v={version}(version='2.2.23')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <link rel="stylesheet" th:href="@{/assets/css/steam.css?v={version}(version=${theme.spec.version})}" />
     <!-- 音乐播放器 CSS -->
     <th:block th:replace="~{modules/music-player :: head}" />
   </head>
@@ -41,25 +41,7 @@
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
     th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
-    x-data="{ gameBg: null }"
-    x-init="(async () => { for (const url of ['/apis/api.steam.timxs.com/v1alpha1/profile', '/apis/api.steam.halo.run/v1alpha1/profile']) { try { const r = await fetch(url); if (!r.ok) continue; const d = await r.json(); const gameId = d.summary?.gameId || d.summary?.gameid; if (d.playing && gameId) gameBg = gameId; break; } catch {} } })()"
   >
-    <!-- 动态游戏背景 (正在游玩时显示，异步加载) -->
-    <div x-show="gameBg" x-cloak class="pointer-events-none fixed inset-0 z-0">
-      <img
-        x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
-        class="h-full w-full object-cover opacity-20"
-        @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
-      />
-      <div class="via-base-100/80 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
-    </div>
-
-    <!-- 网格背景（仅当选择 grid 样式时显示） -->
-    <div
-      th:if="${enableCustomBg and bgStyle == 'grid'}"
-      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-    ></div>
-
     <div class="relative z-10">
       <!-- 加载屏幕 -->
       <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
@@ -77,6 +59,25 @@
     </div>
 
     <div id="swup-page-extras">
+      <!-- 页面专属 Alpine 状态必须跟随 PJAX extras 容器进入和离开。 -->
+      <div
+        x-data="{ gameBg: null }"
+        x-init="(async () => { for (const url of ['/apis/api.steam.timxs.com/v1alpha1/profile', '/apis/api.steam.halo.run/v1alpha1/profile']) { try { const r = await fetch(url); if (!r.ok) continue; const d = await r.json(); const gameId = d.summary?.gameId || d.summary?.gameid; if (d.playing && gameId) gameBg = gameId; break; } catch {} } })()"
+      >
+        <div x-show="gameBg" x-cloak class="steam-game-bg pointer-events-none fixed inset-0 z-0">
+          <img
+            x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
+            class="h-full w-full object-cover opacity-20"
+            @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
+          />
+          <div class="via-base-100/80 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
+        </div>
+      </div>
+      <div
+        th:if="${enableCustomBg and bgStyle == 'grid'}"
+        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+      ></div>
+
       <!-- 悬浮 Dock 控制栏 -->
       <th:block th:replace="~{modules/floating-dock :: dock}" />
     </div>
@@ -85,11 +86,11 @@
     <div id="swup-scripts" hidden>
       <script
         type="module"
-        th:src="@{/assets/js/steam.js?v={version}(version='2.2.23')}"
+        th:src="@{/assets/js/steam.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script
       ></script>
     </div>
-    <script type="module" th:src="@{/assets/js/main.js?v={version}(version='2.2.23')}"></script>
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
     <!-- 悬浮音乐播放器 -->
     <th:block th:replace="~{modules/music-player :: player}" />
   </body>

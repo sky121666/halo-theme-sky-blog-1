@@ -1179,21 +1179,34 @@
 }
 
 /* ===================================================
- * 22. Halo 联系表单
+ * 22. Text Diagram 正文容器
+ * 主题补渲染读取 html[data-color-scheme] 决定 Mermaid 暗色主题
  * ==================================================*/
-halo-contact-form {
-  --halo-contact-form-color-primary: var(--color-primary);
-  --halo-contact-form-color-label: var(--color-base-content);
-  --halo-contact-form-color-input: var(--color-base-content);
-  --halo-contact-form-color-placeholder: color-mix(in srgb, var(--color-base-content) 50%, transparent);
-  --halo-contact-form-color-help: color-mix(in srgb, var(--color-base-content) 60%, transparent);
-  --halo-contact-form-color-border: var(--color-base-300);
-  --halo-contact-form-color-danger: var(--color-error);
-  --halo-contact-form-color-button: var(--color-primary-content);
-  --halo-contact-form-bg-input: var(--color-base-100);
-  --halo-contact-form-border-radius: 0.5rem;
+#article-content text-diagram {
   display: block;
+  max-width: 100%;
   margin: 1.5em 0;
+  overflow-x: auto;
+}
+
+/* 正文型插件宿主只约束布局，不覆盖插件后台提供的配色。 */
+#article-content hyperlink-card,
+#article-content lottery-card,
+#article-content content-restrict-widget {
+  display: block;
+  max-width: 100%;
+}
+
+#article-content hyperlink-inline-card {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+#article-content .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* ===================================================

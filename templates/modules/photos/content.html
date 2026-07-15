@@ -70,11 +70,14 @@
           <div
             th:style="'animation-delay: ' + (${stat.index} * 35) + 'ms;'"
             class="photo-item animate-fade-in-up group break-inside-avoid"
-            tabindex="0"
           >
             <img
               th:src="${photo.spec.url}"
               th:alt="${photo.spec.displayName}"
+              th:attr="data-src=${photo.spec.url},aria-label=${'打开图片：' + (#strings.isEmpty(photo.spec.displayName) ? '未命名图片' : photo.spec.displayName)}"
+              data-photo-lightbox-trigger
+              role="button"
+              tabindex="0"
               class="h-auto w-full object-cover"
               loading="lazy"
             />
@@ -149,6 +152,11 @@
         <div id="loading-spinner" class="text-base-content/50 flex hidden items-center gap-2">
           <span class="loading loading-spinner loading-sm"></span>
           <span class="text-sm font-medium">加载更多...</span>
+        </div>
+
+        <div id="photos-load-error" class="alert alert-warning hidden max-w-md" role="alert" aria-live="polite">
+          <span>更多照片加载失败。</span>
+          <button id="photos-load-retry" class="btn btn-sm" type="button">重试</button>
         </div>
 
         <div

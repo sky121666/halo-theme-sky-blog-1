@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title th:text="${#strings.defaultString(title, '维护中')} + ' - ' + ${site.title}">维护中</title>
+    <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <style>
+      #maintenance-page {
+        min-height: 100%;
+        margin: 0;
+        color: var(--color-base-content, #1f2937);
+        background:
+          radial-gradient(
+            circle at 18% 16%,
+            color-mix(in srgb, var(--color-primary, #6366f1) 18%, transparent),
+            transparent 34rem
+          ),
+          radial-gradient(
+            circle at 82% 84%,
+            color-mix(in srgb, var(--color-secondary, #8b5cf6) 14%, transparent),
+            transparent 30rem
+          ),
+          var(--color-base-100, #f8fafc);
+      }
+
+      .maintenance-shell {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.25rem;
+      }
+
+      .maintenance-card {
+        position: relative;
+        width: min(100%, 42rem);
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--color-base-content, #1f2937) 10%, transparent);
+        border-radius: 2rem;
+        padding: clamp(2rem, 6vw, 4rem);
+        text-align: center;
+        background: color-mix(in srgb, var(--color-base-100, #fff) 88%, transparent);
+        box-shadow: 0 2rem 5rem color-mix(in srgb, var(--color-base-content, #111827) 12%, transparent);
+        backdrop-filter: blur(1.5rem);
+      }
+
+      .maintenance-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 15% auto;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-primary, #6366f1), transparent);
+      }
+
+      .maintenance-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 5rem;
+        height: 5rem;
+        margin-bottom: 1.75rem;
+        border-radius: 1.5rem;
+        color: var(--color-primary, #6366f1);
+        background: color-mix(in srgb, var(--color-primary, #6366f1) 12%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary, #6366f1) 16%, transparent);
+      }
+
+      .maintenance-icon svg {
+        width: 2.5rem;
+        height: 2.5rem;
+        animation: maintenance-spin 10s linear infinite;
+      }
+
+      .maintenance-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        color: color-mix(in srgb, var(--color-base-content, #1f2937) 62%, transparent);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .maintenance-kicker::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: var(--color-warning, #f59e0b);
+        box-shadow: 0 0 1rem color-mix(in srgb, var(--color-warning, #f59e0b) 65%, transparent);
+      }
+
+      .maintenance-title {
+        margin: 0;
+        font-size: clamp(2rem, 7vw, 3.75rem);
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+      }
+
+      .maintenance-description {
+        max-width: 34rem;
+        margin: 1.5rem auto 0;
+        color: color-mix(in srgb, var(--color-base-content, #1f2937) 66%, transparent);
+        font-size: clamp(1rem, 2.5vw, 1.125rem);
+        line-height: 1.85;
+      }
+
+      .maintenance-description > :first-child {
+        margin-top: 0;
+      }
+
+      .maintenance-description > :last-child {
+        margin-bottom: 0;
+      }
+
+      .maintenance-retry {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        border: 0;
+        border-radius: 999px;
+        color: var(--color-primary-content, #fff);
+        background: var(--color-primary, #6366f1);
+        box-shadow: 0 0.75rem 2rem color-mix(in srgb, var(--color-primary, #6366f1) 28%, transparent);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .maintenance-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+      }
+
+      .maintenance-actions .maintenance-retry {
+        margin-top: 0;
+      }
+
+      .maintenance-home {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid color-mix(in srgb, var(--color-base-content, #1f2937) 14%, transparent);
+        border-radius: 999px;
+        color: var(--color-base-content, #1f2937);
+        text-decoration: none;
+        font-weight: 700;
+        transition:
+          transform 180ms ease,
+          background-color 180ms ease;
+      }
+
+      .maintenance-home:hover {
+        transform: translateY(-2px);
+        background: color-mix(in srgb, var(--color-base-content, #1f2937) 6%, transparent);
+      }
+
+      .maintenance-home:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--color-primary, #6366f1) 38%, transparent);
+        outline-offset: 4px;
+      }
+
+      .maintenance-retry:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 1rem 2.5rem color-mix(in srgb, var(--color-primary, #6366f1) 34%, transparent);
+      }
+
+      .maintenance-retry:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--color-primary, #6366f1) 38%, transparent);
+        outline-offset: 4px;
+      }
+
+      .maintenance-site {
+        margin-top: 1.5rem;
+        color: color-mix(in srgb, var(--color-base-content, #1f2937) 42%, transparent);
+        font-size: 0.8125rem;
+      }
+
+      @keyframes maintenance-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .maintenance-icon svg {
+          animation: none;
+        }
+
+        .maintenance-retry,
+        .maintenance-home {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body id="maintenance-page" data-plugin-contract="maintenance@1.1.0">
+    <main class="maintenance-shell">
+      <section class="maintenance-card" aria-labelledby="maintenance-title" aria-describedby="maintenance-description">
+        <div class="maintenance-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.34 2.94c.43-1.25 2.2-1.25 2.63 0l.23.68a1.4 1.4 0 0 0 1.75.87l.69-.22c1.26-.4 2.15 1.13 1.32 2.16l-.46.56a1.4 1.4 0 0 0 .23 1.95l.55.47c1.01.85.13 2.38-1.18 2.16l-.71-.12a1.4 1.4 0 0 0-1.52 1.08l-.17.7c-.3 1.29-2.07 1.29-2.48.03l-.22-.68a1.4 1.4 0 0 0-1.75-.87l-.69.22c-1.26.4-2.15-1.13-1.32-2.16l.46-.56a1.4 1.4 0 0 0-.23-1.95l-.55-.47c-1.01-.85-.13-2.38 1.18-2.16l.71.12a1.4 1.4 0 0 0 1.52-1.08l.17-.7Z"
+            />
+            <circle cx="11.65" cy="8.25" r="2.25" />
+            <path stroke-linecap="round" d="M4 20h16" />
+          </svg>
+        </div>
+        <div class="maintenance-kicker">System maintenance</div>
+        <h1 id="maintenance-title" class="maintenance-title" th:text="${#strings.defaultString(title, '站点正在维护')}">
+          站点正在维护
+        </h1>
+        <div
+          id="maintenance-description"
+          class="maintenance-description"
+          th:utext="${#strings.defaultString(description, '我们正在进行短暂维护，请稍后再来。')}"
+        >
+          我们正在进行短暂维护，请稍后再来。
+        </div>
+        <div class="maintenance-actions">
+          <button type="button" class="maintenance-retry" onclick="location.reload()">重新检查</button>
+          <a class="maintenance-home" th:href="@{/}">返回首页</a>
+        </div>
+        <div class="maintenance-site" th:text="${site.title}">Site</div>
+      </section>
+    </main>
+  </body>
+</html>
