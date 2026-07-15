@@ -4,7 +4,7 @@
 
 [![Halo](https://img.shields.io/badge/Halo-2.23.0+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
-[![Node](https://img.shields.io/badge/Node-20+-brightgreen)](https://nodejs.org)
+[![Node](https://img.shields.io/badge/Node-24+-brightgreen)](https://nodejs.org)
 
 ## 📖 简介
 
@@ -12,11 +12,11 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 **核心特点**：
 
-- 🎨 35+ DaisyUI 主题，可视化预览切换
+- 🎨 35 套 DaisyUI 主题，可视化预览切换
 - 🧩 首页自由排印 Widget 组件流
 - 👾 独家 Illustration 动态怪兽表情登录
-- 📱 完美的响应式设计
-- ⚡ 极致的性能优化
+- 📱 面向移动端和桌面端的响应式布局
+- ⚡ 按页面拆分资源并适配 PJAX 生命周期
 - 🔧 灵活的后台配置
 - 🧩 丰富的插件适配
 
@@ -32,18 +32,18 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 | 功能             | 说明                                                         |
 | ---------------- | ------------------------------------------------------------ |
-| 🎨 35+ 主题      | DaisyUI 预设主题，可视化预览选择                             |
+| 🎨 35 套主题     | DaisyUI 预设主题，可视化预览选择                             |
 | 🌓 明暗切换      | 浅色/深色主题独立配置，全景背景蒙版                          |
 | 🧩 Widget 流     | 首页可拖拽式/自由排序功能模块组件流                          |
 | 👾 动态插画登录  | 认证页独家插画视线跟随、害羞看密码体验                       |
-| 📱 响应式        | 完美适配移动端和桌面端（带高斯模糊侧边栏）                   |
+| 📱 响应式        | 移动端和桌面端布局（带高斯模糊侧边栏）                       |
 | ⚡ 加载动画      | 多种动画样式，避免闪烁                                       |
 | 🎯 悬浮控制栏    | 多种样式可选                                                 |
 | 📝 列表风格      | 卡片/列表/杂志/极简                                          |
-| 🌐 背景定制      | 网格背景、天气联动特效、四大预设动效                         |
+| 🌐 背景定制      | 图片背景、天气联动和 3 种首页背景特效                        |
 | 📊 GitHub 热力图 | 贡献统计展示                                                 |
 | 🖼️ 高级图库      | JS Masonry 瀑布流、照片详情页、无限滚动、PJAX 适配           |
-| 📚 文档中心      | 无缝集成 Docsme 系列知识库展示                               |
+| 📚 文档中心      | 集成 Docsme 项目、目录、正文和评论                           |
 | 👤 作者主页      | 独立模板，支持文章/瞬间/动态展示                             |
 | 💻 极客终端      | 独家终端风格认证界面                                         |
 | 🧊 玻璃拟态      | 全局磨砂质感设计                                             |
@@ -51,7 +51,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 🔍 全局搜索      | 支持文章/页面/瞬间/分类搜索                                  |
 | 🎭 Iconify 图标  | 菜单/分类/标签/装备支持自定义图标选择器                      |
 | 📸 瞬间动态      | 前端发布瞬间，内置1/2/3/4+多图自适应瀑布流网格及弹性悬浮动画 |
-| 🧭 归档探索      | 全局无分页平铺时间树视图，扁平全候交互                       |
+| 🧭 归档探索      | 按年月组织的时间树视图，支持分页                             |
 
 ---
 
@@ -81,30 +81,34 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ### 插件模板
 
-| 模板   | 文件                                          | 依赖插件       | 说明                 |
-| ------ | --------------------------------------------- | -------------- | -------------------- |
-| 友链   | `links.html`                                  | plugin-links   | 友情链接展示         |
-| 图库   | `photos.html` / `photo.html`                  | plugin-photos  | 瀑布流图库、照片详情 |
-| 瞬间   | `moments.html` / `moment.html`                | plugin-moments | 瞬间列表/详情        |
-| 朋友圈 | `friends.html`                                | plugin-friends | RSS 聚合             |
-| 文档   | `docs.html` / `doc.html` / `doc-catalog.html` | plugin-docsme  | 知识库文档           |
-| 追番   | `bangumis.html`                               | plugin-bangumi | Bilibili 追番        |
-| Steam  | `steam.html`                                  | plugin-steam   | Steam 游戏库         |
+| 模板   | 文件                                          | 依赖插件                | 说明                 |
+| ------ | --------------------------------------------- | ----------------------- | -------------------- |
+| 友链   | `links.html`                                  | PluginLinks             | 友情链接展示         |
+| 图库   | `photos.html` / `photo.html`                  | PluginPhotos            | 瀑布流图库、照片详情 |
+| 瞬间   | `moments.html` / `moment.html`                | PluginMoments           | 瞬间列表/详情        |
+| 朋友圈 | `friends.html`                                | plugin-friends          | RSS 聚合             |
+| 文档   | `docs.html` / `doc.html` / `doc-catalog.html` | plugin-docsme           | 知识库文档           |
+| 追番   | `bangumis.html`                               | plugin-bilibili-bangumi | Bilibili 追番        |
+| Steam  | `steam.html`                                  | halo-plugin-steam       | Steam 游戏库         |
+| 装备   | `equipments.html`                             | plugin-equipment        | 装备分组展示         |
+| 豆瓣   | `douban.html`                                 | plugin-douban           | 类型、题材筛选       |
 
 ### 侧边栏小工具
 
-| 组件       | 说明                             | 依赖           |
-| ---------- | -------------------------------- | -------------- |
-| 作者卡片   | 头像、名称、简介、社交链接       | 无             |
-| 欢迎卡片   | 天气信息、问候语、日期显示       | 无             |
-| 最新文章   | 最新发布的文章列表               | 无             |
-| 热门文章   | 访问量最高的文章列表             | 无             |
-| 分类列表   | 文章分类导航                     | 无             |
-| 标签云     | 文章标签聚合                     | 无             |
-| 博客统计   | 文章数、分类数、标签数、最后更新 | 无             |
-| 追番卡片   | Bilibili 追番轮播展示            | plugin-bangumi |
-| Steam 卡片 | Steam 游戏信息展示               | plugin-steam   |
-| 广告位     | 自定义图片链接                   | 无             |
+| 组件       | 说明                             | 依赖                    |
+| ---------- | -------------------------------- | ----------------------- |
+| 作者卡片   | 头像、名称、简介、社交链接       | 无                      |
+| 欢迎卡片   | 天气信息、问候语、日期显示       | 无                      |
+| 最新文章   | 最新发布的文章列表               | 无                      |
+| 热门文章   | 访问量最高的文章列表             | 无                      |
+| 分类列表   | 文章分类导航                     | 无                      |
+| 标签云     | 文章标签聚合                     | 无                      |
+| 博客统计   | 文章数、分类数、标签数、最后更新 | 无                      |
+| 文章目录   | 当前正文标题导航                 | 无                      |
+| 归档导航   | 按年月定位文章                   | 无                      |
+| 追番卡片   | Bilibili 追番轮播展示            | plugin-bilibili-bangumi |
+| Steam 卡片 | Steam 游戏信息展示               | steam                   |
+| 在线统计   | 在线人数和访问统计               | online                  |
 
 ---
 
@@ -112,54 +116,62 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 | 技术         | 版本 | 说明       |
 | ------------ | ---- | ---------- |
-| Vite         | 7.x  | 构建工具   |
+| Vite         | 8.x  | 构建工具   |
 | Tailwind CSS | 4.x  | 原子化 CSS |
 | DaisyUI      | 5.x  | UI 组件库  |
 | Alpine.js    | 3.x  | 响应式框架 |
 | Thymeleaf    | 3.x  | 模板引擎   |
-| TypeScript   | 5.x  | 类型安全   |
+| TypeScript   | 6.x  | 类型安全   |
 
 ---
 
 ## 🔌 插件适配
 
-主题已适配以下插件，开箱即用：
+主题对以下插件提供模板、DOM 或样式集成。精确的契约版本、测试版本和证据以[插件适配矩阵](./docs/system/adaptation/plugin-adaptation.md)为准；本地主实例结果见[主 Halo 插件运行态审计](./docs/system/adaptation/main-halo-runtime-audit.md)。安装后仍需在目标 Halo 站点回归。下表中的 ✅ 只表示仓库存在主题集成，不表示当前站点安装版本已完成运行态测试；未进入矩阵的插件也不能自动视为兼容。
 
 ### 内容类
 
-| 插件        | 应用市场                                                     | GitHub                                                                   | 主题支持                                                           |
-| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| 瞬间管理    | [app-SnwWD](https://www.halo.run/store/apps/app-SnwWD)       | [plugin-moments](https://github.com/halo-sigs/plugin-moments)            | ✅ 前端发布、媒体上传                                              |
-| 朋友圈      | [app-yISsV](https://www.halo.run/store/apps/app-yISsV)       | [plugin-friends](https://github.com/halo-sigs/plugin-friends)            | ✅ RSS 聚合展示                                                    |
-| Docsme 文档 | [app-yffxw](https://www.halo.run/store/apps/app-yffxw)       | -                                                                        | ✅ 知识库文档、专属宽版路由模板；免费版 1.5.0，专业版/商业版 1.6.0 |
-| 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)              | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配                       |
-| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                | ✅ 友链书签、分组展示                                              |
-| 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/jiangqizheng/plugin-link-submit) | ✅ 自助申请                                                        |
+| 插件        | 应用市场                                                     | GitHub                                                                                    | 主题支持                                                             |
+| ----------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 瞬间管理    | [app-SnwWD](https://www.halo.run/store/apps/app-SnwWD)       | [plugin-moments](https://github.com/halo-sigs/plugin-moments)                             | ✅ 前端发布、媒体上传                                                |
+| 朋友圈      | [app-yISsV](https://www.halo.run/store/apps/app-yISsV)       | [plugin-friends](https://github.com/chengzhongxue/plugin-friends)                         | ✅ 1.4.6 与 PluginLinks 2.0.0 组合已通过；上游已归档                 |
+| Docsme 文档 | [app-yffxw](https://www.halo.run/store/apps/app-yffxw)       | -                                                                                         | ✅ 按 1.7.0 契约集成项目、目录、正文和 DocTree 评论                  |
+| 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配                         |
+| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链书签、分组展示                                                |
+| 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit)                        | ✅ 1.0.7 官方组件与 PJAX 弹窗通过；资源失败时保留多级降级            |
+| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.3 的全局主题变量；提交与上传待实站回归                        |
+| 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM 与 PJAX 重入通过；移动端和暗色专项待验收     |
+| 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归                        |
+| 限制阅读    | [app-TzRqd](https://www.halo.run/store/apps/app-TzRqd)       | -                                                                                         | ✅ 宿主、登录和文章/单页评论依赖；各模式待实站回归                   |
+| 维护模式    | -                                                            | [plugin-maintenance](https://github.com/chengzhongxue/plugin-maintenance)                 | ✅ 1.1.0 独立品牌模板与返回入口；真实全站切换未执行                  |
 
 ### 扩展类
 
-| 插件          | 应用市场                                                     | GitHub                                                                         | 主题支持                  |
-| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------- |
-| Bilibili 追番 | [app-OTFPN](https://www.halo.run/store/apps/app-OTFPN)       | [plugin-bilibili-bangumi](https://github.com/Roozenlz/plugin-bilibili-bangumi) | ✅ 追番列表、轮播卡片     |
-| Steam 游戏库  | [app-0ojqyzfh](https://www.halo.run/store/apps/app-0ojqyzfh) | [plugin-steam](https://github.com/Tim0x0/halo-plugin-steam)                    | ✅ 游戏库展示、侧边栏卡片 |
-| 投票管理      | [app-veyvzyhv](https://www.halo.run/store/apps/app-veyvzyhv) | [plugin-vote](https://github.com/chengzhongxue/plugin-vote)                    | ✅ CSS 变量适配           |
-| 装备管理      | [app-ytygyqml](https://www.halo.run/store/apps/app-ytygyqml) | [plugin-equipment](https://github.com/chengzhongxue/plugin-equipment)          | ✅ 装备展示/我的装备      |
-| 豆瓣记录      | [app-srBOL](https://www.halo.run/store/apps/app-srBOL)       | [plugin-douban](https://github.com/chengzhongxue/plugin-douban)                | ✅ 海报网格/筛选展示      |
+| 插件          | 应用市场                                                     | GitHub                                                                         | 主题支持                                                        |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| Bilibili 追番 | [app-OTFPN](https://www.halo.run/store/apps/app-OTFPN)       | [plugin-bilibili-bangumi](https://github.com/Roozenlz/plugin-bilibili-bangumi) | ✅ 追番列表、轮播卡片                                           |
+| Steam 游戏库  | [app-0ojqyzfh](https://www.halo.run/store/apps/app-0ojqyzfh) | [plugin-steam](https://github.com/Tim0x0/halo-plugin-steam)                    | ✅ 游戏库展示、侧边栏卡片                                       |
+| 投票管理      | [app-veyvzyhv](https://www.halo.run/store/apps/app-veyvzyhv) | [plugin-vote](https://github.com/chengzhongxue/plugin-vote)                    | ✅ 1.1.3 的 25 个主题变量与结束态组件通过；有效投票写操作未验收 |
+| 装备管理      | [app-ytygyqml](https://www.halo.run/store/apps/app-ytygyqml) | [plugin-equipment](https://github.com/chengzhongxue/plugin-equipment)          | ✅ 装备展示/我的装备                                            |
+| 豆瓣记录      | [app-srBOL](https://www.halo.run/store/apps/app-srBOL)       | [plugin-douban](https://github.com/chengzhongxue/plugin-douban)                | ✅ 海报网格/筛选展示                                            |
 
 ### 工具类
 
-| 插件           | 应用市场                                                     | GitHub                                                                      | 主题支持                    |
-| -------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- | --------------------------- |
-| Shiki 代码高亮 | [app-kzloktzn](https://www.halo.run/store/apps/app-kzloktzn) | [plugin-shiki](https://github.com/halo-sigs/plugin-shiki)                   | ✅ 代码块美化               |
-| 搜索组件       | [app-DlacW](https://www.halo.run/store/apps/app-DlacW)       | [plugin-search-widget](https://github.com/halo-sigs/plugin-search-widget)   | ✅ 全局搜索                 |
-| 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                 |
-| 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ Mermaid/PlantUML         |
-| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 图片灯箱                 |
-| Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 无密码登录/指纹/面部识别 |
+| 插件           | 应用市场                                                     | GitHub                                                                      | 主题支持                                               |
+| -------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Shiki 代码高亮 | [app-kzloktzn](https://www.halo.run/store/apps/app-kzloktzn) | [plugin-shiki](https://github.com/halo-sigs/plugin-shiki)                   | ✅ 代码块美化                                          |
+| KaTeX 数学公式 | -                                                            | [plugin-katex](https://github.com/halo-sigs/plugin-katex)                   | ✅ 3.0.0 公式溢出与 PJAX 脚本重执行契约                |
+| 搜索组件       | [app-DlacW](https://www.halo.run/store/apps/app-DlacW)       | [plugin-search-widget](https://github.com/halo-sigs/plugin-search-widget)   | ✅ 全局搜索                                            |
+| 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                                            |
+| 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ 1.5.2 默认节点、SVG、明暗重绘与 PJAX 重入通过       |
+| AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ AI 总结按 1.5.1 契约适配；当前 2.2.4 待实站回归     |
+| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 稳定 selector DOM 与 PJAX 后兼容重放                |
+| Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 登录入口和认证 options 请求通过；真实凭据认证未执行 |
+| 在线统计       | -                                                            | -                                                                           | ✅ 插件可用时显示；禁用或失败时不再请求 API            |
 
 ### 存储类
 
-> 瞬间前端发布功能需要配置存储策略
+> 瞬间前端发布功能需要配置存储策略。这里描述的是 Halo 通用附件上传能力，不是对每个存储插件版本的兼容承诺。
 
 | 存储插件  | 图片 | 视频 | 音频 | 状态   | 说明               |
 | --------- | ---- | ---- | ---- | ------ | ------------------ |
@@ -202,8 +214,9 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 安装以下插件以获得完整体验：
 
 - **必装**：搜索组件、评论组件
-- **推荐**：瞬间、图库、友链提交、装备管理
-- **可选**：Docsme 文档、朋友圈、追番、Steam、Passkey 认证
+- **推荐**：瞬间、图库、链接管理、友链提交、装备管理
+- **可选**：Docsme 文档、朋友圈、追番、Steam、豆瓣、Passkey 认证
+- **版本约束**：同时使用朋友圈或友链提交时，PluginLinks 固定使用 2.0.0；2.1.0～2.2.1 与该组合存在已确认的类加载冲突
 
 ---
 
@@ -211,8 +224,8 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ### 环境要求
 
-- Node.js 20+
-- pnpm 8+
+- Node.js 24+
+- pnpm 10+
 - Java 21+ (运行 Halo)
 
 ### 开发命令
@@ -220,8 +233,9 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 ```bash
 pnpm install    # 安装依赖
 pnpm dev        # 开发模式（热更新）
-pnpm build      # 构建主题包
+pnpm build      # 校验插件契约、构建资源并打包主题
 pnpm lint       # 代码检查
+pnpm verify:plugin-contracts # 校验版本矩阵与模板契约
 pnpm format     # 代码格式化
 ```
 
@@ -253,11 +267,11 @@ theme-sky-blog-1/
 
 ### 主要章节
 
-- [通用设置](./docs/general.md) - 主题、背景、侧边栏
-- [首页设置](./docs/index.md) - 头部、模块、布局
-- [文章页设置](./docs/article.md) - 文章展示和交互
-- [瞬间设置](./docs/moments.md) - 瞬间展示和前端发布
-- [插件适配](./docs/plugins.md) - 插件配置和兼容性
+- [通用设置](./docs/theme/base/general.md) - 主题、背景、侧边栏
+- [首页设置](./docs/content/core/index.md) - 头部、模块、布局
+- [文章页设置](./docs/content/core/article.md) - 文章展示和交互
+- [瞬间设置](./docs/plugins/content/moments.md) - 瞬间展示和前端发布
+- [插件适配](./docs/system/adaptation/plugin-adaptation.md) - 插件契约和兼容性
 
 ---
 
@@ -284,7 +298,7 @@ theme-sky-blog-1/
 
 - Fork 项目并创建分支
 - 遵循项目代码规范（ESLint + Prettier）
-- 提交前运行 `pnpm lint` 和 `pnpm format`
+- 提交前运行 `pnpm lint`、`pnpm verify:plugin-contracts` 和 `pnpm build-only`
 - 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)
 
 ---

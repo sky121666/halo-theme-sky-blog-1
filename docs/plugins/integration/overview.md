@@ -39,10 +39,14 @@
 | PluginCommentWidget     | 评论组件                         | 文章、页面、插件页评论区      | 插件后台配置                                         |
 | PluginSearchWidget      | 搜索组件                         | 导航搜索入口                  | [顶部导航](../../theme/base/nav.md)                  |
 | plugin-online           | 在线访客统计                     | 侧边栏小工具                  | [在线统计](../../theme/enhancements/online-stats.md) |
+| vote                    | 正文投票块                       | 文章、页面和文档正文          | 1.1.3 主题变量；交互需实站回归                       |
+| text-diagram            | Mermaid/PlantUML 文本绘图        | 文章、页面和文档正文          | 1.5.2 绘图容器与暗色 selector                        |
+| PluginContactForm       | 联系表单                         | 正文、贴边按钮和页面弹窗      | 契约 1.6.3；当前 1.6.4 完整流程仍待实站回归          |
+| ai-assistant            | AI 总结小部件                    | 文章顶部                      | 1.5.1 DOM/主题变量；市场 2.2.4 待实站回归            |
 
 ## lightgallery.js 灯箱
 
-灯箱由 `PluginLightGallery` 后台配置。主题只保留稳定 DOM，不逐页主动初始化。
+灯箱 selector 由 `PluginLightGallery` 后台配置。主题保留稳定 DOM，并在 PJAX 切换后加载插件资源、重放插件生成的初始化脚本；图库无限滚动追加内容时，主题只补齐 DOM 契约并刷新现有实例。若当前插件实例不提供 `refresh()`，主题会复制插件 settings 后销毁并单实例重建，不覆盖后台 selector。
 
 推荐配置：
 
@@ -87,13 +91,17 @@
 
 ## 版本注意
 
-| 插件组合                                   | 注意事项                                       |
-| ------------------------------------------ | ---------------------------------------------- |
-| PluginLinks + plugin-friends + link-submit | 当前本地建议使用 `PluginLinks v2.0.0`          |
-| plugin-docsme                              | 首页文档中心需要 `plugin-docsme >= 1.4.0`      |
-| plugin-douban                              | 图片代理在插件后台配置，主题只做失败占位       |
-| halo-plugin-steam                          | Steam 资料需要 API Key、SteamID 和公开隐私设置 |
-| Passkey                                    | 登录页必须保留 Halo 表单结构                   |
+| 插件组合                                   | 注意事项                                                                                                  |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| PluginLinks + plugin-friends + link-submit | 当前 2.0.0 + 1.4.6 + 1.0.7 均已启动；Links 申请 Modal 首次/PJAX 重入通过，2.1.0～2.2.1 存在组合类加载冲突 |
+| PluginPhotos                               | `2.1.2` 列表、详情、PJAX、20→40→46 张无限滚动灯箱与 46 个唯一详情路由均通过                               |
+| plugin-bilibili-bangumi                    | 稳定版 `1.4.1` 已通过数值越界 404、文本参数回退及真页 PJAX；实现契约继续保持 `1.4.0`                       |
+| plugin-shiki                               | 主题契约仍为 `1.3.1`；当前 `1.4.1` 已通过 26 个代码块、折叠、明暗与两轮 PJAX，记录为 `testedVersion`       |
+| plugin-docsme                              | 主题当前契约为 `plugin-docsme 1.7.0`                                                                      |
+| plugin-douban                              | 图片代理在插件后台配置，主题只做失败占位                                                                  |
+| halo-plugin-steam                          | Steam 资料需要 API Key、SteamID 和公开隐私设置                                                            |
+| Passkey                                    | 登录入口与认证 options 请求通过；未选择凭据或完成认证                                                     |
+| ai-assistant                               | 只确认 `1.5.1` AI 总结契约；市场 `2.2.4` 待回归                                                           |
 
 更完整的版本基线见 [插件适配状态](../../system/adaptation/plugin-adaptation.md)。
 
@@ -109,6 +117,16 @@ pnpm verify:plugins
 
 ```bash
 pnpm verify:plugins:deep
+```
+
+包含投票、绘图或联系表单内容时，可以指定样例页面，确认服务端输出了对应 Web Component 标记：
+
+```bash
+VOTE_PAGE_URL=/archives/{post} \
+TEXT_DIAGRAM_PAGE_URL=/archives/{post} \
+CONTACT_FORM_PAGE_URL=/archives/{post} \
+AI_SUMMARY_PAGE_URL=/archives/{post} \
+pnpm verify:plugins
 ```
 
 脚本通过不等于真实页面一定没问题。重要页面仍建议用浏览器检查点击、加载、评论、灯箱和移动端布局。
