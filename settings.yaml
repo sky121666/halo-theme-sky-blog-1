@@ -24,10 +24,11 @@ spec:
               name: enable_loading
               label: 启用加载屏幕
               help: 在页面加载时显示加载动画，避免样式闪烁和变形
-              value: true
+              value: false
             - $formkit: toggle
               id: animation_type
               name: animation_type
+              key: general_loading_screen_animation_type_field
               if: $get(enable_loading).value
               label: 动画来源
               help: 选择加载动画的来源方式
@@ -70,6 +71,7 @@ spec:
             - $formkit: text
               if: $get(enable_loading).value
               name: loading_text
+              key: general_loading_screen_loading_text_field
               label: 加载文字
               help: 加载动画下方显示的文字提示
               placeholder: "Loading..."
@@ -77,6 +79,7 @@ spec:
             - $formkit: number
               if: $get(enable_loading).value
               name: min_duration
+              key: general_loading_screen_min_duration_field
               label: 最小显示时间（毫秒）
               help: 加载屏幕至少显示的时间，避免快速闪现，推荐 300-800 毫秒
               value: 300
@@ -98,6 +101,7 @@ spec:
               value: false
             - $formkit: toggle
               name: background_style
+              key: general_global_background_background_style_field
               if: $get(enable_custom_bg).value
               label: 背景样式
               help: 选择全局页面的背景样式
@@ -133,6 +137,7 @@ spec:
               value: true
             - $formkit: toggle
               name: dock_style
+              key: general_floating_dock_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(fd_general_enable_dock).value
@@ -147,12 +152,14 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: dock_menu
+              key: general_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(fd_general_enable_dock).value
               help: 选择要在悬浮控制栏中显示的菜单。菜单项的图标通过【元数据】中的 icon 字段设置（填入 SVG 代码）
             - $formkit: switch
               name: enable_back_to_top
+              key: general_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               help: 控制悬浮 Dock 中是否显示"返回顶部"按钮
               if: $get(fd_general_enable_dock).value
@@ -271,7 +278,7 @@ spec:
               render-type: text
               size: 80
               gap: 10
-              value: font-default
+              value: font-siyuan-songti
               options:
                 - label: 系统默认
                   value: font-default
@@ -289,12 +296,18 @@ spec:
           name: debug_settings
           label: 开发者与调试
           value:
+            enable_developer_mode: false
             enable_weather_debug: false
           children:
             - $formkit: switch
+              name: enable_developer_mode
+              label: 开启开发者模式
+              help: "仅用于本地排查。开启后在浏览器控制台输出主题页面挂载、PJAX 切换、脚本重放和降级路径日志；关闭后主题不输出这些诊断日志。日志会过滤敏感字段和原始 DOM。"
+              value: false
+            - $formkit: switch
               name: enable_weather_debug
               label: 开启天气组件 Debug 日志
-              help: "排查错误用。开启后会在浏览器 F12 控制台打印包含天气热力学地图、渲染流程、定位状态等关键日志。若需强制刷新天气缓存请执行：localStorage.removeItem('sky_weather_cache_v13')"
+              help: "开发者模式开启时生效，额外输出天气定位、缓存和渲染流程日志。若需强制刷新天气缓存请执行：localStorage.removeItem('sky_weather_cache_v13')"
               value: false
 
     - group: nav
@@ -320,7 +333,7 @@ spec:
               render-type: text
               size: 60
               gap: 10
-              value: iconify
+              value: none
               options:
                 - label: 隐藏
                   value: none
@@ -955,6 +968,7 @@ spec:
               help: 关闭则默认按原固化顺序铺设。开启后可通过下方列表自由拖拽顺序（需保证底层各模块单独开关已开启）。
             - $formkit: array
               name: modules
+              key: index_index_layout_modules_field
               label: 首页模块流
               if: $get(index_enable_custom_layout).value
               addLabel: 插入模块
@@ -1000,6 +1014,7 @@ spec:
             - $formkit: toggle
               id: background_type
               name: background_type
+              key: index_background_settings_background_type_field
               if: $get(index_enable_header).value
               label: 背景类型
               help: 选择首页头部背景的显示方式。注：天气联动需在侧边栏启用「天气小组件」
@@ -1051,6 +1066,7 @@ spec:
             - $formkit: toggle
               id: light_scheme
               name: light_scheme
+              key: index_background_settings_light_scheme_field
               if: $get(index_enable_header).value && $get(background_type).value === 'image'
               label: 浅色主题蒙版
               help: 选择浅色主题下的蒙版颜色方案
@@ -1073,6 +1089,7 @@ spec:
                   render: "#6366f1"
             - $formkit: color
               name: light_custom_color
+              key: index_background_settings_light_custom_color_field
               if: $get(index_enable_header).value && $get(background_type).value === 'image' && $get(light_scheme).value === 'custom'
               label: 自定义颜色（浅色主题）
               help: 选择浅色主题下蒙版的自定义颜色
@@ -1080,6 +1097,7 @@ spec:
             - $formkit: toggle
               id: dark_scheme
               name: dark_scheme
+              key: index_background_settings_dark_scheme_field
               if: $get(index_enable_header).value && $get(background_type).value === 'image'
               label: 深色主题蒙版
               help: 选择深色主题下的蒙版颜色方案
@@ -1102,12 +1120,14 @@ spec:
                   render: "#6366f1"
             - $formkit: color
               name: dark_custom_color
+              key: index_background_settings_dark_custom_color_field
               if: $get(index_enable_header).value && $get(background_type).value === 'image' && $get(dark_scheme).value === 'custom'
               label: 自定义颜色（深色主题）
               help: 选择深色主题下蒙版的自定义颜色
               value: "#000000"
         - $formkit: group
           name: title_settings
+          key: index_title_settings_field
           label: 主标题设置
           if: $get(index_enable_header).value
           value:
@@ -1133,6 +1153,7 @@ spec:
             - $formkit: toggle
               id: title_font
               name: title_font
+              key: index_title_settings_title_font_field
               if: $get(show_title).value
               label: 字体
               help: 选择主标题的字体
@@ -1190,13 +1211,14 @@ spec:
             - $formkit: toggle
               id: decoration_effect
               name: decoration_effect
+              key: index_title_settings_decoration_effect_field
               if: $get(show_title).value
               label: 装饰效果（可选）
               help: 为标题添加动态装饰元素
               render-type: text
               size: 80
               gap: 10
-              value: none
+              value: effect-particles
               options:
                 - label: 无
                   value: none
@@ -1206,6 +1228,7 @@ spec:
                   value: effect-starlight
         - $formkit: group
           name: subtitle_settings
+          key: index_subtitle_settings_field
           label: 副标题设置
           if: $get(index_enable_header).value
           value:
@@ -1230,6 +1253,7 @@ spec:
             - $formkit: toggle
               id: subtitle_font
               name: subtitle_font
+              key: index_subtitle_settings_subtitle_font_field
               if: $get(show_subtitle).value
               label: 字体
               help: 选择副标题的字体
@@ -1280,9 +1304,10 @@ spec:
                 - 颜色值：#3b82f6、#8b5cf6
                 - CSS变量：var(--color-primary)、var(--color-secondary)
               placeholder: "var(--color-primary)"
-              value: "var(--color-primary)"
+              value: ""
         - $formkit: group
           name: wave_transition_settings
+          key: index_wave_transition_settings_field
           label: 底部过渡设置
           if: $get(index_enable_header).value
           value:
@@ -1303,6 +1328,7 @@ spec:
               help: 波浪的颜色，可以使用颜色名称、HEX、RGB、变量
         - $formkit: group
           name: moment_settings
+          key: index_moment_settings_field
           label: 瞬间说说设置
           if: $get(index_enable_header).value
           value:
@@ -1346,12 +1372,14 @@ spec:
             - $formkit: switch
               id: index_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: index_sidebar_settings_index_enable_custom_sidebar_field
               if: $get(index_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: index_sidebar_settings_sidebar_position_field
               if: $get(index_show_sidebar).value && $get(index_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -1365,6 +1393,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: index_sidebar_settings_sidebar_widgets_field
               if: $get(index_show_sidebar).value && $get(index_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -1401,6 +1430,7 @@ spec:
               value: true
             - $formkit: toggle
               name: heatmap_type
+              key: index_content_settings_heatmap_type_field
               if: $get(index_show_heatmap).value
               label: 热力图类型
               help: GitHub 热力图需在"关于"设置中配置用户名
@@ -1474,6 +1504,7 @@ spec:
               value: true
             - $formkit: toggle
               name: list_style
+              key: index_post_settings_list_style_field
               if: $get(show_posts_tab).value
               label: 文章列表风格
               help: 选择首页文章列表的展示风格
@@ -1492,6 +1523,7 @@ spec:
                   value: minimal
             - $formkit: number
               name: post_count
+              key: index_post_settings_post_count_field
               if: $get(show_posts_tab).value
               label: 文章数量
               help: 首页显示的文章数量（3-12）
@@ -1501,12 +1533,14 @@ spec:
             - $formkit: switch
               id: index_cover_fallback_enable
               name: cover_fallback_enable
+              key: index_post_settings_index_cover_fallback_enable_field
               if: $get(show_posts_tab).value
               label: 启用封面替代
               help: 启用后无封面的文章将使用指定图片替代
               value: true
             - $formkit: toggle
               name: cover_fallback_mode
+              key: index_post_settings_cover_fallback_mode_field
               if: $get(show_posts_tab).value && $get(index_cover_fallback_enable).value
               label: 替代模式
               help: 选择替代策略
@@ -1521,6 +1555,7 @@ spec:
                   value: always
             - $formkit: attachment
               name: cover_fallback_url
+              key: index_post_settings_cover_fallback_url_field
               if: $get(show_posts_tab).value && $get(index_cover_fallback_enable).value
               label: 默认封面图片
               help: 上传或选择作为替代封面的图片（支持 jpeg/png/webp/gif）
@@ -1529,7 +1564,7 @@ spec:
                 - image/png
                 - image/webp
                 - image/gif
-              value: ""
+              value: "https://www.dmoe.cc/random.php"
         # 朋友动态设置
         - $formkit: group
           name: friends_settings
@@ -1547,6 +1582,7 @@ spec:
               value: true
             - $formkit: number
               name: friends_count
+              key: index_friends_settings_friends_count_field
               if: $get(show_friends_tab).value
               label: 朋友动态数量
               help: 首页显示的朋友动态数量（3-20）
@@ -1555,6 +1591,7 @@ spec:
               max: 20
             - $formkit: toggle
               name: list_style
+              key: index_friends_settings_list_style_field
               if: $get(show_friends_tab).value
               label: 列表样式
               help: 选择首页朋友动态的展示样式
@@ -1585,6 +1622,7 @@ spec:
               value: true
             - $formkit: number
               name: moments_count
+              key: index_moments_settings_moments_count_field
               if: $get(show_moments_tab).value
               label: 瞬间数量
               help: 首页显示的瞬间数量（3-12）
@@ -1593,6 +1631,7 @@ spec:
               max: 12
             - $formkit: toggle
               name: list_style
+              key: index_moments_settings_list_style_field
               if: $get(show_moments_tab).value
               label: 列表样式
               help: 选择首页瞬间的展示样式
@@ -1623,12 +1662,14 @@ spec:
               value: true
             - $formkit: text
               name: gallery_title
+              key: index_gallery_settings_gallery_title_field
               if: $get(enable_gallery).value
               label: 模块标题
               help: 图库模块的标题文字
               value: "图库"
             - $formkit: text
               name: gallery_subtitle
+              key: index_gallery_settings_gallery_subtitle_field
               if: $get(enable_gallery).value
               label: 模块副标题
               help: 图库模块的副标题文字
@@ -1653,18 +1694,21 @@ spec:
               value: true
             - $formkit: text
               name: links_title
+              key: index_links_settings_links_title_field
               if: $get(enable_links).value
               label: 模块标题
               help: 友情链接模块的标题文字
               value: "友情链接"
             - $formkit: text
               name: links_subtitle
+              key: index_links_settings_links_subtitle_field
               if: $get(enable_links).value
               label: 模块副标题
               help: 友情链接模块的副标题文字
               value: "Friends & Partners"
             - $formkit: select
               name: links_groups
+              key: index_links_settings_links_groups_field
               if: $get(enable_links).value
               label: 显示分组
               help: 选择要在首页显示的友链分组，留空则显示所有分组
@@ -1682,6 +1726,7 @@ spec:
                 valueField: metadata.name
             - $formkit: number
               name: links_count
+              key: index_links_settings_links_count_field
               if: $get(enable_links).value
               label: 显示数量
               help: 首页最多展示的友链数量（仅前端截断，不限制后端加载，插件问题，暂不支持数量限制），0 为不限制
@@ -1691,7 +1736,7 @@ spec:
         - $formkit: group
           name: docs_settings
           label: 文档中心模块
-          help: 需安装 Docsme 文档插件 (plugin-docsme) ≥1.4.0；免费版请安装应用市场 1.5.0 免授权版本，专业版/商业版可使用 1.6.0
+          help: 需安装 Docsme 文档插件 (plugin-docsme) 1.7.0；升级插件后请按适配矩阵完成页面回归
           value:
             enable_docs: true
             docs_title: "文档中心"
@@ -1706,18 +1751,21 @@ spec:
               value: true
             - $formkit: text
               name: docs_title
+              key: index_docs_settings_docs_title_field
               if: $get(enable_docs).value
               label: 模块标题
               help: 文档中心模块的标题文字
               value: "文档中心"
             - $formkit: text
               name: docs_subtitle
+              key: index_docs_settings_docs_subtitle_field
               if: $get(enable_docs).value
               label: 模块副标题
               help: 文档中心模块的副标题文字
               value: "Documentation"
             - $formkit: number
               name: docs_count
+              key: index_docs_settings_docs_count_field
               if: $get(enable_docs).value
               label: 显示数量
               help: 首页最多展示的文档项目数量，默认 6
@@ -1739,12 +1787,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: index_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(index_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: index_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(index_enable_custom_dock).value
               value: true
@@ -1823,6 +1873,7 @@ spec:
             - $formkit: select
               id: article_copyright_notice_type
               name: type
+              key: article_copyright_notice_article_copyright_notice_type_field
               if: $get(article_copyright_notice_enable).value
               label: 默认声明类型
               value: original
@@ -1839,48 +1890,56 @@ spec:
                   value: custom
             - $formkit: text
               name: source_title
+              key: article_copyright_notice_source_title_field
               if: $get(article_copyright_notice_enable).value
               label: 默认来源标题
               value: ""
               placeholder: "原文或原作标题"
             - $formkit: text
               name: source_url
+              key: article_copyright_notice_source_url_field
               if: $get(article_copyright_notice_enable).value
               label: 默认来源链接
               value: ""
               placeholder: "https://..."
             - $formkit: text
               name: source_author
+              key: article_copyright_notice_source_author_field
               if: $get(article_copyright_notice_enable).value
               label: 默认原作者
               value: ""
               placeholder: "原作者或来源站点"
             - $formkit: text
               name: ai_tool
+              key: article_copyright_notice_ai_tool_field
               if: $get(article_copyright_notice_enable).value
               label: 默认 AI 工具
               value: ""
               placeholder: "如：ChatGPT / Claude / Gemini"
             - $formkit: text
               name: ai_usage
+              key: article_copyright_notice_ai_usage_field
               if: $get(article_copyright_notice_enable).value
               label: 默认 AI 参与方式
               value: ""
               placeholder: "如：资料整理、排版校对、代码辅助"
             - $formkit: text
               name: license_name
+              key: article_copyright_notice_license_name_field
               if: $get(article_copyright_notice_enable).value
               label: 默认许可协议
               value: "CC BY-NC-SA 4.0"
               placeholder: "如：CC BY-NC-SA 4.0 / 保留所有权利"
             - $formkit: text
               name: license_url
+              key: article_copyright_notice_license_url_field
               if: $get(article_copyright_notice_enable).value
               label: 默认协议链接
               value: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
               placeholder: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
             - $formkit: textarea
               name: note
+              key: article_copyright_notice_note_field
               if: $get(article_copyright_notice_enable).value
               label: 默认补充说明
               value: ""
@@ -1909,12 +1968,14 @@ spec:
             - $formkit: switch
               id: post_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: article_sidebar_settings_post_enable_custom_sidebar_field
               if: $get(post_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: true
             - $formkit: toggle
               name: sidebar_position
+              key: article_sidebar_settings_sidebar_position_field
               if: $get(post_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -1928,6 +1989,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: article_sidebar_settings_sidebar_widgets_field
               if: $get(post_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -1938,9 +2000,9 @@ spec:
                   label: $value.widget
               value:
                 - widget: toc
+                - widget: welcome_card
                 - widget: author_card
                 - widget: blog_stats
-                - widget: categories
                 - widget: tags
                 - widget: popular_posts
               children:
@@ -1991,6 +2053,7 @@ spec:
               value: true
             - $formkit: group
               name: share_settings
+              key: article_post_interaction_share_settings_field
               label: 分享设置
               if: $get(post_enable_share).value
               value:
@@ -2053,6 +2116,7 @@ spec:
               value: false
             - $formkit: toggle
               name: dock_style
+              key: article_dock_settings_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(enable_custom_dock).value
@@ -2069,6 +2133,7 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: post_dock_menu
+              key: article_dock_settings_post_dock_menu_field
               label: 文章页 Dock 菜单
               value: primary
               if: $get(enable_custom_dock).value
@@ -2093,7 +2158,7 @@ spec:
           label: 基础信息
           value:
             list_style: modern
-            category_display_style: style_1
+            category_display_style: chips
           children:
             - $formkit: toggle
               name: list_style
@@ -2156,12 +2221,14 @@ spec:
             - $formkit: switch
               id: cat_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: category_settings_sidebar_settings_cat_enable_custom_sidebar_field
               if: $get(cat_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: category_settings_sidebar_settings_sidebar_position_field
               if: $get(cat_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -2175,6 +2242,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: category_settings_sidebar_settings_sidebar_widgets_field
               if: $get(cat_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -2257,12 +2325,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: category_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(category_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: category_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(category_enable_custom_dock).value
               value: true
@@ -2336,12 +2406,14 @@ spec:
             - $formkit: switch
               id: tag_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: tag_settings_sidebar_settings_tag_enable_custom_sidebar_field
               if: $get(tag_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: tag_settings_sidebar_settings_sidebar_position_field
               if: $get(tag_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -2355,6 +2427,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: tag_settings_sidebar_settings_sidebar_widgets_field
               if: $get(tag_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -2436,12 +2509,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: tag_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(tag_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: tag_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(tag_enable_custom_dock).value
               value: true
@@ -2481,12 +2556,14 @@ spec:
             - $formkit: switch
               id: archive_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: archive_settings_sidebar_settings_archive_enable_custom_sidebar_field
               if: $get(archive_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: true
             - $formkit: toggle
               name: sidebar_position
+              key: archive_settings_sidebar_settings_sidebar_position_field
               if: $get(archive_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -2500,6 +2577,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: archive_settings_sidebar_settings_sidebar_widgets_field
               if: $get(archive_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -2539,6 +2617,7 @@ spec:
                       value: online_stats
             - $formkit: group
               name: archive_sidebar_config
+              key: archive_settings_sidebar_settings_archive_sidebar_config_field
               label: [归档]
               if: $get(archive_enable_custom_sidebar).value
               value:
@@ -2571,12 +2650,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: archive_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(archive_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: archive_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(archive_enable_custom_dock).value
               value: true
@@ -2606,12 +2687,14 @@ spec:
             - $formkit: switch
               id: author_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: author_settings_sidebar_settings_author_enable_custom_sidebar_field
               if: $get(author_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: author_settings_sidebar_settings_sidebar_position_field
               if: $get(author_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -2625,6 +2708,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: author_settings_sidebar_settings_sidebar_widgets_field
               if: $get(author_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -2676,6 +2760,7 @@ spec:
               value: false
             - $formkit: toggle
               name: dock_style
+              key: author_settings_floating_dock_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(author_enable_custom_dock).value
@@ -2690,12 +2775,14 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: dock_menu
+              key: author_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(author_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: author_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(author_enable_custom_dock).value
               value: true
@@ -2744,17 +2831,20 @@ spec:
             # Application Content
             - $formkit: text
               name: apply_title
+              key: links_settings_apply_settings_apply_title_field
               if: $get(apply_enable).value
               label: 申请区标题
               help: 申请区域的标题文字
             - $formkit: textarea
               name: apply_description
+              key: links_settings_apply_settings_apply_description_field
               if: $get(apply_enable).value
               label: 申请区描述
               help: 申请区域的说明文字
               rows: 2
             - $formkit: text
               name: apply_url
+              key: links_settings_apply_settings_apply_url_field
               if: $get(apply_enable).value
               label: 申请链接
               help: 申请按钮跳转的链接，默认为 /# (不跳转)
@@ -2763,30 +2853,35 @@ spec:
             # 本站信息配置
             - $formkit: text
               name: blogger_logo
+              key: links_settings_apply_settings_blogger_logo_field
               if: $get(apply_enable).value
               label: 站点 Logo
               help: 自定义展示的 Logo 地址，留空则使用系统默认 Logo
               placeholder: "https://example.com/logo.png"
             - $formkit: text
               name: blogger_title
+              key: links_settings_apply_settings_blogger_title_field
               if: $get(apply_enable).value
               label: 站点名称
               help: 自定义展示的站点名称，留空则使用系统默认标题
               placeholder: "My Blog"
             - $formkit: text
               name: blogger_rss
+              key: links_settings_apply_settings_blogger_rss_field
               if: $get(apply_enable).value
               label: RSS 地址
               help: 自定义 RSS 地址，留空则默认为 /rss.xml
               placeholder: "https://example.com/rss.xml"
             - $formkit: text
               name: blogger_email
+              key: links_settings_apply_settings_blogger_email_field
               if: $get(apply_enable).value
               label: 联系邮箱
               help: 站长联系邮箱，用于友链申请联系
               placeholder: "admin@example.com"
             - $formkit: textarea
               name: blogger_description
+              key: links_settings_apply_settings_blogger_description_field
               if: $get(apply_enable).value
               label: 站点描述
               help: 自定义站点描述，留空则使用系统副标题
@@ -2817,12 +2912,14 @@ spec:
             - $formkit: switch
               id: links_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: links_settings_sidebar_settings_links_enable_custom_sidebar_field
               if: $get(links_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: links_settings_sidebar_settings_sidebar_position_field
               if: $get(links_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -2836,6 +2933,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: links_settings_sidebar_settings_sidebar_widgets_field
               if: $get(links_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -2872,12 +2970,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: links_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(links_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: links_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(links_enable_custom_dock).value
               value: true
@@ -2940,18 +3040,21 @@ spec:
               placeholder: "如：sky121666"
             - $formkit: switch
               name: show_stats
+              key: about_settings_github_show_stats_field
               label: 显示统计卡片
               if: $get(about_github_username).value
               help: 显示 GitHub Stats 和 Top Languages 卡片
               value: true
             - $formkit: switch
               name: show_calendar
+              key: about_settings_github_show_calendar_field
               label: 显示贡献热力图
               if: $get(about_github_username).value
               help: 显示 GitHub Contributions 日历图
               value: true
             - $formkit: text
               name: stats_host
+              key: about_settings_github_stats_host_field
               label: Stats 服务地址
               if: $get(about_github_username).value
               help: "默认服务支持 locale，可替换为自部署地址"
@@ -2959,6 +3062,7 @@ spec:
               placeholder: "https://github-readme-stats.xoku.cn"
             - $formkit: select
               name: locale
+              key: about_settings_github_locale_field
               label: 语言（可选）
               if: $get(about_github_username).value
               help: "设置 GitHub Stats 卡片的显示语言"
@@ -2985,6 +3089,7 @@ spec:
                   value: pt-br
             - $formkit: select
               name: stats_theme
+              key: about_settings_github_stats_theme_field
               label: 主题（可选）
               if: $get(about_github_username).value
               help: 留空使用自动适配主题
@@ -3120,12 +3225,14 @@ spec:
                   value: true
                 - $formkit: text
                   name: primary_text
+                  key: about_settings_hero_actions_primary_group_primary_text_field
                   label: 按钮文字
                   if: $get(hero_show_primary).value
                   value: "查看作品"
                   placeholder: "查看作品"
                 - $formkit: text
                   name: primary_link
+                  key: about_settings_hero_actions_primary_group_primary_link_field
                   label: 按钮链接
                   if: $get(hero_show_primary).value
                   value: "#sf-projects"
@@ -3141,12 +3248,14 @@ spec:
                   value: true
                 - $formkit: text
                   name: secondary_text
+                  key: about_settings_hero_actions_secondary_group_secondary_text_field
                   label: 按钮文字
                   if: $get(hero_show_secondary).value
                   value: "联系我"
                   placeholder: "联系我"
                 - $formkit: text
                   name: secondary_link
+                  key: about_settings_hero_actions_secondary_group_secondary_link_field
                   label: 按钮链接
                   if: $get(hero_show_secondary).value
                   help: 留空则使用第一个社交链接
@@ -3168,17 +3277,20 @@ spec:
               value: true
             - $formkit: textarea
               name: title
+              key: about_settings_cta_title_field
               label: CTA 标题
               if: $get(cta_show).value
               rows: 2
               value: "让我们一起打造卓越的数字体验 — 立即开始您的下一个项目"
             - $formkit: text
               name: button_text
+              key: about_settings_cta_button_text_field
               label: 按钮文字
               if: $get(cta_show).value
               value: "立即开始"
             - $formkit: text
               name: button_link
+              key: about_settings_cta_button_link_field
               label: 按钮链接
               if: $get(cta_show).value
               value: "#sf-comments"
@@ -3230,6 +3342,7 @@ spec:
               value: true
             - $formkit: number
               name: latitude
+              key: about_settings_location_latitude_field
               label: 纬度
               if: $get(about_show_location).value
               help: "示例：39.9042（北京天安门）| 获取坐标：https://lbs.amap.com/tools/picker"
@@ -3237,6 +3350,7 @@ spec:
               step: 0.0001
             - $formkit: number
               name: longitude
+              key: about_settings_location_longitude_field
               label: 经度
               if: $get(about_show_location).value
               help: "示例：116.4074（北京天安门）| 获取坐标：https://lbs.amap.com/tools/picker"
@@ -3244,11 +3358,13 @@ spec:
               step: 0.0001
             - $formkit: text
               name: location_name
+              key: about_settings_location_location_name_field
               label: 位置名称
               if: $get(about_show_location).value
               placeholder: "如：北京·中国"
             - $formkit: textarea
               name: location_description
+              key: about_settings_location_location_description_field
               label: 位置描述
               if: $get(about_show_location).value
               rows: 2
@@ -3270,12 +3386,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: about_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(about_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: about_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(about_enable_custom_dock).value
               value: true
@@ -3378,12 +3496,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: photos_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(photos_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: photos_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(photos_enable_custom_dock).value
               value: true
@@ -3436,12 +3556,14 @@ spec:
             - $formkit: switch
               id: moments_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: moments_settings_sidebar_settings_moments_enable_custom_sidebar_field
               if: $get(moments_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: moments_settings_sidebar_settings_sidebar_position_field
               if: $get(moments_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -3455,6 +3577,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: moments_settings_sidebar_settings_sidebar_widgets_field
               if: $get(moments_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -3492,18 +3615,21 @@ spec:
               value: true
             - $formkit: switch
               name: enable_image_upload
+              key: moments_settings_publish_settings_enable_image_upload_field
               if: $get(moments_enable_publish).value
               label: 启用图片上传
               help: 允许用户上传图片（需要配置存储策略）
               value: true
             - $formkit: switch
               name: enable_video_upload
+              key: moments_settings_publish_settings_enable_video_upload_field
               if: $get(moments_enable_publish).value
               label: 启用视频上传
               help: 允许用户上传视频（需要配置存储策略）
               value: true
             - $formkit: switch
               name: enable_audio_upload
+              key: moments_settings_publish_settings_enable_audio_upload_field
               if: $get(moments_enable_publish).value
               label: 启用音频上传
               help: 允许用户上传音频（需要配置存储策略）
@@ -3516,6 +3642,7 @@ spec:
           value: true
         - $formkit: group
           name: share_settings
+          key: moments_settings_share_settings_field
           label: 分享设置
           if: $get(moments_enable_share).value
           value:
@@ -3572,12 +3699,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: moments_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(moments_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: moments_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(moments_enable_custom_dock).value
               value: true
@@ -3644,12 +3773,14 @@ spec:
             - $formkit: switch
               id: friends_page_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: friends_page_settings_sidebar_settings_friends_page_enable_custom_sidebar_field
               if: $get(friends_page_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: friends_page_settings_sidebar_settings_sidebar_position_field
               if: $get(friends_page_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -3663,6 +3794,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: friends_page_settings_sidebar_settings_sidebar_widgets_field
               if: $get(friends_page_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -3699,12 +3831,14 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: friends_page_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(friends_page_enable_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: friends_page_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(friends_page_enable_custom_dock).value
               value: true
@@ -3741,6 +3875,7 @@ spec:
               value: true
             - $formkit: group
               name: share_settings
+              key: docsme_doc_settings_share_settings_field
               label: 分享设置
               if: $get(docsme_doc_enable_share).value
               value:
@@ -3788,6 +3923,7 @@ spec:
               value: false
             - $formkit: toggle
               name: dock_style
+              key: docsme_doc_settings_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_doc_custom_dock).value
@@ -3802,12 +3938,14 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: dock_menu
+              key: docsme_doc_settings_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(docsme_doc_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: docsme_doc_settings_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(docsme_doc_custom_dock).value
               value: true
@@ -3841,6 +3979,7 @@ spec:
               value: false
             - $formkit: toggle
               name: dock_style
+              key: docsme_docs_settings_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_docs_custom_dock).value
@@ -3855,12 +3994,14 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: dock_menu
+              key: docsme_docs_settings_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(docsme_docs_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: docsme_docs_settings_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(docsme_docs_custom_dock).value
               value: true
@@ -3882,6 +4023,7 @@ spec:
               value: false
             - $formkit: toggle
               name: dock_style
+              key: docsme_doc_catalog_settings_dock_style_field
               label: Dock 样式
               help: 选择悬浮控制栏的展示样式
               if: $get(docsme_catalog_custom_dock).value
@@ -3896,12 +4038,14 @@ spec:
                   value: side
             - $formkit: menuRadio
               name: dock_menu
+              key: docsme_doc_catalog_settings_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(docsme_catalog_custom_dock).value
               help: 选择要在悬浮控制栏中显示的菜单
             - $formkit: switch
               name: enable_back_to_top
+              key: docsme_doc_catalog_settings_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(docsme_catalog_custom_dock).value
               value: true
@@ -3952,6 +4096,7 @@ spec:
             - $formkit: toggle
               id: brand_style
               name: brand_style
+              key: auth_auth_settings_brand_style_field
               label: 品牌区样式
               help: 分屏布局左侧的展示风格
               render-type: text
@@ -3969,6 +4114,7 @@ spec:
             - $formkit: toggle
               id: card_effect
               name: card_effect
+              key: auth_auth_settings_card_effect_field
               label: 卡片效果
               help: 为居中卡片布局选择交互效果
               render-type: text
@@ -3983,12 +4129,14 @@ spec:
                   value: spotlight
             - $formkit: text
               name: auth_site_title_simple
+              key: auth_auth_settings_auth_site_title_simple_field
               label: 站点标题
               help: 简约风格下的站点标题，留空则使用站点默认标题
               if: $get(auth_layout).value === 'split' && $get(brand_style).value === 'simple'
               placeholder: "留空使用站点标题"
             - $formkit: text
               name: brand_slogan
+              key: auth_auth_settings_brand_slogan_field
               label: 品牌标语
               help: 在品牌展示区显示的标语文字
               if: $get(auth_layout).value === 'split'
@@ -4263,12 +4411,14 @@ spec:
             - $formkit: switch
               id: equipment_enable_custom_sidebar
               name: enable_custom_sidebar
+              key: equipment_settings_sidebar_settings_equipment_enable_custom_sidebar_field
               if: $get(equipment_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
             - $formkit: toggle
               name: sidebar_position
+              key: equipment_settings_sidebar_settings_sidebar_position_field
               if: $get(equipment_enable_custom_sidebar).value
               label: 侧边栏位置
               render-type: text
@@ -4282,6 +4432,7 @@ spec:
                   value: right
             - $formkit: array
               name: sidebar_widgets
+              key: equipment_settings_sidebar_settings_sidebar_widgets_field
               if: $get(equipment_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
@@ -4319,11 +4470,13 @@ spec:
               value: false
             - $formkit: menuRadio
               name: dock_menu
+              key: equipment_settings_floating_dock_dock_menu_field
               label: Dock 菜单
               value: primary
               if: $get(equipment_enable_custom_dock).value
             - $formkit: switch
               name: enable_back_to_top
+              key: equipment_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(equipment_enable_custom_dock).value
               value: true
@@ -4357,6 +4510,7 @@ spec:
               value: true
             - $formkit: select
               name: server
+              key: music_music_settings_server_field
               label: 音乐平台
               if: $get(music_enable).value
               value: netease
@@ -4373,6 +4527,7 @@ spec:
                   value: baidu
             - $formkit: select
               name: type
+              key: music_music_settings_type_field
               label: 资源类型
               if: $get(music_enable).value
               value: playlist
@@ -4387,12 +4542,14 @@ spec:
                   value: song
             - $formkit: text
               name: id
+              key: music_music_settings_id_field
               label: 资源 ID
               if: $get(music_enable).value
               help: "歌单/专辑/歌手/单曲的 ID（从音乐平台 URL 中获取）"
               validation: required
         - $formkit: group
           name: player_config
+          key: music_player_config_field
           label: 播放器配置
           if: $get(music_enable).value
           value:
@@ -4418,6 +4575,7 @@ spec:
                   value: random
         - $formkit: group
           name: position_config
+          key: music_position_config_field
           label: 位置与显示
           if: $get(music_enable).value
           value:
@@ -4467,6 +4625,7 @@ spec:
               step: 4
         - $formkit: group
           name: cdn_config
+          key: music_cdn_config_field
           label: CDN / 代理设置
           if: $get(music_enable).value
           value:
