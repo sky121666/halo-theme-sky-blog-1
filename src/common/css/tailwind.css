@@ -1,13 +1,18 @@
 /* Tailwind CSS 4 + DaisyUI 5 配置 */
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 
-/* 内容扫描 - 只包含实际使用的类 */
-@source "../../templates/**/*.html";
-@source "../**/*.js";
+/* 只扫描真实模板和源码；templates/assets 是构建输出，禁止反向成为扫描输入。 */
+@source "../../../templates/*.html";
+@source "../../../templates/error/**/*.html";
+@source "../../../templates/gateway_fragments/**/*.html";
+@source "../../../templates/modules/**/*.html";
+@source "../../../templates/password-reset/**/*.html";
+@source "../../common/**/*.js";
+@source "../../pages/**/*.js";
+@source "../../static/**/*.js";
 
 /* 插件 */
 @plugin "@iconify/tailwind4";
 @plugin "daisyui" {
   themes: all;
- }
-
+}

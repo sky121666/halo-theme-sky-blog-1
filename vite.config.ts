@@ -1,7 +1,11 @@
 import { defineConfig } from "vite";
 import { glob } from "glob";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from "fs";
-import { join, dirname } from "path";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { join } from "path";
+
+const bundledStaticAssets = new Set(["css/article-content.css", "js/article-content.js"]);
+const qrcodeTemplate = "qrcode/qrcode-share.html";
+const assetVersionPlaceholder = "__THEME_ASSET_VERSION__";
 
 function normalizePath(filePath: string): string {
   return filePath.replace(/\\/g, "/");
@@ -27,12 +31,22 @@ function copyStaticAssets() {
     items.forEach((item) => {
       const srcPath = join(src, item);
       const destPath = join(dest, item);
+      const relativePath = normalizePath(srcPath).slice(`${normalizePath(srcStaticDir)}/`.length);
 
       if (statSync(srcPath).isDirectory()) {
         copyRecursive(srcPath, destPath);
       } else {
-        // 跳过 README.md
-        if (item === "README.md") {
+        // article-content 已由页面入口打包成共享 chunk，禁止再复制顶层重复文件。
+        if (item === "README.md" || bundledStaticAssets.has(relativePath)) {
+          return;
+        }
+
+        if (relativePath === qrcodeTemplate) {
+          const template = readFileSync(srcPath, "utf-8");
+          if (!template.includes(assetVersionPlaceholder)) {
+            throw new Error(`二维码模板缺少版本占位符：${assetVersionPlaceholder}`);
+          }
+          writeFileSync(destPath, template.replaceAll(assetVersionPlaceholder, assetVersion), "utf-8");
           return;
         }
 

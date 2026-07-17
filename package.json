@@ -2,8 +2,10 @@
   "type": "module",
   "license": "GPL-3.0",
   "version": "2.2.33",
+  "packageManager": "pnpm@10.34.5",
   "engines": {
-    "node": ">=24"
+    "node": ">=24.18.0 <25",
+    "pnpm": "10.34.5"
   },
   "scripts": {
     "build": "tsc && node scripts/verify-plugin-contracts.mjs && vite build && node scripts/verify-build-artifacts.mjs && theme-package",
@@ -11,7 +13,6 @@
     "dev": "vite build --watch",
     "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-pattern src/static/qrcode/qrcode.min.js",
     "format": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
-    "prepare": "husky",
     "prettier": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
     "verify:plugins": "node scripts/verify-plugin-pages.mjs",
     "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs",
@@ -19,45 +20,48 @@
     "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
     "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs"
   },
-  "lint-staged": {
-    "*.{ts,json,yaml,yml,html}": [
-      "prettier --write"
-    ]
-  },
   "dependencies": {
-    "@iconify/tailwind4": "^1.2.3",
-    "@swup/head-plugin": "^2.3.1",
-    "@swup/scripts-plugin": "^2.1.0",
-    "alpinejs": "^3.15.11",
-    "swup": "^4.8.3"
+    "@swup/head-plugin": "2.3.1",
+    "@swup/scripts-plugin": "2.1.0",
+    "alpinejs": "3.15.12",
+    "swup": "4.9.2"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@halo-dev/theme-package-cli": "^1.0.4",
-    "@iconify/json": "^2.2.464",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@tailwindcss/typography": "^0.5.19",
-    "@types/alpinejs": "^3.13.11",
-    "@types/node": "^25.6.0",
-    "@typescript-eslint/eslint-plugin": "^8.58.2",
-    "@typescript-eslint/parser": "^8.58.2",
-    "autoprefixer": "^10.5.0",
-    "daisyui": "^5.5.19",
-    "esbuild": "^0.28.0",
-    "eslint": "^10.2.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "glob": "^13.0.6",
-    "globals": "^17.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
-    "postcss": "^8.5.10",
-    "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.2.2",
-    "terser": "^5.46.1",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.8"
+    "@eslint/js": "10.0.1",
+    "@halo-dev/theme-package-cli": "1.1.1",
+    "@iconify/json": "2.2.500",
+    "@iconify/tailwind4": "1.2.3",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/alpinejs": "3.13.11",
+    "@types/node": "24.13.3",
+    "autoprefixer": "10.5.4",
+    "daisyui": "5.6.18",
+    "esbuild": "0.28.1",
+    "eslint": "10.7.0",
+    "eslint-config-prettier": "10.1.8",
+    "glob": "13.0.6",
+    "globals": "17.7.0",
+    "postcss": "8.5.19",
+    "prettier": "3.9.5",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.64.0",
+    "vite": "8.1.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild@0.28.1"
+    ],
+    "overrides": {
+      "brace-expansion@2": "2.1.2",
+      "brace-expansion@5": "5.0.7",
+      "flatted@3": "3.4.2",
+      "js-yaml@4": "4.3.0",
+      "lodash@4": "4.18.1",
+      "minimatch@5": "5.1.9",
+      "minimatch@9": "9.0.9",
+      "yaml@2": "2.9.0"
+    }
   }
 }

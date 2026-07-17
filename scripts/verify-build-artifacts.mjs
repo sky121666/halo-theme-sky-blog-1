@@ -37,13 +37,7 @@ const logicalChunks = [
   "toc-utils",
 ];
 
-const knownOrphans = [
-  "templates/assets/js/article-content.js",
-  "templates/assets/css/article-content.css",
-];
-
 const copiedTopLevelCss = [
-  "article-content.css",
   "index-effects.css",
   "index-subtitle-effects.css",
   "index-title-effects.css",
@@ -51,7 +45,6 @@ const copiedTopLevelCss = [
 ];
 
 const failures = [];
-const warnings = [];
 
 function absolutePath(relativePath) {
   return path.join(rootDir, relativePath);
@@ -129,10 +122,7 @@ function verifyEntries() {
     recordMissing(`templates/assets/css/${entry}.css`, `入口 CSS ${entry}`);
   }
 
-  const allowedTopLevelJs = new Set([
-    ...logicalEntries.map((entry) => `${entry}.js`),
-    "article-content.js",
-  ]);
+  const allowedTopLevelJs = new Set(logicalEntries.map((entry) => `${entry}.js`));
   const topLevelJsDir = absolutePath("templates/assets/js");
   if (fs.existsSync(topLevelJsDir)) {
     for (const entry of fs.readdirSync(topLevelJsDir, { withFileTypes: true })) {
@@ -273,14 +263,33 @@ function verifyNoSourceMaps() {
   }
 }
 
-function reportKnownOrphans(templateAssetReferences) {
-  for (const orphan of knownOrphans) {
-    if (!exists(orphan)) continue;
+function verifyCacheContracts(packageVersion) {
+  const templateFiles = walk("templates").filter(
+    (file) => file.endsWith(".html") && !file.startsWith("templates/assets/"),
+  );
 
-    if (templateAssetReferences.has(orphan)) {
-      warnings.push(`已知例外当前已被模板引用，需重新审查：${orphan}`);
-    } else {
-      warnings.push(`已知顶层孤儿产物（当前不阻断）：${orphan}`);
+  for (const templateFile of templateFiles) {
+    const lines = read(templateFile).split(/\r?\n/);
+    lines.forEach((line, index) => {
+      if (/[@][{]\/assets\/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+/.test(line) && !line.includes("?v=")) {
+        failures.push(`模板静态资源缺少主题版本缓存参数：${templateFile}:${index + 1}`);
+      }
+    });
+  }
+
+  const qrcodeSource = read("src/static/qrcode/qrcode-share.html");
+  if (!qrcodeSource.includes("qrcode.min.js?v=__THEME_ASSET_VERSION__")) {
+    failures.push("二维码源码未使用主题版本占位符加载 qrcode.min.js");
+  }
+
+  const builtQrcode = "templates/assets/qrcode/qrcode-share.html";
+  if (exists(builtQrcode)) {
+    const builtSource = read(builtQrcode);
+    if (builtSource.includes("__THEME_ASSET_VERSION__")) {
+      failures.push("二维码构建产物仍包含未替换的主题版本占位符");
+    }
+    if (packageVersion && !builtSource.includes(`qrcode.min.js?v=${packageVersion}`)) {
+      failures.push(`二维码子资源版本与主题不一致：期望 ${packageVersion}`);
     }
   }
 }
@@ -298,10 +307,6 @@ function printReport(packageVersion, templateReferenceCount, jsReferenceCount) {
     );
   }
 
-  if (warnings.length > 0) {
-    console.warn("非阻断例外：");
-    for (const warning of warnings) console.warn(`- ${warning}`);
-  }
 }
 
 const { packageVersion } = loadVersions();
@@ -310,7 +315,7 @@ const { expectedChunkFiles } = verifyChunks(packageVersion);
 const templateAssetReferences = collectTemplateAssetReferences();
 const jsReferenceCount = verifyRelativeChunkImports(expectedChunkFiles);
 verifyNoSourceMaps();
-reportKnownOrphans(templateAssetReferences);
+verifyCacheContracts(packageVersion);
 printReport(packageVersion ?? "未知版本", templateAssetReferences.size, jsReferenceCount);
 
 process.exitCode = failures.length === 0 ? 0 : 1;
