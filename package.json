@@ -1,7 +1,7 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.34",
+  "version": "2.2.35",
   "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=24.18.0 <25",

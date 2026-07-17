@@ -1,4 +1,4 @@
-import{t as Z}from"./chunks/debug-2.2.34.js";import{r as z,t as me}from"./chunks/page-runtime-2.2.34.js";(function(){"use strict";const h={info:(...e)=>{window.SYS_WEATHER_DEBUG&&Z.log("weather-bg",...e)},warn:(...e)=>Z.warn("weather-bg",...e)},v="sky_weather_cache_v13",x={sunBody:`<svg viewBox="0 0 200 200" class="w-full h-full fill-current text-yellow-400">
+import{t as Z}from"./chunks/debug-2.2.35.js";import{r as z,t as me}from"./chunks/page-runtime-2.2.35.js";(function(){"use strict";const h={info:(...e)=>{window.SYS_WEATHER_DEBUG&&Z.log("weather-bg",...e)},warn:(...e)=>Z.warn("weather-bg",...e)},v="sky_weather_cache_v13",x={sunBody:`<svg viewBox="0 0 200 200" class="w-full h-full fill-current text-yellow-400">
                 <circle cx="100" cy="100" r="60" />
                 <g class="sun-face" fill="#cc9900">
                   <circle cx="75" cy="90" r="8" />
