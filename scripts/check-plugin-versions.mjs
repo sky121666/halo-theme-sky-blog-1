@@ -38,7 +38,6 @@ try {
   }
   process.exit(1);
 }
-const installed = new Map(endpoint.plugins.map((plugin) => [plugin.name, plugin]));
 const aliasIndex = new Map();
 
 for (const plugin of endpoint.plugins) {

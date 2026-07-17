@@ -53,10 +53,17 @@
         error: false,
         username: /*[[${githubUsername}]]*/ '',
         _initialized: false,
+        _destroyed: false,
+        _idleHandle: null,
+        _loadTimer: null,
+        _themeObserver: null,
+        _themeFrame: null,
+        _preloader: null,
 
         init() {
           if (this._initialized) return;
           this._initialized = true;
+          this._destroyed = false;
 
           if (!this.username) {
             this.loading = false;
@@ -66,16 +73,28 @@
 
           // 延迟加载热力图，不阻塞首屏
           this.$nextTick(() => {
+            if (this._destroyed) return;
             if ('requestIdleCallback' in window) {
-              requestIdleCallback(() => this.loadImage(), { timeout: 3000 });
+              this._idleHandle = window.requestIdleCallback(() => {
+                this._idleHandle = null;
+                if (!this._destroyed) this.loadImage();
+              }, { timeout: 3000 });
             } else {
-              setTimeout(() => this.loadImage(), 200);
+              this._loadTimer = window.setTimeout(() => {
+                this._loadTimer = null;
+                if (!this._destroyed) this.loadImage();
+              }, 200);
             }
           });
 
-          new MutationObserver(() => {
-            requestAnimationFrame(() => this.updateImageSrc());
-          }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+          this._themeObserver = new MutationObserver(() => {
+            if (this._themeFrame !== null) cancelAnimationFrame(this._themeFrame);
+            this._themeFrame = requestAnimationFrame(() => {
+              this._themeFrame = null;
+              if (!this._destroyed) this.updateImageSrc();
+            });
+          });
+          this._themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
         },
 
         getPrimaryHex() {
@@ -96,6 +115,7 @@
         },
 
         loadImage() {
+          if (this._destroyed) return;
           this.loading = true;
           this.error = false;
 
@@ -108,14 +128,19 @@
 
           const url = this.getImageUrl();
           const preloader = new Image();
+          this._preloader = preloader;
 
           preloader.onload = () => {
+            if (this._destroyed || this._preloader !== preloader) return;
+            this._preloader = null;
             imgEl.src = url;
             this.loading = false;
             this.error = false;
           };
 
           preloader.onerror = () => {
+            if (this._destroyed || this._preloader !== preloader) return;
+            this._preloader = null;
             this.loading = false;
             this.error = true;
           };
@@ -124,6 +149,7 @@
         },
 
         updateImageSrc() {
+          if (this._destroyed) return;
           const img = this.$refs.img;
           if (img && !this.error) {
             img.src = this.getImageUrl();
@@ -132,6 +158,25 @@
 
         retry() {
           this.loadImage();
+        },
+
+        destroy() {
+          this._destroyed = true;
+          this._themeObserver?.disconnect();
+          this._themeObserver = null;
+          if (this._themeFrame !== null) cancelAnimationFrame(this._themeFrame);
+          this._themeFrame = null;
+          if (this._idleHandle !== null && 'cancelIdleCallback' in window) {
+            window.cancelIdleCallback(this._idleHandle);
+          }
+          this._idleHandle = null;
+          if (this._loadTimer !== null) window.clearTimeout(this._loadTimer);
+          this._loadTimer = null;
+          if (this._preloader) {
+            this._preloader.onload = null;
+            this._preloader.onerror = null;
+            this._preloader = null;
+          }
         }
       }));
       };
@@ -204,17 +249,25 @@
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             _initialized: false,
+            _destroyed: false,
+            _resizeObserver: null,
+            _themeObserver: null,
+            _resizeTimer: null,
+            _renderFrame: null,
+            _tooltipTimer: null,
 
             init() {
               // 防止重复初始化
               if (this._initialized) return;
               this._initialized = true;
+              this._destroyed = false;
 
               this.parseData();
               this.isEmpty = this.totalCount === 0;
 
               if (!this.isEmpty) {
                 this.$nextTick(() => {
+                  if (this._destroyed) return;
                   this.render();
                   this.setupResizeObserver();
                   this.setupThemeObserver();
@@ -284,7 +337,11 @@
             },
 
             render() {
-              requestAnimationFrame(() => {
+              if (this._destroyed) return;
+              if (this._renderFrame !== null) cancelAnimationFrame(this._renderFrame);
+              this._renderFrame = requestAnimationFrame(() => {
+                this._renderFrame = null;
+                if (this._destroyed) return;
                 const container = this.$refs.container;
                 if (!container) return;
 
@@ -437,7 +494,10 @@
               if (!tooltip) return;
 
               tooltip.classList.remove('visible');
-              setTimeout(() => {
+              if (this._tooltipTimer !== null) window.clearTimeout(this._tooltipTimer);
+              this._tooltipTimer = window.setTimeout(() => {
+                this._tooltipTimer = null;
+                if (this._destroyed) return;
                 tooltip.style.display = 'none';
               }, 150);
             },
@@ -453,20 +513,40 @@
             setupResizeObserver() {
               if (typeof ResizeObserver === 'undefined') return;
 
-              let timeout;
-              new ResizeObserver(() => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => this.render(), 100);
-              }).observe(this.$refs.container);
+              this._resizeObserver?.disconnect();
+              this._resizeObserver = new ResizeObserver(() => {
+                if (this._resizeTimer !== null) window.clearTimeout(this._resizeTimer);
+                this._resizeTimer = window.setTimeout(() => {
+                  this._resizeTimer = null;
+                  if (!this._destroyed) this.render();
+                }, 100);
+              });
+              this._resizeObserver.observe(this.$refs.container);
             },
 
             setupThemeObserver() {
-              new MutationObserver(() => {
-                requestAnimationFrame(() => this.render());
-              }).observe(document.documentElement, {
+              this._themeObserver?.disconnect();
+              this._themeObserver = new MutationObserver(() => {
+                if (!this._destroyed) this.render();
+              });
+              this._themeObserver.observe(document.documentElement, {
                 attributes: true,
                 attributeFilter: ['data-theme']
               });
+            },
+
+            destroy() {
+              this._destroyed = true;
+              this._resizeObserver?.disconnect();
+              this._resizeObserver = null;
+              this._themeObserver?.disconnect();
+              this._themeObserver = null;
+              if (this._resizeTimer !== null) window.clearTimeout(this._resizeTimer);
+              this._resizeTimer = null;
+              if (this._renderFrame !== null) cancelAnimationFrame(this._renderFrame);
+              this._renderFrame = null;
+              if (this._tooltipTimer !== null) window.clearTimeout(this._tooltipTimer);
+              this._tooltipTimer = null;
             }
           }));
           };

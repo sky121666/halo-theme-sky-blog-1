@@ -1,21 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <!-- 字体样式声明片段：保持服务端 head 与 PJAX 目标文档一致。 -->
+  <!-- 字体 link 由服务端直接声明，确保 Swup HeadPlugin 能正确保留、增加和移除。 -->
+  <th:block
+    th:fragment="fonts"
+    th:with="fontConfig=${theme.config.general.font_settings},
+             fontCdn=${fontConfig?.font_cdn ?: 'https://cdn.5ee.net/fonts'},
+             bodyFont=${fontConfig?.body_font ?: 'font-default'}"
+  >
+    <!-- 预连接到字体 CDN -->
+    <link rel="preconnect" th:href="${fontCdn}" crossorigin />
 
-<!-- 字体异步加载片段 - 不阻塞渲染 -->
-<!-- 使用后端配置的 font_cdn 地址 -->
-<th:block th:fragment="fonts">
-  <!-- 预连接到字体 CDN -->
-  <link rel="preconnect" th:href="${theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts'}" crossorigin />
-  
-  <!-- 异步加载通用字体样式 -->
-  <link rel="stylesheet" 
-        th:href="${(theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts') + '/open-fonts.css'}" 
-        media="print" 
-        onload="this.media='all'" />
-  <noscript>
-    <link rel="stylesheet" 
-          th:href="${(theme.config.general.font_settings?.font_cdn ?: 'https://cdn.5ee.net/fonts') + '/open-fonts.css'}" />
-  </noscript>
-</th:block>
+    <!-- 保持 link outerHTML 稳定，避免 HeadPlugin 在每次 PJAX 后重复替换字体样式。 -->
+    <link rel="stylesheet" th:href="${fontCdn + '/open-fonts.css'}" />
 
+    <!-- 正文字体必须出现在服务端 head 中，否则首次 PJAX 后会被 HeadPlugin 当作陈旧资源移除。 -->
+    <link
+      th:if="${bodyFont == 'font-lxgw-wenkai-bright'}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/LXGWBright-SemiLight/result.css'}"
+      data-sky-font="lxgw-wenkai-bright"
+    />
+    <link
+      th:if="${bodyFont == 'font-siyuan-songti'}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/思源屏显臻宋/result.css'}"
+      data-sky-font="siyuan-songti"
+    />
+  </th:block>
+
+  <!-- 首页标题字体：与正文字体、主副标题之间按 URL 去重。 -->
+  <th:block
+    th:fragment="index-fonts"
+    th:with="fontConfig=${theme.config.general.font_settings},
+             fontCdn=${fontConfig?.font_cdn ?: 'https://cdn.5ee.net/fonts'},
+             bodyFont=${fontConfig?.body_font ?: 'font-default'},
+             titleSettings=${theme.config.index.title_settings},
+             subtitleSettings=${theme.config.index.subtitle_settings},
+             titleFont=${titleSettings?.title_font ?: 'font-default'},
+             subtitleFont=${subtitleSettings?.subtitle_font ?: 'font-default'}"
+  >
+    <link
+      th:if="${titleSettings?.show_title == true and titleFont == 'font-lxgw-wenkai-bright' and titleFont != bodyFont}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/LXGWBright-SemiLight/result.css'}"
+      data-sky-font="lxgw-wenkai-bright"
+    />
+    <link
+      th:if="${titleSettings?.show_title == true and titleFont == 'font-siyuan-songti' and titleFont != bodyFont}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/思源屏显臻宋/result.css'}"
+      data-sky-font="siyuan-songti"
+    />
+    <link
+      th:if="${subtitleSettings?.show_subtitle == true and subtitleFont == 'font-lxgw-wenkai-bright' and subtitleFont != bodyFont and (titleSettings?.show_title != true or subtitleFont != titleFont)}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/LXGWBright-SemiLight/result.css'}"
+      data-sky-font="lxgw-wenkai-bright"
+    />
+    <link
+      th:if="${subtitleSettings?.show_subtitle == true and subtitleFont == 'font-siyuan-songti' and subtitleFont != bodyFont and (titleSettings?.show_title != true or subtitleFont != titleFont)}"
+      rel="stylesheet"
+      th:href="${fontCdn + '/思源屏显臻宋/result.css'}"
+      data-sky-font="siyuan-songti"
+    />
+  </th:block>
 </html>

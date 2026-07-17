@@ -217,20 +217,6 @@
 
       // === 全局字体按需加载 ===
       const bodyFont = /*[[${theme.config.general.font_settings.body_font}]]*/ "font-default";
-      const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ "https://cdn.5ee.net/fonts";
-
-      // 加载字体文件
-      if (bodyFont === "font-lxgw-wenkai-bright") {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = fontCdn + "/LXGWBright-SemiLight/result.css";
-        document.head.appendChild(link);
-      } else if (bodyFont === "font-siyuan-songti") {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = fontCdn + "/思源屏显臻宋/result.css";
-        document.head.appendChild(link);
-      }
 
       // 应用字体类到 html 元素（全局生效）
       if (bodyFont && bodyFont !== "font-default") {

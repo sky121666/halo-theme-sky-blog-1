@@ -35,6 +35,7 @@
                       @click.outside="open = false"
                       @focusout="if (!$el.contains($event.relatedTarget)) open = false"
                       @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
+                      @sky:page-load.window="open = false"
                       class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown"
                     >
                       <button
@@ -73,6 +74,7 @@
                             role="menuitem"
                             th:href="@{${childItem.status.href}}"
                             th:target="${childItem.spec.target?.value}"
+                            @click="open = false"
                             th:title="${childItem.status.displayName}"
                             class="text-base-content/70 hover:text-base-content hover:bg-primary/10 rounded-lg text-sm transition-all duration-200"
                           >
@@ -473,7 +475,10 @@
                    allTags = ${tagFinder.listAll()},
                    allCategories = ${categoryFinder.listAsTree()}"
           >
-            <a href="/archives" class="group flex flex-col items-center">
+            <a
+              href="/archives"
+              class="group flex flex-col items-center"
+            >
               <span
                 class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
                 th:text="${allPosts.total}"
@@ -482,7 +487,10 @@
               <span class="text-base-content/40 mt-1 text-xs">文章</span>
             </a>
             <div class="bg-base-content/10 h-6 w-px"></div>
-            <a href="/tags" class="group flex flex-col items-center">
+            <a
+              href="/tags"
+              class="group flex flex-col items-center"
+            >
               <span
                 class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
                 th:text="${#lists.size(allTags)}"
@@ -491,7 +499,10 @@
               <span class="text-base-content/40 mt-1 text-xs">标签</span>
             </a>
             <div class="bg-base-content/10 h-6 w-px"></div>
-            <a href="/categories" class="group flex flex-col items-center">
+            <a
+              href="/categories"
+              class="group flex flex-col items-center"
+            >
               <span
                 class="text-base-content group-hover:text-primary font-mono text-lg font-bold tracking-tight transition-all duration-300 group-hover:scale-110"
                 th:text="${#lists.size(allCategories)}"
@@ -514,6 +525,7 @@
                   <div
                     x-data="{ open: false }"
                     @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
+                    @sky:page-load.window="open = false"
                   >
                     <button
                       type="button"
@@ -570,6 +582,7 @@
                         th:each="childItem : ${menuItem.children}"
                         th:href="@{${childItem.status.href}}"
                         th:target="${childItem.spec.target?.value}"
+                        @click="open = false"
                         class="text-base-content/50 hover:text-base-content hover:bg-base-content/5 flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all duration-200"
                       >
                         <th:block

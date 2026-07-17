@@ -158,7 +158,7 @@ export const pluginContracts = [
   {
     plugin: "PluginContactForm",
     aliases: ["PluginContactForm", "plugin-contact-form", "contact-form"],
-    contractVersion: "1.6.3",
+    contractVersion: "1.6.4",
     status: "confirmed",
     surface: "正文内嵌表单和全局贴边/弹窗表单的主题配色",
     evidence: "src/common/css/base.css; templates/modules/theme-script.html",
@@ -167,6 +167,7 @@ export const pluginContracts = [
     plugin: "ai-assistant",
     aliases: ["ai-assistant", "plugin-ai-assistant"],
     contractVersion: "1.5.1",
+    testedVersion: "2.2.4",
     status: "confirmed",
     surface: "文章顶部 AI 总结小部件的主题配色",
     evidence: "src/pages/post/post.css",

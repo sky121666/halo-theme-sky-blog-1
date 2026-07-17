@@ -3,28 +3,39 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
 
+const typescriptFiles = ["src/**/*.ts", "vite.config.ts", "scripts/**/*.{ts,mts,cts}"];
+
 export default [
   {
-    ignores: [
-      "dist/**",
-      "node_modules/**",
-      "templates/assets/**",
-      "src/static/qrcode/qrcode.min.js",
-    ],
+    ignores: ["dist/**", "node_modules/**", "templates/assets/**", "src/static/qrcode/qrcode.min.js"],
+  },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: typescriptFiles,
+  })),
+  {
+    files: ["src/**/*.{js,ts}"],
     languageOptions: {
       globals: {
         ...globals.browser,
         Alpine: "readonly",
       },
     },
-  },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  prettierConfig,
-  {
-    files: ["**/*.{js,ts}"],
     rules: {
       "no-console": "error",
+    },
+  },
+  {
+    files: ["*.config.{js,cjs}", "vite.config.ts", "scripts/**/*.{js,mjs,ts}"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
+    files: ["vite.config.ts"],
+    rules: {
+      "no-useless-escape": ["error", { allowRegexCharacters: ["/"] }],
     },
   },
   {
@@ -33,4 +44,5 @@ export default [
       "no-console": "off",
     },
   },
+  prettierConfig,
 ];

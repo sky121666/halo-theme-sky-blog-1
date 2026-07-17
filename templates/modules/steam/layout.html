@@ -66,17 +66,14 @@
       >
         <div x-show="gameBg" x-cloak class="steam-game-bg pointer-events-none fixed inset-0 z-0">
           <img
-            x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : ''"
+            x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : null"
             class="h-full w-full object-cover opacity-20"
             @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
           />
           <div class="via-base-100/80 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
         </div>
       </div>
-      <div
-        th:if="${enableCustomBg and bgStyle == 'grid'}"
-        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-      ></div>
+      <th:block th:replace="~{modules/global-background :: grid(${enableCustomBg}, ${bgStyle})}" />
 
       <!-- 悬浮 Dock 控制栏 -->
       <th:block th:replace="~{modules/floating-dock :: dock}" />

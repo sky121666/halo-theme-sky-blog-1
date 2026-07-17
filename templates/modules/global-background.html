@@ -1,0 +1,10 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+  <!-- 全局网格背景跟随 #swup-page-extras 替换，避免 PJAX 切换后丢失或重复。 -->
+  <th:block th:fragment="grid(enableCustomBg, bgStyle)">
+    <div
+      th:if="${enableCustomBg and bgStyle == 'grid'}"
+      class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
+    ></div>
+  </th:block>
+</html>

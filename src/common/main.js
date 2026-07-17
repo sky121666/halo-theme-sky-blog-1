@@ -93,17 +93,12 @@ if (window.__skyPjaxEnabled !== false) {
         isRouteOrDescendant(url, "/schedule-calendar")
       );
     },
-    plugins: [
-      new SwupHeadPlugin({
-        persistAssets: true,
-        persistTags: 'link[rel="stylesheet"][href*="main.css"]',
-      }),
-      new SwupScriptsPlugin({ head: false, body: true, optin: true }),
-    ],
+    plugins: [new SwupHeadPlugin(), new SwupScriptsPlugin({ head: false, body: true, optin: true })],
   });
 
   window.__swup = swup;
 
+  const MANAGED_BODY_CLASSES = ["text-base-content", "flex", "flex-col", "bg-base-100", "bg-base-200", "bg-base-300"];
   let navigationId = 0;
   let pageGeneration = 0;
   const visitDebugState = new WeakMap();
@@ -186,9 +181,59 @@ if (window.__skyPjaxEnabled !== false) {
         .filter(Boolean),
     );
   window.__skyLoadingPluginScripts = window.__skyLoadingPluginScripts || new Set();
+  // HeadPlugin 会同步 head 标签，但浏览器不会执行通过 DOM 替换插入的外部脚本。
+  // 记录首屏已由浏览器执行的脚本；后续只重放 PJAX 首次引入或版本 URL 变化的脚本。
+  window.__skyLoadedHeadScripts =
+    window.__skyLoadedHeadScripts ||
+    new Set(
+      Array.from(document.head.querySelectorAll("script[src]"))
+        .map((script) => script.src)
+        .filter(Boolean),
+    );
+  window.__skyLoadingHeadScripts = window.__skyLoadingHeadScripts || new Set();
+
+  function replayNewHeadScripts(debugState) {
+    const loadedHeadScripts = window.__skyLoadedHeadScripts;
+    const loadingHeadScripts = window.__skyLoadingHeadScripts;
+    const candidates = Array.from(document.head.querySelectorAll("script[src]")).filter(
+      (script) =>
+        !script.hasAttribute("data-swup-ignore-script") &&
+        !loadedHeadScripts.has(script.src) &&
+        !loadingHeadScripts.has(script.src),
+    );
+
+    skyDebug.event("pjax", "head-script:scan", { id: debugState.id, count: candidates.length });
+    candidates.forEach((script) => {
+      const source = script.src;
+      loadingHeadScripts.add(source);
+      const replacement = document.createElement("script");
+      Array.from(script.attributes).forEach((attr) => replacement.setAttribute(attr.name, attr.value));
+      replacement.async = script.hasAttribute("async");
+      replacement.textContent = script.textContent;
+      replacement.addEventListener(
+        "load",
+        () => {
+          loadingHeadScripts.delete(source);
+          loadedHeadScripts.add(source);
+          skyDebug.event("pjax", "head-script:load", { id: debugState.id, path: debugPath(source) });
+        },
+        { once: true },
+      );
+      replacement.addEventListener(
+        "error",
+        () => {
+          loadingHeadScripts.delete(source);
+          loadedHeadScripts.delete(source);
+          skyDebug.error("pjax", "head-script:error", { id: debugState.id, path: debugPath(source) });
+        },
+        { once: true },
+      );
+      script.replaceWith(replacement);
+    });
+  }
 
   function dispatchPjaxCompatibilityEvents(detail) {
-    ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced", "swup:page:view"].forEach((name) => {
+    ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced"].forEach((name) => {
       document.dispatchEvent(
         new CustomEvent(name, {
           detail,
@@ -405,6 +450,19 @@ if (window.__skyPjaxEnabled !== false) {
       }
 
       debugState.generation = ++pageGeneration;
+      window.SkyEvents?.cleanupPageObservers?.();
+
+      // body 不在 Swup 容器内；只同步主题拥有的页面类，保留插件或运行时追加的未知类。
+      const incomingBody = incomingDocument.body;
+      const changedBodyClasses = [];
+      MANAGED_BODY_CLASSES.forEach((className) => {
+        const enabled = incomingBody.classList.contains(className);
+        if (document.body.classList.contains(className) !== enabled) changedBodyClasses.push(className);
+        document.body.classList.toggle(className, enabled);
+      });
+      if (changedBodyClasses.length > 0) {
+        skyDebug.event("pjax", "body:class-sync", { id: debugState.id, classes: changedBodyClasses });
+      }
 
       window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
       skyDebug.event("pjax", "page:cleanup", { id: debugState.id, path: debugPath() });
@@ -437,110 +495,105 @@ if (window.__skyPjaxEnabled !== false) {
   //    - 内联脚本页面（friends 等）：同步执行已置 _currentSignaled=true → 快速路径 ✅
   //
   //  【不阻塞 swup】handler 不返回 Promise → swup 立即继续 content:scroll / page:view
-  swup.hooks.on(
-    "content:replace",
-    (visit) => {
-      const debugState = getVisitDebug(visit);
-      const expectedGeneration = debugState.generation || pageGeneration;
-      // 只重放当前页面明确声明支持 PJAX 的脚本。
-      // 兼容两类标记：
-      //  - data-pjax：主题内约定
-      //  - .pjax：Halo / 插件常见约定（后端传递的普通脚本常见是这个）
-      //
-      // halo:footer 注入区保持常驻，避免全局脚本生成的 DOM 在切页时被替换掉。
-      const pjaxScripts = document.querySelectorAll("script[data-pjax], script.pjax");
-      skyDebug.event("pjax", "script:scan", { id: debugState.id, count: pjaxScripts.length });
-      const loadedPluginScripts = window.__skyLoadedPluginScripts;
-      const loadingPluginScripts = window.__skyLoadingPluginScripts;
-      pjaxScripts.forEach((script) => {
-        // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
-        // 对于内联 script（无 src），每次都执行以初始化组件
-        if (script.src) {
-          if (loadedPluginScripts.has(script.src) || loadingPluginScripts.has(script.src)) {
-            skyDebug.event("pjax", "script:skip", { id: debugState.id, path: debugPath(script.src) });
-            return;
-          }
-          loadingPluginScripts.add(script.src);
+  swup.hooks.on("content:replace", (visit) => {
+    const debugState = getVisitDebug(visit);
+    const expectedGeneration = debugState.generation || pageGeneration;
+    replayNewHeadScripts(debugState);
+    // 只重放当前页面明确声明支持 PJAX 的脚本。
+    // 兼容两类标记：
+    //  - data-pjax：主题内约定
+    //  - .pjax：Halo / 插件常见约定（后端传递的普通脚本常见是这个）
+    //
+    // halo:footer 注入区保持常驻，避免全局脚本生成的 DOM 在切页时被替换掉。
+    const pjaxScripts = document.querySelectorAll("script[data-pjax], script.pjax");
+    skyDebug.event("pjax", "script:scan", { id: debugState.id, count: pjaxScripts.length });
+    const loadedPluginScripts = window.__skyLoadedPluginScripts;
+    const loadingPluginScripts = window.__skyLoadingPluginScripts;
+    pjaxScripts.forEach((script) => {
+      // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
+      // 对于内联 script（无 src），每次都执行以初始化组件
+      if (script.src) {
+        if (loadedPluginScripts.has(script.src) || loadingPluginScripts.has(script.src)) {
+          skyDebug.event("pjax", "script:skip", { id: debugState.id, path: debugPath(script.src) });
+          return;
         }
-        const newScript = document.createElement("script");
-        Array.from(script.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
-        newScript.textContent = script.textContent;
-        if (script.src) {
-          const source = script.src;
-          newScript.addEventListener(
-            "load",
-            () => {
-              loadingPluginScripts.delete(source);
-              loadedPluginScripts.add(source);
-              skyDebug.event("pjax", "script:load", { id: debugState.id, path: debugPath(source) });
-            },
-            { once: true },
-          );
-          newScript.addEventListener(
-            "error",
-            () => {
-              loadingPluginScripts.delete(source);
-              loadedPluginScripts.delete(source);
-              skyDebug.error("pjax", "script:error", { id: debugState.id, path: debugPath(source) });
-            },
-            { once: true },
-          );
-        }
-        script.parentNode.replaceChild(newScript, script);
-      });
-      // 快速路径：内联脚本同步执行已发信号
-      if (_currentSignaled) {
-        _resumeAlpine("inline-signal", expectedGeneration);
-        return;
+        loadingPluginScripts.add(script.src);
       }
-
-      // 找到 ScriptsPlugin 刚注入的 type="module" 脚本
-      const swupScriptsEl = document.getElementById("swup-scripts");
-      const moduleScripts = swupScriptsEl
-        ? Array.from(swupScriptsEl.querySelectorAll('script[type="module"][src]'))
-        : [];
-
-      if (moduleScripts.length === 0) {
-        // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
-        setTimeout(() => _resumeAlpine("no-module-fallback", expectedGeneration), 100);
-        return;
+      const newScript = document.createElement("script");
+      Array.from(script.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+      newScript.textContent = script.textContent;
+      if (script.src) {
+        const source = script.src;
+        newScript.addEventListener(
+          "load",
+          () => {
+            loadingPluginScripts.delete(source);
+            loadedPluginScripts.add(source);
+            skyDebug.event("pjax", "script:load", { id: debugState.id, path: debugPath(source) });
+          },
+          { once: true },
+        );
+        newScript.addEventListener(
+          "error",
+          () => {
+            loadingPluginScripts.delete(source);
+            loadedPluginScripts.delete(source);
+            skyDebug.error("pjax", "script:error", { id: debugState.id, path: debugPath(source) });
+          },
+          { once: true },
+        );
       }
+      script.parentNode.replaceChild(newScript, script);
+    });
+    // 快速路径：内联脚本同步执行已发信号
+    if (_currentSignaled) {
+      _resumeAlpine("inline-signal", expectedGeneration);
+      return;
+    }
 
-      // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
-      let resumed = false;
-      let fallbackTimer = null;
-      function tryResume(reason) {
-        if (!resumed) {
-          resumed = true;
-          if (fallbackTimer) window.clearTimeout(fallbackTimer);
-          _resumeAlpine(reason, expectedGeneration);
-        }
+    // 找到 ScriptsPlugin 刚注入的 type="module" 脚本
+    const swupScriptsEl = document.getElementById("swup-scripts");
+    const moduleScripts = swupScriptsEl ? Array.from(swupScriptsEl.querySelectorAll('script[type="module"][src]')) : [];
+
+    if (moduleScripts.length === 0) {
+      // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
+      setTimeout(() => _resumeAlpine("no-module-fallback", expectedGeneration), 100);
+      return;
+    }
+
+    // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
+    let resumed = false;
+    let fallbackTimer = null;
+    function tryResume(reason) {
+      if (!resumed) {
+        resumed = true;
+        if (fallbackTimer) window.clearTimeout(fallbackTimer);
+        _resumeAlpine(reason, expectedGeneration);
       }
+    }
 
-      let pending = moduleScripts.length;
-      moduleScripts.forEach((script) => {
-        const settle = (event) => {
-          const log = event.type === "error" ? skyDebug.error : skyDebug.event;
-          log("pjax", `module:${event.type}`, {
-            id: debugState.id,
-            path: debugPath(script.src),
-          });
-          if (--pending <= 0) tryResume("module-settled");
-        };
-        script.addEventListener("load", settle, { once: true });
-        script.addEventListener("error", settle, { once: true });
-      });
+    let pending = moduleScripts.length;
+    moduleScripts.forEach((script) => {
+      const settle = (event) => {
+        const log = event.type === "error" ? skyDebug.error : skyDebug.event;
+        log("pjax", `module:${event.type}`, {
+          id: debugState.id,
+          path: debugPath(script.src),
+        });
+        if (--pending <= 0) tryResume("module-settled");
+      };
+      script.addEventListener("load", settle, { once: true });
+      script.addEventListener("error", settle, { once: true });
+    });
 
-      // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
-      fallbackTimer = window.setTimeout(() => {
-        skyDebug.warn("pjax", "module:timeout", { id: debugState.id, pending });
-        tryResume("module-timeout");
-      }, 5000);
+    // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
+    fallbackTimer = window.setTimeout(() => {
+      skyDebug.warn("pjax", "module:timeout", { id: debugState.id, pending });
+      tryResume("module-timeout");
+    }, 5000);
 
-      // 不显式 return Promise → swup 立即继续，不阻塞导航管线
-    },
-    { after: true },
-  );
+    // 不显式 return Promise → swup 立即继续，不阻塞导航管线
+  });
 } else {
   // PJAX 已关闭 — 设置 noop 桩，防止页面 JS 调用报错
   window.__swup = null;

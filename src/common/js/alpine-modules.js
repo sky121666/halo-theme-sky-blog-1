@@ -414,6 +414,7 @@ function createNavbarController() {
   return {
     scrolled: false,
     _scrollHandler: null,
+    _pageLoadHandler: null,
 
     init() {
       // 使用 requestAnimationFrame 节流的滚动监听
@@ -437,12 +438,23 @@ function createNavbarController() {
         }
       };
       window.addEventListener("scroll", this._scrollHandler, { passive: true });
+
+      // 导航栏位于 Swup 容器外，页面切换后必须主动收起持久化的移动抽屉。
+      this._pageLoadHandler = () => {
+        const drawer = document.getElementById("mobile-menu-drawer");
+        if (drawer) drawer.checked = false;
+      };
+      document.addEventListener("sky:page-load", this._pageLoadHandler);
     },
 
     destroy() {
       if (this._scrollHandler) {
         window.removeEventListener("scroll", this._scrollHandler);
         this._scrollHandler = null;
+      }
+      if (this._pageLoadHandler) {
+        document.removeEventListener("sky:page-load", this._pageLoadHandler);
+        this._pageLoadHandler = null;
       }
     },
   };
@@ -849,12 +861,10 @@ function welcomeWeatherCard() {
           return { city, adcode: "", source: "pconline" };
         }
 
-        if (window.SYS_WEATHER_DEBUG)
-          skyDebug.warn("weather", "IP 定位返回异常城市，已降级启用默认地区");
+        if (window.SYS_WEATHER_DEBUG) skyDebug.warn("weather", "IP 定位返回异常城市，已降级启用默认地区");
         return { city: fallbackRegion, adcode: "", source: "fallback_region" };
       } catch (error) {
-        if (window.SYS_WEATHER_DEBUG)
-          skyDebug.warn("weather", "pconline 请求失败或被拦截，已降级启用默认地区", error);
+        if (window.SYS_WEATHER_DEBUG) skyDebug.warn("weather", "pconline 请求失败或被拦截，已降级启用默认地区", error);
         return { city: fallbackRegion, adcode: "", source: "fallback_region" };
       }
     },

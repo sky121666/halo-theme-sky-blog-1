@@ -73,10 +73,7 @@
         />
         <div class="via-base-100/50 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
       </div>
-      <div
-        th:if="${enableCustomBg and bgStyle == 'grid'}"
-        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-      ></div>
+      <th:block th:replace="~{modules/global-background :: grid(${enableCustomBg}, ${bgStyle})}" />
 
       <!-- 悬浮 Dock 控制栏 -->
       <th:block th:replace="~{modules/floating-dock :: dock}" />

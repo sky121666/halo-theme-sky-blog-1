@@ -52,10 +52,7 @@
       <div class="douban-bg pointer-events-none fixed inset-0 z-0" aria-hidden="true">
         <div class="douban-bg-mask absolute inset-0"></div>
       </div>
-      <div
-        th:if="${enableCustomBg and bgStyle == 'grid'}"
-        class="bg-grid-pattern pointer-events-none fixed inset-0 z-[1]"
-      ></div>
+      <th:block th:replace="~{modules/global-background :: grid(${enableCustomBg}, ${bgStyle})}" />
 
       <th:block th:replace="~{modules/floating-dock :: dock}" />
     </div>

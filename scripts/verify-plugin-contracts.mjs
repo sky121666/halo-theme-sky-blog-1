@@ -224,7 +224,12 @@ for (const marker of [
 ]) {
   if (!doubanScript.includes(marker)) fail(`Douban query boundary marker is missing: ${marker}`);
 }
-for (const marker of ["data-douban-error-title", "data-douban-error-description", "data-douban-retry", "data-douban-reset"]) {
+for (const marker of [
+  "data-douban-error-title",
+  "data-douban-error-description",
+  "data-douban-retry",
+  "data-douban-reset",
+]) {
   if (!doubanContent.includes(marker)) fail(`Douban recoverable error marker is missing: ${marker}`);
 }
 
@@ -464,6 +469,7 @@ const contactFormVariables = [
   "--halo-contact-form-color-primary",
   "--halo-contact-form-color-label",
   "--halo-contact-form-color-input",
+  "--halo-contact-form-color-placeholder",
   "--halo-contact-form-color-input-selection",
   "--halo-contact-form-color-border",
   "--halo-contact-form-color-danger",
@@ -478,24 +484,20 @@ const contactFormVariables = [
   "--halo-contact-form-auto-color-modal-bg",
 ];
 for (const variable of contactFormVariables) {
-  if (!baseCss.includes(`${variable}:`)) fail(`Contact Form 1.6.3 theme variable is missing: ${variable}`);
+  if (!baseCss.includes(`${variable}:`)) fail(`Contact Form 1.6.4 theme variable is missing: ${variable}`);
 }
-if (!baseCss.includes("halo-contact-form-auto-loader")) {
-  fail("Contact Form 1.6.3 variables must cover the auto-loader button and modal host");
+for (const host of ["halo-contact-form", "halo-contact-form-single", "halo-contact-form-auto-loader"]) {
+  if (!baseCss.includes(host)) fail(`Contact Form 1.6.4 theme variables must cover host: ${host}`);
 }
 if (
-  !baseCss.includes('[data-color-scheme="dark"] halo-contact-form') ||
-  !baseCss.includes('[data-color-scheme="dark"] halo-contact-form-auto-loader')
+  !baseCss.includes('html[data-color-scheme="dark"] body') ||
+  !baseCss.includes(":is(halo-contact-form, halo-contact-form-single, halo-contact-form-auto-loader)")
 ) {
-  fail("Contact Form form and auto-loader dark color-scheme selectors are missing");
+  fail("Contact Form 1.6.4 high-specificity light/dark host selectors are missing");
 }
 if (!/import\s+["']\.\/css\/base\.css["']/.test(read("src/common/main.js"))) {
   fail("Contact Form variables must be loaded globally through base.css");
 }
-if (articleCss.includes("--halo-contact-form-color-placeholder")) {
-  fail("stale undocumented Contact Form placeholder variable must not be used");
-}
-
 for (const selector of [
   "#article-content hyperlink-card",
   "#article-content hyperlink-inline-card",
@@ -519,11 +521,79 @@ for (const marker of [
   "{ priority: -100 }",
   "window.__skyLoadedPluginScripts ||",
   "window.__skyLoadingPluginScripts || new Set()",
+  "window.__skyLoadedHeadScripts ||",
+  "window.__skyLoadingHeadScripts || new Set()",
+  "replayNewHeadScripts(debugState)",
+  'document.head.querySelectorAll("script[src]")',
+  'script.hasAttribute("data-swup-ignore-script")',
+  'replacement.async = script.hasAttribute("async")',
+  'skyDebug.event("pjax", "head-script:load"',
   "loadingPluginScripts.add(script.src)",
   "loadingPluginScripts.delete(source)",
   "loadedPluginScripts.add(source)",
+  "MANAGED_BODY_CLASSES",
+  "document.body.classList.toggle(className, enabled)",
+  "new SwupHeadPlugin()",
 ]) {
   if (!commonMain.includes(marker)) fail(`PJAX boundary/script lifecycle marker is missing: ${marker}`);
+}
+if (/persist(?:Assets|Tags)\s*:/.test(commonMain)) {
+  fail("Swup HeadPlugin must diff versioned assets instead of persisting stale main.css");
+}
+if (commonMain.includes("{ after: true }")) {
+  fail("unsupported Swup hook option after:true must not be used");
+}
+if (/document\.body\.className\s*=/.test(commonMain)) {
+  fail("PJAX body sync must preserve third-party runtime classes");
+}
+const compatibilityEvents = commonMain.slice(
+  commonMain.indexOf("function dispatchPjaxCompatibilityEvents"),
+  commonMain.indexOf("function getLightGalleryInlineScripts"),
+);
+if (compatibilityEvents.includes("swup:page:view")) {
+  fail("Swup already dispatches swup:page:view; the compatibility bridge must not duplicate it");
+}
+const heatmapTemplate = read("templates/modules/widgets/heatmap.html");
+for (const marker of [
+  "_themeObserver?.disconnect()",
+  "_resizeObserver?.disconnect()",
+  "cancelIdleCallback",
+  "cancelAnimationFrame(this._renderFrame)",
+  "clearTimeout(this._resizeTimer)",
+]) {
+  if (!heatmapTemplate.includes(marker)) fail(`PJAX heatmap cleanup marker is missing: ${marker}`);
+}
+if ((heatmapTemplate.match(/\bdestroy\(\)\s*\{/g) || []).length < 2) {
+  fail("both GitHub and article heatmaps must release observers and scheduled callbacks on Alpine destroy");
+}
+const baseScript = read("src/common/js/base.js");
+for (const marker of [
+  "cleanupPageObservers()",
+  "this._imageObserver?.disconnect()",
+  "this._animationObserver?.disconnect()",
+  "this._loadingImageObserver?.disconnect()",
+  "this.initLoadingImageObserver()",
+  'document.getElementById("swup") || document.body',
+]) {
+  if (!baseScript.includes(marker)) fail(`PJAX base observer lifecycle marker is missing: ${marker}`);
+}
+if (!commonMain.includes("window.SkyEvents?.cleanupPageObservers?.()")) {
+  fail("PJAX cleanup must release base observers before replacing the page containers");
+}
+const navTemplate = read("templates/modules/nav.html");
+if ((navTemplate.match(/@click="open = false"/g) || []).length < 2) {
+  fail("desktop and mobile submenu links must close their persistent Alpine state before PJAX navigation");
+}
+if ((navTemplate.match(/@sky:page-load\.window="open = false"/g) || []).length < 2) {
+  fail("desktop and mobile submenu state must reset after PJAX navigation and history traversal");
+}
+for (const marker of [
+  "_pageLoadHandler: null",
+  'document.addEventListener("sky:page-load", this._pageLoadHandler)',
+  'document.removeEventListener("sky:page-load", this._pageLoadHandler)',
+  'document.getElementById("mobile-menu-drawer")',
+]) {
+  if (!alpineModules.includes(marker)) fail(`persistent navbar cleanup marker is missing: ${marker}`);
 }
 for (const route of ["/dishes", "/schedule-calendar"]) {
   if (!commonMain.includes(`isRouteOrDescendant(url, ${JSON.stringify(route)})`)) {
@@ -535,6 +605,80 @@ if (
   !commonMain.includes("resolved.pathname.startsWith(`${route}/`)")
 ) {
   fail("independent plugin route matching must not swallow similarly prefixed non-plugin pages");
+}
+const pjaxLayouts = [
+  "templates/modules/about/layout.html",
+  "templates/modules/archives/layout.html",
+  "templates/modules/author/layout.html",
+  "templates/modules/bangumi/layout.html",
+  "templates/modules/categories/layout.html",
+  "templates/modules/doc-layout.html",
+  "templates/modules/douban/layout.html",
+  "templates/modules/equipments/layout.html",
+  "templates/modules/friends/layout.html",
+  "templates/modules/index/layout.html",
+  "templates/modules/links/layout.html",
+  "templates/modules/moments/layout.html",
+  "templates/modules/page/layout.html",
+  "templates/modules/photos/layout.html",
+  "templates/modules/post/layout.html",
+  "templates/modules/steam/layout.html",
+  "templates/modules/tags/layout.html",
+];
+const gridFragmentMarker = "modules/global-background :: grid(${enableCustomBg}, ${bgStyle})";
+const fontFragmentMarker = "modules/font-loader :: fonts";
+for (const file of pjaxLayouts) {
+  const source = read(file);
+  const extrasIndex = source.indexOf('id="swup-page-extras"');
+  const scriptsIndex = source.indexOf('id="swup-scripts"');
+  const gridIndex = source.indexOf(gridFragmentMarker);
+  const gridCount = source.split(gridFragmentMarker).length - 1;
+  const fontCount = source.split(fontFragmentMarker).length - 1;
+  if (
+    extrasIndex === -1 ||
+    scriptsIndex === -1 ||
+    gridCount !== 1 ||
+    gridIndex < extrasIndex ||
+    gridIndex > scriptsIndex
+  ) {
+    fail(`${file}: global grid fragment must appear exactly once inside #swup-page-extras`);
+  }
+  if (fontCount !== 1) {
+    fail(`${file}: global font-loader must appear exactly once`);
+  }
+  if (source.includes('class="bg-grid-pattern')) {
+    fail(`${file}: duplicated grid markup must use the shared global-background fragment`);
+  }
+}
+const fontLoader = read("templates/modules/font-loader.html");
+for (const marker of [
+  'th:fragment="index-fonts"',
+  'data-sky-font="lxgw-wenkai-bright"',
+  'data-sky-font="siyuan-songti"',
+  "/LXGWBright-SemiLight/result.css",
+  "/思源屏显臻宋/result.css",
+  "titleSettings?.show_title != true or subtitleFont != titleFont",
+]) {
+  if (!fontLoader.includes(marker)) fail(`declarative font contract marker is missing: ${marker}`);
+}
+if (fontLoader.includes('media="print"') || fontLoader.includes("onload=")) {
+  fail("font link attributes must stay stable for Swup HeadPlugin outerHTML matching");
+}
+if (fontLoader.includes("<noscript")) {
+  fail("ordinary font stylesheets already support no-JS and must not be duplicated by DOMParser during PJAX");
+}
+if (!read("templates/modules/index/layout.html").includes("modules/font-loader :: index-fonts")) {
+  fail("index layout must declare its title/subtitle fonts in the incoming document head");
+}
+for (const file of ["templates/modules/theme-script.html", "templates/modules/index/header/title.html"]) {
+  const source = read(file);
+  if (
+    source.includes('createElement("link")') ||
+    source.includes("createElement('link')") ||
+    source.includes("loadedFonts")
+  ) {
+    fail(`${file}: dynamic font injection is incompatible with Swup HeadPlugin`);
+  }
 }
 for (const [file, marker] of [
   ["templates/modules/bangumi/layout.html", 'id="bangumi-bg-container"'],
@@ -673,7 +817,7 @@ for (const { env, markers, matchAll = false } of [
     matchAll: true,
   },
 ]) {
-  const start = pageVerifier.indexOf(`env: \"${env}\"`);
+  const start = pageVerifier.indexOf(`env: "${env}"`);
   const end = start === -1 ? -1 : pageVerifier.indexOf("\n  },", start);
   const block = start === -1 || end === -1 ? "" : pageVerifier.slice(start, end);
   if (!block) {

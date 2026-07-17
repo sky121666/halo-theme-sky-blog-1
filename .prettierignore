@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+.pnpm-store/
+.playwright-cli/
+
+# Halo 运行时构建产物与锁文件不参与格式化。
+templates/assets/
+pnpm-lock.yaml
+
+# Thymeleaf 属性和内联表达式由 Halo 运行时解析，暂不交给通用 HTML 格式化器重排。
+templates/**/*.html
+
+# 二维码资源分别是第三方压缩文件和带构建期版本占位符的运行时模板。
+src/static/qrcode/qrcode.min.js
+src/static/qrcode/qrcode-share.html
