@@ -41,8 +41,8 @@
 | plugin-online           | 在线访客统计                     | 侧边栏小工具                  | [在线统计](../../theme/enhancements/online-stats.md) |
 | vote                    | 正文投票块                       | 文章、页面和文档正文          | 1.1.3 主题变量；交互需实站回归                       |
 | text-diagram            | Mermaid/PlantUML 文本绘图        | 文章、页面和文档正文          | 1.5.2 绘图容器与暗色 selector                        |
-| PluginContactForm       | 联系表单                         | 正文、贴边按钮和页面弹窗      | 契约 1.6.3；当前 1.6.4 完整流程仍待实站回归          |
-| ai-assistant            | AI 总结小部件                    | 文章顶部                      | 1.5.1 DOM/主题变量；市场 2.2.4 待实站回归            |
+| PluginContactForm       | 联系表单                         | 正文、单页、贴边按钮和页面弹窗 | 契约 1.6.4；完整提交与上传流程仍待实站回归            |
+| ai-assistant            | AI 总结小部件                    | 文章顶部                      | 契约 1.5.1；2.2.4 摘要小部件已完成无模型实站回归      |
 
 ## lightgallery.js 灯箱
 
@@ -101,7 +101,7 @@
 | plugin-douban                              | 图片代理在插件后台配置，主题只做失败占位                                                                  |
 | halo-plugin-steam                          | Steam 资料需要 API Key、SteamID 和公开隐私设置                                                            |
 | Passkey                                    | 登录入口与认证 options 请求通过；未选择凭据或完成认证                                                     |
-| ai-assistant                               | 只确认 `1.5.1` AI 总结契约；市场 `2.2.4` 待回归                                                           |
+| ai-assistant                               | `2.2.4` 仅完成已有摘要小部件、明暗、移动端与 PJAX 回归；不含生成、RAG 或编辑器 AI                         |
 
 更完整的版本基线见 [插件适配状态](../../system/adaptation/plugin-adaptation.md)。
 

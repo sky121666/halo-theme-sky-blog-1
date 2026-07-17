@@ -15,7 +15,7 @@
 | `pnpm verify:plugin-versions`  | 通过 Halo 后端 API 检查插件安装版本和主题契约 |
 | `pnpm verify:plugin-contracts` | 校验契约清单、文档矩阵和关键模板断言          |
 
-项目声明 Node.js `>=24`。较低版本即使部分命令能运行，也只能视为预检查，正式构建和验收应切换到 Node 24 或更高版本。
+项目声明 Node.js `>=24.18.0 <25`，并固定使用 pnpm `10.34.5`。版本低于该范围或进入 Node 25 均只能视为预检查，正式构建、CI 和发版必须使用这组基线。
 
 默认 smoke 目标是 `http://localhost:8090`，页面与版本脚本都会自动读取 `.env.local` / `.env` 中的 `HALO_BASE_URL`。如果本地端口不同，也可以单次覆盖：
 

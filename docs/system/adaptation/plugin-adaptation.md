@@ -37,8 +37,8 @@
 | `plugin-online`           | 在线统计侧边栏小工具和 PJAX 请求取消                   | `1.0.5`          | -              | `confirmed`         | `templates/modules/widgets/online-stats.html`、`src/common/js/alpine-modules.js`                                                                                                                         |
 | `vote`                    | 正文投票块的 25 个主题变量                             | `1.1.3`          | -              | `confirmed`         | `src/static/css/article-content.css`                                                                                                                                                                     |
 | `text-diagram`            | 默认 `<text-diagram>`、暗色和 PJAX 补渲染              | `1.5.2`          | -              | `confirmed`         | `templates/modules/theme-script.html`、`src/static/css/article-content.css`、`src/static/js/article-content.js`                                                                                          |
-| `PluginContactForm`       | 内嵌、贴边和弹窗联系表单的 20 个主题变量               | `1.6.3`          | -              | `confirmed`         | `src/common/css/base.css`、`templates/modules/theme-script.html`                                                                                                                                         |
-| `ai-assistant`            | 文章顶部 AI 总结小部件                                 | `1.5.1`          | -              | `confirmed`         | `src/pages/post/post.css`                                                                                                                                                                                |
+| `PluginContactForm`       | 内嵌、单页、贴边和弹窗联系表单的 21 个主题变量         | `1.6.4`          | -              | `confirmed`         | `src/common/css/base.css`、`templates/modules/theme-script.html`                                                                                                                                         |
+| `ai-assistant`            | 文章顶部 AI 总结小部件                                 | `1.5.1`          | `2.2.4`        | `confirmed`         | `src/pages/post/post.css`、`src/common/main.js`                                                                                                                                                          |
 | `editor-hyperlink-card`   | 正文块级/行内链接卡片宿主布局与 PJAX                   | `1.9.2`          | -              | `confirmed`         | `src/static/css/article-content.css`、`src/common/main.js`                                                                                                                                               |
 | `plugin-katex`            | 行内/块级公式、横向溢出与 PJAX 重执行                  | `3.0.0`          | -              | `confirmed`         | `src/static/css/article-content.css`、`src/common/main.js`                                                                                                                                               |
 | `lottery`                 | 正文抽奖卡片宿主布局                                   | `1.0.2`          | -              | `confirmed`         | `src/static/css/article-content.css`                                                                                                                                                                     |
@@ -65,8 +65,8 @@
 | `PluginPhotos`            | `2.1.1`  | `2.1.2`           | 列表、详情、PJAX、20→40→46 张无限滚动灯箱和 46 个唯一详情路由均通过      |
 | `plugin-bilibili-bangumi` | `1.4.0`  | `1.4.1`           | 稳定版 1.4.1 已通过 36/36 深度边界与真页 PJAX；实现契约继续保持 1.4.0     |
 | `plugin-shiki`            | `1.3.1`  | `1.4.1`           | 1.4.1 已通过 26 个真实代码块、折叠、明暗及两轮 PJAX 归一化；最低 Halo 契约仍保持 1.3.1 |
-| `ai-assistant`            | `1.5.1`  | `2.2.4`           | 只确认 1.5.1 的 AI 总结 DOM/变量；2.2.4 为当前市场版，待文章页回归       |
-| `PluginContactForm`       | `1.6.3`  | `1.6.4`           | 当前安装版高于契约；Loader 可用，UI、校验、上传和提交仍待完整回归        |
+| `ai-assistant`            | `1.5.1`  | `2.2.4`           | 2.2.4 已通过已有摘要、明暗、移动端、PJAX 首次脚本注入和返回去重回归；不含模型生成、RAG 或编辑器 AI |
+| `PluginContactForm`       | `1.6.4`  | `1.6.4`           | 已按 21 个变量和 3 类宿主更新契约；UI、校验、上传和提交仍待完整回归      |
 | `plugin-friends`          | `1.4.6`  | `1.4.6`           | 上游已归档；与 Links 2.0.0 可启动，Links 2.1.0～2.2.1 组合触发类加载冲突 |
 | `link-submit`             | `1.0.7`  | `1.0.7`           | 与 Links 2.0.0 可启动；主题按需加载官方资源并保留申请 URL/评论/邮箱降级  |
 
@@ -86,8 +86,8 @@
 | Text Diagram    | 主实例 `mermaid_selector` 为默认 `<text-diagram>`；主题按需加载插件自带资源、串行补渲染，并在明暗切换后重绘 SVG。自定义 selector 不在当前契约内 |
 | Shiki           | 1.4.1 在 Halo 2.25.4 已通过 26 个代码块、折叠、长行、明暗与两轮 PJAX；主题实现契约仍保留兼容 Halo 2.23/2.24 的 1.3.1                         |
 | LightGallery    | 文章、Moments 单图/多图及 PJAX 返回均保持单实例；后台 selector 覆盖 moments、photos、docs、archives、about、privacy 路由                     |
-| Contact Form    | 主题契约仍为 1.6.3；当前 1.6.4 的 Loader 可用，但提交、上传、贴边和弹窗流程尚未完成实站验证                                                     |
-| AI Assistant    | 只适配文章 `ai-summary-widget`；不代表 RAG、编辑器 AI 或模型调用已验证                                                                          |
+| Contact Form    | 主题契约已覆盖 1.6.4 的 21 个变量和 3 类宿主；Loader 可用，但提交、上传、贴边和弹窗流程尚未完成实站验证                                        |
+| AI Assistant    | 2.2.4 的文章 `ai-summary-widget` 已通过无模型回归；不代表 RAG、编辑器 AI 或模型生成流程已验证                                                     |
 | Hyperlink Card  | 块级卡片保持块布局，行内卡片保持 `inline-block`；颜色继续由插件后台控制                                                                         |
 | KaTeX           | `.katex-display` 限制正文宽度并允许横向滚动；公式脚本依赖 `data-pjax` 重执行                                                                    |
 | Lottery         | 只约束 `<lottery-card>` 宿主宽度；参与、验证码、开奖和存储状态需要有效活动写操作验收                                                            |

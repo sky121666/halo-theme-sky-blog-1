@@ -7,7 +7,7 @@ on:
 
 jobs:
   cd:
-    uses: halo-sigs/reusable-workflows/.github/workflows/theme-cd.yaml@v4
+    uses: halo-sigs/reusable-workflows/.github/workflows/theme-cd.yaml@99c24709710a37e286adca6879d8d5faf46224fc
     secrets:
       halo-pat: ${{ secrets.HALO_PAT }}
     permissions:
@@ -15,4 +15,6 @@ jobs:
     with:
       app-id: app-squauk4h
       skip-appstore-release: false
-      node-version: 24
+      node-version: "24.18.0"
+      # 空值让 pnpm/action-setup 读取 package.json 的 packageManager，避免双版本来源。
+      pnpm-version: ""

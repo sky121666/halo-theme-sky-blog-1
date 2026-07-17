@@ -4,7 +4,7 @@
 
 [![Halo](https://img.shields.io/badge/Halo-2.23.0+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
-[![Node](https://img.shields.io/badge/Node-24+-brightgreen)](https://nodejs.org)
+[![Node](https://img.shields.io/badge/Node-24.18.x-brightgreen)](https://nodejs.org)
 
 ## 📖 简介
 
@@ -139,7 +139,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配                         |
 | 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链书签、分组展示                                                |
 | 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit)                        | ✅ 1.0.7 官方组件与 PJAX 弹窗通过；资源失败时保留多级降级            |
-| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.3 的全局主题变量；提交与上传待实站回归                        |
+| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.4 的 21 个全局主题变量；提交与上传待实站回归                  |
 | 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM 与 PJAX 重入通过；移动端和暗色专项待验收     |
 | 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归                        |
 | 限制阅读    | [app-TzRqd](https://www.halo.run/store/apps/app-TzRqd)       | -                                                                                         | ✅ 宿主、登录和文章/单页评论依赖；各模式待实站回归                   |
@@ -224,8 +224,8 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ### 环境要求
 
-- Node.js 24+
-- pnpm 10+
+- Node.js `>=24.18.0 <25`
+- pnpm `10.34.5`
 - Java 21+ (运行 Halo)
 
 ### 开发命令
