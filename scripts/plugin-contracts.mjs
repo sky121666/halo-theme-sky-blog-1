@@ -168,9 +168,9 @@ export const pluginContracts = [
     aliases: ["ai-assistant", "plugin-ai-assistant"],
     contractVersion: "1.5.1",
     testedVersion: "2.2.4",
-    status: "confirmed",
-    surface: "文章顶部 AI 总结小部件的主题配色",
-    evidence: "src/pages/post/post.css",
+    status: "compatible-tested",
+    surface: "文章顶部 AI 总结小部件的主题配色与 PJAX 资源生命周期",
+    evidence: "src/pages/post/post.css; src/common/main.js",
   },
   {
     plugin: "editor-hyperlink-card",

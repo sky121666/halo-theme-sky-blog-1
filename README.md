@@ -131,19 +131,19 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ### 内容类
 
-| 插件        | 应用市场                                                     | GitHub                                                                                    | 主题支持                                                             |
-| ----------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 瞬间管理    | [app-SnwWD](https://www.halo.run/store/apps/app-SnwWD)       | [plugin-moments](https://github.com/halo-sigs/plugin-moments)                             | ✅ 前端发布、媒体上传                                                |
-| 朋友圈      | [app-yISsV](https://www.halo.run/store/apps/app-yISsV)       | [plugin-friends](https://github.com/chengzhongxue/plugin-friends)                         | ✅ 1.4.6 与 PluginLinks 2.0.0 组合已通过；上游已归档                 |
-| Docsme 文档 | [app-yffxw](https://www.halo.run/store/apps/app-yffxw)       | -                                                                                         | ✅ 按 1.7.0 契约集成项目、目录、正文和 DocTree 评论                  |
-| 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配                         |
-| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链书签、分组展示                                                |
-| 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit)                        | ✅ 1.0.7 官方组件与 PJAX 弹窗通过；资源失败时保留多级降级            |
-| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.4 的 21 个全局主题变量；提交与上传待实站回归                  |
-| 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM 与 PJAX 重入通过；移动端和暗色专项待验收     |
-| 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归                        |
-| 限制阅读    | [app-TzRqd](https://www.halo.run/store/apps/app-TzRqd)       | -                                                                                         | ✅ 宿主、登录和文章/单页评论依赖；各模式待实站回归                   |
-| 维护模式    | -                                                            | [plugin-maintenance](https://github.com/chengzhongxue/plugin-maintenance)                 | ✅ 1.1.0 独立品牌模板与返回入口；真实全站切换未执行                  |
+| 插件        | 应用市场                                                     | GitHub                                                                                    | 主题支持                                                  |
+| ----------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| 瞬间管理    | [app-SnwWD](https://www.halo.run/store/apps/app-SnwWD)       | [plugin-moments](https://github.com/halo-sigs/plugin-moments)                             | ✅ 前端发布、媒体上传                                     |
+| 朋友圈      | [app-yISsV](https://www.halo.run/store/apps/app-yISsV)       | [plugin-friends](https://github.com/chengzhongxue/plugin-friends)                         | ✅ 1.4.6 与 PluginLinks 2.0.0 组合已通过；上游已归档      |
+| Docsme 文档 | [app-yffxw](https://www.halo.run/store/apps/app-yffxw)       | -                                                                                         | ✅ 按 1.7.0 契约集成项目、目录、正文和 DocTree 评论       |
+| 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配              |
+| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链书签、分组展示                                     |
+| 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit)                        | ✅ 1.0.7 官方组件与 PJAX 弹窗通过；资源失败时保留多级降级 |
+| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.4 的 21 个全局主题变量；提交与上传待实站回归       |
+| 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM、390px、暗色与 PJAX 重入通过      |
+| 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归             |
+| 限制阅读    | [app-TzRqd](https://www.halo.run/store/apps/app-TzRqd)       | -                                                                                         | ✅ 宿主、登录和文章/单页评论依赖；各模式待实站回归        |
+| 维护模式    | -                                                            | [plugin-maintenance](https://github.com/chengzhongxue/plugin-maintenance)                 | ✅ 1.1.0 独立品牌模板与返回入口；真实全站切换未执行       |
 
 ### 扩展类
 
@@ -157,17 +157,17 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ### 工具类
 
-| 插件           | 应用市场                                                     | GitHub                                                                      | 主题支持                                               |
-| -------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Shiki 代码高亮 | [app-kzloktzn](https://www.halo.run/store/apps/app-kzloktzn) | [plugin-shiki](https://github.com/halo-sigs/plugin-shiki)                   | ✅ 代码块美化                                          |
-| KaTeX 数学公式 | -                                                            | [plugin-katex](https://github.com/halo-sigs/plugin-katex)                   | ✅ 3.0.0 公式溢出与 PJAX 脚本重执行契约                |
-| 搜索组件       | [app-DlacW](https://www.halo.run/store/apps/app-DlacW)       | [plugin-search-widget](https://github.com/halo-sigs/plugin-search-widget)   | ✅ 全局搜索                                            |
-| 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                                            |
-| 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ 1.5.2 默认节点、SVG、明暗重绘与 PJAX 重入通过       |
-| AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ AI 总结按 1.5.1 契约适配；当前 2.2.4 待实站回归     |
-| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 稳定 selector DOM 与 PJAX 后兼容重放                |
-| Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 登录入口和认证 options 请求通过；真实凭据认证未执行 |
-| 在线统计       | -                                                            | -                                                                           | ✅ 插件可用时显示；禁用或失败时不再请求 API            |
+| 插件           | 应用市场                                                     | GitHub                                                                      | 主题支持                                                                           |
+| -------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Shiki 代码高亮 | [app-kzloktzn](https://www.halo.run/store/apps/app-kzloktzn) | [plugin-shiki](https://github.com/halo-sigs/plugin-shiki)                   | ✅ 代码块美化                                                                      |
+| KaTeX 数学公式 | -                                                            | [plugin-katex](https://github.com/halo-sigs/plugin-katex)                   | ✅ 3.0.0 公式溢出与 PJAX 脚本重执行契约                                            |
+| 搜索组件       | [app-DlacW](https://www.halo.run/store/apps/app-DlacW)       | [plugin-search-widget](https://github.com/halo-sigs/plugin-search-widget)   | ✅ 全局搜索                                                                        |
+| 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                                                                        |
+| 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ 1.5.2 默认节点、SVG、明暗重绘与 PJAX 重入通过                                   |
+| AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ 1.5.1 实现契约；2.2.4 摘要小部件已完成无模型实站回归，生成/RAG/编辑器 AI 未验收 |
+| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 稳定 selector DOM 与 PJAX 后兼容重放                                            |
+| Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 登录入口和认证 options 请求通过；真实凭据认证未执行                             |
+| 在线统计       | -                                                            | -                                                                           | ✅ 插件可用时显示；禁用或失败时不再请求 API                                        |
 
 ### 存储类
 

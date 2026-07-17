@@ -19,26 +19,26 @@
 
 | Plugin                    | Surface                                                | Contract version | Tested version | Status              | Evidence                                                                                                                                                                                                 |
 | ------------------------- | ------------------------------------------------------ | ---------------- | -------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PluginLinks`             | `/links`、首页友链、Friends 可选分组、友链申请         | `2.0.0`          | `2.0.0`        | `compatible-tested` | `templates/links.html`、`templates/modules/index/content.html`、`templates/modules/widgets/links.html`、`templates/modules/widgets/tabs_group.html`、`src/pages/links/links.js`                         |
+| `PluginLinks`             | `/links`、首页友链、Friends 可选分组、友链申请         | `2.0.0`          | `2.0.0`        | `compatible-tested` | `templates/links.html`、`templates/modules/index/content.html`、`templates/modules/widgets/links.html`、`templates/modules/widgets/tabs_group.html`、`src/pages/links/links.js`                          |
 | `PluginPhotos`            | `/photos`、无限滚动、照片详情和灯箱生命周期            | `2.1.1`          | `2.1.2`        | `compatible-tested` | `templates/photos.html`、`templates/photo.html`、`templates/modules/photos/content.html`、`src/pages/photos/photos.js`                                                                                   |
 | `PluginMoments`           | 列表、详情、作者缺失降级、作者 Finder 门控、前端发布   | `1.16.1`         | -              | `inferred`          | `templates/moments.html`、`templates/moment.html`、`templates/modules/moments/`、`templates/modules/author/content.html`                                                                                 |
 | `plugin-friends`          | `/friends`、首页动态和 PluginLinks 可选增强            | `1.4.6`          | -              | `confirmed`         | `templates/friends.html`、`templates/modules/friends/`、`templates/modules/widgets/tabs_group.html`                                                                                                      |
 | `plugin-docsme`           | 项目、目录、正文、DocTree 评论                         | `1.7.0`          | -              | `inferred`          | `templates/docs.html`、`templates/doc.html`、`templates/modules/doc-content.html`                                                                                                                        |
-| `plugin-bilibili-bangumi` | `/bangumis`、侧边栏卡片和 PJAX 背景                    | `1.4.0`          | `1.4.1`        | `compatible-tested` | `templates/bangumis.html`、`templates/modules/bangumi/content.html`、`templates/modules/widgets/bangumi-card.html`、`templates/modules/bangumi/layout.html`、`scripts/verify-plugin-pages.mjs`          |
+| `plugin-bilibili-bangumi` | `/bangumis`、侧边栏卡片和 PJAX 背景                    | `1.4.0`          | `1.4.1`        | `compatible-tested` | `templates/bangumis.html`、`templates/modules/bangumi/content.html`、`templates/modules/widgets/bangumi-card.html`、`templates/modules/bangumi/layout.html`、`scripts/verify-plugin-pages.mjs`           |
 | `halo-plugin-steam`       | `/steam`、侧边栏门控、空封面、下架状态和 PJAX 页面状态 | `1.0.0`          | -              | `inferred`          | `templates/steam.html`、`templates/modules/steam/content.html`、`templates/modules/steam/layout.html`、`templates/modules/widgets/sidebar.html`、`src/pages/steam/steam.js`、`src/pages/steam/steam.css` |
 | `plugin-equipment`        | `/equipments`                                          | `1.1.1`          | -              | `confirmed`         | `templates/equipments.html`、`templates/modules/equipments/`                                                                                                                                             |
 | `plugin-douban`           | `/douban`、URL/历史状态、类型和题材 API、PJAX 背景     | `1.2.5`          | -              | `confirmed`         | `templates/douban.html`、`templates/modules/douban/layout.html`、`src/pages/douban/douban.js`                                                                                                            |
 | `PluginSearchWidget`      | 导航搜索入口                                           | `1.7.1`          | -              | `confirmed`         | `templates/modules/nav.html`                                                                                                                                                                             |
 | `PluginCommentWidget`     | 文章、页面和插件页评论                                 | `3.1.2`          | -              | `confirmed`         | `templates/modules/post/article-footer.html`、`templates/modules/moments/`                                                                                                                               |
 | `plugin-shiki`            | 文章和文档代码高亮；Halo 2.23/2.24 兼容线              | `1.3.1`          | `1.4.1`        | `compatible-tested` | `src/static/css/article-content.css`、`docs/system/adaptation/main-halo-runtime-audit.md`；1.4.x 要求 Halo 2.25+                                                                                         |
-| `PluginLightGallery`      | 文章、图库、瞬间和文档灯箱及动态列表刷新               | `1.2.1`          | `1.2.1`        | `compatible-tested` | `src/common/main.js`、`src/pages/photos/photos.js`、`src/pages/moments/moments.js`、`templates/modules/photos/content.html`、本页 selector 配置                                                         |
+| `PluginLightGallery`      | 文章、图库、瞬间和文档灯箱及动态列表刷新               | `1.2.1`          | `1.2.1`        | `compatible-tested` | `src/common/main.js`、`src/pages/photos/photos.js`、`src/pages/moments/moments.js`、`templates/modules/photos/content.html`、本页 selector 配置                                                          |
 | `auth-passkey`            | `/login` 认证入口                                      | `1.0.4`          | -              | `confirmed`         | `templates/login.html`、`templates/gateway_fragments/login.html`                                                                                                                                         |
 | `link-submit`             | `/links` 官方申请组件、主题变量和不可用降级            | `1.0.7`          | -              | `confirmed`         | `templates/modules/links/content.html`、`src/common/css/base.css`                                                                                                                                        |
 | `plugin-online`           | 在线统计侧边栏小工具和 PJAX 请求取消                   | `1.0.5`          | -              | `confirmed`         | `templates/modules/widgets/online-stats.html`、`src/common/js/alpine-modules.js`                                                                                                                         |
 | `vote`                    | 正文投票块的 25 个主题变量                             | `1.1.3`          | -              | `confirmed`         | `src/static/css/article-content.css`                                                                                                                                                                     |
 | `text-diagram`            | 默认 `<text-diagram>`、暗色和 PJAX 补渲染              | `1.5.2`          | -              | `confirmed`         | `templates/modules/theme-script.html`、`src/static/css/article-content.css`、`src/static/js/article-content.js`                                                                                          |
 | `PluginContactForm`       | 内嵌、单页、贴边和弹窗联系表单的 21 个主题变量         | `1.6.4`          | -              | `confirmed`         | `src/common/css/base.css`、`templates/modules/theme-script.html`                                                                                                                                         |
-| `ai-assistant`            | 文章顶部 AI 总结小部件                                 | `1.5.1`          | `2.2.4`        | `confirmed`         | `src/pages/post/post.css`、`src/common/main.js`                                                                                                                                                          |
+| `ai-assistant`            | 文章顶部 AI 总结小部件                                 | `1.5.1`          | `2.2.4`        | `compatible-tested` | `src/pages/post/post.css`、`src/common/main.js`                                                                                                                                                          |
 | `editor-hyperlink-card`   | 正文块级/行内链接卡片宿主布局与 PJAX                   | `1.9.2`          | -              | `confirmed`         | `src/static/css/article-content.css`、`src/common/main.js`                                                                                                                                               |
 | `plugin-katex`            | 行内/块级公式、横向溢出与 PJAX 重执行                  | `3.0.0`          | -              | `confirmed`         | `src/static/css/article-content.css`、`src/common/main.js`                                                                                                                                               |
 | `lottery`                 | 正文抽奖卡片宿主布局                                   | `1.0.2`          | -              | `confirmed`         | `src/static/css/article-content.css`                                                                                                                                                                     |
@@ -53,22 +53,22 @@
 
 主实例的 45 个安装插件、启动状态、页面结果、矩阵外分类和上游阻塞项记录在[主 Halo 插件运行态审计](./main-halo-runtime-audit.md)。当前 27 个插件有显式主题契约，18 个处于矩阵外。该报告是带日期的站点快照，不会自动抬升本矩阵的 `testedVersion`。版本脚本会同时打印矩阵外插件清单；矩阵外插件可能无需主题契约，也可能是尚未完成适配的缺口，必须按运行审计分类判断。
 
-`2.2.33` 热加载后的页面、DOM、PJAX 与深度边界结果只记入运行态审计；当前深度 smoke 为 `36/36`。未覆盖完整契约或业务流程的插件仍不填写 `testedVersion`，因此 Contact Form 1.6.4 与 AI Assistant 2.2.4 仍不能据安装状态宣称兼容。
+`2.2.34` 热加载后的页面、DOM、PJAX 与深度边界结果只记入运行态审计；当前基础 smoke 为 `12/12`，深度 smoke 为 `36/36`。未覆盖真实 UI 或业务流程的插件仍不填写 `testedVersion`：Contact Form 1.6.4 仅完成变量、宿主与资源契约；AI Assistant 2.2.4 的 `testedVersion` 只覆盖已有摘要小部件，不扩展到模型生成、RAG 或编辑器 AI。
 
 ## 上游版本差距
 
 上游源码或应用市场基线核对日期：2026-07-13。以下差距只用于安排回归，不会自动改写 `contractVersion` 或 `testedVersion`。
 
-| 插件                      | 当前契约 | 当前上游/市场基线 | 当前处理                                                                 |
-| ------------------------- | -------- | ----------------- | ------------------------------------------------------------------------ |
+| 插件                      | 当前契约 | 当前上游/市场基线 | 当前处理                                                                                             |
+| ------------------------- | -------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
 | `PluginLinks`             | `2.0.0`  | `2.2.1`           | 2.0.0 已完成分组、申请弹窗和 PJAX 回归并冻结；2.1.0～2.2.1 与 Friends/Link Submit 组合触发类加载冲突 |
-| `PluginPhotos`            | `2.1.1`  | `2.1.2`           | 列表、详情、PJAX、20→40→46 张无限滚动灯箱和 46 个唯一详情路由均通过      |
-| `plugin-bilibili-bangumi` | `1.4.0`  | `1.4.1`           | 稳定版 1.4.1 已通过 36/36 深度边界与真页 PJAX；实现契约继续保持 1.4.0     |
-| `plugin-shiki`            | `1.3.1`  | `1.4.1`           | 1.4.1 已通过 26 个真实代码块、折叠、明暗及两轮 PJAX 归一化；最低 Halo 契约仍保持 1.3.1 |
-| `ai-assistant`            | `1.5.1`  | `2.2.4`           | 2.2.4 已通过已有摘要、明暗、移动端、PJAX 首次脚本注入和返回去重回归；不含模型生成、RAG 或编辑器 AI |
-| `PluginContactForm`       | `1.6.4`  | `1.6.4`           | 已按 21 个变量和 3 类宿主更新契约；UI、校验、上传和提交仍待完整回归      |
-| `plugin-friends`          | `1.4.6`  | `1.4.6`           | 上游已归档；与 Links 2.0.0 可启动，Links 2.1.0～2.2.1 组合触发类加载冲突 |
-| `link-submit`             | `1.0.7`  | `1.0.7`           | 与 Links 2.0.0 可启动；主题按需加载官方资源并保留申请 URL/评论/邮箱降级  |
+| `PluginPhotos`            | `2.1.1`  | `2.1.2`           | 列表、详情、PJAX、20→40→46 张无限滚动灯箱和 46 个唯一详情路由均通过                                  |
+| `plugin-bilibili-bangumi` | `1.4.0`  | `1.4.1`           | 稳定版 1.4.1 已通过 36/36 深度边界与真页 PJAX；实现契约继续保持 1.4.0                                |
+| `plugin-shiki`            | `1.3.1`  | `1.4.1`           | 1.4.1 已通过 26 个真实代码块、折叠、明暗及两轮 PJAX 归一化；最低 Halo 契约仍保持 1.3.1               |
+| `ai-assistant`            | `1.5.1`  | `2.2.4`           | 2.2.4 已通过已有摘要、明暗、移动端、PJAX 首次脚本注入和返回去重回归；不含模型生成、RAG 或编辑器 AI   |
+| `PluginContactForm`       | `1.6.4`  | `1.6.4`           | 已按 21 个变量和 3 类宿主更新契约；UI、校验、上传和提交仍待完整回归                                  |
+| `plugin-friends`          | `1.4.6`  | `1.4.6`           | 上游已归档；与 Links 2.0.0 可启动，Links 2.1.0～2.2.1 组合触发类加载冲突                             |
+| `link-submit`             | `1.0.7`  | `1.0.7`           | 与 Links 2.0.0 可启动；主题按需加载官方资源并保留申请 URL/评论/邮箱降级                              |
 
 ## 重点兼容点
 
@@ -76,7 +76,7 @@
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Links + Friends | 当前组合为 Links 2.0.0 + Friends 1.4.6 + Link Submit 1.0.7；三者均已启动。申请弹窗支持按需加载与 PJAX，Links 2.1.0～2.2.1 暂不可升级            |
 | Photos          | 列表页和无限滚动新增项都要补齐 LightGallery `data-src` 契约并刷新单实例；详情页使用 `.photo-detail-viewer`                                      |
-| Moments         | 1.16.1 的已删除作者可能为空；模板必须降级，作者页调用 `momentFinder` 前必须确认 `PluginMoments >=1.16.1` 可用；单图/多图统一按稳定锚点重绑灯箱 |
+| Moments         | 1.16.1 的已删除作者可能为空；模板必须降级，作者页调用 `momentFinder` 前必须确认 `PluginMoments >=1.16.1` 可用；单图/多图统一按稳定锚点重绑灯箱  |
 | Docsme          | 评论 subject 使用 `doc.halo.run/DocTree/{docTree.name}`，不是 Doc 资源                                                                          |
 | Bangumi         | 侧边栏 Finder 必须门控；轮播销毁时清理计时器且尊重 reduced-motion；页面背景位于 `#swup-page-extras`                                             |
 | Douban          | `dataType/genre/page/size/type/status` 与 URL 同步；历史返回恢复状态；条目和题材请求分别取消；背景位于 extras                                   |
@@ -84,10 +84,10 @@
 | Passkey         | 登录表单必须保留 `.halo-form` 和插件认证片段                                                                                                    |
 | Vote            | 主题覆盖 1.1.3 的 25 个公开变量；投票提交、重复限制和用户弹窗仍需实站验证                                                                       |
 | Text Diagram    | 主实例 `mermaid_selector` 为默认 `<text-diagram>`；主题按需加载插件自带资源、串行补渲染，并在明暗切换后重绘 SVG。自定义 selector 不在当前契约内 |
-| Shiki           | 1.4.1 在 Halo 2.25.4 已通过 26 个代码块、折叠、长行、明暗与两轮 PJAX；主题实现契约仍保留兼容 Halo 2.23/2.24 的 1.3.1                         |
-| LightGallery    | 文章、Moments 单图/多图及 PJAX 返回均保持单实例；后台 selector 覆盖 moments、photos、docs、archives、about、privacy 路由                     |
-| Contact Form    | 主题契约已覆盖 1.6.4 的 21 个变量和 3 类宿主；Loader 可用，但提交、上传、贴边和弹窗流程尚未完成实站验证                                        |
-| AI Assistant    | 2.2.4 的文章 `ai-summary-widget` 已通过无模型回归；不代表 RAG、编辑器 AI 或模型生成流程已验证                                                     |
+| Shiki           | 1.4.1 在 Halo 2.25.4 已通过 26 个代码块、折叠、长行、明暗与两轮 PJAX；主题实现契约仍保留兼容 Halo 2.23/2.24 的 1.3.1                            |
+| LightGallery    | 文章、Moments 单图/多图及 PJAX 返回均保持单实例；后台 selector 覆盖 moments、photos、docs、archives、about、privacy 路由                        |
+| Contact Form    | 主题契约已覆盖 1.6.4 的 21 个变量和 3 类宿主；Loader 可用，但提交、上传、贴边和弹窗流程尚未完成实站验证                                         |
+| AI Assistant    | 2.2.4 的文章 `ai-summary-widget` 已通过无模型回归；不代表 RAG、编辑器 AI 或模型生成流程已验证                                                   |
 | Hyperlink Card  | 块级卡片保持块布局，行内卡片保持 `inline-block`；颜色继续由插件后台控制                                                                         |
 | KaTeX           | `.katex-display` 限制正文宽度并允许横向滚动；公式脚本依赖 `data-pjax` 重执行                                                                    |
 | Lottery         | 只约束 `<lottery-card>` 宿主宽度；参与、验证码、开奖和存储状态需要有效活动写操作验收                                                            |
@@ -101,13 +101,13 @@
 
 在 lightgallery.js 插件后台配置 selector；主题只负责保留 DOM 合约，并在 PJAX 切换后重新触发插件脚本：
 
-| 路径匹配      | 匹配区域               |
-| ------------- | ---------------------- |
-| `/photos`     | `#photo-grid`          |
-| `/photos/**`  | `.photo-detail-viewer` |
-| `/moments`    | `.moment-media`        |
-| `/moments/**` | `.moment-media`        |
-| `/docs/**`    | `#article-content`     |
+| 路径匹配       | 匹配区域               |
+| -------------- | ---------------------- |
+| `/photos`      | `#photo-grid`          |
+| `/photos/**`   | `.photo-detail-viewer` |
+| `/moments`     | `.moment-media`        |
+| `/moments/**`  | `.moment-media`        |
+| `/docs/**`     | `#article-content`     |
 | `/archives/**` | `#article-content`     |
 | `/about`       | `#article-content`     |
 | `/privacy`     | `#article-content`     |

@@ -90,7 +90,7 @@
 3. 仅配置联系邮箱：打开邮件客户端。
 4. 以上均不可用：显示“暂未开放申请”，不向访客展示安装插件提示。
 
-当前主 Halo 使用 `PluginLinks 2.0.0`、`plugin-friends 1.4.6`、`link-submit 1.0.7`，三者均为 `STARTED`。`2.2.33` 真页已验证首次和 PJAX 二次打开官方 Modal，资源与 Modal 不重复，离页自动关闭且控制台无错误。PluginLinks 2.1.0～2.2.1 与后两者组合时会触发跨插件 `ObjectMapper` 类加载冲突，升级前必须重新验证。
+当前主 Halo 使用 `PluginLinks 2.0.0`、`plugin-friends 1.4.6`、`link-submit 1.0.7`，三者均为 `STARTED`。`2.2.34` 真页已验证首次和 PJAX 二次打开官方 Modal，资源与 Modal 不重复，离页自动关闭且控制台无错误。PluginLinks 2.1.0～2.2.1 与后两者组合时会触发跨插件 `ObjectMapper` 类加载冲突，升级前必须重新验证。
 
 ## 侧边栏与 Dock
 
