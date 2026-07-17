@@ -6,8 +6,8 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "tsc && node scripts/verify-plugin-contracts.mjs && vite build && theme-package",
-    "build-only": "tsc && node scripts/verify-plugin-contracts.mjs && vite build",
+    "build": "tsc && node scripts/verify-plugin-contracts.mjs && vite build && node scripts/verify-build-artifacts.mjs && theme-package",
+    "build-only": "tsc && node scripts/verify-plugin-contracts.mjs && vite build && node scripts/verify-build-artifacts.mjs",
     "dev": "vite build --watch",
     "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-pattern src/static/qrcode/qrcode.min.js",
     "format": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
@@ -15,6 +15,7 @@
     "prettier": "prettier --write './**/*.{ts,json,yaml,yml,html}'",
     "verify:plugins": "node scripts/verify-plugin-pages.mjs",
     "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs",
+    "verify:build-artifacts": "node scripts/verify-build-artifacts.mjs",
     "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
     "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs"
   },
