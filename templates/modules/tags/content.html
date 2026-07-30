@@ -7,13 +7,14 @@
 <!-- ========================================== -->
 
 <!-- 标签集合内容片段：/tags -->
-<main class="relative" th:fragment="tag-collection"
+<div class="relative" th:fragment="tag-collection"
   th:with="rootCfg = ${theme.config.tag_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only">文章标签</h1>
   <!-- 主体内容区域（两列布局） -->
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
@@ -49,7 +50,7 @@
 
           <!-- 有标签：在 /tags（全部）分页显示所有文章 -->
           <th:block th:unless="${#lists.isEmpty(tags)}" th:with="pageSize=${site.post.tagPageSize ?: 10}, 
-                             pageParam=${param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'}, 
+                             pageParam=${param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')},
                              currentPage=${#numbers.formatInteger(pageParam, 0)}, 
                              posts=${postFinder.list({page: currentPage, size: pageSize})}">
             <!-- 动态渲染不同风格的列表 -->
@@ -84,8 +85,8 @@
             <!-- 分页 -->
             <th:block th:replace="~{modules/categories/pagination :: pagination(
                 context=@{/tags/},
-                prevUrl=@{/tags(page=${posts.page - 1})},
-                nextUrl=@{/tags(page=${posts.page + 1})},
+                prevUrl=@{/tags(p=${posts.page - 1})},
+                nextUrl=@{/tags(p=${posts.page + 1})},
                 totalPages=${posts.totalPages},
                 page=${posts.page},
                 hasPrevious=${posts.hasPrevious},
@@ -102,16 +103,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 标签归档内容片段：/tags/:slug -->
-<main class="relative" th:fragment="tag-archive"
+<div class="relative" th:fragment="tag-archive"
   th:with="rootCfg = ${theme.config.tag_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${tag.spec.displayName + ' 标签'}">标签文章</h1>
   <!-- 主体内容区域 -->
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
@@ -183,6 +185,6 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 </html>

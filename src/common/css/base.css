@@ -82,21 +82,6 @@
   --halo-search-widget-kbd-border-color: color-mix(in oklch, var(--color-base-content) 10%, transparent);
   --halo-search-widget-kbd-shadow: 0 1px 2px 0 color-mix(in oklch, var(--color-base-content) 5%, transparent);
 
-  /* link-submit 1.0.7 官方 LinkSubmitWidget 主题变量 */
-  --link-submit-widget-base-font-size: 1rem;
-  --link-submit-widget-base-font-family: var(--font-sans);
-  --link-submit-widget-base-rounded: 1rem;
-  --link-submit-widget-base-bg-color: var(--color-base-100);
-  --link-submit-widget-modal-layer-color: rgb(0 0 0 / 45%);
-  --link-submit-widget-form-bg-color: var(--color-base-100);
-  --link-submit-widget-form-border-color: var(--color-base-300);
-  --link-submit-widget-form-text-color: var(--color-base-content);
-  --link-submit-widget-form-label-color: var(--color-base-content);
-  --link-submit-widget-form-placeholder-color: color-mix(in oklch, var(--color-base-content) 48%, transparent);
-  --link-submit-widget-form-button-bg-color: var(--color-primary);
-  --link-submit-widget-form-button-text-color: var(--color-primary-content);
-  --link-submit-widget-form-button-hover-bg-color: color-mix(in oklch, var(--color-primary) 88%, black);
-
   /* 修复字体加载问题 */
   --font-sans:
     ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -240,9 +225,7 @@ html body :is(halo-contact-form, halo-contact-form-single, halo-contact-form-aut
   color-scheme: light;
 }
 
-html[data-color-scheme="dark"]
-  body
-  :is(halo-contact-form, halo-contact-form-single, halo-contact-form-auto-loader) {
+html[data-color-scheme="dark"] body :is(halo-contact-form, halo-contact-form-single, halo-contact-form-auto-loader) {
   color-scheme: dark;
 }
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        装备页面布局                         -->
   <!-- 路由：/equipments                            -->
@@ -8,7 +8,10 @@
 
   <head
     th:with="cfg = ${theme.config.equipment_settings?.basic_info},
-           pageTitle = ${cfg?.page_title ?: '装备'}"
+             pageNumber = ${equipments?.page ?: 1},
+             pageTitle = ${cfg?.page_title ?: (title ?: '装备')},
+             documentTitle = ${pageTitle + (pageNumber > 1 ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
+             pageCanonical = ${pageNumber > 1 ? '/equipments/page/' + pageNumber : '/equipments'}"
   >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,12 +22,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${pageTitle} + ' | ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-      装备
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${cfg?.page_description}, ${pageCanonical}, ${site.logo}, 'website')}"
+    />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />

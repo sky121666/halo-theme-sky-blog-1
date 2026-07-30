@@ -2,9 +2,25 @@
 
 > 快照日期：2026-07-17（含 `2.2.34` 本轮热加载复验）
 > 目标实例：本地容器 `halo`，Halo Pro `2.25.4`，`http://localhost:8090`
-> 当前渲染主题：`theme-sky-blog-1 2.2.34`（live mount + Theme Reload API）
+> 2026-07-17 快照主题：`theme-sky-blog-1 2.2.34`（live mount + Theme Reload API）
 
 本报告初始审计基于 `2.2.23`，当前结论已合并 `2.2.34` Build、Reload 和页面缓存刷新后的验证。它只记录该实例在快照时刻的安装状态和真实页面证据，不替代[插件适配矩阵](./plugin-adaptation.md)中的主题契约。`通过` 只表示列出的表面已通过，未执行提交、登录、上传、评论等会修改数据的操作。
+
+## 2026-07-28 增量复验（主题 2.2.36 → 2.2.37）
+
+本节记录当前主 Halo 的新状态，不改写上方 `2026-07-17 / 2.2.34` 历史快照。
+
+- 主实例仍为本地容器 `halo`、Halo Pro `2.25.4`、端口 `8090`。主题 `2.2.37` 已完成 Build 和压缩包内二次校验，Theme Reload API 与页面缓存刷新接口均返回 200，控制台状态为 `READY`。
+- 当前矩阵包含 28 个主题契约，45 个已安装插件中有 17 个在矩阵外。`PluginLinks 2.2.1` 已提升为 `contractVersion=testedVersion=2.2.1`；`link-submit` 已退出主题集成并进入矩阵外。Halo API 仍将 `plugin-friends 1.4.6` 与 `link-submit 1.0.7` 列为已安装但 `DISABLED`，它们不参与本轮 Links 独立适配结论。
+- 读取型路由烟测通过：基础检查 `11/11`，另跳过 1 个禁用 Friends 路由；深度检查 `31/31`，另跳过该禁用路由。深度检查覆盖 Links 全部页面、动态发现的非空分组、真实空分组、不存在分组、7 条状态数据、3 个分组和 20 条公开 Feed API 数据。
+- Links 页面采用 2.2.1 的 `linksTitle` 安全回退、访问/反链状态枚举和 `linkFeedFinder`。根页面实际渲染 7 张卡片、7 个状态和 8 条最近动态；命名分组仅渲染对应链接，真实空分组与不存在分组使用不同空态；公开 HTML 不含 Feed 源地址，也不再请求 Link Submit JS/CSS。
+- 真实浏览器链路为首页 → Links → 非空组 → 空组 → 后退/前进 → 首页 → 再次进入。每一步保持单 canonical、单 description、单 `main`、单评论宿主和单 `#swup`；状态与 Feed 随路由正确收敛。390×844 同源移动视口为 390px，文档无横向溢出，卡片与 Feed 宽度均为 358px。
+- 18 个真实布局统一接入 `seo-head`。标准 `description` 由主题在 Halo/插件未提供时补齐；SEO Tools 1.9.5 启用时独占 canonical、Open Graph、Twitter Card 与 JSON-LD，主题降级标记为 0，避免双 canonical 和重复结构化数据。插件不可用时的 SSR 降级已单独验证 canonical、社交标签和 JSON-LD 可解析。
+- 真实页面验证覆盖首页、归档年/月分页、分类/标签分页、瞬间列表与详情、图库列表与详情、Docs 列表与详情。canonical 和标准 description 均保持单例，页面主体保持单 `main`；Docs 正文自身可包含内容级 H1，不由主题删除。
+- 真实 PJAX 往返验证覆盖首页、瞬间、分类、Docs 与图库，并检查前进/后退后的 Head 收敛：旧页面 JSON-LD/Open Graph 不残留，SEO Tools 与主题降级不会同时输出。开发者模式关闭时，本轮未出现 `[SkyDebug:*]` 日志或控制台错误。
+- 集合分页的新链接统一使用 `?p=`，兼容 SEO Tools 1.9.5 的 canonical 参数白名单；旧 `?page=` 仍可读取，但 canonical 会被插件归一到集合根路径。Photos 与 Bangumi 仍使用各自上游查询参数，分页 canonical 的精细化需要 SEO Tools 扩充白名单。
+- `PluginSitemap 1.3.0` 仍未收录多类插件页面；SEO Tools 对部分插件页缺少专用 Open Graph/JSON-LD 生成器。这两项属于上游覆盖缺口，主题选择单一 Head 所有权，避免通过重复标签伪修复。
+- 新增 `pnpm verify:seo` 与 `pnpm verify:seo:package`：工作树和最终 zip 都必须通过布局接管、canonical 所有权、鉴权页 noindex、图片 alt、H1、分页锚点和 `main` 所有权门禁。
 
 ## 结论
 

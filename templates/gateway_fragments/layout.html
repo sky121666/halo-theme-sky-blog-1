@@ -23,7 +23,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
-    <title th:text="${title}">Auth</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <th:block th:replace="~{modules/seo-head :: meta(${title}, ${null}, ${null}, ${site.logo}, 'website')}" />
 
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
@@ -58,9 +59,9 @@
                     </a>
                 </div>
                 <!-- 表单内容 -->
-                <div class="auth-form-container">
+                <main class="auth-form-container">
                     <th:block th:replace="${body}" />
-                </div>
+                </main>
             </div>
             <!-- 版权 -->
             <div class="auth-copyright-default">
@@ -97,7 +98,8 @@
                 <div class="features-content">
                     <div class="features-logo">
                         <img th:if="${not #strings.isEmpty(authLogo)} or ${site.logo}"
-                            th:src="${not #strings.isEmpty(authLogo) ? authLogo : site.logo}" />
+                            th:src="${not #strings.isEmpty(authLogo) ? authLogo : site.logo}"
+                            th:alt="${not #strings.isEmpty(authSiteTitle) ? authSiteTitle : site.title}" />
                         <h2 th:text="${not #strings.isEmpty(authSiteTitle) ? authSiteTitle : site.title}">Site</h2>
                     </div>
                     <h1 class="features-title" th:text="${featuresWelcome}">欢迎来到</h1>
@@ -210,9 +212,9 @@
             </div>
 
             <div class="auth-form-section-split">
-                <div class="auth-form-container">
+                <main class="auth-form-container">
                     <th:block th:replace="${body}" />
-                </div>
+                </main>
                 <div class="absolute bottom-6 left-0 right-0 auth-copyright">
                     <span>©</span><a href="/" class="ml-1" th:text="${site.title}">Site</a>
                 </div>
@@ -238,9 +240,9 @@
                         <div class="spotlight-card-glow"></div>
                     </div>
                 </th:block>
-                <div class="relative z-10">
+                <main class="relative z-10">
                     <th:block th:replace="${body}" />
-                </div>
+                </main>
             </div>
             <div class="mt-6 auth-copyright">
                 <span>©</span><a href="/" class="ml-1" th:text="${site.title}">Site</a>

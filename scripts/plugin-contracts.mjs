@@ -2,12 +2,12 @@ export const pluginContracts = [
   {
     plugin: "PluginLinks",
     aliases: ["PluginLinks"],
-    contractVersion: "2.0.0",
-    testedVersion: "2.0.0",
+    contractVersion: "2.2.1",
+    testedVersion: "2.2.1",
     status: "compatible-tested",
-    surface: "友链页面、首页友链、可选 Friends 分组标签、友链申请",
+    surface: "友链路由与详情、RSS 来源/权限/游标状态、申请创建降级、评论与首页 Finder",
     evidence:
-      "templates/links.html; templates/modules/index/content.html; templates/modules/widgets/links.html; templates/modules/widgets/tabs_group.html",
+      "templates/links.html; templates/modules/links; src/apps/links/runtime.js; templates/modules/index/content.html; templates/modules/widgets/links.html; settings.yaml; scripts/verify-plugin-pages.mjs; scripts/verify-links-runtime.mjs",
   },
   {
     plugin: "PluginPhotos",
@@ -26,6 +26,25 @@ export const pluginContracts = [
     status: "inferred",
     surface: "瞬间列表、详情、作者缺失降级、前端发布",
     evidence: "templates/moments.html; templates/moment.html; templates/modules/moments",
+  },
+  {
+    plugin: "seo-tools",
+    aliases: ["seo-tools"],
+    contractVersion: "1.9.5",
+    status: "inferred",
+    surface: "Head 单一所有权、canonical、社交元数据、结构化数据和主题 SSR 降级",
+    evidence:
+      "templates/modules/seo-head.html; scripts/verify-seo-contracts.mjs; docs/system/adaptation/main-halo-runtime-audit.md",
+  },
+  {
+    plugin: "PluginFeed",
+    aliases: ["PluginFeed"],
+    contractVersion: "1.5.0",
+    testedVersion: "1.5.0",
+    status: "compatible-tested",
+    surface: "Head 中的 RSS 自动发现链接与 /feed.xml 路由",
+    evidence:
+      "templates/modules/seo-head.html; scripts/verify-plugin-pages.mjs; docs/system/adaptation/main-halo-runtime-audit.md",
   },
   {
     plugin: "plugin-friends",
@@ -120,15 +139,6 @@ export const pluginContracts = [
     status: "confirmed",
     surface: "登录页认证入口",
     evidence: "templates/login.html; templates/gateway_fragments/login.html",
-  },
-  {
-    plugin: "link-submit",
-    aliases: ["link-submit"],
-    contractVersion: "1.0.7",
-    status: "confirmed",
-    surface: "官方提交组件按需加载、安全入口、主题变量和不可用降级",
-    evidence:
-      "templates/modules/links/content.html; src/pages/links/links.js; src/common/css/base.css; scripts/verify-plugin-pages.mjs",
   },
   {
     plugin: "plugin-online",

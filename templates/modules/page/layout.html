@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--     单页面布局 - 隐私条例/使用条款等           -->
   <!-- ========================================== -->
 
-  <head>
+  <head th:with="documentTitle=${singlePage.spec.title + ' - ' + site.title}">
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,11 +14,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${singlePage.spec.title} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${singlePage.status.excerpt}, ${singlePage.status.permalink}, ${!#strings.isEmpty(singlePage.spec.cover) ? singlePage.spec.cover : site.logo}, 'article')}"
+    />
 
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />

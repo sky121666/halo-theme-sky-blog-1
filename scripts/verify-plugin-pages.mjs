@@ -22,14 +22,15 @@ const deepMode = /^(1|true|yes|on)$/i.test(process.env.VERIFY_PLUGIN_DEEP || "")
 const checks = [
   {
     name: "Links",
+    plugin: "PluginLinks",
     path: "/links",
     markers: [
-      "友情链接",
-      "site-info-modal",
+      "data-links-page",
+      'data-plugin-links-contract="PluginLinks>=2.2.1"',
+      "data-plugin-links-title",
+      "data-link-group-navigation",
+      "data-link-access-state",
       "links-comments",
-      "data-link-submit-trigger",
-      "/plugins/link-submit/assets/static/link-submit-widget.iife.js?version=1.0.7",
-      "data-link-submit-fallback",
     ],
     match: "all",
   },
@@ -47,6 +48,7 @@ const checks = [
   },
   {
     name: "Friends",
+    plugin: "plugin-friends",
     path: "/friends",
     markers: ["朋友圈", "plugin-friends-rss", "__completeSwupPageInit"],
     match: "all",
@@ -249,18 +251,6 @@ const deepChecks = [
     match: "all",
   },
   {
-    name: "Link Submit Widget Script",
-    path: "/plugins/link-submit/assets/static/link-submit-widget.iife.js?version=1.0.7",
-    markers: ["LinkSubmitWidget", "link-submit-modal"],
-    match: "all",
-  },
-  {
-    name: "Link Submit Widget Style",
-    path: "/plugins/link-submit/assets/static/var.css?version=1.0.7",
-    markers: ["--link-submit-widget-base-bg-color", "--link-submit-widget-form-button-bg-color"],
-    match: "all",
-  },
-  {
     name: "Moments Media Binding",
     path: envPath("LIGHTGALLERY_PAGE_URL", "/moments"),
     markers: ["moment-media", "data-src"],
@@ -293,6 +283,56 @@ const deepChecks = [
 ];
 
 const deepApiChecks = [
+  {
+    name: "Links 2.2.1 Public API",
+    path: "/apis/api.link.halo.run/v1alpha1/links",
+    validate(data) {
+      const items = Array.isArray(data?.items) ? data.items : [];
+      const accessStates = new Set(["CHECKING", "ACCESSIBLE", "INACCESSIBLE"]);
+      const backlinkStates = new Set(["CHECKING", "FOUND", "MISSING", "NOT_CONFIGURED", "FAILED"]);
+      const valid = items.every((link) => {
+        const access = link?.status?.verification?.access?.state;
+        const backlink = link?.status?.verification?.backlink?.state;
+        return (
+          link?.metadata?.name &&
+          link?.spec?.url &&
+          (!access || accessStates.has(access)) &&
+          (!backlink || backlinkStates.has(backlink))
+        );
+      });
+      return {
+        ok: items.length > 0 && valid,
+        marker: `links=${items.length}, status-enums`,
+        error: "PluginLinks public link/status schema is invalid",
+      };
+    },
+  },
+  {
+    name: "Links 2.2.1 Groups API",
+    path: "/apis/api.link.halo.run/v1alpha1/linkgroups",
+    validate(data) {
+      const groups = Array.isArray(data) ? data : [];
+      const valid = groups.every((group) => group?.metadata?.name && group?.spec?.displayName);
+      return {
+        ok: groups.length > 0 && valid,
+        marker: `groups=${groups.length}`,
+        error: "PluginLinks public group schema is invalid",
+      };
+    },
+  },
+  {
+    name: "Links 2.2.1 Feed API",
+    path: "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+    validate(data) {
+      const items = Array.isArray(data?.items) ? data.items : null;
+      const valid = items?.every((feed) => feed?.id && feed?.url && feed?.title && !feed?.feedUrls);
+      return {
+        ok: items != null && valid,
+        marker: items?.length ? `public-feeds=${items.length}` : "public-feed-disabled",
+        error: "PluginLinks public feed schema is invalid",
+      };
+    },
+  },
   {
     name: "Douban Types API",
     path: "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
@@ -369,6 +409,51 @@ for (const optional of optionalChecks) {
 
 if (deepMode) {
   checks.push(...deepChecks);
+  await addDiscoveredLinksGroupChecks();
+}
+
+async function addDiscoveredLinksGroupChecks() {
+  try {
+    const headers = { Accept: "application/json" };
+    const [groupsResponse, linksResponse] = await Promise.all([
+      fetchWithTimeout(resolveUrl("/apis/api.link.halo.run/v1alpha1/linkgroups"), { headers }),
+      fetchWithTimeout(resolveUrl("/apis/api.link.halo.run/v1alpha1/links"), { headers }),
+    ]);
+    if (!groupsResponse.ok || !linksResponse.ok) return;
+    const [groups, linksPage] = await Promise.all([groupsResponse.json(), linksResponse.json()]);
+    const links = Array.isArray(linksPage?.items) ? linksPage.items : [];
+    if (!Array.isArray(groups)) return;
+
+    const hasLinks = (group) => links.some((link) => link?.spec?.groupName === group?.metadata?.name);
+    const populatedGroup = groups.find(hasLinks);
+    const emptyGroup = groups.find((group) => !hasLinks(group));
+
+    if (populatedGroup?.metadata?.name) {
+      const name = populatedGroup.metadata.name;
+      checks.push({
+        name: "Links Populated Group Route",
+        path: `/links?group=${encodeURIComponent(name)}`,
+        markers: [`data-link-group-section="${name}"`, 'aria-current="page"'],
+        match: "all",
+      });
+    }
+    if (emptyGroup?.metadata?.name) {
+      checks.push({
+        name: "Links Empty Group Route",
+        path: `/links?group=${encodeURIComponent(emptyGroup.metadata.name)}`,
+        markers: ['data-links-empty-state="group-empty"', "该分组暂无友情链接"],
+        match: "all",
+      });
+    }
+    checks.push({
+      name: "Links Missing Group Route",
+      path: "/links?group=theme-contract-missing-group",
+      markers: ['data-links-empty-state="group-missing"', "未找到该友链分组"],
+      match: "all",
+    });
+  } catch {
+    // Public group API validation below will report the actual endpoint failure.
+  }
 }
 
 function resolveUrl(path) {
@@ -376,11 +461,12 @@ function resolveUrl(path) {
   return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-async function fetchWithTimeout(url) {
+async function fetchWithTimeout(url, options = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     return await fetch(url, {
+      ...options,
       signal: controller.signal,
     });
   } finally {
@@ -431,18 +517,63 @@ function escapeRegExp(value) {
 function evaluateMarkers(html, check) {
   if (check.statusOnly) return { foundMarkers: [], ok: true };
   const foundMarkers = findMarkers(html, check.markers || []);
-  const ok = check.match === "all" ? foundMarkers.length === check.markers.length : foundMarkers.length > 0;
+  const baseMarkersOk = check.match === "all" ? foundMarkers.length === check.markers.length : foundMarkers.length > 0;
+  const foundMarkerGroups = (check.markerGroups || []).map((group) => findMarkers(html, group));
+  const markerGroupsOk = foundMarkerGroups.every((group) => group.length > 0);
 
   return {
-    foundMarkers,
-    ok,
+    foundMarkers: [...foundMarkers, ...foundMarkerGroups.flat()],
+    ok: baseMarkersOk && markerGroupsOk,
   };
 }
 
+async function loadPluginStates() {
+  const token = process.env.HALO_PAT || process.env.HALO_TOKEN || process.env.HALO_API_TOKEN;
+  if (!token) return null;
+
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/apis/api.console.halo.run/v1alpha1/plugins?size=200`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) return null;
+
+    const payload = await response.json();
+    return new Map((payload.items || []).map((plugin) => [plugin.metadata?.name, plugin.status?.phase || "UNKNOWN"]));
+  } catch {
+    return null;
+  }
+}
+
+function pluginSkipReason(check, pluginStates) {
+  if (!check.plugin || !pluginStates) return "";
+  const phase = pluginStates.get(check.plugin);
+  if (!phase) return `plugin ${check.plugin} is not installed`;
+  if (phase !== "STARTED") return `plugin ${check.plugin} phase=${phase}`;
+  return "";
+}
+
 const results = [];
+const pluginStates = await loadPluginStates();
 
 for (const check of checks) {
   const url = resolveUrl(check.path);
+  const skipReason = pluginSkipReason(check, pluginStates);
+  if (skipReason) {
+    results.push({
+      ...check,
+      url,
+      status: "-",
+      marker: "-",
+      ok: true,
+      skipped: true,
+      error: skipReason,
+    });
+    continue;
+  }
+
   try {
     const response = await fetchWithTimeout(url);
     const html = await response.text();
@@ -516,11 +647,13 @@ if (deepMode) {
   console.log("Plugin smoke mode: deep");
 }
 for (const result of results) {
-  const icon = result.ok ? "OK" : "FAIL";
+  const icon = result.skipped ? "SKIP" : result.ok ? "OK" : "FAIL";
   const name = result.name.padEnd(width, " ");
-  const details = result.ok
-    ? `status=${result.status} marker=${result.marker}`
-    : `status=${result.status} ${result.error}`;
+  const details = result.skipped
+    ? result.error
+    : result.ok
+      ? `status=${result.status} marker=${result.marker}`
+      : `status=${result.status} ${result.error}`;
   console.log(`${icon} ${name} ${result.path} ${details}`);
 }
 
@@ -530,4 +663,7 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Plugin smoke passed: ${results.length}/${results.length}`);
+const skipped = results.filter((result) => result.skipped).length;
+console.log(
+  `Plugin smoke passed: ${results.length - skipped}/${results.length - skipped}; skipped inactive: ${skipped}`,
+);

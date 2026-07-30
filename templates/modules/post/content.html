@@ -1,5 +1,5 @@
 <!-- 主要内容区域 -->
-<main class="relative" th:fragment="post-content"
+<div class="relative" th:fragment="post-content"
   th:with="cfg = ${theme.config.article.sidebar_settings},
                contentCfg = ${theme.config.article.content_settings},
                showExcerpt = ${contentCfg?.show_excerpt != false},
@@ -49,4 +49,4 @@
       </aside>
     </div>
   </div>
-</main>
+</div>

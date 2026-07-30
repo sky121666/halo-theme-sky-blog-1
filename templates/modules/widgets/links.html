@@ -1,5 +1,5 @@
 <th:block th:fragment="links(context)">
-  <!-- 兼容基线：PluginLinks v2.0.0；Finder 保留 listBy(groupName)/groupBy()/random/count；首页模块继续使用 groupBy()。 -->
+  <!-- 兼容基线：PluginLinks v2.2.1；首页模块使用 groupBy()，并对主题分组筛选后的真实空集显示空态。 -->
   <th:block th:with="linksSettings = ${theme.config.index.links_settings}">
     <section
       th:if="${linksSettings != null and linksSettings.enable_links == true}"
@@ -39,7 +39,7 @@
       </div>
 
       <!-- 未安装插件时的提醒 -->
-      <th:block th:unless="${pluginFinder.available('PluginLinks', '>=2.0.0')}">
+      <th:block th:unless="${pluginFinder.available('PluginLinks', '>=2.2.1')}">
         <div class="bg-base-100/50 border-base-content/5 rounded-3xl border border-dashed py-12 text-center">
           <span class="icon-[heroicons--link] text-base-content/20 mx-auto mb-4 block h-12 w-12"></span>
           <p class="text-base-content/60 mb-4">需要安装友链插件来展示链接</p>
@@ -55,9 +55,13 @@
       </th:block>
 
       <!-- 已安装插件时显示内容 -->
-      <th:block th:if="${pluginFinder.available('PluginLinks', '>=2.0.0')}">
+      <th:block th:if="${pluginFinder.available('PluginLinks', '>=2.2.1')}">
         <!-- 通过 groupBy() 获取所有分组，按主题设置筛选展示，不伪造不存在的 listBy(groupNames, limit) API。 -->
-        <th:block th:with="groups = ${linkFinder.groupBy()}">
+        <th:block
+          th:with="groups = ${linkFinder.groupBy()},
+                   filteredGroups = ${linksSettings.links_groups == null or #lists.isEmpty(linksSettings.links_groups) ? groups : groups.?[#lists.contains(linksSettings.links_groups, metadata.name)]},
+                   visibleLinkCount = ${filteredGroups == null or #lists.isEmpty(filteredGroups) ? 0 : #aggregates.sum(filteredGroups.![#lists.size(links)])}"
+        >
           <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
           <script th:inline="javascript" data-swup-reload-script>
             (function () {
@@ -82,13 +86,12 @@
           </script>
 
           <div
-            th:if="${groups != null && !groups.isEmpty()}"
+            th:if="${visibleLinkCount > 0}"
             id="index-links-grid"
             class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
           >
             <th:block
-              th:each="group : ${groups}"
-              th:if="${linksSettings.links_groups == null || linksSettings.links_groups.isEmpty() || #lists.contains(linksSettings.links_groups, group.metadata.name)}"
+              th:each="group : ${filteredGroups}"
             >
               <a
                 th:each="link : ${group.links}"
@@ -114,9 +117,13 @@
                       th:alt="${link.spec.displayName}"
                       class="bg-base-200 h-full w-full object-cover"
                       loading="lazy"
+                      onerror="
+                        this.hidden = true;
+                        this.nextElementSibling.hidden = false;
+                      "
                     />
                     <div
-                      th:if="${link.spec.logo == null || link.spec.logo.isEmpty()}"
+                      th:hidden="${link.spec.logo != null and !link.spec.logo.isEmpty()}"
                       class="from-base-200 to-base-300 text-base-content/40 flex h-full w-full items-center justify-center bg-gradient-to-br"
                     >
                       <span class="text-xl font-bold" th:text="${#strings.substring(link.spec.displayName,0,1)}"
@@ -142,7 +149,7 @@
             </th:block>
           </div>
           <!-- 空状态 -->
-          <div th:if="${groups == null || groups.isEmpty()}" class="py-12 text-center">
+          <div th:if="${visibleLinkCount == 0}" data-index-links-empty class="py-12 text-center">
             <div class="bg-base-200/50 mb-4 inline-flex h-16 w-16 items-center justify-center rounded-3xl">
               <span class="icon-[heroicons--link] text-base-content/30 h-8 w-8"></span>
             </div>

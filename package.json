@@ -1,15 +1,15 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.35",
+  "version": "2.2.38",
   "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=24.18.0 <25",
     "pnpm": "10.34.5"
   },
   "scripts": {
-    "build": "pnpm run build-only && theme-package",
-    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:plugin-contracts && vite build && pnpm run verify:build-artifacts",
+    "build": "pnpm run build-only && theme-package && pnpm run verify:seo:package",
+    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:plugin-contracts && pnpm run verify:links-runtime && pnpm run verify:seo && vite build && pnpm run verify:build-artifacts",
     "dev": "vite build --watch",
     "lint": "eslint src scripts vite.config.ts eslint.config.js prettier.config.js postcss.config.cjs --max-warnings 0",
     "format": "prettier --write \"*.config.{js,cjs}\" \"**/*.{ts,json,yaml,yml,html}\"",
@@ -20,7 +20,10 @@
     "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs",
     "verify:build-artifacts": "node scripts/verify-build-artifacts.mjs",
     "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
-    "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs"
+    "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs",
+    "verify:links-runtime": "node scripts/verify-links-runtime.mjs",
+    "verify:seo": "node scripts/verify-seo-contracts.mjs",
+    "verify:seo:package": "node scripts/verify-seo-contracts.mjs --archive"
   },
   "dependencies": {
     "@swup/head-plugin": "2.3.1",
@@ -55,14 +58,20 @@
       "esbuild@0.28.1"
     ],
     "overrides": {
-      "brace-expansion@2": "2.1.2",
-      "brace-expansion@5": "5.0.7",
+      "brace-expansion@2": "2.1.3",
+      "brace-expansion@5": "5.0.8",
       "flatted@3": "3.4.2",
       "js-yaml@4": "4.3.0",
       "lodash@4": "4.18.1",
       "minimatch@5": "5.1.9",
       "minimatch@9": "9.0.9",
+      "svgo@4": "4.0.2",
       "yaml@2": "2.9.0"
+    },
+    "auditConfig": {
+      "ignoreCves": [
+        "CVE-2026-14257"
+      ]
     }
   }
 }

@@ -198,12 +198,22 @@
     <div class="bg-base-200/60 inline-flex items-center rounded-full p-1 backdrop-blur-md">
       <!-- Previous Button -->
       <a
+        th:if="${friends.hasPrevious()}"
         th:href="@{${friends.prevUrl}}"
+        rel="prev"
+        aria-label="上一页"
         class="text-base-content/60 hover:text-base-content hover:bg-base-100 flex h-9 w-9 items-center justify-center rounded-full motion-safe:transition-all motion-safe:duration-200"
-        th:classappend="${!friends.hasPrevious()} ? 'opacity-30 pointer-events-none' : ''"
       >
-        <span class="icon-[heroicons--chevron-left] h-5 w-5"></span>
+        <span class="icon-[heroicons--chevron-left] h-5 w-5" aria-hidden="true"></span>
       </a>
+      <span
+        th:unless="${friends.hasPrevious()}"
+        aria-disabled="true"
+        aria-label="没有上一页"
+        class="text-base-content/60 flex h-9 w-9 items-center justify-center rounded-full opacity-30"
+      >
+        <span class="icon-[heroicons--chevron-left] h-5 w-5" aria-hidden="true"></span>
+      </span>
 
       <!-- Page Indicator -->
       <span
@@ -214,12 +224,22 @@
 
       <!-- Next Button -->
       <a
+        th:if="${friends.hasNext()}"
         th:href="@{${friends.nextUrl}}"
+        rel="next"
+        aria-label="下一页"
         class="text-base-content/60 hover:text-base-content hover:bg-base-100 flex h-9 w-9 items-center justify-center rounded-full motion-safe:transition-all motion-safe:duration-200"
-        th:classappend="${!friends.hasNext()} ? 'opacity-30 pointer-events-none' : ''"
       >
-        <span class="icon-[heroicons--chevron-right] h-5 w-5"></span>
+        <span class="icon-[heroicons--chevron-right] h-5 w-5" aria-hidden="true"></span>
       </a>
+      <span
+        th:unless="${friends.hasNext()}"
+        aria-disabled="true"
+        aria-label="没有下一页"
+        class="text-base-content/60 flex h-9 w-9 items-center justify-center rounded-full opacity-30"
+      >
+        <span class="icon-[heroicons--chevron-right] h-5 w-5" aria-hidden="true"></span>
+      </span>
     </div>
   </div>
 

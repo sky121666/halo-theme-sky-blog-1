@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- 页面头部 -->
 
-  <head>
+  <head
+    th:with="documentTitle=${site.subtitle != null and !#strings.isEmpty(site.subtitle) ? site.title + ' - ' + site.subtitle : site.title}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,11 +16,9 @@
     <!-- 关键 CSS 内联 -->
     <th:block th:replace="~{modules/critical-css :: critical}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${site.subtitle != null and !#strings.isEmpty(site.subtitle) ? site.title + ' - ' + site.subtitle : site.title}"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${site.seo?.description ?: site.subtitle}, '/', ${site.logo}, 'website')}"
+    />
     <!-- 字体 - 异步加载，不阻塞渲染 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <th:block th:replace="~{modules/font-loader :: index-fonts}" />
@@ -76,6 +76,11 @@
         id="swup"
         th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'"
       >
+        <h1
+          th:if="${theme.config.index.background_settings?.enable_header == false or theme.config.index.title_settings?.show_title != true}"
+          class="sr-only"
+          th:text="${site.title}"
+        ></h1>
         <!-- 首页头部区域 - 放入 swup 容器，保证与首页正文共享同一 PJAX 生命周期 -->
         <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
           <th:block th:replace="~{modules/index/header}" />

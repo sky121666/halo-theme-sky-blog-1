@@ -1,8 +1,8 @@
-import { skyDebug } from './debug.js';
+import { skyDebug } from "./debug.js";
 
 export function runPageInit(init) {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
     return;
   }
 
@@ -17,7 +17,7 @@ export function runPageInit(init) {
  * mount 返回的 cleanup。
  *
  * @param {(detail?: object) => void | (() => void)} mount
- * @param {{ entry?: string }} [options]
+ * @param {{ entry?: string, immediate?: boolean }} [options]
  * @returns {() => void}
  */
 export function registerPageLifecycle(mount, options = {}) {
@@ -29,30 +29,30 @@ export function registerPageLifecycle(mount, options = {}) {
     mounted = false;
     const task = cleanup;
     cleanup = null;
-    if (typeof task !== 'function') {
-      skyDebug.event('page', 'unmount', { entry: options.entry || 'anonymous', cleanup: false });
+    if (typeof task !== "function") {
+      skyDebug.event("page", "unmount", { entry: options.entry || "anonymous", cleanup: false });
       return;
     }
 
     try {
       task();
-      skyDebug.event('page', 'unmount', { entry: options.entry || 'anonymous', cleanup: true });
+      skyDebug.event("page", "unmount", { entry: options.entry || "anonymous", cleanup: true });
     } catch (error) {
-      skyDebug.error('page', 'cleanup failed', { entry: options.entry || 'anonymous', error });
+      skyDebug.error("page", "cleanup failed", { entry: options.entry || "anonymous", error });
     }
   };
 
   const remount = (detail) => {
     unmount();
     if (options.entry && !isPageEntryActive(options.entry)) {
-      skyDebug.event('page', 'mount:skip', { entry: options.entry, reason: 'entry-inactive' });
+      skyDebug.event("page", "mount:skip", { entry: options.entry, reason: "entry-inactive" });
       return;
     }
     const nextCleanup = mount(detail);
-    cleanup = typeof nextCleanup === 'function' ? nextCleanup : null;
+    cleanup = typeof nextCleanup === "function" ? nextCleanup : null;
     mounted = true;
-    skyDebug.event('page', 'mount', {
-      entry: options.entry || 'anonymous',
+    skyDebug.event("page", "mount", {
+      entry: options.entry || "anonymous",
       pjax: detail?.pjax === true,
       cleanup: Boolean(cleanup),
     });
@@ -60,20 +60,35 @@ export function registerPageLifecycle(mount, options = {}) {
 
   if (window.SkyPjax?.onPage && window.SkyPjax?.onCleanup) {
     // main.js 会在首屏 DOM ready 以及每次 PJAX DOM 替换后触发 _runPage。
-    // 禁用 immediate，避免模块首次经 PJAX 注入时拿旧页面 currentPage 重复 mount。
+    // onPage 自身保持非立即模式，避免 PJAX 注入时拿旧 currentPage 重复 mount；
+    // 大入口可显式开启下方的 URL 一致性补挂载，处理首屏模块晚于 _runPage 的竞态。
     window.SkyPjax.onPage(remount, { immediate: false });
     window.SkyPjax.onCleanup(unmount);
+    if (options.immediate && isCurrentPjaxPage()) {
+      remount(window.__skyPjaxState.currentPage);
+    }
   } else {
     runPageInit(remount);
-    document.addEventListener('sky:page-cleanup', unmount);
+    document.addEventListener("sky:page-cleanup", unmount);
   }
 
   return unmount;
 }
 
+function isCurrentPjaxPage() {
+  const currentPage = window.__skyPjaxState?.currentPage;
+  if (!currentPage) return false;
+  try {
+    const registeredUrl = new URL(currentPage.url || window.location.href, window.location.href);
+    return registeredUrl.href === window.location.href;
+  } catch {
+    return false;
+  }
+}
+
 function isPageEntryActive(entry) {
   const expectedPath = `/${entry}.js`;
-  return Array.from(document.querySelectorAll('#swup-scripts script[src]')).some((script) => {
+  return Array.from(document.querySelectorAll("#swup-scripts script[src]")).some((script) => {
     try {
       return new URL(script.src, window.location.href).pathname.endsWith(expectedPath);
     } catch {
@@ -88,11 +103,15 @@ export function registerAlpinePageComponents(register) {
     return;
   }
 
-  document.addEventListener('alpine:init', () => {
-    if (window.Alpine) {
-      register(window.Alpine);
-    }
-  }, { once: true });
+  document.addEventListener(
+    "alpine:init",
+    () => {
+      if (window.Alpine) {
+        register(window.Alpine);
+      }
+    },
+    { once: true },
+  );
 }
 
 /**
@@ -100,5 +119,5 @@ export function registerAlpinePageComponents(register) {
  * 在 Alpine.data() 组件注册完毕后调用，通知 main.js 可以恢复 Alpine。
  */
 export function notifySwupPageReady() {
-  window.__completeSwupPageInit?.({ source: 'module' });
+  window.__completeSwupPageInit?.({ source: "module" });
 }

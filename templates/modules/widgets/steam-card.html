@@ -48,6 +48,8 @@
         <div x-show="gameHeaderUrl" class="absolute inset-0 z-0">
           <img
             :src="gameHeaderUrl"
+            alt=""
+            aria-hidden="true"
             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             referrerpolicy="no-referrer"
             @error="gameHeaderUrl = null"

@@ -9,7 +9,7 @@
 
 <th:block th:replace="~{plugin:equipment:modules/style}"></th:block>
 
-<main class="equipment-page relative" th:fragment="equipment-content"
+<div class="equipment-page relative" th:fragment="equipment-content"
     th:with="cfg = ${theme.config.equipment_settings},
              sidebarCfg = ${cfg?.sidebar_settings},
              globalSidebarCfg = ${theme.config.general.sidebar_settings},
@@ -92,6 +92,6 @@
             </aside>
         </div>
     </div>
-</main>
+</div>
 
 </html>

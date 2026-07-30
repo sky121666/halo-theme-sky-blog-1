@@ -1,11 +1,21 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        归档页面布局                         -->
   <!-- 路由：/archives, /archives/:year, /archives/:year/:month -->
   <!-- ========================================== -->
 
-  <head>
+  <head
+    th:with="pageNumber=${archives?.page ?: 1},
+             archiveBase=${archives?.prevUrl != null and archives.prevUrl.contains('/page/') ? archives.prevUrl.substring(0, archives.prevUrl.indexOf('/page/')) : archives?.prevUrl},
+             hasYearMonth=${archiveBase != null and archiveBase.matches('.*/[0-9]{4}/[0-9]{2}$')},
+             hasYear=${!hasYearMonth and archiveBase != null and archiveBase.matches('.*/[0-9]{4}$')},
+             archiveYear=${hasYearMonth ? archiveBase.substring(archiveBase.length() - 7, archiveBase.length() - 3) : (hasYear ? archiveBase.substring(archiveBase.length() - 4) : null)},
+             archiveMonth=${hasYearMonth ? archiveBase.substring(archiveBase.length() - 2) : null},
+             pageTitle=${hasYearMonth ? archiveYear + ' 年 ' + archiveMonth + ' 月文章归档' : (hasYear ? archiveYear + ' 年文章归档' : '文章归档')},
+             pageCanonical=${archiveBase != null ? (pageNumber > 1 ? archiveBase + '/page/' + pageNumber : archiveBase) : (!#strings.isEmpty(site.routes?.archivesUri) ? site.routes.archivesUri : '/archives')},
+             documentTitle=${pageTitle + (pageNumber > 1 ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,11 +25,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="'归档 - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${'按时间浏览 ' + site.title + ' 的' + pageTitle}, ${pageCanonical}, ${site.logo}, 'website')}"
+    />
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->

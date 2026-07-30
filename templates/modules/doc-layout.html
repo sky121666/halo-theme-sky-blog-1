@@ -1,8 +1,13 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (head, content, scripts, dock)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (head, content, scripts, dock)">
   <!-- Docsme 文档专用布局 - 取消加载界面提升体验 -->
 
-  <head>
+  <head
+    th:with="pageTitle=${docTree?.spec?.title ?: '文档中心'},
+             documentTitle=${pageTitle + ' - ' + site.title},
+             pageCanonical=${docTree?.status?.permalink ?: '/docs'},
+             pageDescription=${project?.spec?.description}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,11 +17,9 @@
     <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${pageDescription}, ${pageCanonical}, ${site.logo}, ${docTree != null ? 'article' : 'website'})}"
+    />
 
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />

@@ -6,8 +6,9 @@
 
   <th:block th:with="
     cfg=${theme.config.moments_settings},
-    enableUpvote=${cfg?.enable_upvote != false},
-    enableComment=${cfg?.enable_comment != false},
+    basicCfg=${cfg?.basic_info},
+    enableUpvote=${basicCfg?.enable_upvote != false},
+    enableComment=${basicCfg?.enable_comment != false},
     enableShare=${cfg?.enable_share != false},
     shareSettings=${cfg?.share_settings},
     shareItemIds=${shareSettings?.share_item_ids ?: {'wechat','weibo','x','qq'}},
@@ -15,6 +16,10 @@
   ">
 
     <div class="max-w-2xl mx-auto px-4 py-8">
+      <h1 class="sr-only"
+        th:text="${(moment?.owner?.displayName ?: '访客') + ' 于 ' + #temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm') + ' 发布的瞬间'}">
+        瞬间详情
+      </h1>
 
       <!-- 返回按钮 -->
       <div class="mb-6">

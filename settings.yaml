@@ -2800,6 +2800,7 @@ spec:
             - $formkit: text
               name: page_title
               label: 页面标题
+              help: 留空时使用 PluginLinks 后台配置的链接页面标题
               value: "友情链接"
               placeholder: "友情链接"
             - $formkit: textarea
@@ -2811,6 +2812,25 @@ spec:
               name: enable_comment
               label: 启用评论
               help: 在友链页面底部显示评论区
+              value: true
+        - $formkit: group
+          name: display_settings
+          label: Links 2.2 展示
+          help: 状态来自链接检测；友链动态要求在 PluginLinks 中开启公开 RSS 订阅动态
+          value:
+            show_link_status: true
+            show_link_feeds: true
+          children:
+            - $formkit: switch
+              name: show_link_status
+              label: 显示链接状态
+              help: 在已完成检测的友链卡片上显示可访问、检测中或不可访问状态
+              value: true
+            - $formkit: switch
+              id: links_show_link_feeds
+              name: show_link_feeds
+              label: 显示友链动态
+              help: 仅当 PluginLinks 2.2.1 已启用并公开 RSS 动态时显示
               value: true
         # 申请设置分组
         - $formkit: group
@@ -3515,6 +3535,7 @@ spec:
           label: 基础信息
           value:
             page_title: "瞬间"
+            page_description: "记录生活中的片刻与想法"
             enable_upvote: true
             enable_comment: true
           children:
@@ -3523,6 +3544,11 @@ spec:
               label: 页面标题
               value: "瞬间"
               placeholder: "瞬间页面的标题"
+            - $formkit: textarea
+              name: page_description
+              label: 页面描述
+              value: "记录生活中的片刻与想法"
+              placeholder: "用于搜索结果和分享卡片的页面描述"
             - $formkit: switch
               name: enable_upvote
               label: 启用点赞

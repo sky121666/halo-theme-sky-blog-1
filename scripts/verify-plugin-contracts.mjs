@@ -143,73 +143,92 @@ if (
 }
 
 const linksContent = read("templates/modules/links/content.html");
+const linksLayout = read("templates/modules/links/layout.html");
 for (const marker of [
   "data-link-group-navigation",
   "simpleGroups",
   'th:each="linkGroup : ${groups}"',
-  "linkGroup.metadata.name == group",
-  "displayLinks=${#strings.isEmpty(group) ? linkGroup.links : links}",
+  "displayLinks=${linkGroup.links}",
+  'th:data-link-group-section="${linkGroup.metadata.name}"',
+  'th:hidden="${!#strings.isEmpty(group) and linkGroup.metadata.name != group}"',
+  "data-link-card",
+  'th:data-link-key="${link.metadata.name}"',
   "data-links-empty",
+  "data-links-empty-state",
+  "selectedGroupExists = ${",
 ]) {
   if (!linksContent.includes(marker)) fail(`PluginLinks group route marker is missing: ${marker}`);
 }
 if (/th:each="group(?:,|\s)/.test(linksContent)) {
   fail("PluginLinks page must not shadow the route variable 'group' with a loop variable");
 }
-if (!linksContent.includes("pluginFinder.available('link-submit', '>=1.0.7')")) {
-  fail("Link Submit UI must be gated by link-submit >=1.0.7 availability");
-}
-if (linksContent.includes("pluginFinder.available('link-submit')")) {
-  fail("Link Submit UI must not use an unversioned plugin availability check");
-}
-if (linksContent.includes('onclick="LinkSubmitWidget.open()"')) {
-  fail("Link Submit trigger must not call the widget before its official resources are ready");
-}
 for (const marker of [
-  "data-link-submit-trigger",
-  "data-link-submit-fallback",
-  "data-link-submit-status",
-  "/plugins/link-submit/assets/static/link-submit-widget.iife.js?version=1.0.7",
-  "/plugins/link-submit/assets/static/var.css?version=1.0.7",
+  "pluginFinder.available('PluginLinks', '>=2.2.1')",
+  'data-plugin-links-contract="PluginLinks>=2.2.1"',
+  "data-plugin-links-title",
+  "link.status?.verification?.access?.state",
+  "link.status?.verification?.backlink?.state",
+  ".state.name()",
+  "data-link-access-state",
+  "data-link-backlink-state",
+  "linkFeedFinder.groupBy(1)",
+  "linkFeedFinder.list({limit: linkFeedLimit})",
+  "groupName: currentFeedGroup",
+  "linkName: currentFeedLink",
+  "data-link-feeds",
+  "data-feed-prefetch-item",
+  "data-link-apply-form",
+  "data-link-detail-dialog",
+  "data-feed-detail-dialog",
+  "linkFeedPage.items",
+  "pluginFinder.available('PluginCommentWidget', '>=3.1.2')",
+  "canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled and hasCommentWidget}",
+  'th:name="${pluginName}"',
 ]) {
-  if (!linksContent.includes(marker)) fail(`Link Submit safe trigger marker is missing: ${marker}`);
+  if (!linksContent.includes(marker)) fail(`PluginLinks 2.2.1 marker is missing: ${marker}`);
 }
-if (!linksContent.includes("applyUrl != '#' and applyUrl != '/#'")) {
-  fail("Link Submit fallback must ignore placeholder apply URLs '#' and '/#'");
+if (!linksLayout.includes("linksTitle")) {
+  fail("PluginLinks linksTitle must participate in the page title fallback");
 }
-if (linksContent.includes("link-submit-modal") || linksContent.includes("安装插件")) {
-  fail("Link Submit must not be reimplemented by the theme or expose plugin installation to site visitors");
+if (linksContent.includes("linkGroup.spec.links")) {
+  fail("PluginLinks must use Link.spec.groupName-backed route data instead of deprecated LinkGroup.spec.links");
 }
 const linksScript = read("src/pages/links/links.js");
-for (const marker of [
-  'typeof window.LinkSubmitWidget?.open === "function"',
-  "window.__skyLinkSubmitWidgetPromise",
-  "findPluginAsset",
-  "waitForLinkSubmitStylesheet",
-  "window.__skyLinkSubmitWidgetPromise = widgetReady",
-  "Promise.all([styleReady, widgetReady])",
-  "loadLinkSubmitWidget(trigger)",
-  "fallback.hidden = false",
-  "closeLinkSubmitModal()",
+const linksRuntime = read("src/apps/links/runtime.js");
+for (const [file, source] of [
+  ["templates/modules/links/content.html", linksContent],
+  ["src/pages/links/links.js", linksScript],
+  ["src/apps/links/runtime.js", linksRuntime],
+  ["src/common/css/base.css", read("src/common/css/base.css")],
 ]) {
-  if (!linksScript.includes(marker)) fail(`Link Submit runtime guard marker is missing: ${marker}`);
-}
-const linkSubmitLoader = linksScript.slice(linksScript.indexOf("function loadLinkSubmitWidget"));
-if (
-  linkSubmitLoader.indexOf("const styleReady = ensureLinkSubmitStylesheet(styleUrl)") >
-  linkSubmitLoader.indexOf("if (isLinkSubmitWidgetReady())")
-) {
-  fail("Link Submit must restore its official stylesheet before reusing the PJAX-persistent widget");
-}
-for (const forbidden of [
-  "anonymous.link.submit.kunkunyu.com",
-  "linkSubmitForm",
-  "LINK_SUBMIT_API",
-  "LINK_GROUPS_API",
-]) {
-  if (linksScript.includes(forbidden)) {
-    fail(`Link Submit plugin backend must not be reimplemented in theme JavaScript: ${forbidden}`);
+  if (/link-submit|LinkSubmit/i.test(source)) {
+    fail(`retired Link Submit integration must not remain in ${file}`);
   }
+}
+for (const forbidden of ["feedUrls", "status.rss.feeds", "linkGroup.spec.links"]) {
+  if (linksContent.includes(forbidden)) fail(`PluginLinks public template must not expose ${forbidden}`);
+}
+if (!linksScript.includes("notifySwupPageReady()")) {
+  fail("PluginLinks page entry must notify the shared PJAX lifecycle");
+}
+if (!linksScript.includes('registerPageLifecycle(mountLinksApp, { entry: "links", immediate: true })')) {
+  fail("PluginLinks page entry must close the late-module initial mount race");
+}
+const pageRuntime = read("src/common/js/page-runtime.js");
+for (const marker of ["options.immediate && isCurrentPjaxPage()", "window.__skyPjaxState?.currentPage"]) {
+  if (!pageRuntime.includes(marker)) fail(`shared page lifecycle immediate marker is missing: ${marker}`);
+}
+for (const marker of [
+  'const MANAGED_QUERY_KEYS = ["view", "scope", "groupName", "linkName", "itemId", "group", "link"]',
+  "normalizeLinksState",
+  "normalizeLinksUrl",
+  "buildLinkFeedApiUrl",
+  "resolveCapabilities",
+  "buildCsrfHeaders",
+  "mountLinksApp",
+  "/apis/api.link.halo.run/v1alpha1/linkfeeds",
+]) {
+  if (!linksRuntime.includes(marker)) fail(`PluginLinks runtime marker is missing: ${marker}`);
 }
 
 const doubanScript = read("src/pages/douban/douban.js");
@@ -268,8 +287,8 @@ if (
 ) {
   fail("Home shell conditional class expression must remain valid after formatting");
 }
-if (!indexContent.includes("hasLinksPlugin = ${pluginFinder.available('PluginLinks', '>=2.0.0')}")) {
-  fail("Home Friends enhancements must independently gate PluginLinks >=2.0.0");
+if (!indexContent.includes("hasLinksPlugin = ${pluginFinder.available('PluginLinks', '>=2.2.1')}")) {
+  fail("Home Friends enhancements must independently gate PluginLinks >=2.2.1");
 }
 if (!tabsGroup.includes("hasLinksPlugin ? linkFinder.groupBy() : {}")) {
   fail("Home Friends group labels must not call linkFinder when PluginLinks is unavailable");
@@ -280,7 +299,16 @@ if (
 ) {
   fail("Every Friends list style must provide an empty/error avatar fallback");
 }
-for (const marker of ["function applyLimit()", 'document.readyState === "loading"', "applyLimit();"]) {
+for (const marker of [
+  "pluginFinder.available('PluginLinks', '>=2.2.1')",
+  "filteredGroups = ${",
+  "visibleLinkCount = ${",
+  "data-index-links-empty",
+  "this.nextElementSibling.hidden = false",
+  "function applyLimit()",
+  'document.readyState === "loading"',
+  "applyLimit();",
+]) {
   if (!linksWidget.includes(marker)) fail(`Home Links PJAX limit marker is missing: ${marker}`);
 }
 
@@ -440,26 +468,6 @@ if (
 }
 
 const baseCss = read("src/common/css/base.css");
-for (const variable of [
-  "--link-submit-widget-base-font-size",
-  "--link-submit-widget-base-font-family",
-  "--link-submit-widget-base-rounded",
-  "--link-submit-widget-base-bg-color",
-  "--link-submit-widget-modal-layer-color",
-  "--link-submit-widget-form-bg-color",
-  "--link-submit-widget-form-border-color",
-  "--link-submit-widget-form-text-color",
-  "--link-submit-widget-form-label-color",
-  "--link-submit-widget-form-placeholder-color",
-  "--link-submit-widget-form-button-bg-color",
-  "--link-submit-widget-form-button-text-color",
-  "--link-submit-widget-form-button-hover-bg-color",
-]) {
-  if (!baseCss.includes(`${variable}:`)) fail(`Link Submit 1.0.7 theme variable is missing: ${variable}`);
-}
-if (read("src/pages/links/links.css").includes("#link-submit-modal")) {
-  fail("obsolete theme-owned Link Submit modal CSS must be removed");
-}
 const contactFormVariables = [
   "--halo-contact-form-font-family",
   "--halo-contact-form-font-size",

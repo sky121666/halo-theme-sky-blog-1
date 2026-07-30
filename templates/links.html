@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
   <!-- 页面：友情链接（/links）-->
-  <!-- 兼容基线：PluginLinks v2.0.0；路由注入 links/simpleGroups/groups/group/pluginName，评论 subject 使用 PluginLinks。 -->
+  <!-- 兼容基线：PluginLinks v2.2.1；SSR Finder 与客户端运行时共同承载友链、RSS、申请和留言状态。 -->
 
   <th:block th:replace="~{modules/links/layout :: html (~{modules/links/content :: links-content})}" />
 </html>

@@ -1,12 +1,17 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        朋友圈页面布局                       -->
   <!-- 路由：/friends                             -->
   <!-- 插件：plugin-friends                       -->
   <!-- ========================================== -->
 
-  <head>
+  <head
+    th:with="pageNumber=${friends?.page ?: 1},
+             pageTitle=${theme.config.friends_page_settings?.basic_info?.page_title ?: (title ?: '朋友圈')},
+             documentTitle=${pageTitle + (pageNumber > 1 ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
+             pageCanonical=${pageNumber > 1 ? '/friends/page/' + pageNumber : '/friends'}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,11 +21,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${(theme.config.friends_page_settings?.basic_info?.page_title ?: '朋友圈')} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${theme.config.friends_page_settings?.basic_info?.page_description}, ${pageCanonical}, ${site.logo}, 'website')}"
+    />
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->

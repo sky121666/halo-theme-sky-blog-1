@@ -24,25 +24,25 @@
 
 ## 插件总览
 
-| 插件                    | 用途                             | 入口                          | 说明                                                 |
-| ----------------------- | -------------------------------- | ----------------------------- | ---------------------------------------------------- |
-| PluginLinks             | 友情链接、分组、申请入口         | `/links`                      | [友情链接](../content/links.md)                      |
-| PluginPhotos            | 图库列表、照片详情、EXIF         | `/photos`、`/photos/{name}`   | [图库页面](../content/photos.md)                     |
-| PluginMoments           | 瞬间、媒体、点赞、评论、前端发布 | `/moments`、`/moments/{name}` | [瞬间页面](../content/moments.md)                    |
-| plugin-docsme           | 文档中心、目录、正文             | `/docs`、`/docs/**`           | [文档页面](../content/docsme.md)                     |
-| plugin-friends          | 朋友圈 RSS 动态                  | `/friends`                    | [朋友圈页面](../content/friends.md)                  |
-| plugin-douban           | 豆瓣收藏记录                     | `/douban`                     | [豆瓣页面](../collections/douban.md)                 |
-| plugin-bilibili-bangumi | Bilibili 追番记录                | `/bangumis`                   | [追番页面](../collections/bangumi.md)                |
-| halo-plugin-steam       | Steam 资料、游戏库、热力图       | `/steam`                      | [Steam 页面](../collections/steam.md)                |
-| plugin-equipment        | 装备、工具、好物展示             | `/equipments`                 | [装备页面](../collections/equipment.md)              |
-| PluginLightGallery      | 图片灯箱                         | 文章、图库、瞬间、文档正文    | 本页下方说明                                         |
-| PluginCommentWidget     | 评论组件                         | 文章、页面、插件页评论区      | 插件后台配置                                         |
-| PluginSearchWidget      | 搜索组件                         | 导航搜索入口                  | [顶部导航](../../theme/base/nav.md)                  |
-| plugin-online           | 在线访客统计                     | 侧边栏小工具                  | [在线统计](../../theme/enhancements/online-stats.md) |
-| vote                    | 正文投票块                       | 文章、页面和文档正文          | 1.1.3 主题变量；交互需实站回归                       |
-| text-diagram            | Mermaid/PlantUML 文本绘图        | 文章、页面和文档正文          | 1.5.2 绘图容器与暗色 selector                        |
-| PluginContactForm       | 联系表单                         | 正文、单页、贴边按钮和页面弹窗 | 契约 1.6.4；完整提交与上传流程仍待实站回归            |
-| ai-assistant            | AI 总结小部件                    | 文章顶部                      | 契约 1.5.1；2.2.4 摘要小部件已完成无模型实站回归      |
+| 插件                    | 用途                             | 入口                           | 说明                                                 |
+| ----------------------- | -------------------------------- | ------------------------------ | ---------------------------------------------------- |
+| PluginLinks             | 友情链接、分组、申请入口         | `/links`                       | [友情链接](../content/links.md)                      |
+| PluginPhotos            | 图库列表、照片详情、EXIF         | `/photos`、`/photos/{name}`    | [图库页面](../content/photos.md)                     |
+| PluginMoments           | 瞬间、媒体、点赞、评论、前端发布 | `/moments`、`/moments/{name}`  | [瞬间页面](../content/moments.md)                    |
+| plugin-docsme           | 文档中心、目录、正文             | `/docs`、`/docs/**`            | [文档页面](../content/docsme.md)                     |
+| plugin-friends          | 朋友圈 RSS 动态                  | `/friends`                     | [朋友圈页面](../content/friends.md)                  |
+| plugin-douban           | 豆瓣收藏记录                     | `/douban`                      | [豆瓣页面](../collections/douban.md)                 |
+| plugin-bilibili-bangumi | Bilibili 追番记录                | `/bangumis`                    | [追番页面](../collections/bangumi.md)                |
+| halo-plugin-steam       | Steam 资料、游戏库、热力图       | `/steam`                       | [Steam 页面](../collections/steam.md)                |
+| plugin-equipment        | 装备、工具、好物展示             | `/equipments`                  | [装备页面](../collections/equipment.md)              |
+| PluginLightGallery      | 图片灯箱                         | 文章、图库、瞬间、文档正文     | 本页下方说明                                         |
+| PluginCommentWidget     | 评论组件                         | 文章、页面、插件页评论区       | 插件后台配置                                         |
+| PluginSearchWidget      | 搜索组件                         | 导航搜索入口                   | [顶部导航](../../theme/base/nav.md)                  |
+| plugin-online           | 在线访客统计                     | 侧边栏小工具                   | [在线统计](../../theme/enhancements/online-stats.md) |
+| vote                    | 正文投票块                       | 文章、页面和文档正文           | 1.1.3 主题变量；交互需实站回归                       |
+| text-diagram            | Mermaid/PlantUML 文本绘图        | 文章、页面和文档正文           | 1.5.2 绘图容器与暗色 selector                        |
+| PluginContactForm       | 联系表单                         | 正文、单页、贴边按钮和页面弹窗 | 契约 1.6.4；完整提交与上传流程仍待实站回归           |
+| ai-assistant            | AI 总结小部件                    | 文章顶部                       | 契约 1.5.1；2.2.4 摘要小部件已完成无模型实站回归     |
 
 ## lightgallery.js 灯箱
 
@@ -91,17 +91,17 @@
 
 ## 版本注意
 
-| 插件组合                                   | 注意事项                                                                                                  |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| PluginLinks + plugin-friends + link-submit | 当前 2.0.0 + 1.4.6 + 1.0.7 均已启动；Links 申请 Modal 首次/PJAX 重入通过，2.1.0～2.2.1 存在组合类加载冲突 |
-| PluginPhotos                               | `2.1.2` 列表、详情、PJAX、20→40→46 张无限滚动灯箱与 46 个唯一详情路由均通过                               |
-| plugin-bilibili-bangumi                    | 稳定版 `1.4.1` 已通过数值越界 404、文本参数回退及真页 PJAX；实现契约继续保持 `1.4.0`                       |
-| plugin-shiki                               | 主题契约仍为 `1.3.1`；当前 `1.4.1` 已通过 26 个代码块、折叠、明暗与两轮 PJAX，记录为 `testedVersion`       |
-| plugin-docsme                              | 主题当前契约为 `plugin-docsme 1.7.0`                                                                      |
-| plugin-douban                              | 图片代理在插件后台配置，主题只做失败占位                                                                  |
-| halo-plugin-steam                          | Steam 资料需要 API Key、SteamID 和公开隐私设置                                                            |
-| Passkey                                    | 登录入口与认证 options 请求通过；未选择凭据或完成认证                                                     |
-| ai-assistant                               | `2.2.4` 仅完成已有摘要小部件、明暗、移动端与 PJAX 回归；不含生成、RAG 或编辑器 AI                         |
+| 插件组合                | 注意事项                                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| PluginLinks             | 当前独立适配 `2.2.1`：分组、状态枚举、公开 RSS Finder、评论和 PJAX；Friends 与 Link Submit 不参与该结论 |
+| PluginPhotos            | `2.1.2` 列表、详情、PJAX、20→40→46 张无限滚动灯箱与 46 个唯一详情路由均通过                             |
+| plugin-bilibili-bangumi | 稳定版 `1.4.1` 已通过数值越界 404、文本参数回退及真页 PJAX；实现契约继续保持 `1.4.0`                    |
+| plugin-shiki            | 主题契约仍为 `1.3.1`；当前 `1.4.1` 已通过 26 个代码块、折叠、明暗与两轮 PJAX，记录为 `testedVersion`    |
+| plugin-docsme           | 主题当前契约为 `plugin-docsme 1.7.0`                                                                    |
+| plugin-douban           | 图片代理在插件后台配置，主题只做失败占位                                                                |
+| halo-plugin-steam       | Steam 资料需要 API Key、SteamID 和公开隐私设置                                                          |
+| Passkey                 | 登录入口与认证 options 请求通过；未选择凭据或完成认证                                                   |
+| ai-assistant            | `2.2.4` 仅完成已有摘要小部件、明暗、移动端与 PJAX 回归；不含生成、RAG 或编辑器 AI                       |
 
 更完整的版本基线见 [插件适配状态](../../system/adaptation/plugin-adaptation.md)。
 

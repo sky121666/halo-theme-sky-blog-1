@@ -31,13 +31,14 @@
 -->
 
 <!-- 分类集合内容片段：/categories -->
-<main class="relative" th:fragment="category-collection" x-data="categoriesPage()"
+<div class="relative" th:fragment="category-collection" x-data="categoriesPage()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only">文章分类</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与列表 -->
 
   <!-- 主体内容区域（两列布局，与 post 一致） -->
@@ -74,7 +75,7 @@
 
           <!-- 有分类：在 /categories（全部）分页显示所有文章，风格由后台设置 -->
           <th:block th:unless="${#lists.isEmpty(categories)}" th:with="pageSize=${site.post.categoryPageSize}, 
-                             pageParam=${param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'}, 
+                             pageParam=${param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')},
                              currentPage=${#numbers.formatInteger(pageParam, 0)}, 
                              posts=${postFinder.list({page: currentPage, size: pageSize})}">
             <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
@@ -104,7 +105,7 @@
               </th:block>
             </div>
 
-            <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? '/categories?page=' + (posts.page + 1) : ''}" />
+            <input id="initial-next-url" type="hidden" th:value="${posts.hasNext ? '/categories?p=' + (posts.page + 1) : ''}" />
             <div id="infinite-sentinel" class="h-px w-full"></div>
 
             <!-- 无文章提示 -->
@@ -115,8 +116,8 @@
             <!-- 分页：上一页/下一页 + 下拉选择（索引页） -->
             <th:block th:replace="~{modules/categories/pagination :: pagination(
                 context=@{/categories/},
-                prevUrl=@{/categories(page=${posts.page - 1})},
-                nextUrl=@{/categories(page=${posts.page + 1})},
+                prevUrl=@{/categories(p=${posts.page - 1})},
+                nextUrl=@{/categories(p=${posts.page + 1})},
                 totalPages=${posts.totalPages},
                 page=${posts.page},
                 hasPrevious=${posts.hasPrevious},
@@ -133,16 +134,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 分类归档内容片段：/categories/:slug -->
-<main class="relative" th:fragment="category-archive" x-data="categoryArchive()"
+<div class="relative" th:fragment="category-archive" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${category.spec.displayName + ' 分类'}">分类文章</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
   <!-- 主体内容区域（与 post 一致的两列布局） -->
@@ -221,16 +223,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制卡片风格 -->
-<main class="relative" th:fragment="category-archive-card" x-data="categoryArchive()"
+<div class="relative" th:fragment="category-archive-card" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${category.spec.displayName + ' 分类'}">分类文章</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
   <!-- 主体内容区域（与 post 一致的两列布局） -->
@@ -288,16 +291,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制列表风格 -->
-<main class="relative" th:fragment="category-archive-list" x-data="categoryArchive()"
+<div class="relative" th:fragment="category-archive-list" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${category.spec.displayName + ' 分类'}">分类文章</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
   <!-- 主体内容区域（与 post 一致的两列布局） -->
@@ -355,16 +359,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制杂志风格 -->
-<main class="relative" th:fragment="category-archive-magazine" x-data="categoryArchive()"
+<div class="relative" th:fragment="category-archive-magazine" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${category.spec.displayName + ' 分类'}">分类文章</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
   <!-- 主体内容区域（与 post 一致的两列布局） -->
@@ -422,16 +427,17 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 <!-- 分类归档内容片段：/categories/:slug - 强制极简风格 -->
-<main class="relative" th:fragment="category-archive-minimal" x-data="categoryArchive()"
+<div class="relative" th:fragment="category-archive-minimal" x-data="categoryArchive()"
   th:with="rootCfg = ${theme.config.category_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  <h1 class="sr-only" th:text="${category.spec.displayName + ' 分类'}">分类文章</h1>
   <!-- 简约样式：不使用页头 Banner，直接展示分类按钮与当前分类列表 -->
 
   <!-- 主体内容区域（与 post 一致的两列布局） -->
@@ -489,6 +495,6 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 </html>

@@ -1,8 +1,15 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- 页面头部 -->
 
-  <head>
+  <head
+    th:with="pageNumber=${tag != null ? (posts?.page ?: 1) : (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'))},
+             isPaged=${pageNumber.toString() != '1'},
+             pageLabel=${tag != null ? tag.spec.displayName + ' 标签' : '文章标签'},
+             documentTitle=${pageLabel + (isPaged ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
+             baseCanonical=${tag != null ? tag.status.permalink : (!#strings.isEmpty(site.routes?.tagsUri) ? site.routes.tagsUri : '/tags')},
+             pageCanonical=${isPaged ? (tag != null ? baseCanonical + (baseCanonical.endsWith('/') ? 'page/' : '/page/') + pageNumber : baseCanonical + '?p=' + pageNumber) : baseCanonical}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,11 +19,9 @@
     <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${(tag != null ? tag.spec.displayName + ' - ' + site.title : '标签 - ' + site.title)} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${null}, ${pageCanonical}, ${site.logo}, 'website')}"
+    />
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->

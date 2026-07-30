@@ -8,7 +8,7 @@
 | 设置位置 | `外观 -> 主题 -> Sky Blog -> 设置 -> 朋友圈`                 |
 | 依赖插件 | `plugin-friends`；`PluginLinks` 仅用于首页动态的分组标签增强 |
 
-> `plugin-friends 1.4.6` 上游已归档，但当前主 Halo 与 `PluginLinks 2.0.0`、`link-submit 1.0.7` 组合时三者均为 `STARTED`，`/friends` 已通过深度 smoke。PluginLinks 2.1.0～2.2.1 与后两者组合会触发跨插件 `ObjectMapper` 类加载冲突，因此不能把故障归因于 Friends 单独不兼容 Halo 2.25.4，升级 Links 前必须复验。
+> `plugin-friends 1.4.6` 上游已归档，当前主 Halo 中处于禁用态，不参与 PluginLinks 2.2.1 的独立适配结论。2026-07-17 的 Links 2.0.0 组合结果仅保留在运行态历史快照中。
 
 ## 页面内容
 

@@ -1,0 +1,114 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+  <th:block
+    th:fragment="meta(title, description, canonical, image, type)"
+    th:with="pageDescription=${!#strings.isEmpty(description) ? description : (!#strings.isEmpty(site.seo?.description) ? site.seo.description : site.subtitle)},
+             pageType=${!#strings.isEmpty(type) ? type : 'website'},
+             coreDescriptionAvailable=${(_templateId == 'index' and !#strings.isEmpty(site.seo?.description)) or _templateId == 'post' or _templateId == 'page' or docTree != null},
+             seoPluginAvailable=${pluginFinder.available('seo-tools')},
+             rawCanonical=${canonical != null ? canonical.toString() : ''},
+             rawImage=${image != null ? image.toString() : ''},
+             siteBaseUrl=${site.url != null ? site.url.toString() : ''},
+             absoluteCanonical=${!#strings.isEmpty(rawCanonical) ? ((rawCanonical.startsWith('http://') or rawCanonical.startsWith('https://')) ? rawCanonical : (!#strings.isEmpty(siteBaseUrl) ? ((siteBaseUrl.endsWith('/') and rawCanonical.startsWith('/')) ? siteBaseUrl + rawCanonical.substring(1) : ((!siteBaseUrl.endsWith('/')) and (!rawCanonical.startsWith('/')) ? siteBaseUrl + '/' + rawCanonical : siteBaseUrl + rawCanonical)) : rawCanonical)) : ''},
+             absoluteImage=${!#strings.isEmpty(rawImage) ? ((rawImage.startsWith('http://') or rawImage.startsWith('https://')) ? rawImage : (!#strings.isEmpty(siteBaseUrl) ? ((siteBaseUrl.endsWith('/') and rawImage.startsWith('/')) ? siteBaseUrl + rawImage.substring(1) : ((!siteBaseUrl.endsWith('/')) and (!rawImage.startsWith('/')) ? siteBaseUrl + '/' + rawImage : siteBaseUrl + rawImage)) : rawImage)) : ''},
+             schemaType=${pageType == 'article' ? 'Article' : (pageType == 'profile' ? 'ProfilePage' : 'WebPage')}"
+  >
+    <title th:text="${title}"></title>
+
+    <!-- Halo 会按 meta[name] 去重；标准描述由主题补齐，插件继续独占 canonical/OG/JSON-LD。 -->
+    <meta
+      th:if="${!coreDescriptionAvailable and !#strings.isEmpty(pageDescription)}"
+      name="description"
+      data-theme-seo-description
+      th:content="${pageDescription}"
+    />
+
+    <!-- plugin-contract: seo-tools; contract-version: 1.9.5; status: inferred; source: docs/system/adaptation/plugin-adaptation.md -->
+    <!-- SEO Tools 的 HeadProcessor 是权威输出；仅在插件不可用时提供最小 SSR 降级。 -->
+    <th:block th:unless="${seoPluginAvailable}">
+      <link
+        th:if="${!#strings.isEmpty(absoluteCanonical)}"
+        rel="canonical"
+        data-theme-seo-fallback="canonical"
+        th:href="${absoluteCanonical}"
+      />
+
+      <meta
+        th:if="${!#strings.isEmpty(absoluteCanonical)}"
+        property="og:url"
+        data-theme-seo-fallback="og:url"
+        th:content="${absoluteCanonical}"
+      />
+      <meta
+        th:if="${!#strings.isEmpty(site.title)}"
+        property="og:site_name"
+        data-theme-seo-fallback="og:site_name"
+        th:content="${site.title}"
+      />
+      <meta property="og:title" data-theme-seo-fallback="og:title" th:content="${title}" />
+      <meta property="og:type" data-theme-seo-fallback="og:type" th:content="${pageType}" />
+      <meta
+        th:if="${!#strings.isEmpty(pageDescription)}"
+        property="og:description"
+        data-theme-seo-fallback="og:description"
+        th:content="${pageDescription}"
+      />
+      <meta
+        th:if="${!#strings.isEmpty(absoluteImage)}"
+        property="og:image"
+        data-theme-seo-fallback="og:image"
+        th:content="${absoluteImage}"
+      />
+      <meta
+        th:if="${!#strings.isEmpty(absoluteImage)}"
+        property="og:image:alt"
+        data-theme-seo-fallback="og:image:alt"
+        th:content="${title}"
+      />
+
+      <meta
+        name="twitter:card"
+        data-theme-seo-fallback="twitter:card"
+        th:content="${!#strings.isEmpty(absoluteImage) ? 'summary_large_image' : 'summary'}"
+      />
+      <meta name="twitter:title" data-theme-seo-fallback="twitter:title" th:content="${title}" />
+      <meta
+        th:if="${!#strings.isEmpty(pageDescription)}"
+        name="twitter:description"
+        data-theme-seo-fallback="twitter:description"
+        th:content="${pageDescription}"
+      />
+      <meta
+        th:if="${!#strings.isEmpty(absoluteImage)}"
+        name="twitter:image"
+        data-theme-seo-fallback="twitter:image"
+        th:content="${absoluteImage}"
+      />
+
+      <script
+        th:if="${!#strings.isEmpty(absoluteCanonical)}"
+        type="application/ld+json"
+        data-theme-seo-fallback="json-ld"
+        th:inline="javascript"
+      >
+        {
+          "@context": "https://schema.org",
+          "@type": /*[[${schemaType}]]*/ "WebPage",
+          "name": /*[[${title}]]*/ "",
+          "description": /*[[${pageDescription}]]*/ "",
+          "url": /*[[${absoluteCanonical}]]*/ "",
+          "image": /*[[${absoluteImage}]]*/ ""
+        }
+      </script>
+    </th:block>
+
+    <!-- plugin-contract: PluginFeed; contract-version: 1.5.0; tested-version: 1.5.0; status: compatible-tested; source: docs/system/adaptation/plugin-adaptation.md -->
+    <link
+      th:if="${pluginFinder.available('PluginFeed')}"
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS"
+      th:href="@{/feed.xml}"
+    />
+  </th:block>
+</html>

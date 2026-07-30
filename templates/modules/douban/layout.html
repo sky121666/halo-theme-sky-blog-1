@@ -1,12 +1,15 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        豆瓣记录页面布局                     -->
   <!-- 路由：/douban                              -->
   <!-- 插件：plugin-douban                         -->
   <!-- ========================================== -->
 
-  <head th:with="pageTitle=${title ?: '豆瓣记录'}">
+  <head
+    th:with="pageTitle=${title ?: '豆瓣记录'},
+             documentTitle=${pageTitle + ' - ' + site.title}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,11 +17,9 @@
 
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <title
-      th:text="${pageTitle} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-      豆瓣记录
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${null}, '/douban', ${site.logo}, 'website')}"
+    />
 
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
 

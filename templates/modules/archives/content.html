@@ -7,13 +7,19 @@
 <!-- ========================================== -->
 
 <!-- 归档内容片段 -->
-<main class="relative" th:fragment="archive-content"
+<div class="relative" th:fragment="archive-content"
   th:with="rootCfg = ${theme.config.archive_settings},
                cfg = ${rootCfg.basic_info},
                sidebarCfg = ${rootCfg.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')},
+               archiveBase = ${archives?.prevUrl != null and archives.prevUrl.contains('/page/') ? archives.prevUrl.substring(0, archives.prevUrl.indexOf('/page/')) : archives?.prevUrl},
+               hasYearMonth = ${archiveBase != null and archiveBase.matches('.*/[0-9]{4}/[0-9]{2}$')},
+               hasYear = ${!hasYearMonth and archiveBase != null and archiveBase.matches('.*/[0-9]{4}$')},
+               archiveYear = ${hasYearMonth ? archiveBase.substring(archiveBase.length() - 7, archiveBase.length() - 3) : (hasYear ? archiveBase.substring(archiveBase.length() - 4) : null)},
+               archiveMonth = ${hasYearMonth ? archiveBase.substring(archiveBase.length() - 2) : null},
+               archiveLabel = ${hasYearMonth ? archiveYear + ' 年 ' + archiveMonth + ' 月文章归档' : (hasYear ? archiveYear + ' 年文章归档' : '文章归档')}">
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：归档内容 -->
@@ -24,7 +30,8 @@
           th:with="globalArchives = ${postFinder.archives(1, 100)}">
           <div class="flex items-end justify-between">
             <div>
-              <h1 class="text-4xl md:text-5xl font-serif text-base-content tracking-wider font-semibold">文章归档</h1>
+              <h1 class="text-4xl md:text-5xl font-serif text-base-content tracking-wider font-semibold"
+                th:text="${archiveLabel}">文章归档</h1>
               <p class="text-[14px] text-base-content/40 mt-3 font-serif tracking-[0.05em]"
                 th:if="${globalArchives != null and globalArchives.items != null}">
                 共 <span class="font-sans font-medium text-base-content/80 px-[3px]"
@@ -189,6 +196,6 @@
       </aside>
     </div>
   </div>
-</main>
+</div>
 
 </html>

@@ -1,12 +1,17 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        追番页面布局                         -->
   <!-- 路由：/bangumis                            -->
   <!-- 插件：plugin-bilibili-bangumi              -->
   <!-- ========================================== -->
 
-  <head>
+  <head
+    th:with="pageNumber=${bangumis?.page ?: 1},
+             pageTitle=${theme.config.bangumi_settings?.page_title ?: '追番列表'},
+             documentTitle=${pageTitle + (pageNumber > 1 ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
+             pageCanonical=${pageNumber > 1 ? '/bangumis?page=' + pageNumber : '/bangumis'}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,12 +21,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="'追番 - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-      追番
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${theme.config.bangumi_settings?.page_description}, ${pageCanonical}, ${site.logo}, 'website')}"
+    />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />

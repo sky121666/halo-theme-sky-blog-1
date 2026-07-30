@@ -234,6 +234,7 @@
                         <img
                           th:unless="${!#strings.isEmpty(currentUser.avatar)}"
                           th:src="@{/assets/images/heihei.png?v={version}(version=${theme.spec.version})}"
+                          th:alt="${currentUser.displayName}"
                         />
                       </div>
                     </div>
@@ -266,6 +267,7 @@
                             <img
                               th:unless="${!#strings.isEmpty(currentUser.avatar)}"
                               th:src="@{/assets/images/heihei.png?v={version}(version=${theme.spec.version})}"
+                              th:alt="${currentUser.displayName}"
                             />
                           </div>
                         </div>
@@ -429,6 +431,7 @@
                 <img
                   th:unless="${!#strings.isEmpty(currentUser.avatar)}"
                   th:src="@{/assets/images/heihei.png?v={version}(version=${theme.spec.version})}"
+                  th:alt="${currentUser.displayName}"
                   class="h-full w-full object-cover"
                 />
               </div>

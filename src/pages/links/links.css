@@ -1,57 +1,225 @@
 /**
- * 友情链接页样式
- * 模板位置：templates/links.html
- * 
- * 注：评论组件样式已在 base.css 中全局定义
+ * PluginLinks v2 页面补丁。
+ * 视觉基线：links-v2-prototype.html + assets/patch.css。
+ * 仅补充运行时状态，不重做主题色板、卡片或外层布局。
  */
 
-/* 友链卡片悬停效果 */
-.link-card {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+[data-links-page] [data-links-view-panel][hidden],
+[data-links-page] [data-link-group-section][hidden],
+[data-links-page] [data-links-filter-empty][hidden],
+[data-links-page] [data-links-protected-control][hidden],
+[data-links-page] [data-links-capability-status][hidden],
+[data-links-page] [data-feed-state][hidden],
+[data-links-page] [data-feed-list][hidden],
+[data-links-page] [data-feed-load-more][hidden],
+[data-links-page] [data-apply-update-field][hidden],
+[data-links-page] [data-apply-status][hidden],
+[data-links-page] [data-apply-output][hidden],
+[data-links-page] [data-link-detail-rss-row][hidden],
+[data-links-page] [data-link-detail-feed][hidden] {
+  display: none !important;
 }
 
-.link-card:hover {
-  transform: translateY(-4px);
+[data-links-page] .links-view-navigation,
+[data-links-page] .links-scroll-nav {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Logo 图片容器 */
-.link-card img {
+[data-links-page] .links-view-navigation::-webkit-scrollbar,
+[data-links-page] .links-scroll-nav::-webkit-scrollbar {
+  display: none;
+}
+
+[data-links-page] .links-view-navigation > *,
+[data-links-page] .links-scroll-nav > * {
+  min-height: 2.5rem;
+}
+
+[data-links-page] [data-links-view-panel]:not([hidden]) {
+  animation: links-view-enter 0.25s ease both;
+}
+
+@keyframes links-view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+[data-links-page] .links-card-active {
+  border-color: color-mix(in oklch, var(--color-primary) 40%, transparent) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--color-primary) 35%, transparent),
+    0 8px 24px -12px color-mix(in oklch, var(--color-primary) 45%, transparent) !important;
+}
+
+[data-links-page] .links-filter-active {
+  color: var(--color-primary-content) !important;
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+[data-links-page] .links-link-card img {
   transition: transform 0.3s ease;
 }
 
-.link-card:hover img {
+[data-links-page] .links-link-card:hover img {
   transform: scale(1.05);
 }
 
-/* 分组标题装饰线动画 */
-.link-group > div > .w-1 {
-  transition: height 0.3s ease;
+[data-links-page] .links-feed-row {
+  position: relative;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.link-group:hover > div > .w-1 {
+[data-links-page] .links-dot-unread {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  background: var(--color-primary);
+  border-radius: 9999px;
+  box-shadow: 0 0 8px color-mix(in oklch, var(--color-primary) 70%, transparent);
+}
+
+[data-links-page] .links-feed-active {
+  background: color-mix(in oklch, var(--color-primary) 8%, transparent);
+  box-shadow: inset 2px 0 0 var(--color-primary);
+}
+
+[data-links-page] .links-select-sm {
   height: 2rem;
+  min-height: 2rem;
+  padding-inline-start: 0.5rem;
+  font-size: 0.75rem;
 }
 
-/* 卡片网格响应式间距 */
-@media (max-width: 640px) {
-  .link-card {
-    padding: 1rem;
+[data-links-page] .links-capability {
+  height: 2rem;
+  min-height: 2rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+[data-links-page] .links-state-panel .loading {
+  display: inline-block;
+}
+
+[data-links-page] .links-apply-type label:has(input:checked) {
+  color: var(--color-primary-content);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px -14px color-mix(in oklch, var(--color-primary) 65%, transparent);
+}
+
+[data-links-page] .links-markdown-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+[data-links-page] .links-board-section {
+  scroll-margin-top: 5.5rem;
+}
+
+[data-links-page] .links-board-focus {
+  border-radius: 1rem;
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-primary) 55%, transparent);
+  transition: box-shadow 0.4s ease;
+}
+
+[data-links-page] .links-toast-stack {
+  position: fixed;
+  inset-block-start: 4.5rem;
+  inset-inline-end: 1rem;
+  z-index: 90;
+  display: grid;
+  width: min(20rem, calc(100vw - 2rem));
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+[data-links-page] .links-toast {
+  min-height: 0;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  pointer-events: auto;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 50%);
+  animation: links-toast-enter 0.25s ease both;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+[data-links-page] .links-toast.is-leaving {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@keyframes links-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
 
-  .link-card > div:first-child {
-    width: 3rem;
-    height: 3rem;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* 申请友链区域样式 */
-.mt-16.p-6 {
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklch, var(--color-base-200) 50%, transparent) 0%,
-    color-mix(in oklch, var(--color-base-300) 30%, transparent) 100%
-  );
+@media (max-width: 639px) {
+  [data-links-page] .links-rss-filters {
+    display: grid !important;
+    grid-template-columns: 1fr;
+  }
+
+  [data-links-page] .links-rss-filters label {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+  }
+
+  [data-links-page] .links-rss-filters select {
+    width: 100%;
+  }
+
+  [data-links-page] .links-apply-url-row {
+    flex-direction: column;
+  }
+
+  [data-links-page] .links-apply-url-row > .btn,
+  [data-links-page] .links-form-actions > .btn {
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  [data-links-page] .links-form-actions {
+    display: grid !important;
+    grid-template-columns: 1fr;
+  }
+
+  [data-links-page] .links-toast-stack {
+    inset-block-start: 4.25rem;
+    inset-inline: 0.75rem;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-links-page] [data-links-view-panel]:not([hidden]),
+  [data-links-page] .links-toast {
+    animation: none;
+    transition: none;
+  }
+
+  [data-links-page] .links-board-focus {
+    transition: none;
+  }
 }

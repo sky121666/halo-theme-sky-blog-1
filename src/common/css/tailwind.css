@@ -7,6 +7,7 @@
 @source "../../../templates/gateway_fragments/**/*.html";
 @source "../../../templates/modules/**/*.html";
 @source "../../../templates/password-reset/**/*.html";
+@source "../../apps/**/*.js";
 @source "../../common/**/*.js";
 @source "../../pages/**/*.js";
 @source "../../static/**/*.js";

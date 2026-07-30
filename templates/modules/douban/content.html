@@ -5,7 +5,7 @@
   <!-- 兼容基线：plugin-douban v1.2.5；不触发 douban LazyContextVariable，列表走公开 API。 -->
   <!-- ========================================== -->
 
-  <main
+  <div
     class="douban-page relative"
     th:fragment="douban-content"
     th:data-page-title="${title ?: '豆瓣记录'}"
@@ -90,5 +90,5 @@
         </div>
       </section>
     </div>
-  </main>
+  </div>
 </html>

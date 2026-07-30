@@ -1,12 +1,15 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        Steam 游戏库页面布局                 -->
   <!-- 路由：/steam                               -->
   <!-- 插件：plugin-steam                         -->
   <!-- ========================================== -->
 
-  <head>
+  <head
+    th:with="pageTitle=${title ?: 'Steam 游戏库'},
+             documentTitle=${pageTitle + ' - ' + site.title}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,12 +19,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="${title ?: 'Steam 游戏库'} + ' - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-      Steam 游戏库
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${null}, '/steam', ${site.logo}, 'website')}"
+    />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
@@ -67,6 +67,8 @@
         <div x-show="gameBg" x-cloak class="steam-game-bg pointer-events-none fixed inset-0 z-0">
           <img
             x-bind:src="gameBg ? 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/library_hero.jpg' : null"
+            alt=""
+            aria-hidden="true"
             class="h-full w-full object-cover opacity-20"
             @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
           />

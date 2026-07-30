@@ -3,46 +3,106 @@
   <!-- ========================================== -->
   <!--        友情链接页主体内容 - Apple Style     -->
   <!-- 支持分组展示，毛玻璃卡片布局                -->
-  <!-- 兼容基线：PluginLinks v2.0.0；页面路由直接消费 groups，不手动拼 LinkGroup/Link；link-submit 不可用时切换评论留言兜底。 -->
+  <!-- 兼容基线：PluginLinks v2.2.1；消费路由变量、状态枚举和可选公开 RSS Finder，不手动拼 LinkGroup/Link。 -->
   <!-- ========================================== -->
 
   <!-- 友链内容片段 -->
-  <main
+  <div
     class="relative"
     data-links-page
     th:fragment="links-content"
     th:with="rootCfg = ${theme.config.links_settings},
            cfg = ${rootCfg.basic_info},
-           hasLinkSubmitPlugin = ${pluginFinder.available('link-submit', '>=1.0.7')},
+           displayCfg = ${rootCfg.display_settings},
+           pageTitle = ${!#strings.isEmpty(cfg?.page_title) ? cfg.page_title : (!#strings.isEmpty(linksTitle) ? linksTitle : '友情链接')},
+           selectedGroupExists = ${#strings.isEmpty(group) or (simpleGroups != null and #lists.contains(simpleGroups.![metadata.name], group))},
+           hasCommentWidget = ${pluginFinder.available('PluginCommentWidget', '>=3.1.2')},
+           canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled and hasCommentWidget},
+           hasLatestLinks = ${pluginFinder.available('PluginLinks', '>=2.2.1')},
+           showLinkFeeds = ${hasLatestLinks and displayCfg?.show_link_feeds != false},
+           currentView = ${param.view != null and !#lists.isEmpty(param.view) ? param.view[0] : ''},
+           currentFeedScope = ${param.scope != null and !#lists.isEmpty(param.scope) ? param.scope[0] : ''},
+           currentFeedGroup = ${param.groupName != null and !#lists.isEmpty(param.groupName) ? param.groupName[0] : ''},
+           currentFeedLink = ${#strings.isEmpty(currentFeedGroup) and param.linkName != null and !#lists.isEmpty(param.linkName) ? param.linkName[0] : ''},
+           linkFeedLimit = 20,
+           linkFeedGroups = ${showLinkFeeds ? linkFeedFinder.groupBy(1) : null},
+           hasFeedSources = ${linkFeedGroups != null and !#lists.isEmpty(linkFeedGroups)},
+           shouldPrefetchFeeds = ${hasFeedSources and currentView == 'friends' and (#strings.isEmpty(currentFeedScope) or currentFeedScope == 'all' or (!#strings.isEmpty(currentFeedGroup)) or (!#strings.isEmpty(currentFeedLink)))},
+           linkFeedPage = ${!shouldPrefetchFeeds ? null : (!#strings.isEmpty(currentFeedGroup) ? linkFeedFinder.list({limit: linkFeedLimit, groupName: currentFeedGroup}) : (!#strings.isEmpty(currentFeedLink) ? linkFeedFinder.list({limit: linkFeedLimit, linkName: currentFeedLink}) : linkFeedFinder.list({limit: linkFeedLimit})))},
+           feedPrefetchKey = ${linkFeedPage == null ? '' : (!#strings.isEmpty(currentFeedGroup) ? 'public:group:' + currentFeedGroup : (!#strings.isEmpty(currentFeedLink) ? 'public:link:' + currentFeedLink : 'public:all'))},
            sidebarCfg = ${rootCfg.sidebar_settings},
            globalSidebarCfg = ${theme.config.general.sidebar_settings},
            useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
            sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+    data-plugin-links-contract="PluginLinks>=2.2.1"
+    th:data-plugin-links-available="${hasLatestLinks}"
+    th:data-plugin-links-title="${linksTitle}"
+    th:data-feed-prefetch-key="${feedPrefetchKey}"
+    th:data-feed-prefetch-has-next="${linkFeedPage != null and linkFeedPage.hasNext}"
+    th:data-feed-prefetch-next-published-at="${linkFeedPage != null ? linkFeedPage.nextBeforePublishedAt : ''}"
+    th:data-feed-prefetch-next-id="${linkFeedPage != null ? linkFeedPage.nextBeforeId : ''}"
   >
     <div class="mx-auto max-w-7xl px-4 py-8">
       <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
         <!-- 主内容区 -->
         <section class="min-w-0 flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
-          <!-- 页面标题区 - Apple风格左对齐 -->
-          <header class="mb-10">
-            <div class="flex items-center justify-between">
-              <div>
-                <h1
-                  class="text-base-content text-2xl font-bold tracking-tight md:text-3xl"
-                  th:text="${cfg?.page_title ?: '友情链接'}"
-                >
-                  友情链接
-                </h1>
-                <p class="text-base-content/50 mt-1" th:text="${cfg?.page_description ?: '感谢这些优秀的网站与博客'}">
-                  感谢这些优秀的网站与博客
-                </p>
-              </div>
-            </div>
+          <!-- 与静态 Demo 一致：标题区不增加眉标、CTA 或额外卡片。 -->
+          <header class="links-hero mb-10">
+            <h1
+              class="text-base-content text-2xl font-bold tracking-tight md:text-3xl"
+              th:text="${currentView == 'friends' ? '友链动态' : (currentView == 'apply' ? '申请友链' : pageTitle)}"
+              data-links-page-title
+            >
+              友情链接
+            </h1>
+            <p
+              class="text-base-content/50 mt-1 max-w-2xl"
+              th:text="${currentView == 'friends' ? '来自友链接阅的最新内容，支持未读、收藏与稍后阅读' : (currentView == 'apply' ? '提交站点信息，管理员审核后将出现在友链列表中' : (cfg?.page_description ?: '感谢这些优秀的网站与博客'))}"
+              data-links-page-description
+            >
+              感谢这些优秀的网站与博客
+            </p>
           </header>
 
-          <!-- PluginLinks 2.0.0 官方 group 路由：simpleGroups 生成筛选，links 承载当前分组结果。 -->
+          <!-- 视图导航由 Links 页脚本同步 URL；无脚本时仍可使用普通链接访问。 -->
+          <nav class="links-view-navigation mb-8 flex gap-2 overflow-x-auto pb-2" aria-label="友链页面视图">
+            <a
+              th:href="@{/links}"
+              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${#strings.isEmpty(currentView) or currentView == 'board' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-links-view-link="links"
+              data-links-local-navigation
+              data-no-swup
+              th:attr="aria-current=${#strings.isEmpty(currentView) or currentView == 'board' ? 'page' : null}"
+            >友链</a>
+            <a
+              th:href="@{/links(view='friends')}"
+              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${currentView == 'friends' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-links-view-link="friends"
+              data-links-local-navigation
+              data-no-swup
+              th:attr="aria-current=${currentView == 'friends' ? 'page' : null}"
+            >友链动态</a>
+            <a
+              th:href="@{/links(view='apply')}"
+              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${currentView == 'apply' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-links-view-link="apply"
+              data-links-local-navigation
+              data-no-swup
+              th:attr="aria-current=${currentView == 'apply' ? 'page' : null}"
+            >申请友链</a>
+          </nav>
+
+          <div
+            data-links-view-panel="links"
+            th:hidden="${currentView == 'friends' or currentView == 'apply'}"
+          >
+
+          <!-- PluginLinks 2.2.1 官方 group 路由：simpleGroups 生成筛选，links 承载当前分组结果。 -->
           <nav
-            class="mb-8 flex gap-2 overflow-x-auto pb-2"
+            class="links-scroll-nav mb-8 flex gap-2 overflow-x-auto pb-2"
             aria-label="友链分组"
             data-link-group-navigation
             th:if="${simpleGroups != null and !#lists.isEmpty(simpleGroups)}"
@@ -50,6 +110,8 @@
             <a
               th:href="@{/links}"
               data-link-group-filter="all"
+              data-links-local-navigation
+              data-no-swup
               th:attr="aria-current=${#strings.isEmpty(group) ? 'page' : null}"
               th:classappend="${#strings.isEmpty(group) ? 'bg-primary text-primary-content border-primary' : ''}"
               class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
@@ -61,6 +123,8 @@
               th:href="@{/links(group=${groupOption.metadata.name})}"
               th:text="${groupOption.spec.displayName ?: '未命名分组'}"
               th:data-link-group-filter="${groupOption.metadata.name}"
+              data-links-local-navigation
+              data-no-swup
               th:attr="aria-current=${group == groupOption.metadata.name ? 'page' : null}"
               th:classappend="${group == groupOption.metadata.name ? 'bg-primary text-primary-content border-primary' : ''}"
               class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
@@ -73,15 +137,15 @@
           <div
             class="space-y-10"
             data-link-groups
-            th:if="${#strings.isEmpty(group) ? (groups != null and !#lists.isEmpty(groups)) : (links != null and !#lists.isEmpty(links))}"
+            th:if="${groups != null and !#lists.isEmpty(groups)}"
           >
             <th:block th:each="linkGroup : ${groups}">
               <!-- 分组区块 -->
               <section
                 class="link-group"
-                th:if="${#strings.isEmpty(group) or linkGroup.metadata.name == group}"
-                th:with="displayLinks=${#strings.isEmpty(group) ? linkGroup.links : links}"
+                th:with="displayLinks=${linkGroup.links}"
                 th:data-link-group-section="${linkGroup.metadata.name}"
+                th:hidden="${!#strings.isEmpty(group) and linkGroup.metadata.name != group}"
               >
                 <!-- 分组标题 -->
                 <div class="mb-5 flex items-center gap-3">
@@ -109,10 +173,22 @@
                 >
                   <a
                     th:each="link : ${displayLinks}"
+                    th:with="accessState=${link.status?.verification?.access?.state != null ? link.status.verification.access.state.name() : null},
+                             backlinkState=${link.status?.verification?.backlink?.state != null ? link.status.verification.backlink.state.name() : null}"
                     th:href="${link.spec.url}"
+                    data-link-card
+                    th:data-link-key="${link.metadata.name}"
+                    th:data-link-group="${linkGroup.metadata.name}"
+                    th:data-link-group-label="${linkGroup.spec.displayName ?: (linkGroup.metadata.name == 'ungrouped' ? '未分组' : linkGroup.metadata.name)}"
+                    th:data-link-name="${link.spec.displayName}"
+                    th:data-link-url="${link.spec.url}"
+                    th:data-link-logo="${link.spec.logo ?: ''}"
+                    th:data-link-description="${link.spec.description ?: ''}"
+                    th:data-link-access-state="${accessState}"
+                    th:data-link-backlink-state="${backlinkState}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg"
+                    class="links-link-card glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg"
                   >
                     <!-- Logo -->
                     <div
@@ -151,8 +227,22 @@
                       </p>
                     </div>
 
+                    <!-- PluginLinks 2.2.1 链接检测状态；未知状态不渲染，避免把“未检测”误报为离线。 -->
+                    <span
+                      th:if="${displayCfg?.show_link_status != false and accessState != null}"
+                      role="status"
+                      th:attr="aria-label=${accessState == 'ACCESSIBLE' ? '链接状态：可访问' : (accessState == 'CHECKING' ? '链接状态：检测中' : '链接状态：暂不可访问')}"
+                      class="inline-flex shrink-0 items-center"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="status status-xs"
+                        th:classappend="${accessState == 'ACCESSIBLE' ? 'status-success' : (accessState == 'CHECKING' ? 'status-warning' : 'status-error')}"
+                      ></span>
+                    </span>
+
                     <!-- 外链图标 -->
-                    <div class="shrink-0">
+                    <div class="hidden shrink-0 sm:block">
                       <span
                         class="icon-[heroicons--arrow-right] text-base-content/20 group-hover:text-primary h-4 w-4 transition-all duration-300 group-hover:translate-x-1"
                       ></span>
@@ -162,6 +252,7 @@
                 <p
                   class="text-base-content/50 rounded-2xl border border-dashed py-8 text-center text-sm"
                   th:if="${displayLinks == null or #lists.isEmpty(displayLinks)}"
+                  data-links-empty-state="group-empty"
                 >
                   该分组暂无友情链接
                 </p>
@@ -171,8 +262,9 @@
 
           <!-- 无友链提示 -->
           <div
-            th:if="${#strings.isEmpty(group) ? (groups == null or #lists.isEmpty(groups)) : (links == null or #lists.isEmpty(links))}"
+            th:if="${groups == null or #lists.isEmpty(groups)}"
             data-links-empty
+            data-links-empty-state="all-empty"
             class="bg-base-100/60 border-base-content/5 rounded-2xl border backdrop-blur-xl"
           >
             <div class="flex flex-col items-center justify-center py-20">
@@ -181,307 +273,550 @@
               </div>
               <p
                 class="text-base-content/50"
-                th:text="${#strings.isEmpty(group) ? '暂无友情链接' : '该分组不存在或暂无友情链接'}"
+                th:text="'暂无友情链接'"
               >
                 暂无友情链接
               </p>
             </div>
           </div>
-
-          <!-- Link Exchange CTA Card (Compact & Interactive) -->
-          <!-- Link Exchange Area: Card + Modals -->
-          <div class="mt-8" th:if="${rootCfg?.apply_settings?.enable == true}">
-            <!-- 1. Apply Card (Compact Row Layout) -->
-            <div
-              class="glow-card bg-base-100/80 border-base-content/[0.06] flex flex-col items-center justify-between gap-6 rounded-2xl border p-6 backdrop-blur-xl md:flex-row"
-            >
-              <!-- Left: Text -->
-              <div class="min-w-0 flex-1 text-center md:text-left">
-                <div class="mb-1 flex items-center justify-center gap-3 md:justify-start">
-                  <div class="bg-primary/10 text-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
-                    <span class="icon-[heroicons--paper-airplane] h-4 w-4"></span>
-                  </div>
-                  <h3
-                    class="text-base-content text-lg font-bold"
-                    th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_title) ? rootCfg.apply_settings.apply_title : '加入友链星球'}"
-                  >
-                    加入友链星球
-                  </h3>
-                </div>
-                <p
-                  class="text-base-content/60 pl-0 text-sm md:pl-11"
-                  th:text="${!#strings.isEmpty(rootCfg.apply_settings.apply_description) ? rootCfg.apply_settings.apply_description : '与我交换友链，一起探索更广阔的创作世界'}"
-                >
-                  与我交换友链，一起探索更广阔的创作世界
-                </p>
-              </div>
-
-              <!-- Right: Actions -->
-              <div class="flex shrink-0 items-center gap-3">
-                <!-- View Info Button (First) -->
-                <button
-                  onclick="document.getElementById('site-info-modal').showModal()"
-                  class="btn btn-ghost btn-sm md:btn-md bg-base-200/50 hover:bg-base-200 text-base-content rounded-xl font-bold transition-all"
-                >
-                  <span class="icon-[heroicons--information-circle] h-4 w-4"></span>
-                  <span class="hidden sm:inline">本站信息</span>
-                  <span class="sm:hidden">信息</span>
-                </button>
-
-                <!-- Apply Button (Second/Right - Primary) -->
-                <button
-                  th:if="${hasLinkSubmitPlugin}"
-                  type="button"
-                  data-link-submit-trigger
-                  data-link-submit-script="/plugins/link-submit/assets/static/link-submit-widget.iife.js?version=1.0.7"
-                  data-link-submit-style="/plugins/link-submit/assets/static/var.css?version=1.0.7"
-                  aria-describedby="link-submit-runtime-status"
-                  class="btn btn-primary btn-sm md:btn-md shadow-primary/20 hover:shadow-primary/30 rounded-xl font-bold shadow-lg transition-all"
-                >
-                  <span class="icon-[heroicons--plus] h-4 w-4"></span>
-                  <span class="hidden sm:inline">立即申请</span>
-                  <span class="sm:hidden">申请</span>
-                </button>
-                <!-- 插件不可用或官方组件资源加载失败时，使用站点自己的申请渠道。 -->
-                <th:block th:with="applyUrl=${#strings.trim(rootCfg.apply_settings.apply_url ?: '')}">
-                  <a
-                    th:if="${!applyUrl.isEmpty() and applyUrl != '#' and applyUrl != '/#'}"
-                    th:href="${applyUrl}"
-                    th:target="${#strings.startsWith(applyUrl, 'http')} ? '_blank' : null"
-                    th:hidden="${hasLinkSubmitPlugin}"
-                    data-link-submit-fallback
-                    rel="noopener"
-                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
-                  >
-                    <span class="icon-[heroicons--arrow-top-right-on-square] h-4 w-4"></span>
-                    前往申请
-                  </a>
-                  <a
-                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment != false}"
-                    href="#links-comments"
-                    th:hidden="${hasLinkSubmitPlugin}"
-                    data-link-submit-fallback
-                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
-                  >
-                    <span class="icon-[heroicons--chat-bubble-left-right] h-4 w-4"></span>
-                    留言申请
-                  </a>
-                  <a
-                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment == false and !#strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
-                    th:href="|mailto:${rootCfg.apply_settings.blogger_email}|"
-                    th:hidden="${hasLinkSubmitPlugin}"
-                    data-link-submit-fallback
-                    class="btn btn-primary btn-sm md:btn-md rounded-xl shadow-lg"
-                  >
-                    <span class="icon-[heroicons--envelope] h-4 w-4"></span>
-                    邮件申请
-                  </a>
-                  <button
-                    th:if="${(applyUrl.isEmpty() or applyUrl == '#' or applyUrl == '/#') and cfg?.enable_comment == false and #strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
-                    type="button"
-                    th:hidden="${hasLinkSubmitPlugin}"
-                    data-link-submit-fallback
-                    disabled
-                    class="btn btn-disabled btn-sm md:btn-md rounded-xl"
-                  >
-                    暂未开放申请
-                  </button>
-                </th:block>
-              </div>
-            </div>
-            <p
-              th:if="${hasLinkSubmitPlugin}"
-              id="link-submit-runtime-status"
-              data-link-submit-status
-              role="status"
-              aria-live="polite"
-              tabindex="-1"
-              hidden
-              class="text-warning mt-3 text-sm"
-            ></p>
-
-            <!-- 2. Site Info Modal (Refined Left-Layout) -->
-            <dialog
-              id="site-info-modal"
-              class="modal modal-bottom sm:modal-middle"
-              x-data="{
-                 copy(text, $el) {
-                     navigator.clipboard.writeText(text).then(() => {
-                         const originalIcon = $el.innerHTML;
-                         $el.innerHTML = '<span class=\'icon-[heroicons--check] w-4 h-4 text-success\'></span>';
-                         setTimeout(() => { $el.innerHTML = originalIcon; }, 2000);
-                     });
-                 }
-             }"
-            >
-              <div class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl">
-                <form method="dialog">
-                  <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">✕</button>
-                </form>
-
-                <h3 class="text-primary mb-6 flex items-center gap-2 text-lg font-bold">
-                  <span class="icon-[heroicons--information-circle] h-6 w-6"></span>
-                  <span>本站信息</span>
-                </h3>
-
-                <div class="space-y-4">
-                  <!-- Name -->
-                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
-                    <span class="text-base-content/70 text-sm font-medium">站点名称</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span
-                        class="text-base-content truncate text-sm font-bold select-all"
-                        th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}"
-                        >My Blog</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_title) ? site.title : rootCfg.apply_settings.blogger_title}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- URL -->
-                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
-                    <span class="text-base-content/70 text-sm font-medium">网站地址</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span class="text-base-content truncate font-mono text-sm select-all" th:text="${site.url}"
-                        >https://example.com</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:data-text="${site.url}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Email -->
-                  <div
-                    class="border-base-content/5 flex items-center justify-between border-b pb-3"
-                    th:if="${!#strings.isEmpty(rootCfg.apply_settings.blogger_email)}"
-                  >
-                    <span class="text-base-content/70 text-sm font-medium">联系邮箱</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span
-                        class="text-base-content truncate font-mono text-sm select-all"
-                        th:text="${rootCfg.apply_settings.blogger_email}"
-                        >admin@example.com</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:data-text="${rootCfg.apply_settings.blogger_email}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Description -->
-                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
-                    <span class="text-base-content/70 shrink-0 text-sm font-medium">站点描述</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span
-                        class="text-base-content truncate text-sm select-all"
-                        th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
-                        th:text="${desc}"
-                        >Site Description...</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:with="desc=${!#strings.isEmpty(rootCfg.apply_settings.blogger_description) ? rootCfg.apply_settings.blogger_description : ((site.seo != null and !#strings.isEmpty(site.seo.description)) ? site.seo.description : site.subtitle)}"
-                        th:data-text="${desc}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Logo -->
-                  <div class="border-base-content/5 flex items-center justify-between border-b pb-3">
-                    <span class="text-base-content/70 text-sm font-medium">Logo 地址</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span
-                        class="text-base-content/80 truncate font-mono text-xs select-all"
-                        th:text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}"
-                        >...</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:data-text="${#strings.isEmpty(rootCfg.apply_settings.blogger_logo) ? site.logo : rootCfg.apply_settings.blogger_logo}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- RSS -->
-                  <div class="flex items-center justify-between">
-                    <span class="text-base-content/70 text-sm font-medium">RSS 地址</span>
-                    <div class="flex max-w-[70%] items-center gap-2">
-                      <span
-                        class="text-base-content/80 truncate font-mono text-xs select-all"
-                        th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
-                                      urlStr=${#strings.toString(site.url)},
-                                      baseUrl=${urlStr.endsWith('/') ? #strings.substring(urlStr, 0, urlStr.length() - 1) : urlStr},
-                                      fullRssUrl=${rssPath.startsWith('http') ? rssPath : baseUrl + rssPath}"
-                        th:text="${fullRssUrl}"
-                        >.../rss.xml</span
-                      >
-                      <button
-                        class="btn btn-xs btn-ghost btn-square text-primary"
-                        th:with="rssPath=${!#strings.isEmpty(rootCfg.apply_settings.blogger_rss) ? rootCfg.apply_settings.blogger_rss : '/rss.xml'},
-                                         urlStr=${#strings.toString(site.url)},
-                                         baseUrl=${urlStr.endsWith('/') ? #strings.substring(urlStr, 0, urlStr.length() - 1) : urlStr},
-                                         fullRssUrl=${rssPath.startsWith('http') ? rssPath : baseUrl + rssPath}"
-                        th:data-text="${fullRssUrl}"
-                        @click="copy($el.dataset.text, $el)"
-                        title="复制"
-                      >
-                        <span class="icon-[heroicons--document-duplicate] h-4 w-4"></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <form method="dialog" class="modal-backdrop"><button>close</button></form>
-            </dialog>
+          <div
+            data-links-filter-empty
+            data-links-empty-state="group-missing"
+            th:hidden="${selectedGroupExists}"
+            class="bg-base-100/60 border-base-content/5 rounded-2xl border py-16 text-center backdrop-blur-xl"
+          >
+            <span class="icon-[heroicons--link-slash] text-base-content/30 mx-auto h-8 w-8" aria-hidden="true"></span>
+            <p class="text-base-content/50 mt-3 text-sm">未找到该友链分组</p>
+          </div>
           </div>
 
-          <!-- 评论区 -->
-          <section id="links-comments" class="mt-12" th:if="${cfg?.enable_comment != false}">
-            <div class="mb-5 flex items-center gap-3">
-              <div
-                class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br"
+          <!-- PluginLinks 2.2.1 RSS：与 Demo 一致，进入视图后直接显示筛选和动态列表。 -->
+          <section
+            class="links-view-panel"
+            data-link-feeds
+            data-links-view-panel="friends"
+            th:hidden="${currentView != 'friends'}"
+          >
+            <!-- 来源目录仅给路由校验和列表元数据使用，不生成额外“来源首页”。 -->
+            <div class="hidden" aria-hidden="true" data-feed-source-catalog>
+              <section
+                th:each="feedGroup : ${linkFeedGroups}"
+                th:data-feed-group-key="${feedGroup.metadata.name}"
               >
-                <span class="icon-[mdi--comment-text-outline] text-primary h-4 w-4"></span>
+                <button
+                  th:each="feedLink : ${feedGroup.links}"
+                  type="button"
+                  data-feed-source
+                  th:data-feed-link-key="${feedLink.metadata.name}"
+                  th:data-feed-group="${feedGroup.metadata.name}"
+                  th:data-feed-group-label="${feedGroup.spec.displayName ?: (feedGroup.metadata.name == 'ungrouped' ? '未分组' : feedGroup.metadata.name)}"
+                  th:data-feed-link-label="${feedLink.spec.displayName}"
+                  th:data-feed-link-description="${feedLink.spec.description ?: ''}"
+                  th:data-feed-link-url="${feedLink.spec.url}"
+                  th:data-feed-link-logo="${feedLink.spec.logo ?: ''}"
+                ></button>
+              </section>
+            </div>
+
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
+                  <span class="icon-[heroicons--rss] text-primary h-4 w-4" aria-hidden="true"></span>
+                </div>
+                <div>
+                  <h2 class="text-base-content text-lg font-semibold" data-feed-results-title>友链动态</h2>
+                  <p class="text-base-content/50 text-xs" data-feed-results-description>来自友链公开订阅的最近更新</p>
+                </div>
               </div>
-              <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
+              <span class="badge badge-ghost badge-sm gap-1">
+                RSS
+                <span data-feed-unread-count class="badge badge-primary badge-xs" hidden>0</span>
+              </span>
+            </div>
+
+            <nav class="links-scroll-nav mb-4 flex gap-2 overflow-x-auto pb-1" aria-label="动态范围">
+              <button type="button" class="btn btn-sm border-base-content/10 shrink-0 rounded-full" data-feed-scope="all">
+                <span class="icon-[heroicons--rss] h-3.5 w-3.5" aria-hidden="true"></span>
+                全部动态
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+                data-feed-scope="unread"
+                data-links-protected-control
+                hidden
+              >
+                <span class="icon-[heroicons--inbox] h-3.5 w-3.5" aria-hidden="true"></span>
+                未读
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+                data-feed-scope="favorite"
+                data-links-protected-control
+                hidden
+              >
+                <span class="icon-[heroicons--star] h-3.5 w-3.5" aria-hidden="true"></span>
+                收藏
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+                data-feed-scope="later"
+                data-links-protected-control
+                hidden
+              >
+                <span class="icon-[heroicons--bookmark] h-3.5 w-3.5" aria-hidden="true"></span>
+                稍后阅读
+              </button>
+              <span
+                data-links-capability-status
+                class="links-capability btn btn-sm border-base-content/10 text-base-content/40 shrink-0 cursor-default gap-1.5 rounded-full border-dashed"
+                role="status"
+              >
+                <span class="icon-[heroicons--information-circle] h-3.5 w-3.5" aria-hidden="true"></span>
+                <span data-links-capability-copy>正在确认登录状态…</span>
+              </span>
+            </nav>
+
+            <div class="links-rss-filters mb-4 flex flex-wrap items-center gap-3 text-xs text-base-content/50">
+              <label class="flex items-center gap-2">
+                <span>按分组</span>
+                <select class="select links-select-sm w-32" data-feed-filter-group>
+                  <option value="">全部分组</option>
+                  <option
+                    th:each="feedGroup : ${linkFeedGroups}"
+                    th:value="${feedGroup.metadata.name}"
+                    th:text="${feedGroup.spec.displayName ?: (feedGroup.metadata.name == 'ungrouped' ? '未分组' : feedGroup.metadata.name)}"
+                  >分组</option>
+                </select>
+              </label>
+              <label class="flex items-center gap-2">
+                <span>按来源</span>
+                <select class="select links-select-sm w-40" data-feed-filter-source>
+                  <option value="">全部来源</option>
+                  <th:block th:each="feedGroup : ${linkFeedGroups}">
+                    <option
+                      th:each="feedLink : ${feedGroup.links}"
+                      th:value="${feedLink.metadata.name}"
+                      th:text="${feedLink.spec.displayName}"
+                    >来源</option>
+                  </th:block>
+                </select>
+              </label>
+              <span class="text-base-content/35 text-[11px]">分组与来源互斥，分组优先（groupName &gt; linkName）</span>
+            </div>
+
+            <div
+              data-feed-state
+              class="links-state-panel border-base-content/10 bg-base-100/70 rounded-2xl border border-dashed px-5 py-14 text-center"
+              role="status"
+            >
+              <span class="loading loading-spinner loading-md text-primary" aria-hidden="true"></span>
+              <h3 class="text-base-content mt-3 font-semibold" data-feed-state-title>正在加载动态</h3>
+              <p class="text-base-content/50 mx-auto mt-1 max-w-md text-sm" data-feed-state-description>
+                正在获取最新内容，请稍候。
+              </p>
+              <button type="button" class="btn btn-sm mt-4" data-feed-retry hidden>重新加载</button>
+            </div>
+
+            <ul
+              data-feed-list
+              class="list bg-base-100/80 border-base-content/[0.06] rounded-2xl border shadow-sm backdrop-blur-xl"
+            >
+              <li
+                th:each="feed : ${linkFeedPage != null ? linkFeedPage.items : null}"
+                data-feed-prefetch-item
+                th:data-feed-id="${feed.id}"
+                th:data-feed-link-name="${feed.linkName}"
+                th:data-feed-url="${feed.url}"
+                th:data-feed-title="${feed.title ?: ''}"
+                th:data-feed-summary="${feed.summary ?: ''}"
+                th:data-feed-author="${feed.author ?: ''}"
+                th:data-feed-author-url="${feed.authorUrl ?: ''}"
+                th:data-feed-author-logo="${feed.authorLogo ?: ''}"
+                th:data-feed-published-at="${feed.publishedAt ?: ''}"
+                th:data-feed-fetched-at="${feed.fetchedAt ?: ''}"
+                th:data-feed-updated-at="${feed.updatedAt ?: ''}"
+                data-feed-read="false"
+                data-feed-favorite="false"
+                data-feed-read-later="false"
+                class="list-row border-base-content/[0.06] border-b last:border-b-0"
+              >
+                <div class="bg-base-200/60 flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl">
+                  <img
+                    th:if="${!#strings.isEmpty(feed.authorLogo)}"
+                    th:src="${feed.authorLogo}"
+                    alt=""
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                  <span
+                    th:if="${#strings.isEmpty(feed.authorLogo)}"
+                    class="icon-[heroicons--rss] text-base-content/30 h-5 w-5"
+                    aria-hidden="true"
+                  ></span>
+                </div>
+                <div class="list-col-grow min-w-0">
+                  <a
+                    th:href="${feed.url}"
+                    th:text="${feed.title ?: '未命名动态'}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-base-content hover:text-primary line-clamp-1 text-sm font-medium"
+                  >动态标题</a>
+                  <p class="text-base-content/50 mt-1 line-clamp-1 text-xs" th:text="${feed.summary ?: ''}"></p>
+                </div>
+              </li>
+            </ul>
+            <div class="mt-5 text-center">
+              <button type="button" class="btn btn-sm border-base-content/10 rounded-full" data-feed-load-more hidden>
+                加载更多
+              </button>
+            </div>
+          </section>
+
+          <!-- 申请视图完全沿用 Demo 的单卡片表单结构。 -->
+          <div
+            class="links-view-panel"
+            th:if="${rootCfg?.apply_settings?.enable == true}"
+            data-links-view-panel="apply"
+            th:hidden="${currentView != 'apply'}"
+          >
+            <section class="link-group">
+              <div class="mb-5 flex items-center gap-3">
+                <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
+                  <span class="icon-[heroicons--paper-airplane] text-primary h-4 w-4" aria-hidden="true"></span>
+                </div>
+                <h2 class="text-base-content text-lg font-semibold">提交友链申请</h2>
+              </div>
+
+              <form
+                class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 shadow-sm backdrop-blur-xl sm:p-8"
+                data-link-apply-form
+                novalidate
+              >
+                <div
+                  class="mb-6 flex items-start gap-2.5 rounded-xl border border-base-content/10 bg-base-200/50 px-4 py-3 text-xs leading-relaxed text-base-content/60"
+                >
+                  <span class="icon-[heroicons--information-circle] text-info h-4 w-4 shrink-0" aria-hidden="true"></span>
+                  <span data-apply-capability>正在确认可用的识别与提交方式…</span>
+                </div>
+
+                <div class="grid gap-5">
+                  <fieldset>
+                    <legend class="mb-1.5 block text-xs font-medium text-base-content/60">申请类型</legend>
+                    <div class="links-apply-type flex gap-2">
+                      <label class="btn btn-ghost bg-base-200/50 hover:bg-base-200 btn-sm flex-1 rounded-xl">
+                        <input class="sr-only" type="radio" name="type" value="add" checked />
+                        <span>新增友链</span>
+                      </label>
+                      <label class="btn btn-ghost bg-base-200/50 hover:bg-base-200 btn-sm flex-1 rounded-xl">
+                        <input class="sr-only" type="radio" name="type" value="update" />
+                        <span>更新友链</span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <label>
+                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">
+                      站点地址 <span class="text-error">*</span>（仅 HTTP/HTTPS）
+                    </span>
+                    <span class="links-apply-url-row flex gap-2">
+                      <input
+                        class="input min-w-0 flex-1"
+                        type="url"
+                        name="url"
+                        inputmode="url"
+                        autocomplete="url"
+                        placeholder="https://example.com"
+                        required
+                      />
+                      <button type="button" class="btn btn-ghost bg-base-200/50 hover:bg-base-200 shrink-0 rounded-xl" data-apply-identify>
+                        <span class="icon-[heroicons--magnifying-glass] h-4 w-4" aria-hidden="true"></span>
+                        识别
+                      </button>
+                    </span>
+                  </label>
+
+                  <div class="grid gap-5 sm:grid-cols-2">
+                    <label>
+                      <span class="mb-1.5 block text-xs font-medium text-base-content/60">站点名称 <span class="text-error">*</span></span>
+                      <input class="input w-full" type="text" name="displayName" maxlength="120" placeholder="displayName" required />
+                    </label>
+                    <label>
+                      <span class="mb-1.5 block text-xs font-medium text-base-content/60">Logo 地址</span>
+                      <input class="input w-full" type="url" name="logo" inputmode="url" placeholder="https://…/logo.png" />
+                    </label>
+                    <label>
+                      <span class="mb-1.5 block text-xs font-medium text-base-content/60">所属分组</span>
+                      <select class="select w-full" name="groupName">
+                        <option value="">未分组</option>
+                        <option
+                          th:each="groupOption : ${simpleGroups}"
+                          th:value="${groupOption.metadata.name}"
+                          th:text="${groupOption.spec.displayName ?: groupOption.metadata.name}"
+                        >友链分组</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span class="mb-1.5 block text-xs font-medium text-base-content/60">RSS 地址</span>
+                      <input class="input w-full" type="url" name="rssUrl" inputmode="url" placeholder="https://…/rss.xml" />
+                    </label>
+                  </div>
+
+                  <label>
+                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">站点描述 <span class="text-error">*</span></span>
+                    <textarea class="textarea w-full" name="description" rows="3" maxlength="500" placeholder="一句话介绍这个站点" required></textarea>
+                  </label>
+
+                  <label>
+                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">联系邮箱</span>
+                    <input class="input w-full" type="email" name="email" autocomplete="email" placeholder="you@example.com" />
+                  </label>
+
+                  <label data-apply-update-field hidden>
+                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">更新说明</span>
+                    <textarea class="textarea w-full" name="updateDescription" rows="2" maxlength="500" placeholder="说明本次需要更新的内容"></textarea>
+                  </label>
+
+                  <div data-apply-status class="alert alert-soft" role="status" aria-live="polite" hidden></div>
+
+                  <div class="links-form-actions mt-1 flex flex-wrap items-center gap-3">
+                    <button type="submit" class="btn btn-primary rounded-xl shadow-lg" data-apply-submit>
+                      <span class="icon-[heroicons--paper-airplane] h-4 w-4" aria-hidden="true"></span>
+                      <span data-apply-submit-label>生成申请 Markdown</span>
+                    </button>
+                    <span class="text-base-content/40 text-xs" data-apply-action-hint>生成 Markdown 后到留言板提交，等待管理员审核</span>
+                  </div>
+
+                  <div data-apply-output hidden>
+                    <label class="mb-1.5 block text-xs font-medium text-base-content/60" for="links-apply-markdown">
+                      生成的申请 Markdown（复制后前往留言板提交）
+                    </label>
+                    <textarea
+                      id="links-apply-markdown"
+                      class="textarea links-markdown-output w-full text-xs leading-relaxed"
+                      data-apply-markdown
+                      rows="9"
+                      readonly
+                    ></textarea>
+                    <div class="links-form-actions mt-3 flex flex-wrap gap-2">
+                      <button type="button" class="btn btn-primary btn-sm rounded-xl shadow-lg" data-apply-copy>
+                        <span class="icon-[heroicons--clipboard-document] h-4 w-4" aria-hidden="true"></span>
+                        复制 Markdown
+                      </button>
+                      <button type="button" class="btn btn-ghost btn-sm bg-base-200/50 hover:bg-base-200 rounded-xl" data-apply-board>
+                        <span class="icon-[heroicons--chat-bubble-left-right] h-4 w-4" aria-hidden="true"></span>
+                        前往留言板提交
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <section
+            th:unless="${rootCfg?.apply_settings?.enable == true}"
+            class="links-view-panel"
+            data-links-view-panel="apply"
+            th:hidden="${currentView != 'apply'}"
+          >
+            <div class="alert alert-soft">
+              <span class="icon-[heroicons--information-circle] h-5 w-5" aria-hidden="true"></span>
+              <div>
+                <h2 class="font-semibold">暂未开放友链申请</h2>
+                <p class="mt-1 text-sm opacity-70">你仍可以在留言板与站长联系。</p>
+              </div>
+              <button type="button" class="btn btn-sm" data-links-view-trigger="board">前往留言板</button>
+            </div>
+          </section>
+
+          <!-- 留言板是页面级常驻设施；view=board 仅用于滚动到此锚点。 -->
+          <section
+            id="links-comments"
+            class="links-board-section mt-12"
+            th:if="${canUseComments}"
+          >
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
+                  <span class="icon-[mdi--comment-text-outline] text-primary h-4 w-4" aria-hidden="true"></span>
+                </div>
+                <div>
+                  <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
+                  <p class="text-base-content/50 text-xs">提交友链申请、分享想法或打个招呼</p>
+                </div>
+              </div>
             </div>
             <div class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 backdrop-blur-xl">
               <halo:comment
                 group="plugin.halo.run"
                 kind="Plugin"
-                th:name="${pluginName != null ? pluginName : 'links'}"
-                th:attr="displayName=${cfg?.page_title ?: '友情链接'}, subject-title=${cfg?.page_title ?: '友情链接'}"
+                th:name="${pluginName}"
+                th:attr="displayName=${pageTitle}, subject-title=${pageTitle}"
                 colorScheme="system"
               >
               </halo:comment>
             </div>
           </section>
+
+          <section
+            th:unless="${canUseComments}"
+            id="links-comments"
+            class="links-board-section mt-12"
+          >
+            <div class="mb-5 flex items-center gap-3">
+              <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
+                <span class="icon-[mdi--comment-text-outline] text-primary h-4 w-4" aria-hidden="true"></span>
+              </div>
+              <div>
+                <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
+                <p class="text-base-content/50 text-xs">提交友链申请、分享想法或打个招呼</p>
+              </div>
+            </div>
+            <div class="alert alert-soft">
+              <span class="icon-[heroicons--chat-bubble-left-right] h-5 w-5" aria-hidden="true"></span>
+              <div>
+                <h3 class="font-semibold">留言组件暂不可用</h3>
+                <p class="mt-1 text-sm opacity-70">页面可以正常浏览，但当前站点未启用 PluginCommentWidget。</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 普通友链详情：link 参数只选择资源，访问外站由弹窗中的明确按钮完成。 -->
+          <dialog class="modal modal-bottom sm:modal-middle" data-link-detail-dialog>
+            <div class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl">
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2" aria-label="关闭友链详情">
+                  ✕
+                </button>
+              </form>
+              <h3 class="text-primary mb-6 flex items-center gap-2 pr-8 text-lg font-bold">
+                <span class="bg-base-200/60 ring-base-content/5 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1">
+                  <img data-link-detail-logo class="h-full w-full object-cover" alt="" hidden />
+                  <span
+                    data-link-detail-logo-fallback
+                    class="icon-[heroicons--globe-alt] text-base-content/30 h-5 w-5"
+                    aria-hidden="true"
+                  ></span>
+                </span>
+                <span class="min-w-0 truncate" data-link-detail-name>友链详情</span>
+                <span class="status status-xs" data-link-detail-status-dot aria-hidden="true"></span>
+              </h3>
+
+              <div class="space-y-4">
+                <div class="border-base-content/5 flex items-center justify-between gap-4 border-b pb-3">
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">站点名称</span>
+                  <div class="flex min-w-0 max-w-[70%] items-center gap-2">
+                    <span class="text-base-content truncate text-sm font-bold select-all" data-link-detail-name-copy></span>
+                    <button type="button" class="btn btn-xs btn-ghost btn-square text-primary" data-link-detail-copy="name" title="复制">
+                      <span class="icon-[heroicons--document-duplicate] h-4 w-4" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="border-base-content/5 flex items-center justify-between gap-4 border-b pb-3">
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">网站地址</span>
+                  <div class="flex min-w-0 max-w-[70%] items-center gap-2">
+                    <span class="text-base-content truncate font-mono text-xs select-all" data-link-detail-url></span>
+                    <button type="button" class="btn btn-xs btn-ghost btn-square text-primary" data-link-detail-copy="url" title="复制">
+                      <span class="icon-[heroicons--document-duplicate] h-4 w-4" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="border-base-content/5 flex items-center justify-between gap-4 border-b pb-3">
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">站点描述</span>
+                  <div class="flex min-w-0 max-w-[70%] items-center gap-2">
+                    <span class="text-base-content truncate text-sm select-all" data-link-detail-description></span>
+                    <button type="button" class="btn btn-xs btn-ghost btn-square text-primary" data-link-detail-copy="description" title="复制">
+                      <span class="icon-[heroicons--document-duplicate] h-4 w-4" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="border-base-content/5 flex items-center justify-between gap-4 border-b pb-3">
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">所属分组</span>
+                  <div class="flex min-w-0 max-w-[70%] items-center gap-2">
+                    <span class="text-base-content truncate text-sm font-bold select-all" data-link-detail-group></span>
+                    <button type="button" class="btn btn-xs btn-ghost btn-square text-primary" data-link-detail-copy="group" title="复制">
+                      <span class="icon-[heroicons--document-duplicate] h-4 w-4" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="border-base-content/5 flex items-center justify-between gap-4 border-b pb-3" data-link-detail-rss-row>
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">RSS 地址</span>
+                  <div class="flex min-w-0 max-w-[70%] items-center gap-2">
+                    <span class="text-base-content truncate font-mono text-xs select-all" data-link-detail-rss></span>
+                    <button type="button" class="btn btn-xs btn-ghost btn-square text-primary" data-link-detail-copy="rss" title="复制">
+                      <span class="icon-[heroicons--document-duplicate] h-4 w-4" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-base-content/70 shrink-0 text-sm font-medium">当前 URL</span>
+                  <span class="text-primary/70 truncate font-mono text-xs select-all" data-link-detail-current-url></span>
+                </div>
+              </div>
+
+              <div class="mt-6 flex flex-wrap gap-2">
+                <a data-link-detail-visit class="btn btn-primary rounded-xl shadow-lg" target="_blank" rel="noopener noreferrer">
+                  访问网站
+                  <span class="icon-[heroicons--arrow-up-right] h-4 w-4" aria-hidden="true"></span>
+                </a>
+                <button type="button" class="btn btn-ghost bg-base-200/50 hover:bg-base-200 rounded-xl" data-link-detail-feed hidden>
+                  <span class="icon-[heroicons--rss] h-4 w-4" aria-hidden="true"></span>
+                  查看该站动态
+                </button>
+              </div>
+            </div>
+            <form method="dialog" class="modal-backdrop"><button>关闭</button></form>
+          </dialog>
+
+          <!-- RSS 内部详情只在有 plugin:links:view 能力时打开。 -->
+          <dialog class="modal modal-bottom sm:modal-middle" data-feed-detail-dialog>
+            <div class="modal-box bg-base-100/95 border-base-content/10 max-w-2xl border backdrop-blur-2xl">
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2" aria-label="关闭动态详情">
+                  ✕
+                </button>
+              </form>
+              <p class="text-primary text-xs font-semibold tracking-[0.16em] uppercase">RSS Detail</p>
+              <h3 class="text-base-content mt-2 pr-8 text-xl leading-snug font-bold" data-feed-detail-title>动态详情</h3>
+              <p class="text-base-content/45 mt-2 flex flex-wrap gap-2 text-xs">
+                <span data-feed-detail-author></span>
+                <time data-feed-detail-time></time>
+              </p>
+              <p class="text-base-content/65 mt-5 whitespace-pre-line text-sm leading-7" data-feed-detail-summary></p>
+              <div class="mt-6 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-ghost rounded-full"
+                  data-feed-detail-toggle="favorite"
+                >
+                  <span class="icon-[heroicons--star] h-4 w-4" aria-hidden="true"></span>
+                  收藏
+                </button>
+                <button type="button" class="btn btn-sm btn-ghost rounded-full" data-feed-detail-toggle="later">
+                  <span class="icon-[heroicons--bookmark] h-4 w-4" aria-hidden="true"></span>
+                  稍后阅读
+                </button>
+                <button type="button" class="btn btn-sm btn-ghost rounded-full" data-feed-detail-toggle="read">
+                  <span class="icon-[heroicons--envelope-open] h-4 w-4" aria-hidden="true"></span>
+                  未读
+                </button>
+              </div>
+              <div class="modal-action">
+                <form method="dialog"><button class="btn btn-ghost">关闭</button></form>
+                <a data-feed-detail-visit class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                  阅读原文
+                  <span class="icon-[heroicons--arrow-up-right] h-4 w-4" aria-hidden="true"></span>
+                </a>
+              </div>
+            </div>
+            <form method="dialog" class="modal-backdrop"><button>关闭</button></form>
+          </dialog>
+
+          <div class="links-toast-stack" data-links-toast aria-live="polite" aria-atomic="false"></div>
         </section>
 
         <!-- 右侧边栏 -->
@@ -493,5 +828,5 @@
         </aside>
       </div>
     </div>
-  </main>
+  </div>
 </html>

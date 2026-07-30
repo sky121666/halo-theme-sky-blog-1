@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="zh-CN" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
   <!-- ========================================== -->
   <!--        友情链接页面布局                     -->
   <!-- 路由：/links                               -->
   <!-- ========================================== -->
 
-  <head>
+  <head
+    th:with="pageTitle=${!#strings.isEmpty(theme.config.links_settings?.basic_info?.page_title) ? theme.config.links_settings.basic_info.page_title : (!#strings.isEmpty(linksTitle) ? linksTitle : '友情链接')},
+             documentTitle=${pageTitle + ' - ' + site.title}"
+  >
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,11 +18,9 @@
     <!-- 防止主题闪烁 -->
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
-    <!-- 页面标题 -->
-    <title
-      th:text="'友情链接 - ' + ${site.title} + (${site.subtitle != null and !#strings.isEmpty(site.subtitle)} ? ' - ' + ${site.subtitle} : '')"
-    >
-    </title>
+    <th:block
+      th:replace="~{modules/seo-head :: meta(${documentTitle}, ${theme.config.links_settings?.basic_info?.page_description}, '/links', ${site.logo}, 'website')}"
+    />
     <!-- 字体 -->
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <!-- 主题样式 -->
