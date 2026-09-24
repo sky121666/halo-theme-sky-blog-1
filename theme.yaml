@@ -17,7 +17,7 @@ spec:
   settingName: "theme-sky-blog-1-setting"
   configMapName: "theme-sky-blog-1-configMap"
   version: "2.2.40"
-  requires: ">=2.23.0"
+  requires: ">=2.26.0"
   license:
     - name: "GPL-3.0"
       url: "https://github.com/sky121666/halo-theme-sky-blog-1/blob/main/LICENSE"

@@ -1,5 +1,7 @@
 # 主 Halo 插件运行态审计
 
+本页保存此前的历史验收快照，其中 `>=2.23.0` 是当时的主题最低要求；待发布的 `2.2.40` 已在 `theme.yaml` 调整为 `>=2.26.0`，当前在 Halo Pro `2.26.1` 上仅验证了新元数据 Reload/READY；2026-09-24 05:36 UTC 核验时站点激活主题 2，主题 1 页面待复测。本页历史测试结果不因最低版本改动而自动更新。
+
 ## 2026-09-23 SEO、页面缓存、AI 与 Passkey 后续核验
 
 本节是下方历史复验之后的增量，不能把旧结果倒填到新代码。**最终源码指纹**为 `74d214a02ea557cf5ead5432ba642a9c9fbd53c2a4fc49e108ef1cfc7baa9caf`；Node 24.18.0 / pnpm 10.34.5 下 `build`（含工作树和压缩包 SEO 契约、27 项插件契约、热力图与升级回归）、`lint`、`format:check` 均通过，压缩包 SHA256 为 `25e7961761275b95d679c56933f2d55fa053ad8ba01ca989ea2b0da2231a8882`。在原站点配置下，[114 路由 HTTP/SSR](./evidence/2026-09-23/route-http-post-warning.json)为 113 个 200 与预期 `/terms` 404；[同指纹的 114 路由真实浏览器导航](./evidence/2026-09-23/browser-routes-post-warning.json)无导航失败、可见 500 或横向溢出；[同窗口 Halo 日志](./evidence/2026-09-23/backend-log-post-warning.json)为 0 错误、6 条装备插件页大小警告。33 项插件 HTTP/API 深度检查仍对应较早指纹 `3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc`。中间指纹 `bd7460b...` 完成 SEO 15 URL 与临时 114 路由对照、Passkey 权限定位和追番一次 500 的后端诊断；最终代码相对它只收紧了主题设置文案，但旧结果不倒填为最终指纹的完整交互验收。
