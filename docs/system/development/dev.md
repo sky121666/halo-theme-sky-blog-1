@@ -17,6 +17,8 @@
 
 项目声明 Node.js `>=24.18.0 <25`，固定使用 pnpm `12.6.0`；CI 使用 Node.js `24.21.0`。依赖安装策略位于 `pnpm-workspace.yaml`，默认要求新发布的依赖经过 pnpm 12 的 24 小时观察期。TypeScript 7 用于 `tsc` 检查，`typescript-eslint` 的兼容别名使用 TypeScript 6。低于 Node 声明范围或进入 Node 25 只能视为预检查；正式构建和发版应使用 CI 组合。
 
+普通提交推送到 `main` 不会自动运行 GitHub Quality Gate；推送匹配 `v*` 的版本标签才会自动运行，也可在 Actions 手动触发。标签必须与 `package.json` 版本一致。发布顺序是先推送版本标签、等该标签的 Quality Gate 通过，再手动发布对应的 GitHub Release；Release 的 `published` 事件才会触发 CD 打包并上传 GitHub/Halo App Store 资产。GitHub 不会自动阻止你在 Quality Gate 失败时点击发布，发版前需要核对该标签的检查结果。
+
 默认 smoke 目标是 `http://localhost:8090`，页面与版本脚本都会自动读取 `.env.local` / `.env` 中的 `HALO_BASE_URL`。如果本地端口不同，也可以单次覆盖：
 
 ```bash

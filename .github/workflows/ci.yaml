@@ -1,10 +1,9 @@
 name: Quality Gate
 
 on:
-  pull_request:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
   workflow_dispatch:
 
 concurrency:
@@ -36,6 +35,12 @@ jobs:
           node-version: "24.21.0"
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify release tag
+        if: github.event_name == 'push'
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: test "$RELEASE_TAG" = "v$(node -p 'require("./package.json").version')"
 
       - name: Install frozen dependencies
         run: pnpm install --frozen-lockfile
