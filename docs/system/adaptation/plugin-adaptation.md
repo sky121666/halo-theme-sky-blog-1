@@ -2,6 +2,8 @@
 
 这份文档记录主题和 Halo 插件的适配边界、版本基线和本地验收方式。它不是安装教程，具体配置请看各功能文档。
 
+2026-09-24 待发布的主题 `2.2.40` 代码已通过本地依赖升级抽查；精确组合与待完成的供应链时龄门禁见 [依赖适配记录](../development/dependency-upgrade-2026-09-24.md)。下文提到的 `2.2.39` 是当时的历史运行快照。
+
 ## 适配原则
 
 | 原则               | 说明                                                                |
@@ -17,7 +19,7 @@
 
 `contractVersion` 是主题实现所采用的插件契约；`testedVersion` 只在真实站点回归通过后填写，并且只是关联记录的历史摘要。插件最新版和站点安装版本不写入本表。矩阵只覆盖主题主动消费或明确适配的插件，未列出的插件不能因为能通过 `halo:footer` 注入资源就自动视为兼容。Steam、Equipment、Shiki 的主键现使用 manifest ID；仓库别名保留在脚本 aliases 中。
 
-当前运行组合为 Halo Pro 2.26.1 / 主题 2.2.39 未提交工作区 / **45 个安装插件**；最新代码指纹、逐插件结果和剩余问题见[2026-09-23 当前结果](./current-plugin-results.md)，精确 HTTP/API 与页面验证见[本次收口审计](./main-halo-runtime-audit.md)。此前 47 项插件的安装构建、官方稳定目标、发布日期、最低 Halo、技能基线和逐项结果仍保留在[9 月 22 日快照](./evidence/2026-09-22/version-audit.json)。当前测试不能用 HEAD 或单个 `testedVersion` 替代；旧记录中缺少的环境信息保持未知，不倒填。
+2026-09-23 当时的运行组合为 Halo Pro 2.26.1 / 主题 2.2.39 未提交工作区 / **45 个安装插件**；当时的代码指纹、逐插件结果和剩余问题见[2026-09-23 结果](./current-plugin-results.md)，精确 HTTP/API 与页面验证见[当时收口审计](./main-halo-runtime-audit.md)。此前 47 项插件的安装构建、官方稳定目标、发布日期、最低 Halo、技能基线和逐项结果仍保留在[9 月 22 日快照](./evidence/2026-09-22/version-audit.json)。当时测试不能用 HEAD 或单个 `testedVersion` 替代；旧记录中缺少的环境信息保持未知，不倒填。
 
 | Plugin | Surface | Contract version | Tested version | Status | Evidence |
 | --- | --- | --- | --- | --- | --- |

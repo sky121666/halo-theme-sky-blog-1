@@ -11,6 +11,7 @@ const inputs = [
   "scripts",
   "package.json",
   "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
   "theme.yaml",
   "settings.yaml",
   "annotation-setting.yaml",

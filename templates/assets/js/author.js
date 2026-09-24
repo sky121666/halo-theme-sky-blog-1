@@ -1,1 +1,1 @@
-import{r as e,t as r}from"./chunks/page-runtime-2.2.39.js";e(()=>{},{entry:"author"});r();
+import{r as e,t as r}from"./chunks/page-runtime-2.2.40.js";e(()=>{},{entry:"author"});r();

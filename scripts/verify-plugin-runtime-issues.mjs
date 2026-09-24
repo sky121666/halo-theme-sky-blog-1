@@ -292,6 +292,7 @@ if (cookie && expectedUser?.startsWith("codex-passkey-qa-")) {
 }
 
 const codeAtEnd = themeCodeIdentity(root);
+const themeVersion = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).version;
 const report = {
   schemaVersion: 1,
   startedAt,
@@ -300,7 +301,7 @@ const report = {
     baseUrl: baseUrl.origin,
     haloVersion: environment.haloVersion,
     theme: {
-      version: "2.2.39",
+      version: themeVersion,
       codeHash: codeAtEnd.codeHash,
       unchangedDuringRun: codeAtStart.codeHash === codeAtEnd.codeHash,
     },

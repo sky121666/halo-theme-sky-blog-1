@@ -31,9 +31,9 @@ jobs:
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: "24.18.0"
+          node-version: "24.21.0"
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
@@ -47,7 +47,6 @@ jobs:
         run: pnpm run format:check
 
       - name: Audit dependencies
-        # package.json 的 auditConfig 单列 CVE-2026-14257 例外；其余漏洞仍由 audit 阻断。
         run: pnpm audit
 
       - name: Build and package theme

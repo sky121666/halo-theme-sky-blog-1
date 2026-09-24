@@ -1,0 +1,25 @@
+packages:
+  - .
+
+autoInstallPeers: false
+engineStrict: true
+savePrefix: ""
+strictDepBuilds: true
+strictPeerDependencies: true
+
+allowBuilds:
+  esbuild@0.28.2: true
+
+overrides:
+  "@humanfs/node@0.16": 0.16.8
+  "brace-expansion@2": 2.1.7
+  "brace-expansion@5": 5.0.12
+  "fflate@0.8": 0.8.3
+  "flatted@3": 3.4.4
+  "js-yaml@4": 4.3.2
+  "lodash@4": 4.18.1
+  "minimatch@5": 5.1.9
+  "minimatch@9": 9.0.9
+  "nanoid@3": 3.3.19
+  "svgo@4": 4.1.0
+  "yaml@2": 2.9.1
