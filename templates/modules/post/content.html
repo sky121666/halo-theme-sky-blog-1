@@ -20,8 +20,7 @@
           <th:block th:if="${showExcerpt}" th:with="excerptText = ${post.status.excerpt ?: ''}">
             <div th:if="${!#strings.isEmpty(excerptText)}" 
                  class="article-excerpt" 
-                 x-data="articleExcerpt"
-                 x-init="init()">
+                 x-data="articleExcerpt">
               <span class="excerpt-text" 
                     x-ref="excerptText"
                     th:attr="data-text=${excerptText}"></span><span class="excerpt-cursor" x-show="typing">|</span>

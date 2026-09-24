@@ -92,12 +92,28 @@ const momentHeader = read("templates/modules/index/header/moments.html");
 if (/th:utext="\$\{content\.raw\}"/.test(momentHeader)) {
   fail("unsafe moment raw HTML output is forbidden; render content.raw as text");
 }
+if (!momentHeader.includes("momentFinder.list(1, 3).items") || !momentHeader.includes('th:utext="${content.html}"')) {
+  fail("home moment preview must use the bounded Finder and render the plugin HTML field");
+}
 
 const momentList = read("templates/modules/moments/content.html");
 const momentDetail = read("templates/modules/moments/detail.html");
 const momentsScript = read("src/pages/moments/moments.js");
 const emojiScript = read("src/static/emoji/emoji-selector.js");
 const mainScript = read("src/common/main.js");
+const publicLayout = read("templates/layout.html");
+if (!/th:fragment="html\s*\(head,\s*content\)"/.test(publicLayout)) {
+  fail("Halo 2.26 public layout must expose html(head, content)");
+}
+if (/\$\{[^}]*\b(?:post|singlePage)\??\./.test(publicLayout)) {
+  fail("public plugin layout must not require a post/singlePage model");
+}
+if (!publicLayout.includes('th:if="${head == null}"') || !publicLayout.includes('th:replace="${head}"')) {
+  fail("public plugin layout must accept caller head and provide a title only when it is null");
+}
+if (!publicLayout.includes("modules/footer :: footer") || !publicLayout.includes("window.__skyPjaxEnabled = false")) {
+  fail("public plugin layout must preserve plugin injection and the full-document lifecycle");
+}
 const authorContent = read("templates/modules/author/content.html");
 for (const [file, source] of [
   ["templates/modules/moments/content.html", momentList],
@@ -255,7 +271,6 @@ for (const marker of [
 const indexContent = read("templates/modules/index/content.html");
 const indexMomentsHeader = read("templates/modules/index/header/moments.html");
 const tabsGroup = read("templates/modules/widgets/tabs_group.html");
-const friendsContent = read("templates/modules/friends/content.html");
 const linksWidget = read("templates/modules/widgets/links.html");
 for (const [name, source] of [
   ["home content", indexContent],
@@ -287,17 +302,30 @@ if (
 ) {
   fail("Home shell conditional class expression must remain valid after formatting");
 }
-if (!indexContent.includes("hasLinksPlugin = ${pluginFinder.available('PluginLinks', '>=2.2.1')}")) {
-  fail("Home Friends enhancements must independently gate PluginLinks >=2.2.1");
+if (pluginContracts.some(({ plugin }) => plugin === "plugin-friends")) {
+  fail("retired Friends plugin must not be an active theme contract");
 }
-if (!tabsGroup.includes("hasLinksPlugin ? linkFinder.groupBy() : {}")) {
-  fail("Home Friends group labels must not call linkFinder when PluginLinks is unavailable");
+if (/friendFinder|showFriendsTab|plugin-friends|home-panel-friends/.test(`${indexContent}\n${tabsGroup}`)) {
+  fail("Home must not render the retired Friends tab or call its Finder");
 }
-if (
-  (tabsGroup.match(/this\.nextElementSibling\.hidden = false;/g) || []).length < 2 ||
-  (friendsContent.match(/this\.nextElementSibling\.hidden = false;/g) || []).length < 2
-) {
-  fail("Every Friends list style must provide an empty/error avatar fallback");
+if (!tabsGroup.includes(".?[#this == 'posts' or #this == 'moments']")) {
+  fail("Home must filter persisted Friends tab values before choosing its active tab");
+}
+if (!linksContent.includes('data-links-view-panel="friends"')) {
+  fail("PluginLinks must own the friend-feed view");
+}
+for (const file of [
+  "templates/friends.html",
+  "templates/modules/friends/content.html",
+  "templates/modules/friends/layout.html",
+]) {
+  if (fs.existsSync(path.join(root, file))) fail(`${file} must be retired with the Friends route`);
+}
+if (/friends_page_settings|friends_settings|value: friends/.test(read("settings.yaml"))) {
+  fail("active theme settings must not offer retired Friends controls");
+}
+for (const file of ["templates/modules/nav.html", "templates/modules/footer.html"]) {
+  if (!read(file).includes("/links?view=friends")) fail(`${file} must resolve legacy /friends menu items to Links`);
 }
 for (const marker of [
   "pluginFinder.available('PluginLinks', '>=2.2.1')",
@@ -623,7 +651,6 @@ const pjaxLayouts = [
   "templates/modules/doc-layout.html",
   "templates/modules/douban/layout.html",
   "templates/modules/equipments/layout.html",
-  "templates/modules/friends/layout.html",
   "templates/modules/index/layout.html",
   "templates/modules/links/layout.html",
   "templates/modules/moments/layout.html",
@@ -802,20 +829,20 @@ for (const { env, markers, matchAll = false } of [
     markers: [
       "<hyperlink-card",
       "<hyperlink-inline-card",
-      "/plugins/editor-hyperlink-card/assets/static/index.iife.js?version=1.9.2",
+      "/plugins/editor-hyperlink-card/assets/static/index.iife.js?version=",
     ],
     matchAll: true,
   },
   {
     env: "LOTTERY_PAGE_URL",
-    markers: ["<lottery-card", "/plugins/lottery/assets/static/lottery-card.js?version=1.0.2"],
+    markers: ["<lottery-card", "/plugins/lottery/assets/static/lottery-card.js?version="],
     matchAll: true,
   },
   {
     env: "RESTRICTED_READING_PAGE_URL",
     markers: [
       "<content-restrict-widget",
-      "/plugins/restricted-reading/assets/static/content-restrict-widget.iife.js?version=1.8.1",
+      "/plugins/restricted-reading/assets/static/content-restrict-widget.iife.js?version=",
     ],
     matchAll: true,
   },

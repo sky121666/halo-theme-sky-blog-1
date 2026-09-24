@@ -6,6 +6,7 @@
 import './about.css';
 import { skyDebug } from '../../common/js/debug.js';
 import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { annualWindow, fetchAnnualPublicPosts, localDateKey } from '../../common/js/article-heatmap-data.js';
 
 // 导入公共文章内容脚本（CSS 已在 about.css 中导入）
 import '../../static/js/article-content.js';
@@ -127,20 +128,24 @@ import '../../static/js/article-content.js';
   
   SF.initArticleHeatmap = function() {
     const container = document.getElementById('article-heatmap-container');
-    if (!container || !window.aboutPagePosts) return;
-
-    const posts = window.aboutPagePosts.filter(function(p) { return p.title && p.date; });
-    if (!posts.length) return;
+    if (!container) return;
 
     const canvas = container.querySelector('.heatmap-canvas');
     const controller = new AbortController();
     const countEl = document.getElementById('article-count');
-    if (countEl) countEl.textContent = posts.length;
+    const statusEl = document.getElementById('article-heatmap-status');
+    const errorEl = document.getElementById('article-heatmap-error');
+    let requestController = null;
+    let visibilityObserver = null;
+    let destroyed = false;
+
+    function renderPosts(posts) {
+      if (countEl) countEl.textContent = posts.length;
 
     const postsByDate = {};
     posts.forEach(function(post) {
-      const dt = new Date(post.date);
-      const key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+      const key = localDateKey(post.date);
+      if (!key) return;
       if (!postsByDate[key]) postsByDate[key] = [];
       postsByDate[key].push(post);
     });
@@ -148,16 +153,16 @@ import '../../static/js/article-content.js';
     const cs = 11, cg = 3, wks = 53, dys = 7, lw = 25, mh = 15;
     const svgW = lw + wks * (cs + cg) + cg;
     const svgH = mh + dys * (cs + cg) + cg;
-    const today = new Date();
-    const start = new Date(today);
-    start.setDate(start.getDate() - 364);
+    const { start, end } = annualWindow();
+    const gridStart = new Date(start);
+    gridStart.setDate(gridStart.getDate() - gridStart.getDay());
 
     const mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const mLabels = [];
     let lastMon = -1;
     
     for (let wk = 0; wk < wks; wk++) {
-      const dt = new Date(start);
+      const dt = new Date(gridStart);
       dt.setDate(dt.getDate() + wk * 7);
       const mon = dt.getMonth();
       if (mon !== lastMon) {
@@ -177,11 +182,11 @@ import '../../static/js/article-content.js';
     for (let idx = 0; idx < wks * dys; idx++) {
       const wk = Math.floor(idx / dys);
       const dy = idx % dys;
-      const dt = new Date(start);
+      const dt = new Date(gridStart);
       dt.setDate(dt.getDate() + wk * 7 + dy);
-      if (dt > today) continue;
+      if (dt < start || dt >= end) continue;
 
-      const key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+      const key = localDateKey(dt);
       const cnt = postsByDate[key] ? postsByDate[key].length : 0;
       const lvl = cnt === 0 ? 0 : Math.ceil((cnt / maxCnt) * 3);
 
@@ -203,19 +208,32 @@ import '../../static/js/article-content.js';
         if (!tooltip) return;
         const ds = cell.getAttribute('data-date');
         const cnt = cell.getAttribute('data-count');
-        const dt = new Date(ds);
-        const fmt = dt.getFullYear() + '/' + (dt.getMonth() + 1) + '/' + dt.getDate();
-        const dayPosts = posts.filter(function(p) { return new Date(p.date).toDateString() === dt.toDateString(); });
-        
-        let htm = '<div class="heatmap-tooltip-date">' + fmt + '</div><div class="heatmap-tooltip-count">' + cnt + ' 篇文章</div>';
+        const [year, month, day] = ds.split('-').map(Number);
+        const dayPosts = postsByDate[ds] || [];
+        const dateElement = document.createElement('div');
+        dateElement.className = 'heatmap-tooltip-date';
+        dateElement.textContent = `${year}/${month}/${day}`;
+        const countElement = document.createElement('div');
+        countElement.className = 'heatmap-tooltip-count';
+        countElement.textContent = `${cnt} 篇文章`;
+        tooltip.replaceChildren(dateElement, countElement);
         if (dayPosts.length > 0) {
-          htm += '<div class="heatmap-tooltip-posts">';
-          dayPosts.slice(0, 3).forEach(function(p) { htm += '<span class="heatmap-tooltip-post">' + p.title + '</span>'; });
-          if (dayPosts.length > 3) htm += '<span class="heatmap-tooltip-post">+' + (dayPosts.length - 3) + ' 更多...</span>';
-          htm += '</div>';
+          const postList = document.createElement('div');
+          postList.className = 'heatmap-tooltip-posts';
+          dayPosts.slice(0, 3).forEach(function(post) {
+            const item = document.createElement('span');
+            item.className = 'heatmap-tooltip-post';
+            item.textContent = post.title;
+            postList.append(item);
+          });
+          if (dayPosts.length > 3) {
+            const more = document.createElement('span');
+            more.className = 'heatmap-tooltip-post';
+            more.textContent = `+${dayPosts.length - 3} 更多...`;
+            postList.append(more);
+          }
+          tooltip.append(postList);
         }
-        
-        tooltip.innerHTML = htm;
         tooltip.style.display = 'block';
         
         // 优化 tooltip 定位，防止溢出屏幕
@@ -253,7 +271,51 @@ import '../../static/js/article-content.js';
       }, { signal: controller.signal });
     });
 
+    }
+
+    async function loadPosts() {
+      requestController?.abort();
+      const request = new AbortController();
+      requestController = request;
+      if (statusEl) {
+        statusEl.textContent = '正在加载年度文章…';
+        statusEl.hidden = false;
+      }
+      if (errorEl) errorEl.hidden = true;
+      try {
+        const posts = await fetchAnnualPublicPosts({ signal: request.signal });
+        if (destroyed || request.signal.aborted) return;
+        renderPosts(posts);
+        if (statusEl) {
+          statusEl.textContent = posts.length === 0 ? '暂无文章发布记录' : '';
+          statusEl.hidden = posts.length > 0;
+        }
+      } catch {
+        if (destroyed || request.signal.aborted) return;
+        if (statusEl) statusEl.hidden = true;
+        if (errorEl) errorEl.hidden = false;
+      } finally {
+        if (requestController === request) requestController = null;
+      }
+    }
+
+    errorEl?.querySelector('button')?.addEventListener('click', loadPosts, { signal: controller.signal });
+    if (typeof IntersectionObserver === 'undefined') {
+      loadPosts();
+    } else {
+      visibilityObserver = new IntersectionObserver(function(entries) {
+        if (!entries.some(function(entry) { return entry.isIntersecting; })) return;
+        visibilityObserver?.disconnect();
+        visibilityObserver = null;
+        loadPosts();
+      }, { rootMargin: '200px' });
+      visibilityObserver.observe(container);
+    }
+
     return function() {
+      destroyed = true;
+      visibilityObserver?.disconnect();
+      requestController?.abort();
       controller.abort();
     };
   };
@@ -571,7 +633,6 @@ import '../../static/js/article-content.js';
         task();
       });
       SF.cancelAnimationFrames();
-      window.aboutPagePosts = undefined;
       window.aboutGithubConfig = undefined;
     };
   }, { entry: 'about' });

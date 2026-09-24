@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T05:50:26.556Z",
+  "browser": "Ego Lite",
+  "taskSpaceId": 9,
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc",
+    "width": 390
+  },
+  "results": [
+    {
+      "path": "/?audit=mobile-20260923",
+      "url": "http://localhost:8090/?audit=mobile-20260923",
+      "title": "5ee博客 - 123",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "main": true,
+      "momentCards": 3,
+      "friendPanel": false
+    },
+    {
+      "path": "/categories?p=abc",
+      "url": "http://localhost:8090/categories?p=abc",
+      "title": "文章分类 - 5ee博客",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "main": true,
+      "momentCards": 0,
+      "friendPanel": false
+    },
+    {
+      "path": "/about",
+      "url": "http://localhost:8090/about",
+      "title": "关于我 - 5ee博客",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "main": true,
+      "momentCards": 0,
+      "friendPanel": false
+    },
+    {
+      "path": "/links?view=friends",
+      "url": "http://localhost:8090/links?view=friends",
+      "title": "友情链接 - 5ee博客",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "main": true,
+      "momentCards": 0,
+      "friendPanel": true
+    }
+  ]
+}

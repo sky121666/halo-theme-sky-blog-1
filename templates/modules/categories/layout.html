@@ -1,13 +1,20 @@
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)"
+  th:with="collectionBase=${!#strings.isEmpty(site.routes?.categoriesUri) ? site.routes.categoriesUri : '/categories'},
+           collectionPageSize=${site.post.categoryPageSize ?: 10},
+           rawPage=${category == null ? (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')) : '1'},
+           requestedPage=${rawPage.matches('^[0-9]{1,6}$') ? T(java.lang.Integer).parseInt(rawPage) : 1},
+           firstCollectionPage=${category == null ? postFinder.list({page: 1, size: collectionPageSize}) : null},
+           collectionPageNumber=${category == null and requestedPage > 0 and requestedPage <= firstCollectionPage.totalPages ? requestedPage : 1},
+           collectionPosts=${category == null ? (collectionPageNumber == 1 ? firstCollectionPage : postFinder.list({page: collectionPageNumber, size: collectionPageSize})) : null}">
   <!-- 页面头部 -->
 
   <head
-    th:with="pageNumber=${category != null ? (posts?.page ?: 1) : (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'))},
+    th:with="pageNumber=${category != null ? (posts?.page ?: 1) : collectionPageNumber},
              isPaged=${pageNumber.toString() != '1'},
              pageLabel=${category != null ? category.spec.displayName + ' 分类' : '文章分类'},
              documentTitle=${pageLabel + (isPaged ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
-             baseCanonical=${category != null ? category.status.permalink : (!#strings.isEmpty(site.routes?.categoriesUri) ? site.routes.categoriesUri : '/categories')},
+             baseCanonical=${category != null ? category.status.permalink : collectionBase},
              pageCanonical=${isPaged ? (category != null ? baseCanonical + (baseCanonical.endsWith('/') ? 'page/' : '/page/') + pageNumber : baseCanonical + '?p=' + pageNumber) : baseCanonical}"
   >
     <meta charset="UTF-8" />

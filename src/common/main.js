@@ -31,6 +31,10 @@ import "./css/toc.css"; // TOC 目录导航公共样式
  * ==================================================*/
 import "./js/base.js"; // 全局工具函数和事件处理
 import { skyDebug } from "./js/debug.js";
+import { fetchAnnualPublicPosts, localDateKey, annualWindow } from "./js/article-heatmap-data.js";
+
+// 模板中的 Alpine 热力图与关于页共用同一公开 API 和访客本地日期规则。
+window.skyArticleHeatmapData = { fetchAnnualPublicPosts, localDateKey, annualWindow };
 
 /* ===================================================
  * Alpine.js 响应式框架
@@ -465,6 +469,9 @@ if (window.__skyPjaxEnabled !== false) {
       }
 
       window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
+      // Contact Form 1.6.4 将悬浮表单挂在 body 下；目标页没有表单时，插件会直接
+      // 跳过初始化及旧节点清理。离页时先销毁，目标页再按自己的配置重新挂载。
+      document.querySelectorAll("halo-contact-form-auto-loader").forEach((element) => element.remove());
       skyDebug.event("pjax", "page:cleanup", { id: debugState.id, path: debugPath() });
       if (typeof window.__skyMusicSave === "function") window.__skyMusicSave();
       if (typeof window.__pageCleanup === "function") {

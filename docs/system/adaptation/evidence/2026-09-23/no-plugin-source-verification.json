@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T08:16:05Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "74d214a02ea557cf5ead5432ba642a9c9fbd53c2a4fc49e108ef1cfc7baa9caf",
+    "browser": "Ego Lite TaskSpace 11",
+    "plugins": {
+      "seo-tools": "1.10.1 STARTED",
+      "plugin-bilibili-bangumi": "1.4.1 STARTED",
+      "equipment": "1.1.1 STARTED",
+      "auth-passkey": "1.0.4 STARTED"
+    }
+  },
+  "scope": "Read-only HTTP/browser/source checks, plus already-authorized disposable local test accounts and role bindings. No plugin source, installed JAR, permanent role, or site SEO setting changed.",
+  "seo": {
+    "httpStatus": 200,
+    "browserExamples": [
+      { "path": "/categories?p=abc", "renderedPage": 1, "canonical": "https://www.5ee.net/categories?p=abc" },
+      { "path": "/categories?page=2", "renderedPage": 2, "canonical": "https://www.5ee.net/categories" },
+      { "path": "/categories?p=2", "renderedPage": 2, "canonical": "https://www.5ee.net/categories?p=2" },
+      { "path": "/tags?p=abc", "renderedPage": 1, "canonical": "https://www.5ee.net/tags?p=abc" },
+      { "path": "/tags?page=2", "renderedPage": 2, "canonical": "https://www.5ee.net/tags" },
+      { "path": "/tags?p=2", "renderedPage": 2, "canonical": "https://www.5ee.net/tags?p=2" }
+    ],
+    "independentPluginPages": [
+      { "path": "/dishes", "status": 200, "canonical": "https://www.5ee.net/dishes" },
+      { "path": "/schedule-calendar", "status": 200, "canonical": "https://www.5ee.net/schedule-calendar" }
+    ],
+    "sourceCheck": "Installed SEO Tools settings expose one global canonical_link.enabled switch. Its redirection filter matches request path, not query parameters, so built-in redirects cannot normalize page/p conditionally.",
+    "result": "Existing mismatch reproduced. Plugin canonical remains enabled and theme-only experimental override remains disabled."
+  },
+  "bangumi": {
+    "browser": "GET /bangumis displayed a total count of 25, title, and one canonical; no visible 500",
+    "freshHttpRequest": "GET /bangumis?codexqa=1790150148488 returned 200 in 0.179 seconds",
+    "result": "Previous Bilibili TLS-timeout 500 was not reproduced; failure handling remains unverified."
+  },
+  "equipment": {
+    "browser": "GET /equipments displayed 2 groups and 3 items",
+    "freshHttpRequest": "GET /equipments?codexqa=1790150148488 returned 200 in 0.173 seconds",
+    "backendLog": "Exactly three PageRequestImpl WARN lines: Page size must not be greater than 1000, reset to 1000",
+    "result": "Warning reproduced on a cache-miss request; the theme receives plugin-provided data after the plugin router calls groupBy()."
+  },
+  "passkey": {
+    "loginMethodPage": "GET /login?method=passkey returned 200; real browser displayed the Passkey button without horizontal overflow",
+    "normalRoleUi": "Disposable post-contributor user with verified test email logged in; GET current-user returned 200; /uc/profile?tab=passkey displayed 加载失败 and 重试",
+    "explicitRoleUi": "Binding plugin-passkey-role-template-authenticated to the same disposable user and immediately reopening the tab still displayed 加载失败; effective permission propagation after binding was not confirmed",
+    "rawCredentialGet": "A browser fetch in an authenticated disposable session returned 403; this does not by itself identify the UI request status or prove the role aggregate failed",
+    "roleSource": "Installed role.yaml labels plugin-passkey-role-template-authenticated with aggregate-to-authenticated=true and includes GET /apis/api.passkey.halo.run/v1alpha1/credentials",
+    "cleanup": "All disposable users and role bindings created in this follow-up were deleted; final list queries found zero names with the test prefixes. No personal Passkey credential was accessed, created, or deleted.",
+    "limitations": "WebAuthn registration, authentication, deletion, and a fully propagated role-rebind flow were not tested. Some preliminary login attempts were invalidated by browser autofill or a saved /logout target; they are excluded from the permission conclusion."
+  },
+  "checks": {
+    "node": "24.19.0",
+    "pnpm": "10.34.5",
+    "verifySeo": "passed: 17 layouts",
+    "verifyPluginContracts": "passed: 27 plugins",
+    "verifyPlugins": "passed: 12/12 HTTP marker smoke tests"
+  }
+}

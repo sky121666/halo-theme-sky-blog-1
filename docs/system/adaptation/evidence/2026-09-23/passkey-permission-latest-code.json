@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T07:02:22.952Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318",
+    "plugin": "auth-passkey 1.0.4"
+  },
+  "officialSource": "https://github.com/ilay1678/halo-plugin-auth-passkey#-api-%E6%96%87%E6%A1%A3",
+  "installedJar": "~/Public/work/sky-blog1/plugins/auth-passkey-1.0.4.jar",
+  "testAccount": {
+    "name": "codex-passkey-qa-20260923-2385fd",
+    "emailDomain": "example.invalid",
+    "initialRole": "guest",
+    "emailVerifiedForTestOnly": true,
+    "verificationMessageSent": false,
+    "login": "browser password login succeeded; first reached /complete-profile, then /uc/profile after test-only emailVerified override"
+  },
+  "credentialList": {
+    "anonymousGet": 302,
+    "adminPatGet": 200,
+    "authenticatedGuestBrowserGet": 403,
+    "guestUi": "Passkey 管理 / 加载失败 / 重试",
+    "pluginRoleTemplate": "plugin-passkey-role-template-authenticated",
+    "roleTemplateAllows": "GET /apis/api.passkey.halo.run/v1alpha1/credentials",
+    "explicitTestRoleBinding": "guest + plugin-passkey-role-template-authenticated",
+    "afterExplicitRoleBinding": "user-center list loaded, displayed 暂无 Passkey and 添加 Passkey; no 403",
+    "interpretation": "The 403 is reproducible for an authenticated guest and resolved by assigning the plugin role to that test user; no theme template change can grant API permissions"
+  },
+  "virtualAuthenticator": {
+    "requested": true,
+    "created": false,
+    "reason": "In-app Browser raw CDP does not support WebAuthn.addVirtualAuthenticator",
+    "personalPasskeyUsed": false,
+    "registrationLoginDeletionTested": false
+  },
+  "cleanup": {
+    "browserLoggedOut": true,
+    "testUserGetAfterDeletion": 404,
+    "testRoleBindingsRemaining": 0,
+    "testCredentialCreated": false,
+    "temporaryStateFileRemoved": true
+  },
+  "limitations": [
+    "The role aggregation behavior for all normal Halo accounts was not tested; only a disposable guest was tested",
+    "No WebAuthn credential was registered, authenticated or deleted",
+    "Do not interpret administrator GET 200 as a successful ordinary-user flow"
+  ]
+}

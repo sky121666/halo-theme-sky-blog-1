@@ -1,0 +1,704 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T02:14:46.016Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "6e74adb22faa05a12e1a8f01d3da6f5d771b8f0ffd8971a7287897f4f788e6ba",
+    "unchangedDuringRun": true
+  },
+  "source": "Same 114 public GET paths as route-sweep-final.json; HTTP status only",
+  "summary": {
+    "total": 114,
+    "ok200": 113,
+    "notFound": ["/terms"],
+    "other": []
+  },
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 312280,
+      "serverError": false
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "bytes": 161357,
+      "serverError": false
+    },
+    {
+      "path": "/archives",
+      "status": 200,
+      "bytes": 154141,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2024/12",
+      "status": 200,
+      "bytes": 152249,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/02",
+      "status": 200,
+      "bytes": 136372,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/03",
+      "status": 200,
+      "bytes": 151901,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/04",
+      "status": 200,
+      "bytes": 130341,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/05",
+      "status": 200,
+      "bytes": 136398,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/06",
+      "status": 200,
+      "bytes": 127122,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/07",
+      "status": 200,
+      "bytes": 124388,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/08",
+      "status": 200,
+      "bytes": 139067,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2026/02",
+      "status": 200,
+      "bytes": 123791,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2U9qMYvW",
+      "status": 200,
+      "bytes": 194324,
+      "serverError": false
+    },
+    {
+      "path": "/archives/CNnnwQh7",
+      "status": 200,
+      "bytes": 162854,
+      "serverError": false
+    },
+    {
+      "path": "/archives/FLQkQJLg",
+      "status": 200,
+      "bytes": 162247,
+      "serverError": false
+    },
+    {
+      "path": "/archives/JGvxASVB",
+      "status": 200,
+      "bytes": 149392,
+      "serverError": false
+    },
+    {
+      "path": "/archives/U42G91AM",
+      "status": 200,
+      "bytes": 170736,
+      "serverError": false
+    },
+    {
+      "path": "/archives/VHHIpSkP",
+      "status": 200,
+      "bytes": 148257,
+      "serverError": false
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "bytes": 155350,
+      "serverError": false
+    },
+    {
+      "path": "/archives/ijhJxHtw",
+      "status": 200,
+      "bytes": 143185,
+      "serverError": false
+    },
+    {
+      "path": "/archives/j3efAbg4",
+      "status": 200,
+      "bytes": 147392,
+      "serverError": false
+    },
+    {
+      "path": "/archives/jJkjiM27",
+      "status": 200,
+      "bytes": 162983,
+      "serverError": false
+    },
+    {
+      "path": "/archives/jeco9MwB",
+      "status": 200,
+      "bytes": 151103,
+      "serverError": false
+    },
+    {
+      "path": "/archives/lKkDC8OW",
+      "status": 200,
+      "bytes": 163062,
+      "serverError": false
+    },
+    {
+      "path": "/archives/mac-restart-podman-container-start",
+      "status": 200,
+      "bytes": 149419,
+      "serverError": false
+    },
+    {
+      "path": "/archives/nsoSkHzN",
+      "status": 200,
+      "bytes": 151902,
+      "serverError": false
+    },
+    {
+      "path": "/archives/page/2",
+      "status": 200,
+      "bytes": 153978,
+      "serverError": false
+    },
+    {
+      "path": "/archives/tFyvnqK0",
+      "status": 200,
+      "bytes": 156459,
+      "serverError": false
+    },
+    {
+      "path": "/authors/sky0821",
+      "status": 200,
+      "bytes": 215419,
+      "serverError": false
+    },
+    {
+      "path": "/bangumis",
+      "status": 200,
+      "bytes": 109855,
+      "serverError": false
+    },
+    {
+      "path": "/categories",
+      "status": 200,
+      "bytes": 153974,
+      "serverError": false
+    },
+    {
+      "path": "/categories/1panel",
+      "status": 200,
+      "bytes": 158348,
+      "serverError": false
+    },
+    {
+      "path": "/categories/ai",
+      "status": 200,
+      "bytes": 157314,
+      "serverError": false
+    },
+    {
+      "path": "/categories/ai/page/2",
+      "status": 200,
+      "bytes": 157767,
+      "serverError": false
+    },
+    {
+      "path": "/categories/halo",
+      "status": 200,
+      "bytes": 147942,
+      "serverError": false
+    },
+    {
+      "path": "/categories/qi-ta",
+      "status": 200,
+      "bytes": 146437,
+      "serverError": false
+    },
+    {
+      "path": "/categories/qian-duan",
+      "status": 200,
+      "bytes": 141585,
+      "serverError": false
+    },
+    {
+      "path": "/categories?p=2",
+      "status": 200,
+      "bytes": 156131,
+      "serverError": false
+    },
+    {
+      "path": "/dishes",
+      "status": 200,
+      "bytes": 16557,
+      "serverError": false
+    },
+    {
+      "path": "/docs",
+      "status": 200,
+      "bytes": 94320,
+      "serverError": false
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1",
+      "status": 200,
+      "bytes": 116310,
+      "serverError": false
+    },
+    {
+      "path": "/douban",
+      "status": 200,
+      "bytes": 93757,
+      "serverError": false
+    },
+    {
+      "path": "/equipments",
+      "status": 200,
+      "bytes": 118397,
+      "serverError": false
+    },
+    {
+      "path": "/links",
+      "status": 200,
+      "bytes": 217000,
+      "serverError": false
+    },
+    {
+      "path": "/links?view=friends",
+      "status": 200,
+      "bytes": 256974,
+      "serverError": false
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "bytes": 25340,
+      "serverError": false
+    },
+    {
+      "path": "/login?method=passkey",
+      "status": 200,
+      "bytes": 29495,
+      "serverError": false
+    },
+    {
+      "path": "/moments",
+      "status": 200,
+      "bytes": 161771,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-1778854511638-3wpy3noe",
+      "status": 200,
+      "bytes": 101211,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-32asaylm",
+      "status": 200,
+      "bytes": 104648,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-4sbc36v5",
+      "status": 200,
+      "bytes": 103388,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-9roi1c7n",
+      "status": 200,
+      "bytes": 101428,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-bxbdkuwu",
+      "status": 200,
+      "bytes": 105805,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-cvbl3r6b",
+      "status": 200,
+      "bytes": 101202,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-f6ircurs",
+      "status": 200,
+      "bytes": 100479,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-qbxmx6d5",
+      "status": 200,
+      "bytes": 105270,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-qrb5xcuw",
+      "status": 200,
+      "bytes": 103956,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-ytpmkzzy",
+      "status": 200,
+      "bytes": 102727,
+      "serverError": false
+    },
+    {
+      "path": "/moments/page/2",
+      "status": 200,
+      "bytes": 124904,
+      "serverError": false
+    },
+    {
+      "path": "/photos",
+      "status": 200,
+      "bytes": 145830,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "status": 200,
+      "bytes": 99242,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-2qclll5g",
+      "status": 200,
+      "bytes": 99255,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-3x39qxyf",
+      "status": 200,
+      "bytes": 99230,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-8os50ylm",
+      "status": 200,
+      "bytes": 99004,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-dgzc3rqv",
+      "status": 200,
+      "bytes": 99217,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-gaazy0ws",
+      "status": 200,
+      "bytes": 99255,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-gtulnjy1",
+      "status": 200,
+      "bytes": 99243,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-hysezd2w",
+      "status": 200,
+      "bytes": 99230,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-ihzgnfm4",
+      "status": 200,
+      "bytes": 99263,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-lglk3ors",
+      "status": 200,
+      "bytes": 100666,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-mogdulku",
+      "status": 200,
+      "bytes": 99236,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-nbgx3edf",
+      "status": 200,
+      "bytes": 101319,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-nsrwcpna",
+      "status": 200,
+      "bytes": 99230,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-rgolxmbv",
+      "status": 200,
+      "bytes": 98603,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-tidpcttl",
+      "status": 200,
+      "bytes": 99230,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-ugdx4sx6",
+      "status": 200,
+      "bytes": 98773,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-vyd6cj4k",
+      "status": 200,
+      "bytes": 99236,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-xqgifxkz",
+      "status": 200,
+      "bytes": 98477,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-yvqae9y4",
+      "status": 200,
+      "bytes": 98641,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-zepgpelt",
+      "status": 200,
+      "bytes": 99107,
+      "serverError": false
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "bytes": 96246,
+      "serverError": false
+    },
+    {
+      "path": "/schedule-calendar",
+      "status": 200,
+      "bytes": 53675,
+      "serverError": false
+    },
+    {
+      "path": "/signup",
+      "status": 200,
+      "bytes": 25230,
+      "serverError": false
+    },
+    {
+      "path": "/steam",
+      "status": 200,
+      "bytes": 107929,
+      "serverError": false
+    },
+    {
+      "path": "/tags",
+      "status": 200,
+      "bytes": 125971,
+      "serverError": false
+    },
+    {
+      "path": "/tags/1panel",
+      "status": 200,
+      "bytes": 127619,
+      "serverError": false
+    },
+    {
+      "path": "/tags/ai",
+      "status": 200,
+      "bytes": 127949,
+      "serverError": false
+    },
+    {
+      "path": "/tags/alist",
+      "status": 200,
+      "bytes": 108204,
+      "serverError": false
+    },
+    {
+      "path": "/tags/astro",
+      "status": 200,
+      "bytes": 107313,
+      "serverError": false
+    },
+    {
+      "path": "/tags/cha-jian-kai-fa",
+      "status": 200,
+      "bytes": 107789,
+      "serverError": false
+    },
+    {
+      "path": "/tags/cursor",
+      "status": 200,
+      "bytes": 119347,
+      "serverError": false
+    },
+    {
+      "path": "/tags/demo",
+      "status": 200,
+      "bytes": 105605,
+      "serverError": false
+    },
+    {
+      "path": "/tags/dify",
+      "status": 200,
+      "bytes": 124488,
+      "serverError": false
+    },
+    {
+      "path": "/tags/docker",
+      "status": 200,
+      "bytes": 108021,
+      "serverError": false
+    },
+    {
+      "path": "/tags/editor",
+      "status": 200,
+      "bytes": 105614,
+      "serverError": false
+    },
+    {
+      "path": "/tags/fan-xiang-dai-li",
+      "status": 200,
+      "bytes": 120435,
+      "serverError": false
+    },
+    {
+      "path": "/tags/frp",
+      "status": 200,
+      "bytes": 105218,
+      "serverError": false
+    },
+    {
+      "path": "/tags/fu-wu-qi",
+      "status": 200,
+      "bytes": 107572,
+      "serverError": false
+    },
+    {
+      "path": "/tags/halo",
+      "status": 200,
+      "bytes": 121673,
+      "serverError": false
+    },
+    {
+      "path": "/tags/hao",
+      "status": 200,
+      "bytes": 105412,
+      "serverError": false
+    },
+    {
+      "path": "/tags/lobechat",
+      "status": 200,
+      "bytes": 112853,
+      "serverError": false
+    },
+    {
+      "path": "/tags/macos",
+      "status": 200,
+      "bytes": 108005,
+      "serverError": false
+    },
+    {
+      "path": "/tags/mcp",
+      "status": 200,
+      "bytes": 119329,
+      "serverError": false
+    },
+    {
+      "path": "/tags/mo-ban-zhi-zuo",
+      "status": 200,
+      "bytes": 105459,
+      "serverError": false
+    },
+    {
+      "path": "/tags/nas",
+      "status": 200,
+      "bytes": 105214,
+      "serverError": false
+    },
+    {
+      "path": "/tags/pod",
+      "status": 200,
+      "bytes": 103217,
+      "serverError": false
+    },
+    {
+      "path": "/tags/podman",
+      "status": 200,
+      "bytes": 108011,
+      "serverError": false
+    },
+    {
+      "path": "/tags/tailwindcss",
+      "status": 200,
+      "bytes": 109971,
+      "serverError": false
+    },
+    {
+      "path": "/tags/tr-ae",
+      "status": 200,
+      "bytes": 105201,
+      "serverError": false
+    },
+    {
+      "path": "/tags/ubuntu",
+      "status": 200,
+      "bytes": 105225,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vaultwarden",
+      "status": 200,
+      "bytes": 105721,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vite",
+      "status": 200,
+      "bytes": 107970,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vue",
+      "status": 200,
+      "bytes": 105641,
+      "serverError": false
+    },
+    {
+      "path": "/terms",
+      "status": 404,
+      "bytes": 185,
+      "serverError": false
+    }
+  ]
+}

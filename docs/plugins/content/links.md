@@ -4,9 +4,9 @@
 
 | 项目     | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
-| 路由     | `/links`                                                     |
+| 路由     | `/links`；友链动态为 `/links?view=friends`                    |
 | 设置位置 | `外观 -> 主题 -> Sky Blog -> 设置 -> 友链`                   |
-| 依赖插件 | `PluginLinks 2.2.1`；留言可选 `PluginCommentWidget >= 3.1.2` |
+| 依赖插件 | `PluginLinks 2.3.0`；留言可选 `PluginCommentWidget >= 3.1.2` |
 
 ## 页面内容
 
@@ -16,7 +16,7 @@
 | 友链列表 | 按插件返回的分组展示站点卡片及链接检测状态       |
 | 友链动态 | 展示 RSS 来源、公开动态和有权限用户的个人状态    |
 | 本站信息 | 弹窗展示本站名称、描述、Logo、RSS 等             |
-| 申请入口 | 识别站点；管理员可直连创建，其他用户生成留言申请 |
+| 申请入口 | 识别站点；管理员可直连创建，访客可按插件开关提交申请 |
 | 评论区   | 页面底部评论，可关闭                             |
 | 侧边栏   | 可使用全局侧边栏，也可单独配置                   |
 
@@ -29,7 +29,7 @@
 | 全部 / 未读 / 收藏 / 稍后读 | `?view=friends&scope=...`                             | 全部公开；个人状态需 `plugin:links:view` |
 | RSS 分组 / 单一来源         | `?view=friends&groupName=`、`?view=friends&linkName=` | 公开                                     |
 | RSS 内部详情                | 有效动态路由追加 `&itemId=`                           | `plugin:links:view`                      |
-| 添加或修改申请              | `?view=apply`                                         | 公开；直连创建需 `plugin:links:manage`   |
+| 添加或修改申请              | `?view=apply`                                         | 公开；直连创建需 `plugin:links:manage`，访客新增需插件开放申请 |
 | 留言板                      | `?view=board`                                         | 页面公开；提交依赖评论组件               |
 
 运行时只管理 `view`、`group`、`link`、`scope`、`groupName`、`linkName`、`itemId` 七个参数。未知查询参数和 hash 保留，非法组合通过 `history.replaceState` 规范化；canonical 始终为 `/links`。
@@ -110,12 +110,13 @@ RSS 首屏和后续分页固定每次读取 20 条，使用 `beforePublishedAt +
 - 页面先读取当前 Halo 用户和 UI 权限，不用前端判断替代服务端鉴权。
 - 有 `plugin:links:manage` 时，自动识别调用 PluginLinks 的 `links/-/detail` 与 `rss/discovery`，新增申请通过 Halo 标准 `core.halo.run/v1alpha1/links` 创建，并携带 CSRF 令牌。
 - 官方识别失败后才尝试浏览器匿名识别；请求限制为 HTTP/HTTPS、8 秒、1.5 MB 和 HTML/XHTML，仍可能受目标站 CORS 限制。
-- 访客、无管理权限、401/403 安全降级，以及所有修改申请，都只生成 Markdown，不调用受保护写入接口；复制后切换到留言板。
+- PluginLinks 2.3.0 开放申请时，访客或无管理权限用户新增友链走插件公开申请接口，填写验证码并等待管理员审核，不调用受保护写入接口。
+- 插件未开放申请时，以及所有修改申请，生成 Markdown，复制后切换到留言板。管理员直连创建遇到 401/403 时也降级为此方式。
 - 主题不调用 `plugin-friends`、`link-submit` 或 `/friends`。
 
 配置的 `apply_url`、评论和邮箱仍作为页面上的辅助联系入口；站内表单的能力判断和降级规则不依赖这些入口。
 
-## PluginLinks 2.2.1 契约
+## PluginLinks 2.2.1 列表与 RSS 基线
 
 - 页面标题保留主题自定义值；留空时使用插件提供的 `linksTitle` 安全回退。
 - `/links?group={metadata.name}` 使用 `simpleGroups`、`groups`、`group` 和 `links` 路由变量，不读取已废弃的 `LinkGroup.spec.links`。
@@ -125,6 +126,12 @@ RSS 首屏和后续分页固定每次读取 20 条，使用 `beforePublishedAt +
 - 公共列表使用匿名 `/apis/api.link.halo.run/v1alpha1/linkfeeds`；有查看权限时自动切换到受保护 RSS 列表，并开放未读、收藏、稍后阅读、内部详情与状态写入。
 - 打开内部详情会把条目标记为已读，并移出稍后阅读；收藏状态不会自动改变。
 - 页面入口通过共享 PJAX 生命周期挂载和清理，前进、后退由 `popstate` 恢复。
+
+## PluginLinks 2.3.0 访客申请
+
+- 仅当插件版本达到 2.3.0 且后台开启友链申请时，新增申请显示验证码并调用公开 `POST /apis/api.link.halo.run/v1alpha1/link-applications/captcha` 和 `POST /apis/api.link.halo.run/v1alpha1/link-applications`。请求不携带登录 Cookie，成功状态为 201，结果等待后台审核。
+- 申请接口返回禁用、重复、限流、验证码错误等状态时，页面显示对应提示；验证码在提交后重新加载。
+- 当前本地站点的申请开关未开启，公开申请写入与后台审核尚未实际验证；页面、接口契约与错误处理已有自动化检查。
 
 ## 侧边栏与 Dock
 
@@ -141,12 +148,12 @@ RSS 首屏和后续分页固定每次读取 20 条，使用 `beforePublishedAt +
 
 | 场景         | 建议                                                            |
 | ------------ | --------------------------------------------------------------- |
-| 页面打不开   | 确认 `PluginLinks >= 2.2.1` 已安装并启用                        |
+| 页面打不开   | 确认 PluginLinks 已安装并启用；当前适配目标为 `2.3.0`          |
 | 友链为空     | 到插件后台添加友链和分组                                        |
 | 状态不显示   | 先在 PluginLinks 后台执行链接检测；未检测状态会被主题主动隐藏   |
 | 动态不显示   | 开启插件的“公开 RSS 订阅动态”，并确认友链已配置有效 RSS         |
 | 识别失败     | 浏览器识别受 CORS 限制时手动填写；管理员同时检查 Links 管理权限 |
-| 不能直接创建 | 确认账号具有 `plugin:links:manage`；否则使用生成的留言申请      |
+| 不能直接创建 | 管理员检查 `plugin:links:manage`；访客新增需插件开放申请，关闭时使用留言申请 |
 | 留言不可用   | 确认 `PluginCommentWidget >= 3.1.2` 已启用                      |
 
 ## 灯箱

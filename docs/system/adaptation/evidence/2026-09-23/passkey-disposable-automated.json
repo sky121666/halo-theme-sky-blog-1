@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T13:51:27.711Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "themeCodeHash": "1bcb1efbf229e49c7a74d1f70934fd91dca0747640ad347fff00077fc9e834d0",
+    "passkeyVersion": "1.0.4"
+  },
+  "disposableUser": "codex-passkey-qa-20260923-800ab9",
+  "initial": {
+    "loginStatus": 302,
+    "loginRedirectPath": "/uc",
+    "cookieNames": ["XSRF-TOKEN", "SESSION", "device_id"],
+    "currentUserStatus": 200,
+    "credentialsStatus": 403,
+    "permissions": {
+      "directRoles": ["post-contributor"],
+      "credentialPermissionRoles": [],
+      "credentialGetEffective": false
+    }
+  },
+  "withExplicitPluginRole": {
+    "loginStatus": 302,
+    "currentUserStatus": 200,
+    "credentialsStatus": 403,
+    "permissions": {
+      "directRoles": ["post-contributor"],
+      "credentialPermissionRoles": [],
+      "credentialGetEffective": false
+    },
+    "permissionWaitMs": 30965
+  },
+  "cleanup": {
+    "userGetAfterCleanup": 404,
+    "deletedRoleBindings": 2,
+    "remainingRoleBindings": 0
+  },
+  "error": null,
+  "finishedAt": "2026-09-23T13:52:01.261Z"
+}

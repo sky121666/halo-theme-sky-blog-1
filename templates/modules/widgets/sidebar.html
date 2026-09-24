@@ -27,12 +27,12 @@
              {widget: 'tags'},
              {widget: 'popular_posts'}
            } },
-           baseWidgets = ${globalWidgets != null && !#lists.isEmpty(globalWidgets) ? globalWidgets : defaultWidgets}">
+           baseWidgets = ${globalWidgets != null ? globalWidgets : defaultWidgets}">
 
   <!-- 确定要渲染的组件列表 -->
   <!-- 优先级: 启用定制 -> sidebar_widgets -> 全局配置 -->
   <th:block
-    th:with="renderList = ${useCustom && customWidgets != null && !#lists.isEmpty(customWidgets) ? customWidgets : baseWidgets}">
+    th:with="renderList = ${useCustom && customWidgets != null ? customWidgets : baseWidgets}">
 
     <th:block th:each="item : ${renderList}">
       <!-- 解析小工具类型：支持对象格式 {widget: 'name'} 和字符串格式 'name' -->

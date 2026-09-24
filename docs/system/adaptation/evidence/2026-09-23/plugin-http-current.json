@@ -1,0 +1,694 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T05:31:57.172Z",
+  "finishedAt": "2026-09-23T05:32:05.033Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+  },
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "ba1e6ecad5663c47f93965e5ad78d4dc93c21181f56128bbc6a9c41ec1d28e90",
+    "fileCount": 363,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "unchangedDuringRun": true
+  },
+  "plugins": [
+    {
+      "id": "mcp-server",
+      "phase": "STARTED",
+      "version": "1.2.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "mcp-server-1.2.0.jar"
+    },
+    {
+      "id": "ai-foundation",
+      "phase": "STARTED",
+      "version": "1.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "ai-foundation-1.1.0.jar"
+    },
+    {
+      "id": "plugin-katex",
+      "phase": "STARTED",
+      "version": "3.0.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.2",
+      "artifactName": "plugin-katex-3.0.0.jar"
+    },
+    {
+      "id": "plugin-douban",
+      "phase": "STARTED",
+      "version": "1.2.6",
+      "enabled": true,
+      "requiresHalo": ">=2.22.1",
+      "artifactName": "plugin-douban-1.2.6.jar"
+    },
+    {
+      "id": "maintenance",
+      "phase": "STARTED",
+      "version": "1.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.10",
+      "artifactName": "maintenance-1.1.0.jar"
+    },
+    {
+      "id": "online",
+      "phase": "STARTED",
+      "version": "1.0.5",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "online-1.0.5.jar"
+    },
+    {
+      "id": "dishes",
+      "phase": "STARTED",
+      "version": "1.0.3",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "dishes-1.0.3.jar"
+    },
+    {
+      "id": "schedule-calendar",
+      "phase": "STARTED",
+      "version": "3.5.0",
+      "enabled": true,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "schedule-calendar-3.5.0.jar"
+    },
+    {
+      "id": "lottery",
+      "phase": "STARTED",
+      "version": "1.0.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "lottery-1.0.2.jar"
+    },
+    {
+      "id": "PluginLive2d",
+      "phase": "DISABLED",
+      "version": "2.2.0",
+      "enabled": false,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "PluginLive2d-2.2.0.jar"
+    },
+    {
+      "id": "editor-emoji",
+      "phase": "STARTED",
+      "version": "1.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "editor-emoji-1.1.0.jar"
+    },
+    {
+      "id": "auth-passkey",
+      "phase": "STARTED",
+      "version": "1.0.4",
+      "enabled": true,
+      "requiresHalo": ">=2.22.5",
+      "artifactName": "auth-passkey-1.0.4.jar"
+    },
+    {
+      "id": "equipment",
+      "phase": "STARTED",
+      "version": "1.1.1",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "equipment-1.1.1.jar"
+    },
+    {
+      "id": "plugin-bilibili-bangumi",
+      "phase": "STARTED",
+      "version": "1.4.1",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "plugin-bilibili-bangumi-1.4.1.jar"
+    },
+    {
+      "id": "steam",
+      "phase": "STARTED",
+      "version": "1.0.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.1",
+      "artifactName": "steam-1.0.0.jar"
+    },
+    {
+      "id": "vote",
+      "phase": "STARTED",
+      "version": "1.1.3",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "vote-1.1.3.jar"
+    },
+    {
+      "id": "shiki",
+      "phase": "STARTED",
+      "version": "1.5.1",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "shiki-1.5.1.jar"
+    },
+    {
+      "id": "data-studio",
+      "phase": "STARTED",
+      "version": "1.0.0-alpha.9",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "data-studio-1.0.0-alpha.9.jar"
+    },
+    {
+      "id": "text-diagram",
+      "phase": "STARTED",
+      "version": "1.5.2",
+      "enabled": true,
+      "requiresHalo": ">=2.11.0",
+      "artifactName": "text-diagram-1.5.2.jar"
+    },
+    {
+      "id": "PluginS3ObjectStorage",
+      "phase": "STARTED",
+      "version": "1.17.0",
+      "enabled": true,
+      "requiresHalo": ">=2.24.0",
+      "artifactName": "PluginS3ObjectStorage-1.17.0.jar"
+    },
+    {
+      "id": "PluginBytemd",
+      "phase": "STARTED",
+      "version": "1.9.0",
+      "enabled": true,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "PluginBytemd-1.9.0.jar"
+    },
+    {
+      "id": "hybrid-edit-block",
+      "phase": "STARTED",
+      "version": "1.7.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "hybrid-edit-block-1.7.0.jar"
+    },
+    {
+      "id": "chenhe-lsky-pro",
+      "phase": "STARTED",
+      "version": "1.1.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "chenhe-lsky-pro-1.1.2.jar"
+    },
+    {
+      "id": "PluginLightGallery",
+      "phase": "STARTED",
+      "version": "1.2.1",
+      "enabled": true,
+      "requiresHalo": ">=2.10.0",
+      "artifactName": "PluginLightGallery-1.2.1.jar"
+    },
+    {
+      "id": "PluginPhotos",
+      "phase": "STARTED",
+      "version": "2.1.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "PluginPhotos-2.1.2.jar"
+    },
+    {
+      "id": "seo-tools",
+      "phase": "STARTED",
+      "version": "1.10.1",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "seo-tools-1.10.1.jar"
+    },
+    {
+      "id": "PluginLinks",
+      "phase": "STARTED",
+      "version": "2.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "PluginLinks-2.3.0.jar"
+    },
+    {
+      "id": "PluginMoments",
+      "phase": "STARTED",
+      "version": "1.19.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginMoments-1.19.0.jar"
+    },
+    {
+      "id": "page-cache",
+      "phase": "STARTED",
+      "version": "1.6.0",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "page-cache-1.6.0.jar"
+    },
+    {
+      "id": "content-tools",
+      "phase": "STARTED",
+      "version": "1.8.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "content-tools-1.8.0.jar"
+    },
+    {
+      "id": "PluginContactForm",
+      "phase": "STARTED",
+      "version": "1.6.4",
+      "enabled": true,
+      "requiresHalo": ">=2.22.2",
+      "artifactName": "PluginContactForm-1.6.4.jar"
+    },
+    {
+      "id": "ai-assistant",
+      "phase": "STARTED",
+      "version": "3.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "ai-assistant-3.1.0.jar"
+    },
+    {
+      "id": "alist-integration",
+      "phase": "STARTED",
+      "version": "1.2.0",
+      "enabled": true,
+      "requiresHalo": ">=2.20.0",
+      "artifactName": "alist-integration-1.2.0.jar"
+    },
+    {
+      "id": "backup-improved",
+      "phase": "STARTED",
+      "version": "1.5.1",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "backup-improved-1.5.1.jar"
+    },
+    {
+      "id": "plugin-ldap-login",
+      "phase": "STARTED",
+      "version": "1.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "plugin-ldap-login-1.3.0.jar"
+    },
+    {
+      "id": "plugin-docsme",
+      "phase": "STARTED",
+      "version": "1.10.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "plugin-docsme-1.10.0.jar"
+    },
+    {
+      "id": "editor-hyperlink-card",
+      "phase": "STARTED",
+      "version": "1.9.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "editor-hyperlink-card-1.9.2.jar"
+    },
+    {
+      "id": "plugin-oauth2",
+      "phase": "STARTED",
+      "version": "1.7.1",
+      "enabled": true,
+      "requiresHalo": ">=2.20.0",
+      "artifactName": "plugin-oauth2-1.7.1.jar"
+    },
+    {
+      "id": "plugin-social-login",
+      "phase": "STARTED",
+      "version": "1.7.0",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "plugin-social-login-1.7.0.jar"
+    },
+    {
+      "id": "restricted-reading",
+      "phase": "STARTED",
+      "version": "1.9.1",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "restricted-reading-1.9.1.jar"
+    },
+    {
+      "id": "PluginCommentWidget",
+      "phase": "STARTED",
+      "version": "3.3.2",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginCommentWidget-3.3.2.jar"
+    },
+    {
+      "id": "PluginSitemap",
+      "phase": "STARTED",
+      "version": "1.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.7",
+      "artifactName": "PluginSitemap-1.3.0.jar"
+    },
+    {
+      "id": "PluginSearchWidget",
+      "phase": "STARTED",
+      "version": "1.7.1",
+      "enabled": true,
+      "requiresHalo": ">=2.17.0",
+      "artifactName": "PluginSearchWidget-1.7.1.jar"
+    },
+    {
+      "id": "PluginFeed",
+      "phase": "STARTED",
+      "version": "1.5.0",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "PluginFeed-1.5.0.jar"
+    },
+    {
+      "id": "app-store-integration",
+      "phase": "STARTED",
+      "version": "1.19.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "app-store-integration-1.19.0.jar"
+    }
+  ],
+  "scope": "HTTP/API reads and rendered markers; not browser interaction or write workflows",
+  "deepMode": true,
+  "results": [
+    {
+      "name": "Links",
+      "path": "/links",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "data-links-page, data-plugin-links-contract=\"PluginLinks>=2.2.1\", data-plugin-links-title, data-link-group-navigation, data-link-access-state, links-comments",
+      "error": ""
+    },
+    {
+      "name": "Photos",
+      "path": "/photos",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "photo-grid, 图库, photos.js",
+      "error": ""
+    },
+    {
+      "name": "Moments",
+      "path": "/moments",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "moments-list, 瞬间, moments.js",
+      "error": ""
+    },
+    {
+      "name": "Links Friend Feed",
+      "path": "/links?view=friends",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "data-links-view-panel=\"friends\", data-link-feeds, links.js",
+      "error": ""
+    },
+    {
+      "name": "Docsme",
+      "path": "/docs",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "文档中心, doc.js",
+      "error": ""
+    },
+    {
+      "name": "Bangumi",
+      "path": "/bangumis",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "bangumi-page, 追番, bangumi.js",
+      "error": ""
+    },
+    {
+      "name": "Steam",
+      "path": "/steam",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "steam-page, Steam, steam.js",
+      "error": ""
+    },
+    {
+      "name": "Equipment",
+      "path": "/equipments",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "equipment-page, 装备, equipment.js",
+      "error": ""
+    },
+    {
+      "name": "Douban",
+      "path": "/douban",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "douban-page, douban-grid, douban.js",
+      "error": ""
+    },
+    {
+      "name": "Login",
+      "path": "/login",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "halo-form, login?method=passkey, /plugins/auth-passkey/assets/static/passkey.svg",
+      "error": ""
+    },
+    {
+      "name": "Dishes External Route",
+      "path": "/dishes",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "id=\"app\", data-dishes-site-title, dishes-csrf-header, window.__DISHES_CSRF__, window.__DISHES_PUBLIC_BASE__, /plugins/dishes/assets/dishes-frontend/assets/index.css, /plugins/dishes/assets/dishes-frontend/app.js",
+      "error": ""
+    },
+    {
+      "name": "Schedule External Route",
+      "path": "/schedule-calendar",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "id=\"calendar-view\", id=\"agenda-view\", /apis/api.schedule.calendar.sunny.dev/v1alpha1/summary",
+      "error": ""
+    },
+    {
+      "name": "Home Plugin Widgets",
+      "path": "/",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "文档中心, 友情链接, 瞬间说说",
+      "error": ""
+    },
+    {
+      "name": "Docsme Catalog",
+      "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "doc-layout, 主题配置功能详解, var docsme = { disableThemeFunction: true }",
+      "error": ""
+    },
+    {
+      "name": "Shiki Loader",
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "plugin-shiki, shiki-code.js?version=",
+      "error": ""
+    },
+    {
+      "name": "Comment Widget",
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "plugin-comment-widget, comment-widget.js?version=, comment-content-, 评论交流",
+      "error": ""
+    },
+    {
+      "name": "Search Widget",
+      "path": "/",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "PluginSearchWidget, SearchWidget.open()",
+      "error": ""
+    },
+    {
+      "name": "Contact Form Loader Reference",
+      "path": "/",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "/plugins/PluginContactForm/assets/static/contact-form-loader.iife.js?version=",
+      "error": ""
+    },
+    {
+      "name": "Moments Media Binding",
+      "path": "/moments",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "moment-media, data-src",
+      "error": ""
+    },
+    {
+      "name": "Author Moments Gate",
+      "path": "/authors/sky0821",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "author_tab, data-plugin-moments-contract=\"PluginMoments>=1.16.1\", data-plugin-moments-available=",
+      "error": ""
+    },
+    {
+      "name": "Feed XML",
+      "path": "/feed.xml",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "<rss, <channel",
+      "error": ""
+    },
+    {
+      "name": "Sitemap XML",
+      "path": "/sitemap.xml",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "<urlset, <loc",
+      "error": ""
+    },
+    {
+      "name": "Robots Sitemap",
+      "path": "/robots.txt",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "Sitemap:",
+      "error": ""
+    },
+    {
+      "name": "Links Populated Group Route",
+      "path": "/links?group=link-group-yOmci",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "data-link-group-section=\"link-group-yOmci\", aria-current=\"page\"",
+      "error": ""
+    },
+    {
+      "name": "Links Empty Group Route",
+      "path": "/links?group=link-group-gtqEW",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "data-links-empty-state=\"group-empty\", 该分组暂无友情链接",
+      "error": ""
+    },
+    {
+      "name": "Links Missing Group Route",
+      "path": "/links?group=theme-contract-missing-group",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "data-links-empty-state=\"group-missing\", 未找到该友链分组",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Public API",
+      "path": "/apis/api.link.halo.run/v1alpha1/links",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "links=7, status-enums",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Groups API",
+      "path": "/apis/api.link.halo.run/v1alpha1/linkgroups",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "groups=3",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Feed API",
+      "path": "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "public-feeds=20",
+      "error": ""
+    },
+    {
+      "name": "Douban Items API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "readable-items=8",
+      "error": ""
+    },
+    {
+      "name": "Douban Types API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "movie",
+      "error": ""
+    },
+    {
+      "name": "Douban Genres API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "喜剧, 剧情, 悬疑, 犯罪, 动作",
+      "error": ""
+    },
+    {
+      "name": "Online Summary API",
+      "path": "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "marker": "online-count",
+      "error": ""
+    }
+  ]
+}

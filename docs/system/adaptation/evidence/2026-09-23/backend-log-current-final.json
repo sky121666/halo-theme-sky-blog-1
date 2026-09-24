@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T05:53:15.419746+00:00",
+  "container": "halo",
+  "since": "2026-09-23T05:40:00Z",
+  "environment": {
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc"
+  },
+  "scope": "Container logs during final browser and HTTP route sweeps; counts are observed messages, not issue totals",
+  "counts": {
+    "templateProcessingException": 0,
+    "templateInterrupted": 9,
+    "attachmentReconciler": 4,
+    "linksRssRefresh": 0,
+    "pageSizeWarning": 15,
+    "bangumiUpstream": 0
+  },
+  "otherWarnErrorSamples": [],
+  "dockerExitCode": 0
+}

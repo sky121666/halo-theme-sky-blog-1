@@ -190,7 +190,6 @@
             <div th:if="${showArticleHeatmap}" 
                  class="sf-project-card sf-card-wide" 
                  data-reveal="fade-up" data-reveal-delay="100">
-              <th:block th:with="recentPosts = ${postFinder.list({page: 1, size: 500})}">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
@@ -203,6 +202,10 @@
                 <div class="sf-heatmap-wrapper" id="article-heatmap-container">
                   <div class="heatmap-canvas"></div>
                 </div>
+                <p id="article-heatmap-status" role="status">正在加载年度文章…</p>
+                <div id="article-heatmap-error" role="alert" hidden>
+                  文章发布记录加载失败。<button type="button">重试</button>
+                </div>
                 <div class="sf-heatmap-legend">
                   <span>少</span>
                   <span class="sf-legend-dot sf-l0"></span>
@@ -212,14 +215,6 @@
                   <span>多</span>
                 </div>
                 <div class="heatmap-tooltip" id="article-tooltip"></div>
-                <script th:inline="javascript" data-swup-reload-script>
-                  window.aboutPagePosts = [
-                    /*[# th:each="post : ${recentPosts.items}"]*/
-                    {title: /*[[${post.spec.title}]]*/ '', date: /*[[${post.spec.publishTime}]]*/ ''},
-                    /*[/]*/
-                  ];
-                </script>
-              </th:block>
             </div>
 
             <!-- GitHub 热力图 - 全屏 -->

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-24T01:44:32Z",
+  "scope": "Local release candidate verification before GitHub publication",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "themeVersion": "2.2.39",
+    "themeCodeHash": "1bcb1efbf229e49c7a74d1f70934fd91dca0747640ad347fff00077fc9e834d0",
+    "pluginLinksVersion": "2.3.0",
+    "nodeVersion": "24.19.0",
+    "pnpmVersion": "10.34.5",
+    "browser": "Ego Lite",
+    "browserTaskSpaceId": 21,
+    "cacheIsolation": "Unique qa query values per browser route"
+  },
+  "issues": {
+    "40": {
+      "firstPage": "/categories?qa=release-2239-issue40-a",
+      "firstCount": 6,
+      "afterScrollCount": 6,
+      "firstPager": "1 / 9",
+      "secondPage": "/categories?p=2&qa=release-2239-issue40-b",
+      "secondCount": 6,
+      "secondPager": "2 / 9",
+      "firstThreeTitlesDiffer": true,
+      "result": "passed"
+    },
+    "38": {
+      "route": "/links?qa=release-2239-issue38",
+      "title": "友情链接 - 5ee博客",
+      "linksPageMarkerPresent": true,
+      "visible500OrEL1008E": false,
+      "layoutFilePresent": true,
+      "result": "passed"
+    },
+    "36": {
+      "representativeRoute": "/archives/lKkDC8OW?qa=release-2239-issue36",
+      "nativePreCodeCount": 26,
+      "sampledWhiteSpace": ["pre", "pre", "pre"],
+      "sampledSourceLineCounts": [6, 13, 9],
+      "originalReporterArticleAvailable": false,
+      "result": "passed_on_representative_content"
+    }
+  },
+  "qualityGates": {
+    "frozenInstall": "passed",
+    "lint": "passed",
+    "formatCheck": "passed",
+    "audit": "no_known_vulnerabilities",
+    "buildAndArchiveVerification": "passed",
+    "pluginContracts": "27_passed",
+    "deepPluginSmoke": "33_of_33_passed",
+    "deepPluginSmokeReport": "release-deep-smoke.json"
+  },
+  "archive": {
+    "path": "dist/theme-sky-blog-1-2.2.39.zip",
+    "sha256": "f92919c67db3b4a7942ef41296e861efd89e8801a3361f8cd84f60dc9f2b5ddc",
+    "entryCount": 267
+  },
+  "limitations": [
+    "The original reporter article for issue 36 was not provided; a real multiline article was used instead.",
+    "This record predates GitHub Actions and App Store publication; those results must be verified separately."
+  ]
+}

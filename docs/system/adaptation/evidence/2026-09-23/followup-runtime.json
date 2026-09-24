@@ -1,0 +1,1150 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-22T23:46:39.012Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "themeVersion": "2.2.39",
+    "installedPlugins": [
+      {
+        "id": "mcp-server",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.6",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "1.0.4",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "link-submit",
+        "version": "1.0.7",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-friends",
+        "version": "1.4.6",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "1.6.4",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.3.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "finalTheme": {
+    "algorithm": "sha256",
+    "codeHash": "94da2d4b233512dbb3d4e9832281506a0c029f467598928a219728eeb58b9c62",
+    "fileCount": 363,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "build": {
+    "commands": ["pnpm run lint", "pnpm run build", "pnpm run verify:plugins:deep", "git diff --check"],
+    "allPassed": true,
+    "deepSmoke": {
+      "passed": 32,
+      "total": 32,
+      "skippedInactive": 1
+    },
+    "package": {
+      "path": "dist/theme-sky-blog-1-2.2.39.zip",
+      "sha256": "6e58dd93f2ae12baa828989fad73988f58d8a202b454a8974ab73fd0617cc019"
+    }
+  },
+  "results": [
+    {
+      "id": "contact-required-and-submit",
+      "plugin": "PluginContactForm",
+      "pluginVersion": "1.6.4",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T04:48:32.984Z",
+      "codeHash": "05af915ad6b499bdb132fbe142d18ba7784f2055a64f0d3b7593f20eff21363b",
+      "result": "passed",
+      "details": {
+        "environment": "localhost:8090",
+        "requiredErrors": 2,
+        "realStoredEntries": 1,
+        "notificationEnabled": false,
+        "successUi": "form reset after submission"
+      }
+    },
+    {
+      "id": "vote-single-real-submit",
+      "plugin": "vote",
+      "pluginVersion": "1.1.3",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T04:49:15.901Z",
+      "codeHash": "05af915ad6b499bdb132fbe142d18ba7784f2055a64f0d3b7593f20eff21363b",
+      "result": "passed",
+      "details": {
+        "count": 1,
+        "users": 1,
+        "uiCompleted": true
+      }
+    },
+    {
+      "id": "vote-multiple-limit-and-submit",
+      "plugin": "vote",
+      "pluginVersion": "1.1.3",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T04:50:35.618Z",
+      "codeHash": "05af915ad6b499bdb132fbe142d18ba7784f2055a64f0d3b7593f20eff21363b",
+      "result": "passed",
+      "details": {
+        "count": 2,
+        "users": 1,
+        "selected": ["a", "b"],
+        "attemptedOptions": 3,
+        "maxVotes": 2
+      }
+    },
+    {
+      "id": "vote-pk-real-submit",
+      "plugin": "vote",
+      "pluginVersion": "1.1.3",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T04:51:37.152Z",
+      "codeHash": "05af915ad6b499bdb132fbe142d18ba7784f2055a64f0d3b7593f20eff21363b",
+      "result": "passed",
+      "details": {
+        "count": 1,
+        "uiCompleted": true
+      }
+    },
+    {
+      "id": "contact-pjax-leave-return",
+      "plugin": "PluginContactForm",
+      "pluginVersion": "1.6.4",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T05:00:43.857Z",
+      "codeHash": "2cf514032162d64248ded7b2345b4faed05d71b28abfb3c0abfb400d8edcb335",
+      "result": "passed",
+      "details": {
+        "away": {
+          "marker": "same-document",
+          "loaders": 0,
+          "inline": 0,
+          "blocks": []
+        },
+        "returned": {
+          "marker": "same-document",
+          "loaders": 1,
+          "math": 2,
+          "svg": 1,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "katex-real-pjax",
+      "plugin": "plugin-katex",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T05:00:43.883Z",
+      "codeHash": "2cf514032162d64248ded7b2345b4faed05d71b28abfb3c0abfb400d8edcb335",
+      "result": "passed",
+      "details": {
+        "marker": "same-document",
+        "loaders": 1,
+        "math": 2,
+        "svg": 1,
+        "errors": 0
+      }
+    },
+    {
+      "id": "hyperlink-real-render",
+      "plugin": "editor-hyperlink-card",
+      "pluginVersion": "1.9.2",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T05:00:43.905Z",
+      "codeHash": "2cf514032162d64248ded7b2345b4faed05d71b28abfb3c0abfb400d8edcb335",
+      "result": "invalidated",
+      "details": {
+        "reason": "Wrong selectors in original browser probe; tags are hyperlink-card and hyperlink-inline-card."
+      }
+    },
+    {
+      "id": "ai-deepseek-foundation-migration",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:26:49.342Z",
+      "codeHash": "4105cab0bad1fb648985881801b81e9ecdcdad9d763e19fd518523ce68096426",
+      "result": "passed",
+      "details": {
+        "foundationVersion": "1.1.0",
+        "modelName": "codex-plugin-qa-20260922-deepseek-chat",
+        "autoSummaryEnabled": false,
+        "legacyConfigPreserved": true,
+        "modelCall": "pending"
+      }
+    },
+    {
+      "id": "ai-deepseek-single-article-model-call",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:27:34.893Z",
+      "codeHash": "df93f2be5cd010399ed5afa1b31f7f029fe53803f4979d6395e5a94f9f0a6f4a",
+      "result": "blocked",
+      "details": {
+        "articleName": "codex-plugin-qa-20260922-components",
+        "error": "Error: POST /apis/console.api.aifoundation.halo.run/v1alpha1/models/codex-plugin-qa-20260922-deepseek-chat/test-completion/stream: HTTP 500",
+        "rollbackFailures": []
+      }
+    },
+    {
+      "id": "ai-model-generated-name-root-cause",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:28:32.676Z",
+      "codeHash": "d808eab2e9a7db3a9555f127563701f0485cb6801d3168cdc517440675020755",
+      "result": "failed",
+      "details": {
+        "error": "Foundation ModelNotFoundException; generated model name differs from submitted metadata.name",
+        "providerCallReached": false,
+        "logTimestamp": "2026-09-23T07:27:34.779+08:00"
+      }
+    },
+    {
+      "id": "ai-deepseek-foundation-migration",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:28:33.177Z",
+      "codeHash": "d808eab2e9a7db3a9555f127563701f0485cb6801d3168cdc517440675020755",
+      "result": "passed",
+      "details": {
+        "foundationVersion": "1.1.0",
+        "modelName": "codex-plugin-qa-20260922-deepseek-deepseek-chat-943b9e29",
+        "autoSummaryEnabled": false,
+        "legacyConfigPreserved": true,
+        "modelCall": "pending"
+      }
+    },
+    {
+      "id": "ai-deepseek-single-article-model-call",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:28:41.016Z",
+      "codeHash": "d808eab2e9a7db3a9555f127563701f0485cb6801d3168cdc517440675020755",
+      "result": "blocked",
+      "details": {
+        "articleName": "codex-plugin-qa-20260922-components",
+        "error": "Error: Foundation returned an empty or error completion stream",
+        "rollbackFailures": []
+      }
+    },
+    {
+      "id": "friends-enabled-route-pagination-empty",
+      "plugin": "plugin-friends",
+      "pluginVersion": "1.4.6",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:30:19.331Z",
+      "codeHash": "6492546604b96fc8cb5024d71f1f0dc30c90eb5f1951f512af00f73a7c7fc442",
+      "result": "failed",
+      "details": {
+        "phase": "FAILED",
+        "routes": [
+          {
+            "route": "/friends",
+            "status": 404,
+            "hasTitle": false,
+            "hasEmpty": false,
+            "hasPjax": false
+          },
+          {
+            "route": "/friends?page=2",
+            "status": 404,
+            "hasTitle": false,
+            "hasEmpty": false,
+            "hasPjax": false
+          },
+          {
+            "route": "/friends?linkName=__qa_missing__",
+            "status": 404,
+            "hasTitle": false,
+            "hasEmpty": false,
+            "hasPjax": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "maintenance-temporary-activation",
+      "plugin": "maintenance",
+      "pluginVersion": "1.1.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:30:45.648Z",
+      "codeHash": "6492546604b96fc8cb5024d71f1f0dc30c90eb5f1951f512af00f73a7c7fc442",
+      "result": "failed",
+      "details": {
+        "anon": {
+          "status": 200,
+          "maintenanceTitle": false,
+          "themeContent": false
+        },
+        "withPat": {
+          "status": 200,
+          "maintenanceTitle": false,
+          "themeContent": false
+        }
+      }
+    },
+    {
+      "id": "maintenance-anonymous-redirect",
+      "plugin": "maintenance",
+      "pluginVersion": "1.1.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:31:43.929Z",
+      "codeHash": "8af7df225331e6116bc0f7d27b42471f894b1b712ce2323201c05fca691c12c3",
+      "result": "passed",
+      "details": {
+        "status": 302,
+        "location": "https://www.5ee.net/maintenance",
+        "contentType": null
+      }
+    },
+    {
+      "id": "maintenance-local-template",
+      "plugin": "maintenance",
+      "pluginVersion": "1.1.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:31:57.293Z",
+      "codeHash": "8af7df225331e6116bc0f7d27b42471f894b1b712ce2323201c05fca691c12c3",
+      "result": "passed",
+      "details": {
+        "status": 200,
+        "location": null,
+        "hasTitle": true,
+        "hasDescription": true,
+        "length": 31698
+      }
+    },
+    {
+      "id": "lottery-participation-duplicate-draw",
+      "plugin": "lottery",
+      "pluginVersion": "1.0.2",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:32:31.571Z",
+      "codeHash": "8af7df225331e6116bc0f7d27b42471f894b1b712ce2323201c05fca691c12c3",
+      "result": "failed",
+      "details": {
+        "verificationEnabled": {
+          "enabled": false
+        },
+        "firstStatus": 200,
+        "firstKeys": ["message", "success"],
+        "duplicateStatus": 200,
+        "participants": 0,
+        "drawStatus": 200,
+        "draw": {
+          "message": "无人参与",
+          "success": false
+        },
+        "activityState": "RUNNING",
+        "winnerCount": 0
+      }
+    },
+    {
+      "id": "lottery-redis-required",
+      "plugin": "lottery",
+      "pluginVersion": "1.0.2",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:32:58.884Z",
+      "codeHash": "8af7df225331e6116bc0f7d27b42471f894b1b712ce2323201c05fca691c12c3",
+      "result": "blocked",
+      "details": {
+        "anonymousParticipate": {
+          "httpStatus": 200,
+          "success": false,
+          "message": "防重复参与依赖 Redis，请先完成 Redis 连接测试。"
+        },
+        "redis": {
+          "configured": null,
+          "connected": null,
+          "lastTestSuccess": null
+        },
+        "notificationsRestored": true
+      }
+    },
+    {
+      "id": "passkey-test-user-credentials-permission",
+      "plugin": "auth-passkey",
+      "pluginVersion": "1.0.4",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:38:40.512Z",
+      "codeHash": "4729b0d3550385c4951de4180de9fb08ca0214bcf7c95c15df95db8034205098",
+      "result": "blocked",
+      "details": {
+        "loginStatus": 400,
+        "testUserAuthenticated": false,
+        "credentialsStatus": null,
+        "roles": ["guest", "plugin-passkey-role-template-authenticated"]
+      }
+    },
+    {
+      "id": "restricted-login-anonymous-no-leak",
+      "plugin": "restricted-reading",
+      "pluginVersion": "1.9.1",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:39:48.995Z",
+      "codeHash": "4729b0d3550385c4951de4180de9fb08ca0214bcf7c95c15df95db8034205098",
+      "result": "passed",
+      "details": {
+        "status": 200,
+        "hasPublicIntro": true,
+        "hasWidget": true,
+        "leaksSecret": false
+      }
+    },
+    {
+      "id": "hyperlink-real-html-sample",
+      "plugin": "editor-hyperlink-card",
+      "pluginVersion": "1.9.2",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:40:20.129Z",
+      "codeHash": "4729b0d3550385c4951de4180de9fb08ca0214bcf7c95c15df95db8034205098",
+      "result": "passed",
+      "details": {
+        "status": 200,
+        "blockThemes": ["small", "regular", "grid"],
+        "inlineCount": 1,
+        "externalLink": "https://www.baidu.com",
+        "noOpener": true
+      }
+    },
+    {
+      "id": "ai-deepseek-provider-401",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.0.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:41:52.573Z",
+      "codeHash": "568923690559b633475802a05311a3d8407f8777c1d4389fbf2a74b34934736d",
+      "result": "blocked",
+      "details": {
+        "foundationVersion": "1.1.0",
+        "installedAssistantVersion": "3.0.0",
+        "officialTargetAssistantVersion": "3.1.0",
+        "logTimestamp": "2026-09-23T07:28:40.821+08:00",
+        "providerHttpStatus": 401,
+        "reason": "Existing DeepSeek credential rejected as invalid; no generated summary",
+        "migrationRolledBack": true,
+        "autoSummaryEnabled": false
+      }
+    },
+    {
+      "id": "ai-assistant-3.1-runtime-read",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.1.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-22T23:54:16.176Z",
+      "codeHash": "94da2d4b233512dbb3d4e9832281506a0c029f467598928a219728eeb58b9c62",
+      "result": "partial",
+      "details": {
+        "officialJarMatch": true,
+        "phase": "STARTED",
+        "summaryAssets200": true,
+        "foundationModelSelected": true,
+        "modelCallTested": false,
+        "automaticSummaryTested": false,
+        "deepSmoke": "32/32, inactive 1 skipped"
+      }
+    },
+    {
+      "id": "ai-assistant-3.1-flash-generation-readback",
+      "plugin": "ai-assistant",
+      "pluginVersion": "3.1.0",
+      "haloVersion": "2.26.1",
+      "at": "2026-09-23T00:04:51.574Z",
+      "codeHash": "94da2d4b233512dbb3d4e9832281506a0c029f467598928a219728eeb58b9c62",
+      "result": "passed",
+      "details": {
+        "summaryCreatedAt": "2026-09-22T23:49:02.260237885Z",
+        "lastGeneratedTime": "2026-09-22T23:49:02.260143051Z",
+        "modelName": "deepseek-flash",
+        "contentLength": 119,
+        "inputToken": 962,
+        "outputToken": 331,
+        "totalToken": 1293,
+        "anonymousSummaryGet": 200,
+        "adminSummaryGet": 200,
+        "postHtmlStatus": 200,
+        "postHtmlWidgetPresent": false,
+        "autoSummaryEnabled": false,
+        "modelCallByAgent": false,
+        "userReportedManualTestSuccess": true,
+        "userReportedTestScope": "not-yet-specified"
+      }
+    }
+  ],
+  "migration": {
+    "finalPersisted": false,
+    "firstRequestDidNotReachProvider": true,
+    "secondRequestReachedProvider": true,
+    "providerHttpStatus": 401,
+    "legacyDeepseekConfigPreserved": true,
+    "automaticSummaryEnabled": false,
+    "foundationModelName": null
+  },
+  "cleanup": {
+    "at": "2026-09-22T23:45:55.664Z",
+    "failures": [],
+    "createdPrefix": "codex-plugin-qa-20260922",
+    "remainingCreatedResources": 0,
+    "testUserRemoved": true,
+    "friendRestoredDisabled": true,
+    "maintenanceConfigRestored": true,
+    "lotteryConfigRestored": true,
+    "pluginCounts": {
+      "total": 47,
+      "started": 44,
+      "disabled": 3
+    }
+  },
+  "latestRuntimeObservation": {
+    "observedAt": "2026-09-22T23:54:16.176Z",
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "themeVersion": "2.2.39",
+    "codeHash": "94da2d4b233512dbb3d4e9832281506a0c029f467598928a219728eeb58b9c62",
+    "aiAssistant": {
+      "version": "3.1.0",
+      "phase": "STARTED",
+      "jarSha256": "c6c1575b0e4009f0c9ffd1a1d593f5c44c5be2e97327c0575e883ca6aad2e22e",
+      "assets": [
+        {
+          "path": "/plugins/ai-assistant/assets/static/ai-summary/index.js?v=3.1.0",
+          "status": 200,
+          "bytes": 52486
+        },
+        {
+          "path": "/plugins/ai-assistant/assets/static/ai-summary/index.css?v=3.1.0",
+          "status": 200,
+          "bytes": 571
+        },
+        {
+          "path": "/plugins/ai-assistant/assets/static/rag-ui/rag-ui.js?v=3.1.0",
+          "status": 200,
+          "bytes": 767
+        }
+      ]
+    },
+    "aiFoundation": {
+      "version": "1.1.0",
+      "phase": "STARTED"
+    },
+    "model": {
+      "name": "deepseek-ivcqs9kh-deepseek-flash-4163af23",
+      "modelId": "deepseek-flash",
+      "adapterType": "deepseek-chat",
+      "enabled": true,
+      "providerPhase": "OK",
+      "selectedAsFoundationDefault": true,
+      "selectedForAssistantSummary": true
+    },
+    "summary": {
+      "enabled": false,
+      "legacyModel": {
+        "provider": "deepseek",
+        "model": "deepseek-chat"
+      },
+      "modelCallTested": false,
+      "automaticSummaryTested": false
+    },
+    "deepSmoke": {
+      "passed": 32,
+      "total": 32,
+      "skippedInactive": 1
+    },
+    "inventoryObservedAt": "2026-09-22T23:58:17.234Z",
+    "installedPlugins": [
+      {
+        "id": "mcp-server",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.6",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "1.0.4",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "link-submit",
+        "version": "1.0.7",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-friends",
+        "version": "1.4.6",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "1.6.4",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.3.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ],
+    "pluginCount": 47,
+    "phaseCounts": {
+      "STARTED": 44,
+      "DISABLED": 3
+    }
+  },
+  "updatedAt": "2026-09-23T00:04:51.574Z",
+  "latestAIVerification": {
+    "observedAt": "2026-09-23T00:04:51.574Z",
+    "codeHash": "94da2d4b233512dbb3d4e9832281506a0c029f467598928a219728eeb58b9c62",
+    "haloVersion": "2.26.1",
+    "aiAssistantVersion": "3.1.0",
+    "foundationVersion": "1.1.0",
+    "details": {
+      "summaryCreatedAt": "2026-09-22T23:49:02.260237885Z",
+      "lastGeneratedTime": "2026-09-22T23:49:02.260143051Z",
+      "modelName": "deepseek-flash",
+      "contentLength": 119,
+      "inputToken": 962,
+      "outputToken": 331,
+      "totalToken": 1293,
+      "anonymousSummaryGet": 200,
+      "adminSummaryGet": 200,
+      "postHtmlStatus": 200,
+      "postHtmlWidgetPresent": false,
+      "autoSummaryEnabled": false,
+      "modelCallByAgent": false,
+      "userReportedManualTestSuccess": true,
+      "userReportedTestScope": "not-yet-specified"
+    }
+  }
+}

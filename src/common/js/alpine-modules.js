@@ -736,6 +736,12 @@ function createSideFloatingDock() {
  * 定位源：pconline CF Worker（默认）/ 高德 IP 定位
  * 天气源：心知天气（默认免费）/ 高德天气 / 和风天气
  */
+function weatherNumber(value) {
+  if (value == null || typeof value === "boolean" || (typeof value === "string" && !value.trim())) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 function welcomeWeatherCard() {
   const CACHE_KEY = "sky_weather_cache_v13";
   const CACHE_DURATION = 30 * 60 * 1000;
@@ -794,6 +800,16 @@ function welcomeWeatherCard() {
       this.currentDate = `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
     },
 
+    formatWeatherMetric(value) {
+      const number = weatherNumber(value);
+      return number === null ? "--" : String(Math.round(number));
+    },
+
+    showWeatherUnavailable() {
+      this.errorMsg = "天气暂不可用";
+      if (this.weather) this.weather.description = this.errorMsg;
+    },
+
     getDefaultWeather() {
       return {
         location: "--",
@@ -837,12 +853,13 @@ function welcomeWeatherCard() {
         if (window.SYS_WEATHER_DEBUG) skyDebug.log("weather", "定位结果", { source: loc.source });
         if (!loc.city || loc.city === "未知") {
           skyDebug.warn("weather", "定位失败");
+          this.showWeatherUnavailable();
           return;
         }
         await this.getWeatherByWttrProxy(loc);
       } catch (error) {
         skyDebug.warn("weather", "天气获取失败", error);
-        this.errorMsg = "服务维护中";
+        this.showWeatherUnavailable();
       }
     },
 
@@ -880,7 +897,7 @@ function welcomeWeatherCard() {
         const data = await res.json();
 
         if (data.error) throw new Error(data.error);
-        if (data.temp === undefined) throw new Error("返回数据格式异常");
+        if (weatherNumber(data.temp) === null) throw new Error("返回数据格式异常");
 
         // WMO weather_code 映射到 Basmilius 图标
         const code = data.weather_code;
@@ -894,7 +911,10 @@ function welcomeWeatherCard() {
             humidity: data.humidity,
             wind_direction: data.wind_direction,
             description: data.description,
-            wind: `${this.degToDir(data.wind_direction)} ${data.wind_speed}km/h`,
+            wind:
+              weatherNumber(data.wind_speed) === null
+                ? "--"
+                : `${this.degToDir(data.wind_direction)} ${data.wind_speed}km/h`.trim(),
           },
           weatherIcon: iconInfo.icon,
           weatherBg: iconInfo.bg,
@@ -1005,6 +1025,10 @@ function welcomeWeatherCard() {
           localStorage.removeItem(CACHE_KEY);
           return null;
         }
+        if (weatherNumber(d?.weather?.temp) === null) {
+          localStorage.removeItem(CACHE_KEY);
+          return null;
+        }
         return d;
       } catch {
         return null;
@@ -1085,7 +1109,6 @@ function onlineStats() {
     "/archives": "归档",
     "/links": "友链",
     "/moments": "瞬间",
-    "/friends": "朋友圈",
     "/photos": "相册",
     "/about": "关于",
     "/douban": "豆瓣",

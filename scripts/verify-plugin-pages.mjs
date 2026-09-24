@@ -2,6 +2,19 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { normalizeDoubanItem } from "../src/apps/douban/model.js";
+import { themeCodeIdentity } from "./theme-code-identity.mjs";
+
+const startedAt = new Date().toISOString();
+const codeAtStart = themeCodeIdentity();
+const reportPath = process.argv.find((arg) => arg.startsWith("--report="))?.slice("--report=".length);
+const cacheFreshSinceArg = process.argv
+  .find((arg) => arg.startsWith("--cache-fresh-since="))
+  ?.slice("--cache-fresh-since=".length);
+const cacheFreshSince = cacheFreshSinceArg == null ? null : Date.parse(cacheFreshSinceArg);
+if (cacheFreshSinceArg != null && !Number.isFinite(cacheFreshSince)) {
+  throw new Error("--cache-fresh-since must be an ISO date/time");
+}
 
 const envFileArg = process.argv
   .slice(2)
@@ -47,10 +60,10 @@ const checks = [
     match: "all",
   },
   {
-    name: "Friends",
-    plugin: "plugin-friends",
-    path: "/friends",
-    markers: ["朋友圈", "plugin-friends-rss", "__completeSwupPageInit"],
+    name: "Links Friend Feed",
+    plugin: "PluginLinks",
+    path: "/links?view=friends",
+    markers: ['data-links-view-panel="friends"', "data-link-feeds", "links.js"],
     match: "all",
   },
   {
@@ -182,26 +195,32 @@ const optionalChecks = [
   },
   {
     env: "HYPERLINK_CARD_PAGE_URL",
+    plugin: "editor-hyperlink-card",
+    resource: "/plugins/editor-hyperlink-card/assets/static/index.iife.js",
     name: "Hyperlink Card",
     markers: [
       "<hyperlink-card",
       "<hyperlink-inline-card",
-      "/plugins/editor-hyperlink-card/assets/static/index.iife.js?version=1.9.2",
+      "/plugins/editor-hyperlink-card/assets/static/index.iife.js?version=",
     ],
     match: "all",
   },
   {
     env: "LOTTERY_PAGE_URL",
+    plugin: "lottery",
+    resource: "/plugins/lottery/assets/static/lottery-card.js",
     name: "Lottery Card",
-    markers: ["<lottery-card", "/plugins/lottery/assets/static/lottery-card.js?version=1.0.2"],
+    markers: ["<lottery-card", "/plugins/lottery/assets/static/lottery-card.js?version="],
     match: "all",
   },
   {
     env: "RESTRICTED_READING_PAGE_URL",
+    plugin: "restricted-reading",
+    resource: "/plugins/restricted-reading/assets/static/content-restrict-widget.iife.js",
     name: "Restricted Reading",
     markers: [
       "<content-restrict-widget",
-      "/plugins/restricted-reading/assets/static/content-restrict-widget.iife.js?version=1.8.1",
+      "/plugins/restricted-reading/assets/static/content-restrict-widget.iife.js?version=",
     ],
     match: "all",
   },
@@ -234,8 +253,10 @@ const deepChecks = [
   },
   {
     name: "Comment Widget",
+    plugin: "PluginCommentWidget",
+    resource: "/plugins/PluginCommentWidget/assets/static/comment-widget.js",
     path: envPath("COMMENT_PAGE_URL", process.env.DOC_DETAIL_URL || "/archives/editor-feature-demo"),
-    markers: ["plugin-comment-widget", "comment-widget.js?version=3.1.2", "评论交流"],
+    markers: ["plugin-comment-widget", "comment-widget.js?version=", "comment-content-", "评论交流"],
     match: "all",
   },
   {
@@ -334,6 +355,22 @@ const deepApiChecks = [
     },
   },
   {
+    name: "Douban Items API",
+    path: "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+    validate(data) {
+      const items = Array.isArray(data?.items) ? data.items : null;
+      const valid = items?.every((item) => {
+        const entry = normalizeDoubanItem(item);
+        return typeof entry.name === "string" && /^https?:\/\//.test(entry.link);
+      });
+      return {
+        ok: items != null && valid,
+        marker: `readable-items=${items?.length ?? 0}`,
+        error: "Douban item title/link contract is invalid",
+      };
+    },
+  },
+  {
     name: "Douban Types API",
     path: "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
     validate(data) {
@@ -400,6 +437,8 @@ for (const optional of optionalChecks) {
   if (path) {
     checks.push({
       name: optional.name,
+      plugin: optional.plugin,
+      resource: optional.resource,
       path,
       markers: optional.markers,
       match: optional.match,
@@ -459,6 +498,17 @@ async function addDiscoveredLinksGroupChecks() {
 function resolveUrl(path) {
   if (/^https?:\/\//i.test(path)) return path;
   return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+function expectsHtml(path) {
+  return !/\.(?:xml|rss|txt)$/i.test(new URL(resolveUrl(path)).pathname);
+}
+
+function isStalePageCache(cacheAt, path) {
+  if (cacheFreshSince == null || !expectsHtml(path) || !cacheAt) return false;
+  const cachedAt = Date.parse(cacheAt);
+  // HTTP dates have second precision; a refresh within the same second is valid.
+  return !Number.isFinite(cachedAt) || cachedAt + 1000 < cacheFreshSince;
 }
 
 async function fetchWithTimeout(url, options = {}) {
@@ -541,7 +591,18 @@ async function loadPluginStates() {
     if (!response.ok) return null;
 
     const payload = await response.json();
-    return new Map((payload.items || []).map((plugin) => [plugin.metadata?.name, plugin.status?.phase || "UNKNOWN"]));
+    return new Map(
+      (payload.items || []).map((plugin) => [
+        plugin.metadata?.name,
+        {
+          phase: plugin.status?.phase || "UNKNOWN",
+          version: plugin.spec?.version,
+          enabled: plugin.spec?.enabled,
+          requiresHalo: plugin.spec?.requires,
+          artifactName: plugin.metadata?.annotations?.["plugin.halo.run/plugin-path"],
+        },
+      ]),
+    );
   } catch {
     return null;
   }
@@ -549,7 +610,7 @@ async function loadPluginStates() {
 
 function pluginSkipReason(check, pluginStates) {
   if (!check.plugin || !pluginStates) return "";
-  const phase = pluginStates.get(check.plugin);
+  const phase = pluginStates.get(check.plugin)?.phase;
   if (!phase) return `plugin ${check.plugin} is not installed`;
   if (phase !== "STARTED") return `plugin ${check.plugin} phase=${phase}`;
   return "";
@@ -557,6 +618,21 @@ function pluginSkipReason(check, pluginStates) {
 
 const results = [];
 const pluginStates = await loadPluginStates();
+
+async function verifyResource(html, check) {
+  if (!check.resource) return { ok: true, error: "" };
+  const references = [...html.matchAll(new RegExp(`${escapeRegExp(check.resource)}\\?version=([^\\s"'<>]+)`, "g"))];
+  const expectedVersion = pluginStates?.get(check.plugin)?.version;
+  const versions = new Set(references.map((match) => match[1]));
+  if (versions.size !== 1 || (expectedVersion && !versions.has(expectedVersion))) {
+    return { ok: false, error: "plugin resources are missing, mixed, or differ from the installed version" };
+  }
+  // Halo's plugin asset handler serves GET; it may return 404 for HEAD.
+  const response = await fetchWithTimeout(resolveUrl(references[0][0]));
+  const ok = response.ok && /javascript/.test(response.headers.get("content-type") || "");
+  await response.body?.cancel();
+  return { ok, error: ok ? "" : "plugin JavaScript resource is unavailable" };
+}
 
 for (const check of checks) {
   const url = resolveUrl(check.path);
@@ -575,24 +651,34 @@ for (const check of checks) {
   }
 
   try {
-    const response = await fetchWithTimeout(url);
+    const response = await fetchWithTimeout(url, {
+      headers: { Accept: expectsHtml(check.path) ? "text/html" : "*/*" },
+    });
     const html = await response.text();
     const markers = evaluateMarkers(html, check);
+    const resource = await verifyResource(html, check);
     const expectedStatus = check.expectedStatus || 200;
-    const ok = response.status === expectedStatus && markers.ok;
+    const cacheAt = response.headers.get("x-halo-cache-at");
+    const stalePageCache = isStalePageCache(cacheAt, check.path);
+    const ok = response.status === expectedStatus && markers.ok && resource.ok && !stalePageCache;
     results.push({
       ...check,
       url,
       status: response.status,
+      cacheAt,
       marker: markers.foundMarkers.join(", ") || "-",
       ok,
       error: ok
         ? ""
-        : markers.ok
-          ? `unexpected status ${response.status}; expected ${expectedStatus}`
-          : check.match === "all"
-            ? "required markers not found"
-            : "marker not found",
+        : stalePageCache
+          ? `page cache predates ${cacheFreshSinceArg}: ${cacheAt}`
+          : !resource.ok
+            ? resource.error
+            : markers.ok
+              ? `unexpected status ${response.status}; expected ${expectedStatus}`
+              : check.match === "all"
+                ? "required markers not found"
+                : "marker not found",
     });
   } catch (error) {
     results.push({
@@ -641,8 +727,51 @@ if (deepMode) {
 
 const width = Math.max(...results.map((result) => result.name.length), 10);
 
+if (reportPath) {
+  let haloVersion = null;
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/v3/api-docs`);
+    if (response.ok) haloVersion = (await response.json()).info?.version || null;
+  } catch {
+    /* Unknown remains unknown; never infer core version from a plugin. */
+  }
+  const codeAtEnd = themeCodeIdentity();
+  const report = {
+    schemaVersion: 1,
+    startedAt,
+    finishedAt: new Date().toISOString(),
+    environment: { baseUrl, haloVersion, haloVersionSource: `${baseUrl}/v3/api-docs#/info/version` },
+    theme: { ...codeAtEnd, unchangedDuringRun: codeAtStart.codeHash === codeAtEnd.codeHash },
+    plugins: pluginStates ? [...pluginStates].map(([id, state]) => ({ id, ...state })) : null,
+    scope:
+      "Browser-like HTML Accept, Page Cache age, HTTP/API reads and rendered markers; not browser interaction or write workflows",
+    deepMode,
+    cacheFreshSince: cacheFreshSinceArg || null,
+    results: results.map(({ name, path, status, ok, skipped = false, cacheAt = null, marker, error }) => ({
+      name,
+      path,
+      status,
+      ok,
+      skipped,
+      cacheAt,
+      marker,
+      error,
+    })),
+  };
+  const destination = path.resolve(reportPath);
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  fs.writeFileSync(destination, `${JSON.stringify(report, null, 2)}\n`);
+  if (!report.theme.unchangedDuringRun) {
+    console.error("Theme code changed during smoke testing; rerun before using this evidence.");
+    process.exit(1);
+  }
+}
+
 console.log(`Plugin smoke base: ${baseUrl}`);
-console.log("Plugin smoke scope: HTTP status and rendered markers only; PJAX requires real browser navigation");
+console.log(
+  "Plugin smoke scope: browser-like HTML response and rendered markers; PJAX requires real browser navigation",
+);
+if (cacheFreshSinceArg) console.log(`Page Cache must be refreshed since: ${cacheFreshSinceArg}`);
 if (deepMode) {
   console.log("Plugin smoke mode: deep");
 }
@@ -652,7 +781,7 @@ for (const result of results) {
   const details = result.skipped
     ? result.error
     : result.ok
-      ? `status=${result.status} marker=${result.marker}`
+      ? `status=${result.status} cacheAt=${result.cacheAt || "uncached"} marker=${result.marker}`
       : `status=${result.status} ${result.error}`;
   console.log(`${icon} ${name} ${result.path} ${details}`);
 }

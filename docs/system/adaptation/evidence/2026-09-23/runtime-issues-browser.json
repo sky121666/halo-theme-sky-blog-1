@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T13:36:55.876Z",
+  "environment": {
+    "site": "http://127.0.0.1:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted",
+    "codeHash": "324b3020cb6323aab5569077499816cb56c43dbae5c0607a26443ecb6708646f",
+    "browserTaskSpace": 14,
+    "browserCacheDisabled": true,
+    "session": "anonymous 127.0.0.1 host, separate from localhost cache"
+  },
+  "results": [
+    {
+      "route": "/categories?p=abc",
+      "url": "http://127.0.0.1:8090/categories?p=abc",
+      "title": "文章分类 - 5ee博客",
+      "h1": "文章分类",
+      "canonical": ["https://www.5ee.net/categories?p=abc"],
+      "mainText": "文章分类\n全部\n其他\n8\nAI\n21\nhalo\n8\n1panel\n14\n前端\n7\n02-03\n测试\n\n717\n08-25\nAI\nAI\n编辑器\n+1\n编辑器功能演示\n\n本文展示了 Halo 编辑器支持的所有文本格式、列表、代码块、多媒体嵌入、表格和分栏等核心功能。\n\n770\n3\n0\n08-09\nAI\ntrae\n记录试用TRAE SOLO模式的一次历程\n\n本文分",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/categories?page=2",
+      "url": "http://127.0.0.1:8090/categories?page=2",
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "h1": "文章分类",
+      "canonical": ["https://www.5ee.net/categories"],
+      "mainText": "文章分类\n全部\n其他\n8\nAI\n21\nhalo\n8\n1panel\n14\n前端\n7\n05-24\n前端\nAstro\nAstro的基础了解与对比\n\n安装在之前文档已经写过了，现在从头了解一下Astro基础结构，其实Astro大部分功能对我来说并不需要用，我的主要目的是通过Astro生成一套静态HTML JS CSS，可适配任意CMS的纯静态，而不是现代化的使用方式",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/tags?p=abc",
+      "url": "http://127.0.0.1:8090/tags?p=abc",
+      "title": "文章标签 - 5ee博客",
+      "h1": "文章标签",
+      "canonical": ["https://www.5ee.net/tags?p=abc"],
+      "mainText": "文章标签\n全部\n演示 1\n编辑器 1\ntrae 1\ndocker 2\nmacos 3\npodman 3\npod\nAstro 2\ntailwindcss 3\nvue 1\nvite 2\nubuntu 1\n+16 更多\n01\n2026-02-03\n测试\n717\n阅读更多\n02\n2025-08-25\nAI\n编辑器功能演示\nAI\n编辑器\n演示\n770\n阅读更多\n03\n",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/tags?page=2",
+      "url": "http://127.0.0.1:8090/tags?page=2",
+      "title": "文章标签 - 第 2 页 - 5ee博客",
+      "h1": "文章标签",
+      "canonical": ["https://www.5ee.net/tags"],
+      "mainText": "文章标签\n全部\n演示 1\n编辑器 1\ntrae 1\ndocker 2\nmacos 3\npodman 3\npod\nAstro 2\ntailwindcss 3\nvue 1\nvite 2\nubuntu 1\n+16 更多\n01\n2025-05-24\n前端\nAstro的基础了解与对比\nAstro\n618\n阅读更多\n02\n2025-05-23\n前端\nAstro + Ta",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/dishes",
+      "url": "http://127.0.0.1:8090/dishes/",
+      "title": "首页 · 家庭私厨",
+      "h1": "家庭厨房",
+      "canonical": ["https://www.5ee.net/dishes"],
+      "mainText": "家庭厨房\n\n没写进菜谱的菜暂时还不会做，技能树还在缓慢增长...\n\n今日餐品\n\n用餐进度\n9月23日\n早餐\n未点\n午餐\n未点\n晚餐\n此刻 · 未点\n\n本餐还没有选菜\n\n去点单页挑几样，会显示在这里\n\n厨师长精选\n\n今日推荐\n\n不知道吃什么？试试这个！\n\n早餐\n午餐\n晚餐\n\n为你推荐 5 道适合当前餐段的菜\n\n开始推荐\n\n预约\n\n未来用餐\n\n已点菜、用餐日晚于",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/schedule-calendar",
+      "url": "http://127.0.0.1:8090/schedule-calendar",
+      "title": "日程日历",
+      "h1": "日程日历",
+      "canonical": ["https://www.5ee.net/schedule-calendar"],
+      "mainText": "日程日历\n当前空闲\n上一周\n下一周\n回到本周\n日历布局\n事项布局\n时间\n00:00\n01:00\n02:00\n03:00\n04:00\n05:00\n06:00\n07:00\n08:00\n09:00\n10:00\n11:00\n12:00\n13:00\n14:00\n15:00\n16:00\n17:00\n18:00\n19:00\n20:00\n21:00\n22:00\n23:00\n",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/bangumis",
+      "url": "http://127.0.0.1:8090/bangumis",
+      "title": "追番列表 - 5ee博客",
+      "h1": "追番列表",
+      "canonical": ["https://www.5ee.net/bangumis"],
+      "mainText": "追番列表\n\n记录我的二次元之旅\n\n追番\n追剧\n全部\n想看\n在看\n已看\n共 25 部\n9.7\n间谍过家家\n全25话\n间谍过家家 第三季\n全13话\n9.5\n判处勇者刑\n全12话\n8.9\n仙王的日常生活 第五季\n全12话\n7.4\n盾之勇者成名录\n全25话\n9.7\n与变成了异世界美少女的好友一起冒险\n全12话\n9.9\n葬送的芙莉莲\n全28话\n9.7\n理科生坠入情网，",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    },
+    {
+      "route": "/equipments",
+      "url": "http://127.0.0.1:8090/equipments",
+      "title": "我的装备 - 5ee博客",
+      "h1": "我的装备",
+      "canonical": ["https://www.5ee.net/equipments"],
+      "mainText": "我的装备\n好物分享\n\n分享我日常使用的硬件与软件\n\n3\nITEMS\n全部\n测试2\n1\n测试\n2\nPRODUCT_OVERVIEW\nMACBOOK PRO\n测试2\n\n这是一台超牛逼的电脑\n\nCPU\nM2\n内存\n16GB\n硬盘\n512GB\n屏幕\n16寸\nID. DJQAO1\nPRODUCT_OVERVIEW\n测试2\n测试\n\n这是一件装备这是一件装备\n\nID. T",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": "3\nITEMS"
+    },
+    {
+      "route": "/login?method=passkey",
+      "url": "http://127.0.0.1:8090/login?method=passkey",
+      "title": "登录 - 5ee博客",
+      "h1": "欢迎来到",
+      "canonical": [],
+      "mainText": "欢迎回来\n\n登录以继续访问您的账户\n\n保持登录状态\n使用通行密钥登录\n其他方式\n账号密码登录\n其他登录方式\n阿里云\n百度\nGitHub\n还没有账户？ 立即注册\n返回首页",
+      "currentPage": null,
+      "passkeyMethod": false,
+      "equipmentCount": null
+    }
+  ],
+  "screenshot": "~/Public/work/sky-blog1/themes/theme-sky-blog-1/docs/system/adaptation/evidence/2026-09-23/runtime-passkey-login-current.png",
+  "visualReview": {
+    "passkeyButtonVisible": true,
+    "label": "使用通行密钥登录",
+    "source": "~/Public/work/sky-blog1/themes/theme-sky-blog-1/docs/system/adaptation/evidence/2026-09-23/runtime-passkey-login-current.png",
+    "note": "The raw passkeyMethod field matched only English text and is a detector false negative; screenshot and mainText show the Chinese button."
+  }
+}

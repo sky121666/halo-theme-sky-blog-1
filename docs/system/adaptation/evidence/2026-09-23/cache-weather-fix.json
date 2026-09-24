@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted live mount",
+    "pageCache": "1.6.0",
+    "links": "2.3.0",
+    "codeHash": "7521524cd039f3fbc8a2949a37b0805c00c5c175d029b594de32c689443f6bbd",
+    "node": "24.19.0",
+    "browser": "Ego Chromium TaskSpace 12"
+  },
+  "changes": [
+    "verify-plugin-pages.mjs requests HTML with Accept: text/html and fails when X-Halo-Cache-At predates --cache-fresh-since",
+    "welcome-card.html formats invalid temperature, feels-like temperature and humidity as -- rather than NaN",
+    "alpine-modules.js rejects invalid weather API values and cached temperatures, and shows a failure description"
+  ],
+  "tests": {
+    "buildOnly": "passed: TypeScript, 27 plugin contracts, Links runtime, upgrade/evidence checks, 17 SEO layouts, two heatmap time zones, Vite and build artifacts",
+    "weatherAssertions": "passed: undefined/null/blank/--/non-numeric/Infinity fallback, zero and negative/decimal values, invalid cache eviction, failure state",
+    "oldCacheNegative": {
+      "codeHash": "5990238245bab48d25b53a084c08f0340a02f80767f2c396220347c63d1130f2",
+      "freshSince": "2026-09-23T09:06:04Z",
+      "failedPaths": ["/links", "/equipments"],
+      "evidence": "cache-guard-before-refresh.json"
+    },
+    "themeReload": {
+      "at": "2026-09-23T09:16:55.754Z",
+      "status": 200,
+      "phase": "READY",
+      "configDataUnchanged": true,
+      "configDataSha256": "cee1b011c8508f82ab64636302c80539bd513d56d0e4ecb5ae7cd4da8dc6f54b"
+    },
+    "pageCacheRefresh": {
+      "at": "2026-09-23T09:17:05.503Z",
+      "status": 200
+    },
+    "currentCacheSmoke": {
+      "freshSince": "2026-09-23T09:17:05Z",
+      "pathsPassed": 12,
+      "pathsChecked": 12,
+      "localhostLinksCacheAt": "Wed, 23 Sep 2026 09:18:09 GMT",
+      "localhostEquipmentCacheAt": "Wed, 23 Sep 2026 09:18:09 GMT",
+      "evidence": "cache-guard-weather-after-refresh.json"
+    },
+    "sameUrlHtml": {
+      "localhostLinksFriendFeed": {
+        "status": 200,
+        "cacheAt": "Wed, 23 Sep 2026 09:18:09 GMT",
+        "newWeatherTemplate": true,
+        "oldWeatherTemplate": false
+      },
+      "anonymous127LinksFriendFeed": {
+        "status": 200,
+        "cacheAt": "Wed, 23 Sep 2026 09:17:55 GMT",
+        "newWeatherTemplate": true,
+        "oldWeatherTemplate": false
+      }
+    },
+    "browserWeather": {
+      "url": "http://127.0.0.1:8090/links?view=friends",
+      "anonymousHostIsolatedFromLocalhostCookies": true,
+      "browserCacheDisabled": true,
+      "normal": {
+        "title": "友情链接 - 5ee博客",
+        "h1": "友链动态",
+        "temperature": "28",
+        "feelsLike": "29",
+        "humidity": "59",
+        "description": "阴天",
+        "hasNaN": false,
+        "screenshot": "weather-fixed-links-friends.png"
+      },
+      "blockedWeatherService": {
+        "blockedHost": "pconline.xoku.cn",
+        "temperature": "--",
+        "feelsLike": "--",
+        "humidity": "--",
+        "description": "天气暂不可用",
+        "hasNaN": false,
+        "browserBlockRemovedAndPriorTestHostWeatherCacheRestored": true
+      }
+    },
+    "servedAsset": {
+      "path": "/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.39",
+      "status": 200,
+      "sameBytesAsBuild": true,
+      "sha256": "a2ab7796d5f644363ab581b038ee97925b9409037816ac04cfb66ce01ef0c132"
+    },
+    "backendLogSinceRefresh": {
+      "errorLines": 0,
+      "templateExceptions": 0,
+      "pageSizeWarnings": 3,
+      "pageSizeWarningsSource": "equipment 1.1.1 Finder; unchanged plugin issue",
+      "bangumiTimeouts": 0
+    }
+  },
+  "remaining": [
+    "The current weather code hash has targeted browser and 12-route checks, not a repeated 114-route sweep.",
+    "SEO Tools canonical mismatch, Passkey user-center permission failure, Bangumi timeout fallback and Equipment Finder page-size warning are not fixed by these theme changes.",
+    "Production and proxy/CDN caches were not changed or verified."
+  ]
+}

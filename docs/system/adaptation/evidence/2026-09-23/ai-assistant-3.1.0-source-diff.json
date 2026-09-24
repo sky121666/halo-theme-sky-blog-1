@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-09-22T23:39:10.307902+00:00",
+  "officialRelease": {
+    "version": "3.1.0",
+    "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-6orwsoce",
+    "publishedAt": "2026-09-22T04:17:32.449134823Z",
+    "requiresHalo": ">=2.26.0",
+    "artifactSha256": "c6c1575b0e4009f0c9ffd1a1d593f5c44c5be2e97327c0575e883ca6aad2e22e"
+  },
+  "installed": {
+    "version": "3.0.0",
+    "artifactSha256": "d447a65428f811ecea259f9e41fbabafd67d4e2ed8057ea934fd9175854de141"
+  },
+  "comparison": {
+    "static/ai-summary/index.js": {
+      "identical": true,
+      "sha256": "b12ab9e920b6c98c24c5d6955c7f584cddb460f226d5258befd8d4d931f85850"
+    },
+    "static/ai-summary/index.css": {
+      "identical": true,
+      "sha256": "6e07760fb6b6980f0c886d801a56db5a550c3cd048e6ad3f0e591d88c3d214ee"
+    },
+    "summaryClasses": {
+      "count": 16,
+      "identical": true
+    }
+  },
+  "relevantReleaseChanges": [
+    "Summary, article metadata generation and Copilot free license access with app-store-integration >=1.19.0",
+    "Editor Agent multiple discontiguous selections and resilience",
+    "Markdown highlighter loading optimization"
+  ],
+  "localDependency": {
+    "app-store-integration": "1.19.0",
+    "ai-foundation": "1.1.0"
+  },
+  "runtimeTested31": false
+}

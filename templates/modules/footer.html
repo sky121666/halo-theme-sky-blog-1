@@ -113,9 +113,10 @@
               <nav class="flex flex-wrap gap-x-4 gap-y-2" th:if="${footerMenu != null}">
                 <a
                   th:each="item : ${footerMenu.menuItems}"
-                  th:href="${item.status.href}"
+                  th:with="targetHref=${item.status.href == '/friends' ? '/links?view=friends' : item.status.href}"
+                  th:href="@{${targetHref}}"
                   class="text-base-content/60 hover:text-primary text-sm transition-all duration-300 hover:-translate-y-0.5"
-                  th:text="${item.status.displayName}"
+                  th:text="${item.status.href == '/friends' ? '友链动态' : item.status.displayName}"
                 ></a>
               </nav>
             </th:block>

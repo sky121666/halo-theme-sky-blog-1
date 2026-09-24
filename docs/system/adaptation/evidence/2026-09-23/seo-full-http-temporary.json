@@ -1,0 +1,1222 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T07:17:56.546Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318",
+    "seoTools": "1.10.1 canonical_link.enabled=false",
+    "themeCanonical": "general.seo_settings.theme_canonical=true",
+    "pageCache": "1.6.0 cleared before scan"
+  },
+  "scope": {
+    "routeCount": 114,
+    "accept": "text/html",
+    "note": "Temporary mutually exclusive SEO setting; restoration follows browser sampling"
+  },
+  "invalidInitialAttempt": "seo-full-http-invalid-config.json: wrote theme SEO setting at wrong level; preserved separately and excluded from conclusions",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/",
+      "themeCanonicalCount": 1,
+      "title": "5ee博客 - 123",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:56 GMT",
+      "error": null
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/about",
+      "themeCanonicalCount": 1,
+      "title": "关于我 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:56 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives",
+      "themeCanonicalCount": 1,
+      "title": "文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2024/12",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2024/12",
+      "themeCanonicalCount": 1,
+      "title": "2024 年 12 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/02",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/02",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 02 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/03",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/03",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 03 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/04",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/04",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 04 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/05",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/05",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 05 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/06",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/06",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 06 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/07",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/07",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 07 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2025/08",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2025/08",
+      "themeCanonicalCount": 1,
+      "title": "2025 年 08 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2026/02",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2026/02",
+      "themeCanonicalCount": 1,
+      "title": "2026 年 02 月文章归档 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:57 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/2U9qMYvW",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/2U9qMYvW",
+      "themeCanonicalCount": 1,
+      "title": "Astro核心内容总结 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/CNnnwQh7",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/CNnnwQh7",
+      "themeCanonicalCount": 1,
+      "title": "1panel搭建mihomo让你的服务器正常访问谷歌Gemini - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/FLQkQJLg",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/FLQkQJLg",
+      "themeCanonicalCount": 1,
+      "title": "记录试用TRAE SOLO模式的一次历程 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/JGvxASVB",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/JGvxASVB",
+      "themeCanonicalCount": 1,
+      "title": "在Mac上配置Podman挂载外置硬盘目录 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/U42G91AM",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/U42G91AM",
+      "themeCanonicalCount": 1,
+      "title": "Dify0.15.3：修改环境变量并通过 Docker Compose 复用现有容器 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/VHHIpSkP",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/VHHIpSkP",
+      "themeCanonicalCount": 1,
+      "title": "dify shandbox 给python引入包 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:58 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/editor-feature-demo",
+      "themeCanonicalCount": 1,
+      "title": "编辑器功能演示 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/ijhJxHtw",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/ijhJxHtw",
+      "themeCanonicalCount": 1,
+      "title": "测试 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/j3efAbg4",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/j3efAbg4",
+      "themeCanonicalCount": 1,
+      "title": "TTF 在线转换为 CSS+WOFF2 字体分包工具推荐 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/jJkjiM27",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/jJkjiM27",
+      "themeCanonicalCount": 1,
+      "title": "VMware vSphere 8.0U3e 全套镜像下载（包含戴尔、浪潮、联想、惠普等自定义镜像） - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/jeco9MwB",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/jeco9MwB",
+      "themeCanonicalCount": 1,
+      "title": "1panel 如何快速使用 docker 创建 3x-ui - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/lKkDC8OW",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/lKkDC8OW",
+      "themeCanonicalCount": 1,
+      "title": "Halo 主题使用 vite 构建样式的一个改进方式 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:17:59 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/mac-restart-podman-container-start",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/mac-restart-podman-container-start",
+      "themeCanonicalCount": 1,
+      "title": "Mac 重启后启动 Podman 容器的完整流程 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:00 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/nsoSkHzN",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/nsoSkHzN",
+      "themeCanonicalCount": 1,
+      "title": "dify如何使用Unstructured ETL 提取方案 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:00 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/page/2",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/page/2",
+      "themeCanonicalCount": 1,
+      "title": "文章归档 - 第 2 页 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:00 GMT",
+      "error": null
+    },
+    {
+      "path": "/archives/tFyvnqK0",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/archives/tFyvnqK0",
+      "themeCanonicalCount": 1,
+      "title": "1panel 用docker图形化安装3x-ui - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:00 GMT",
+      "error": null
+    },
+    {
+      "path": "/authors/sky0821",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/authors/sky0821",
+      "themeCanonicalCount": 1,
+      "title": "Sky 的文章 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:01 GMT",
+      "error": null
+    },
+    {
+      "path": "/bangumis",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/bangumis",
+      "themeCanonicalCount": 1,
+      "title": "追番列表 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:01 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories",
+      "themeCanonicalCount": 1,
+      "title": "文章分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:01 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/1panel",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/1panel",
+      "themeCanonicalCount": 1,
+      "title": "1panel 分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:01 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/ai",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/ai",
+      "themeCanonicalCount": 1,
+      "title": "AI 分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:01 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/ai/page/2",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/ai/page/2",
+      "themeCanonicalCount": 1,
+      "title": "AI 分类 - 第 2 页 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/halo",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/halo",
+      "themeCanonicalCount": 1,
+      "title": "halo 分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/qi-ta",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/qi-ta",
+      "themeCanonicalCount": 1,
+      "title": "其他 分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories/qian-duan",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories/qian-duan",
+      "themeCanonicalCount": 1,
+      "title": "前端 分类 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/categories?p=2",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/categories?p=2",
+      "themeCanonicalCount": 1,
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/dishes",
+      "status": 200,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "家庭私厨",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/docs",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/docs",
+      "themeCanonicalCount": 1,
+      "title": "文档中心 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/docs/halo-theme-sky-blog-1/jianjie",
+      "themeCanonicalCount": 1,
+      "title": "简介 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/douban",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/douban",
+      "themeCanonicalCount": 1,
+      "title": "豆瓣记录 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:02 GMT",
+      "error": null
+    },
+    {
+      "path": "/equipments",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/equipments",
+      "themeCanonicalCount": 1,
+      "title": "我的装备 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/links",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/links",
+      "themeCanonicalCount": 1,
+      "title": "友情链接 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/links?view=friends",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/links",
+      "themeCanonicalCount": 1,
+      "title": "友情链接 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "登录 - 5ee博客",
+      "cacheAt": null,
+      "error": null
+    },
+    {
+      "path": "/login?method=passkey",
+      "status": 200,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "登录 - 5ee博客",
+      "cacheAt": null,
+      "error": null
+    },
+    {
+      "path": "/moments",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments",
+      "themeCanonicalCount": 1,
+      "title": "瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-1778854511638-3wpy3noe",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-1778854511638-3wpy3noe",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-05-15 22:15 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-32asaylm",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-32asaylm",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-4sbc36v5",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-4sbc36v5",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:34 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-9roi1c7n",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-9roi1c7n",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-04-07 08:33 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-bxbdkuwu",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-bxbdkuwu",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:03 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-cvbl3r6b",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-cvbl3r6b",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-04-02 18:30 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-f6ircurs",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-f6ircurs",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-05-27 08:51 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-qbxmx6d5",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-qbxmx6d5",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-qrb5xcuw",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-qrb5xcuw",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/moment-ytpmkzzy",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/moment-ytpmkzzy",
+      "themeCanonicalCount": 1,
+      "title": "Sky 于 2026-03-08 16:34 发布的瞬间 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/moments/page/2",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/moments/page/2",
+      "themeCanonicalCount": 1,
+      "title": "瞬间 - 第 2 页 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos",
+      "themeCanonicalCount": 1,
+      "title": "发现 细腻 的视觉美学 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-14xk1htg",
+      "themeCanonicalCount": 1,
+      "title": "3E3CE107.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-2qclll5g",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-2qclll5g",
+      "themeCanonicalCount": 1,
+      "title": "3C257F83.jpeg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-3x39qxyf",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-3x39qxyf",
+      "themeCanonicalCount": 1,
+      "title": "3F6E3B52.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-8os50ylm",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-8os50ylm",
+      "themeCanonicalCount": 1,
+      "title": "3A31286D.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:04 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-dgzc3rqv",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-dgzc3rqv",
+      "themeCanonicalCount": 1,
+      "title": "3A31522.png - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-gaazy0ws",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-gaazy0ws",
+      "themeCanonicalCount": 1,
+      "title": "3BED22B3.JPEG - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-gtulnjy1",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-gtulnjy1",
+      "themeCanonicalCount": 1,
+      "title": "3A2ACB44.JPEG - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-hysezd2w",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-hysezd2w",
+      "themeCanonicalCount": 1,
+      "title": "2EB6AAD4.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-ihzgnfm4",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-ihzgnfm4",
+      "themeCanonicalCount": 1,
+      "title": "2F87FAF2.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-lglk3ors",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-lglk3ors",
+      "themeCanonicalCount": 1,
+      "title": "IMG20260503131609.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-mogdulku",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-mogdulku",
+      "themeCanonicalCount": 1,
+      "title": "3EFE0A00.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-nbgx3edf",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-nbgx3edf",
+      "themeCanonicalCount": 1,
+      "title": "IMG20260502155214_BURST000_COVER.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-nsrwcpna",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-nsrwcpna",
+      "themeCanonicalCount": 1,
+      "title": "3B80A221.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-rgolxmbv",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-rgolxmbv",
+      "themeCanonicalCount": 1,
+      "title": "3A31910A.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-tidpcttl",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-tidpcttl",
+      "themeCanonicalCount": 1,
+      "title": "3A2228D6.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-ugdx4sx6",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-ugdx4sx6",
+      "themeCanonicalCount": 1,
+      "title": "2F87FAF2.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:05 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-vyd6cj4k",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-vyd6cj4k",
+      "themeCanonicalCount": 1,
+      "title": "3AFCFA5E.jpg - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-xqgifxkz",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-xqgifxkz",
+      "themeCanonicalCount": 1,
+      "title": "111_1080P_Dynamic_Best.webp - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-yvqae9y4",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-yvqae9y4",
+      "themeCanonicalCount": 1,
+      "title": "111_1080P_Dynamic_Best.webp - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/photos/photo-zepgpelt",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/photos/photo-zepgpelt",
+      "themeCanonicalCount": 1,
+      "title": "Gemini_Generated_Image_20i92120i92120i9_2.png - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/privacy",
+      "themeCanonicalCount": 1,
+      "title": "测试 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/schedule-calendar",
+      "status": 200,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "日程日历",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/signup",
+      "status": 200,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "注册 - 5ee博客",
+      "cacheAt": null,
+      "error": null
+    },
+    {
+      "path": "/steam",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/steam",
+      "themeCanonicalCount": 1,
+      "title": "Steam 游戏库 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags",
+      "themeCanonicalCount": 1,
+      "title": "文章标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/1panel",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/1panel",
+      "themeCanonicalCount": 1,
+      "title": "1panel 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/ai",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/ai",
+      "themeCanonicalCount": 1,
+      "title": "AI 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/alist",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/alist",
+      "themeCanonicalCount": 1,
+      "title": "alist 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:06 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/astro",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/astro",
+      "themeCanonicalCount": 1,
+      "title": "Astro 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/cha-jian-kai-fa",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/cha-jian-kai-fa",
+      "themeCanonicalCount": 1,
+      "title": "插件开发 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/cursor",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/cursor",
+      "themeCanonicalCount": 1,
+      "title": "cursor 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/demo",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/demo",
+      "themeCanonicalCount": 1,
+      "title": "演示 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/dify",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/dify",
+      "themeCanonicalCount": 1,
+      "title": "dify 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/docker",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/docker",
+      "themeCanonicalCount": 1,
+      "title": "docker 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/editor",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/editor",
+      "themeCanonicalCount": 1,
+      "title": "编辑器 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/fan-xiang-dai-li",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/fan-xiang-dai-li",
+      "themeCanonicalCount": 1,
+      "title": "反向代理 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/frp",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/frp",
+      "themeCanonicalCount": 1,
+      "title": "frp 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/fu-wu-qi",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/fu-wu-qi",
+      "themeCanonicalCount": 1,
+      "title": "服务器 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/halo",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/halo",
+      "themeCanonicalCount": 1,
+      "title": "Halo 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:07 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/hao",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/hao",
+      "themeCanonicalCount": 1,
+      "title": "hao 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/lobechat",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/lobechat",
+      "themeCanonicalCount": 1,
+      "title": "lobechat 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/macos",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/macos",
+      "themeCanonicalCount": 1,
+      "title": "macos 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/mcp",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/mcp",
+      "themeCanonicalCount": 1,
+      "title": "mcp 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/mo-ban-zhi-zuo",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/mo-ban-zhi-zuo",
+      "themeCanonicalCount": 1,
+      "title": "模板制作 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/nas",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/nas",
+      "themeCanonicalCount": 1,
+      "title": "NAS 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/pod",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/pod",
+      "themeCanonicalCount": 1,
+      "title": "pod 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/podman",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/podman",
+      "themeCanonicalCount": 1,
+      "title": "podman 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/tailwindcss",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/tailwindcss",
+      "themeCanonicalCount": 1,
+      "title": "tailwindcss 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/tr-ae",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/tr-ae",
+      "themeCanonicalCount": 1,
+      "title": "trae 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/ubuntu",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/ubuntu",
+      "themeCanonicalCount": 1,
+      "title": "ubuntu 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:08 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/vaultwarden",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/vaultwarden",
+      "themeCanonicalCount": 1,
+      "title": "Vaultwarden 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:09 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/vite",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/vite",
+      "themeCanonicalCount": 1,
+      "title": "vite 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:09 GMT",
+      "error": null
+    },
+    {
+      "path": "/tags/vue",
+      "status": 200,
+      "canonicalCount": 1,
+      "canonical": "https://www.5ee.net/tags/vue",
+      "themeCanonicalCount": 1,
+      "title": "vue 标签 - 5ee博客",
+      "cacheAt": "Wed, 23 Sep 2026 07:18:09 GMT",
+      "error": null
+    },
+    {
+      "path": "/terms",
+      "status": 404,
+      "canonicalCount": 0,
+      "canonical": null,
+      "themeCanonicalCount": 0,
+      "title": "404 - Not Found - 5ee博客",
+      "cacheAt": null,
+      "error": null
+    }
+  ],
+  "completedAt": "2026-09-23T07:18:09.326Z",
+  "summary": {
+    "total": 114,
+    "statusCounts": {
+      "200": 113,
+      "404": 1
+    },
+    "missingOrDuplicateCanonical": ["/dishes", "/login", "/login?method=passkey", "/schedule-calendar", "/signup"],
+    "notThemeOwned": ["/dishes", "/login", "/login?method=passkey", "/schedule-calendar", "/signup"],
+    "errors": [],
+    "missingAtBaseline": ["/login", "/login?method=passkey", "/signup"],
+    "lostCanonicalComparedWithBaseline": ["/dishes", "/schedule-calendar"]
+  },
+  "browserSpotChecks": [
+    {
+      "path": "/categories?p=abc",
+      "title": "文章分类 - 5ee博客",
+      "canonical": "https://www.5ee.net/categories",
+      "themeOwned": true
+    },
+    {
+      "path": "/categories?page=2",
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "canonical": "https://www.5ee.net/categories?p=2",
+      "themeOwned": true
+    },
+    {
+      "path": "/tags?page=2",
+      "title": "文章标签 - 第 2 页 - 5ee博客",
+      "canonical": "https://www.5ee.net/tags?p=2",
+      "themeOwned": true
+    },
+    {
+      "path": "/dishes/",
+      "title": "首页 · 家庭私厨",
+      "canonical": null,
+      "themeOwned": false
+    },
+    {
+      "path": "/schedule-calendar",
+      "title": "日程日历",
+      "canonical": null,
+      "themeOwned": false
+    },
+    {
+      "path": "/login",
+      "title": "登录 - 5ee博客",
+      "canonical": null,
+      "themeOwned": false
+    }
+  ],
+  "restoration": {
+    "pluginCanonicalEnabled": true,
+    "themeNestedSeoSettingsPresent": false,
+    "themeTopLevelSeoSettingsPresent": false,
+    "configMapsExactlyEqualToPretest": true,
+    "themeReloadStatus": 200,
+    "pageCacheClearStatus": 200,
+    "originalUrlCanonicalAfterRestore": "https://www.5ee.net/categories?p=abc",
+    "temporarySnapshotRemoved": true
+  }
+}

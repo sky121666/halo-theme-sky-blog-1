@@ -1,0 +1,1747 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-22T02:42:20.630229+00:00",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version",
+    "haloImage": "registry.fit2cloud.com/halo/halo-pro:2.26.1",
+    "haloImageId": "sha256:946533d1cff978159fdf82b88b257447a468348a36b3db8327dd6d7702470340"
+  },
+  "theme": {
+    "name": "theme-sky-blog-1",
+    "version": "2.2.39",
+    "requiresHalo": ">=2.23.0",
+    "algorithm": "sha256",
+    "codeHash": "03349c4f38360b2593296f8e07e8c1892d08b2a6c07cc8c4993cceabb24a5c6f",
+    "fileCount": 360,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "unchangedDuringRun": true
+  },
+  "coverage": {
+    "installed": 47,
+    "declaredContracts": 28,
+    "activePluginSkills": 16,
+    "contractedButNotInstalled": [],
+    "activeSkillsOutsideInventory": [],
+    "excluded": "plugin-forum 未安装、未声明使用且不在活动技能范围；不安装"
+  },
+  "plugins": [
+    {
+      "id": "mcp-server",
+      "installed": {
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "mcp-server-1.2.0.jar"
+      },
+      "installedArtifactSha256": "4e4934e509606b530e61c7dc7596c544a2491e63e858c3059207ce7f65151adc",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.2.0",
+        "url": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-on4pkzby",
+        "publishedAt": "2026-09-05T06:56:59.744071130Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-on4pkzby"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.0.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-4r3flh8m",
+          "publishedAt": "2026-08-25T07:59:41.249102567Z",
+          "requiresHalo": ">=2.26.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "后台 MCP 工具/密钥能力；无前台宿主；未创建密钥或授权工具"
+    },
+    {
+      "id": "ai-foundation",
+      "installed": {
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "ai-foundation-1.1.0.jar"
+      },
+      "installedArtifactSha256": "d8f906657b7e36f38841caf748d0e630b6df89d1257907fb70d809557713f111",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-zqvdpyu1",
+        "publishedAt": "2026-09-03T03:16:22.745386901Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-zqvdpyu1"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.0.0-beta.6",
+          "url": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-nwvytuqz",
+          "publishedAt": "2026-07-29T11:12:50.552888896Z",
+          "requiresHalo": ">=2.25.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "AI 供应商/模型和 SDK 依赖；无主题模板；已启动，未配置模型或测试调用"
+    },
+    {
+      "id": "plugin-katex",
+      "installed": {
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.2",
+        "artifact": "plugin-katex-3.0.0.jar"
+      },
+      "installedArtifactSha256": "e444781b99c23b020fcc379f6859ce67dc7669536c880004f7bf7cce0ed2df96",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "3.0.0",
+        "url": "https://www.halo.run/store/apps/app-ISCsX/releases/app-release-l4qbvcue",
+        "publishedAt": "2026-01-16T08:13:09.566584277Z",
+        "requiresHalo": ">=2.22.2",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ISCsX/releases/app-release-l4qbvcue"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "3.0.0",
+      "implementationContractVersion": "3.0.0",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留预渲染公式样式和 data-pjax 客户端兼容路径",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "3.0 旧文章需要插件客户端开关；本轮未重存文章或调整设置"
+    },
+    {
+      "id": "plugin-douban",
+      "installed": {
+        "version": "1.2.6",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.1",
+        "artifact": "plugin-douban-1.2.6.jar"
+      },
+      "installedArtifactSha256": "364154d6825a3db5e13967572c1a2eb7bd27eed0af82eb8c6515b9a6168bd3c4",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.2.6",
+        "url": "https://www.halo.run/store/apps/app-srBOL/releases/app-release-bcudqrjs",
+        "publishedAt": "2026-08-22T14:49:09.428270592Z",
+        "requiresHalo": ">=2.22.1",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-srBOL/releases/app-release-bcudqrjs"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-douban",
+        "version": "1.2.6",
+        "requiresHalo": ">=2.22.1",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": null,
+        "documentation": "https://docs.kunkunyu.com/docs/plugin-douban/finder-api",
+        "sourceFileSha256": "c67e2b1730ec4ac13d6a4c0c3afddbb3284bd764a34d506309703e28626d8b42"
+      },
+      "skillCorrections": [
+        "技能称公开仓库止于 v1.2.0 已过时；当天官方 1.2.6 Release 和 commit 33100c8d594e0b1bf7990befc1f426b68bbe54b5 已确认，按当前源码/维护者文档复核扁平 DTO。"
+      ],
+      "plannedSupport": "1.2.6",
+      "implementationContractVersion": "1.2.6",
+      "historicalTestedVersion": "1.2.6",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "按 1.2.6 扁平 DTO 归一化，保留旧 spec/faves 兼容",
+      "validation": "真实 8 条标题/图片/外链，移动端、API 与 PJAX",
+      "remaining": "未触发同步或数据库迁移"
+    },
+    {
+      "id": "maintenance",
+      "installed": {
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.10",
+        "artifact": "maintenance-1.1.0.jar"
+      },
+      "installedArtifactSha256": "d07f1614602243b08253b08165576f203bde7cfb633a9e03b8d919fc7935e389",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-umgvtji6/releases/app-release-ecm0eqla",
+        "publishedAt": "2026-04-18T15:22:03.536099272Z",
+        "requiresHalo": ">=2.22.10",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-umgvtji6/releases/app-release-ecm0eqla"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.1.0",
+      "implementationContractVersion": "1.1.0",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留独立维护模板、title/description 和返回入口",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "未切换全站维护状态，实际拦截与恢复待验"
+    },
+    {
+      "id": "online",
+      "installed": {
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.23.0",
+        "artifact": "online-1.0.5.jar"
+      },
+      "installedArtifactSha256": "42a243741bb372c67198680ac611784be2176cce3f1a6a95aad75bd7d1c539fe",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.0.5",
+        "url": "https://www.halo.run/store/apps/app-ion2qhko/releases/app-release-jvggype9",
+        "publishedAt": "2026-05-04T05:17:37.898899724Z",
+        "requiresHalo": ">=2.23.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ion2qhko/releases/app-release-jvggype9"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-online",
+        "version": "1.0.5",
+        "requiresHalo": ">=2.23.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "b8e9a1721716b7154280eb50199305e5c8207f74",
+        "documentation": "https://github.com/Zyx-2012/plugin-online/blob/b8e9a1721716b7154280eb50199305e5c8207f74/README.md#api",
+        "sourceFileSha256": "6d426b918bb904c3c8dddcf2b79ec985962fad4129dd11954e64ec6ebbaa7a66"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.0.5",
+      "implementationContractVersion": "1.0.5",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留统计读取与离页取消；WebSocket 仍由插件负责",
+      "validation": "stats/summary API 与页面读取",
+      "remaining": "未模拟 WebSocket 服务故障或多用户进度"
+    },
+    {
+      "id": "dishes",
+      "installed": {
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.23.0",
+        "artifact": "dishes-1.0.3.jar"
+      },
+      "installedArtifactSha256": "aa1e897eab8485eae909a16362d13a120b77e142908f62f07de38bf670df698a",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.0.3",
+        "url": "https://www.halo.run/store/apps/app-espsmupa/releases/app-release-smxrkwj0",
+        "publishedAt": "2026-05-02T15:05:19.022473140Z",
+        "requiresHalo": ">=2.23.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-espsmupa/releases/app-release-smxrkwj0"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.0.3",
+      "implementationContractVersion": "1.0.3",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留独立页面整页导航，无须复制 SPA",
+      "validation": "公开页读取；本轮真实整页导航通过",
+      "remaining": "未点餐或导入备份"
+    },
+    {
+      "id": "schedule-calendar",
+      "installed": {
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.25.0",
+        "artifact": "schedule-calendar-3.5.0.jar"
+      },
+      "installedArtifactSha256": "60399d9017f1b13051b1ef36bdf2277e6b17ac96d62a6e83ad72713ac8d93494",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "3.5.0",
+        "url": "https://www.halo.run/store/apps/app-1ubowut0/releases/app-release-mdsorinh",
+        "publishedAt": "2026-08-08T14:49:01.579203063Z",
+        "requiresHalo": ">=2.25.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-1ubowut0/releases/app-release-mdsorinh"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "3.5.0",
+      "implementationContractVersion": "3.3.0",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "3.5 模板委托保留官方页面及整页导航",
+      "validation": "公开日历页/摘要读取；本轮整页导航通过",
+      "remaining": "自定义路由与日程写入未执行"
+    },
+    {
+      "id": "lottery",
+      "installed": {
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "lottery-1.0.2.jar"
+      },
+      "installedArtifactSha256": "b67e35570c7a282211fde76dd1b633c9339c817a5f97c6c5a2cc66022bf8a706",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.0.2",
+        "url": "https://www.halo.run/store/apps/app-8wtcwm5t/releases/app-release-6dooiafp",
+        "publishedAt": "2026-04-23T05:01:02.441423051Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-8wtcwm5t/releases/app-release-6dooiafp"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.0.2",
+      "implementationContractVersion": "1.0.2",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 lottery-card 宿主及实际版本资源检查",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "文章有宿主但活动不存在；参与/开奖不可验证"
+    },
+    {
+      "id": "PluginLive2d",
+      "installed": {
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED",
+        "requires": ">=2.25.0",
+        "artifact": "PluginLive2d-2.2.0.jar"
+      },
+      "installedArtifactSha256": "6edf2be941d641453e675565acf7e9144f8ff534ce330544eb7afd61f7335fa6",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "2.2.0",
+        "url": "https://www.halo.run/store/apps/app-oPNFQ/releases/app-release-wyldvl72",
+        "publishedAt": "2026-07-28T04:19:21.336827790Z",
+        "requiresHalo": ">=2.25.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-oPNFQ/releases/app-release-wyldvl72"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "已禁用且主题无专用集成；2.2 移动端/Markdown 浮层由插件负责"
+    },
+    {
+      "id": "editor-emoji",
+      "installed": {
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "editor-emoji-1.1.0.jar"
+      },
+      "installedArtifactSha256": "7e875b4b1b91bd236a7316266edbe1be8099f3f86a4193532daa9f54b437fc4b",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-pwojlwgu/releases/app-release-j3solsy2",
+        "publishedAt": "2026-08-26T03:56:57.263067042Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-pwojlwgu/releases/app-release-j3solsy2"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "后台 Emoji 扩展；1.1 优化 Halo 2.26 加载，无主题 API 差异"
+    },
+    {
+      "id": "auth-passkey",
+      "installed": {
+        "version": "1.0.4",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.5",
+        "artifact": "auth-passkey-1.0.4.jar"
+      },
+      "installedArtifactSha256": "7c1e5d54f033b391d41ef8ec16ea64d28b39a37db5a8a076d0c89ea14ee963a3",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.0.4",
+        "url": "https://www.halo.run/store/apps/app-g7tggrco/releases/app-release-gqo1e59a",
+        "publishedAt": "2026-01-27T05:25:25.170881600Z",
+        "requiresHalo": ">=2.22.5",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-g7tggrco/releases/app-release-gqo1e59a"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-auth-passkey",
+        "version": "1.0.4",
+        "requiresHalo": ">=2.22.5",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "7d7585b70d51080e660f13f0cca5e87ea7a1291e",
+        "documentation": "https://github.com/iLay1678/halo-plugin-auth-passkey/blob/7d7585b70d51080e660f13f0cca5e87ea7a1291e/README.md#api-%E6%96%87%E6%A1%A3",
+        "sourceFileSha256": "1f4b8e5ef79d5273430bc1e962ab81e754eae33a2a9208a312e8402e9a2db913"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.0.4",
+      "implementationContractVersion": "1.0.4",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 halo-form、认证片段和 remember-me",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "未使用真实 Passkey 绑定/登录/删除，不能仅凭模板断言兼容"
+    },
+    {
+      "id": "equipment",
+      "installed": {
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "equipment-1.1.1.jar"
+      },
+      "installedArtifactSha256": "6bb3b14e87f196ed85f7e19c385fb92294fbbd88afb566246502e0be4afca6e3",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.1",
+        "url": "https://www.halo.run/store/apps/app-ytygyqml/releases/app-release-xty8o5xa",
+        "publishedAt": "2026-05-09T07:35:38.568708813Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ytygyqml/releases/app-release-xty8o5xa"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-equipment",
+        "version": "1.1.1",
+        "requiresHalo": ">=2.22.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "cd2043cc3c7d299ca78e3021ee78a87a00d1fdd9",
+        "documentation": "https://docs.kunkunyu.com/docs/equipment",
+        "sourceFileSha256": "0ee02af33b54f9e19e604d2e4a1b9e330b53adcbbfdec519d17684e5b9e1cec6"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.1.1",
+      "implementationContractVersion": "1.1.1",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留 equipmentFinder 与分组/cover/url 结构",
+      "validation": "实际页面、分组 SSR、PJAX",
+      "remaining": "未修改装备或分组"
+    },
+    {
+      "id": "plugin-bilibili-bangumi",
+      "installed": {
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.21.0",
+        "artifact": "plugin-bilibili-bangumi-1.4.1.jar"
+      },
+      "installedArtifactSha256": "3ce2edfe5a65774399eb80d10fc2553d6bbf769948ddf20da3a4709bd980ef66",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.4.1",
+        "url": "https://github.com/Roozenlz/plugin-bilibili-bangumi/releases/tag/1.4.1",
+        "publishedAt": "2026-07-08T09:00:11Z",
+        "prerelease": false,
+        "requiresHalo": ">=2.21.0",
+        "requirementsUrl": "https://github.com/Roozenlz/plugin-bilibili-bangumi/blob/87bcd652b6947b5bfd33035191ae5777e113ed01/src/main/resources/plugin.yaml"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.4.1-beta.1",
+          "url": "https://www.halo.run/store/apps/app-OTFPN/releases/app-release-zeazygej",
+          "publishedAt": "2026-03-10T13:14:57.896098065Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "requiresHalo": ">=2.21.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "87bcd652b6947b5bfd33035191ae5777e113ed01",
+        "documentation": "https://github.com/Roozenlz/plugin-bilibili-bangumi/blob/87bcd652b6947b5bfd33035191ae5777e113ed01/README.md#%E4%B8%BB%E9%A2%98%E9%80%82%E9%85%8D",
+        "sourceFileSha256": "9d233c8ce610a17f173b08a93ecc8185d270eac4762a1303b8479da4c6c23fbf"
+      },
+      "skillCorrections": [
+        "非数字 page 经 NumberUtils.toInt(value, 1) 回退第 1 页；数值越界由 Finder 拒绝。初始按技能概述预期所有非法参数为 404，核对源码后纠正。"
+      ],
+      "plannedSupport": "1.4.1",
+      "implementationContractVersion": "1.4.0",
+      "historicalTestedVersion": "1.4.1",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留 1.4 路由/Finder，目标采用 GitHub 1.4.1",
+      "validation": "列表、参数默认值/越界路径、PJAX",
+      "remaining": "page=bad 回退 1 页返回 200；page=0 与非法状态为 404；不扩大技能对非法参数的概述。"
+    },
+    {
+      "id": "steam",
+      "installed": {
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.1",
+        "artifact": "steam-1.0.0.jar"
+      },
+      "installedArtifactSha256": "49440f1018a1b3f849669cc35decc5ea6705e014e3a04515f63f4ce2fd6e1ed4",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.0.0",
+        "url": "https://www.halo.run/store/apps/app-0ojqyzfh/releases/app-release-ck4zbqkk",
+        "publishedAt": "2026-06-27T18:53:27.062404874Z",
+        "requiresHalo": ">=2.22.1",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-0ojqyzfh/releases/app-release-ck4zbqkk"
+      },
+      "observedPrereleases": [
+        {
+          "version": "0.2.0-beta.2",
+          "url": "https://www.halo.run/store/apps/app-0ojqyzfh/releases/app-release-wsbxvnx6",
+          "publishedAt": "2026-01-25T14:46:03.671489937Z",
+          "requiresHalo": ">=2.22.1"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-steam",
+        "version": "1.0.0",
+        "requiresHalo": ">=2.22.1",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "7bba0400405c50036acd64e807b586d93188c22e",
+        "documentation": "https://github.com/Tim0x0/halo-plugin-steam/blob/7bba0400405c50036acd64e807b586d93188c22e/docs/usage-guide.md",
+        "sourceFileSha256": "d6f23c7e8c514b616063a91f1503d62241f3dab9b8a17f642d3851536e5184bd"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.0.0",
+      "implementationContractVersion": "1.0.0",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留 camelCase VO、空封面和 delisted 分支",
+      "validation": "实际页面、公开 API、PJAX",
+      "remaining": "外部 Steam 断网/空配置状态未改造现场"
+    },
+    {
+      "id": "link-submit",
+      "installed": {
+        "version": "1.0.7",
+        "enabled": false,
+        "phase": "DISABLED",
+        "requires": ">=2.22.1",
+        "artifact": "link-submit-1.0.7.jar"
+      },
+      "installedArtifactSha256": "7a636873f45b5c317ced7a1d41be021e43af5ff9cf7bf1ce0164fbbcf9e99175",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.0.7",
+        "url": "https://www.halo.run/store/apps/app-glejqzwk/releases/app-release-okiwoznl",
+        "publishedAt": "2026-05-23T07:20:19.031664171Z",
+        "requiresHalo": ">=2.22.1",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-glejqzwk/releases/app-release-okiwoznl"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.0.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-glejqzwk/releases/app-release-5bzud2bn",
+          "publishedAt": "2025-06-13T14:58:47.038086141Z",
+          "requiresHalo": ">=2.20.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-link-submit",
+        "version": "1.0.7",
+        "requiresHalo": ">=2.22.1",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "3a630b91323dbe0a4d3cd96802f6705c178df232",
+        "documentation": "https://github.com/chengzhongxue/link-submit/blob/3a630b91323dbe0a4d3cd96802f6705c178df232/README.md#%E4%B8%BB%E9%A2%98%E9%80%82%E9%85%8D",
+        "sourceFileSha256": "9fa74703d91d4655de3ba64d8473bcd86313eac31782d45ddf417f1a62b80e20"
+      },
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "已禁用且主题已退出该集成；由 Links 2.3 官方申请接口承接"
+    },
+    {
+      "id": "vote",
+      "installed": {
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "vote-1.1.3.jar"
+      },
+      "installedArtifactSha256": "1720ff013e27bfdfe089a97403c3d277e6b4042df4851d6a53aa9a2171fae75f",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.3",
+        "url": "https://www.halo.run/store/apps/app-veyvzyhv/releases/app-release-np8tb8nv",
+        "publishedAt": "2025-12-15T17:25:12.329807063Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-veyvzyhv/releases/app-release-np8tb8nv"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.1.3",
+      "implementationContractVersion": "1.1.3",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 25 个变量与投票宿主布局",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "宿主显示先前核对；实际投票、重复限制和错误态未验收"
+    },
+    {
+      "id": "shiki",
+      "installed": {
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "shiki-1.5.1.jar"
+      },
+      "installedArtifactSha256": "e44fe0ec2e7eff4785ff50c83d7ff87cba3ff2510ffb93b385f2de449f91ce5b",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.5.1",
+        "url": "https://www.halo.run/store/apps/app-kzloktzn/releases/app-release-mzrz7aqk",
+        "publishedAt": "2026-08-20T10:04:37.736110784Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-kzloktzn/releases/app-release-mzrz7aqk"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-shiki",
+        "version": "1.5.1",
+        "requiresHalo": ">=2.26.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "a13a43f100d04f8739fc0b230cd3f8ef597bb0e1",
+        "documentation": "https://github.com/halo-sigs/plugin-shiki/blob/a13a43f100d04f8739fc0b230cd3f8ef597bb0e1/README.md",
+        "sourceFileSha256": "8c37b115bc847fed24c76b49673f186d126407207f5d7f7e97c3abbb5353e34d"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.5.1",
+      "implementationContractVersion": "1.3.1",
+      "historicalTestedVersion": "1.5.1",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "修复原生 pre code 空白继承；保留宿主去嵌套",
+      "validation": "26 个高亮内容、PJAX、明暗、390px 无溢出",
+      "remaining": "未穷举所有语言及自定义渲染规则"
+    },
+    {
+      "id": "data-studio",
+      "installed": {
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "data-studio-1.0.0-alpha.9.jar"
+      },
+      "installedArtifactSha256": "36ea6c533689d496b122c4f448c2ed78ddaa89cb6705dda6214ab94ef5ea6c36",
+      "officialArtifactMatch": true,
+      "latestStable": null,
+      "observedPrereleases": [
+        {
+          "version": "1.0.0-alpha.9",
+          "url": "https://www.halo.run/store/apps/app-MrbzY/releases/app-release-jdujqc92",
+          "publishedAt": "2026-04-08T10:49:49.328529338Z",
+          "requiresHalo": ">=2.22.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "受阻",
+      "scope": "后台工具，无稳定目标",
+      "change": "无前台主题契约，不安装或替换预发布",
+      "validation": "官方稳定目标不存在",
+      "remaining": "1.0.0-alpha.9 仍是预发布，等待官方稳定版"
+    },
+    {
+      "id": "text-diagram",
+      "installed": {
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.11.0",
+        "artifact": "text-diagram-1.5.2.jar"
+      },
+      "installedArtifactSha256": "91967fd5be2273bbe46a621880219f9970e531d699fac6d8b0234e8df8b03112",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.5.2",
+        "url": "https://www.halo.run/store/apps/app-ahBRi/releases/app-release-rqudxdgh",
+        "publishedAt": "2026-01-23T10:16:34.181282564Z",
+        "requiresHalo": ">=2.11.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ahBRi/releases/app-release-rqudxdgh"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.5.2",
+      "implementationContractVersion": "1.5.2",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留补渲染队列、明暗重绘和插件资源",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "缺真实绘图内容样本；不将静态检查当运行通过"
+    },
+    {
+      "id": "PluginS3ObjectStorage",
+      "installed": {
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.24.0",
+        "artifact": "PluginS3ObjectStorage-1.17.0.jar"
+      },
+      "installedArtifactSha256": "c59ac257e7117bfd018a7ff59b7d701fd2680eb33bc645c0b4d05594ee4c20d9",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.17.0",
+        "url": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-hdy1v1xf",
+        "publishedAt": "2026-06-29T11:12:40.994766843Z",
+        "requiresHalo": ">=2.24.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-hdy1v1xf"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.14.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-0idwwuqx",
+          "publishedAt": "2025-12-23T08:57:48.928789059Z",
+          "requiresHalo": ">=2.22.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "附件存储；1.17 缩略图格式修复由插件处理，不迁移附件"
+    },
+    {
+      "id": "plugin-friends",
+      "installed": {
+        "version": "1.4.6",
+        "enabled": false,
+        "phase": "DISABLED",
+        "requires": ">=2.22.0",
+        "artifact": "plugin-friends-1.4.6.jar"
+      },
+      "installedArtifactSha256": "1764c0e49d2ce6f37aa1c046f9be61d148aa0481d0f7cc2bc59cca96f2f31526",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.4.6",
+        "url": "https://www.halo.run/store/apps/app-yISsV/releases/app-release-nc8mxddx",
+        "publishedAt": "2026-05-22T10:11:55.658952698Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-yISsV/releases/app-release-nc8mxddx"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-friends",
+        "version": "1.4.6",
+        "requiresHalo": ">=2.22.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "edb65d56dfa07d0cfe7fa7e670e3c172bcf9e4ea",
+        "documentation": "https://github.com/chengzhongxue/plugin-friends/blob/edb65d56dfa07d0cfe7fa7e670e3c172bcf9e4ea/README.md#%E4%B8%BB%E9%A2%98%E9%80%82%E9%85%8D",
+        "sourceFileSha256": "6a629b7ac751ada06e675340a977dc60b9491e35966f97e76fc614dd659905a0"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.4.6",
+      "implementationContractVersion": "1.4.6",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 Finder 门控和现有朋友圈模板",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "插件禁用；未启用或测试与 Links 2.3 的组合启动"
+    },
+    {
+      "id": "PluginBytemd",
+      "installed": {
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.25.0",
+        "artifact": "PluginBytemd-1.9.0.jar"
+      },
+      "installedArtifactSha256": "b31894afe7fcf5d467f45fde6474059ce6eb8865ab4aaea308ccd533c709dcb8",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.9.0",
+        "url": "https://www.halo.run/store/apps/app-HTyhC/releases/app-release-fvqxsvlk",
+        "publishedAt": "2026-06-26T10:08:22.672303375Z",
+        "requiresHalo": ">=2.25.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-HTyhC/releases/app-release-fvqxsvlk"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "后台 Markdown 编辑器；1.9 粘贴/拖拽上传不改变主题正文契约"
+    },
+    {
+      "id": "hybrid-edit-block",
+      "installed": {
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "hybrid-edit-block-1.7.0.jar"
+      },
+      "installedArtifactSha256": "6706fd5ab80551577522756b81dbbc29427a46b1951bb925a8f1fb8f5900ef1f",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.7.0",
+        "url": "https://www.halo.run/store/apps/app-NgHnY/releases/app-release-lgexvgkn",
+        "publishedAt": "2026-08-17T04:43:47.959127299Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-NgHnY/releases/app-release-lgexvgkn"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "后台混合编辑块；1.7 ESM/CodeMirror 变更，无需重写主题"
+    },
+    {
+      "id": "chenhe-lsky-pro",
+      "installed": {
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "chenhe-lsky-pro-1.1.2.jar"
+      },
+      "installedArtifactSha256": "d4d0d501ee423f234237af6fc0b6d8e2d25cbb7401d74ef64537a8f64a0415f1",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.1.2",
+        "url": "https://www.halo.run/store/apps/app-jZHhX/releases/app-release-soqqub9p",
+        "publishedAt": "2026-04-09T21:10:36.776276521Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-jZHhX/releases/app-release-soqqub9p"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "附件存储；1.1.2 文件名/MIME 改动由存储侧处理"
+    },
+    {
+      "id": "PluginLightGallery",
+      "installed": {
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.10.0",
+        "artifact": "PluginLightGallery-1.2.1.jar"
+      },
+      "installedArtifactSha256": "a59d35d973ceaf5c67ac559f34de7124a41ba40fa007b7254730d682ade2834e",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.2.1",
+        "url": "https://www.halo.run/store/apps/app-OoggD/releases/app-release-LPQbl",
+        "publishedAt": "2024-07-03T04:21:49.853844309Z",
+        "requiresHalo": ">=2.10.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-OoggD/releases/app-release-LPQbl"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-lightgallery",
+        "version": "1.2.1",
+        "requiresHalo": ">=2.10.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "d0fb02e0b78124bf3ddacf2f5958f34b3966c879",
+        "documentation": "https://github.com/halo-sigs/plugin-lightgallery/blob/d0fb02e0b78124bf3ddacf2f5958f34b3966c879/README.md#%E4%B8%BB%E9%A2%98%E9%80%82%E9%85%8D",
+        "sourceFileSha256": "d4bffed4d9a2e88d459898053197a5926fd8cc34bc686968c8e6b64fb5b387ce"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.2.1",
+      "implementationContractVersion": "1.2.1",
+      "historicalTestedVersion": "1.2.1",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留单实例初始化/销毁与 data-src 桥接",
+      "validation": "HTTP/页面契约；本轮真实图片灯箱打开通过",
+      "remaining": "未穷举全部媒体格式"
+    },
+    {
+      "id": "PluginPhotos",
+      "installed": {
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "PluginPhotos-2.1.2.jar"
+      },
+      "installedArtifactSha256": "ef8d9507b60c2b6f268dc1574bd19ece4c4dd6dd33de09ff5dab6f640e5e267e",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "2.1.2",
+        "url": "https://www.halo.run/store/apps/app-BmQJW/releases/app-release-hxm5qfoy",
+        "publishedAt": "2026-06-22T16:08:40.688169157Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-BmQJW/releases/app-release-hxm5qfoy"
+      },
+      "observedPrereleases": [
+        {
+          "version": "2.0.0-beta.2",
+          "url": "https://www.halo.run/store/apps/app-BmQJW/releases/app-release-wtncoivo",
+          "publishedAt": "2026-05-06T09:48:55.438249339Z",
+          "requiresHalo": ">=2.22.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-photos",
+        "version": "2.1.2",
+        "requiresHalo": ">=2.22.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "64e3b2faf38e265e52666d76b96452254dbfa5a0",
+        "documentation": "https://github.com/halo-sigs/plugin-photos/blob/64e3b2faf38e265e52666d76b96452254dbfa5a0/dev/theme-api.md",
+        "sourceFileSha256": "0e510dfbe970d9c3ba2c743b36d2b4c63f8bc31bd3f9f6d2da90272626b14c61"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "2.1.2",
+      "implementationContractVersion": "2.1.1",
+      "historicalTestedVersion": "2.1.2",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留 photoUrl、空邻居、分组与灯箱桥接，无新增接口差异",
+      "validation": "列表/详情 HTTP、PJAX；本轮真实图片灯箱操作通过",
+      "remaining": "未修改照片数据；未穷举全部 EXIF 类型"
+    },
+    {
+      "id": "seo-tools",
+      "installed": {
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.23.0",
+        "artifact": "seo-tools-1.10.1.jar"
+      },
+      "installedArtifactSha256": "40413a0e803c3510e547e5022d9ab4960a4d7c35803626c13967a0bf259c31e4",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.10.1",
+        "url": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg",
+        "publishedAt": "2026-08-08T15:20:30.801088110Z",
+        "requiresHalo": ">=2.23.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.3.0-rc.3",
+          "url": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-hsbzhsib",
+          "publishedAt": "2025-06-13T14:46:49.569518480Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.10.1",
+      "implementationContractVersion": "1.9.5",
+      "historicalTestedVersion": "1.10.1",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留统一 Head；无前台接口变更",
+      "validation": "读取检查与八条 PJAX 路由的单一 canonical/description",
+      "remaining": "未调用搜索引擎推送"
+    },
+    {
+      "id": "PluginLinks",
+      "installed": {
+        "version": "2.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.25.0",
+        "artifact": "PluginLinks-2.3.0.jar"
+      },
+      "installedArtifactSha256": "96ec593d97912f6f3069cc184004389459ac842cea20212eb664c2ca19862f86",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "2.3.0",
+        "url": "https://www.halo.run/store/apps/app-hfbQg/releases/app-release-rpaiuvqj",
+        "publishedAt": "2026-08-12T11:06:07.559019462Z",
+        "requiresHalo": ">=2.25.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-hfbQg/releases/app-release-rpaiuvqj"
+      },
+      "observedPrereleases": [
+        {
+          "version": "2.3.0-beta.4",
+          "url": "https://www.halo.run/store/apps/app-hfbQg/releases/app-release-bg32rsaa",
+          "publishedAt": "2026-08-04T13:53:58.749270178Z",
+          "requiresHalo": ">=2.25.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-links",
+        "version": "2.3.0",
+        "requiresHalo": ">=2.25.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "54abc9582bd3bee41a7e4241afdb21bcc0c7c8c6",
+        "documentation": "https://github.com/halo-sigs/plugin-links/blob/54abc9582bd3bee41a7e4241afdb21bcc0c7c8c6/dev/theme-api.md",
+        "sourceFileSha256": "542dc7b9e234cddd2217327c3dafbd44e162a7746df3233e7fbb198a614238ef"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "2.3.0",
+      "implementationContractVersion": "2.3.0",
+      "historicalTestedVersion": "2.3.0",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "新增官方 REST 申请适配；修复首页分组选取；保留 RSS 隐私门控",
+      "validation": "真实列表/RSS/评论宿主、PJAX；申请仅替身回归",
+      "remaining": "正式申请开关关闭，未执行申请与审核写入"
+    },
+    {
+      "id": "PluginMoments",
+      "installed": {
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "PluginMoments-1.19.0.jar"
+      },
+      "installedArtifactSha256": "1966bb104625ea4ac7b5e0dbb8ad95b0a3d542b3d6c0f34bc737708f0314a7e5",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.19.0",
+        "url": "https://www.halo.run/store/apps/app-SnwWD/releases/app-release-uip7zlta",
+        "publishedAt": "2026-09-10T14:15:29.549340406Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-SnwWD/releases/app-release-uip7zlta"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-moments",
+        "version": "1.19.0",
+        "requiresHalo": ">=2.26.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "0f631c3f6ab9526c656b4210cb00014ff41bf9c6",
+        "documentation": "https://github.com/halo-sigs/plugin-moments/blob/0f631c3f6ab9526c656b4210cb00014ff41bf9c6/dev/theme-api.md",
+        "sourceFileSha256": "b1e1f233ee76495dcd184815af8b772e340d102eb3e9fe248a2e1b832775f084"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.19.0",
+      "implementationContractVersion": "1.16.1",
+      "historicalTestedVersion": "1.19.0",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留 releaseTime、作者为空降级和媒体生命周期",
+      "validation": "列表/详情/RSS API、PJAX",
+      "remaining": "发布/上传/删除未执行；缺失作者实站样本待验"
+    },
+    {
+      "id": "page-cache",
+      "installed": {
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.23.0",
+        "artifact": "page-cache-1.6.0.jar"
+      },
+      "installedArtifactSha256": "f9ac158c96ebe9a6677d37b437fada49379ccc9b79dd21d72a372e2380d1a06b",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.6.0",
+        "url": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd",
+        "publishedAt": "2026-08-13T04:39:13.008748281Z",
+        "requiresHalo": ">=2.23.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "运行缓存；1.6 清理角色变更，主题继续用版本化静态资源；未清缓存"
+    },
+    {
+      "id": "content-tools",
+      "installed": {
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "content-tools-1.8.0.jar"
+      },
+      "installedArtifactSha256": "3de24e331b99f22b0abc263b7e84ab25727e0564af9dc258ac987ffd35d6f6a3",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.8.0",
+        "url": "https://www.halo.run/store/apps/app-SUvBR/releases/app-release-58jwitjo",
+        "publishedAt": "2026-08-14T11:10:31.264415810Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-SUvBR/releases/app-release-58jwitjo"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "后台格式转换；1.8 适配 Halo 2.26，保持正文容器即可"
+    },
+    {
+      "id": "PluginContactForm",
+      "installed": {
+        "version": "1.6.4",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.2",
+        "artifact": "PluginContactForm-1.6.4.jar"
+      },
+      "installedArtifactSha256": "ebc12be5f6487f71741f00f80e25ccc3fda04691bfe4b74f1b6f229fef3185fa",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.6.4",
+        "url": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-mnsixhfk",
+        "publishedAt": "2026-07-15T04:11:04.979089105Z",
+        "requiresHalo": ">=2.22.2",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-mnsixhfk"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.2.0-rc.2",
+          "url": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-xcmy5i1j",
+          "publishedAt": "2025-06-09T15:23:53.778776918Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.6.4",
+      "implementationContractVersion": "1.6.4",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 21 个变量、3 类宿主与官方 Loader",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "缺表单样本；上传/提交/弹窗待运行验证"
+    },
+    {
+      "id": "ai-assistant",
+      "installed": {
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "ai-assistant-3.0.0.jar"
+      },
+      "installedArtifactSha256": "d447a65428f811ecea259f9e41fbabafd67d4e2ed8057ea934fd9175854de141",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "3.0.0",
+        "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-lsh7g0yx",
+        "publishedAt": "2026-08-17T10:32:28.322448103Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-lsh7g0yx"
+      },
+      "observedPrereleases": [
+        {
+          "version": "3.0.0-beta.4",
+          "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-1fiszyal",
+          "publishedAt": "2026-07-30T11:20:26.651794293Z",
+          "requiresHalo": ">=2.25.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "3.0.0",
+      "implementationContractVersion": "3.0.0",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 ai-summary-widget 与 4 个公开变量",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "依赖已启动；前序临时挂载显示通过；自动摘要关闭、无模型，自动注入/生成待验"
+    },
+    {
+      "id": "alist-integration",
+      "installed": {
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.20.0",
+        "artifact": "alist-integration-1.2.0.jar"
+      },
+      "installedArtifactSha256": "68820666cf54947f887cb50b5d3c427fa3a39c8a66bd88a0ac32b8968eaba501",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.2.0",
+        "url": "https://www.halo.run/store/apps/app-wEGMV/releases/app-release-d2ydr0xa",
+        "publishedAt": "2026-06-18T07:02:56.850410558Z",
+        "requiresHalo": ">=2.20.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-wEGMV/releases/app-release-d2ydr0xa"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "附件存储；1.2 访问前缀由存储侧负责，不改变主题展示接口"
+    },
+    {
+      "id": "backup-improved",
+      "installed": {
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "backup-improved-1.5.1.jar"
+      },
+      "installedArtifactSha256": "fb98597ced3f3cf0e44ed0c079714cb822ced725d1e9b20070b55d9a69acd273",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.5.1",
+        "url": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-3qec25tx",
+        "publishedAt": "2026-01-02T10:36:09.532742627Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-3qec25tx"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.4.0-rc.2",
+          "url": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-pj2kwqj6",
+          "publishedAt": "2025-06-12T02:13:17.402442830Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "备份/通知后台任务；1.5.1 修复重复通知，无主题接口"
+    },
+    {
+      "id": "plugin-ldap-login",
+      "installed": {
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.21.0",
+        "artifact": "plugin-ldap-login-1.3.0.jar"
+      },
+      "installedArtifactSha256": "05be69815248c6e45d04376f4b9e7efbe299dddbe396861c586afaf930b3ae11",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.3.0",
+        "url": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-wf3uzfck",
+        "publishedAt": "2025-06-15T06:58:28.536362639Z",
+        "requiresHalo": ">=2.21.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-wf3uzfck"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.3.0-rc.4",
+          "url": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-kdnzesk0",
+          "publishedAt": "2025-06-05T08:28:14.696855534Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "LDAP 用户与权限；1.3 后台同步改动，无新增主题代码"
+    },
+    {
+      "id": "plugin-docsme",
+      "installed": {
+        "version": "1.10.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "plugin-docsme-1.10.0.jar"
+      },
+      "installedArtifactSha256": "6cb148d87e38fe28d253a268764c11e7225cd52f9dabf9d865c17493b5a1ecae",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.10.0",
+        "url": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-vuhmiwq1",
+        "publishedAt": "2026-09-18T09:21:00.960672959Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-vuhmiwq1"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.5.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-xazkctqz",
+          "publishedAt": "2026-03-10T09:29:47.891747260Z",
+          "requiresHalo": ">=2.23.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-docsme",
+        "version": "1.10.0",
+        "requiresHalo": ">=2.26.0",
+        "knowledgeRevision": "2026-09-22.2",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": null,
+        "documentation": "https://www.halo.run/docs/docsme/develop/theme",
+        "sourceFileSha256": "1c7a510792e8dafaad852311539e4e2834cc3d2e707ab62025c24d94e6b29ff0"
+      },
+      "skillCorrections": [
+        "技能契约正文的 2026-09-05 核对日期早于官方 1.10.0 的 2026-09-18 发布；本表使用当天官方发布页重新取证，不沿用该日期。"
+      ],
+      "plannedSupport": "1.10.0",
+      "implementationContractVersion": "1.7.0",
+      "historicalTestedVersion": "1.10.0",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "保留官方片段、权限分支和 DocTree 评论主体",
+      "validation": "项目/目录/正文读取、PJAX",
+      "remaining": "许可证切换及三种未授权模式未制造状态测试"
+    },
+    {
+      "id": "editor-hyperlink-card",
+      "installed": {
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.0",
+        "artifact": "editor-hyperlink-card-1.9.2.jar"
+      },
+      "installedArtifactSha256": "79936406067f7ea572c44d38b9089dcae0d456cd542245d52c1132351cffa542",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.9.2",
+        "url": "https://www.halo.run/store/apps/app-UpUJA/releases/app-release-epm4pje4",
+        "publishedAt": "2026-06-10T07:57:11.807735271Z",
+        "requiresHalo": ">=2.22.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-UpUJA/releases/app-release-epm4pje4"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.9.2",
+      "implementationContractVersion": "1.9.2",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留块级/行内宿主和资源加载",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "资源/宿主 HTTP 已通过；外部抓取失败与全部交互待验"
+    },
+    {
+      "id": "plugin-oauth2",
+      "installed": {
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.20.0",
+        "artifact": "plugin-oauth2-1.7.1.jar"
+      },
+      "installedArtifactSha256": "dabe367418afbf29be8200b280b3b44be9ae38d6ec9945cae298173019ec6868",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.7.1",
+        "url": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-jsoz5qnd",
+        "publishedAt": "2026-01-20T03:47:55.509110818Z",
+        "requiresHalo": ">=2.20.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-jsoz5qnd"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.5.0-rc.1",
+          "url": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-XLjfV",
+          "publishedAt": "2024-10-30T04:21:33.692496644Z",
+          "requiresHalo": ">=2.20.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "SSO 配置/认证提供者；1.7.1 配置扩展，保留 Halo 认证片段"
+    },
+    {
+      "id": "plugin-social-login",
+      "installed": {
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.23.0",
+        "artifact": "plugin-social-login-1.7.0.jar"
+      },
+      "installedArtifactSha256": "248f193cbc6908fb0ff5e9f625c1f53b7f6a7e309e2e58ab8173efc021191b2b",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.7.0",
+        "url": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-dbseugob",
+        "publishedAt": "2026-03-13T08:48:02.760269072Z",
+        "requiresHalo": ">=2.23.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-dbseugob"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.7.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-wnumu3tw",
+          "publishedAt": "2026-03-10T04:43:09.581539858Z",
+          "requiresHalo": ">=2.23.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "第三方认证提供者；1.7 Halo 2.23 适配，无主题专用接口变更"
+    },
+    {
+      "id": "restricted-reading",
+      "installed": {
+        "version": "1.9.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "restricted-reading-1.9.1.jar"
+      },
+      "installedArtifactSha256": "f478080b0f1aff95e1e34f10979e44f69aed145242565e661155ac350551969c",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.9.1",
+        "url": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-1avdqral",
+        "publishedAt": "2026-09-20T03:57:31.925115301Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-1avdqral"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.7.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-te3fqv25",
+          "publishedAt": "2026-03-10T04:48:44.615044815Z",
+          "requiresHalo": ">=2.21.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.9.1",
+      "implementationContractVersion": "1.8.1",
+      "historicalTestedVersion": null,
+      "classification": "待运行验证",
+      "scope": "主题集成",
+      "change": "保留 content-restrict-widget 与登录/评论主体",
+      "validation": "代码适配完成，运行验证待完成（部分读取证据不替代完整流程）",
+      "remaining": "缺受限内容样本；各解锁模式待运行验证"
+    },
+    {
+      "id": "PluginCommentWidget",
+      "installed": {
+        "version": "3.3.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "PluginCommentWidget-3.3.2.jar"
+      },
+      "installedArtifactSha256": "e569a4bd8aade89383c8c7fee169fd822cfa80ff01341fdaa292cd2cd9db8f3f",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "3.3.2",
+        "url": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-e6j0ni2s",
+        "publishedAt": "2026-09-20T09:36:03.765120068Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-e6j0ni2s"
+      },
+      "observedPrereleases": [
+        {
+          "version": "2.2.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-ersbz",
+          "publishedAt": "2024-04-26T13:51:39.067226637Z",
+          "requiresHalo": ">=2.15.0"
+        }
+      ],
+      "skillBaseline": {
+        "name": "halo-plugin-comment-widget",
+        "version": "3.3.2",
+        "requiresHalo": ">=2.26.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "1bb6becf499d3f23f3bf9c8ab08b71bb8e078b74",
+        "documentation": "https://github.com/halo-dev/plugin-comment-widget/blob/1bb6becf499d3f23f3bf9c8ab08b71bb8e078b74/dev/theme-integration.md",
+        "sourceFileSha256": "9090f8195902d28a8f653669e77f61fa8e5318896446eb9c9a13bc4808bc11a4"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "3.3.2",
+      "implementationContractVersion": "3.3.2",
+      "historicalTestedVersion": "3.3.2",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "动态核对实际资源版本，保留 CSS 变量与 subject",
+      "validation": "3.3.2 资源 GET、懒挂载单实例、配置/列表读取",
+      "remaining": "图片上传、发布、审核、ALTCHA/Turnstile 未执行"
+    },
+    {
+      "id": "PluginSitemap",
+      "installed": {
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.22.7",
+        "artifact": "PluginSitemap-1.3.0.jar"
+      },
+      "installedArtifactSha256": "06cccf55a6d6e9369c818de7a52049fddb4b7f20bb83af52ebc329f89a637c8e",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.3.0",
+        "url": "https://www.halo.run/store/apps/app-QDFMI/releases/app-release-lytd42sz",
+        "publishedAt": "2026-04-27T09:17:15.010574830Z",
+        "requiresHalo": ">=2.22.7",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-QDFMI/releases/app-release-lytd42sz"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "XML 输出服务；1.3 移除非必要字段并修复 URL 转义；未发现插件路由覆盖"
+    },
+    {
+      "id": "PluginSearchWidget",
+      "installed": {
+        "version": "1.7.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.17.0",
+        "artifact": "PluginSearchWidget-1.7.1.jar"
+      },
+      "installedArtifactSha256": "1c7da1a954e4d6af12e95be10eec35c518d436acb578933b66e53c911395193b",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.7.1",
+        "url": "https://www.halo.run/store/apps/app-DlacW/releases/app-release-oouqymo1",
+        "publishedAt": "2025-09-09T08:32:53.585286749Z",
+        "requiresHalo": ">=2.17.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-DlacW/releases/app-release-oouqymo1"
+      },
+      "observedPrereleases": [],
+      "skillBaseline": {
+        "name": "halo-plugin-search-widget",
+        "version": "1.7.1",
+        "requiresHalo": ">=2.17.0",
+        "knowledgeRevision": "2026-09-22.1",
+        "applicability": "exact-baseline-only",
+        "sourceCommit": "d78a04addcdaf4e4e37634015bd09932b5389c32",
+        "documentation": "https://github.com/halo-dev/plugin-search-widget/blob/d78a04addcdaf4e4e37634015bd09932b5389c32/README.md#%E4%B8%BB%E9%A2%98%E9%80%82%E9%85%8D",
+        "sourceFileSha256": "f267d6ea7175eaa12282e7ff51a3e946fa3bff1c29561b6c2913eb4d02e39548"
+      },
+      "skillCorrections": [],
+      "plannedSupport": "1.7.1",
+      "implementationContractVersion": "1.7.1",
+      "historicalTestedVersion": null,
+      "classification": "已验证",
+      "scope": "主题导航搜索入口与读取交互",
+      "change": "保留 SearchWidget.open、主题配色标记和官方资源，无需改接口",
+      "validation": "真实查询、空结果、输入焦点、键盘选中并进入文档、Escape 关闭",
+      "remaining": "未改变索引配置；排序和索引完整性属于插件后台范围"
+    },
+    {
+      "id": "PluginFeed",
+      "installed": {
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.21.0",
+        "artifact": "PluginFeed-1.5.0.jar"
+      },
+      "installedArtifactSha256": "d7e97df76e502c0f1bd0605d4f3a6dc8b047ed20e1de50fbbed992e95fd33a87",
+      "officialArtifactMatch": true,
+      "latestStable": {
+        "version": "1.5.0",
+        "url": "https://www.halo.run/store/apps/app-KhIVw/releases/app-release-x64igayx",
+        "publishedAt": "2025-06-15T07:00:28.124683537Z",
+        "requiresHalo": ">=2.21.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-KhIVw/releases/app-release-x64igayx"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.1.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-KhIVw/releases/app-release-zuBrT",
+          "publishedAt": "2023-04-14T16:01:50.837038217Z",
+          "requiresHalo": ">=2.0.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": "1.5.0",
+      "implementationContractVersion": "1.5.0",
+      "historicalTestedVersion": "1.5.0",
+      "classification": "已验证",
+      "scope": "仅以下主题读取/显示表面",
+      "change": "RSS 自动发现契约保留，无需新增改动",
+      "validation": "feed.xml 与 Head 链接读取",
+      "remaining": "未触发订阅外部业务"
+    },
+    {
+      "id": "app-store-integration",
+      "installed": {
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requires": ">=2.26.0",
+        "artifact": "app-store-integration-1.19.0.jar"
+      },
+      "installedArtifactSha256": "5f2322514726180b5eab31f00dd31664fb832021e06a0f31b91a7fbe2b9995e8",
+      "officialArtifactMatch": null,
+      "latestStable": {
+        "version": "1.19.0",
+        "url": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-dtqssqka",
+        "publishedAt": "2026-09-20T03:57:46.359229939Z",
+        "requiresHalo": ">=2.26.0",
+        "requirementsUrl": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-dtqssqka"
+      },
+      "observedPrereleases": [
+        {
+          "version": "1.10.0-beta.1",
+          "url": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-oh0m7vl9",
+          "publishedAt": "2025-05-14T03:41:07.256631299Z",
+          "requiresHalo": ">=2.17.0"
+        }
+      ],
+      "skillBaseline": null,
+      "skillCorrections": [],
+      "plannedSupport": null,
+      "implementationContractVersion": null,
+      "historicalTestedVersion": null,
+      "classification": "不适用",
+      "scope": "后台能力、平台注入或未使用",
+      "change": "无需主题代码改动",
+      "validation": "仅版本、清单及适用范围核对，不声明主题兼容",
+      "remaining": "应用安装/许可证 Console；1.19 免费额度变化，无主题契约"
+    }
+  ]
+}

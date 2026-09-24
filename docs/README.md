@@ -2,6 +2,8 @@
 
 这套文档按二级、三级目录分类维护，覆盖主题和插件的完整配置、使用方式、依赖关系和验收方法。
 
+当前版本修复与验证见 [v2.2.39 发布说明](./releases/v2.2.39.md)。
+
 ## 文档结构
 
 | 一级目录  | 二级分类                                         | 说明                                     | 入口                            |
@@ -64,7 +66,7 @@
 | 友情链接 | `plugins/content`     | [友情链接](./plugins/content/links.md)         |
 | 图库     | `plugins/content`     | [图库页面](./plugins/content/photos.md)        |
 | 瞬间     | `plugins/content`     | [瞬间页面](./plugins/content/moments.md)       |
-| 朋友圈   | `plugins/content`     | [朋友圈页面](./plugins/content/friends.md)     |
+| 友链动态 | `plugins/content`     | [友情链接](./plugins/content/links.md)         |
 | 文档中心 | `plugins/content`     | [文档页面](./plugins/content/docsme.md)        |
 | 豆瓣     | `plugins/collections` | [豆瓣页面](./plugins/collections/douban.md)    |
 | 追番     | `plugins/collections` | [追番页面](./plugins/collections/bangumi.md)   |

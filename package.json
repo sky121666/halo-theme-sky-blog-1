@@ -1,7 +1,7 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.38",
+  "version": "2.2.39",
   "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=24.18.0 <25",
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "pnpm run build-only && theme-package && pnpm run verify:seo:package",
-    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:plugin-contracts && pnpm run verify:links-runtime && pnpm run verify:seo && vite build && pnpm run verify:build-artifacts",
+    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:plugin-contracts && pnpm run verify:links-runtime && pnpm run verify:plugin-upgrades && pnpm run verify:plugin-evidence && pnpm run verify:seo && pnpm run verify:heatmap && vite build && pnpm run verify:build-artifacts",
     "dev": "vite build --watch",
     "lint": "eslint src scripts vite.config.ts eslint.config.js prettier.config.js postcss.config.cjs --max-warnings 0",
     "format": "prettier --write \"*.config.{js,cjs}\" \"**/*.{ts,json,yaml,yml,html}\"",
@@ -18,11 +18,16 @@
     "typecheck:config": "tsc --project tsconfig.node.json",
     "verify:plugins": "node scripts/verify-plugin-pages.mjs",
     "verify:plugins:deep": "VERIFY_PLUGIN_DEEP=1 node scripts/verify-plugin-pages.mjs",
+    "verify:runtime-issues": "node scripts/verify-plugin-runtime-issues.mjs",
+    "verify:passkey-disposable": "node scripts/verify-passkey-disposable.mjs",
     "verify:build-artifacts": "node scripts/verify-build-artifacts.mjs",
     "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
     "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs",
     "verify:links-runtime": "node scripts/verify-links-runtime.mjs",
+    "verify:plugin-upgrades": "node scripts/verify-plugin-upgrades.mjs",
+    "verify:plugin-evidence": "node scripts/verify-plugin-evidence.mjs",
     "verify:seo": "node scripts/verify-seo-contracts.mjs",
+    "verify:heatmap": "TZ=Asia/Shanghai node scripts/verify-article-heatmap.mjs && TZ=America/Los_Angeles node scripts/verify-article-heatmap.mjs",
     "verify:seo:package": "node scripts/verify-seo-contracts.mjs --archive"
   },
   "dependencies": {
@@ -45,7 +50,7 @@
     "eslint-config-prettier": "10.1.8",
     "glob": "13.0.6",
     "globals": "17.7.0",
-    "postcss": "8.5.19",
+    "postcss": "8.5.28",
     "prettier": "3.9.5",
     "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "4.3.3",
@@ -58,14 +63,17 @@
       "esbuild@0.28.1"
     ],
     "overrides": {
-      "brace-expansion@2": "2.1.3",
-      "brace-expansion@5": "5.0.8",
+      "@humanfs/node@0.16": "0.16.8",
+      "brace-expansion@2": "2.1.7",
+      "brace-expansion@5": "5.0.12",
+      "fflate@0.8": "0.8.3",
       "flatted@3": "3.4.2",
-      "js-yaml@4": "4.3.0",
+      "js-yaml@4": "4.3.2",
       "lodash@4": "4.18.1",
       "minimatch@5": "5.1.9",
       "minimatch@9": "9.0.9",
-      "svgo@4": "4.0.2",
+      "nanoid@3": "3.3.19",
+      "svgo@4": "4.1.0",
       "yaml@2": "2.9.0"
     },
     "auditConfig": {

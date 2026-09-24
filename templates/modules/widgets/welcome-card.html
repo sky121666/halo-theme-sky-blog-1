@@ -150,7 +150,7 @@
     <div x-show="weather" class="flex items-center gap-4">
       <!-- 温度 -->
       <div class="flex items-baseline gap-1">
-        <span class="text-3xl font-bold text-base-content" x-text="Math.round(weather?.temp || 0)"></span>
+        <span class="text-3xl font-bold text-base-content" x-text="formatWeatherMetric(weather?.temp)"></span>
         <span class="text-base-content/50">°C</span>
       </div>
 
@@ -204,7 +204,7 @@
           </defs>
           <use width="118" height="278" href="#thermo-full" transform="translate(197 117)" />
         </svg>
-        <span x-text="Math.round(weather?.feels_like || 0)"></span>°
+        <span x-text="formatWeatherMetric(weather?.feels_like)"></span>°
       </span>
       <span class="flex items-center gap-1">
         <!-- 湿度图标（水滴动画） -->
@@ -221,7 +221,7 @@
           </defs>
           <use width="175" height="260" href="#drop-inner" transform="translate(168 100)" />
         </svg>
-        <span x-text="weather?.humidity || 0"></span>%
+        <span x-text="formatWeatherMetric(weather?.humidity)"></span>%
       </span>
       <span class="flex items-center gap-1">
         <!-- 风速图标（动画） -->

@@ -2,12 +2,12 @@ export const pluginContracts = [
   {
     plugin: "PluginLinks",
     aliases: ["PluginLinks"],
-    contractVersion: "2.2.1",
-    testedVersion: "2.2.1",
+    contractVersion: "2.3.0",
+    testedVersion: "2.3.0",
     status: "compatible-tested",
-    surface: "友链路由与详情、RSS 来源/权限/游标状态、申请创建降级、评论与首页 Finder",
+    surface: "友链、RSS、访客验证码申请与留言降级、评论与首页 Finder",
     evidence:
-      "templates/links.html; templates/modules/links; src/apps/links/runtime.js; templates/modules/index/content.html; templates/modules/widgets/links.html; settings.yaml; scripts/verify-plugin-pages.mjs; scripts/verify-links-runtime.mjs",
+      "templates/links.html; templates/modules/links; src/apps/links/runtime.js; templates/modules/index/content.html; templates/modules/widgets/links.html; settings.yaml; scripts/verify-plugin-pages.mjs; scripts/verify-links-runtime.mjs; docs/system/adaptation/main-halo-runtime-audit.md; src/apps/links/application.js; scripts/verify-plugin-upgrades.mjs",
   },
   {
     plugin: "PluginPhotos",
@@ -23,18 +23,21 @@ export const pluginContracts = [
     plugin: "PluginMoments",
     aliases: ["PluginMoments"],
     contractVersion: "1.16.1",
-    status: "inferred",
-    surface: "瞬间列表、详情、作者缺失降级、前端发布",
-    evidence: "templates/moments.html; templates/moment.html; templates/modules/moments",
+    status: "compatible-tested",
+    surface: "瞬间列表、详情、releaseTime、媒体和作者降级；发布接口仅核对契约",
+    evidence:
+      "templates/moments.html; templates/moment.html; templates/modules/moments; docs/system/adaptation/main-halo-runtime-audit.md",
+    testedVersion: "1.19.0",
   },
   {
     plugin: "seo-tools",
     aliases: ["seo-tools"],
     contractVersion: "1.9.5",
-    status: "inferred",
+    status: "compatible-tested",
     surface: "Head 单一所有权、canonical、社交元数据、结构化数据和主题 SSR 降级",
     evidence:
       "templates/modules/seo-head.html; scripts/verify-seo-contracts.mjs; docs/system/adaptation/main-halo-runtime-audit.md",
+    testedVersion: "1.10.1",
   },
   {
     plugin: "PluginFeed",
@@ -47,20 +50,14 @@ export const pluginContracts = [
       "templates/modules/seo-head.html; scripts/verify-plugin-pages.mjs; docs/system/adaptation/main-halo-runtime-audit.md",
   },
   {
-    plugin: "plugin-friends",
-    aliases: ["plugin-friends"],
-    contractVersion: "1.4.6",
-    status: "confirmed",
-    surface: "朋友圈 RSS 动态、首页动态与 PluginLinks 可选增强",
-    evidence: "templates/friends.html; templates/modules/friends; templates/modules/widgets/tabs_group.html",
-  },
-  {
     plugin: "plugin-docsme",
     aliases: ["plugin-docsme"],
     contractVersion: "1.7.0",
-    status: "inferred",
+    status: "compatible-tested",
     surface: "文档中心、目录、正文、DocTree 评论 subject",
-    evidence: "templates/docs.html; templates/doc.html; templates/modules/doc-content.html",
+    evidence:
+      "templates/docs.html; templates/doc.html; templates/modules/doc-content.html; docs/system/adaptation/main-halo-runtime-audit.md",
+    testedVersion: "1.10.0",
   },
   {
     plugin: "plugin-bilibili-bangumi",
@@ -72,7 +69,7 @@ export const pluginContracts = [
     evidence: "templates/bangumis.html; templates/modules/widgets/bangumi-card.html",
   },
   {
-    plugin: "halo-plugin-steam",
+    plugin: "steam",
     aliases: ["halo-plugin-steam", "plugin-steam", "steam"],
     contractVersion: "1.0.0",
     status: "inferred",
@@ -81,7 +78,7 @@ export const pluginContracts = [
       "templates/steam.html; templates/modules/steam/content.html; templates/modules/widgets/sidebar.html; src/pages/steam/steam.js",
   },
   {
-    plugin: "plugin-equipment",
+    plugin: "equipment",
     aliases: ["plugin-equipment", "equipment", "PluginEquipment"],
     contractVersion: "1.1.1",
     status: "confirmed",
@@ -91,10 +88,12 @@ export const pluginContracts = [
   {
     plugin: "plugin-douban",
     aliases: ["plugin-douban"],
-    contractVersion: "1.2.5",
-    status: "confirmed",
-    surface: "豆瓣海报网格、类型和题材 API",
-    evidence: "templates/douban.html; src/pages/douban/douban.js",
+    contractVersion: "1.2.6",
+    status: "compatible-tested",
+    surface: "豆瓣扁平 DTO 与旧格式兼容、海报网格、类型/题材筛选及历史恢复",
+    evidence:
+      "templates/douban.html; src/pages/douban/douban.js; docs/system/adaptation/main-halo-runtime-audit.md; src/apps/douban/model.js; scripts/verify-plugin-upgrades.mjs",
+    testedVersion: "1.2.6",
   },
   {
     plugin: "PluginSearchWidget",
@@ -107,20 +106,22 @@ export const pluginContracts = [
   {
     plugin: "PluginCommentWidget",
     aliases: ["PluginCommentWidget"],
-    contractVersion: "3.1.2",
-    status: "confirmed",
-    surface: "文章、页面和插件页评论区",
+    contractVersion: "3.3.2",
+    status: "compatible-tested",
+    surface: "halo:comment 注入、懒挂载、资源版本一致性与评论主体",
     evidence:
-      "templates/modules/post/article-footer.html; templates/modules/moments; templates/modules/doc-content.html",
+      "templates/modules/post/article-footer.html; templates/modules/moments; templates/modules/doc-content.html; docs/system/adaptation/main-halo-runtime-audit.md",
+    testedVersion: "3.3.2",
   },
   {
-    plugin: "plugin-shiki",
+    plugin: "shiki",
     aliases: ["plugin-shiki", "shiki"],
     contractVersion: "1.3.1",
-    testedVersion: "1.4.1",
+    testedVersion: "1.5.1",
     status: "compatible-tested",
-    surface: "文章和文档代码高亮；Halo 2.23/2.24 兼容线",
-    evidence: "src/static/css/article-content.css; docs/system/adaptation/plugin-adaptation.md",
+    surface: "文章与文档高亮、原生代码换行、明暗及 PJAX 归一化",
+    evidence:
+      "src/static/css/article-content.css; docs/system/adaptation/plugin-adaptation.md; docs/system/adaptation/main-halo-runtime-audit.md",
   },
   {
     plugin: "PluginLightGallery",
@@ -176,11 +177,11 @@ export const pluginContracts = [
   {
     plugin: "ai-assistant",
     aliases: ["ai-assistant", "plugin-ai-assistant"],
-    contractVersion: "1.5.1",
-    testedVersion: "2.2.4",
-    status: "compatible-tested",
-    surface: "文章顶部 AI 总结小部件的主题配色与 PJAX 资源生命周期",
-    evidence: "src/pages/post/post.css; src/common/main.js",
+    contractVersion: "3.0.0",
+    status: "confirmed",
+    surface: "3.0/3.1 共用的摘要宿主与四个颜色变量；3.1 运行及自动注入待验",
+    evidence:
+      "src/pages/post/post.css; src/common/main.js; docs/system/adaptation/main-halo-runtime-audit.md; docs/system/adaptation/evidence/2026-09-23/ai-assistant-3.1.0-source-diff.json",
   },
   {
     plugin: "editor-hyperlink-card",

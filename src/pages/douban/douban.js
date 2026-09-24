@@ -1,6 +1,7 @@
 import "./douban.css";
 import { skyDebug } from "../../common/js/debug.js";
 import { notifySwupPageReady, registerPageLifecycle } from "../../common/js/page-runtime.js";
+import { normalizeDoubanItem } from "../../apps/douban/model.js";
 
 const API_BASE = "/apis/api.douban.moony.la/v1alpha1/doubanmovies";
 const QUERY_KEYS = ["dataType", "genre", "page", "size", "type", "status"];
@@ -80,8 +81,7 @@ function normalizeGenre(genre) {
 }
 
 function createCard(item, signal) {
-  const spec = item?.spec || {};
-  const faves = item?.faves || {};
+  const spec = normalizeDoubanItem(item);
   const article = createEl("article", "douban-card-wrap");
   const link = createEl("a", "douban-card");
   link.href = spec.link || "#";
@@ -120,15 +120,15 @@ function createCard(item, signal) {
   const meta = createEl("div", "douban-meta");
   appendMeta(meta, spec.year);
   appendMeta(meta, spec.dataType);
-  appendMeta(meta, formatDate(faves.createTime));
+  appendMeta(meta, formatDate(spec.favesCreateTime));
   if (meta.children.length > 0) info.appendChild(meta);
 
   if (spec.cardSubtitle) {
     info.appendChild(createEl("p", "douban-card-subtitle", spec.cardSubtitle));
   }
 
-  if (faves.remark) {
-    info.appendChild(createEl("p", "douban-remark", faves.remark));
+  if (spec.favesRemark) {
+    info.appendChild(createEl("p", "douban-remark", spec.favesRemark));
   }
 
   link.append(cover, info);

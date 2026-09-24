@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T01:43:12.773Z",
+  "browser": "Ego Lite",
+  "taskSpaceId": 5,
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "686a944160f0cc1f1b660ceffeb167ef4a60db08ea1b008c72832afc2422cfa2"
+  },
+  "scope": "29 representative UI routes by full browser navigation, desktop viewport, current uncached assets",
+  "results": [
+    {
+      "path": "/",
+      "url": "http://localhost:8090/?qa=20260923-final",
+      "title": "5ee博客 - 123",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/archives",
+      "url": "http://localhost:8090/archives?qa=20260923-final",
+      "title": "文章归档 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "url": "http://localhost:8090/archives/editor-feature-demo?qa=20260923-final",
+      "title": "编辑器功能演示 - 5ee博客",
+      "main": true,
+      "h1": 2,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/categories",
+      "url": "http://localhost:8090/categories?qa=20260923-final",
+      "title": "文章分类 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/categories/ai",
+      "url": "http://localhost:8090/categories/ai?qa=20260923-final",
+      "title": "AI 分类 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/categories?p=2",
+      "url": "http://localhost:8090/categories?p=2&qa=20260923-final",
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/tags",
+      "url": "http://localhost:8090/tags?qa=20260923-final",
+      "title": "文章标签 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/tags/ai",
+      "url": "http://localhost:8090/tags/ai?qa=20260923-final",
+      "title": "AI 标签 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/links",
+      "url": "http://localhost:8090/links?qa=20260923-final",
+      "title": "友情链接 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/links?view=friends",
+      "url": "http://localhost:8090/links?qa=20260923-final&view=friends",
+      "title": "友情链接 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/links?view=apply",
+      "url": "http://localhost:8090/links?qa=20260923-final&view=apply",
+      "title": "友情链接 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/photos",
+      "url": "http://localhost:8090/photos?qa=20260923-final",
+      "title": "发现 细腻 的视觉美学 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "url": "http://localhost:8090/photos/photo-14xk1htg?qa=20260923-final",
+      "title": "3E3CE107.jpg - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/moments",
+      "url": "http://localhost:8090/moments?qa=20260923-final",
+      "title": "瞬间 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/moments/moment-32asaylm",
+      "url": "http://localhost:8090/moments/moment-32asaylm?qa=20260923-final",
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/docs",
+      "url": "http://localhost:8090/docs?qa=20260923-final",
+      "title": "文档中心 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?qa=20260923-final",
+      "title": "主题配置功能详解 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/douban",
+      "url": "http://localhost:8090/douban?qa=20260923-final",
+      "title": "豆瓣记录 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/steam",
+      "url": "http://localhost:8090/steam?qa=20260923-final",
+      "title": "Steam 游戏库 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/equipments",
+      "url": "http://localhost:8090/equipments?qa=20260923-final",
+      "title": "我的装备 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/bangumis",
+      "url": "http://localhost:8090/bangumis?qa=20260923-final",
+      "title": "追番列表 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/about",
+      "url": "http://localhost:8090/about?qa=20260923-final",
+      "title": "关于我 - 5ee博客",
+      "main": true,
+      "h1": 2,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/privacy",
+      "url": "http://localhost:8090/privacy?qa=20260923-final",
+      "title": "测试 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/authors/sky0821",
+      "url": "http://localhost:8090/authors/sky0821?qa=20260923-final",
+      "title": "Sky 的文章 - 5ee博客",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/dishes",
+      "url": "http://localhost:8090/dishes/?qa=20260923-final",
+      "title": "首页 · 家庭私厨",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/schedule-calendar",
+      "url": "http://localhost:8090/schedule-calendar?qa=20260923-final&view=agenda",
+      "title": "日程日历",
+      "main": true,
+      "h1": 1,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/login",
+      "url": "http://localhost:8090/login?qa=20260923-final",
+      "title": "登录 - 5ee博客",
+      "main": true,
+      "h1": 2,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/login?method=passkey",
+      "url": "http://localhost:8090/login?method=passkey&qa=20260923-final",
+      "title": "登录 - 5ee博客",
+      "main": true,
+      "h1": 2,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    },
+    {
+      "path": "/signup",
+      "url": "http://localhost:8090/signup?qa=20260923-final",
+      "title": "注册 - 5ee博客",
+      "main": true,
+      "h1": 2,
+      "horizontalOverflow": false,
+      "hasServerError": false,
+      "browserErrors": []
+    }
+  ]
+}

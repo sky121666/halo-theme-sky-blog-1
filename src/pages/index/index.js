@@ -1154,7 +1154,13 @@ registerPageLifecycle(() => {
 
       // 为粒子和星光特效准备嵌套结构
       if (this.decorationEffect === 'effect-particles' || this.decorationEffect === 'effect-starlight') {
-        this.titleElement.innerHTML = `<span><span><span>${this.originalText}</span></span></span>`;
+        const outer = document.createElement('span');
+        const middle = document.createElement('span');
+        const inner = document.createElement('span');
+        inner.textContent = this.originalText;
+        middle.append(inner);
+        outer.append(middle);
+        this.titleElement.replaceChildren(outer);
       }
 
       // 添加装饰特效类

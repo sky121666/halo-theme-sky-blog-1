@@ -1,0 +1,58 @@
+{
+  "testedAt": "2026-09-22T02:42:20.574961+00:00",
+  "cases": [
+    {
+      "path": "/bangumis?page=bad",
+      "expected": 200,
+      "status": 200,
+      "ok": true,
+      "initialAssumption": 404
+    },
+    {
+      "path": "/bangumis?page=0",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/bangumis?status=999",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/photos/not-a-real-photo-sky-verification",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    }
+  ],
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+  },
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "03349c4f38360b2593296f8e07e8c1892d08b2a6c07cc8c4993cceabb24a5c6f",
+    "fileCount": 360,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "unchangedDuringRun": true
+  },
+  "source": "https://github.com/Roozenlz/plugin-bilibili-bangumi/blob/87bcd652b6947b5bfd33035191ae5777e113ed01/src/main/java/top/roozen/bangumi/config/BangumiPluginConfig.java#L61",
+  "interpretation": "非数字 page 经 NumberUtils.toInt(value, 1) 回退第 1 页；数值越界由 Finder 拒绝。初始按技能概述预期所有非法参数为 404，核对源码后纠正。"
+}

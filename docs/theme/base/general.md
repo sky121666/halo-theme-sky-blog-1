@@ -74,9 +74,13 @@
 
 ## SEO 与 Head 所有权
 
-所有公开布局统一通过 `templates/modules/seo-head.html` 生成标题和标准描述。启用 `seo-tools` 时，插件独占 canonical、Open Graph、Twitter Card 与 JSON-LD，主题不会重复输出；插件未启用时，主题提供一组最小 SSR 降级。登录、注册、退出和密码重置页固定输出 `noindex,nofollow`。
+所有公开布局统一通过 `templates/modules/seo-head.html` 生成标题和标准描述。默认由 `seo-tools` 独占 canonical、Open Graph、Twitter Card 与 JSON-LD；插件未启用时，主题提供最小 SSR 降级。登录、注册、退出和密码重置页固定输出 `noindex,nofollow`。
 
-分类和标签集合页使用 `?p=` 分页，以对齐 Halo 与 `seo-tools 1.9.5` 的 canonical 参数白名单；旧的 `?page=` 仍可读取，但新链接只生成 `?p=`。图库和追番等插件自有的 `page` 查询参数仍由插件决定，`seo-tools 1.9.5` 会把这些查询参数归一到列表根 URL，这是当前上游边界，主题不会用第二条 canonical 覆盖它。
+分类和标签集合页使用 `?p=` 分页，以对齐 `seo-tools 1.10.1` 的 canonical 参数白名单；旧的 `?page=` 仍可读取，但新链接只生成 `?p=`。插件会原样保留非法 `p`，并丢弃 `page`，使这些 URL 的 canonical 与正文页码不一致。
+
+主题现提供“通用（全局）→ SEO 规范链接 → 仅由主题页面生成规范链接”**实验性**开关，默认关闭。关闭 SEO 工具集插件的“开启规范链接”并打开该开关，可修正主题分类/标签页的非法 `p` 和旧 `page` 别名；两边同时开启会输出两个 canonical。切换后必须 Reload 主题、刷新页面缓存，再检查 `/categories?p=abc`、`/categories?page=2`、`/categories?p=2` 及对应 `/tags` URL。最初的[15 URL 与浏览器定向验收](../../system/adaptation/evidence/2026-09-23/seo-cache-ai-followup.json)证明这些主题页面的单一 canonical 正确。
+
+随后在同一 Head 渲染代码上临时扩展到[114 路由 HTTP 与浏览器抽查](../../system/adaptation/evidence/2026-09-23/seo-full-http-temporary.json)：113 个有效路由均为 200，但 `/dishes`、`/schedule-calendar` 是独立插件页面，不使用主题 Head；关闭 SEO Tools 的全局 canonical 后，两页从原有 1 条变为 0 条。登录/注册页原本就没有 canonical，不计为本次回归。**该开关不能作为全站 SEO 修复直接启用**；完整方案需在 SEO Tools 插件侧规范化集合页参数，同时保留它对独立插件页面的全局覆盖，或者由这些插件自行输出 canonical。临时设置已精确恢复并刷新缓存，当前站点仍使用插件 canonical，分类/标签原错误仍在。主题开关只控制主题页面，不替独立插件注入 Head。
 
 安装并启用 `PluginFeed 1.5.0` 后，Head 会输出指向 `/feed.xml` 的 RSS 自动发现链接。主题构建会运行 `pnpm verify:seo`，同时检查源码模板与最终主题包中的 Head 契约。
 

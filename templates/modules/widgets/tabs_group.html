@@ -1,14 +1,14 @@
-<!-- 兼容基线：plugin-friends v1.4.6 + PluginLinks v2.2.1 + PluginMoments v1.16.1；首页 Tab 使用 friendFinder.list/momentFinder.list，Link 分组仅在 PluginLinks 可用时增强。 -->
+<!-- 首页 Tab 只展示文章和瞬间；友链动态由 PluginLinks 的 /links?view=friends 提供。 -->
 <th:block th:fragment="tabs_group(context)">
   <th:block
     th:with="
-            tabsList = ${tabsOrder.![#this instanceof T(java.lang.String) ? #this : #this.tab]},
-            tab0 = ${tabsList[0]},
-            tab1 = ${tabsList[1]},
-            tab2 = ${tabsList[2]},
-            isTab0Enabled = ${(tab0 == 'posts' and showPostsTab) or (tab0 == 'friends' and showFriendsTab) or (tab0 == 'moments' and showMomentsTab)},
-            isTab1Enabled = ${(tab1 == 'posts' and showPostsTab) or (tab1 == 'friends' and showFriendsTab) or (tab1 == 'moments' and showMomentsTab)},
-            firstEnabledTab = ${isTab0Enabled ? tab0 : (isTab1Enabled ? tab1 : tab2)},
+            configuredTabs = ${tabsOrder.![#this instanceof T(java.lang.String) ? #this : #this.tab].?[#this == 'posts' or #this == 'moments']},
+            tabsList = ${configuredTabs.isEmpty() ? {'posts', 'moments'} : (configuredTabs[0] == 'posts' ? (configuredTabs.contains('moments') ? {'posts', 'moments'} : {'posts'}) : (configuredTabs.contains('posts') ? {'moments', 'posts'} : {'moments'}))},
+            tab0 = ${tabsList.size() > 0 ? tabsList[0] : 'posts'},
+            tab1 = ${tabsList.size() > 1 ? tabsList[1] : 'moments'},
+            isTab0Enabled = ${(tab0 == 'posts' and showPostsTab) or (tab0 == 'moments' and showMomentsTab)},
+            isTab1Enabled = ${(tab1 == 'posts' and showPostsTab) or (tab1 == 'moments' and showMomentsTab)},
+            firstEnabledTab = ${isTab0Enabled ? tab0 : (isTab1Enabled ? tab1 : 'posts')},
             defaultTab = ${firstEnabledTab == 'posts' ? 'site' : firstEnabledTab}"
   >
     <div
@@ -41,22 +41,6 @@
                 >
                   <span class="icon-[heroicons--home] h-3.5 w-3.5"></span>
                   全部文章
-                </button>
-                <!-- 朋友动态 -->
-                <button
-                  th:if="${tabCode == 'friends' and showFriendsTab}"
-                  @click="tab = 'friends'"
-                  type="button"
-                  role="tab"
-                  id="home-tab-friends"
-                  aria-controls="home-panel-friends"
-                  :aria-selected="(tab === 'friends').toString()"
-                  :tabindex="tab === 'friends' ? '0' : '-1'"
-                  :class="tab === 'friends' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
-                  class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-200"
-                >
-                  <span class="icon-[heroicons--users] h-3.5 w-3.5"></span>
-                  朋友动态
                 </button>
                 <!-- 瞬间说说 -->
                 <button
@@ -102,21 +86,6 @@
                 >
                   <span class="icon-[heroicons--squares-2x2] h-4 w-4"></span>全部文章
                 </button>
-                <!-- 朋友动态 -->
-                <button
-                  th:if="${tabCode == 'friends' and showFriendsTab}"
-                  @click="tab = 'friends'"
-                  type="button"
-                  role="tab"
-                  id="home-tab-friends"
-                  aria-controls="home-panel-friends"
-                  :aria-selected="(tab === 'friends').toString()"
-                  :tabindex="tab === 'friends' ? '0' : '-1'"
-                  :class="tab === 'friends' ? 'bg-base-100 shadow-md text-base-content dark:bg-base-100/95' : 'text-base-content/60 hover:text-base-content hover:bg-base-100/40'"
-                  class="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200"
-                >
-                  <span class="icon-[heroicons--users] h-4 w-4"></span>朋友动态
-                </button>
                 <!-- 瞬间说说 -->
                 <button
                   th:if="${tabCode == 'moments' and showMomentsTab}"
@@ -157,25 +126,6 @@
                   全部文章
                   <span
                     x-show="tab === 'site'"
-                    class="bg-primary absolute right-0 bottom-0 left-0 h-0.5 rounded-full"
-                  ></span>
-                </button>
-                <!-- 朋友动态 -->
-                <button
-                  th:if="${tabCode == 'friends' and showFriendsTab}"
-                  @click="tab = 'friends'"
-                  type="button"
-                  role="tab"
-                  id="home-tab-friends"
-                  aria-controls="home-panel-friends"
-                  :aria-selected="(tab === 'friends').toString()"
-                  :tabindex="tab === 'friends' ? '0' : '-1'"
-                  :class="tab === 'friends' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
-                  class="relative px-4 py-3 text-sm font-medium transition-colors duration-200"
-                >
-                  朋友动态
-                  <span
-                    x-show="tab === 'friends'"
                     class="bg-primary absolute right-0 bottom-0 left-0 h-0.5 rounded-full"
                   ></span>
                 </button>
@@ -222,20 +172,6 @@
                   全部文章
                 </button>
                 <button
-                  th:if="${tabCode == 'friends' and showFriendsTab}"
-                  @click="tab = 'friends'"
-                  type="button"
-                  role="tab"
-                  id="home-tab-friends"
-                  aria-controls="home-panel-friends"
-                  :aria-selected="(tab === 'friends').toString()"
-                  :tabindex="tab === 'friends' ? '0' : '-1'"
-                  :class="tab === 'friends' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
-                  class="rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
-                >
-                  朋友动态
-                </button>
-                <button
                   th:if="${tabCode == 'moments' and showMomentsTab}"
                   @click="tab = 'moments'"
                   type="button"
@@ -271,20 +207,6 @@
                   class="rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
                 >
                   全部文章
-                </button>
-                <button
-                  th:if="${tabCode == 'friends' and showFriendsTab}"
-                  @click="tab = 'friends'"
-                  type="button"
-                  role="tab"
-                  id="home-tab-friends"
-                  aria-controls="home-panel-friends"
-                  :aria-selected="(tab === 'friends').toString()"
-                  :tabindex="tab === 'friends' ? '0' : '-1'"
-                  :class="tab === 'friends' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
-                  class="rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
-                >
-                  朋友动态
                 </button>
                 <button
                   th:if="${tabCode == 'moments' and showMomentsTab}"
@@ -336,205 +258,6 @@
           <div class="mt-10 text-center">
             <a
               href="/archives"
-              class="group text-base-content/50 hover:text-primary inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-300"
-            >
-              View All
-              <span
-                class="icon-[heroicons--arrow-right] h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              ></span>
-            </a>
-          </div>
-        </div>
-      </th:block>
-
-      <!-- 朋友动态 -->
-      <th:block th:if="${showFriendsTab and friendFinder != null}">
-        <div
-          id="home-panel-friends"
-          role="tabpanel"
-          aria-labelledby="home-tab-friends"
-          tabindex="0"
-          x-show="tab === 'friends'"
-          x-cloak
-          th:with="friendPosts = ${friendFinder.list({page: 1, size: friendsCount})},
-                       linkGroups = ${hasLinksPlugin ? linkFinder.groupBy() : {}}"
-        >
-          <!-- 两列样式 - Bento Grid Style -->
-          <div th:if="${friendsListStyle == 'two_columns'}" class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <th:block th:each="friend : ${friendPosts.items}" th:with="spec = ${friend.spec}">
-              <article
-                class="card group bg-base-100/80 border-base-content/5 hover:bg-base-100 relative cursor-pointer overflow-hidden rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl"
-              >
-                <!-- 顶部元信息 -->
-                <div class="mb-4 flex items-center gap-3">
-                  <div class="relative">
-                    <img
-                      th:if="${spec.logo != null and !spec.logo.isEmpty()}"
-                      th:src="${spec.logo}"
-                      th:alt="|${spec.author ?: '朋友'} 头像|"
-                      class="ring-base-content/10 group-hover:ring-primary/50 h-10 w-10 rounded-xl object-cover ring-2 transition-all"
-                      loading="lazy"
-                      onerror="
-                        this.hidden = true;
-                        this.nextElementSibling.hidden = false;
-                      "
-                    />
-                    <span
-                      th:hidden="${spec.logo != null and !spec.logo.isEmpty()}"
-                      aria-hidden="true"
-                      class="bg-base-200 text-base-content/40 ring-base-content/10 flex h-10 w-10 items-center justify-center rounded-xl ring-2"
-                    >
-                      <span class="icon-[heroicons--user] h-5 w-5"></span>
-                    </span>
-                    <div
-                      class="bg-base-100 absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full"
-                    >
-                      <span class="bg-success h-2 w-2 animate-pulse rounded-full"></span>
-                    </div>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <a
-                      th:href="${spec.authorUrl}"
-                      target="_blank"
-                      class="text-base-content block truncate text-sm font-bold"
-                      th:text="${spec.author}"
-                      >作者</a
-                    >
-                    <div class="text-base-content/40 flex items-center gap-1.5 text-xs">
-                      <span th:text="${#temporals.format(spec.pubDate, 'MM-dd HH:mm')}">时间</span>
-                      <!-- 动态匹配分组 -->
-                      <th:block th:each="group : ${linkGroups}">
-                        <th:block th:each="link : ${group.links}">
-                          <th:block
-                            th:if="${link.spec.url == spec.authorUrl || link.spec.url == spec.authorUrl + '/' || spec.authorUrl == link.spec.url + '/'}"
-                          >
-                            <span>·</span>
-                            <span th:text="${group.spec.displayName}">分组</span>
-                          </th:block>
-                        </th:block>
-                      </th:block>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 内容区域 -->
-                <div class="relative z-10">
-                  <h3 class="text-base-content mb-2 line-clamp-2 text-base leading-snug font-bold">
-                    <a th:href="${spec.postLink}" target="_blank" th:text="${spec.title}">标题</a>
-                  </h3>
-                  <p
-                    th:if="${spec.description != null and !spec.description.isEmpty()}"
-                    class="text-base-content/60 mb-4 line-clamp-2 text-sm leading-relaxed"
-                    th:text="${spec.description}"
-                  >
-                    描述...
-                  </p>
-
-                  <!-- 底部链接 -->
-                  <a
-                    th:href="${spec.postLink}"
-                    target="_blank"
-                    class="text-base-content/40 group-hover:text-primary inline-flex items-center gap-1.5 text-xs font-semibold transition-colors"
-                  >
-                    阅读原文
-                    <span
-                      class="icon-[heroicons--arrow-right] h-3 w-3 transition-transform group-hover:translate-x-0.5"
-                    ></span>
-                  </a>
-                </div>
-              </article>
-            </th:block>
-          </div>
-
-          <!-- 单列样式 - Bento List Style -->
-          <div th:if="${friendsListStyle == 'single_column'}" class="space-y-4">
-            <th:block th:each="friend : ${friendPosts.items}" th:with="spec = ${friend.spec}">
-              <article
-                class="card group bg-base-100/80 border-base-content/5 hover:bg-base-100 rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl"
-              >
-                <div class="flex items-start gap-4">
-                  <!-- 左侧头像 -->
-                  <a th:href="${spec.authorUrl}" target="_blank" rel="noopener" class="relative top-1 shrink-0">
-                    <img
-                      th:if="${spec.logo != null and !spec.logo.isEmpty()}"
-                      th:src="${spec.logo}"
-                      th:alt="|${spec.author ?: '朋友'} 头像|"
-                      class="ring-base-content/10 group-hover:ring-primary/50 h-12 w-12 rounded-xl object-cover ring-2 transition-all"
-                      loading="lazy"
-                      onerror="
-                        this.hidden = true;
-                        this.nextElementSibling.hidden = false;
-                      "
-                    />
-                    <span
-                      th:hidden="${spec.logo != null and !spec.logo.isEmpty()}"
-                      aria-hidden="true"
-                      class="ring-base-content/10 text-base-content/40 bg-base-200 flex h-12 w-12 items-center justify-center rounded-xl ring-2"
-                    >
-                      <span class="icon-[heroicons--user] h-6 w-6"></span>
-                    </span>
-                  </a>
-
-                  <!-- 右侧内容 -->
-                  <div class="min-w-0 flex-1">
-                    <div class="mb-1 flex items-center justify-between">
-                      <div class="flex items-center gap-2">
-                        <a
-                          th:href="${spec.authorUrl}"
-                          target="_blank"
-                          rel="noopener"
-                          class="text-base-content text-sm font-bold"
-                          th:text="${spec.author}"
-                          >作者</a
-                        >
-                        <!-- 动态匹配分组 (单列) -->
-                        <th:block th:each="group : ${linkGroups}">
-                          <th:block th:each="link : ${group.links}">
-                            <th:block
-                              th:if="${link.spec.url == spec.authorUrl || link.spec.url == spec.authorUrl + '/' || spec.authorUrl == link.spec.url + '/'}"
-                            >
-                              <span
-                                class="bg-base-200/50 text-base-content/40 rounded px-1.5 py-0.5 text-[10px]"
-                                th:text="${group.spec.displayName}"
-                                >分组</span
-                              >
-                            </th:block>
-                          </th:block>
-                        </th:block>
-                      </div>
-                      <time
-                        class="text-base-content/40 text-xs font-medium"
-                        th:text="${#temporals.format(spec.pubDate, 'yyyy-MM-dd')}"
-                        >2023-01-01</time
-                      >
-                    </div>
-
-                    <h3 class="text-base-content mb-1.5 line-clamp-1 text-base font-bold">
-                      <a th:href="${spec.postLink}" target="_blank" rel="noopener" th:text="${spec.title}">文章标题</a>
-                    </h3>
-
-                    <p
-                      th:if="${spec.description != null and !spec.description.isEmpty()}"
-                      class="text-base-content/50 line-clamp-2 text-sm leading-relaxed"
-                      th:text="${spec.description}"
-                    >
-                      文章描述
-                    </p>
-                  </div>
-                </div>
-              </article>
-            </th:block>
-          </div>
-
-          <div
-            th:if="${friendPosts.items == null or friendPosts.items.isEmpty()}"
-            class="text-base-content/40 py-16 text-center text-sm"
-          >
-            暂无朋友动态
-          </div>
-          <div th:if="${friendPosts.items != null and !friendPosts.items.isEmpty()}" class="mt-10 text-center">
-            <a
-              href="/friends"
               class="group text-base-content/50 hover:text-primary inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-300"
             >
               View All

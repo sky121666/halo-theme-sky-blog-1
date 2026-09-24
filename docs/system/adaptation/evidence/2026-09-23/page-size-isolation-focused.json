@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-09-23T07:00:53.774Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318",
+    "plugin": "equipment 1.1.1"
+  },
+  "accept": "*/*",
+  "results": [
+    {
+      "path": "/douban",
+      "since": "2026-09-23T07:00:46.145Z",
+      "until": "2026-09-23T07:00:46.506Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/equipments",
+      "since": "2026-09-23T07:00:47.141Z",
+      "until": "2026-09-23T07:00:47.439Z",
+      "status": 200,
+      "warnings": 3
+    },
+    {
+      "path": "/links",
+      "since": "2026-09-23T07:00:48.045Z",
+      "until": "2026-09-23T07:00:48.422Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/links?view=friends",
+      "since": "2026-09-23T07:00:49.073Z",
+      "until": "2026-09-23T07:00:49.437Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/login",
+      "since": "2026-09-23T07:00:50.048Z",
+      "until": "2026-09-23T07:00:50.274Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/login?method=passkey",
+      "since": "2026-09-23T07:00:50.931Z",
+      "until": "2026-09-23T07:00:51.164Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/moments",
+      "since": "2026-09-23T07:00:51.820Z",
+      "until": "2026-09-23T07:00:52.192Z",
+      "status": 200,
+      "warnings": 0
+    },
+    {
+      "path": "/moments/moment-1778854511638-3wpy3noe",
+      "since": "2026-09-23T07:00:52.832Z",
+      "until": "2026-09-23T07:00:53.130Z",
+      "status": 200,
+      "warnings": 0
+    }
+  ]
+}

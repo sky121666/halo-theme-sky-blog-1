@@ -22,7 +22,6 @@ const expectedLayouts = [
   docsLayout,
   "templates/modules/douban/layout.html",
   "templates/modules/equipments/layout.html",
-  "templates/modules/friends/layout.html",
   "templates/modules/index/layout.html",
   "templates/modules/links/layout.html",
   "templates/modules/moments/layout.html",
@@ -51,7 +50,6 @@ const contentFragmentsWithoutMain = [
   "templates/modules/categories/content.html",
   "templates/modules/douban/content.html",
   "templates/modules/equipments/content.html",
-  "templates/modules/friends/content.html",
   "templates/modules/index/content.html",
   "templates/modules/links/content.html",
   "templates/modules/moments/content.html",
@@ -76,7 +74,6 @@ const headingMinimums = new Map([
   ["templates/modules/equipments/content.html", 1],
   ["templates/modules/equipments/style-simple.html", 1],
   ["templates/modules/equipments/style-tech.html", 1],
-  ["templates/modules/friends/content.html", 1],
   ["templates/modules/index/layout.html", 1],
   ["templates/modules/index/header/title.html", 1],
   ["templates/modules/links/content.html", 1],
@@ -392,7 +389,23 @@ function verifySharedSeoHead(context) {
     (boundAttributeValue(entry.tag, "rel") ?? "").toLowerCase().split(/\s+/).includes("canonical"),
   );
   if (canonicalTags.length !== 1) {
-    fail(`${seoHeadFile}：降级 canonical 应恰好 1 个，实际 ${canonicalTags.length} 个`);
+    fail(`${seoHeadFile}：主题 canonical 应恰好 1 个，实际 ${canonicalTags.length} 个`);
+  } else {
+    const canonicalGate = attributeValue(canonicalTags[0].tag, "th:if") ?? "";
+    if (
+      !canonicalGate.includes("absoluteCanonical") ||
+      !canonicalGate.includes("!seoPluginAvailable") ||
+      !canonicalGate.includes("themeCanonicalOverride")
+    ) {
+      fail(`${seoHeadFile}：canonical 必须只在插件不可用或主题显式接管时输出`);
+    }
+    if (!/themeCanonicalOverride\s*=\s*\$\{theme\.config\.general\?\.seo_settings\?\.theme_canonical\s*==\s*true\}/.test(masked)) {
+      fail(`${seoHeadFile}：主题接管 canonical 必须由独立设置显式开启`);
+    }
+    const settingsSource = context.read("settings.yaml");
+    if (settingsSource && !/name:\s*seo_settings\b[\s\S]*?theme_canonical:\s*false\b[\s\S]*?name:\s*theme_canonical\b/.test(settingsSource)) {
+      fail("settings.yaml：主题 canonical 接管必须默认关闭，避免与 SEO Tools 重复输出");
+    }
   }
 
   const ogTags = findStartTags(masked, "meta").filter((entry) =>
@@ -414,9 +427,14 @@ function verifySharedSeoHead(context) {
   if (fallbackMatch) {
     const feedIndex = masked.search(/pluginFinder\.available\(\s*["']PluginFeed["']/);
     const fallbackEnd = feedIndex === -1 ? masked.length : feedIndex;
-    for (const entry of [...canonicalTags, ...ogTags, ...jsonLdTags]) {
+    for (const entry of canonicalTags) {
+      if (entry.index > fallbackMatch.index) {
+        fail(`${seoHeadFile}:${lineNumber(masked, entry.index)}：canonical 接管必须独立于社交标签降级块`);
+      }
+    }
+    for (const entry of [...ogTags, ...jsonLdTags]) {
       if (entry.index < fallbackMatch.index || entry.index > fallbackEnd) {
-        fail(`${seoHeadFile}:${lineNumber(masked, entry.index)}：canonical/OG/JSON-LD 必须位于 SEO 插件缺失降级块内`);
+        fail(`${seoHeadFile}:${lineNumber(masked, entry.index)}：OG/JSON-LD 必须位于 SEO 插件缺失降级块内`);
       }
     }
   }
@@ -431,11 +449,11 @@ function verifyLayouts(context, htmlSources) {
 
   const expected = [...expectedLayouts].sort();
   stats.layouts = discovered.length;
-  if (expectedLayouts.length !== 18) {
-    fail(`脚本内部布局清单应为 18 个，实际 ${expectedLayouts.length} 个`);
+  if (expectedLayouts.length !== 17) {
+    fail(`脚本内部布局清单应为 17 个，实际 ${expectedLayouts.length} 个`);
   }
-  if (discovered.length !== 18) {
-    fail(`真实 head 布局应为 18 个，实际 ${discovered.length} 个`);
+  if (discovered.length !== 17) {
+    fail(`真实 head 布局应为 17 个，实际 ${discovered.length} 个`);
   }
   for (const file of expected.filter((file) => !discovered.includes(file))) {
     fail(`真实 head 布局缺失：${file}`);

@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T06:21:32Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39, uncommitted workspace",
+    "installedPluginCount": 45,
+    "pluginPhases": "44 STARTED, 1 DISABLED",
+    "browserAndHttpCodeHash": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc",
+    "latestSourceCodeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318"
+  },
+  "seoTools": {
+    "version": "1.10.1",
+    "officialRelease": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg",
+    "source": "Installed 1.10.1 JAR: CanonicalLinkProcessor and settings.yaml inspected with javap/unzip",
+    "allowlistedQueryParameters": ["p"],
+    "queryValueValidation": false,
+    "pluginCanonicalToggle": "canonical_link.enabled",
+    "observed": [
+      { "path": "/categories?p=abc", "renderedPage": 1, "canonical": "https://www.5ee.net/categories?p=abc" },
+      { "path": "/categories?page=2", "renderedPage": 2, "canonical": "https://www.5ee.net/categories" },
+      { "path": "/categories?p=2", "renderedPage": 2, "canonical": "https://www.5ee.net/categories?p=2" },
+      { "path": "/tags?p=abc", "renderedPage": 1, "canonical": "https://www.5ee.net/tags?p=abc" },
+      { "path": "/tags?page=2", "renderedPage": 2, "canonical": "https://www.5ee.net/tags" },
+      { "path": "/tags?p=2", "renderedPage": 2, "canonical": "https://www.5ee.net/tags?p=2" }
+    ],
+    "themeChange": "Opt-in theme canonical owner setting defaults to false; requires plugin canonical toggle disabled first",
+    "latestSourceStatus": "Temporary configuration runtime validation passed; original site configuration restored, so the plugin-owned canonical error remains on the current site",
+    "siteSettingsChanged": false,
+    "siteSettingsTemporarilyChangedAndRestored": true
+  },
+  "pageCache": {
+    "version": "1.6.0",
+    "officialRelease": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd",
+    "source": "Installed 1.6.0 JAR: PageCacheWebFilter inspected with javap",
+    "cacheKey": "Full request URI",
+    "htmlAcceptRequired": true,
+    "sameUrlHtmlAccept": {
+      "xHaloCacheAt": "Wed, 23 Sep 2026 05:25:42 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "repeatHadSameTimestamp": true
+    },
+    "defaultCurlAccept": {
+      "cacheControl": "no-cache, no-store, max-age=0, must-revalidate",
+      "xHaloCacheAt": null
+    },
+    "cacheCleared": true,
+    "remaining": "The local test cleared Page Cache after theme Reload, after initial configuration restoration, and after removing a Reload-inserted default field; a future permanent switch or deployment must repeat cache invalidation and browser verification"
+  },
+  "aiAssistant": {
+    "version": "3.1.0",
+    "foundationVersion": "1.1.0",
+    "codeHashAtBrowserTest": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc",
+    "egoTaskSpaceId": 10,
+    "browserTestType": "Temporary DOM mount of official 3.1.0 JS/CSS and ai-summary-widget; no persisted setting or model invocation",
+    "existingSummaryGet": 200,
+    "existingSummaryLength": 119,
+    "shadowDomContainsExistingSummary": true,
+    "mobileViewportPx": 390,
+    "mobileDocumentWidthPx": 390,
+    "mobileWidgetWidthPx": 358,
+    "lightScreenshot": "ai-widget-mobile-current.png",
+    "darkScreenshot": "ai-widget-mobile-dark-current.png",
+    "pjaxNavigationToSecondArticle": true,
+    "pjaxDocumentPreserved": true,
+    "temporaryWidgetCountAfterSettledNavigation": 0,
+    "temporaryHeadResourceCountAfterSettledNavigation": 0,
+    "automaticSummaryEnabled": false,
+    "automaticServerInjectionTested": false,
+    "editorAgentTested": false
+  },
+  "passkey": {
+    "version": "1.0.4",
+    "codeHashAtBrowserTest": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc",
+    "loginMethodUrl": "http://localhost:8090/login?method=passkey",
+    "browserSecureContext": true,
+    "publicKeyCredentialAvailable": true,
+    "passkeyButtonVisible": true,
+    "mobileViewportPx": 390,
+    "mobileDocumentWidthPx": 390,
+    "mobileScreenshot": "passkey-login-mobile-current.png",
+    "unsupportedWarningVisible": false,
+    "priorDedicatedUserCredentialList": "403 recorded in plugin-runtime-followup.md; not rerun in this browser session",
+    "registrationLoginDeletionTested": false,
+    "personalCredentialUsed": false
+  },
+  "backendWarningIsolation": {
+    "directUncachedSsrPaths": ["/", "/tags", "/categories", "/archives/editor-feature-demo"],
+    "statuses": [200, 200, 200, 200],
+    "pageSizeWarningsAfterEach": [0, 0, 0, 0],
+    "conclusion": "The prior page-size warning caller is not identified; these four controlled SSR reads did not reproduce it"
+  },
+  "latestSourceValidation": {
+    "node": "24.18.0",
+    "pnpm": "10.34.5",
+    "build": "passed",
+    "lint": "passed",
+    "formatCheck": "passed",
+    "pluginContractCount": 27,
+    "seoSourceAndPackage": "passed",
+    "packageSha256": "4d0886404dd20cd2bc8a1b0205435648a5e8dfac76430e9dcccc83d52f857993"
+  },
+  "seoRuntimeAcceptance": {
+    "testedAtUtc": "2026-09-23T06:30:11Z",
+    "environment": "localhost:8090; Halo Pro 2.26.1; theme 2.2.39 uncommitted code bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318; SEO Tools 1.10.1; Page Cache 1.6.0",
+    "temporaryConfiguration": {
+      "seoToolsCanonicalEnabled": false,
+      "themeCanonicalEnabled": true,
+      "themeReloadStatus": 200,
+      "pageCacheClearStatus": 200
+    },
+    "http": {
+      "accept": "text/html",
+      "testedUrlCount": 15,
+      "statuses": "15/15 HTTP 200; each response had exactly one theme-owned canonical",
+      "canonicalExamples": [
+        { "path": "/categories?p=abc", "canonical": "https://www.5ee.net/categories" },
+        { "path": "/categories?page=2", "canonical": "https://www.5ee.net/categories?p=2" },
+        { "path": "/categories?p=2", "canonical": "https://www.5ee.net/categories?p=2" },
+        { "path": "/categories?p=0", "canonical": "https://www.5ee.net/categories" },
+        { "path": "/categories?p=99999", "canonical": "https://www.5ee.net/categories" },
+        { "path": "/tags?p=abc", "canonical": "https://www.5ee.net/tags" },
+        { "path": "/tags?page=2", "canonical": "https://www.5ee.net/tags?p=2" },
+        { "path": "/tags?p=2", "canonical": "https://www.5ee.net/tags?p=2" },
+        { "path": "/archives/editor-feature-demo", "canonical": "https://www.5ee.net/archives/editor-feature-demo" }
+      ],
+      "otherRoutes": ["/", "/categories", "/categories/ai", "/tags", "/tags/ai", "/privacy"],
+      "pageCacheAtUtc": "2026-09-23T06:30:11Z to 2026-09-23T06:30:12Z"
+    },
+    "browser": {
+      "directNavigations": [
+        "/categories?p=abc",
+        "/categories?page=2",
+        "/tags?p=abc",
+        "/tags?page=2",
+        "/archives/editor-feature-demo"
+      ],
+      "pjaxNavigation": "/archives/editor-feature-demo -> /categories/ai -> /categories/ai/page/2",
+      "result": "After title and H1 settled, each page had one matching canonical; article retained 4 OG metadata entries; no browser console errors",
+      "backendErrorOrWarningLinesInTestWindow": "0 SEO/template/page-size errors or warnings from 2026-09-23T06:29:00Z through 06:32:00Z; later periodic Links RSS and attachment reconciler warnings were unrelated background tasks"
+    },
+    "restoration": {
+      "seoToolsCanonicalEnabled": true,
+      "themeSeoSettingsPresent": false,
+      "themeReloadStatus": 200,
+      "pageCacheClearStatus": 200,
+      "reloadDefaultWriteback": "Halo theme Reload reinserted seo_settings.theme_canonical=false after the first restore; the test removed that default-only field again and cleared Page Cache without a second Reload",
+      "snapshotRemoved": true,
+      "firstRestorationCacheAtUtc": "2026-09-23T06:31:53Z to 2026-09-23T06:31:54Z",
+      "finalCacheAtUtc": "2026-09-23T06:37:36Z",
+      "browserConfirmedPluginOwnedCanonical": true,
+      "knownCurrentSiteErrorStillReproduces": true,
+      "currentSiteExamples": [
+        { "path": "/categories?p=abc", "canonical": "https://www.5ee.net/categories?p=abc" },
+        { "path": "/categories?page=2", "canonical": "https://www.5ee.net/categories" },
+        { "path": "/tags?p=abc", "canonical": "https://www.5ee.net/tags?p=abc" },
+        { "path": "/tags?page=2", "canonical": "https://www.5ee.net/tags" }
+      ]
+    }
+  }
+}

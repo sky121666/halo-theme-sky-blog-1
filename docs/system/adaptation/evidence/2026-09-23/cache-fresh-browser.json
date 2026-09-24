@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T09:09:02.763Z",
+  "environment": {
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted",
+    "codeHash": "5990238245bab48d25b53a084c08f0340a02f80767f2c396220347c63d1130f2",
+    "session": "authenticated localhost; Page Cache bypassed, so cacheAt is null"
+  },
+  "spaceId": 12,
+  "browserCacheDisabled": true,
+  "paths": [
+    {
+      "path": "/links",
+      "status": 200,
+      "cacheAt": null,
+      "title": "友情链接 - 5ee博客",
+      "h1": "友情链接",
+      "canonical": ["https://www.5ee.net/links"],
+      "bodyText": "友情链接\n            感谢这些优秀的网站与博客，让互联网变得更加精彩\n          \n\n          \n          \n            友链\n            友链动态\n            申请友链\n          \n\n    ",
+      "friendView": true,
+      "equipmentCommentSubject": "comment-plugin-halo-run-Plugin-PluginLinks"
+    },
+    {
+      "path": "/links?view=friends",
+      "status": 200,
+      "cacheAt": null,
+      "title": "友情链接 - 5ee博客",
+      "h1": "友链动态",
+      "canonical": ["https://www.5ee.net/links"],
+      "bodyText": "友链动态\n            来自友链接阅的最新内容，支持未读、收藏与稍后阅读\n          \n\n          \n          \n            友链\n            友链动态\n            申请友链\n          \n\n   ",
+      "friendView": true,
+      "equipmentCommentSubject": "comment-plugin-halo-run-Plugin-PluginLinks"
+    },
+    {
+      "path": "/categories?p=abc",
+      "status": 200,
+      "cacheAt": null,
+      "title": "文章分类 - 5ee博客",
+      "h1": "文章分类",
+      "canonical": ["https://www.5ee.net/categories?p=abc"],
+      "bodyText": "文章分类\n  \n\n  \n  \n    \n      \n      \n        \n          \n          \n            \n            \n            \n            \n            \n          ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/categories?page=2",
+      "status": 200,
+      "cacheAt": null,
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "h1": "文章分类",
+      "canonical": ["https://www.5ee.net/categories"],
+      "bodyText": "文章分类\n  \n\n  \n  \n    \n      \n      \n        \n          \n          \n            \n            \n            \n            \n            \n          ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/tags?p=abc",
+      "status": 200,
+      "cacheAt": null,
+      "title": "文章标签 - 5ee博客",
+      "h1": "文章标签",
+      "canonical": ["https://www.5ee.net/tags?p=abc"],
+      "bodyText": "文章标签\n  \n  \n    \n      \n      \n        \n\n          \n          \n            \n            \n            \n              \n  \n    \n    \n      全部\n  ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/tags?page=2",
+      "status": 200,
+      "cacheAt": null,
+      "title": "文章标签 - 第 2 页 - 5ee博客",
+      "h1": "文章标签",
+      "canonical": ["https://www.5ee.net/tags"],
+      "bodyText": "文章标签\n  \n  \n    \n      \n      \n        \n\n          \n          \n            \n            \n            \n              \n  \n    \n    \n      全部\n  ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/bangumis",
+      "status": 200,
+      "cacheAt": null,
+      "title": "追番列表 - 5ee博客",
+      "h1": "追番列表",
+      "canonical": ["https://www.5ee.net/bangumis"],
+      "bodyText": "追番列表\n        记录我的二次元之旅\n      \n\n      \n      \n        \n          \n            \n            \n              \n            \n            追番\n      ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/equipments",
+      "status": 200,
+      "cacheAt": null,
+      "title": "我的装备 - 5ee博客",
+      "h1": "我的装备",
+      "canonical": ["https://www.5ee.net/equipments"],
+      "bodyText": "我的装备\n                    \n                        好物分享\n                        \n                        分享我日常使用的硬件与软件\n                    \n ",
+      "friendView": false,
+      "equipmentCommentSubject": "comment-plugin-halo-run-Plugin-PluginEquipment"
+    },
+    {
+      "path": "/dishes",
+      "status": 200,
+      "cacheAt": null,
+      "title": "首页 · 家庭私厨",
+      "h1": "家庭厨房",
+      "canonical": ["https://www.5ee.net/dishes"],
+      "bodyText": "家庭厨房没写进菜谱的菜暂时还不会做，技能树还在缓慢增长... 今日餐品  用餐进度 9月23日早餐 未点午餐 未点晚餐此刻 ·  未点 本餐还没有选菜  去点单页挑几样，会显示在这里  厨师长精选  今日推荐  不知道吃什么？试试这个！  早餐  午餐  晚餐  为你推荐 5 道",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    },
+    {
+      "path": "/schedule-calendar",
+      "status": 200,
+      "cacheAt": null,
+      "title": "日程日历",
+      "h1": "日程日历",
+      "canonical": ["https://www.5ee.net/schedule-calendar"],
+      "bodyText": "日程日历\n          当前空闲\n          \n        \n        \n          \n            上一周\n            \n            下一周\n            回到本周\n          \n       ",
+      "friendView": false,
+      "equipmentCommentSubject": null
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "checkedAt": "2026-09-23T07:00:33.314Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318",
+    "plugin": "equipment 1.1.1"
+  },
+  "accept": "*/*",
+  "groupSize": 8,
+  "excluded": ["/bangumis"],
+  "groups": [
+    {
+      "paths": [
+        "/",
+        "/about",
+        "/archives",
+        "/archives/2024/12",
+        "/archives/2025/02",
+        "/archives/2025/03",
+        "/archives/2025/04",
+        "/archives/2025/05"
+      ],
+      "since": "2026-09-23T07:00:09.940Z",
+      "until": "2026-09-23T07:00:11.184Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/archives/2025/06",
+        "/archives/2025/07",
+        "/archives/2025/08",
+        "/archives/2026/02",
+        "/archives/2U9qMYvW",
+        "/archives/CNnnwQh7",
+        "/archives/FLQkQJLg",
+        "/archives/JGvxASVB"
+      ],
+      "since": "2026-09-23T07:00:11.881Z",
+      "until": "2026-09-23T07:00:13.158Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/archives/U42G91AM",
+        "/archives/VHHIpSkP",
+        "/archives/editor-feature-demo",
+        "/archives/ijhJxHtw",
+        "/archives/j3efAbg4",
+        "/archives/jJkjiM27",
+        "/archives/jeco9MwB",
+        "/archives/lKkDC8OW"
+      ],
+      "since": "2026-09-23T07:00:13.784Z",
+      "until": "2026-09-23T07:00:15.235Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/archives/mac-restart-podman-container-start",
+        "/archives/nsoSkHzN",
+        "/archives/page/2",
+        "/archives/tFyvnqK0",
+        "/authors/sky0821",
+        "/categories",
+        "/categories/1panel",
+        "/categories/ai"
+      ],
+      "since": "2026-09-23T07:00:15.861Z",
+      "until": "2026-09-23T07:00:17.129Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/categories/ai/page/2",
+        "/categories/halo",
+        "/categories/qi-ta",
+        "/categories/qian-duan",
+        "/categories?p=2",
+        "/dishes",
+        "/docs",
+        "/docs/halo-theme-sky-blog-1"
+      ],
+      "since": "2026-09-23T07:00:17.751Z",
+      "until": "2026-09-23T07:00:18.669Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/douban",
+        "/equipments",
+        "/links",
+        "/links?view=friends",
+        "/login",
+        "/login?method=passkey",
+        "/moments",
+        "/moments/moment-1778854511638-3wpy3noe"
+      ],
+      "since": "2026-09-23T07:00:19.288Z",
+      "until": "2026-09-23T07:00:20.154Z",
+      "warnings": 3,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/moments/moment-32asaylm",
+        "/moments/moment-4sbc36v5",
+        "/moments/moment-9roi1c7n",
+        "/moments/moment-bxbdkuwu",
+        "/moments/moment-cvbl3r6b",
+        "/moments/moment-f6ircurs",
+        "/moments/moment-qbxmx6d5",
+        "/moments/moment-qrb5xcuw"
+      ],
+      "since": "2026-09-23T07:00:20.775Z",
+      "until": "2026-09-23T07:00:21.586Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/moments/moment-ytpmkzzy",
+        "/moments/page/2",
+        "/photos",
+        "/photos/photo-14xk1htg",
+        "/photos/photo-2qclll5g",
+        "/photos/photo-3x39qxyf",
+        "/photos/photo-8os50ylm",
+        "/photos/photo-dgzc3rqv"
+      ],
+      "since": "2026-09-23T07:00:22.203Z",
+      "until": "2026-09-23T07:00:23.054Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/photos/photo-gaazy0ws",
+        "/photos/photo-gtulnjy1",
+        "/photos/photo-hysezd2w",
+        "/photos/photo-ihzgnfm4",
+        "/photos/photo-lglk3ors",
+        "/photos/photo-mogdulku",
+        "/photos/photo-nbgx3edf",
+        "/photos/photo-nsrwcpna"
+      ],
+      "since": "2026-09-23T07:00:23.690Z",
+      "until": "2026-09-23T07:00:24.551Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/photos/photo-rgolxmbv",
+        "/photos/photo-tidpcttl",
+        "/photos/photo-ugdx4sx6",
+        "/photos/photo-vyd6cj4k",
+        "/photos/photo-xqgifxkz",
+        "/photos/photo-yvqae9y4",
+        "/photos/photo-zepgpelt",
+        "/privacy"
+      ],
+      "since": "2026-09-23T07:00:25.169Z",
+      "until": "2026-09-23T07:00:25.994Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/schedule-calendar",
+        "/signup",
+        "/steam",
+        "/tags",
+        "/tags/1panel",
+        "/tags/ai",
+        "/tags/alist",
+        "/tags/astro"
+      ],
+      "since": "2026-09-23T07:00:26.635Z",
+      "until": "2026-09-23T07:00:27.370Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/tags/cha-jian-kai-fa",
+        "/tags/cursor",
+        "/tags/demo",
+        "/tags/dify",
+        "/tags/docker",
+        "/tags/editor",
+        "/tags/fan-xiang-dai-li",
+        "/tags/frp"
+      ],
+      "since": "2026-09-23T07:00:28.000Z",
+      "until": "2026-09-23T07:00:28.917Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/tags/fu-wu-qi",
+        "/tags/halo",
+        "/tags/hao",
+        "/tags/lobechat",
+        "/tags/macos",
+        "/tags/mcp",
+        "/tags/mo-ban-zhi-zuo",
+        "/tags/nas"
+      ],
+      "since": "2026-09-23T07:00:29.531Z",
+      "until": "2026-09-23T07:00:30.427Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": [
+        "/tags/pod",
+        "/tags/podman",
+        "/tags/tailwindcss",
+        "/tags/tr-ae",
+        "/tags/ubuntu",
+        "/tags/vaultwarden",
+        "/tags/vite",
+        "/tags/vue"
+      ],
+      "since": "2026-09-23T07:00:31.050Z",
+      "until": "2026-09-23T07:00:31.895Z",
+      "warnings": 0,
+      "statuses": [200, 200, 200, 200, 200, 200, 200, 200]
+    },
+    {
+      "paths": ["/terms"],
+      "since": "2026-09-23T07:00:32.531Z",
+      "until": "2026-09-23T07:00:32.693Z",
+      "warnings": 0,
+      "statuses": [404]
+    }
+  ]
+}

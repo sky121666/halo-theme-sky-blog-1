@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" th:lang="${#locale.toLanguageTag}" th:fragment="html (head, content)">
+  <!-- Halo 2.26 public layout: callers provide only head/content, never post/singlePage. -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:if="${head == null}" th:text="${site.title}"></title>
+    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <script>
+      // Plugin-owned pages may use a full-document lifecycle.
+      window.__skyPjaxEnabled = false;
+    </script>
+    <th:block th:replace="~{modules/font-loader :: fonts}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <th:block th:if="${head != null}">
+      <th:block th:replace="${head}" />
+    </th:block>
+  </head>
+  <body class="bg-base-200 text-base-content flex min-h-screen flex-col">
+    <th:block th:replace="~{modules/nav :: navbar}" />
+    <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8" data-plugin-page-layout>
+      <th:block th:replace="${content}" />
+    </main>
+    <!-- The shared footer owns the single halo:footer injection. -->
+    <th:block th:replace="~{modules/footer :: footer}" />
+    <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
+  </body>
+</html>

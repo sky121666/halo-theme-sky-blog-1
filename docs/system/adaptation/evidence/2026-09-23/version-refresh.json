@@ -1,0 +1,764 @@
+{
+  "checkedAt": "2026-09-22T23:34:54.916670+00:00",
+  "source": "official Halo store release listing pages",
+  "count": 47,
+  "rows": [
+    {
+      "id": "mcp-server",
+      "storeUrl": "https://www.halo.run/store/apps/app-ybv96zol/releases",
+      "stable": {
+        "version": "1.2.0",
+        "url": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-on4pkzby"
+      },
+      "previousStableVersion": "1.2.0",
+      "changed": false,
+      "releaseCount": 4,
+      "error": null,
+      "latestPrereleases": ["1.0.0-beta.1"],
+      "previousPrereleases": ["1.0.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "ai-foundation",
+      "storeUrl": "https://www.halo.run/store/apps/app-acslk9nu/releases",
+      "stable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-zqvdpyu1"
+      },
+      "previousStableVersion": "1.1.0",
+      "changed": false,
+      "releaseCount": 9,
+      "error": null,
+      "latestPrereleases": ["1.0.0-beta.6", "1.0.0-beta.5", "1.0.0-beta.4"],
+      "previousPrereleases": ["1.0.0-beta.6", "1.0.0-beta.5", "1.0.0-beta.4"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-katex",
+      "storeUrl": "https://www.halo.run/store/apps/app-ISCsX/releases",
+      "stable": {
+        "version": "3.0.0",
+        "url": "https://www.halo.run/store/apps/app-ISCsX/releases/app-release-l4qbvcue"
+      },
+      "previousStableVersion": "3.0.0",
+      "changed": false,
+      "releaseCount": 7,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-douban",
+      "storeUrl": "https://www.halo.run/store/apps/app-srBOL/releases",
+      "stable": {
+        "version": "1.2.6",
+        "url": "https://www.halo.run/store/apps/app-srBOL/releases/app-release-bcudqrjs"
+      },
+      "previousStableVersion": "1.2.6",
+      "changed": false,
+      "releaseCount": 18,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "maintenance",
+      "storeUrl": "https://www.halo.run/store/apps/app-umgvtji6/releases",
+      "stable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-umgvtji6/releases/app-release-ecm0eqla"
+      },
+      "previousStableVersion": "1.1.0",
+      "changed": false,
+      "releaseCount": 2,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "online",
+      "storeUrl": "https://www.halo.run/store/apps/app-ion2qhko/releases",
+      "stable": {
+        "version": "1.0.5",
+        "url": "https://www.halo.run/store/apps/app-ion2qhko/releases/app-release-jvggype9"
+      },
+      "previousStableVersion": "1.0.5",
+      "changed": false,
+      "releaseCount": 4,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "dishes",
+      "storeUrl": "https://www.halo.run/store/apps/app-espsmupa/releases",
+      "stable": {
+        "version": "v1.0.3",
+        "url": "https://www.halo.run/store/apps/app-espsmupa/releases/app-release-smxrkwj0"
+      },
+      "previousStableVersion": "v1.0.3",
+      "changed": false,
+      "releaseCount": 3,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "schedule-calendar",
+      "storeUrl": "https://www.halo.run/store/apps/app-1ubowut0/releases",
+      "stable": {
+        "version": "3.5.0",
+        "url": "https://www.halo.run/store/apps/app-1ubowut0/releases/app-release-mdsorinh"
+      },
+      "previousStableVersion": "3.5.0",
+      "changed": false,
+      "releaseCount": 17,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "lottery",
+      "storeUrl": "https://www.halo.run/store/apps/app-8wtcwm5t/releases",
+      "stable": {
+        "version": "1.0.2",
+        "url": "https://www.halo.run/store/apps/app-8wtcwm5t/releases/app-release-6dooiafp"
+      },
+      "previousStableVersion": "1.0.2",
+      "changed": false,
+      "releaseCount": 3,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginLive2d",
+      "storeUrl": "https://www.halo.run/store/apps/app-oPNFQ/releases",
+      "stable": {
+        "version": "2.2.0",
+        "url": "https://www.halo.run/store/apps/app-oPNFQ/releases/app-release-wyldvl72"
+      },
+      "previousStableVersion": "2.2.0",
+      "changed": false,
+      "releaseCount": 9,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "editor-emoji",
+      "storeUrl": "https://www.halo.run/store/apps/app-pwojlwgu/releases",
+      "stable": {
+        "version": "1.1.0",
+        "url": "https://www.halo.run/store/apps/app-pwojlwgu/releases/app-release-j3solsy2"
+      },
+      "previousStableVersion": "1.1.0",
+      "changed": false,
+      "releaseCount": 2,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "auth-passkey",
+      "storeUrl": "https://www.halo.run/store/apps/app-g7tggrco/releases",
+      "stable": {
+        "version": "1.0.4",
+        "url": "https://www.halo.run/store/apps/app-g7tggrco/releases/app-release-gqo1e59a"
+      },
+      "previousStableVersion": "1.0.4",
+      "changed": false,
+      "releaseCount": 4,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "equipment",
+      "storeUrl": "https://www.halo.run/store/apps/app-ytygyqml/releases",
+      "stable": {
+        "version": "1.1.1",
+        "url": "https://www.halo.run/store/apps/app-ytygyqml/releases/app-release-xty8o5xa"
+      },
+      "previousStableVersion": "1.1.1",
+      "changed": false,
+      "releaseCount": 5,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-bilibili-bangumi",
+      "storeUrl": "https://www.halo.run/store/apps/app-OTFPN/releases",
+      "stable": {
+        "version": "1.4.0",
+        "url": "https://www.halo.run/store/apps/app-OTFPN/releases/app-release-q2ycbfhg"
+      },
+      "previousStableVersion": "1.4.0",
+      "changed": false,
+      "releaseCount": 6,
+      "error": null,
+      "latestPrereleases": ["1.4.1-beta.1"],
+      "previousPrereleases": ["1.4.1-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "steam",
+      "storeUrl": "https://www.halo.run/store/apps/app-0ojqyzfh/releases",
+      "stable": {
+        "version": "1.0.0",
+        "url": "https://www.halo.run/store/apps/app-0ojqyzfh/releases/app-release-ck4zbqkk"
+      },
+      "previousStableVersion": "1.0.0",
+      "changed": false,
+      "releaseCount": 8,
+      "error": null,
+      "latestPrereleases": ["0.2.0-beta.2", "0.2.0-beta.1"],
+      "previousPrereleases": ["0.2.0-beta.2", "0.2.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "link-submit",
+      "storeUrl": "https://www.halo.run/store/apps/app-glejqzwk/releases",
+      "stable": {
+        "version": "1.0.7",
+        "url": "https://www.halo.run/store/apps/app-glejqzwk/releases/app-release-okiwoznl"
+      },
+      "previousStableVersion": "1.0.7",
+      "changed": false,
+      "releaseCount": 9,
+      "error": null,
+      "latestPrereleases": ["1.0.0-beta.1"],
+      "previousPrereleases": ["1.0.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "vote",
+      "storeUrl": "https://www.halo.run/store/apps/app-veyvzyhv/releases",
+      "stable": {
+        "version": "1.1.3",
+        "url": "https://www.halo.run/store/apps/app-veyvzyhv/releases/app-release-np8tb8nv"
+      },
+      "previousStableVersion": "1.1.3",
+      "changed": false,
+      "releaseCount": 4,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "shiki",
+      "storeUrl": "https://www.halo.run/store/apps/app-kzloktzn/releases",
+      "stable": {
+        "version": "1.5.1",
+        "url": "https://www.halo.run/store/apps/app-kzloktzn/releases/app-release-mzrz7aqk"
+      },
+      "previousStableVersion": "1.5.1",
+      "changed": false,
+      "releaseCount": 22,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "data-studio",
+      "storeUrl": "https://www.halo.run/store/apps/app-MrbzY/releases",
+      "stable": null,
+      "previousStableVersion": null,
+      "changed": false,
+      "releaseCount": 9,
+      "error": null,
+      "latestPrereleases": ["1.0.0-alpha.9", "1.0.0-alpha.8", "1.0.0-alpha.7"],
+      "previousPrereleases": ["1.0.0-alpha.9", "1.0.0-alpha.8", "1.0.0-alpha.7"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "text-diagram",
+      "storeUrl": "https://www.halo.run/store/apps/app-ahBRi/releases",
+      "stable": {
+        "version": "1.5.2",
+        "url": "https://www.halo.run/store/apps/app-ahBRi/releases/app-release-rqudxdgh"
+      },
+      "previousStableVersion": "1.5.2",
+      "changed": false,
+      "releaseCount": 8,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginS3ObjectStorage",
+      "storeUrl": "https://www.halo.run/store/apps/app-Qxhpp/releases",
+      "stable": {
+        "version": "1.17.0",
+        "url": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-hdy1v1xf"
+      },
+      "previousStableVersion": "1.17.0",
+      "changed": false,
+      "releaseCount": 24,
+      "error": null,
+      "latestPrereleases": ["1.14.0-beta.1", "1.13.0-rc.2", "1.13.0-rc.1"],
+      "previousPrereleases": ["1.14.0-beta.1", "1.13.0-rc.2", "1.13.0-rc.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-friends",
+      "storeUrl": "https://www.halo.run/store/apps/app-yISsV/releases",
+      "stable": {
+        "version": "1.4.6",
+        "url": "https://www.halo.run/store/apps/app-yISsV/releases/app-release-nc8mxddx"
+      },
+      "previousStableVersion": "1.4.6",
+      "changed": false,
+      "releaseCount": 18,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginBytemd",
+      "storeUrl": "https://www.halo.run/store/apps/app-HTyhC/releases",
+      "stable": {
+        "version": "1.9.0",
+        "url": "https://www.halo.run/store/apps/app-HTyhC/releases/app-release-fvqxsvlk"
+      },
+      "previousStableVersion": "1.9.0",
+      "changed": false,
+      "releaseCount": 10,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "hybrid-edit-block",
+      "storeUrl": "https://www.halo.run/store/apps/app-NgHnY/releases",
+      "stable": {
+        "version": "1.7.0",
+        "url": "https://www.halo.run/store/apps/app-NgHnY/releases/app-release-lgexvgkn"
+      },
+      "previousStableVersion": "1.7.0",
+      "changed": false,
+      "releaseCount": 13,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "chenhe-lsky-pro",
+      "storeUrl": "https://www.halo.run/store/apps/app-jZHhX/releases",
+      "stable": {
+        "version": "1.1.2",
+        "url": "https://www.halo.run/store/apps/app-jZHhX/releases/app-release-soqqub9p"
+      },
+      "previousStableVersion": "1.1.2",
+      "changed": false,
+      "releaseCount": 8,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginLightGallery",
+      "storeUrl": "https://www.halo.run/store/apps/app-OoggD/releases",
+      "stable": {
+        "version": "1.2.1",
+        "url": "https://www.halo.run/store/apps/app-OoggD/releases/app-release-LPQbl"
+      },
+      "previousStableVersion": "1.2.1",
+      "changed": false,
+      "releaseCount": 5,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginPhotos",
+      "storeUrl": "https://www.halo.run/store/apps/app-BmQJW/releases",
+      "stable": {
+        "version": "2.1.2",
+        "url": "https://www.halo.run/store/apps/app-BmQJW/releases/app-release-hxm5qfoy"
+      },
+      "previousStableVersion": "2.1.2",
+      "changed": false,
+      "releaseCount": 17,
+      "error": null,
+      "latestPrereleases": ["2.0.0-beta.2", "2.0.0-beta.1"],
+      "previousPrereleases": ["2.0.0-beta.2", "2.0.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "seo-tools",
+      "storeUrl": "https://www.halo.run/store/apps/app-FNGbT/releases",
+      "stable": {
+        "version": "1.10.1",
+        "url": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg"
+      },
+      "previousStableVersion": "1.10.1",
+      "changed": false,
+      "releaseCount": 28,
+      "error": null,
+      "latestPrereleases": ["1.3.0-rc.3", "1.3.0-rc.2", "1.3.0-rc.1"],
+      "previousPrereleases": ["1.3.0-rc.3", "1.3.0-rc.2", "1.3.0-rc.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginLinks",
+      "storeUrl": "https://www.halo.run/store/apps/app-hfbQg/releases",
+      "stable": {
+        "version": "2.3.0",
+        "url": "https://www.halo.run/store/apps/app-hfbQg/releases/app-release-rpaiuvqj"
+      },
+      "previousStableVersion": "2.3.0",
+      "changed": false,
+      "releaseCount": 29,
+      "error": null,
+      "latestPrereleases": ["2.3.0-beta.4", "2.3.0-beta.3", "2.3.0-beta.2"],
+      "previousPrereleases": ["2.3.0-beta.4", "2.3.0-beta.3", "2.3.0-beta.2"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginMoments",
+      "storeUrl": "https://www.halo.run/store/apps/app-SnwWD/releases",
+      "stable": {
+        "version": "1.19.0",
+        "url": "https://www.halo.run/store/apps/app-SnwWD/releases/app-release-uip7zlta"
+      },
+      "previousStableVersion": "1.19.0",
+      "changed": false,
+      "releaseCount": 27,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "page-cache",
+      "storeUrl": "https://www.halo.run/store/apps/app-BaamQ/releases",
+      "stable": {
+        "version": "1.6.0",
+        "url": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd"
+      },
+      "previousStableVersion": "1.6.0",
+      "changed": false,
+      "releaseCount": 12,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "content-tools",
+      "storeUrl": "https://www.halo.run/store/apps/app-SUvBR/releases",
+      "stable": {
+        "version": "1.8.0",
+        "url": "https://www.halo.run/store/apps/app-SUvBR/releases/app-release-58jwitjo"
+      },
+      "previousStableVersion": "1.8.0",
+      "changed": false,
+      "releaseCount": 16,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginContactForm",
+      "storeUrl": "https://www.halo.run/store/apps/app-gSebd/releases",
+      "stable": {
+        "version": "1.6.4",
+        "url": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-mnsixhfk"
+      },
+      "previousStableVersion": "1.6.4",
+      "changed": false,
+      "releaseCount": 28,
+      "error": null,
+      "latestPrereleases": ["1.2.0-rc.2", "1.2.0-rc.1", "1.0.0-beta.1"],
+      "previousPrereleases": ["1.2.0-rc.2", "1.2.0-rc.1", "1.0.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "ai-assistant",
+      "storeUrl": "https://www.halo.run/store/apps/app-riNgb/releases",
+      "stable": {
+        "version": "3.1.0",
+        "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-6orwsoce"
+      },
+      "previousStableVersion": "3.0.0",
+      "changed": true,
+      "releaseCount": 30,
+      "error": null,
+      "latestPrereleases": ["3.0.0-beta.4", "3.0.0-beta.3", "3.0.0-beta.2"],
+      "previousPrereleases": ["3.0.0-beta.4", "3.0.0-beta.3", "3.0.0-beta.2"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "alist-integration",
+      "storeUrl": "https://www.halo.run/store/apps/app-wEGMV/releases",
+      "stable": {
+        "version": "1.2.0",
+        "url": "https://www.halo.run/store/apps/app-wEGMV/releases/app-release-d2ydr0xa"
+      },
+      "previousStableVersion": "1.2.0",
+      "changed": false,
+      "releaseCount": 8,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "backup-improved",
+      "storeUrl": "https://www.halo.run/store/apps/app-dHakX/releases",
+      "stable": {
+        "version": "1.5.1",
+        "url": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-3qec25tx"
+      },
+      "previousStableVersion": "1.5.1",
+      "changed": false,
+      "releaseCount": 10,
+      "error": null,
+      "latestPrereleases": ["1.4.0-rc.2", "1.4.0-rc.1"],
+      "previousPrereleases": ["1.4.0-rc.2", "1.4.0-rc.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-ldap-login",
+      "storeUrl": "https://www.halo.run/store/apps/app-vrSqF/releases",
+      "stable": {
+        "version": "1.3.0",
+        "url": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-wf3uzfck"
+      },
+      "previousStableVersion": "1.3.0",
+      "changed": false,
+      "releaseCount": 12,
+      "error": null,
+      "latestPrereleases": ["1.3.0-rc.4", "1.3.0-rc.3", "1.3.0-rc.2"],
+      "previousPrereleases": ["1.3.0-rc.4", "1.3.0-rc.3", "1.3.0-rc.2"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-docsme",
+      "storeUrl": "https://www.halo.run/store/apps/app-yffxw/releases",
+      "stable": {
+        "version": "1.10.0",
+        "url": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-vuhmiwq1"
+      },
+      "previousStableVersion": "1.10.0",
+      "changed": false,
+      "releaseCount": 30,
+      "error": null,
+      "latestPrereleases": ["1.5.0-beta.1", "1.1.0-rc.3", "1.1.0-rc.2"],
+      "previousPrereleases": ["1.5.0-beta.1", "1.1.0-rc.3", "1.1.0-rc.2"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "editor-hyperlink-card",
+      "storeUrl": "https://www.halo.run/store/apps/app-UpUJA/releases",
+      "stable": {
+        "version": "1.9.2",
+        "url": "https://www.halo.run/store/apps/app-UpUJA/releases/app-release-epm4pje4"
+      },
+      "previousStableVersion": "1.9.2",
+      "changed": false,
+      "releaseCount": 19,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-oauth2",
+      "storeUrl": "https://www.halo.run/store/apps/app-ESVDK/releases",
+      "stable": {
+        "version": "1.7.1",
+        "url": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-jsoz5qnd"
+      },
+      "previousStableVersion": "1.7.1",
+      "changed": false,
+      "releaseCount": 16,
+      "error": null,
+      "latestPrereleases": ["1.5.0-rc.1", "1.4.0-rc.1"],
+      "previousPrereleases": ["1.5.0-rc.1", "1.4.0-rc.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "plugin-social-login",
+      "storeUrl": "https://www.halo.run/store/apps/app-IXZkJ/releases",
+      "stable": {
+        "version": "1.7.0",
+        "url": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-dbseugob"
+      },
+      "previousStableVersion": "1.7.0",
+      "changed": false,
+      "releaseCount": 20,
+      "error": null,
+      "latestPrereleases": ["1.7.0-beta.1", "1.4.0-rc.5", "1.4.0-rc.4"],
+      "previousPrereleases": ["1.7.0-beta.1", "1.4.0-rc.5", "1.4.0-rc.4"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "restricted-reading",
+      "storeUrl": "https://www.halo.run/store/apps/app-TzRqd/releases",
+      "stable": {
+        "version": "1.9.1",
+        "url": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-1avdqral"
+      },
+      "previousStableVersion": "1.9.1",
+      "changed": false,
+      "releaseCount": 28,
+      "error": null,
+      "latestPrereleases": ["1.7.0-beta.1", "1.5.0-alpha.1", "1.4.0-beta.2"],
+      "previousPrereleases": ["1.7.0-beta.1", "1.5.0-alpha.1", "1.4.0-beta.2"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginCommentWidget",
+      "storeUrl": "https://www.halo.run/store/apps/app-YXyaD/releases",
+      "stable": {
+        "version": "3.3.2",
+        "url": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-e6j0ni2s"
+      },
+      "previousStableVersion": "3.3.2",
+      "changed": false,
+      "releaseCount": 30,
+      "error": null,
+      "latestPrereleases": ["2.2.0-beta.1", "2.0.0-beta.2", "2.0.0-beta.1"],
+      "previousPrereleases": ["2.2.0-beta.1", "2.0.0-beta.2", "2.0.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginSitemap",
+      "storeUrl": "https://www.halo.run/store/apps/app-QDFMI/releases",
+      "stable": {
+        "version": "1.3.0",
+        "url": "https://www.halo.run/store/apps/app-QDFMI/releases/app-release-lytd42sz"
+      },
+      "previousStableVersion": "1.3.0",
+      "changed": false,
+      "releaseCount": 8,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginSearchWidget",
+      "storeUrl": "https://www.halo.run/store/apps/app-DlacW/releases",
+      "stable": {
+        "version": "1.7.1",
+        "url": "https://www.halo.run/store/apps/app-DlacW/releases/app-release-oouqymo1"
+      },
+      "previousStableVersion": "1.7.1",
+      "changed": false,
+      "releaseCount": 12,
+      "error": null,
+      "latestPrereleases": [],
+      "previousPrereleases": [],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "PluginFeed",
+      "storeUrl": "https://www.halo.run/store/apps/app-KhIVw/releases",
+      "stable": {
+        "version": "1.5.0",
+        "url": "https://www.halo.run/store/apps/app-KhIVw/releases/app-release-x64igayx"
+      },
+      "previousStableVersion": "1.5.0",
+      "changed": false,
+      "releaseCount": 12,
+      "error": null,
+      "latestPrereleases": ["1.1.0-beta.1"],
+      "previousPrereleases": ["1.1.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    },
+    {
+      "id": "app-store-integration",
+      "storeUrl": "https://www.halo.run/store/apps/app-VYJbF/releases",
+      "stable": {
+        "version": "1.19.0",
+        "url": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-dtqssqka"
+      },
+      "previousStableVersion": "1.19.0",
+      "changed": false,
+      "releaseCount": 30,
+      "error": null,
+      "latestPrereleases": ["1.10.0-beta.1"],
+      "previousPrereleases": ["1.10.0-beta.1"],
+      "prereleasesChanged": false,
+      "prereleaseRefreshError": null
+    }
+  ],
+  "githubException": {
+    "id": "plugin-bilibili-bangumi",
+    "latestStable": "1.4.1",
+    "url": "https://github.com/Roozenlz/plugin-bilibili-bangumi/releases/tag/1.4.1",
+    "publishedAt": "2026-07-08T09:00:11Z",
+    "checkedAt": "2026-09-22T23:34:54.916670+00:00",
+    "reason": "GitHub latest stable is newer than Halo store listing"
+  }
+}

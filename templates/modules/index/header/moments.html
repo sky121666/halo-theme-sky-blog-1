@@ -1,4 +1,4 @@
-<!-- 兼容基线：PluginMoments v1.16.1；首页头图瞬间模块使用 momentFinder.listAll()。 -->
+<!-- 契约基线：PluginMoments 1.16.1；当前验收版本：1.19.0。首页只读取需要展示的 3 条。 -->
 <!-- 瞬间卡片发光效果脚本 -->
 <script th:inline="none" data-swup-reload-script>
   window.handleMomentCardGlow =
@@ -111,20 +111,21 @@
             class="grid grid-cols-1 gap-3 transition-all duration-500 ease-out md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-5"
           >
             <th:block
-              th:each="moment, momentStat : ${momentFinder.listAll()}"
-              th:with="content=${moment.spec.content}, hasText=${not #strings.isEmpty(content.raw)}, hasMedia=${content.medium != null and not content.medium.isEmpty()}"
+              th:each="moment, momentStat : ${momentFinder.list(1, 3).items}"
+              th:with="content=${moment.spec.content}, hasText=${content != null and (not #strings.isEmpty(content.html) or not #strings.isEmpty(content.raw))}, hasMedia=${content?.medium != null and not content.medium.isEmpty()}"
             >
               <!-- 根据索引动态设置响应式显示类 -->
               <!-- prettier-ignore -->
               <div
-                th:if="${(hasText or hasMedia) and momentStat.index < 3}"
+                th:if="${hasText or hasMedia}"
                 th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + (momentStat.index == 1 ? ' hidden md:flex' : '') + (momentStat.index == 2 ? ' hidden lg:flex' : ' flex')}"
                 th:classappend="${momentStat.index % 2 == 0 ? ' rotate-slight-left' : ' rotate-slight-right'}"
               >
                 <!-- 瞬间内容 -->
                 <div class="max-h-12 flex-1 overflow-hidden text-sm leading-snug *:m-0 *:p-0 md:max-h-16 md:text-base">
                   <!-- 有文本内容时显示文本 -->
-                  <span th:if="${hasText}" th:text="${content.raw}"></span>
+                  <div th:if="${not #strings.isEmpty(content?.html)}" th:utext="${content.html}"></div>
+                  <div th:if="${#strings.isEmpty(content?.html) and not #strings.isEmpty(content?.raw)}" th:text="${content.raw}"></div>
                   <!-- 只有媒体时显示媒体提示 -->
                   <span th:unless="${hasText}" class="flex items-center gap-2 text-white/70">
                     <span class="icon-[material-symbols--image] h-5 w-5"></span>

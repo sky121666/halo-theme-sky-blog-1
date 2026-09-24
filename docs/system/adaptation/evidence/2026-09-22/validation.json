@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-22T02:46:24.445Z",
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "03349c4f38360b2593296f8e07e8c1892d08b2a6c07cc8c4993cceabb24a5c6f",
+    "fileCount": 360,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+  },
+  "checks": [
+    {
+      "command": "npx --yes --package=node@24.18.0 pnpm run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "npx --yes --package=node@24.18.0 pnpm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npx --yes --package=node@24.18.0 pnpm run verify:plugin-contracts",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "package": {
+    "path": "dist/theme-sky-blog-1-2.2.39.zip",
+    "sha256": "c390ceb680dcb1696391ecabe0d7b20ef38c810e9b0f8b264742af237bfcf49e"
+  },
+  "httpRecord": "http-tests.json",
+  "browserRecord": "browser-tests.json",
+  "boundaryRecord": "boundary-tests.json"
+}

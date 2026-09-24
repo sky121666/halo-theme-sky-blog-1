@@ -48,11 +48,8 @@
             </div>
           </th:block>
 
-          <!-- 有标签：在 /tags（全部）分页显示所有文章 -->
-          <th:block th:unless="${#lists.isEmpty(tags)}" th:with="pageSize=${site.post.tagPageSize ?: 10}, 
-                             pageParam=${param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')},
-                             currentPage=${#numbers.formatInteger(pageParam, 0)}, 
-                             posts=${postFinder.list({page: currentPage, size: pageSize})}">
+          <!-- 标签为空不影响全部文章；分页与页头共用布局中的结果。 -->
+          <th:block th:with="posts=${collectionPosts}">
             <!-- 动态渲染不同风格的列表 -->
             <th:block th:switch="${theme.config.tag_settings.basic_info.list_style}">
               <th:block th:case="'modern'">
@@ -84,9 +81,9 @@
 
             <!-- 分页 -->
             <th:block th:replace="~{modules/categories/pagination :: pagination(
-                context=@{/tags/},
-                prevUrl=@{/tags(p=${posts.page - 1})},
-                nextUrl=@{/tags(p=${posts.page + 1})},
+                context=${collectionBase},
+                prevUrl=@{${collectionBase}(p=${posts.page - 1})},
+                nextUrl=@{${collectionBase}(p=${posts.page + 1})},
                 totalPages=${posts.totalPages},
                 page=${posts.page},
                 hasPrevious=${posts.hasPrevious},

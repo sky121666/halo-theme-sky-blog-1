@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T01:44:39.976Z",
+  "browser": "Ego Lite",
+  "taskSpaceId": 5,
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "686a944160f0cc1f1b660ceffeb167ef4a60db08ea1b008c72832afc2422cfa2"
+  },
+  "steps": [
+    {
+      "step": "category-first",
+      "url": "/categories?qa=20260923-interaction-2",
+      "count": 10,
+      "pager": "1 / 6"
+    },
+    {
+      "step": "category-after-scroll",
+      "url": "/categories?qa=20260923-interaction-2",
+      "count": 10,
+      "pager": "1 / 6"
+    },
+    {
+      "step": "category-second-pjax",
+      "url": "/categories?p=2",
+      "count": 10,
+      "pager": "2 / 6"
+    },
+    {
+      "step": "code-block",
+      "preCodes": 27,
+      "whiteSpace": "pre"
+    },
+    {
+      "step": "category-mobile",
+      "count": 10,
+      "pager": "1 / 3",
+      "overflow": false
+    },
+    {
+      "step": "links-friends-mobile",
+      "heading": "友链动态",
+      "view": true,
+      "overflow": false
+    }
+  ]
+}

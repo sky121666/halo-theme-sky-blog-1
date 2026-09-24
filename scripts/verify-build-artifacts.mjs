@@ -31,6 +31,7 @@ const logicalEntries = [
 
 const logicalChunks = [
   "article-content",
+  "article-heatmap-data",
   "auth-common",
   "debug",
   "page-runtime",

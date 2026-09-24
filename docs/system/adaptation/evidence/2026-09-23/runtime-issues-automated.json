@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T13:52:36.467Z",
+  "finishedAt": "2026-09-23T13:52:37.911Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "theme": {
+      "version": "2.2.39",
+      "codeHash": "1bcb1efbf229e49c7a74d1f70934fd91dca0747640ad347fff00077fc9e834d0",
+      "unchangedDuringRun": true
+    },
+    "plugins": [
+      {
+        "id": "auth-passkey",
+        "version": "1.0.4",
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      }
+    ],
+    "inventoryError": null,
+    "pageCacheFreshSince": "2026-09-23T13:50:51.716Z",
+    "dockerContainer": "halo"
+  },
+  "scope": "Local read-only HTTP and backend-log checks. No deterministic Bilibili failure injection or ordinary-user Passkey session was created.",
+  "results": [
+    {
+      "id": "seo.categories.invalid",
+      "owner": "seo-tools",
+      "status": "failed",
+      "route": "/categories?p=abc",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:56 GMT",
+      "title": "文章分类 - 5ee博客",
+      "canonicalPaths": ["/categories?p=abc"],
+      "failures": ["canonical expected /categories, got /categories?p=abc"]
+    },
+    {
+      "id": "seo.categories.alias",
+      "owner": "seo-tools",
+      "status": "failed",
+      "route": "/categories?page=2",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "canonicalPaths": ["/categories"],
+      "failures": ["canonical expected /categories?p=2, got /categories"]
+    },
+    {
+      "id": "seo.categories.page",
+      "owner": "seo-tools",
+      "status": "passed",
+      "route": "/categories?p=2",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "canonicalPaths": ["/categories?p=2"],
+      "failures": []
+    },
+    {
+      "id": "seo.tags.invalid",
+      "owner": "seo-tools",
+      "status": "failed",
+      "route": "/tags?p=abc",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "文章标签 - 5ee博客",
+      "canonicalPaths": ["/tags?p=abc"],
+      "failures": ["canonical expected /tags, got /tags?p=abc"]
+    },
+    {
+      "id": "seo.tags.alias",
+      "owner": "seo-tools",
+      "status": "failed",
+      "route": "/tags?page=2",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "文章标签 - 第 2 页 - 5ee博客",
+      "canonicalPaths": ["/tags"],
+      "failures": ["canonical expected /tags?p=2, got /tags"]
+    },
+    {
+      "id": "seo.tags.page",
+      "owner": "seo-tools",
+      "status": "passed",
+      "route": "/tags?p=2",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "文章标签 - 第 2 页 - 5ee博客",
+      "canonicalPaths": ["/tags?p=2"],
+      "failures": []
+    },
+    {
+      "id": "seo.external.dishes",
+      "owner": "seo-tools",
+      "status": "passed",
+      "route": "/dishes",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "家庭私厨",
+      "canonicalPaths": ["/dishes"],
+      "failures": []
+    },
+    {
+      "id": "seo.external.schedule-calendar",
+      "owner": "seo-tools",
+      "status": "passed",
+      "route": "/schedule-calendar",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "日程日历",
+      "canonicalPaths": ["/schedule-calendar"],
+      "failures": []
+    },
+    {
+      "id": "bangumi.original",
+      "owner": "plugin-bilibili-bangumi",
+      "status": "passed",
+      "route": "/bangumis",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:57 GMT",
+      "title": "追番列表 - 5ee博客",
+      "canonicalPaths": ["/bangumis"],
+      "failures": []
+    },
+    {
+      "id": "bangumi.fresh.filter",
+      "owner": "plugin-bilibili-bangumi",
+      "status": "passed",
+      "route": "/bangumis?typeNum=2&status=0&runtimeProbe=mue5x9bn",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:52:36 GMT",
+      "title": "追番列表 - 5ee博客",
+      "canonicalPaths": ["/bangumis"],
+      "failures": []
+    },
+    {
+      "id": "bangumi.fresh.page",
+      "owner": "plugin-bilibili-bangumi",
+      "status": "passed",
+      "route": "/bangumis?page=2&runtimeProbe=mue5x9bn",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:52:37 GMT",
+      "title": "追番列表 - 第 2 页 - 5ee博客",
+      "canonicalPaths": ["/bangumis"],
+      "failures": []
+    },
+    {
+      "id": "bangumi.upstream-failure",
+      "owner": "plugin-bilibili-bangumi",
+      "status": "not_tested",
+      "reason": "A healthy request cannot prove Bilibili TLS timeout handling; no plugin or network configuration was changed."
+    },
+    {
+      "id": "equipment.original",
+      "owner": "equipment",
+      "status": "passed",
+      "route": "/equipments",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:50:58 GMT",
+      "title": "我的装备 - 5ee博客",
+      "canonicalPaths": ["/equipments"],
+      "failures": []
+    },
+    {
+      "id": "equipment.public-api",
+      "owner": "equipment",
+      "status": "passed",
+      "httpStatus": 200,
+      "total": 3,
+      "returnedItems": 3
+    },
+    {
+      "id": "equipment.fresh",
+      "owner": "equipment",
+      "status": "passed",
+      "route": "/equipments?runtimeProbe=mue5x9bn",
+      "httpStatus": 200,
+      "cacheAt": "Wed, 23 Sep 2026 13:52:37 GMT",
+      "title": "我的装备 - 5ee博客",
+      "canonicalPaths": ["/equipments"],
+      "failures": []
+    },
+    {
+      "id": "equipment.page-size",
+      "owner": "equipment",
+      "status": "failed",
+      "freshRoute": "/equipments?runtimeProbe=mue5x9bn",
+      "warningCount": 3,
+      "logWindow": ["2026-09-23T13:52:37.137Z", "2026-09-23T13:52:38.219Z"],
+      "failures": ["Finder requested page size above Halo limit"]
+    },
+    {
+      "id": "passkey.login",
+      "owner": "auth-passkey",
+      "status": "passed",
+      "route": "/login?method=passkey",
+      "httpStatus": 200,
+      "cacheAt": null,
+      "title": "登录 - 5ee博客",
+      "canonicalPaths": [],
+      "failures": []
+    },
+    {
+      "id": "passkey.anonymous-guard",
+      "owner": "auth-passkey",
+      "status": "passed",
+      "httpStatus": 302
+    },
+    {
+      "id": "passkey.role-declaration",
+      "owner": "auth-passkey",
+      "status": "passed",
+      "pluginRolePresent": true,
+      "credentialGetDeclared": true,
+      "aggregateToAuthenticated": true
+    },
+    {
+      "id": "passkey.disposable-user",
+      "owner": "auth-passkey",
+      "status": "not_tested",
+      "reason": "Requires a separately created disposable logged-in QA account; admin PAT is not an ordinary-user test."
+    }
+  ],
+  "summary": {
+    "passed": 13,
+    "failed": 5,
+    "not_tested": 2
+  }
+}

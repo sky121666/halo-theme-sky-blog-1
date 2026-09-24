@@ -1,0 +1,106 @@
+{
+  "checkedAt": "2026-09-23T02:08:13.041Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "d067ff8e146066c8751e5e824b091361a744f53ec15eb4b5cf8a8746a4d622a3"
+  },
+  "before": [
+    {
+      "name": "隐私政策",
+      "url": "/privacy"
+    },
+    {
+      "name": "使用条款",
+      "url": "/terms"
+    },
+    {
+      "name": "网站地图",
+      "url": "/sitemap.xml"
+    }
+  ],
+  "after": [
+    {
+      "name": "隐私政策",
+      "url": "/privacy"
+    },
+    {
+      "name": "网站地图",
+      "url": "/sitemap.xml"
+    }
+  ],
+  "publicFooter": {
+    "termsLink": false,
+    "privacyLink": true,
+    "sitemapLink": true
+  },
+  "termsStatus": 404,
+  "privacyStatus": 200,
+  "finalRecheck": {
+    "checkedAt": "2026-09-23T02:16:39.071Z",
+    "codeHash": "6e74adb22faa05a12e1a8f01d3da6f5d771b8f0ffd8971a7287897f4f788e6ba",
+    "links": [
+      {
+        "name": "隐私政策",
+        "url": "/privacy"
+      },
+      {
+        "name": "网站地图",
+        "url": "/sitemap.xml"
+      }
+    ],
+    "footerTermsLink": false,
+    "footerPrivacyLink": true,
+    "footerSitemapLink": true
+  },
+  "themeReload": {
+    "checkedAt": "2026-09-23T02:18:45.930Z",
+    "codeHash": "6e74adb22faa05a12e1a8f01d3da6f5d771b8f0ffd8971a7287897f4f788e6ba",
+    "themePhase": "READY",
+    "settingDefaultLegalLinks": [
+      {
+        "name": "隐私政策",
+        "url": "/privacy"
+      },
+      {
+        "name": "网站地图",
+        "url": "/sitemap.xml"
+      }
+    ],
+    "savedLegalLinks": [
+      {
+        "name": "隐私政策",
+        "url": "/privacy"
+      },
+      {
+        "name": "网站地图",
+        "url": "/sitemap.xml"
+      }
+    ],
+    "restoredCategoryPageSize": "10",
+    "restoredCategoryStyle": "modern",
+    "publicPages": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/categories",
+        "status": 200
+      },
+      {
+        "path": "/links",
+        "status": 200
+      },
+      {
+        "path": "/privacy",
+        "status": 200
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200
+      }
+    ]
+  }
+}

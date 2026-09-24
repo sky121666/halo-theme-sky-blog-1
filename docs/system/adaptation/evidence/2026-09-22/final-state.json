@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-09-22T02:51:43.947Z",
+  "codeHash": "03349c4f38360b2593296f8e07e8c1892d08b2a6c07cc8c4993cceabb24a5c6f",
+  "inventoryUnchanged": true,
+  "resources": [
+    {
+      "asset": "js/main.js",
+      "status": 200,
+      "sha256": "b87cfb9e80eee89a24ad639d3ab2d6c54c7ea5d270fe7b53674974de542e739c",
+      "matchesLocal": true
+    },
+    {
+      "asset": "js/links.js",
+      "status": 200,
+      "sha256": "4743c9e7e06df159a9dc8f4e4d923f3d843dd5cf670b9948fe0a5296de2a5bf3",
+      "matchesLocal": true
+    },
+    {
+      "asset": "js/douban.js",
+      "status": 200,
+      "sha256": "f6b636c5c92d183331046d210c2dab70d339d676d37330e4525460ad9f621a06",
+      "matchesLocal": true
+    },
+    {
+      "asset": "css/post.css",
+      "status": 200,
+      "sha256": "260d8ce155b5a9b8a5aab42e715d0c40efde263b1c33a990ccd8234625f5aa5f",
+      "matchesLocal": true
+    }
+  ],
+  "aiSummary": {
+    "enabled": false,
+    "modelSelected": false
+  }
+}

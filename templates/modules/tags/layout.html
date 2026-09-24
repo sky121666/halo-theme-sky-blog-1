@@ -1,13 +1,20 @@
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)">
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)"
+  th:with="collectionBase=${!#strings.isEmpty(site.routes?.tagsUri) ? site.routes.tagsUri : '/tags'},
+           collectionPageSize=${site.post.tagPageSize ?: 10},
+           rawPage=${tag == null ? (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')) : '1'},
+           requestedPage=${rawPage.matches('^[0-9]{1,6}$') ? T(java.lang.Integer).parseInt(rawPage) : 1},
+           firstCollectionPage=${tag == null ? postFinder.list({page: 1, size: collectionPageSize}) : null},
+           collectionPageNumber=${tag == null and requestedPage > 0 and requestedPage <= firstCollectionPage.totalPages ? requestedPage : 1},
+           collectionPosts=${tag == null ? (collectionPageNumber == 1 ? firstCollectionPage : postFinder.list({page: collectionPageNumber, size: collectionPageSize})) : null}">
   <!-- 页面头部 -->
 
   <head
-    th:with="pageNumber=${tag != null ? (posts?.page ?: 1) : (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1'))},
+    th:with="pageNumber=${tag != null ? (posts?.page ?: 1) : collectionPageNumber},
              isPaged=${pageNumber.toString() != '1'},
              pageLabel=${tag != null ? tag.spec.displayName + ' 标签' : '文章标签'},
              documentTitle=${pageLabel + (isPaged ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
-             baseCanonical=${tag != null ? tag.status.permalink : (!#strings.isEmpty(site.routes?.tagsUri) ? site.routes.tagsUri : '/tags')},
+             baseCanonical=${tag != null ? tag.status.permalink : collectionBase},
              pageCanonical=${isPaged ? (tag != null ? baseCanonical + (baseCanonical.endsWith('/') ? 'page/' : '/page/') + pageNumber : baseCanonical + '?p=' + pageNumber) : baseCanonical}"
   >
     <meta charset="UTF-8" />

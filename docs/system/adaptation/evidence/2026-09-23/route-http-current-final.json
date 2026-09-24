@@ -1,0 +1,820 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-23T05:51:35.325594+00:00",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.26.1",
+    "theme": "2.2.39",
+    "codeHash": "3f6b2bafddea31f8927df278a00223eda67a766d8c12fa8f4507e2979050f6fc"
+  },
+  "scope": "All 114 known public GET routes, HTTP and complete response body only",
+  "summary": {
+    "total": 114,
+    "statusCounts": {
+      "200": 113,
+      "404": 1
+    },
+    "serverErrors": [],
+    "templateErrors": []
+  },
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 319668,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "bytes": 158360,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives",
+      "status": 200,
+      "bytes": 159134,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2024/12",
+      "status": 200,
+      "bytes": 157086,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/02",
+      "status": 200,
+      "bytes": 140715,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/03",
+      "status": 200,
+      "bytes": 156618,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/04",
+      "status": 200,
+      "bytes": 134434,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/05",
+      "status": 200,
+      "bytes": 140699,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/06",
+      "status": 200,
+      "bytes": 131157,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/07",
+      "status": 200,
+      "bytes": 128303,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2025/08",
+      "status": 200,
+      "bytes": 143468,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2026/02",
+      "status": 200,
+      "bytes": 127682,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/2U9qMYvW",
+      "status": 200,
+      "bytes": 206074,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/CNnnwQh7",
+      "status": 200,
+      "bytes": 173460,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/FLQkQJLg",
+      "status": 200,
+      "bytes": 175331,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/JGvxASVB",
+      "status": 200,
+      "bytes": 156434,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/U42G91AM",
+      "status": 200,
+      "bytes": 182341,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/VHHIpSkP",
+      "status": 200,
+      "bytes": 154210,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "bytes": 161558,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/ijhJxHtw",
+      "status": 200,
+      "bytes": 148560,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/j3efAbg4",
+      "status": 200,
+      "bytes": 154504,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/jJkjiM27",
+      "status": 200,
+      "bytes": 174086,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/jeco9MwB",
+      "status": 200,
+      "bytes": 158277,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/lKkDC8OW",
+      "status": 200,
+      "bytes": 172890,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/mac-restart-podman-container-start",
+      "status": 200,
+      "bytes": 156161,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/nsoSkHzN",
+      "status": 200,
+      "bytes": 158720,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/page/2",
+      "status": 200,
+      "bytes": 158839,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/archives/tFyvnqK0",
+      "status": 200,
+      "bytes": 163820,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/authors/sky0821",
+      "status": 200,
+      "bytes": 223800,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/bangumis",
+      "status": 200,
+      "bytes": 113800,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories",
+      "status": 200,
+      "bytes": 164289,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/1panel",
+      "status": 200,
+      "bytes": 170335,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/ai",
+      "status": 200,
+      "bytes": 169959,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/ai/page/2",
+      "status": 200,
+      "bytes": 169514,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/halo",
+      "status": 200,
+      "bytes": 158907,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/qi-ta",
+      "status": 200,
+      "bytes": 156281,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories/qian-duan",
+      "status": 200,
+      "bytes": 150998,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/categories?p=2",
+      "status": 200,
+      "bytes": 168609,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/dishes",
+      "status": 200,
+      "bytes": 16643,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/docs",
+      "status": 200,
+      "bytes": 97703,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1",
+      "status": 200,
+      "bytes": 124629,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/douban",
+      "status": 200,
+      "bytes": 97036,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/equipments",
+      "status": 200,
+      "bytes": 122694,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/links",
+      "status": 200,
+      "bytes": 227282,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/links?view=friends",
+      "status": 200,
+      "bytes": 272702,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "bytes": 26913,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/login?method=passkey",
+      "status": 200,
+      "bytes": 31228,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments",
+      "status": 200,
+      "bytes": 166696,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-1778854511638-3wpy3noe",
+      "status": 200,
+      "bytes": 104666,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-32asaylm",
+      "status": 200,
+      "bytes": 108153,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-4sbc36v5",
+      "status": 200,
+      "bytes": 106877,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-9roi1c7n",
+      "status": 200,
+      "bytes": 104883,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-bxbdkuwu",
+      "status": 200,
+      "bytes": 109326,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-cvbl3r6b",
+      "status": 200,
+      "bytes": 104673,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-f6ircurs",
+      "status": 200,
+      "bytes": 103890,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-qbxmx6d5",
+      "status": 200,
+      "bytes": 108783,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-qrb5xcuw",
+      "status": 200,
+      "bytes": 107453,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/moment-ytpmkzzy",
+      "status": 200,
+      "bytes": 106208,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/moments/page/2",
+      "status": 200,
+      "bytes": 129323,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos",
+      "status": 200,
+      "bytes": 151277,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "status": 200,
+      "bytes": 102411,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-2qclll5g",
+      "status": 200,
+      "bytes": 102424,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-3x39qxyf",
+      "status": 200,
+      "bytes": 102399,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-8os50ylm",
+      "status": 200,
+      "bytes": 102173,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-dgzc3rqv",
+      "status": 200,
+      "bytes": 102386,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-gaazy0ws",
+      "status": 200,
+      "bytes": 102424,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-gtulnjy1",
+      "status": 200,
+      "bytes": 102412,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-hysezd2w",
+      "status": 200,
+      "bytes": 102399,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-ihzgnfm4",
+      "status": 200,
+      "bytes": 102432,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-lglk3ors",
+      "status": 200,
+      "bytes": 103838,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-mogdulku",
+      "status": 200,
+      "bytes": 102405,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-nbgx3edf",
+      "status": 200,
+      "bytes": 104497,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-nsrwcpna",
+      "status": 200,
+      "bytes": 102399,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-rgolxmbv",
+      "status": 200,
+      "bytes": 101772,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-tidpcttl",
+      "status": 200,
+      "bytes": 102399,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-ugdx4sx6",
+      "status": 200,
+      "bytes": 101942,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-vyd6cj4k",
+      "status": 200,
+      "bytes": 102405,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-xqgifxkz",
+      "status": 200,
+      "bytes": 101646,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-yvqae9y4",
+      "status": 200,
+      "bytes": 101810,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/photos/photo-zepgpelt",
+      "status": 200,
+      "bytes": 102276,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "bytes": 102133,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/schedule-calendar",
+      "status": 200,
+      "bytes": 53819,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/signup",
+      "status": 200,
+      "bytes": 26579,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/steam",
+      "status": 200,
+      "bytes": 111538,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags",
+      "status": 200,
+      "bytes": 131073,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/1panel",
+      "status": 200,
+      "bytes": 132608,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/ai",
+      "status": 200,
+      "bytes": 132910,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/alist",
+      "status": 200,
+      "bytes": 111803,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/astro",
+      "status": 200,
+      "bytes": 110872,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/cha-jian-kai-fa",
+      "status": 200,
+      "bytes": 111388,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/cursor",
+      "status": 200,
+      "bytes": 123688,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/demo",
+      "status": 200,
+      "bytes": 109018,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/dify",
+      "status": 200,
+      "bytes": 129241,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/docker",
+      "status": 200,
+      "bytes": 111592,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/editor",
+      "status": 200,
+      "bytes": 109033,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/fan-xiang-dai-li",
+      "status": 200,
+      "bytes": 124964,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/frp",
+      "status": 200,
+      "bytes": 108609,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/fu-wu-qi",
+      "status": 200,
+      "bytes": 111173,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/halo",
+      "status": 200,
+      "bytes": 126268,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/hao",
+      "status": 200,
+      "bytes": 108801,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/lobechat",
+      "status": 200,
+      "bytes": 116752,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/macos",
+      "status": 200,
+      "bytes": 111584,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/mcp",
+      "status": 200,
+      "bytes": 123670,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/mo-ban-zhi-zuo",
+      "status": 200,
+      "bytes": 108876,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/nas",
+      "status": 200,
+      "bytes": 108621,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/pod",
+      "status": 200,
+      "bytes": 106448,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/podman",
+      "status": 200,
+      "bytes": 111590,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/tailwindcss",
+      "status": 200,
+      "bytes": 113718,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/tr-ae",
+      "status": 200,
+      "bytes": 108600,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/ubuntu",
+      "status": 200,
+      "bytes": 108622,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vaultwarden",
+      "status": 200,
+      "bytes": 109130,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vite",
+      "status": 200,
+      "bytes": 111551,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/tags/vue",
+      "status": 200,
+      "bytes": 109046,
+      "templateError": false,
+      "serverError": false
+    },
+    {
+      "path": "/terms",
+      "status": 404,
+      "bytes": 186,
+      "templateError": false,
+      "serverError": false
+    }
+  ]
+}

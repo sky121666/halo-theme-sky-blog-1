@@ -83,10 +83,9 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 | 模板   | 文件                                          | 依赖插件                | 说明                 |
 | ------ | --------------------------------------------- | ----------------------- | -------------------- |
-| 友链   | `links.html`                                  | PluginLinks             | 友情链接展示         |
+| 友链   | `links.html`                                  | PluginLinks             | 友情链接、RSS 动态与申请 |
 | 图库   | `photos.html` / `photo.html`                  | PluginPhotos            | 瀑布流图库、照片详情 |
 | 瞬间   | `moments.html` / `moment.html`                | PluginMoments           | 瞬间列表/详情        |
-| 朋友圈 | `friends.html`                                | plugin-friends          | RSS 聚合             |
 | 文档   | `docs.html` / `doc.html` / `doc-catalog.html` | plugin-docsme           | 知识库文档           |
 | 追番   | `bangumis.html`                               | plugin-bilibili-bangumi | Bilibili 追番        |
 | Steam  | `steam.html`                                  | halo-plugin-steam       | Steam 游戏库         |
@@ -134,11 +133,11 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 插件        | 应用市场                                                     | GitHub                                                                                    | 主题支持                                                  |
 | ----------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | 瞬间管理    | [app-SnwWD](https://www.halo.run/store/apps/app-SnwWD)       | [plugin-moments](https://github.com/halo-sigs/plugin-moments)                             | ✅ 前端发布、媒体上传                                     |
-| 朋友圈      | [app-yISsV](https://www.halo.run/store/apps/app-yISsV)       | [plugin-friends](https://github.com/chengzhongxue/plugin-friends)                         | ✅ 1.4.6 与 PluginLinks 2.0.0 组合已通过；上游已归档      |
+| 朋友圈（退役） | [app-yISsV](https://www.halo.run/store/apps/app-yISsV) | [plugin-friends](https://github.com/chengzhongxue/plugin-friends) | 不再适配；RSS 动态统一使用 PluginLinks `/links?view=friends` |
 | Docsme 文档 | [app-yffxw](https://www.halo.run/store/apps/app-yffxw)       | -                                                                                         | ✅ 按 1.7.0 契约集成项目、目录、正文和 DocTree 评论       |
 | 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配              |
-| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链书签、分组展示                                     |
-| 友链提交    | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit)                        | ✅ 1.0.7 官方组件与 PJAX 弹窗通过；资源失败时保留多级降级 |
+| 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链、分组、RSS 动态与申请统一展示                     |
+| 友链提交（退役） | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit) | 不再适配；访客申请统一使用 PluginLinks 2.3.0 的申请接口 |
 | 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.4 的 21 个全局主题变量；提交与上传待实站回归       |
 | 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM、390px、暗色与 PJAX 重入通过      |
 | 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归             |
@@ -214,9 +213,9 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 安装以下插件以获得完整体验：
 
 - **必装**：搜索组件、评论组件
-- **推荐**：瞬间、图库、链接管理、友链提交、装备管理
-- **可选**：Docsme 文档、朋友圈、追番、Steam、豆瓣、Passkey 认证
-- **版本约束**：同时使用朋友圈或友链提交时，PluginLinks 固定使用 2.0.0；2.1.0～2.2.1 与该组合存在已确认的类加载冲突
+- **推荐**：瞬间、图库、链接管理、装备管理
+- **可选**：Docsme 文档、追番、Steam、豆瓣、Passkey 认证
+- **友链版本**：当前适配目标为 PluginLinks 2.3.0；访客站内申请需在插件后台开启申请功能。旧版朋友圈和友链提交插件已退出主题集成。
 
 ---
 

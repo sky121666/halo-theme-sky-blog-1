@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
   <!-- 页面：豆瓣记录（/douban）-->
-  <!-- 兼容基线：plugin-douban v1.2.5；页面壳消费 title/templateId，列表通过公开 API 渲染海报网格。 -->
+  <!-- plugin-douban v1.2.6：页面壳消费 title/templateId，列表兼容扁平 DTO 和旧 spec/faves。 -->
 
   <th:block th:replace="~{modules/douban/layout :: html (~{modules/douban/content :: douban-content})}" />
 </html>

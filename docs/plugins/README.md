@@ -6,7 +6,7 @@
 | ------------- | ---------------------------------- | ----------------------------------- |
 | `integration` | 插件总览、灯箱、附件存储、版本注意 | [插件集成](./integration/README.md) |
 | `pages`       | 关于页面等独立页面                 | [独立页面](./pages/README.md)       |
-| `content`     | 友链、图库、瞬间、朋友圈、文档中心 | [内容插件](./content/README.md)     |
+| `content`     | 友链及动态、图库、瞬间、文档中心 | [内容插件](./content/README.md)     |
 | `collections` | 豆瓣、追番、Steam、装备            | [收藏扩展](./collections/README.md) |
 
 ## 使用顺序

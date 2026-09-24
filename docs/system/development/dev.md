@@ -180,6 +180,33 @@ curl -X DELETE \
 
 最后用普通浏览器新导航确认 DOM；仅看到 Reload API 返回 200，不代表浏览器一定已经离开旧的页面缓存。纯静态资源变化还要核对实际响应字节，必要时禁用浏览器缓存或更新主题版本以刷新 `?v=` 参数。
 
+诊断 Page Cache 1.6.0 时，默认 `curl` 的 `Accept: */*` 不会进入 HTML 缓存分支。对**同一个原始 URL**发送 `Accept: text/html`，记录 `X-Halo-Cache-At`、`Cache-Control` 和 HTML；刷新缓存后再请求同一 URL，确认时间戳与内容变化。给 URL 加随机 `qa` 参数只会生成另一条缓存键，不能证明原 URL 的旧响应已失效。清理 API 是站点缓存操作，执行前确认本地测试授权与凭据权限；正式发布还要核对代理/CDN 层缓存。
+
+刷新后记录 UTC 时间，用下面的只读烟测核对原 URL；每次运行须把示例时刻替换成**本次**刷新时间。脚本对 HTML 请求使用 `Accept: text/html`，如果响应带有早于刷新时刻的 `X-Halo-Cache-At` 就失败，并在 JSON 中保留每页缓存时间。未带该响应头的页面只能判定为“未观察到页面缓存”，不能据此证明其他缓存层已刷新。浏览器还需禁用本机缓存，分别检查匿名（命中 Page Cache）和已登录（可能绕过 Page Cache）界面；静态 JS/CSS 用响应字节与本地构建产物比对。
+
+```bash
+node scripts/verify-plugin-pages.mjs \
+  --cache-fresh-since=2026-09-23T09:17:05Z \
+  --report=docs/system/adaptation/evidence/2026-09-23/cache-guard-weather-after-refresh.json
+```
+
+定位 SEO Tools、追番、装备与 Passkey 的已知问题可运行只读回归；`--cache-fresh-since` 必须填**本次** Page Cache 刷新前记录的 UTC 时刻。该脚本遇到已知缺陷会返回非零退出码，JSON 报告区分通过、失败和未测，不应把一次正常追番请求当成上游超时分支通过。
+
+```bash
+node scripts/verify-plugin-runtime-issues.mjs \
+  --cache-fresh-since=2026-09-23T13:50:51.716Z \
+  --report=docs/system/adaptation/evidence/2026-09-23/runtime-issues-automated.json
+```
+
+Passkey 普通用户权限另有本地一次性账号探针。它使用当前登录页的 Altcha 验证码流程，创建专用账号和角色绑定后自动清理；仅在已获授权的本地 Halo 上使用 `--allow-local-write`，不得指向正式站点或使用真实账号。若进程中断，先运行同脚本的 `--cleanup` 并确认账号、绑定均已删除；失败的 403 是诊断结果，不表示脚本通过。
+
+```bash
+node scripts/verify-passkey-disposable.mjs --allow-local-write \
+  --report=docs/system/adaptation/evidence/2026-09-23/passkey-disposable-automated.json
+# 仅测试中断且恢复状态文件仍存在时运行：
+node scripts/verify-passkey-disposable.mjs --allow-local-write --cleanup
+```
+
 当前构建规则：
 
 | 资源    | 规则                                                               |

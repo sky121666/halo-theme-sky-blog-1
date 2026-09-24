@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-23T07:35:43Z",
+  "environment": {
+    "site": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "74d214a02ea557cf5ead5432ba642a9c9fbd53c2a4fc49e108ef1cfc7baa9caf"
+  },
+  "source": "docker logs --since 2026-09-23T07:24:00Z halo",
+  "scope": "Final-code 114-route HTTP and real-browser sweeps; other local activity in the same window was not excluded",
+  "counts": {
+    "warnLines": 6,
+    "errorLines": 0,
+    "pageSizeWarnings": 6,
+    "templateProcessingExceptions": 0,
+    "bangumi500": 0,
+    "otherGet500Paths": []
+  },
+  "interpretation": "The six page-size warnings match two /equipments navigations and the established three-warning-per-request reproduction; the time-window count alone does not prove no other local request occurred"
+}

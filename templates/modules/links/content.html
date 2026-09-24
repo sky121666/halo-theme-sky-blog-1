@@ -3,7 +3,7 @@
   <!-- ========================================== -->
   <!--        友情链接页主体内容 - Apple Style     -->
   <!-- 支持分组展示，毛玻璃卡片布局                -->
-  <!-- 兼容基线：PluginLinks v2.2.1；消费路由变量、状态枚举和可选公开 RSS Finder，不手动拼 LinkGroup/Link。 -->
+  <!-- PluginLinks v2.3.0：保留 >=2.2.1 列表/RSS，按插件开关启用官方访客申请。 -->
   <!-- ========================================== -->
 
   <!-- 友链内容片段 -->
@@ -37,6 +37,7 @@
     data-plugin-links-contract="PluginLinks>=2.2.1"
     th:data-plugin-links-available="${hasLatestLinks}"
     th:data-plugin-links-title="${linksTitle}"
+    th:data-link-application-enabled="${pluginFinder.available('PluginLinks', '>=2.3.0') and linkApplicationEnabled == true}"
     th:data-feed-prefetch-key="${feedPrefetchKey}"
     th:data-feed-prefetch-has-next="${linkFeedPage != null and linkFeedPage.hasNext}"
     th:data-feed-prefetch-next-published-at="${linkFeedPage != null ? linkFeedPage.nextBeforePublishedAt : ''}"
@@ -548,7 +549,7 @@
                       <span class="mb-1.5 block text-xs font-medium text-base-content/60">Logo 地址</span>
                       <input class="input w-full" type="url" name="logo" inputmode="url" placeholder="https://…/logo.png" />
                     </label>
-                    <label>
+                    <label data-apply-group-field>
                       <span class="mb-1.5 block text-xs font-medium text-base-content/60">所属分组</span>
                       <select class="select w-full" name="groupName">
                         <option value="">未分组</option>
@@ -579,6 +580,20 @@
                     <span class="mb-1.5 block text-xs font-medium text-base-content/60">更新说明</span>
                     <textarea class="textarea w-full" name="updateDescription" rows="2" maxlength="500" placeholder="说明本次需要更新的内容"></textarea>
                   </label>
+
+                  <label data-apply-guest-field hidden>
+                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">反链地址（可选）</span>
+                    <input class="input w-full" type="url" name="backlink" placeholder="你的网站中链接到本站的页面地址" />
+                  </label>
+                  <div data-apply-guest-field hidden>
+                    <label class="mb-1.5 block text-xs font-medium text-base-content/60" for="links-apply-captcha">验证码</label>
+                    <div class="flex flex-wrap items-center gap-3">
+                      <img data-apply-captcha-image alt="友链申请验证码" width="160" height="48" />
+                      <button type="button" class="btn btn-ghost btn-sm" data-apply-captcha-refresh>换一张</button>
+                      <input id="links-apply-captcha" class="input w-36" name="captchaCode" minlength="5" maxlength="5" autocomplete="off" spellcheck="false" />
+                    </div>
+                    <p class="text-base-content/60 mt-2 text-xs" data-apply-captcha-status aria-live="polite"></p>
+                  </div>
 
                   <div data-apply-status class="alert alert-soft" role="status" aria-live="polite" hidden></div>
 

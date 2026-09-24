@@ -2,7 +2,7 @@
   <!-- GitHub 热力图 -->
   <div th:if="${showHeatmap and heatmapType == 'github' and githubUsername != null and !githubUsername.isEmpty()}"
     class="heatmap-card rounded-[1.5rem] backdrop-blur-xl bg-base-100/70 border border-base-content/5 shadow-lg p-5"
-    x-data="githubHeatmap()" x-init="init()" x-cloak>
+    x-data="githubHeatmap()" x-cloak>
 
     <!-- 骨架屏加载状态 -->
     <div x-show="loading" class="heatmap-skeleton">
@@ -192,23 +192,27 @@
 
   <!-- 文章热力图 -->
   <th:block th:if="${showHeatmap and heatmapType == 'article'}">
-    <!-- 获取最近的文章用于统计 -->
-    <th:block th:with="recentPosts = ${postFinder.list({page: 1, size: 500})}">
       <div
         class="heatmap-card rounded-[1.5rem] backdrop-blur-xl bg-base-100/70 border border-base-content/5 shadow-lg p-5"
-        x-data="articleHeatmap()" x-init="init()" x-cloak>
+        x-data="articleHeatmap()" x-cloak>
 
         <!-- 热力图容器 -->
         <div x-ref="container" class="w-full overflow-x-auto"></div>
 
+        <p x-show="isLoading" class="heatmap-empty-text" role="status">正在加载年度文章…</p>
+        <div x-show="error" x-cloak class="heatmap-error" role="alert">
+          <p class="heatmap-error-text">文章发布记录加载失败</p>
+          <button type="button" @click="loadData()" class="heatmap-retry-btn">重试</button>
+        </div>
+
         <!-- 空态提示 -->
-        <div x-show="isEmpty" x-cloak class="heatmap-empty">
+        <div x-show="!isLoading && !error && isEmpty" x-cloak class="heatmap-empty">
           <span class="icon-[heroicons--document-text] heatmap-empty-icon"></span>
           <p class="heatmap-empty-text">暂无文章发布记录</p>
         </div>
 
         <!-- 底部信息栏 -->
-        <div x-show="!isEmpty" class="heatmap-footer flex items-center justify-between mt-3">
+        <div x-show="!isLoading && !error && !isEmpty" class="heatmap-footer flex items-center justify-between mt-3">
           <span class="text-xs text-base-content/40">年度文章 · <span x-text="totalCount"></span> 篇</span>
           <div class="heatmap-legend hidden sm:flex items-center gap-1 text-xs text-base-content/40">
             <span>Less</span>
@@ -220,16 +224,6 @@
             <span x-ref="level4" class="inline-block w-2.5 h-2.5 rounded-sm bg-primary"></span>
             <span>More</span>
           </div>
-        </div>
-
-        <!-- 存储文章数据 - 仅统计公开文章 -->
-        <div x-ref="postsData" style="display:none;">
-          <th:block th:each="post : ${recentPosts.items}">
-            <span
-              th:if="${post.spec.publishTime != null and (post.spec.visible == null or post.spec.visible.name() == 'PUBLIC')}"
-              th:data-date="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}" th:data-title="${post.spec.title}"
-              th:data-slug="${post.spec.slug}"></span>
-          </th:block>
         </div>
 
         <!-- 自定义 Tooltip：必须放在 articleHeatmap 根节点内部，避免 PJAX 下 x-ref 丢失根作用域 -->
@@ -244,6 +238,8 @@
           Alpine.data('articleHeatmap', () => ({
             totalCount: 0,
             isEmpty: false,
+            isLoading: true,
+            error: false,
             data: new Map(),
             postsByDate: new Map(),
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -255,6 +251,8 @@
             _resizeTimer: null,
             _renderFrame: null,
             _tooltipTimer: null,
+            _visibilityObserver: null,
+            _requestController: null,
 
             init() {
               // 防止重复初始化
@@ -262,54 +260,58 @@
               this._initialized = true;
               this._destroyed = false;
 
-              this.parseData();
-              this.isEmpty = this.totalCount === 0;
+              if (typeof IntersectionObserver === 'undefined') {
+                this.loadData();
+                return;
+              }
+              this._visibilityObserver = new IntersectionObserver((entries) => {
+                if (!entries.some((entry) => entry.isIntersecting)) return;
+                this._visibilityObserver?.disconnect();
+                this._visibilityObserver = null;
+                this.loadData();
+              }, { rootMargin: '200px' });
+              this._visibilityObserver.observe(this.$el);
+            },
 
-              if (!this.isEmpty) {
-                this.$nextTick(() => {
-                  if (this._destroyed) return;
-                  this.render();
-                  this.setupResizeObserver();
-                  this.setupThemeObserver();
-                });
+            async loadData() {
+              this._requestController?.abort();
+              const controller = new AbortController();
+              this._requestController = controller;
+              this.isLoading = true;
+              this.error = false;
+              try {
+                const posts = await window.skyArticleHeatmapData.fetchAnnualPublicPosts({ signal: controller.signal });
+                if (this._destroyed || controller.signal.aborted) return;
+                this.parseData(posts);
+                this.isEmpty = this.totalCount === 0;
+                if (!this.isEmpty) {
+                  this.$nextTick(() => {
+                    if (this._destroyed) return;
+                    this.render();
+                    this.setupResizeObserver();
+                    this.setupThemeObserver();
+                  });
+                }
+              } catch (error) {
+                if (!this._destroyed && !controller.signal.aborted) this.error = true;
+              } finally {
+                if (!this._destroyed && !controller.signal.aborted) this.isLoading = false;
+                if (this._requestController === controller) this._requestController = null;
               }
             },
 
-            parseData() {
-              const container = this.$refs.postsData;
-              if (!container) return;
-
-              // 防止重复初始化 - 重置所有状态
+            parseData(posts) {
               this.totalCount = 0;
               this.data = new Map();
               this.postsByDate = new Map();
-
-              const oneYearAgo = new Date();
-              oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-              const oneYearAgoStr = oneYearAgo.toISOString().split('T')[0];
-
-              // 使用 slug 去重，防止同一篇文章被多次统计
-              const seenSlugs = new Set();
-
-              container.querySelectorAll('span[data-date]').forEach(span => {
-                const date = span.getAttribute('data-date');
-                const title = span.getAttribute('data-title') || '';
-                const slug = span.getAttribute('data-slug') || '';
-
-                // 跳过一年前的文章
-                if (!date || date < oneYearAgoStr) return;
-
-                // 跳过已经统计过的文章（按 slug 去重）
-                if (seenSlugs.has(slug)) return;
-                seenSlugs.add(slug);
-
+              posts.forEach(post => {
+                const date = window.skyArticleHeatmapData.localDateKey(post.date);
+                if (!date) return;
                 this.data.set(date, (this.data.get(date) || 0) + 1);
-
                 if (!this.postsByDate.has(date)) {
                   this.postsByDate.set(date, []);
                 }
-                this.postsByDate.get(date).push({ title, slug });
-
+                this.postsByDate.get(date).push({ title: post.title, slug: post.slug });
                 this.totalCount++;
               });
             },
@@ -362,9 +364,9 @@
                 const width = labelWidth + gridWidth;
                 const height = monthLabelHeight + gridHeight;
 
-                const today = new Date();
-                const startDate = new Date(today);
-                startDate.setDate(startDate.getDate() - (weeks * days - 1));
+                const { start, end } = window.skyArticleHeatmapData.annualWindow();
+                const startDate = new Date(start);
+                startDate.setDate(startDate.getDate() - startDate.getDay());
 
                 // 生成月份标签
                 const monthLabels = [];
@@ -392,9 +394,9 @@
                   const date = new Date(startDate);
                   date.setDate(date.getDate() + i);
 
-                  if (date > today) continue;
+                  if (date < start || date >= end) continue;
 
-                  const dateStr = date.toISOString().split('T')[0];
+                  const dateStr = window.skyArticleHeatmapData.localDateKey(date);
                   const count = this.data.get(dateStr) || 0;
                   const level = count === 0 ? 0 : count === 1 ? 1 : count === 2 ? 2 : count === 3 ? 3 : 4;
 
@@ -451,24 +453,31 @@
               const count = parseInt(cell.getAttribute('data-count') || '0');
               const posts = this.postsByDate.get(dateStr) || [];
 
-              const date = new Date(dateStr);
-              const formattedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-
-              let html = `<div class="heatmap-tooltip-date">${formattedDate}</div>`;
-              html += `<div class="heatmap-tooltip-count">${count} 篇文章</div>`;
-
+              const [year, month, day] = dateStr.split('-').map(Number);
+              const dateElement = document.createElement('div');
+              dateElement.className = 'heatmap-tooltip-date';
+              dateElement.textContent = `${year}年${month}月${day}日`;
+              const countElement = document.createElement('div');
+              countElement.className = 'heatmap-tooltip-count';
+              countElement.textContent = `${count} 篇文章`;
+              tooltip.replaceChildren(dateElement, countElement);
               if (posts.length > 0) {
-                html += '<div class="heatmap-tooltip-posts">';
+                const postList = document.createElement('div');
+                postList.className = 'heatmap-tooltip-posts';
                 posts.slice(0, 3).forEach(post => {
-                  html += `<span class="heatmap-tooltip-post">${post.title}</span>`;
+                  const item = document.createElement('span');
+                  item.className = 'heatmap-tooltip-post';
+                  item.textContent = post.title;
+                  postList.append(item);
                 });
                 if (posts.length > 3) {
-                  html += `<span class="heatmap-tooltip-post">还有 ${posts.length - 3} 篇...</span>`;
+                  const more = document.createElement('span');
+                  more.className = 'heatmap-tooltip-post';
+                  more.textContent = `还有 ${posts.length - 3} 篇...`;
+                  postList.append(more);
                 }
-                html += '</div>';
+                tooltip.append(postList);
               }
-
-              tooltip.innerHTML = html;
               tooltip.style.display = 'block';
 
               const rect = cell.getBoundingClientRect();
@@ -537,6 +546,10 @@
 
             destroy() {
               this._destroyed = true;
+              this._visibilityObserver?.disconnect();
+              this._visibilityObserver = null;
+              this._requestController?.abort();
+              this._requestController = null;
               this._resizeObserver?.disconnect();
               this._resizeObserver = null;
               this._themeObserver?.disconnect();
@@ -558,6 +571,5 @@
           }
         })();
       </script>
-    </th:block>
   </th:block>
 </th:block>

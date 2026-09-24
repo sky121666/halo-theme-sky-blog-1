@@ -59,7 +59,7 @@
         <!-- 通过 groupBy() 获取所有分组，按主题设置筛选展示，不伪造不存在的 listBy(groupNames, limit) API。 -->
         <th:block
           th:with="groups = ${linkFinder.groupBy()},
-                   filteredGroups = ${linksSettings.links_groups == null or #lists.isEmpty(linksSettings.links_groups) ? groups : groups.?[#lists.contains(linksSettings.links_groups, metadata.name)]},
+                   filteredGroups = ${linksSettings.links_groups == null or #lists.isEmpty(linksSettings.links_groups) ? groups : groups.?[#lists.contains(#root.linksSettings.links_groups, metadata.name)]},
                    visibleLinkCount = ${filteredGroups == null or #lists.isEmpty(filteredGroups) ? 0 : #aggregates.sum(filteredGroups.![#lists.size(links)])}"
         >
           <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->

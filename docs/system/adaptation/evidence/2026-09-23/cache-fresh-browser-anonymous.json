@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T09:10:33.103Z",
+  "environment": {
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted",
+    "codeHash": "5990238245bab48d25b53a084c08f0340a02f80767f2c396220347c63d1130f2",
+    "session": "anonymous 127.0.0.1 host; separate Page Cache keys from localhost"
+  },
+  "spaceId": 12,
+  "host": "127.0.0.1:8090",
+  "note": "Cookie-isolated anonymous host; original localhost URLs separately checked by Accept:text/html smoke after Page Cache refresh",
+  "browserCacheDisabled": true,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:29 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "5ee博客 - 123",
+        "h1": "sky blog",
+        "canonical": ["https://www.5ee.net/"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/links?view=friends",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:29 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "友情链接 - 5ee博客",
+        "h1": "友链动态",
+        "canonical": ["https://www.5ee.net/links"],
+        "friendView": true,
+        "equipmentCommentSubject": "comment-plugin-halo-run-Plugin-PluginLinks"
+      }
+    },
+    {
+      "path": "/categories?p=abc",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:30 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "文章分类 - 5ee博客",
+        "h1": "文章分类",
+        "canonical": ["https://www.5ee.net/categories?p=abc"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/categories?page=2",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:30 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "文章分类 - 第 2 页 - 5ee博客",
+        "h1": "文章分类",
+        "canonical": ["https://www.5ee.net/categories"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/tags?p=abc",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:30 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "文章标签 - 5ee博客",
+        "h1": "文章标签",
+        "canonical": ["https://www.5ee.net/tags?p=abc"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/tags?page=2",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:31 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "文章标签 - 第 2 页 - 5ee博客",
+        "h1": "文章标签",
+        "canonical": ["https://www.5ee.net/tags"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/bangumis",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:10:31 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "追番列表 - 5ee博客",
+        "h1": "追番列表",
+        "canonical": ["https://www.5ee.net/bangumis"],
+        "friendView": false,
+        "equipmentCommentSubject": null
+      }
+    },
+    {
+      "path": "/equipments",
+      "status": 200,
+      "cacheAt": "Wed, 23 Sep 2026 09:09:59 GMT",
+      "cacheControl": "max-age=3, s-maxage=120, must-revalidate",
+      "ui": {
+        "title": "我的装备 - 5ee博客",
+        "h1": "我的装备",
+        "canonical": ["https://www.5ee.net/equipments"],
+        "friendView": false,
+        "equipmentCommentSubject": "comment-plugin-halo-run-Plugin-PluginEquipment"
+      }
+    }
+  ]
+}

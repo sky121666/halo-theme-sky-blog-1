@@ -1,0 +1,203 @@
+{
+  "testedAt": "2026-09-22T02:49:24.131Z",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+  "cases": [
+    {
+      "name": "douban-real-data",
+      "cards": 8,
+      "titles": ["周处除三害", "狂飙", "消失的她", "忠犬八公", "我不是药神", "孤注一掷", "满江红", "年会不能停！"],
+      "loadedImages": 8,
+      "validLinks": true,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/moments",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 25043,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/photos",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 8530,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/docs/halo-theme-sky-blog-1/jianjie",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 3053,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/links",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 27112,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/bangumis",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 4422,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/steam",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 9890,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/equipments",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 11354,
+      "ok": true
+    },
+    {
+      "name": "pjax",
+      "route": "/archives/lKkDC8OW",
+      "main": 1,
+      "swup": 1,
+      "canonical": 1,
+      "description": 1,
+      "errors": [],
+      "bodyText": 19679,
+      "ok": true
+    },
+    {
+      "name": "shiki-rendered",
+      "hosts": 26,
+      "rendered": 26,
+      "nested": 0,
+      "ok": true
+    },
+    {
+      "name": "mobile-overflow",
+      "viewport": 390,
+      "width": 390,
+      "ok": true
+    },
+    {
+      "name": "comment-lazy-mount",
+      "hosts": 1,
+      "shadow": true,
+      "ok": true
+    },
+    {
+      "name": "shiki-light",
+      "ok": true
+    },
+    {
+      "name": "shiki-dark",
+      "ok": true
+    },
+    {
+      "name": "douban-mobile",
+      "viewport": 390,
+      "width": 390,
+      "ok": true
+    },
+    {
+      "name": "lightgallery-real-image",
+      "ok": true,
+      "visible": 1
+    },
+    {
+      "name": "plugin-document-navigation",
+      "route": "/dishes",
+      "url": "/dishes/",
+      "fullNavigation": true,
+      "swupActive": false,
+      "bodyLength": 202,
+      "errors": [],
+      "ok": true
+    },
+    {
+      "name": "plugin-document-navigation",
+      "route": "/schedule-calendar",
+      "url": "/schedule-calendar",
+      "fullNavigation": true,
+      "swupActive": false,
+      "bodyLength": 284,
+      "errors": [],
+      "ok": true
+    },
+    {
+      "name": "search-empty",
+      "ok": true
+    },
+    {
+      "name": "search-escape",
+      "ok": true
+    },
+    {
+      "name": "search-keyboard-navigation",
+      "results": 19,
+      "inputFocused": true,
+      "target": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/top",
+      "ok": true
+    }
+  ],
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.26.1",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+  },
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "03349c4f38360b2593296f8e07e8c1892d08b2a6c07cc8c4993cceabb24a5c6f",
+    "fileCount": 360,
+    "baseCommit": "dc76df4349a1a91516db52f035cad4c29283bf0d",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "unchangedDuringRun": true
+  },
+  "inventoryRecord": "version-audit.json",
+  "scope": "当前真实页面读取/展示；无站点配置或业务数据写入"
+}

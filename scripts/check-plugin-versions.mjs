@@ -76,7 +76,7 @@ if (jsonMode) {
         },
         summary: {
           total: rows.length,
-          ok: rows.filter((row) => row.result === "ok" || row.result === "tested").length,
+          versionMatches: rows.filter((row) => row.result === "ok" || row.result === "version-match").length,
           warnings: warnings.length,
           failures: failures.length,
         },
@@ -273,7 +273,7 @@ function buildResultRow(contract, plugin) {
   const compareToContract = compareVersions(plugin.version, contract.contractVersion);
   const belowContract = compareToContract < 0;
   let result = "ok";
-  let note = "matches contract";
+  let note = "matches interface baseline; this command does not verify runtime compatibility";
 
   if (
     plugin.enabled === false ||
@@ -286,8 +286,8 @@ function buildResultRow(contract, plugin) {
       note += "; installed version is also below theme contract";
     }
   } else if (contract.testedVersion && compareToTested === 0) {
-    result = "tested";
-    note = "matches tested version";
+    result = "version-match";
+    note = "matches historical tested version only; Halo/build/configuration require a matching test record";
   } else if (compareToContract < 0) {
     result = "older";
     note = "installed version is below theme contract";
@@ -318,7 +318,7 @@ function printTable(rows, endpoint) {
   const columns = [
     ["Plugin", "plugin"],
     ["Contract", "contractVersion"],
-    ["Tested", "testedVersion"],
+    ["Historical test", "testedVersion"],
     ["Installed", "installedVersion"],
     ["Phase", "phase"],
     ["Result", "result"],

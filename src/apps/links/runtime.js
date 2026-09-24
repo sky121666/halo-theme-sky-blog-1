@@ -1,3 +1,5 @@
+import { requestLinkCaptcha, submitLinkApplication } from "./application.js";
+
 const MANAGED_QUERY_KEYS = ["view", "scope", "groupName", "linkName", "itemId", "group", "link"];
 const VALID_VIEWS = new Set(["friends", "apply", "board"]);
 const VALID_SCOPES = new Set(["all", "unread", "favorite", "later"]);
@@ -709,6 +711,10 @@ export function mountLinksApp() {
     identifyController: null,
     dialogSync: false,
     boardFocusTimer: 0,
+    applyBusy: false,
+    captchaAttempted: false,
+    captchaId: "",
+    captchaController: null,
   };
 
   const routeContext = () =>
@@ -872,25 +878,71 @@ export function mountLinksApp() {
     const primaryLabel = form?.querySelector("[data-apply-submit-label]");
     const actionHint = form?.querySelector("[data-apply-action-hint]");
     const type = form ? new FormData(form).get("type") || "add" : "add";
+    const guestApplication = canSubmitGuestApplication(type);
     if (capability) {
       capability.textContent =
         capabilities.status === "checking"
           ? "正在确认可用的识别与提交方式…"
           : capabilities.canManage && type === "add"
-            ? "管理员模式：使用官方识别接口辅助填充，提交后直接创建 Link 资源。"
+            ? "管理员模式：可自动识别站点信息，提交后立即加入友链。"
             : type === "update"
               ? "更新申请：生成 Markdown 后到留言板提交，由管理员审核修改。"
-              : "公开识别（降级方案）：匿名跨域 GET 识别站点信息，最长 8 秒、最大 1.5MB、仅支持 HTML/XHTML；识别失败时可手动填写。提交后生成 Markdown，复制到留言板完成申请。";
+              : guestApplication
+                ? "填写网站信息和验证码后提交，管理员审核通过后将加入友链。"
+                : "填写网站信息后生成申请 Markdown，复制到留言板提交。识别失败时可手动填写。";
     }
     if (primaryLabel)
-      primaryLabel.textContent = capabilities.canManage && type === "add" ? "直接创建 Link" : "生成申请 Markdown";
+      primaryLabel.textContent =
+        capabilities.canManage && type === "add" ? "直接创建友链" : guestApplication ? "提交申请" : "生成申请 Markdown";
     if (actionHint)
       actionHint.textContent =
         capabilities.canManage && type === "add"
-          ? "plugin:links:manage · 直接写入 Link 资源"
-          : "生成 Markdown 后到留言板提交，等待管理员审核";
+          ? "管理员提交后立即加入友链"
+          : guestApplication
+            ? "提交后等待管理员审核"
+            : "生成 Markdown 后到留言板提交，等待管理员审核";
     const updateField = form?.querySelector("[data-apply-update-field]");
     if (updateField) updateField.hidden = type !== "update";
+    for (const field of form?.querySelectorAll("[data-apply-guest-field]") || []) field.hidden = !guestApplication;
+    const groupField = form?.querySelector("[data-apply-group-field]");
+    if (groupField) groupField.hidden = guestApplication;
+    if (guestApplication && state.route.view === "apply" && !state.captchaAttempted) refreshApplyCaptcha();
+  }
+
+  function canSubmitGuestApplication(type) {
+    return (
+      type === "add" &&
+      !capabilities.canManage &&
+      capabilities.status !== "checking" &&
+      root.dataset.linkApplicationEnabled === "true"
+    );
+  }
+
+  async function refreshApplyCaptcha() {
+    state.captchaAttempted = true;
+    state.captchaController?.abort();
+    state.captchaId = "";
+    const task = timeoutController(10000, signal);
+    state.captchaController = task.controller;
+    const image = root.querySelector("[data-apply-captcha-image]");
+    const status = root.querySelector("[data-apply-captcha-status]");
+    const input = root.querySelector('[name="captchaCode"]');
+    if (input) input.value = "";
+    image?.removeAttribute("src");
+    if (status) status.textContent = "正在加载验证码…";
+    try {
+      const captcha = await requestLinkCaptcha({ signal: task.controller.signal });
+      if (task.controller.signal.aborted) return;
+      state.captchaId = captcha.challengeId;
+      if (image) image.src = captcha.image;
+      if (status) status.textContent = "请输入图片中的五位字符，不区分大小写。";
+    } catch {
+      if (!signal.aborted && state.captchaController === task.controller && status)
+        status.textContent = "验证码加载失败，请点击换一张重试。";
+    } finally {
+      task.dispose();
+      if (state.captchaController === task.controller) state.captchaController = null;
+    }
   }
 
   function render() {
@@ -1416,6 +1468,8 @@ export function mountLinksApp() {
       rssUrl: stringValue(data.get("rssUrl")),
       email: stringValue(data.get("email")),
       updateDescription: stringValue(data.get("updateDescription")),
+      backlink: stringValue(data.get("backlink")),
+      captchaCode: stringValue(data.get("captchaCode")),
     };
   }
 
@@ -1425,6 +1479,9 @@ export function mountLinksApp() {
     if (!values.description) return "请填写网站描述。";
     if (values.logo && !normalizeHttpUrl(values.logo)) return "Logo 必须是有效的 HTTP 或 HTTPS 地址。";
     if (values.rssUrl && !normalizeHttpUrl(values.rssUrl)) return "RSS 必须是有效的 HTTP 或 HTTPS 地址。";
+    if (canSubmitGuestApplication(values.type) && values.backlink && !normalizeHttpUrl(values.backlink)) {
+      return "反链必须是有效的 HTTP 或 HTTPS 地址。";
+    }
     if (values.type === "update" && !values.updateDescription) return "修改申请需要填写修改说明。";
     return "";
   }
@@ -1541,20 +1598,51 @@ export function mountLinksApp() {
   }
 
   async function submitApplyForm(form) {
+    if (state.applyBusy) return;
     if (state.capabilityPromise) await state.capabilityPromise;
+    if (state.applyBusy || signal.aborted) return;
     const values = applyFormValues(form);
     const validation = validateApplyForm(values);
     if (validation) {
       applyStatus(validation, "error");
       return;
     }
-    if (values.type !== "add" || !capabilities.canManage) {
+    const guestApplication = canSubmitGuestApplication(values.type);
+    if (!guestApplication && (values.type !== "add" || !capabilities.canManage)) {
       revealApplyDraft(values);
       return;
     }
+    if (guestApplication && (!state.captchaId || values.captchaCode.length !== 5)) {
+      applyStatus("请先加载验证码并填写图片中的五位字符。", "error");
+      form.elements.captchaCode?.focus();
+      return;
+    }
     const button = form.querySelector("[data-apply-submit]");
+    state.applyBusy = true;
     if (button) button.disabled = true;
-    applyStatus("正在通过 Halo 标准 Link 接口创建友链…");
+    if (guestApplication) {
+      applyStatus("正在提交友链申请…");
+      const task = timeoutController(10000, signal);
+      try {
+        await submitLinkApplication(values, state.captchaId, { signal: task.controller.signal });
+        applyStatus("申请已提交，等待管理员审核。", "success");
+      } catch (error) {
+        if (!signal.aborted)
+          applyStatus(
+            error?.name === "TimeoutError" ? "提交超时，请稍后重试。" : error.message || "提交失败，请稍后重试。",
+            "error",
+          );
+      } finally {
+        task.dispose();
+        state.applyBusy = false;
+        if (button) button.disabled = false;
+        // Every decoded attempt consumes the challenge, including validation failures.
+        state.captchaId = "";
+        if (!signal.aborted) refreshApplyCaptcha();
+      }
+      return;
+    }
+    applyStatus("正在添加友链…");
     try {
       const response = await fetch(LINK_CORE_API, {
         method: "POST",
@@ -1568,7 +1656,7 @@ export function mountLinksApp() {
         signal,
       });
       if (!response.ok) throw httpError(response, await responseMessage(response));
-      applyStatus("友链已添加到 PluginLinks，刷新页面后即可看到。", "success");
+      applyStatus("友链已添加，刷新页面后即可看到。", "success");
       toast("友链创建成功", "success");
     } catch (error) {
       if (error?.name === "AbortError") return;
@@ -1591,6 +1679,7 @@ export function mountLinksApp() {
         );
       }
     } finally {
+      state.applyBusy = false;
       if (button) button.disabled = false;
       renderApplyCapability();
     }
@@ -1741,6 +1830,11 @@ export function mountLinksApp() {
         identifyApplySite();
         return;
       }
+      if (target.closest("[data-apply-captcha-refresh]")) {
+        event.preventDefault();
+        if (!state.applyBusy) refreshApplyCaptcha();
+        return;
+      }
       if (target.closest("[data-apply-copy]")) {
         event.preventDefault();
         const form = root.querySelector("[data-link-apply-form]");
@@ -1861,6 +1955,7 @@ export function mountLinksApp() {
     lifecycle.abort();
     feed.controller?.abort();
     state.identifyController?.abort();
+    state.captchaController?.abort();
     globalThis.clearTimeout(state.boardFocusTimer);
   };
 }

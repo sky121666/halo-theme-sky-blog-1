@@ -293,6 +293,18 @@ spec:
               value: "https://cdn.5ee.net/fonts"
 
         - $formkit: group
+          name: seo_settings
+          label: SEO 规范链接
+          value:
+            theme_canonical: false
+          children:
+            - $formkit: switch
+              name: theme_canonical
+              label: 仅由主题页面生成规范链接
+              help: "实验性选项：先关闭 SEO 工具集的「开启规范链接」，再打开此项；两边同时开启会重复。独立插件页面不使用主题 Head，关闭插件后可能失去 canonical（本地已见于 /dishes、/schedule-calendar）。插件未启用时主题页面会自动兜底。"
+              value: false
+
+        - $formkit: group
           name: debug_settings
           label: 开发者与调试
           value:
@@ -800,8 +812,6 @@ spec:
             legal_links:
               - name: "隐私政策"
                 url: "/privacy"
-              - name: "使用条款"
-                url: "/terms"
               - name: "网站地图"
                 url: "/sitemap.xml"
             copyright_icon: null
@@ -1446,7 +1456,7 @@ spec:
             - $formkit: toggle
               name: tab_style
               label: Tab 切换风格
-              help: 选择首页"站内动态/朋友动态"切换按钮的风格
+              help: 选择首页“全部文章/瞬间说说”切换按钮的风格；友链动态在链接页展示
               render-type: text
               size: 60
               gap: 10
@@ -1463,15 +1473,14 @@ spec:
             - $formkit: array
               name: tabs_order
               label: Tab 显示顺序
-              help: 使用上下箭头调整首页 Tab 的显示顺序（从左到右）
+              help: 使用上下箭头调整顺序；旧配置中的 Friends 行已停用，可用删除按钮移除
               value:
                 - tab: posts
-                - tab: friends
                 - tab: moments
               upControl: true
               downControl: true
               insertControl: false
-              removeControl: false
+              removeControl: true
               addButton: false
               children:
                 - $formkit: select
@@ -1480,8 +1489,6 @@ spec:
                   options:
                     - label: 全部文章
                       value: posts
-                    - label: 朋友动态
-                      value: friends
                     - label: 瞬间说说
                       value: moments
         # 文章列表设置
@@ -1565,45 +1572,6 @@ spec:
                 - image/webp
                 - image/gif
               value: "https://www.dmoe.cc/random.php"
-        # 朋友动态设置
-        - $formkit: group
-          name: friends_settings
-          label: 朋友动态设置
-          help: 需安装 plugin-friends 插件
-          value:
-            show_friends_tab: true
-            friends_count: 10
-          children:
-            - $formkit: switch
-              id: show_friends_tab
-              name: show_friends_tab
-              label: 显示朋友动态
-              help: 是否显示"朋友动态"Tab
-              value: true
-            - $formkit: number
-              name: friends_count
-              key: index_friends_settings_friends_count_field
-              if: $get(show_friends_tab).value
-              label: 朋友动态数量
-              help: 首页显示的朋友动态数量（3-20）
-              value: 10
-              min: 3
-              max: 20
-            - $formkit: toggle
-              name: list_style
-              key: index_friends_settings_list_style_field
-              if: $get(show_friends_tab).value
-              label: 列表样式
-              help: 选择首页朋友动态的展示样式
-              render-type: text
-              size: 80
-              gap: 10
-              value: two_columns
-              options:
-                - label: 两列
-                  value: two_columns
-                - label: 单列
-                  value: single_column
         # 瞬间说说设置
         - $formkit: group
           name: moments_settings
@@ -3735,138 +3703,6 @@ spec:
               key: moments_settings_floating_dock_enable_back_to_top_field
               label: 返回顶部按钮
               if: $get(moments_enable_custom_dock).value
-              value: true
-    - group: friends_page_settings
-      label: 朋友圈
-      formSchema:
-        - $formkit: group
-          name: basic_info
-          label: 基础信息
-          value:
-            page_title: "朋友圈"
-            page_description: "订阅朋友们的最新动态"
-            list_style: single_column
-          children:
-            - $formkit: group
-              name: plugin_tips
-              label: 插件配置提示
-              help: 每页显示数量等参数请在「后台 → 插件 → 朋友圈 → 基本设置」中配置
-              children: []
-            - $formkit: text
-              name: page_title
-              label: 页面标题
-              value: "朋友圈"
-              placeholder: "朋友圈页面的标题"
-            - $formkit: textarea
-              name: page_description
-              label: 页面描述
-              value: "订阅朋友们的最新动态"
-              rows: 2
-              placeholder: "朋友圈页面的描述"
-            - $formkit: toggle
-              name: list_style
-              label: 列表样式
-              help: 选择朋友圈页面的展示样式
-              render-type: text
-              size: 80
-              gap: 10
-              value: single_column
-              options:
-                - label: 单列
-                  value: single_column
-                - label: 双列
-                  value: two_columns
-        - $formkit: group
-          name: sidebar_settings
-          label: 侧边栏设置
-          value:
-            show_sidebar: false
-            enable_custom_sidebar: false
-            sidebar_position: right
-            sidebar_widgets:
-              - widget: author_card
-              - widget: blog_stats
-              - widget: categories
-              - widget: tags
-              - widget: popular_posts
-          children:
-            - $formkit: switch
-              id: friends_page_show_sidebar
-              name: show_sidebar
-              label: 显示侧边栏
-              help: 启用后显示侧边栏，页面变为左右布局
-              value: false
-            - $formkit: switch
-              id: friends_page_enable_custom_sidebar
-              name: enable_custom_sidebar
-              key: friends_page_settings_sidebar_settings_friends_page_enable_custom_sidebar_field
-              if: $get(friends_page_show_sidebar).value
-              label: 定制侧边栏
-              help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-              value: false
-            - $formkit: toggle
-              name: sidebar_position
-              key: friends_page_settings_sidebar_settings_sidebar_position_field
-              if: $get(friends_page_enable_custom_sidebar).value
-              label: 侧边栏位置
-              render-type: text
-              size: 80
-              gap: 10
-              value: right
-              options:
-                - label: 左侧
-                  value: left
-                - label: 右侧
-                  value: right
-            - $formkit: array
-              name: sidebar_widgets
-              key: friends_page_settings_sidebar_settings_sidebar_widgets_field
-              if: $get(friends_page_enable_custom_sidebar).value
-              label: 小工具列表
-              addLabel: 添加小工具
-              min: 0
-              max: 10
-              itemLabels:
-                - type: text
-                  label: $value.widget
-              value:
-                - widget: author_card
-                - widget: blog_stats
-                - widget: categories
-                - widget: tags
-                - widget: popular_posts
-              children:
-                - $formkit: select
-                  name: widget
-                  label: 小工具类型
-                  options: *widget_options
-        # 悬浮控制栏设置
-        - $formkit: group
-          name: floating_dock
-          label: 悬浮控制栏
-          value:
-            enable_custom_dock: false
-            dock_menu: primary
-            enable_back_to_top: true
-          children:
-            - $formkit: switch
-              id: friends_page_enable_custom_dock
-              name: enable_custom_dock
-              label: 定制悬浮控制栏
-              help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
-              value: false
-            - $formkit: menuRadio
-              name: dock_menu
-              key: friends_page_settings_floating_dock_dock_menu_field
-              label: Dock 菜单
-              value: primary
-              if: $get(friends_page_enable_custom_dock).value
-              help: 选择要在悬浮控制栏中显示的菜单
-            - $formkit: switch
-              name: enable_back_to_top
-              key: friends_page_settings_floating_dock_enable_back_to_top_field
-              label: 返回顶部按钮
-              if: $get(friends_page_enable_custom_dock).value
               value: true
     # =========================================
     # Docsme 文档插件设置

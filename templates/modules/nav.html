@@ -72,13 +72,14 @@
                         <li th:each="childItem : ${menuItem.children}" role="none" class="w-full">
                           <a
                             role="menuitem"
-                            th:href="@{${childItem.status.href}}"
+                            th:with="targetHref=${childItem.status.href == '/friends' ? '/links?view=friends' : childItem.status.href}"
+                            th:href="@{${targetHref}}"
                             th:target="${childItem.spec.target?.value}"
                             @click="open = false"
-                            th:title="${childItem.status.displayName}"
+                            th:title="${childItem.status.href == '/friends' ? '友链动态' : childItem.status.displayName}"
                             class="text-base-content/70 hover:text-base-content hover:bg-primary/10 rounded-lg text-sm transition-all duration-200"
                           >
-                            <span class="truncate" th:text="${childItem.status.displayName}"></span>
+                            <span class="truncate" th:text="${childItem.status.href == '/friends' ? '友链动态' : childItem.status.displayName}"></span>
                           </a>
                         </li>
                       </ul>
@@ -88,7 +89,8 @@
                   <!-- 普通菜单项（无子菜单） -->
                   <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
                     <a
-                      th:href="@{${menuItem.status.href}}"
+                      th:with="targetHref=${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}"
+                      th:href="@{${targetHref}}"
                       th:target="${menuItem.spec.target?.value}"
                       class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
                     >
@@ -98,7 +100,7 @@
                         class="nav-icon-svg h-4 w-4 flex-shrink-0"
                       >
                       </span>
-                      <span th:text="${menuItem.status.displayName}"></span>
+                      <span th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"></span>
                     </a>
                   </th:block>
                 </div>
@@ -145,7 +147,6 @@
               th:attr="data-light-theme=${theme.config.nav.theme_settings.light_theme}, 
                         data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
                         data-default-theme=${theme.config.nav.theme_settings.default_theme}"
-              x-init="init()"
             >
               <button
                 type="button"
@@ -583,7 +584,8 @@
                     >
                       <a
                         th:each="childItem : ${menuItem.children}"
-                        th:href="@{${childItem.status.href}}"
+                        th:with="targetHref=${childItem.status.href == '/friends' ? '/links?view=friends' : childItem.status.href}"
+                        th:href="@{${targetHref}}"
                         th:target="${childItem.spec.target?.value}"
                         @click="open = false"
                         class="text-base-content/50 hover:text-base-content hover:bg-base-content/5 flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all duration-200"
@@ -603,7 +605,7 @@
                         </th:block>
                         <span
                           class="transition-transform duration-300 group-hover:translate-x-1"
-                          th:text="${childItem.status.displayName}"
+                          th:text="${childItem.status.href == '/friends' ? '友链动态' : childItem.status.displayName}"
                           >子项</span
                         >
                       </a>
@@ -614,7 +616,8 @@
                 <!-- 无子菜单 -->
                 <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
                   <a
-                    th:href="@{${menuItem.status.href}}"
+                    th:with="targetHref=${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}"
+                    th:href="@{${targetHref}}"
                     th:target="${menuItem.spec.target?.value}"
                     class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
                   >
@@ -637,7 +640,7 @@
                     </span>
                     <span
                       class="text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
-                      th:text="${menuItem.status.displayName}"
+                      th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"
                       >菜单项</span
                     >
                   </a>

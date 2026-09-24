@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-23T07:03:01.830Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "Pro 2.26.1",
+    "theme": "2.2.39 uncommitted workspace",
+    "codeHash": "bd7460b48581ce36481cba0786fa5d92ed47bad105c4e1650d0dba273be27318"
+  },
+  "browserRouteAudit": {
+    "routes": 114,
+    "firstBangumiNavigation": "timed out; Halo returned 500 at 2026-09-23T14:46:53.412+08:00",
+    "backendCause": "WebClientRequestException: TLS handshake timed out after 10000ms to https://api.bilibili.com/x/space/bangumi/follow/list",
+    "focusedRetry": "HTTP 200, real browser /bangumis title/body/canonical visible, no console error",
+    "themeBoundary": "Plugin router fails before theme template can render; theme cannot supply a fallback for this exception"
+  },
+  "pageSizeIsolation": {
+    "initialFullScanWarnings": 6,
+    "batchedReplayWarningGroup": [
+      "/douban",
+      "/equipments",
+      "/links",
+      "/links?view=friends",
+      "/login",
+      "/login?method=passkey",
+      "/moments",
+      "/moments/moment-1778854511638-3wpy3noe"
+    ],
+    "focusedReplay": [
+      {
+        "path": "/douban",
+        "warnings": 0
+      },
+      {
+        "path": "/equipments",
+        "warnings": 3
+      },
+      {
+        "path": "/links",
+        "warnings": 0
+      },
+      {
+        "path": "/links?view=friends",
+        "warnings": 0
+      },
+      {
+        "path": "/login",
+        "warnings": 0
+      },
+      {
+        "path": "/login?method=passkey",
+        "warnings": 0
+      },
+      {
+        "path": "/moments",
+        "warnings": 0
+      },
+      {
+        "path": "/moments/moment-1778854511638-3wpy3noe",
+        "warnings": 0
+      }
+    ],
+    "plugin": "equipment 1.1.1",
+    "installedJar": "~/Public/work/sky-blog1/plugins/equipment-1.1.1.jar",
+    "officialSource": "https://github.com/chengzhongxue/plugin-equipment/blob/1.1.1/src/main/java/com/kunkunyu/equipment/finders/impl/EquipmentFInderImpl.java#L71-L82",
+    "bytecode": "EquipmentRouter.equipmentGroups() calls EquipmentFinder.groupBy(); EquipmentFInderImpl.groupBy() calls PageRequestImpl.of(1, 2147483647) for group list and once per group for equipment list",
+    "currentGroupCount": 2,
+    "expectedWarningsPerRequest": 3,
+    "currentEquipmentItems": 3,
+    "result": "Current page 200; the 3 warnings come from installed plugin bytecode and Halo clamps requested size to 1000. Sites with more than 1000 groups or items in one group could be truncated.",
+    "themeBoundary": "Theme consumes plugin-provided groups/equipments after the plugin router has already queried data",
+    "upstreamFix": "Page through requests of size <=1000 until complete, rather than using Integer.MAX_VALUE"
+  },
+  "evidenceFiles": [
+    "page-size-isolation.json",
+    "page-size-isolation-focused.json",
+    "route-http-latest-code.json",
+    "browser-routes-latest-code.json"
+  ]
+}
