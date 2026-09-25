@@ -235,7 +235,7 @@ function main() {
   console.log(`   间距: ${SVG_CONFIG.gap} px\n`);
 
   console.log('💡 使用方法:');
-  console.log('   1. 运行 npm run build 构建主题');
+  console.log('   1. 运行 pnpm run build 构建主题');
   console.log('   2. 上传主题到 Halo 查看效果\n');
 }
 

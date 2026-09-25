@@ -29,7 +29,7 @@ node scripts/generate-theme-previews.js
 ### 2. 构建主题
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 这将：
@@ -99,7 +99,7 @@ const SVG_CONFIG = {
 ## ⚠️ 注意事项
 
 1. **不要手动修改** `src/static/previews/` 和 `templates/assets/previews/` 中的 SVG 文件
-2. **修改后必须重新构建**: 运行 `npm run build`
+2. **修改后必须重新构建**: 运行 `pnpm run build`
 3. **主题包大小**: 添加 35 个 SVG 后，主题包增加约 14 KB
 4. **配色准确性**: 颜色直接从 DaisyUI 源文件提取，确保 100% 准确
 
@@ -107,7 +107,7 @@ const SVG_CONFIG = {
 
 ### SVG 不显示
 
-1. 检查构建是否成功：`npm run build`
+1. 检查构建是否成功：`pnpm run build`
 2. 检查文件是否存在：`ls templates/assets/previews/`
 3. 检查 zip 包内容：`unzip -l dist/theme-*.zip | grep previews`
 
