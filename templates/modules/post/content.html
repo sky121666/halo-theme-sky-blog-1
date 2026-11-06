@@ -29,7 +29,7 @@
 
           <!-- 文章正文内容 -->
           <div id="article-content"
-            th:utext="${#strings.replace(#strings.replace(#strings.replace(post.content.content, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}"
+            th:utext="${post.content?.content}"
             class="prose prose-lg max-w-none">
 
           </div>

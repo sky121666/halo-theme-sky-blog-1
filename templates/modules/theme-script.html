@@ -16,7 +16,27 @@
     (function () {
       // === 主题初始化 ===
       const showThemeToggle = /*[[${theme.config.nav.theme_settings.show_theme_toggle}]]*/ true;
-      const savedTheme = localStorage.getItem("theme-mode");
+      // 偏好存储不可用时仍建立生命周期，并保持当前文档内的主题选择。
+      let memoryTheme = null;
+      window.SkyThemePreference = {
+        read() {
+          if (memoryTheme !== null) return memoryTheme;
+          try {
+            return localStorage.getItem("theme-mode");
+          } catch {
+            return null;
+          }
+        },
+        write(mode) {
+          memoryTheme = mode;
+          try {
+            localStorage.setItem("theme-mode", mode);
+          } catch {
+            // 拒绝存储或容量不足只影响跨刷新记忆，不影响本页切换。
+          }
+        },
+      };
+      const savedTheme = window.SkyThemePreference.read();
       const defaultTheme = /*[[${theme.config.nav.theme_settings.default_theme}]]*/ "dark_theme";
       const lightTheme = /*[[${theme.config.nav.theme_settings.light_theme}]]*/ "light";
       const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ "dark";
@@ -198,8 +218,7 @@
       document.documentElement.setAttribute("data-color-scheme", themeMode);
 
       function handleSystemThemeChange(e) {
-        var currentMode =
-          showThemeToggle && localStorage.getItem("theme-mode") ? localStorage.getItem("theme-mode") : defaultTheme;
+        var currentMode = (showThemeToggle && window.SkyThemePreference.read()) || defaultTheme;
         if (currentMode !== "auto") return;
         var newIsDark = e.matches;
         var newThemeName = newIsDark ? darkTheme : lightTheme;

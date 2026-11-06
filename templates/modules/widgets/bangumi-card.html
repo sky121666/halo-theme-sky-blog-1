@@ -57,7 +57,7 @@
           @mouseleave="paused = false"
         >
           <!-- 主卡片区域 -->
-          <a href="/bangumis" class="group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-lg">
+          <a th:href="@{/bangumis}" class="group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-lg">
             <!-- 轮播封面容器 -->
             <div class="absolute inset-0" x-ref="slides">
               <th:block th:each="bangumi, iter : ${bangumiList.items}" th:with="cover=${bangumi.spec.cover ?: ''}">

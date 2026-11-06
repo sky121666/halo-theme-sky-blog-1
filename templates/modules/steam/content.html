@@ -42,7 +42,7 @@
         <!-- Profile Header - 实际内容 -->
         <div x-show="!loading.profile && profile" x-cloak class="steam-profile-header">
           <div class="steam-profile-avatar" :class="profile?.playing ? 'playing' : ''">
-            <img :src="profile?.summary?.avatarFull || profile?.summary?.avatarfull || profile?.summary?.avatar"
+            <img :src="profile?.summary?.avatarFull || profile?.summary?.avatarfull || profile?.summary?.avatar || null"
               :alt="profile?.summary?.personaName || profile?.summary?.personaname" loading="eager"
               decoding="async" class="steam-avatar-img" />
           </div>
@@ -245,7 +245,7 @@
       </div>
 
       <!-- 空状态 -->
-      <div x-show="!loading.recent && !errors.recent && recentGames.length === 0" x-cloak class="steam-empty-state">
+      <div x-show="!loading.recent && !errors.recent && recentGames.length === 0" x-cloak class="steam-empty-state steam-empty-state--compact">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无最近游玩</div>
       </div>
@@ -311,7 +311,7 @@
       <div x-show="!loading.games && errors.games" x-cloak class="alert alert-warning"
         data-steam-section-error="games" role="alert" aria-live="polite">
         <span x-text="errors.games">游戏库加载失败</span>
-        <button type="button" class="btn btn-sm" @click="loadGames(games.page || 1)">重试</button>
+        <button type="button" class="btn btn-sm" @click="!loading.games && loadGames(gamesRequestedPage)" :disabled="loading.games">重试</button>
       </div>
 
       <!-- 空状态 -->
@@ -324,16 +324,16 @@
       <!-- 分页 -->
       <div x-show="games?.totalPages > 1" x-cloak class="steam-pagination">
         <div class="steam-pagination-inner">
-          <button @click="loadGames(games.page - 1)" :disabled="games?.page <= 1" class="steam-pagination-btn"
-            :class="games?.page <= 1 ? 'opacity-30 cursor-not-allowed' : ''">
+          <button type="button" aria-label="游戏库上一页" @click="!loading.games && loadGames(games.page - 1)" :disabled="loading.games || games?.page <= 1" class="steam-pagination-btn"
+            :class="loading.games || games?.page <= 1 ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
           </button>
           <span class="steam-pagination-info">
             <span x-text="games?.page || 1">1</span> / <span x-text="games?.totalPages || 1">1</span>
           </span>
-          <button @click="loadGames(games.page + 1)" :disabled="games?.page >= games?.totalPages"
+          <button type="button" aria-label="游戏库下一页" @click="!loading.games && loadGames(games.page + 1)" :disabled="loading.games || games?.page >= games?.totalPages"
             class="steam-pagination-btn"
-            :class="games?.page >= games?.totalPages ? 'opacity-30 cursor-not-allowed' : ''">
+            :class="loading.games || games?.page >= games?.totalPages ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
           </button>
         </div>

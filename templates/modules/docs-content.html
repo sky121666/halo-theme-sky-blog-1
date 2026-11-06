@@ -12,7 +12,7 @@
     <th:block th:each="project : ${projects}" th:with="docCount=${project.status.totalDocs ?: 0}">
       <a
         th:if="${docCount > 0}"
-        th:href="${project.status.permalink}"
+        th:href="@{${project.status.permalink}}"
         class="glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 block cursor-pointer rounded-2xl border p-6 shadow-sm backdrop-blur-xl transition-all duration-300 hover:shadow-lg"
       >
         <!-- 图标 -->

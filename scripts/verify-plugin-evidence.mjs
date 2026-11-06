@@ -3,6 +3,26 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { themeCodeIdentity } from "./theme-code-identity.mjs";
+import { previewPageUrl, renderedThemeIdentity } from "./plugin-preview.mjs";
+
+const previewBase = "http://localhost:8090";
+assert.equal(
+  previewPageUrl("/links?view=friends#feed", previewBase, "theme-sky-blog-1"),
+  `${previewBase}/links?view=friends&preview-theme=theme-sky-blog-1#feed`,
+);
+for (const route of ["/apis/example", "/api/example", "/plugins/example/main.js", "/feed.xml"]) {
+  assert.equal(previewPageUrl(route, previewBase, "theme-sky-blog-1"), `${previewBase}${route}`);
+}
+assert.equal(previewPageUrl("https://example.com/", previewBase, "theme-sky-blog-1"), "https://example.com/");
+assert.equal(
+  renderedThemeIdentity('<script src="/themes/theme-sky-blog-3/assets/main.js"></script>', "theme-sky-blog-1").ok,
+  false,
+);
+assert.equal(
+  renderedThemeIdentity('<link href="/themes/theme-sky-blog-1/assets/main.css">', "theme-sky-blog-1").ok,
+  true,
+);
+assert.equal(renderedThemeIdentity("<html>plugin page</html>", "theme-sky-blog-1").ok, false);
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), "sky-plugin-evidence-"));
 try {

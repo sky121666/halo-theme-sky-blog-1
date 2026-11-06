@@ -9,7 +9,7 @@
     sidebarCfg=${rootCfg.sidebar_settings},
     pageTitle=${cfg?.page_title ?: '瞬间'},
     enableUpvote=${cfg?.enable_upvote != false},
-    enableComment=${cfg?.enable_comment != false},
+    enableComment=${haloCommentEnabled and cfg?.enable_comment != false},
     publishSettings=${rootCfg?.publish_settings},
     enablePublish=${publishSettings?.enable_publish != false},
     enableImageUpload=${enablePublish && (publishSettings?.enable_image_upload != false)},
@@ -29,6 +29,27 @@
         <!-- 主内容区 -->
         <section class="flex-1 min-w-0">
 
+          <div id="moment-permission-status" role="status" aria-live="polite"
+            th:if="${enablePublish && #authorization.expression('isAuthenticated()')}"
+            class="hidden mb-4 flex items-center gap-2 text-sm text-base-content/60">
+            <span id="moment-permission-message"></span>
+            <button id="moment-permission-retry" type="button" class="hidden btn btn-ghost btn-sm btn-square"
+              aria-label="重新检查发布权限" title="重新检查发布权限">
+              <span class="icon-[heroicons--arrow-path] size-4" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div id="moments-publish-status" role="status" aria-live="polite"
+            class="hidden mb-4 rounded-xl bg-base-200 p-4 text-sm"></div>
+
+          <div id="moments-refresh-status" role="status" aria-live="polite"
+            class="hidden mb-4 rounded-xl bg-warning/10 p-4 text-sm">
+            <span>瞬间已发布，列表暂未更新。</span>
+            <button id="moments-refresh-retry" type="button" aria-controls="moments-list"
+              class="btn btn-ghost btn-sm ml-2">重试更新</button>
+          </div>
+
+          <div id="moments-list">
           <!-- 标签筛选 + 发布按钮 -->
           <div class="mb-6 flex items-center justify-between gap-4">
             <!-- 左侧标签 -->
@@ -45,16 +66,17 @@
               </th:block>
             </div>
 
-            <!-- 右侧发布按钮（启用发布且登录用户可见） -->
+            <!-- 登录后由 Halo 当前用户 UI 权限确认发布资格 -->
             <button th:if="${enablePublish && #authorization.expression('isAuthenticated()')}"
-              onclick="openMomentModal()" class="btn btn-ghost btn-sm gap-1 shrink-0">
+              data-moment-publish-trigger disabled
+              onclick="openMomentModal()" class="btn btn-ghost btn-sm gap-1 shrink-0 hidden">
               <span class="icon-[heroicons--pencil-square] w-4 h-4"></span>
               <span>发布</span>
             </button>
           </div>
 
           <!-- 瞬间列表 -->
-          <div id="moments-list" th:if="${moments != null && moments.total > 0}" class="space-y-4">
+          <div th:if="${moments != null && moments.total > 0}" class="space-y-4">
 
             <th:block th:each="moment : ${moments.items}" th:with="content=${moment.spec.content}">
 
@@ -146,7 +168,7 @@
                           #lists.size(nonPostMedia) == 8 ? 'grid-cols-6' : 'grid-cols-3'
                         }">
                       <th:block th:each="medium, stat : ${nonPostMedia}">
-                        <a th:if="${medium.type.name == 'PHOTO' && stat.index lt 9}" th:href="${medium.url}"
+                        <a th:if="${medium.type.name == 'PHOTO'}" th:href="${medium.url}"
                           th:attr="data-src=${medium.url}" data-no-swup class="moment-grid-item"
                           th:classappend="${
                             #lists.size(nonPostMedia) == 3 && stat.index == 0 ? 'col-span-2 row-span-2 aspect-square' :
@@ -159,11 +181,6 @@
                             #lists.size(nonPostMedia) == 8 && stat.index ge 2 ? 'col-span-2 aspect-square' : 'aspect-square'
                           }">
                           <img th:src="${medium.url}" alt="瞬间图片" loading="lazy" />
-                          <div th:if="${stat.index == 8 && #lists.size(nonPostMedia) > 9}"
-                            class="absolute inset-0 bg-black/50 flex items-center justify-center" style="z-index:2">
-                            <span class="text-white text-xl font-semibold"
-                              th:text="'+' + (${#lists.size(nonPostMedia)} - 9)">+3</span>
-                          </div>
                         </a>
                         <video th:if="${medium.type.name == 'VIDEO'}" th:src="${medium.url}" controls
                           preload="metadata" class="col-span-full rounded-xl max-h-72 w-full">
@@ -191,18 +208,21 @@
                   <!-- 互动操作 -->
                   <div class="flex items-center gap-4 pt-2 border-t border-base-200 text-sm text-base-content/50">
                     <!-- 点赞按钮 -->
-                    <button th:if="${enableUpvote}"
+                    <button type="button" aria-label="点赞瞬间" th:if="${enableUpvote}"
                       class="inline-flex items-center gap-1.5 hover:text-error transition-colors"
                       th:data-moment-name="${moment.metadata.name}" th:data-upvote-count="${moment.stats?.upvote ?: 0}"
                       onclick="handleMomentUpvote(this)">
-                      <span class="icon-[heroicons--heart] size-5"></span>
+                      <span class="icon-[heroicons--heart] size-5" aria-hidden="true"></span>
                       <span class="upvote-count" th:text="${moment.stats?.upvote ?: 0}">0</span>
                     </button>
                     <!-- 评论按钮 -->
-                    <button th:if="${enableComment}"
+                    <button type="button" th:if="${enableComment}"
+                      aria-label="展开评论" :aria-label="showComment ? '收起评论' : '展开评论'"
+                      aria-expanded="false" :aria-expanded="showComment"
+                      th:attr="aria-controls='moment-comments-' + ${moment.metadata.name}"
                       class="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
                       @click="showComment = !showComment">
-                      <span class="icon-[heroicons--chat-bubble-left] size-5"></span>
+                      <span class="icon-[heroicons--chat-bubble-left] size-5" aria-hidden="true"></span>
                       <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
                     </button>
                     <!-- 详情入口 -->
@@ -213,7 +233,7 @@
                   </div>
 
                   <!-- 评论区 -->
-                  <div th:if="${enableComment}" x-show="showComment" x-transition
+                  <div th:if="${enableComment}" th:id="'moment-comments-' + ${moment.metadata.name}" x-show="showComment" x-transition
                     class="mt-3 pt-3 border-t border-base-200">
                     <halo:comment group="moment.halo.run" kind="Moment" th:attr="name=${moment.metadata.name}"
                       colorScheme="system">
@@ -263,6 +283,7 @@
             <span class="icon-[heroicons--camera] size-16 text-base-content/10 mx-auto block mb-4"></span>
             <p class="text-base-content/40">暂无瞬间</p>
           </div>
+          </div>
 
         </section>
 
@@ -274,10 +295,9 @@
       </div>
     </div>
 
-    <!-- 发布瞬间模态框 - 启用发布且登录用户可见 -->
-    <div id="moment-publish-modal" th:if="${enablePublish && #authorization.expression('isAuthenticated()')}"
+    <!-- 登录用户的发布弹窗；打开和提交前由脚本核对 UC 发布权限 -->
+    <div id="moment-publish-modal" role="dialog" aria-modal="true" aria-label="发布瞬间" tabindex="-1" inert aria-hidden="true" th:if="${enablePublish && #authorization.expression('isAuthenticated()')}"
       th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}"
-      th:attr="data-owner-name=${currentUser.name}"
       class="fixed inset-0 bg-black/60 backdrop-blur-sm z-100 items-center justify-center hidden"
       onclick="if(event.target === this) closeMomentModal();" style="display: none;">
 
@@ -289,7 +309,7 @@
         th:src="@{/assets/emoji/emoji-selector.js?v={version}(version=${theme.spec.version})}"
         data-swup-reload-script></script>
 
-      <div class="w-full max-w-md mx-4 bg-base-100 rounded-2xl shadow-2xl overflow-hidden"
+      <div class="moment-publish-panel w-full max-w-md mx-4 bg-base-100 rounded-2xl shadow-2xl overflow-hidden"
         onclick="event.stopPropagation();">
 
         <!-- 顶部标题栏 -->
@@ -321,7 +341,6 @@
               </div>
               <div>
                 <div class="font-medium text-base-content" th:text="${currentUser.displayName}">用户名</div>
-                <div class="text-xs text-base-content/50">公开发布</div>
               </div>
             </div>
 

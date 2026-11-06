@@ -5,9 +5,21 @@
   <!-- ========================================== -->
 
   <!-- 主导航栏容器 -->
-  <div th:fragment="navbar" class="drawer nav-wrapper sticky top-0 z-50" x-data="navbarController">
+  <div
+    th:fragment="navbar"
+    class="drawer nav-wrapper sticky top-0 z-50"
+    x-data="navbarController"
+    @keydown.escape="if (mobileMenuOpen) { $event.preventDefault(); closeMobileMenu(true) }"
+  >
     <!-- 移动端抽屉开关 -->
-    <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" aria-label="打开移动端菜单" />
+    <input
+      id="mobile-menu-drawer"
+      type="checkbox"
+      class="drawer-toggle"
+      x-model="mobileMenuOpen"
+      tabindex="-1"
+      aria-hidden="true"
+    />
 
     <!-- 导航栏内容区域 -->
     <div class="drawer-content">
@@ -15,7 +27,7 @@
         <div class="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 px-2 sm:gap-4 sm:px-6 lg:px-8">
           <!-- Logo 区域 -->
           <div class="flex-shrink-0">
-            <a href="/" class="flex items-center gap-2.5 text-lg font-bold sm:text-xl">
+            <a th:href="@{/}" class="flex items-center gap-2.5 text-lg font-bold sm:text-xl">
               <th:block th:replace="~{modules/logo :: icon('w-8 h-8')}" />
               <th:block th:replace="~{modules/logo :: title}" />
             </a>
@@ -29,35 +41,55 @@
               >
                 <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}" class="group relative">
                   <!-- 带子菜单的菜单项 -->
-                  <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
+                  <th:block
+                    th:if="${menuItem.children != null and !menuItem.children.isEmpty()}"
+                    th:with="hasParentHref=${!#strings.isEmpty(#strings.trim(menuItem.status.href)) and #strings.trim(menuItem.status.href) != '#'}"
+                  >
                     <div
                       x-data="{ open: false }"
                       @click.outside="open = false"
                       @focusout="if (!$el.contains($event.relatedTarget)) open = false"
                       @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
-                      @sky:page-load.window="open = false"
-                      class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown"
+                      @sky:page-load.document="open = false"
+                      @pointerenter="if ($event.pointerType === 'mouse') open = true"
+                      @pointerleave="if ($event.pointerType === 'mouse' &amp;&amp; !$el.contains(document.activeElement)) open = false"
+                      class="dropdown dropdown-bottom dropdown-center group/dropdown"
                     >
-                      <button
-                        type="button"
-                        x-ref="trigger"
-                        th:id="|desktop-menu-trigger-${iterStat.index}|"
-                        th:attr="aria-controls=|desktop-submenu-${iterStat.index}|"
-                        aria-haspopup="menu"
-                        :aria-expanded="open.toString()"
-                        @click="open = !open"
-                        @keydown.arrow-down.prevent="open = true; $nextTick(() => $refs.menu?.querySelector('a')?.focus())"
-                        class="nav-menu-item text-base-content/80 hover:text-base-content flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
+                      <a
+                        th:if="${hasParentHref}"
+                        th:with="targetHref=${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}"
+                        th:href="@{${targetHref}}"
+                        th:target="${menuItem.spec.target?.value}"
+                        class="nav-menu-item text-base-content/80 hover:text-base-content inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors duration-200"
                       >
                         <span
                           th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
                           th:utext="${menuItem.metadata.annotations['icon']}"
                           class="nav-icon-svg h-4 w-4 flex-shrink-0"
+                        ></span>
+                        <span th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"></span>
+                      </a>
+                      <button
+                        type="button"
+                        x-ref="trigger"
+                        th:id="|desktop-menu-trigger-${iterStat.index}|"
+                        th:attr="aria-controls=|desktop-submenu-${iterStat.index}|, aria-label=${hasParentHref ? '展开' + menuItem.status.displayName + '子菜单' : null}"
+                        aria-haspopup="menu"
+                        :aria-expanded="open.toString()"
+                        @click="open = !open"
+                        @keydown.arrow-down.prevent="open = true; $nextTick(() => $refs.menu?.querySelector('a')?.focus())"
+                        class="nav-menu-item text-base-content/80 hover:text-base-content inline-flex items-center gap-1.5 py-2 text-sm font-medium transition-colors duration-200"
+                        th:classappend="${hasParentHref} ? 'px-2' : 'px-3.5'"
+                      >
+                        <span
+                          th:if="${!hasParentHref and menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                          th:utext="${menuItem.metadata.annotations['icon']}"
+                          class="nav-icon-svg h-4 w-4 flex-shrink-0"
                         >
                         </span>
-                        <span th:text="${menuItem.status.displayName}"></span>
+                        <span th:unless="${hasParentHref}" th:text="${menuItem.status.displayName}"></span>
                         <span
-                          class="icon-[heroicons--chevron-down] text-base-content/40 h-3 w-3 transition-transform group-hover/dropdown:rotate-180"
+                          class="icon-[heroicons--chevron-down] text-base-content/40 h-3 w-3 transition-transform "
                           :class="{ 'rotate-180': open }"
                           aria-hidden="true"
                         ></span>
@@ -66,8 +98,8 @@
                         x-ref="menu"
                         th:id="|desktop-submenu-${iterStat.index}|"
                         role="menu"
-                        :class="{ '!visible !opacity-100': open }"
-                        class="dropdown-content menu bg-base-100/95 shadow-base-content/5 border-base-content/10 invisible z-50 mt-2 w-48 rounded-xl border p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all delay-75 duration-200 group-hover/dropdown:visible group-hover/dropdown:opacity-100 before:absolute before:-top-3 before:right-0 before:left-0 before:h-3 before:content-['']"
+                        :class="open ? '!visible !opacity-100' : '!invisible !opacity-0'"
+                        class="dropdown-content menu bg-base-100/95 shadow-base-content/5 border-base-content/10 invisible z-50 mt-2 w-48 rounded-xl border p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all delay-75 duration-200  before:absolute before:-top-3 before:right-0 before:left-0 before:h-3 before:content-['']"
                       >
                         <li th:each="childItem : ${menuItem.children}" role="none" class="w-full">
                           <a
@@ -212,10 +244,14 @@
                   class="group/user relative"
                   x-data="{ userMenuOpen: false }"
                   @click.outside="userMenuOpen = false"
+                  @focusout="if (!$el.contains($event.relatedTarget)) userMenuOpen = false"
+                  @keydown.escape="if (userMenuOpen) { $event.stopPropagation(); $event.preventDefault(); userMenuOpen = false; $refs.userMenuTrigger.focus() }"
+                  @sky:page-load.document="userMenuOpen = false"
                 >
                   <div
                     role="button"
                     tabindex="0"
+                    x-ref="userMenuTrigger"
                     aria-label="打开用户菜单"
                     aria-haspopup="menu"
                     :aria-expanded="userMenuOpen.toString()"
@@ -304,7 +340,7 @@
                     <div class="divider my-1 opacity-50"></div>
                     <li>
                       <a
-                        href="/logout"
+                        th:href="@{/logout}"
                         class="text-error/70 hover:text-error hover:bg-error/10 flex items-center gap-3 rounded-lg text-sm transition-all duration-200"
                       >
                         <span class="icon-[heroicons--arrow-left-on-rectangle] h-4 w-4"></span>
@@ -317,7 +353,7 @@
                 <!-- 未登录用户 -->
                 <a
                   th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}"
-                  href="/login"
+                  th:href="@{/login}"
                   class="flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
                   title="登录"
                   aria-label="登录"
@@ -343,19 +379,20 @@
 
             <!-- 移动端菜单按钮 -->
             <div class="-mr-1 lg:hidden">
-              <label
-                for="mobile-menu-drawer"
-                role="button"
-                tabindex="0"
+              <button
+                type="button"
+                x-ref="mobileMenuTrigger"
+                @click="toggleMobileMenu()"
                 aria-label="打开移动端菜单"
-                aria-controls="mobile-menu-drawer"
+                aria-controls="mobile-nav-menu"
+                :aria-expanded="mobileMenuOpen.toString()"
                 title="菜单"
                 class="drawer-button flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
               >
                 <span
                   class="icon-[heroicons--bars-3] text-base-content/60 hover:text-primary h-5 w-5 transition-colors"
                 ></span>
-              </label>
+              </button>
             </div>
           </div>
         </div>
@@ -364,9 +401,16 @@
 
     <!-- ========== 移动端菜单抽屉 ========== -->
     <div class="drawer-side z-[100]">
-      <label for="mobile-menu-drawer" aria-label="关闭移动端菜单" class="drawer-overlay"></label>
+      <label for="mobile-menu-drawer" x-ref="mobileMenuBackdrop" @click.prevent="closeMobileMenu(true)" aria-label="关闭移动端菜单" class="drawer-overlay"></label>
 
       <aside
+        id="mobile-nav-menu"
+        x-ref="mobileMenuPanel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        tabindex="-1"
+        inert
         aria-label="移动端导航菜单"
         class="bg-base-100 border-base-content/6 drawer-slide-in relative flex h-screen w-[17rem] flex-col overflow-hidden border-r shadow-[4px_0_40px_-8px_rgba(0,0,0,0.12)]"
       >
@@ -415,7 +459,16 @@
         <div
           class="sidebar-header-texture relative overflow-hidden px-6 pt-8 pb-5"
           th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)},
-                 isLoggedIn = ${!#strings.equals(currentUser.name, 'anonymousUser')}"
+                 isLoggedIn = ${!#strings.equals(currentUser.name, 'anonymousUser')},
+                 navLogoSettings = ${theme.config['nav'] != null ? theme.config['nav']['logo_settings'] : null},
+                 navLogoType = ${navLogoSettings != null ? navLogoSettings['logo_type'] : null},
+                 navLogoIcon = ${navLogoSettings != null ? navLogoSettings['logo_icon'] : null},
+                 guestTitle = ${navLogoSettings != null and !#strings.isEmpty(#strings.trim(navLogoSettings['custom_logo_title'])) ? navLogoSettings['custom_logo_title'] : site.title},
+                 hasGuestLogo = ${navLogoType == 'system' and !#strings.isEmpty(site.logo)
+                   or navLogoType == 'image' and !#strings.isEmpty(navLogoSettings['logo_image'])
+                   or navLogoType == 'svg' and !#strings.isEmpty(navLogoSettings['logo_icon_html'])
+                   or navLogoType == 'iconify' and navLogoIcon != null and !#strings.isEmpty(navLogoIcon)
+                     and (navLogoIcon.toString().startsWith('&lt;svg') or !#strings.isEmpty(navLogoIcon['value']))}"
         >
           <div class="flex flex-col items-center">
             <!-- 已登录：用户头像 -->
@@ -438,7 +491,7 @@
               </div>
             </a>
             <!-- 未登录：站点 Logo -->
-            <a th:unless="${isLoggedIn}" href="/" class="group mb-3">
+            <a th:if="${!isLoggedIn and hasGuestLogo}" th:href="@{/}" aria-label="返回首页" class="group mb-3">
               <div
                 class="bg-base-200 ring-base-content/10 ring-offset-base-100 group-hover:ring-primary/30 shadow-base-content/5 flex h-18 w-18 items-center justify-center overflow-hidden rounded-full shadow-lg ring-2 ring-offset-2 transition-all duration-300"
               >
@@ -455,18 +508,18 @@
               >用户名</a
             >
             <a
-              th:unless="${isLoggedIn}"
-              href="/"
+              th:if="${!isLoggedIn and !#strings.isEmpty(guestTitle)}"
+              th:href="@{/}"
               class="text-base-content hover:text-primary text-sm font-semibold transition-colors"
-              th:text="${siteTitle}"
+              th:text="${guestTitle}"
               >站点名称</a
             >
 
             <!-- 副标题 -->
             <p
-              th:unless="${isLoggedIn}"
+              th:if="${!isLoggedIn and !#strings.isEmpty(site.subtitle)}"
               class="text-base-content/40 mt-1 text-xs"
-              th:text="${#strings.abbreviate(siteSubtitle ?: '', 24)}"
+              th:text="${#strings.abbreviate(site.subtitle ?: '', 24)}"
             >
               一段简介
             </p>
@@ -480,7 +533,7 @@
                    allCategories = ${categoryFinder.listAsTree()}"
           >
             <a
-              href="/archives"
+              th:href="@{${site.routes?.archivesUri ?: '/archives'}}"
               class="group flex flex-col items-center"
             >
               <span
@@ -492,7 +545,7 @@
             </a>
             <div class="bg-base-content/10 h-6 w-px"></div>
             <a
-              href="/tags"
+              th:href="@{${site.routes?.tagsUri ?: '/tags'}}"
               class="group flex flex-col items-center"
             >
               <span
@@ -504,7 +557,7 @@
             </a>
             <div class="bg-base-content/10 h-6 w-px"></div>
             <a
-              href="/categories"
+              th:href="@{${site.routes?.categoriesUri ?: '/categories'}}"
               class="group flex flex-col items-center"
             >
               <span
@@ -525,49 +578,87 @@
             >
               <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}">
                 <!-- 带子菜单 -->
-                <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
+                <th:block
+                  th:if="${menuItem.children != null and !menuItem.children.isEmpty()}"
+                  th:with="hasParentHref=${!#strings.isEmpty(#strings.trim(menuItem.status.href)) and #strings.trim(menuItem.status.href) != '#'}"
+                >
                   <div
                     x-data="{ open: false }"
-                    @keydown.escape.stop.prevent="open = false; $refs.trigger.focus()"
-                    @sky:page-load.window="open = false"
+                    @keydown.escape="if (open) { $event.stopPropagation(); $event.preventDefault(); open = false; $refs.trigger.focus() }"
+                    @sky:page-load.document="open = false"
                   >
-                    <button
-                      type="button"
-                      x-ref="trigger"
-                      th:id="|mobile-menu-trigger-${iterStat.index}|"
-                      th:attr="aria-controls=|mobile-submenu-${iterStat.index}|"
-                      aria-haspopup="true"
-                      @click="open = !open"
-                      :aria-expanded="open.toString()"
-                      class="group text-base-content/60 hover:text-base-content hover:bg-base-content/5 flex w-full cursor-pointer items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
-                    >
-                      <span
-                        class="text-base-content/40 group-hover:text-primary/70 h-5 w-5 flex-shrink-0 transition-colors duration-200"
+                    <div class="flex items-center rounded-xl hover:bg-base-content/5">
+                      <a
+                        th:if="${hasParentHref}"
+                        th:with="targetHref=${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}"
+                        th:href="@{${targetHref}}"
+                        th:target="${menuItem.spec.target?.value}"
+                        class="group text-base-content/60 hover:text-base-content flex min-w-0 flex-1 items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
                       >
-                        <th:block
-                          th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                        <span
+                          class="text-base-content/40 group-hover:text-primary/70 h-5 w-5 flex-shrink-0 transition-colors duration-200"
                         >
+                          <th:block
+                            th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                          >
+                            <span
+                              th:utext="${menuItem.metadata.annotations['icon']}"
+                              class="nav-icon-svg h-full w-full"
+                            ></span>
+                          </th:block>
+                          <th:block
+                            th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                          >
+                            <span class="icon-[heroicons--folder] h-full w-full"></span>
+                          </th:block>
+                        </span>
+                        <span
+                          class="flex-1 text-left text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
+                          th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"
+                          >菜单项</span
+                        >
+                      </a>
+                      <button
+                        type="button"
+                        x-ref="trigger"
+                        th:id="|mobile-menu-trigger-${iterStat.index}|"
+                        th:attr="aria-controls=|mobile-submenu-${iterStat.index}|, aria-label=${hasParentHref ? '展开' + menuItem.status.displayName + '子菜单' : null}"
+                        @click="open = !open"
+                        :aria-expanded="open.toString()"
+                        class="group text-base-content/60 hover:text-base-content flex cursor-pointer items-center gap-3.5 rounded-xl px-4 py-3 transition-all duration-200"
+                        th:classappend="${hasParentHref} ? '' : 'w-full'"
+                      >
+                        <th:block th:unless="${hasParentHref}">
                           <span
-                            th:utext="${menuItem.metadata.annotations['icon']}"
-                            class="nav-icon-svg h-full w-full"
-                          ></span>
+                            class="text-base-content/40 group-hover:text-primary/70 h-5 w-5 flex-shrink-0 transition-colors duration-200"
+                          >
+                            <th:block
+                              th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                            >
+                              <span
+                                th:utext="${menuItem.metadata.annotations['icon']}"
+                                class="nav-icon-svg h-full w-full"
+                              ></span>
+                            </th:block>
+                            <th:block
+                              th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                            >
+                              <span class="icon-[heroicons--folder] h-full w-full"></span>
+                            </th:block>
+                          </span>
+                          <span
+                            class="flex-1 text-left text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
+                            th:text="${menuItem.status.displayName}"
+                            >菜单项</span
+                          >
                         </th:block>
-                        <th:block
-                          th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
-                        >
-                          <span class="icon-[heroicons--folder] h-full w-full"></span>
-                        </th:block>
-                      </span>
-                      <span
-                        class="flex-1 text-left text-sm font-medium transition-transform duration-300 group-hover:translate-x-1"
-                        th:text="${menuItem.status.displayName}"
-                        >菜单项</span
-                      >
-                      <span
-                        class="icon-[heroicons--chevron-down] text-base-content/25 h-3.5 w-3.5 flex-shrink-0 transition-transform duration-300"
-                        :class="{ 'rotate-180': open }"
-                      ></span>
-                    </button>
+                        <span
+                          class="icon-[heroicons--chevron-down] text-base-content/25 h-3.5 w-3.5 flex-shrink-0 transition-transform duration-300"
+                          :class="{ 'rotate-180': open }"
+                          aria-hidden="true"
+                        ></span>
+                      </button>
+                    </div>
                     <div
                       th:id="|mobile-submenu-${iterStat.index}|"
                       role="region"

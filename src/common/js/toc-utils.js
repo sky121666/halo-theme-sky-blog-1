@@ -3,6 +3,21 @@
  * 适用于 post、doc 等需要目录的页面
  */
 
+/** Preserve author IDs and reserve unique IDs for headings without one. */
+export function ensureHeadingIds(headingElements) {
+  const usedIds = new Set(Array.from(headingElements, heading => heading.id).filter(Boolean));
+  headingElements.forEach((heading, index) => {
+    if (heading.id) return;
+    const baseId = `heading-${index}`;
+    let id = baseId;
+    let suffix = 1;
+    // The document check also reserves IDs on non-heading and filtered headings.
+    while (usedIds.has(id) || document.getElementById(id)) id = `${baseId}-${suffix++}`;
+    heading.id = id;
+    usedIds.add(id);
+  });
+}
+
 /**
  * 构建动态目录树结构 - 基于相对层级
  * @param {Array} headingElements - 过滤后的标题元素列表
@@ -12,13 +27,9 @@
 export function buildDynamicTocTree(headingElements, minLevel) {
   const tocTree = [];
   const stack = [];
+  ensureHeadingIds(headingElements);
 
-  headingElements.forEach((headingElement, headingIndex) => {
-    // 为标题添加ID（如果没有的话）
-    if (!headingElement.id) {
-      headingElement.id = `heading-${headingIndex}`;
-    }
-
+  headingElements.forEach((headingElement) => {
     const absoluteLevel = parseInt(headingElement.tagName.charAt(1));
     const relativeLevel = absoluteLevel - minLevel;
 
@@ -73,7 +84,7 @@ export function createDynamicTocHTML(tocTree, options = {}) {
 
     // 创建目录链接
     const linkElement = document.createElement('a');
-    linkElement.href = `#${item.id}`;
+    linkElement.href = `#${encodeURIComponent(item.id)}`;
     linkElement.textContent = item.text;
     linkElement.className = addTooltip ? 'toc-link tooltip tooltip-right' : 'toc-link';
 
@@ -89,7 +100,9 @@ export function createDynamicTocHTML(tocTree, options = {}) {
 
     // 添加点击事件
     if (onClick) {
+      linkElement.setAttribute('data-no-swup', '');
       linkElement.addEventListener('click', (event) => {
+        if (!isPlainTocClick(event)) return;
         event.preventDefault();
         onClick(item.element, event);
       });
@@ -114,14 +127,21 @@ export function createDynamicTocHTML(tocTree, options = {}) {
  * @param {HTMLElement} headingElement - 目标标题元素
  * @param {number} offset - 偏移量（默认 80px，导航栏高度）
  */
-export function smoothScrollToHeading(headingElement, offset = 80) {
-  if (!headingElement) return;
+export function smoothScrollToHeading(headingElement, offset = 80, { updateHash = true, behavior = 'smooth' } = {}) {
+  if (!headingElement || !headingElement.isConnected) return;
 
-  const targetPosition = headingElement.offsetTop - offset;
+  // Match Swup's same-page anchor behavior: update this entry, keep its index.
+  if (updateHash && headingElement.id) {
+    const url = new URL(window.location.href);
+    url.hash = encodeURIComponent(headingElement.id);
+    const nextUrl = url.pathname + url.search + url.hash;
+    window.history.replaceState({ ...window.history.state, url: nextUrl }, '', nextUrl);
+  }
+  const targetPosition = Math.max(0, headingDocumentTop(headingElement) - offset);
 
   window.scrollTo({
     top: targetPosition,
-    behavior: 'smooth'
+    behavior
   });
 }
 
@@ -154,4 +174,40 @@ export function analyzeHeadingHierarchy(headingElements) {
     maxDisplayLevel,
     totalLevels: levels.length > 0 ? Math.max(...levels) - minLevel + 1 : 0
   };
+}
+
+/** Document coordinates also work for headings inside positioned ancestors. */
+export function headingDocumentTop(element) {
+  return element.getBoundingClientRect().top + window.scrollY;
+}
+
+export function isPlainTocClick(event) {
+  return !event.defaultPrevented && event.button === 0 &&
+    !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+
+/** Restore fragment destinations after reveal transforms settle (including back/forward). */
+export async function restoreHeadingFragment(content, signal) {
+  const hash = window.location.hash;
+  if (!content || !hash || signal?.aborted) return;
+  let id = hash.slice(1);
+  try { id = decodeURIComponent(id); } catch { /* A literal percent may be part of the ID. */ }
+  const heading = [...content.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]')]
+    .find(element => element.id === id || element.id === hash.slice(1));
+  if (!heading) return;
+  // Reveal the destination before measuring: scrolling into an unrevealed
+  // ancestor would otherwise start its translation after restoration.
+  for (let element = heading; element; element = element.parentElement) {
+    if (element.classList?.contains('lazy-anim')) element.classList.add('visible');
+  }
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  const animations = [];
+  for (let element = heading; element; element = element.parentElement) {
+    for (const animation of element.getAnimations?.() || []) {
+      if (animation.effect?.getTiming().iterations !== Infinity) animations.push(animation.finished);
+    }
+  }
+  await Promise.allSettled(animations);
+  if (signal?.aborted || window.location.hash !== hash || !heading.isConnected) return;
+  smoothScrollToHeading(heading, 80, { updateHash: false, behavior: 'instant' });
 }

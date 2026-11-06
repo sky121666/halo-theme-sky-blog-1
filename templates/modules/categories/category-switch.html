@@ -17,11 +17,18 @@
 <!-- 药丸风格 - 胶囊徽章 -->
 <!-- ===================== -->
 <div th:fragment="pills(categories, currentCategory)" class="categories-switch-pills mb-8"
-  th:with="maxVisible = 6, totalCategories = ${#lists.size(categories)}, needsCollapse = ${totalCategories > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="6" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-category-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap items-center gap-2">
     <!-- 全部按钮 -->
-    <a th:href="@{/categories}"
+    <a th:href="@{${site.routes?.categoriesUri ?: '/categories'}}"
       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
       th:classappend="${currentCategory == null} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'">
       <span class="icon-[heroicons--squares-2x2] w-3.5 h-3.5"></span>
@@ -29,26 +36,15 @@
     </a>
 
     <!-- 分类 -->
-    <th:block th:each="c, iterStat : ${categories}">
-      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.status.postCount ?: 0}"
-        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
-        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
-        <span class="icon-[heroicons--folder] w-3.5 h-3.5 text-base-content/40"></span>
-        <span th:text="${c.spec.displayName}"></span>
-        <span th:if="${postCount > 0}" class="text-xs text-base-content/50" th:text="${postCount}"></span>
-      </a>
-    </th:block>
+    <th:block th:replace="~{modules/categories/category-switch :: pills-items(${categories}, ${currentCategory}, 0)}" />
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" x-show="hiddenCount > 0" style="display: none" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起分类' : '展开另外 ' + hiddenCount + ' 个分类'"
       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-dashed border-base-content/20 text-base-content/50 hover:text-base-content hover:border-base-content/30 hover:bg-base-100/50 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="icon-[heroicons--chevron-down] w-3.5 h-3.5"></span>
       <span x-show="expanded" class="icon-[heroicons--chevron-up] w-3.5 h-3.5"></span>
-      <span x-show="!expanded" th:text="'+' + ${totalCategories - maxVisible}"></span>
+      <span x-show="!expanded" x-text="'+' + hiddenCount"></span>
       <span x-show="expanded">收起</span>
     </button>
   </div>
@@ -58,11 +54,18 @@
 <!-- 芯片风格 - 边框卡片   -->
 <!-- ===================== -->
 <div th:fragment="chips(categories, currentCategory)" class="categories-switch-chips mb-8"
-  th:with="maxVisible = 10, totalCategories = ${#lists.size(categories)}, needsCollapse = ${totalCategories > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="10" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-category-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center gap-2">
     <!-- 全部芯片 -->
-    <a th:href="@{/categories}"
+    <a th:href="@{${site.routes?.categoriesUri ?: '/categories'}}"
       class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
       th:classappend="${currentCategory == null} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'">
       <span class="icon-[heroicons--squares-2x2] w-4 h-4"></span>
@@ -70,26 +73,15 @@
     </a>
 
     <!-- 分类芯片 -->
-    <th:block th:each="c, iterStat : ${categories}">
-      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.status.postCount ?: 0}"
-        class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
-        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
-        <span class="icon-[heroicons--folder] w-4 h-4 opacity-50"></span>
-        <span th:text="${c.spec.displayName}"></span>
-        <span th:if="${postCount > 0}" class="text-xs opacity-50" th:text="'(' + ${postCount} + ')'"></span>
-      </a>
-    </th:block>
+    <th:block th:replace="~{modules/categories/category-switch :: chips-items(${categories}, ${currentCategory}, 0)}" />
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" x-show="hiddenCount > 0" style="display: none" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起分类' : '展开另外 ' + hiddenCount + ' 个分类'"
       class="inline-flex items-center gap-1 h-9 px-3 rounded-lg text-sm font-medium border border-dashed border-primary/30 text-primary/70 hover:text-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="icon-[heroicons--plus] w-4 h-4"></span>
       <span x-show="expanded" class="icon-[heroicons--minus] w-4 h-4"></span>
-      <span x-show="!expanded" th:text="${totalCategories - maxVisible}"></span>
+      <span x-show="!expanded" x-text="hiddenCount"></span>
       <span x-show="expanded">收起</span>
     </button>
   </div>
@@ -99,11 +91,18 @@
 <!-- 下划线风格 - 极简     -->
 <!-- ===================== -->
 <div th:fragment="underline(categories, currentCategory)" class="categories-switch-underline mb-8"
-  th:with="maxVisible = 12, totalCategories = ${#lists.size(categories)}, needsCollapse = ${totalCategories > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="12" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-category-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center items-center gap-x-1 gap-y-0 border-b border-base-content/10 pb-px">
     <!-- 全部 -->
-    <a th:href="@{/categories}" class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+    <a th:href="@{${site.routes?.categoriesUri ?: '/categories'}}" class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
       th:classappend="${currentCategory == null} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'">
       <span>全部</span>
       <span th:if="${currentCategory == null}"
@@ -111,25 +110,13 @@
     </a>
 
     <!-- 分类 -->
-    <th:block th:each="c, iterStat : ${categories}">
-      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.status.postCount ?: 0}"
-        class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
-        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
-        <span th:text="${c.spec.displayName}"></span>
-        <sup th:if="${postCount > 0}" class="ml-0.5 text-xs opacity-40" th:text="${postCount}"></sup>
-        <span th:if="${currentCategory != null and currentCategory.metadata.name == c.metadata.name}"
-          class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
-      </a>
-    </th:block>
+    <th:block th:replace="~{modules/categories/category-switch :: underline-items(${categories}, ${currentCategory}, 0)}" />
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" x-show="hiddenCount > 0" style="display: none" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起分类' : '展开另外 ' + hiddenCount + ' 个分类'"
       class="px-3 py-2.5 text-sm font-medium text-primary/60 hover:text-primary transition-colors duration-200 cursor-pointer">
-      <span x-show="!expanded" th:text="'+' + ${totalCategories - maxVisible} + ' 更多'"></span>
+      <span x-show="!expanded" x-text="'+' + hiddenCount + ' 更多'"></span>
       <span x-show="expanded">收起</span>
     </button>
   </div>
@@ -139,39 +126,89 @@
 <!-- 玻璃拟态风格 - 轻量   -->
 <!-- ===================== -->
 <div th:fragment="glass(categories, currentCategory)" class="categories-switch-glass mb-8"
-  th:with="maxVisible = 10, totalCategories = ${#lists.size(categories)}, needsCollapse = ${totalCategories > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="10" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-category-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-sm dark:bg-base-300/30">
     <!-- 全部 -->
-    <a th:href="@{/categories}" class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+    <a th:href="@{${site.routes?.categoriesUri ?: '/categories'}}" class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
       th:classappend="${currentCategory == null} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'">
       全部
     </a>
 
     <!-- 分类 -->
-    <th:block th:each="c, iterStat : ${categories}">
-      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.status.postCount ?: 0}"
-        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
-        <span th:text="${c.spec.displayName}"></span>
-        <span th:if="${postCount > 0}" class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
-          th:text="${postCount}"></span>
-      </a>
-    </th:block>
+    <th:block th:replace="~{modules/categories/category-switch :: glass-items(${categories}, ${currentCategory}, 0)}" />
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" x-show="hiddenCount > 0" style="display: none" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起分类' : '展开另外 ' + hiddenCount + ' 个分类'"
       class="px-4 py-2 rounded-xl text-sm font-medium text-primary/70 hover:text-primary hover:bg-base-100/60 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="inline-flex items-center gap-1">
-        <span th:text="'+' + ${totalCategories - maxVisible}"></span>
+        <span x-text="'+' + hiddenCount"></span>
       </span>
       <span x-show="expanded">收起</span>
     </button>
   </div>
 </div>
+
+    <th:block th:fragment="pills-items(categories, currentCategory, depth)" th:each="c : ${categories}">
+      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.postCount ?: 0}"
+        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
+        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
+        data-category-item
+        th:attr="aria-current=${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
+        <span class="icon-[heroicons--folder] w-3.5 h-3.5 text-base-content/40"></span>
+        <span th:if="${depth > 0}" aria-hidden="true">↳</span><span th:text="${c.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="text-xs text-base-content/50" th:text="${postCount}"></span>
+      </a>
+      <th:block th:if="${not #lists.isEmpty(c.children)}"><th:block th:replace="~{modules/categories/category-switch :: pills-items(${c.children}, ${currentCategory}, ${depth + 1})}" /></th:block>
+    </th:block>
+    <th:block th:fragment="chips-items(categories, currentCategory, depth)" th:each="c : ${categories}">
+      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.postCount ?: 0}"
+        class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
+        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'"
+        data-category-item
+        th:attr="aria-current=${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
+        <span class="icon-[heroicons--folder] w-4 h-4 opacity-50"></span>
+        <span th:if="${depth > 0}" aria-hidden="true">↳</span><span th:text="${c.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="text-xs opacity-50" th:text="'(' + ${postCount} + ')'"></span>
+      </a>
+      <th:block th:if="${not #lists.isEmpty(c.children)}"><th:block th:replace="~{modules/categories/category-switch :: chips-items(${c.children}, ${currentCategory}, ${depth + 1})}" /></th:block>
+    </th:block>
+    <th:block th:fragment="underline-items(categories, currentCategory, depth)" th:each="c : ${categories}">
+      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.postCount ?: 0}"
+        class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'"
+        data-category-item
+        th:attr="aria-current=${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
+        <span th:if="${depth > 0}" aria-hidden="true">↳</span><span th:text="${c.spec.displayName}"></span>
+        <sup th:if="${postCount > 0}" class="ml-0.5 text-xs opacity-40" th:text="${postCount}"></sup>
+        <span th:if="${currentCategory != null and currentCategory.metadata.name == c.metadata.name}"
+          class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
+      </a>
+      <th:block th:if="${not #lists.isEmpty(c.children)}"><th:block th:replace="~{modules/categories/category-switch :: underline-items(${c.children}, ${currentCategory}, ${depth + 1})}" /></th:block>
+    </th:block>
+    <th:block th:fragment="glass-items(categories, currentCategory, depth)" th:each="c : ${categories}">
+      <a th:href="@{${c.status.permalink}}" th:with="postCount=${c.postCount ?: 0}"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+        th:classappend="${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'"
+        data-category-item
+        th:attr="aria-current=${currentCategory != null and currentCategory.metadata.name == c.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
+        <span th:if="${depth > 0}" aria-hidden="true">↳</span><span th:text="${c.spec.displayName}"></span>
+        <span th:if="${postCount > 0}" class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
+          th:text="${postCount}"></span>
+      </a>
+      <th:block th:if="${not #lists.isEmpty(c.children)}"><th:block th:replace="~{modules/categories/category-switch :: glass-items(${c.children}, ${currentCategory}, ${depth + 1})}" /></th:block>
+    </th:block>
 
 </html>

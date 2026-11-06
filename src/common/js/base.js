@@ -1,3 +1,5 @@
+import { decorateExternalLinks } from "./external-links.js";
+
 /**
  * Sky Theme - 基础公共脚本
  * 包含全局工具函数和公共功能
@@ -229,13 +231,7 @@ window.SkyEvents = {
    * 初始化外部链接
    */
   initExternalLinks() {
-    const links = document.querySelectorAll('a[href^="http"]');
-    links.forEach((link) => {
-      if (!link.hostname.includes(window.location.hostname)) {
-        link.setAttribute("target", "_blank");
-        link.setAttribute("rel", "noopener noreferrer");
-      }
-    });
+    decorateExternalLinks(document, window.location);
   },
 
   /**

@@ -1,0 +1,906 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-10-27T03:10:31.205Z",
+  "finishedAt": "2026-10-27T03:10:34.903Z",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.27.0",
+    "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+  },
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+    "fileCount": 369,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "unchangedDuringRun": true
+  },
+  "plugins": [
+    {
+      "id": "log-viewer",
+      "phase": "STARTED",
+      "version": "1.3.1",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "log-viewer-1.3.1.jar"
+    },
+    {
+      "id": "mcp-server",
+      "phase": "STARTED",
+      "version": "1.3.1",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "mcp-server-1.3.1.jar"
+    },
+    {
+      "id": "ai-foundation",
+      "phase": "STARTED",
+      "version": "1.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "ai-foundation-1.3.0.jar"
+    },
+    {
+      "id": "plugin-katex",
+      "phase": "STARTED",
+      "version": "3.0.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.2",
+      "artifactName": "plugin-katex-3.0.0.jar"
+    },
+    {
+      "id": "plugin-douban",
+      "phase": "STARTED",
+      "version": "1.2.7",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "plugin-douban-1.2.7.jar"
+    },
+    {
+      "id": "maintenance",
+      "phase": "STARTED",
+      "version": "1.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.10",
+      "artifactName": "maintenance-1.1.0.jar"
+    },
+    {
+      "id": "online",
+      "phase": "STARTED",
+      "version": "1.0.5",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "online-1.0.5.jar"
+    },
+    {
+      "id": "dishes",
+      "phase": "STARTED",
+      "version": "1.0.3",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "dishes-1.0.3.jar"
+    },
+    {
+      "id": "schedule-calendar",
+      "phase": "STARTED",
+      "version": "3.5.0",
+      "enabled": true,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "schedule-calendar-3.5.0.jar"
+    },
+    {
+      "id": "lottery",
+      "phase": "STARTED",
+      "version": "1.0.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "lottery-1.0.2.jar"
+    },
+    {
+      "id": "PluginLive2d",
+      "phase": "DISABLED",
+      "version": "2.2.0",
+      "enabled": false,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "PluginLive2d-2.2.0.jar"
+    },
+    {
+      "id": "editor-emoji",
+      "phase": "STARTED",
+      "version": "1.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "editor-emoji-1.1.0.jar"
+    },
+    {
+      "id": "auth-passkey",
+      "phase": "STARTED",
+      "version": "2.0.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "auth-passkey-2.0.0.jar"
+    },
+    {
+      "id": "equipment",
+      "phase": "STARTED",
+      "version": "1.1.1",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "equipment-1.1.1.jar"
+    },
+    {
+      "id": "plugin-bilibili-bangumi",
+      "phase": "STARTED",
+      "version": "1.4.1",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "plugin-bilibili-bangumi-1.4.1.jar"
+    },
+    {
+      "id": "steam",
+      "phase": "STARTED",
+      "version": "1.0.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.1",
+      "artifactName": "steam-1.0.0.jar"
+    },
+    {
+      "id": "vote",
+      "phase": "STARTED",
+      "version": "1.1.3",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "vote-1.1.3.jar"
+    },
+    {
+      "id": "shiki",
+      "phase": "STARTED",
+      "version": "1.5.1",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "shiki-1.5.1.jar"
+    },
+    {
+      "id": "data-studio",
+      "phase": "STARTED",
+      "version": "1.0.0-alpha.9",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "data-studio-1.0.0-alpha.9.jar"
+    },
+    {
+      "id": "text-diagram",
+      "phase": "STARTED",
+      "version": "1.5.2",
+      "enabled": true,
+      "requiresHalo": ">=2.11.0",
+      "artifactName": "text-diagram-1.5.2.jar"
+    },
+    {
+      "id": "PluginS3ObjectStorage",
+      "phase": "STARTED",
+      "version": "1.17.0",
+      "enabled": true,
+      "requiresHalo": ">=2.24.0",
+      "artifactName": "PluginS3ObjectStorage-1.17.0.jar"
+    },
+    {
+      "id": "PluginBytemd",
+      "phase": "STARTED",
+      "version": "1.9.0",
+      "enabled": true,
+      "requiresHalo": ">=2.25.0",
+      "artifactName": "PluginBytemd-1.9.0.jar"
+    },
+    {
+      "id": "hybrid-edit-block",
+      "phase": "STARTED",
+      "version": "1.7.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "hybrid-edit-block-1.7.0.jar"
+    },
+    {
+      "id": "chenhe-lsky-pro",
+      "phase": "STARTED",
+      "version": "1.1.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "chenhe-lsky-pro-1.1.2.jar"
+    },
+    {
+      "id": "PluginLightGallery",
+      "phase": "STARTED",
+      "version": "1.2.1",
+      "enabled": true,
+      "requiresHalo": ">=2.10.0",
+      "artifactName": "PluginLightGallery-1.2.1.jar"
+    },
+    {
+      "id": "PluginPhotos",
+      "phase": "STARTED",
+      "version": "2.1.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "PluginPhotos-2.1.2.jar"
+    },
+    {
+      "id": "seo-tools",
+      "phase": "STARTED",
+      "version": "1.10.1",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "seo-tools-1.10.1.jar"
+    },
+    {
+      "id": "PluginLinks",
+      "phase": "STARTED",
+      "version": "2.5.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginLinks-2.5.0.jar"
+    },
+    {
+      "id": "PluginMoments",
+      "phase": "STARTED",
+      "version": "1.19.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginMoments-1.19.0.jar"
+    },
+    {
+      "id": "page-cache",
+      "phase": "STARTED",
+      "version": "1.6.0",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "page-cache-1.6.0.jar"
+    },
+    {
+      "id": "content-tools",
+      "phase": "STARTED",
+      "version": "1.8.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "content-tools-1.8.0.jar"
+    },
+    {
+      "id": "PluginContactForm",
+      "phase": "STARTED",
+      "version": "2.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginContactForm-2.1.0.jar"
+    },
+    {
+      "id": "ai-assistant",
+      "phase": "STARTED",
+      "version": "3.1.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "ai-assistant-3.1.0.jar"
+    },
+    {
+      "id": "alist-integration",
+      "phase": "STARTED",
+      "version": "1.2.0",
+      "enabled": true,
+      "requiresHalo": ">=2.20.0",
+      "artifactName": "alist-integration-1.2.0.jar"
+    },
+    {
+      "id": "backup-improved",
+      "phase": "STARTED",
+      "version": "1.5.1",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "backup-improved-1.5.1.jar"
+    },
+    {
+      "id": "plugin-ldap-login",
+      "phase": "STARTED",
+      "version": "1.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "plugin-ldap-login-1.3.0.jar"
+    },
+    {
+      "id": "plugin-docsme",
+      "phase": "STARTED",
+      "version": "1.10.2",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "plugin-docsme-1.10.2.jar"
+    },
+    {
+      "id": "editor-hyperlink-card",
+      "phase": "STARTED",
+      "version": "1.9.2",
+      "enabled": true,
+      "requiresHalo": ">=2.22.0",
+      "artifactName": "editor-hyperlink-card-1.9.2.jar"
+    },
+    {
+      "id": "plugin-oauth2",
+      "phase": "STARTED",
+      "version": "1.7.1",
+      "enabled": true,
+      "requiresHalo": ">=2.20.0",
+      "artifactName": "plugin-oauth2-1.7.1.jar"
+    },
+    {
+      "id": "plugin-social-login",
+      "phase": "STARTED",
+      "version": "1.7.0",
+      "enabled": true,
+      "requiresHalo": ">=2.23.0",
+      "artifactName": "plugin-social-login-1.7.0.jar"
+    },
+    {
+      "id": "restricted-reading",
+      "phase": "STARTED",
+      "version": "1.9.3",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "restricted-reading-1.9.3.jar"
+    },
+    {
+      "id": "PluginCommentWidget",
+      "phase": "STARTED",
+      "version": "3.4.0",
+      "enabled": true,
+      "requiresHalo": ">=2.27.0",
+      "artifactName": "PluginCommentWidget-3.4.0.jar"
+    },
+    {
+      "id": "PluginSitemap",
+      "phase": "STARTED",
+      "version": "1.3.0",
+      "enabled": true,
+      "requiresHalo": ">=2.22.7",
+      "artifactName": "PluginSitemap-1.3.0.jar"
+    },
+    {
+      "id": "PluginSearchWidget",
+      "phase": "STARTED",
+      "version": "1.8.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "PluginSearchWidget-1.8.0.jar"
+    },
+    {
+      "id": "PluginFeed",
+      "phase": "STARTED",
+      "version": "1.5.0",
+      "enabled": true,
+      "requiresHalo": ">=2.21.0",
+      "artifactName": "PluginFeed-1.5.0.jar"
+    },
+    {
+      "id": "app-store-integration",
+      "phase": "STARTED",
+      "version": "1.19.0",
+      "enabled": true,
+      "requiresHalo": ">=2.26.0",
+      "artifactName": "app-store-integration-1.19.0.jar"
+    }
+  ],
+  "scope": "Browser-like HTML Accept, Page Cache age, HTTP/API reads and rendered markers; not browser interaction or write workflows",
+  "deepMode": true,
+  "previewTheme": "theme-sky-blog-1",
+  "cacheFreshSince": "2026-10-27T03:10:05.921Z",
+  "results": [
+    {
+      "name": "Links",
+      "path": "/links",
+      "requestedUrl": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:31 GMT",
+      "marker": "data-links-page, data-plugin-links-contract=\"PluginLinks>=2.2.1\", data-plugin-links-title, data-link-group-navigation, data-link-access-state, links-comments",
+      "error": ""
+    },
+    {
+      "name": "Photos",
+      "path": "/photos",
+      "requestedUrl": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:31 GMT",
+      "marker": "photo-grid, 图库, photos.js",
+      "error": ""
+    },
+    {
+      "name": "Moments",
+      "path": "/moments",
+      "requestedUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:31 GMT",
+      "marker": "moments-list, 瞬间, moments.js",
+      "error": ""
+    },
+    {
+      "name": "Links Friend Feed",
+      "path": "/links?view=friends",
+      "requestedUrl": "http://localhost:8090/links?view=friends&preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/links?view=friends&preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:32 GMT",
+      "marker": "data-links-view-panel=\"friends\", data-link-feeds, links.js",
+      "error": ""
+    },
+    {
+      "name": "Docsme",
+      "path": "/docs",
+      "requestedUrl": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:32 GMT",
+      "marker": "文档中心, doc.js",
+      "error": ""
+    },
+    {
+      "name": "Bangumi",
+      "path": "/bangumis",
+      "requestedUrl": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:32 GMT",
+      "marker": "bangumi-page, 追番, bangumi.js",
+      "error": ""
+    },
+    {
+      "name": "Steam",
+      "path": "/steam",
+      "requestedUrl": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:32 GMT",
+      "marker": "steam-page, Steam, steam.js",
+      "error": ""
+    },
+    {
+      "name": "Equipment",
+      "path": "/equipments",
+      "requestedUrl": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:32 GMT",
+      "marker": "equipment-page, 装备, equipment.js",
+      "error": ""
+    },
+    {
+      "name": "Douban",
+      "path": "/douban",
+      "requestedUrl": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "douban-page, douban-grid, douban.js",
+      "error": ""
+    },
+    {
+      "name": "Login",
+      "path": "/login",
+      "requestedUrl": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "halo-form, login?method=passkey, /plugins/auth-passkey/assets/static/passkey.svg",
+      "error": ""
+    },
+    {
+      "name": "Dishes External Route",
+      "path": "/dishes",
+      "requestedUrl": "http://localhost:8090/dishes?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/dishes?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": [],
+        "notApplicable": true
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "id=\"app\", data-dishes-site-title, dishes-csrf-header, window.__DISHES_CSRF__, window.__DISHES_PUBLIC_BASE__, /plugins/dishes/assets/dishes-frontend/assets/index.css, /plugins/dishes/assets/dishes-frontend/app.js",
+      "error": ""
+    },
+    {
+      "name": "Schedule External Route",
+      "path": "/schedule-calendar",
+      "requestedUrl": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": [],
+        "notApplicable": true
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "id=\"calendar-view\", id=\"agenda-view\", /apis/api.schedule.calendar.sunny.dev/v1alpha1/summary",
+      "error": ""
+    },
+    {
+      "name": "Home Plugin Widgets",
+      "path": "/",
+      "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "文档中心, 友情链接, 瞬间说说",
+      "error": ""
+    },
+    {
+      "name": "Docsme Catalog",
+      "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "requestedUrl": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "doc-layout, 主题配置功能详解, var docsme = { disableThemeFunction: true }",
+      "error": ""
+    },
+    {
+      "name": "Shiki Loader",
+      "path": "/archives/editor-feature-demo",
+      "requestedUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "plugin-shiki, shiki-code.js?version=",
+      "error": ""
+    },
+    {
+      "name": "Comment Widget",
+      "path": "/archives/editor-feature-demo",
+      "requestedUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "plugin-comment-widget, comment-widget.js?version=, comment-content-, 评论交流",
+      "error": ""
+    },
+    {
+      "name": "Search Widget",
+      "path": "/",
+      "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "PluginSearchWidget, SearchWidget.open()",
+      "error": ""
+    },
+    {
+      "name": "Contact Form Loader Reference",
+      "path": "/",
+      "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:33 GMT",
+      "marker": "/contact-form/embed.js",
+      "error": ""
+    },
+    {
+      "name": "Moments Media Binding",
+      "path": "/moments",
+      "requestedUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:31 GMT",
+      "marker": "moment-media, data-src",
+      "error": ""
+    },
+    {
+      "name": "Author Moments Gate",
+      "path": "/authors/sky0821",
+      "requestedUrl": "http://localhost:8090/authors/sky0821?preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/authors/sky0821?preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:34 GMT",
+      "marker": "author_tab, data-plugin-moments-contract=\"PluginMoments>=1.16.1\", data-plugin-moments-available=",
+      "error": ""
+    },
+    {
+      "name": "Feed XML",
+      "path": "/feed.xml",
+      "requestedUrl": "http://localhost:8090/feed.xml",
+      "responseUrl": "http://localhost:8090/feed.xml",
+      "themeIdentity": {
+        "ok": true,
+        "themes": [],
+        "notApplicable": true
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "<rss, <channel",
+      "error": ""
+    },
+    {
+      "name": "Sitemap XML",
+      "path": "/sitemap.xml",
+      "requestedUrl": "http://localhost:8090/sitemap.xml",
+      "responseUrl": "http://localhost:8090/sitemap.xml",
+      "themeIdentity": {
+        "ok": true,
+        "themes": [],
+        "notApplicable": true
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "<urlset, <loc",
+      "error": ""
+    },
+    {
+      "name": "Robots Sitemap",
+      "path": "/robots.txt",
+      "requestedUrl": "http://localhost:8090/robots.txt",
+      "responseUrl": "http://localhost:8090/robots.txt",
+      "themeIdentity": {
+        "ok": true,
+        "themes": [],
+        "notApplicable": true
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "Sitemap:",
+      "error": ""
+    },
+    {
+      "name": "Links Populated Group Route",
+      "path": "/links?group=link-group-yOmci",
+      "requestedUrl": "http://localhost:8090/links?group=link-group-yOmci&preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/links?group=link-group-yOmci&preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:34 GMT",
+      "marker": "data-link-group-section=\"link-group-yOmci\", aria-current=\"page\"",
+      "error": ""
+    },
+    {
+      "name": "Links Empty Group Route",
+      "path": "/links?group=link-group-gtqEW",
+      "requestedUrl": "http://localhost:8090/links?group=link-group-gtqEW&preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/links?group=link-group-gtqEW&preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:34 GMT",
+      "marker": "data-links-empty-state=\"group-empty\", 该分组暂无友情链接",
+      "error": ""
+    },
+    {
+      "name": "Links Missing Group Route",
+      "path": "/links?group=theme-contract-missing-group",
+      "requestedUrl": "http://localhost:8090/links?group=theme-contract-missing-group&preview-theme=theme-sky-blog-1",
+      "responseUrl": "http://localhost:8090/links?group=theme-contract-missing-group&preview-theme=theme-sky-blog-1",
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": "Tue, 27 Oct 2026 03:10:34 GMT",
+      "marker": "data-links-empty-state=\"group-missing\", 未找到该友链分组",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Public API",
+      "path": "/apis/api.link.halo.run/v1alpha1/links",
+      "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/links",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "links=7, status-enums",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Groups API",
+      "path": "/apis/api.link.halo.run/v1alpha1/linkgroups",
+      "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/linkgroups",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "groups=3",
+      "error": ""
+    },
+    {
+      "name": "Links 2.2.1 Feed API",
+      "path": "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+      "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "public-feeds=20",
+      "error": ""
+    },
+    {
+      "name": "Douban Items API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+      "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "readable-items=8",
+      "error": ""
+    },
+    {
+      "name": "Douban Types API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+      "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "movie",
+      "error": ""
+    },
+    {
+      "name": "Douban Genres API",
+      "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+      "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "喜剧, 剧情, 悬疑, 犯罪, 动作",
+      "error": ""
+    },
+    {
+      "name": "Online Summary API",
+      "path": "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+      "requestedUrl": "http://localhost:8090/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+      "status": 200,
+      "ok": true,
+      "skipped": false,
+      "cacheAt": null,
+      "marker": "online-count",
+      "error": ""
+    }
+  ]
+}

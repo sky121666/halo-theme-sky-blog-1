@@ -1,0 +1,1423 @@
+{
+  "schemaVersion": 1,
+  "completedAt": "2026-10-27T07:47:56.156932+00:00",
+  "scope": "User requested local latest stable upgrade after the prior theme-only phase. Only localhost:8090 Halo and two outdated installed plugins were upgraded; theme 1 remained a request-scoped preview. No production release, Git write, database connection edit, manual data migration, model call, personal authentication or unrelated plugin installation.",
+  "versionAuditSource": "version-audit.json",
+  "upstreamRecheck": {
+    "at": "2026-10-27T07:10:24+00:00",
+    "officialStoreReleasePages": 46,
+    "officialGitHubReleaseLists": 35,
+    "changedStableTargets": 0,
+    "haloStable": "2.27.1",
+    "sources": [
+      "https://releases.halo.run/releases/halo-pro/v2.27.1",
+      "https://github.com/halo-dev/halo/releases/tag/v2.27.1",
+      "https://github.com/halo-dev/plugin-mcp-server/releases/tag/v1.3.2",
+      "https://github.com/halo-sigs/plugin-oauth2/releases/tag/v1.7.2"
+    ],
+    "prereleaseOnly": ["data-studio@1.0.0-alpha.9"]
+  },
+  "runtime": {
+    "observedAt": "2026-10-27T07:42:25.647Z",
+    "environment": {
+      "baseUrl": "http://localhost:8090",
+      "halo": "2.27.1",
+      "edition": "halo-pro",
+      "git": {
+        "branch": "v2.27.1",
+        "commit": {
+          "id": "988c637",
+          "time": "2026-10-23T15:57:27Z"
+        }
+      },
+      "activeThemes": ["theme-sky-blog-3"],
+      "previewTheme": "theme-sky-blog-1"
+    },
+    "theme": {
+      "version": "2.2.40",
+      "requires": ">=2.26.0",
+      "codeIdentity": {
+        "algorithm": "sha256",
+        "codeHash": "eeeca3ec47f25a5d18b7fa370de4192cc67aa2c90ed0d4d54442a47ec234c6c1",
+        "fileCount": 370,
+        "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+        "inputs": [
+          "src",
+          "templates",
+          "scripts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "theme.yaml",
+          "settings.yaml",
+          "annotation-setting.yaml",
+          "vite.config.ts",
+          "postcss.config.cjs",
+          "tsconfig.json",
+          "tsconfig.node.json"
+        ]
+      }
+    },
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "log-viewer-1.3.1.jar",
+        "sha256": "1f1d90880f476e16b33a1dfabc0e4f0d8d81ce67072f6758f7ebdb81cd9c3c3c",
+        "targetVersion": "1.3.1",
+        "latestStable": {
+          "version": "1.3.1",
+          "publishedAt": "2026-09-24T11:14:31.480638907Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-pcgkazpl/releases/app-release-6ytxtxav"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "mcp-server-1.3.2.jar",
+        "sha256": "1a58415cf3633104476411e53a5a631f441efe61caebe5a59c9320600ff5543b",
+        "targetVersion": "1.3.2",
+        "latestStable": {
+          "version": "1.3.2",
+          "publishedAt": "2026-10-26T09:11:14.332026429Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-cnsmkng4"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "ai-foundation-1.3.0.jar",
+        "sha256": "a554d60c6a9f00c3687b4a3e9ffa1c625120be347fb45343ed84613d4e558e57",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2026-10-22T08:22:03Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-kyddy5r1"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "requiresHalo": ">=2.22.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-katex-3.0.0.jar",
+        "sha256": "e444781b99c23b020fcc379f6859ce67dc7669536c880004f7bf7cce0ed2df96",
+        "targetVersion": "3.0.0",
+        "latestStable": {
+          "version": "3.0.0",
+          "publishedAt": "2026-01-16T08:12:23Z",
+          "requiresHalo": ">=2.22.2",
+          "url": "https://www.halo.run/store/apps/app-ISCsX/releases/app-release-l4qbvcue"
+        },
+        "skillBaseline": null,
+        "themeContract": "3.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-douban-1.2.7.jar",
+        "sha256": "78929121925a644b92767eca1f94070b05ca2265fd9bc0453422613dbb65e866",
+        "targetVersion": "1.2.7",
+        "latestStable": {
+          "version": "1.2.7",
+          "publishedAt": "2026-09-28T10:42:14Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/chengzhongxue/plugin-douban/releases/tag/1.2.7"
+        },
+        "skillBaseline": "1.2.6",
+        "themeContract": "1.2.6",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "requiresHalo": ">=2.22.10",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "maintenance-1.1.0.jar",
+        "sha256": "d07f1614602243b08253b08165576f203bde7cfb633a9e03b8d919fc7935e389",
+        "targetVersion": "1.1.0",
+        "latestStable": {
+          "version": "1.1.0",
+          "publishedAt": "2026-04-18T15:23:15Z",
+          "requiresHalo": ">=2.22.10",
+          "url": "https://www.halo.run/store/apps/app-umgvtji6/releases/app-release-ecm0eqla"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.1.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "requiresHalo": ">=2.23.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "online-1.0.5.jar",
+        "sha256": "42a243741bb372c67198680ac611784be2176cce3f1a6a95aad75bd7d1c539fe",
+        "targetVersion": "1.0.5",
+        "latestStable": {
+          "version": "1.0.5",
+          "publishedAt": "2026-05-04T05:16:49Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-ion2qhko/releases/app-release-jvggype9"
+        },
+        "skillBaseline": "1.0.5",
+        "themeContract": "1.0.5",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "requiresHalo": ">=2.23.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "dishes-1.0.3.jar",
+        "sha256": "aa1e897eab8485eae909a16362d13a120b77e142908f62f07de38bf670df698a",
+        "targetVersion": "1.0.3",
+        "latestStable": {
+          "version": "1.0.3",
+          "publishedAt": "2026-05-02T15:02:23Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-espsmupa/releases/app-release-smxrkwj0"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.0.3",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "requiresHalo": ">=2.25.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "schedule-calendar-3.5.0.jar",
+        "sha256": "60399d9017f1b13051b1ef36bdf2277e6b17ac96d62a6e83ad72713ac8d93494",
+        "targetVersion": "3.5.0",
+        "latestStable": {
+          "version": "3.5.0",
+          "publishedAt": "2026-08-08T14:32:35Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-1ubowut0/releases/app-release-mdsorinh"
+        },
+        "skillBaseline": null,
+        "themeContract": "3.3.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "lottery-1.0.2.jar",
+        "sha256": "b67e35570c7a282211fde76dd1b633c9339c817a5f97c6c5a2cc66022bf8a706",
+        "targetVersion": "1.0.2",
+        "latestStable": {
+          "version": "1.0.2",
+          "publishedAt": "2026-04-23T05:01:02.441423051Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-8wtcwm5t/releases/app-release-6dooiafp"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.0.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "requiresHalo": ">=2.25.0",
+        "enabled": false,
+        "phase": "DISABLED",
+        "artifactName": "PluginLive2d-2.2.0.jar",
+        "sha256": "6edf2be941d641453e675565acf7e9144f8ff534ce330544eb7afd61f7335fa6",
+        "targetVersion": "2.2.0",
+        "latestStable": {
+          "version": "2.2.0",
+          "publishedAt": "2026-07-28T04:19:21.336827790Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-oPNFQ/releases/app-release-wyldvl72"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "editor-emoji-1.1.0.jar",
+        "sha256": "7e875b4b1b91bd236a7316266edbe1be8099f3f86a4193532daa9f54b437fc4b",
+        "targetVersion": "1.1.0",
+        "latestStable": {
+          "version": "1.1.0",
+          "publishedAt": "2026-08-26T03:56:57.263067042Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-pwojlwgu/releases/app-release-j3solsy2"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "auth-passkey-2.0.0.jar",
+        "sha256": "6302057a94b3f84a1da65ae0b9bb0b2acd1f5b0c856480911b74b5798f09994e",
+        "targetVersion": "2.0.0",
+        "latestStable": {
+          "version": "2.0.0",
+          "publishedAt": "2026-10-11T00:38:40Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-g7tggrco/releases/app-release-rnm9bjxh"
+        },
+        "skillBaseline": "1.0.4",
+        "themeContract": "1.0.4",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "equipment-1.1.1.jar",
+        "sha256": "6bb3b14e87f196ed85f7e19c385fb92294fbbd88afb566246502e0be4afca6e3",
+        "targetVersion": "1.1.1",
+        "latestStable": {
+          "version": "1.1.1",
+          "publishedAt": "2026-05-09T07:34:55Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://github.com/chengzhongxue/plugin-equipment/releases/tag/1.1.1"
+        },
+        "skillBaseline": "1.1.1",
+        "themeContract": "1.1.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "requiresHalo": ">=2.21.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-bilibili-bangumi-1.4.1.jar",
+        "sha256": "3ce2edfe5a65774399eb80d10fc2553d6bbf769948ddf20da3a4709bd980ef66",
+        "targetVersion": "1.4.1",
+        "latestStable": {
+          "version": "1.4.1",
+          "publishedAt": "2026-07-08T09:00:11Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://github.com/Roozenlz/plugin-bilibili-bangumi/releases/tag/1.4.1"
+        },
+        "skillBaseline": "1.4.1",
+        "themeContract": "1.4.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "requiresHalo": ">=2.22.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "steam-1.0.0.jar",
+        "sha256": "49440f1018a1b3f849669cc35decc5ea6705e014e3a04515f63f4ce2fd6e1ed4",
+        "targetVersion": "1.0.0",
+        "latestStable": {
+          "version": "1.0.0",
+          "publishedAt": "2026-06-27T18:29:43Z",
+          "requiresHalo": ">=2.22.1",
+          "url": "https://github.com/Tim0x0/halo-plugin-steam/releases/tag/v1.0.0"
+        },
+        "skillBaseline": "1.0.0",
+        "themeContract": "1.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "vote-1.1.3.jar",
+        "sha256": "1720ff013e27bfdfe089a97403c3d277e6b4042df4851d6a53aa9a2171fae75f",
+        "targetVersion": "1.1.3",
+        "latestStable": {
+          "version": "1.1.3",
+          "publishedAt": "2025-12-15T17:28:17Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-veyvzyhv/releases/app-release-np8tb8nv"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.1.3",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "shiki-1.5.1.jar",
+        "sha256": "e44fe0ec2e7eff4785ff50c83d7ff87cba3ff2510ffb93b385f2de449f91ce5b",
+        "targetVersion": "1.5.1",
+        "latestStable": {
+          "version": "1.5.1",
+          "publishedAt": "2026-08-20T10:03:27Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-kzloktzn/releases/app-release-mzrz7aqk"
+        },
+        "skillBaseline": "1.5.1",
+        "themeContract": "1.3.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "data-studio-1.0.0-alpha.9.jar",
+        "sha256": "36ea6c533689d496b122c4f448c2ed78ddaa89cb6705dda6214ab94ef5ea6c36",
+        "targetVersion": null,
+        "latestStable": null,
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": false
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "requiresHalo": ">=2.11.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "text-diagram-1.5.2.jar",
+        "sha256": "91967fd5be2273bbe46a621880219f9970e531d699fac6d8b0234e8df8b03112",
+        "targetVersion": "1.5.2",
+        "latestStable": {
+          "version": "1.5.2",
+          "publishedAt": "2026-01-23T10:15:00Z",
+          "requiresHalo": ">=2.11.0",
+          "url": "https://www.halo.run/store/apps/app-ahBRi/releases/app-release-rqudxdgh"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.5.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "requiresHalo": ">=2.24.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginS3ObjectStorage-1.17.0.jar",
+        "sha256": "c59ac257e7117bfd018a7ff59b7d701fd2680eb33bc645c0b4d05594ee4c20d9",
+        "targetVersion": "1.17.0",
+        "latestStable": {
+          "version": "1.17.0",
+          "publishedAt": "2026-06-29T11:12:40.994766843Z",
+          "requiresHalo": ">=2.24.0",
+          "url": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-hdy1v1xf"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "requiresHalo": ">=2.25.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginBytemd-1.9.0.jar",
+        "sha256": "b31894afe7fcf5d467f45fde6474059ce6eb8865ab4aaea308ccd533c709dcb8",
+        "targetVersion": "1.9.0",
+        "latestStable": {
+          "version": "1.9.0",
+          "publishedAt": "2026-06-26T10:08:22.672303375Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-HTyhC/releases/app-release-fvqxsvlk"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "hybrid-edit-block-1.7.0.jar",
+        "sha256": "6706fd5ab80551577522756b81dbbc29427a46b1951bb925a8f1fb8f5900ef1f",
+        "targetVersion": "1.7.0",
+        "latestStable": {
+          "version": "1.7.0",
+          "publishedAt": "2026-08-17T04:43:47.959127299Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-NgHnY/releases/app-release-lgexvgkn"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "chenhe-lsky-pro-1.1.2.jar",
+        "sha256": "d4d0d501ee423f234237af6fc0b6d8e2d25cbb7401d74ef64537a8f64a0415f1",
+        "targetVersion": "1.1.2",
+        "latestStable": {
+          "version": "1.1.2",
+          "publishedAt": "2026-04-09T21:10:36.776276521Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-jZHhX/releases/app-release-soqqub9p"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "requiresHalo": ">=2.10.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginLightGallery-1.2.1.jar",
+        "sha256": "a59d35d973ceaf5c67ac559f34de7124a41ba40fa007b7254730d682ade2834e",
+        "targetVersion": "1.2.1",
+        "latestStable": {
+          "version": "1.2.1",
+          "publishedAt": "2024-07-03T04:21:03Z",
+          "requiresHalo": ">=2.10.0",
+          "url": "https://github.com/halo-sigs/plugin-lightgallery/releases/tag/v1.2.1"
+        },
+        "skillBaseline": "1.2.1",
+        "themeContract": "1.2.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginPhotos-2.1.2.jar",
+        "sha256": "ef8d9507b60c2b6f268dc1574bd19ece4c4dd6dd33de09ff5dab6f640e5e267e",
+        "targetVersion": "2.1.2",
+        "latestStable": {
+          "version": "2.1.2",
+          "publishedAt": "2026-06-22T16:06:46Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://github.com/halo-sigs/plugin-photos/releases/tag/v2.1.2"
+        },
+        "skillBaseline": "2.1.2",
+        "themeContract": "2.1.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "requiresHalo": ">=2.23.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "seo-tools-1.10.1.jar",
+        "sha256": "40413a0e803c3510e547e5022d9ab4960a4d7c35803626c13967a0bf259c31e4",
+        "targetVersion": "1.10.1",
+        "latestStable": {
+          "version": "1.10.1",
+          "publishedAt": "2026-08-08T15:20:30.801088110Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.9.5",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginLinks-2.5.0.jar",
+        "sha256": "80002bf31d13d4ad50d6d1b619fe04088fabc49a1cd268ae22f9147a184e6449",
+        "targetVersion": "2.5.0",
+        "latestStable": {
+          "version": "2.5.0",
+          "publishedAt": "2026-10-12T04:09:44Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-sigs/plugin-links/releases/tag/v2.5.0"
+        },
+        "skillBaseline": "2.3.0",
+        "themeContract": "2.3.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginMoments-1.19.0.jar",
+        "sha256": "1966bb104625ea4ac7b5e0dbb8ad95b0a3d542b3d6c0f34bc737708f0314a7e5",
+        "targetVersion": "1.19.0",
+        "latestStable": {
+          "version": "1.19.0",
+          "publishedAt": "2026-09-10T14:14:12Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-sigs/plugin-moments/releases/tag/v1.19.0"
+        },
+        "skillBaseline": "1.19.0",
+        "themeContract": "1.16.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "requiresHalo": ">=2.23.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "page-cache-1.6.0.jar",
+        "sha256": "f9ac158c96ebe9a6677d37b437fada49379ccc9b79dd21d72a372e2380d1a06b",
+        "targetVersion": "1.6.0",
+        "latestStable": {
+          "version": "1.6.0",
+          "publishedAt": "2026-08-13T04:39:13.008748281Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "content-tools-1.8.0.jar",
+        "sha256": "3de24e331b99f22b0abc263b7e84ab25727e0564af9dc258ac987ffd35d6f6a3",
+        "targetVersion": "1.8.0",
+        "latestStable": {
+          "version": "1.8.0",
+          "publishedAt": "2026-08-14T11:10:31.264415810Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-SUvBR/releases/app-release-58jwitjo"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginContactForm-2.1.0.jar",
+        "sha256": "2ed76c98de748326350afc923a29b29c8a369bb31f6892353bd9f959606046e1",
+        "targetVersion": "2.1.0",
+        "latestStable": {
+          "version": "2.1.0",
+          "publishedAt": "2026-10-23T05:04:03.496219433Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-ecpwsgto"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.6.4",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "ai-assistant-3.1.0.jar",
+        "sha256": "c6c1575b0e4009f0c9ffd1a1d593f5c44c5be2e97327c0575e883ca6aad2e22e",
+        "targetVersion": "3.1.0",
+        "latestStable": {
+          "version": "3.1.0",
+          "publishedAt": "2026-09-22T04:17:32.449134823Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-6orwsoce"
+        },
+        "skillBaseline": null,
+        "themeContract": "3.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "requiresHalo": ">=2.20.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "alist-integration-1.2.0.jar",
+        "sha256": "68820666cf54947f887cb50b5d3c427fa3a39c8a66bd88a0ac32b8968eaba501",
+        "targetVersion": "1.2.0",
+        "latestStable": {
+          "version": "1.2.0",
+          "publishedAt": "2026-06-18T07:02:56.850410558Z",
+          "requiresHalo": ">=2.20.0",
+          "url": "https://www.halo.run/store/apps/app-wEGMV/releases/app-release-d2ydr0xa"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "backup-improved-1.5.1.jar",
+        "sha256": "fb98597ced3f3cf0e44ed0c079714cb822ced725d1e9b20070b55d9a69acd273",
+        "targetVersion": "1.5.1",
+        "latestStable": {
+          "version": "1.5.1",
+          "publishedAt": "2026-01-02T10:36:09.532742627Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-3qec25tx"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "requiresHalo": ">=2.21.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-ldap-login-1.3.0.jar",
+        "sha256": "05be69815248c6e45d04376f4b9e7efbe299dddbe396861c586afaf930b3ae11",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2025-06-15T06:58:28.536362639Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-wf3uzfck"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-docsme-1.10.2.jar",
+        "sha256": "f7d2280e59627565917816447862510d476944f452477e5204adc013c4fd4d7c",
+        "targetVersion": "1.10.2",
+        "latestStable": {
+          "version": "1.10.2",
+          "publishedAt": "2026-10-12T04:22:38.423274654Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-eyumqpmy"
+        },
+        "skillBaseline": "1.10.0",
+        "themeContract": "1.7.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "requiresHalo": ">=2.22.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "editor-hyperlink-card-1.9.2.jar",
+        "sha256": "79936406067f7ea572c44d38b9089dcae0d456cd542245d52c1132351cffa542",
+        "targetVersion": "1.9.2",
+        "latestStable": {
+          "version": "1.9.2",
+          "publishedAt": "2026-06-10T07:56:10Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-UpUJA/releases/app-release-epm4pje4"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.9.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "requiresHalo": ">=2.20.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-oauth2-1.7.2.jar",
+        "sha256": "70eb0a40bbdb4c6e4cb781416d21f82b263460bbdf066ae430d2f3b9421515bc",
+        "targetVersion": "1.7.2",
+        "latestStable": {
+          "version": "1.7.2",
+          "publishedAt": "2026-10-24T13:02:27.710268714Z",
+          "requiresHalo": ">=2.20.0",
+          "url": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-3uxqtxfc"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "requiresHalo": ">=2.23.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "plugin-social-login-1.7.0.jar",
+        "sha256": "248f193cbc6908fb0ff5e9f625c1f53b7f6a7e309e2e58ab8173efc021191b2b",
+        "targetVersion": "1.7.0",
+        "latestStable": {
+          "version": "1.7.0",
+          "publishedAt": "2026-03-13T08:48:02.760269072Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-dbseugob"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "restricted-reading-1.9.3.jar",
+        "sha256": "be155a15d913c92175306acaa78ade9da40fd7163bc904789daa609654e14a40",
+        "targetVersion": "1.9.3",
+        "latestStable": {
+          "version": "1.9.3",
+          "publishedAt": "2026-09-29T04:09:39.757997910Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-r8qwe1mg"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.8.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "requiresHalo": ">=2.27.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginCommentWidget-3.4.0.jar",
+        "sha256": "95728b4172c12d0081e7dd4f3bed1eb044b7a255337f2f7694908c4262d54111",
+        "targetVersion": "3.4.0",
+        "latestStable": {
+          "version": "3.4.0",
+          "publishedAt": "2026-10-14T10:00:03Z",
+          "requiresHalo": ">=2.27.0",
+          "url": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-orgmrzv2"
+        },
+        "skillBaseline": "3.3.2",
+        "themeContract": "3.3.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "requiresHalo": ">=2.22.7",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginSitemap-1.3.0.jar",
+        "sha256": "06cccf55a6d6e9369c818de7a52049fddb4b7f20bb83af52ebc329f89a637c8e",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2026-04-27T09:17:15.010574830Z",
+          "requiresHalo": ">=2.22.7",
+          "url": "https://www.halo.run/store/apps/app-QDFMI/releases/app-release-lytd42sz"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginSearchWidget-1.8.0.jar",
+        "sha256": "4ada3473c55a1428134f0373fc7069cb6a906ae44582fd5e7319687f7d27cc2d",
+        "targetVersion": "1.8.0",
+        "latestStable": {
+          "version": "1.8.0",
+          "publishedAt": "2026-10-08T09:54:31Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-dev/plugin-search-widget/releases/tag/v1.8.0"
+        },
+        "skillBaseline": "1.7.1",
+        "themeContract": "1.7.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "requiresHalo": ">=2.21.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "PluginFeed-1.5.0.jar",
+        "sha256": "d7e97df76e502c0f1bd0605d4f3a6dc8b047ed20e1de50fbbed992e95fd33a87",
+        "targetVersion": "1.5.0",
+        "latestStable": {
+          "version": "1.5.0",
+          "publishedAt": "2025-06-15T06:59:05Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://github.com/halo-dev/plugin-feed/releases/tag/v1.5.0"
+        },
+        "skillBaseline": null,
+        "themeContract": "1.5.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "requiresHalo": ">=2.26.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "artifactName": "app-store-integration-1.19.0.jar",
+        "sha256": "5f2322514726180b5eab31f00dd31664fb832021e06a0f31b91a7fbe2b9995e8",
+        "targetVersion": "1.19.0",
+        "latestStable": {
+          "version": "1.19.0",
+          "publishedAt": "2026-09-20T03:57:46.359229939Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-dtqssqka"
+        },
+        "skillBaseline": null,
+        "themeContract": null,
+        "matchesStableTarget": true
+      }
+    ],
+    "assets": [
+      {
+        "path": "css/main.css",
+        "status": 200,
+        "servedSHA256": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "diskSHA256": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "match": true
+      },
+      {
+        "path": "css/post.css",
+        "status": 200,
+        "servedSHA256": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "diskSHA256": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "match": true
+      },
+      {
+        "path": "css/doc.css",
+        "status": 200,
+        "servedSHA256": "85180a6cf388aad6391e23527f3c4b081cbe61419d608cba8c2a2138cd920560",
+        "diskSHA256": "85180a6cf388aad6391e23527f3c4b081cbe61419d608cba8c2a2138cd920560",
+        "match": true
+      },
+      {
+        "path": "css/auth-split.css",
+        "status": 200,
+        "servedSHA256": "3336c6fe372d7dc91157345a54321b514cea21f611ef3d8cb61dfcf2d5cf622a",
+        "diskSHA256": "3336c6fe372d7dc91157345a54321b514cea21f611ef3d8cb61dfcf2d5cf622a",
+        "match": true
+      },
+      {
+        "path": "js/main.js",
+        "status": 200,
+        "servedSHA256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "diskSHA256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "match": true
+      }
+    ]
+  },
+  "coverage": {
+    "installed": 46,
+    "stableTargets": 45,
+    "installedAtStableTarget": 45,
+    "started": 45,
+    "disabled": 1
+  },
+  "coreUpgrade": {
+    "from": "2.27.0",
+    "to": "2.27.1",
+    "startedAt": "2026-10-27T07:20:23.684059+00:00",
+    "imageID": "sha256:dd2510c2b2c822569433d90e1dff6bafc3301556d281d97ed6cb21f306e27d16",
+    "repoDigests": [
+      "registry.fit2cloud.com/halo/halo-pro@sha256:794438ea8537779bdb85c29a6e28a1d8f3107c4740ee93ef9e5e1f48fb50b069"
+    ],
+    "oldContainerKept": "halo-rollback-2.27.0-20261027",
+    "oldContainerRestartPolicy": "no",
+    "newContainerRestartPolicy": "unless-stopped",
+    "sameConfigurationChecks": {
+      "sameCommand": true,
+      "samePorts": true,
+      "sameMounts": true,
+      "sameEntrypoint": true,
+      "sameNetwork": true,
+      "notStarted": true
+    },
+    "applicationConfigurationUnchanged": true,
+    "artifactComparison": {
+      "from": "2.27.0",
+      "to": "2.27.1",
+      "sqlResourceCount": 76,
+      "changedSQL": [],
+      "migrationSchemaExtensionResourceCount": 133,
+      "changedMigrationSchemaExtension": [],
+      "changedResourceCount": 87,
+      "artifactSHA256": {
+        "2.27.0": "05ff1c94937411c2f9fbb5a81492bb00e499a20534e9ebe1dd00c51f973522c6",
+        "2.27.1": "e7154181b6907760a4b7014b8576e9eff77a90afd994d5d1e8ca99e7f0a6d995"
+      }
+    },
+    "postUpgradeFullRestart": {
+      "at": "2026-10-27T07:36:23.530Z",
+      "halo": "2.27.1",
+      "count": 46,
+      "states": {
+        "STARTED": 45,
+        "DISABLED": 1
+      },
+      "failures": []
+    }
+  },
+  "pluginUpgrades": {
+    "targets": [
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "requires": ">=2.26.0",
+        "url": "https://github.com/halo-dev/plugin-mcp-server/releases/download/v1.3.2/plugin-mcp-server-1.3.2.jar",
+        "sha256": "1a58415cf3633104476411e53a5a631f441efe61caebe5a59c9320600ff5543b",
+        "size": 1615272
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "requires": ">=2.20.0",
+        "url": "https://github.com/halo-sigs/plugin-oauth2/releases/download/v1.7.2/plugin-oauth2-1.7.2.jar",
+        "sha256": "70eb0a40bbdb4c6e4cb781416d21f82b263460bbdf066ae430d2f3b9421515bc",
+        "size": 54780
+      }
+    ],
+    "mcp": {
+      "id": "mcp-server",
+      "target": "1.3.2",
+      "startedAt": "2026-10-27T07:22:52.368Z",
+      "status": 200,
+      "version": "1.3.2",
+      "phase": "STARTED",
+      "finishedAt": "2026-10-27T07:22:52.547Z"
+    },
+    "oauth2": {
+      "id": "plugin-oauth2",
+      "target": "1.7.2",
+      "startedAt": "2026-10-27T07:23:19.750Z",
+      "status": 200,
+      "version": "1.7.2",
+      "phase": "STARTED",
+      "finishedAt": "2026-10-27T07:23:19.791Z"
+    }
+  },
+  "themeChanges": {
+    "files": [
+      "templates/gateway_fragments/common.html",
+      "templates/gateway_fragments/login.html",
+      "scripts/verify-core-compatibility.mjs"
+    ],
+    "altcha": "Use official 2.26 ALTCHA 2.3.0 plus legacy solver or 2.27 ALTCHA 3.2.3 without legacy solver; version core helper URLs.",
+    "oauth2": "Display a generic retry message for the official empty oauth2_error redirect parameter. This fixes a pre-existing feedback gap.",
+    "minimumHalo": ">=2.26.0",
+    "oldCoreArtifactVerification": "2.26.0 and 2.26.1 official arm64 image templates/resources inspected; old-core runtime not rerun.",
+    "regressionTests": {
+      "before": {
+        "passed": 9,
+        "failed": 3
+      },
+      "after": {
+        "passed": 12,
+        "failed": 0
+      }
+    },
+    "independentReview": {
+      "blockingFindings": 0,
+      "authTestsPassed": 12,
+      "inMemoryMutationsDetected": 5
+    }
+  },
+  "checks": {
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "build": "passed",
+    "lint": "passed",
+    "formatCheck": "passed",
+    "diffCheck": "passed",
+    "initialBuildAttempt": {
+      "command": "corepack pnpm run build",
+      "exitCode": 1,
+      "reason": "Nested pnpm resolved host 12.11.2 under Corepack while project pins 12.6.0. Direct pnpm invocation selected project 12.6.0; no package or lockfile workaround."
+    },
+    "smokeEvidence": "latest-runtime-smoke.json",
+    "routesEvidence": "latest-runtime-routes.json"
+  },
+  "browser": {
+    "at": "2026-10-27T07:42:00.592Z",
+    "cacheDisabled": true,
+    "screenshotsVisuallyReviewed": true,
+    "alertCaptureBoundary": "The oauthAlert field captures alert text without a visibility filter, including default-hidden fallback nodes. It does not establish a visible error or prove heatmap and load-more success. The 14 page/viewport checks cover the recorded layout, resource identity and script errors; authentication checks below have their own explicit scope.",
+    "pages": [
+      {
+        "name": "home",
+        "width": 1440,
+        "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086888698",
+        "path": "/",
+        "title": "5ee博客 - 123",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["文章发布记录加载失败\n          重试"],
+        "altcha": false
+      },
+      {
+        "name": "post",
+        "width": 1440,
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086896336",
+        "path": "/archives/editor-feature-demo",
+        "title": "编辑器功能演示 - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "doc",
+        "width": 1440,
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086898736",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "title": "通用（全局） - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "catalog",
+        "width": 1440,
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086902033",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+        "title": "主题配置功能详解 - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "links",
+        "width": 1440,
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086902917",
+        "path": "/links",
+        "title": "友情链接 - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "photos",
+        "width": 1440,
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086905129",
+        "path": "/photos",
+        "title": "发现 细腻 的视觉美学 - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["更多照片加载失败。\n          重试"],
+        "altcha": false
+      },
+      {
+        "name": "login",
+        "width": 1440,
+        "url": "http://localhost:8090/login?oauth2_error=&preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086906131",
+        "path": "/login",
+        "title": "登录 - 5ee博客",
+        "scrollWidth": 1440,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["第三方账号登录失败，请重试或使用其他登录方式"],
+        "altcha": true
+      },
+      {
+        "name": "home",
+        "width": 390,
+        "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086907142",
+        "path": "/",
+        "title": "5ee博客 - 123",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["文章发布记录加载失败\n          重试"],
+        "altcha": false
+      },
+      {
+        "name": "post",
+        "width": 390,
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086911709",
+        "path": "/archives/editor-feature-demo",
+        "title": "编辑器功能演示 - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "doc",
+        "width": 390,
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086912880",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "title": "通用（全局） - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "catalog",
+        "width": 390,
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086915039",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+        "title": "主题配置功能详解 - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "links",
+        "width": 390,
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086916111",
+        "path": "/links",
+        "title": "友情链接 - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": [],
+        "altcha": false
+      },
+      {
+        "name": "photos",
+        "width": 390,
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086917033",
+        "path": "/photos",
+        "title": "发现 细腻 的视觉美学 - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["更多照片加载失败。\n          重试"],
+        "altcha": false
+      },
+      {
+        "name": "login",
+        "width": 390,
+        "url": "http://localhost:8090/login?oauth2_error=&preview-theme=theme-sky-blog-1&_theme-verify=upgrade-ui-1793086918004",
+        "path": "/login",
+        "title": "登录 - 5ee博客",
+        "scrollWidth": 390,
+        "overflow": false,
+        "errors": [],
+        "hasBody": true,
+        "themeAssets": true,
+        "oauthAlert": ["第三方账号登录失败，请重试或使用其他登录方式"],
+        "altcha": true
+      }
+    ],
+    "authentication": {
+      "at": "2026-10-27T07:45:28.953Z",
+      "width": 390,
+      "cacheDisabled": true,
+      "before": {
+        "width": 390,
+        "scripts": [
+          "/js/main.js?v=2.27.1",
+          "/webjars/altcha/3.2.3/dist/main/altcha.i18n.min.js",
+          "/js/altcha-utils.js?v=2.27.1"
+        ],
+        "oauthError": true,
+        "widgetCount": 1
+      },
+      "captcha": {
+        "state": "verified",
+        "payloadPresent": true,
+        "errors": [],
+        "formSubmitted": false,
+        "url": "/login"
+      },
+      "remember": {
+        "checked": true,
+        "passkeyRemember": "true"
+      },
+      "rememberRestored": true,
+      "resources": [
+        {
+          "path": "/js/main.js?v=2.27.1",
+          "status": 200,
+          "contentType": "text/javascript",
+          "sha256": "e3f6c470dd19a451e030c96f53e634df9e33d1b38ae5fa19a1731249d2bfcf19",
+          "officialArtifactSHA256": "e3f6c470dd19a451e030c96f53e634df9e33d1b38ae5fa19a1731249d2bfcf19",
+          "matchesOfficialArtifact": true
+        },
+        {
+          "path": "/webjars/altcha/3.2.3/dist/main/altcha.i18n.min.js",
+          "status": 200,
+          "contentType": "text/javascript",
+          "sha256": "5ea2bddc9bb4b94637b9b93fb5646d104d1ae40fe20a0b94a8de50706122f0b0"
+        },
+        {
+          "path": "/js/altcha-utils.js?v=2.27.1",
+          "status": 200,
+          "contentType": "text/javascript",
+          "sha256": "061cf07ed191b7c11ca0c9fc8b3e589315b9342dd0b7fea401cce4be77241220",
+          "officialArtifactSHA256": "061cf07ed191b7c11ca0c9fc8b3e589315b9342dd0b7fea401cce4be77241220",
+          "matchesOfficialArtifact": true
+        }
+      ],
+      "boundary": "Used the official widget verify() to fetch and solve a local challenge; did not submit login or authenticate any account.",
+      "rememberFinalState": {
+        "checked": false,
+        "passkeyRemember": "false"
+      }
+    }
+  },
+  "cache": {
+    "startedAt": "2026-10-27T07:38:41.535Z",
+    "finishedAt": "2026-10-27T07:38:41.656Z",
+    "results": [
+      {
+        "url": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "method": "DELETE",
+        "status": 200
+      }
+    ]
+  },
+  "backend": {
+    "since": "2026-10-27T07:38:41.535Z",
+    "until": "2026-10-27T07:46:05.404752+00:00",
+    "errorCount": 8,
+    "warnCount": 6,
+    "alistTypeMismatchErrors": 8,
+    "otherErrorCount": 0,
+    "thymeleafParseOrExpressionExceptions": 0,
+    "warningFirstLines": [
+      "2026-10-27T15:39:27.566+08:00  WARN 1 --- [ctor-tcp-nio-10] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000",
+      "2026-10-27T15:39:27.578+08:00  WARN 1 --- [actor-tcp-nio-8] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000",
+      "2026-10-27T15:39:27.581+08:00  WARN 1 --- [actor-tcp-nio-8] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000",
+      "2026-10-27T15:40:25.049+08:00  WARN 1 --- [actor-tcp-nio-6] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000",
+      "2026-10-27T15:40:25.063+08:00  WARN 1 --- [actor-tcp-nio-2] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000",
+      "2026-10-27T15:40:25.066+08:00  WARN 1 --- [actor-tcp-nio-8] run.halo.app.extension.PageRequestImpl   : Page size must not be greater than 1000, reset to 1000"
+    ],
+    "otherErrorFirstLines": []
+  },
+  "aiStartupIncident": {
+    "initialFailure": "ai-assistant 3.1.0 could not load run.halo.aifoundation.schema.JsonSchema$Builder before the optional Foundation dependency was loaded.",
+    "evidence": {
+      "assistantLoad": "2026-10-27T15:20:40.594+08:00",
+      "assistantFailure": "2026-10-27T15:20:41.280+08:00",
+      "foundationLoad": "2026-10-27T15:20:42.021+08:00"
+    },
+    "recovery": "Official assistant reload after Foundation STARTED; the backend logged assistant state STARTED at 2026-10-27T07:23:38.123Z. The subsequent API Ready condition recorded 2026-10-27T07:23:40.076469250Z.",
+    "offlineBinaryProbe": "EditorGrepTool inputSchema/outputSchema passed with the exact installed JARs.",
+    "secondFullRestart": {
+      "at": "2026-10-27T07:36:23.530Z",
+      "halo": "2.27.1",
+      "count": 46,
+      "states": {
+        "STARTED": 45,
+        "DISABLED": 1
+      },
+      "failures": []
+    },
+    "boundary": "Recovery is verified; upstream optional-dependency ordering was not changed or claimed fixed."
+  },
+  "remainingValidation": {
+    "MCP": "1.3.2 STARTED. A Halo PAT was rejected with 401 as expected; successful initialize/tools-list needs a dedicated MCP key. No key was created or rotated.",
+    "OAuth2": "1.7.2 STARTED; local failure redirect rendering verified. External provider success/callback/account-binding not exercised.",
+    "CAPTCHA": "Official widget fetched and solved local challenge, verified state and payload present. Login was not submitted, so server-side login acceptance is not claimed.",
+    "plugins": "No model generation, form/comment/vote/lottery writes, payment, WebAuthn or complete backend business validation.",
+    "preRelease": "Data Studio has no stable release; alpha.9 left as-is.",
+    "exclusions": "Live2d kept disabled; Friends retired; AList excluded by user."
+  }
+}

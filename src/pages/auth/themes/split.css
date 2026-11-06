@@ -142,14 +142,15 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 2rem;
+    /* Keep the absolute copyright clear of tall forms on short screens. */
+    padding: 2rem 2rem 4rem;
     background: var(--color-base-100);
     position: relative;
 }
 
 @media (min-width: 640px) {
     .auth-form-section-split {
-        padding: 3rem;
+        padding: 3rem 3rem 4rem;
     }
 }
 
@@ -165,7 +166,6 @@
     background: linear-gradient(135deg,
             oklch(from var(--color-primary) l c h) 0%,
             oklch(from var(--color-primary) calc(l - 0.1) c h) 100%);
-    display: flex;
     align-items: center;
     justify-content: center;
     background-size: cover;

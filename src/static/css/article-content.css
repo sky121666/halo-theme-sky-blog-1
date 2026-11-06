@@ -1204,7 +1204,9 @@
   vertical-align: middle;
 }
 
-#article-content .katex-display {
+/* KaTeX 3 also saves block formulas as .katex-block with MathML output. */
+#article-content .katex-display,
+#article-content .katex-block {
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -1547,4 +1549,10 @@ halo-comment::part(comment-list),
     --vote-shadow: 
         0 2px 12px -2px rgba(0, 0, 0, 0.4),
         0 0 0 1px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+}
+
+/* Native fragment navigation and Swup's scrollIntoView share the same header
+   clearance as the theme's TOC click handler. */
+#article-content :is(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 5rem;
 }

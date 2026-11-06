@@ -88,25 +88,6 @@
     left: 100%;
 }
 
-/* 密码切换 */
-.toggle-password-display-flag[data-show="true"] .password-hidden-icon {
-    display: block !important;
-}
-
-.toggle-password-display-flag[data-show="true"] .password-display-icon {
-    display: none !important;
-}
-
-.toggle-password-display-flag[data-show="false"] .password-hidden-icon,
-.toggle-password-display-flag:not([data-show]) .password-hidden-icon {
-    display: none !important;
-}
-
-.toggle-password-display-flag[data-show="false"] .password-display-icon,
-.toggle-password-display-flag:not([data-show]) .password-display-icon {
-    display: block !important;
-}
-
 .auth-form-container {
     width: 100%;
     max-width: 600px;

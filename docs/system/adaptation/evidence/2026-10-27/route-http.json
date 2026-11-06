@@ -1,0 +1,1684 @@
+{
+  "checkedAt": "2026-10-27T03:10:36.981Z",
+  "environment": {
+    "checkedAt": "2026-10-27T03:10:05.921Z",
+    "cacheFreshSince": "2026-10-27T03:10:05.921Z",
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.27.0",
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.50"
+    },
+    "previewTheme": "theme-sky-blog-1",
+    "theme": {
+      "algorithm": "sha256",
+      "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+      "fileCount": 369,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "localSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "servedSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "matches": true
+      },
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "localSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+        "servedSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+        "matches": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "localSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+        "servedSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+        "matches": true
+      }
+    ]
+  },
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+    "fileCount": 369,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "unchangedDuringRun": true,
+  "scope": "anonymous read-only HTTP preview, not browser business interactions",
+  "results": [
+    {
+      "path": "/archives",
+      "url": "http://localhost:8090/archives?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/about",
+      "url": "http://localhost:8090/about?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "关于我 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/",
+      "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "5ee博客 - 123",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2024/12",
+      "url": "http://localhost:8090/archives/2024/12?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2024 年 12 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/02",
+      "url": "http://localhost:8090/archives/2025/02?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 02 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/04",
+      "url": "http://localhost:8090/archives/2025/04?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 04 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/03",
+      "url": "http://localhost:8090/archives/2025/03?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 03 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/05",
+      "url": "http://localhost:8090/archives/2025/05?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 05 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/06",
+      "url": "http://localhost:8090/archives/2025/06?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 06 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/07",
+      "url": "http://localhost:8090/archives/2025/07?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 07 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2025/08",
+      "url": "http://localhost:8090/archives/2025/08?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2025 年 08 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2026/02",
+      "url": "http://localhost:8090/archives/2026/02?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2026 年 02 月文章归档 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/CNnnwQh7",
+      "url": "http://localhost:8090/archives/CNnnwQh7?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "1panel搭建mihomo让你的服务器正常访问谷歌Gemini - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/2U9qMYvW",
+      "url": "http://localhost:8090/archives/2U9qMYvW?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Astro核心内容总结 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/FLQkQJLg",
+      "url": "http://localhost:8090/archives/FLQkQJLg?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "记录试用TRAE SOLO模式的一次历程 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/JGvxASVB",
+      "url": "http://localhost:8090/archives/JGvxASVB?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "在Mac上配置Podman挂载外置硬盘目录 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/U42G91AM",
+      "url": "http://localhost:8090/archives/U42G91AM?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Dify0.15.3：修改环境变量并通过 Docker Compose 复用现有容器 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/VHHIpSkP",
+      "url": "http://localhost:8090/archives/VHHIpSkP?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "dify shandbox 给python引入包 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "编辑器功能演示 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/ijhJxHtw",
+      "url": "http://localhost:8090/archives/ijhJxHtw?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "测试 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/j3efAbg4",
+      "url": "http://localhost:8090/archives/j3efAbg4?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "TTF 在线转换为 CSS+WOFF2 字体分包工具推荐 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/jeco9MwB",
+      "url": "http://localhost:8090/archives/jeco9MwB?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "1panel 如何快速使用 docker 创建 3x-ui - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/jJkjiM27",
+      "url": "http://localhost:8090/archives/jJkjiM27?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "VMware vSphere 8.0U3e 全套镜像下载（包含戴尔、浪潮、联想、惠普等自定义镜像） - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/lKkDC8OW",
+      "url": "http://localhost:8090/archives/lKkDC8OW?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Halo 主题使用 vite 构建样式的一个改进方式 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/page/2",
+      "url": "http://localhost:8090/archives/page/2?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文章归档 - 第 2 页 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/mac-restart-podman-container-start",
+      "url": "http://localhost:8090/archives/mac-restart-podman-container-start?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Mac 重启后启动 Podman 容器的完整流程 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/nsoSkHzN",
+      "url": "http://localhost:8090/archives/nsoSkHzN?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "dify如何使用Unstructured ETL 提取方案 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/authors/sky0821",
+      "url": "http://localhost:8090/authors/sky0821?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 的文章 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/bangumis",
+      "url": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "追番列表 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories",
+      "url": "http://localhost:8090/categories?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文章分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/1panel",
+      "url": "http://localhost:8090/categories/1panel?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "1panel 分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/archives/tFyvnqK0",
+      "url": "http://localhost:8090/archives/tFyvnqK0?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "1panel 用docker图形化安装3x-ui - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/ai",
+      "url": "http://localhost:8090/categories/ai?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "AI 分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/halo",
+      "url": "http://localhost:8090/categories/halo?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "halo 分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/ai/page/2",
+      "url": "http://localhost:8090/categories/ai/page/2?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "AI 分类 - 第 2 页 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/qi-ta",
+      "url": "http://localhost:8090/categories/qi-ta?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "其他 分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/dishes",
+      "url": "http://localhost:8090/dishes?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": false,
+        "themes": ["theme-acard"]
+      },
+      "independentPage": true,
+      "title": "家庭私厨",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories/qian-duan",
+      "url": "http://localhost:8090/categories/qian-duan?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "前端 分类 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/categories?p=2",
+      "url": "http://localhost:8090/categories?p=2&preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文章分类 - 第 2 页 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/docs",
+      "url": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文档中心 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1",
+      "url": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "简介 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/douban",
+      "url": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "豆瓣记录 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/equipments",
+      "url": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "我的装备 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/login",
+      "url": "http://localhost:8090/login?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "登录 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/login?method=passkey",
+      "url": "http://localhost:8090/login?method=passkey&preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "登录 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/links",
+      "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "友情链接 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/links?view=friends",
+      "url": "http://localhost:8090/links?view=friends&preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "友情链接 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments",
+      "url": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-1778854511638-3wpy3noe",
+      "url": "http://localhost:8090/moments/moment-1778854511638-3wpy3noe?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-05-15 22:15 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-32asaylm",
+      "url": "http://localhost:8090/moments/moment-32asaylm?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-4sbc36v5",
+      "url": "http://localhost:8090/moments/moment-4sbc36v5?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:34 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-9roi1c7n",
+      "url": "http://localhost:8090/moments/moment-9roi1c7n?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-04-07 08:33 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-bxbdkuwu",
+      "url": "http://localhost:8090/moments/moment-bxbdkuwu?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-f6ircurs",
+      "url": "http://localhost:8090/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-05-27 08:51 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-qbxmx6d5",
+      "url": "http://localhost:8090/moments/moment-qbxmx6d5?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-ytpmkzzy",
+      "url": "http://localhost:8090/moments/moment-ytpmkzzy?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:34 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-qrb5xcuw",
+      "url": "http://localhost:8090/moments/moment-qrb5xcuw?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-03-08 16:35 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/moment-cvbl3r6b",
+      "url": "http://localhost:8090/moments/moment-cvbl3r6b?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Sky 于 2026-04-02 18:30 发布的瞬间 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos",
+      "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "发现 细腻 的视觉美学 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/moments/page/2",
+      "url": "http://localhost:8090/moments/page/2?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "瞬间 - 第 2 页 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "url": "http://localhost:8090/photos/photo-14xk1htg?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3E3CE107.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-2qclll5g",
+      "url": "http://localhost:8090/photos/photo-2qclll5g?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3C257F83.jpeg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-3x39qxyf",
+      "url": "http://localhost:8090/photos/photo-3x39qxyf?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3F6E3B52.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-8os50ylm",
+      "url": "http://localhost:8090/photos/photo-8os50ylm?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3A31286D.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-dgzc3rqv",
+      "url": "http://localhost:8090/photos/photo-dgzc3rqv?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3A31522.png - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-gaazy0ws",
+      "url": "http://localhost:8090/photos/photo-gaazy0ws?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3BED22B3.JPEG - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-gtulnjy1",
+      "url": "http://localhost:8090/photos/photo-gtulnjy1?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3A2ACB44.JPEG - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-hysezd2w",
+      "url": "http://localhost:8090/photos/photo-hysezd2w?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2EB6AAD4.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-ihzgnfm4",
+      "url": "http://localhost:8090/photos/photo-ihzgnfm4?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2F87FAF2.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-lglk3ors",
+      "url": "http://localhost:8090/photos/photo-lglk3ors?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "IMG20260503131609.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-mogdulku",
+      "url": "http://localhost:8090/photos/photo-mogdulku?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3EFE0A00.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-nsrwcpna",
+      "url": "http://localhost:8090/photos/photo-nsrwcpna?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3B80A221.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-nbgx3edf",
+      "url": "http://localhost:8090/photos/photo-nbgx3edf?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "IMG20260502155214_BURST000_COVER.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-rgolxmbv",
+      "url": "http://localhost:8090/photos/photo-rgolxmbv?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3A31910A.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-ugdx4sx6",
+      "url": "http://localhost:8090/photos/photo-ugdx4sx6?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "2F87FAF2.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-tidpcttl",
+      "url": "http://localhost:8090/photos/photo-tidpcttl?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3A2228D6.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-vyd6cj4k",
+      "url": "http://localhost:8090/photos/photo-vyd6cj4k?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "3AFCFA5E.jpg - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-xqgifxkz",
+      "url": "http://localhost:8090/photos/photo-xqgifxkz?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "111_1080P_Dynamic_Best.webp - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-yvqae9y4",
+      "url": "http://localhost:8090/photos/photo-yvqae9y4?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "111_1080P_Dynamic_Best.webp - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/schedule-calendar",
+      "url": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": false,
+        "themes": []
+      },
+      "independentPage": true,
+      "title": "日程日历",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/photos/photo-zepgpelt",
+      "url": "http://localhost:8090/photos/photo-zepgpelt?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Gemini_Generated_Image_20i92120i92120i9_2.png - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/signup",
+      "url": "http://localhost:8090/signup?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "注册 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/privacy",
+      "url": "http://localhost:8090/privacy?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "测试 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/steam",
+      "url": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Steam 游戏库 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags",
+      "url": "http://localhost:8090/tags?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "文章标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/1panel",
+      "url": "http://localhost:8090/tags/1panel?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "1panel 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/alist",
+      "url": "http://localhost:8090/tags/alist?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "alist 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/ai",
+      "url": "http://localhost:8090/tags/ai?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "AI 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/cha-jian-kai-fa",
+      "url": "http://localhost:8090/tags/cha-jian-kai-fa?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "插件开发 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/astro",
+      "url": "http://localhost:8090/tags/astro?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Astro 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/demo",
+      "url": "http://localhost:8090/tags/demo?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "演示 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/dify",
+      "url": "http://localhost:8090/tags/dify?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "dify 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/cursor",
+      "url": "http://localhost:8090/tags/cursor?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "cursor 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/docker",
+      "url": "http://localhost:8090/tags/docker?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "docker 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/editor",
+      "url": "http://localhost:8090/tags/editor?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "编辑器 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/fan-xiang-dai-li",
+      "url": "http://localhost:8090/tags/fan-xiang-dai-li?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "反向代理 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/frp",
+      "url": "http://localhost:8090/tags/frp?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "frp 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/fu-wu-qi",
+      "url": "http://localhost:8090/tags/fu-wu-qi?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "服务器 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/halo",
+      "url": "http://localhost:8090/tags/halo?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Halo 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/lobechat",
+      "url": "http://localhost:8090/tags/lobechat?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "lobechat 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/hao",
+      "url": "http://localhost:8090/tags/hao?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "hao 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/macos",
+      "url": "http://localhost:8090/tags/macos?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "macos 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/mcp",
+      "url": "http://localhost:8090/tags/mcp?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "mcp 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/mo-ban-zhi-zuo",
+      "url": "http://localhost:8090/tags/mo-ban-zhi-zuo?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "模板制作 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/nas",
+      "url": "http://localhost:8090/tags/nas?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "NAS 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/pod",
+      "url": "http://localhost:8090/tags/pod?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "pod 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/podman",
+      "url": "http://localhost:8090/tags/podman?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "podman 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/tailwindcss",
+      "url": "http://localhost:8090/tags/tailwindcss?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "tailwindcss 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/tr-ae",
+      "url": "http://localhost:8090/tags/tr-ae?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "trae 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/ubuntu",
+      "url": "http://localhost:8090/tags/ubuntu?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "ubuntu 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/vaultwarden",
+      "url": "http://localhost:8090/tags/vaultwarden?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "Vaultwarden 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/vue",
+      "url": "http://localhost:8090/tags/vue?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "vue 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/terms",
+      "url": "http://localhost:8090/terms?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 404,
+      "expectedStatus": 404,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": true,
+      "title": "404 - Not Found - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    },
+    {
+      "path": "/tags/vite",
+      "url": "http://localhost:8090/tags/vite?preview-theme=theme-sky-blog-1&adaptation=20261027-final",
+      "status": 200,
+      "expectedStatus": 200,
+      "themeIdentity": {
+        "ok": true,
+        "themes": ["theme-sky-blog-1"]
+      },
+      "independentPage": false,
+      "title": "vite 标签 - 5ee博客",
+      "cacheAt": null,
+      "ok": true
+    }
+  ],
+  "summary": {
+    "total": 114,
+    "passed": 114,
+    "failed": 0
+  }
+}

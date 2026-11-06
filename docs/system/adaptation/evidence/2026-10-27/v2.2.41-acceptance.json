@@ -1,0 +1,3165 @@
+{
+  "schemaVersion": 1,
+  "completedAt": "2026-10-27T10:10:46.860354Z",
+  "clientDate": "2026-10-27",
+  "scope": "主题2.2.41与最低Halo2.27声明、实际界面补修及精确组合验收。不修改插件源码、业务配置或数据库；未执行Git暂存/提交/推送/标签/发布。",
+  "versionEvidence": {
+    "officialStableAndSkillBaselines": "version-audit.json",
+    "upgradedArtifactsAndEarlierRuntime": "latest-runtime-upgrade.json",
+    "note": "保留原文件的历史实装版本和源码指纹；下面单独记录2.2.41。"
+  },
+  "runtime": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.27.1",
+    "edition": "halo-pro",
+    "activeTheme": "theme-sky-blog-3",
+    "previewTheme": "theme-sky-blog-1",
+    "theme": {
+      "name": "theme-sky-blog-1",
+      "version": "2.2.41",
+      "requires": ">=2.27.0",
+      "phase": "READY"
+    },
+    "codeIdentity": {
+      "algorithm": "sha256",
+      "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+      "fileCount": 373,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "identityBoundary": "指纹包括scripts目录的未跟踪会话辅助脚本，表示本次工作区，不等于未来排除这些文件后的提交/发行对象。",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "pluginSummary": {
+      "installed": 46,
+      "started": 45,
+      "disabled": 1,
+      "matchingStableTargets": 45,
+      "prereleaseOnly": ["data-studio@1.0.0-alpha.9"]
+    },
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.3.1",
+        "latestStable": {
+          "version": "1.3.1",
+          "publishedAt": "2026-09-24T11:14:31.480638907Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-pcgkazpl/releases/app-release-6ytxtxav"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.3.2",
+        "latestStable": {
+          "version": "1.3.2",
+          "publishedAt": "2026-10-26T09:11:14.332026429Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-ybv96zol/releases/app-release-cnsmkng4"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2026-10-22T08:22:03Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-acslk9nu/releases/app-release-kyddy5r1"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.2",
+        "targetVersion": "3.0.0",
+        "latestStable": {
+          "version": "3.0.0",
+          "publishedAt": "2026-01-16T08:12:23Z",
+          "requiresHalo": ">=2.22.2",
+          "url": "https://www.halo.run/store/apps/app-ISCsX/releases/app-release-l4qbvcue"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "3.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.2.7",
+        "latestStable": {
+          "version": "1.2.7",
+          "publishedAt": "2026-09-28T10:42:14Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/chengzhongxue/plugin-douban/releases/tag/1.2.7"
+        },
+        "skillBaseline": "1.2.6",
+        "previousThemeContract": "1.2.6",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.10",
+        "targetVersion": "1.1.0",
+        "latestStable": {
+          "version": "1.1.0",
+          "publishedAt": "2026-04-18T15:23:15Z",
+          "requiresHalo": ">=2.22.10",
+          "url": "https://www.halo.run/store/apps/app-umgvtji6/releases/app-release-ecm0eqla"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.1.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.23.0",
+        "targetVersion": "1.0.5",
+        "latestStable": {
+          "version": "1.0.5",
+          "publishedAt": "2026-05-04T05:16:49Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-ion2qhko/releases/app-release-jvggype9"
+        },
+        "skillBaseline": "1.0.5",
+        "previousThemeContract": "1.0.5",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.23.0",
+        "targetVersion": "1.0.3",
+        "latestStable": {
+          "version": "1.0.3",
+          "publishedAt": "2026-05-02T15:02:23Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-espsmupa/releases/app-release-smxrkwj0"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.0.3",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.25.0",
+        "targetVersion": "3.5.0",
+        "latestStable": {
+          "version": "3.5.0",
+          "publishedAt": "2026-08-08T14:32:35Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-1ubowut0/releases/app-release-mdsorinh"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "3.3.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.0.2",
+        "latestStable": {
+          "version": "1.0.2",
+          "publishedAt": "2026-04-23T05:01:02.441423051Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-8wtcwm5t/releases/app-release-6dooiafp"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.0.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED",
+        "requiresHalo": ">=2.25.0",
+        "targetVersion": "2.2.0",
+        "latestStable": {
+          "version": "2.2.0",
+          "publishedAt": "2026-07-28T04:19:21.336827790Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-oPNFQ/releases/app-release-wyldvl72"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.1.0",
+        "latestStable": {
+          "version": "1.1.0",
+          "publishedAt": "2026-08-26T03:56:57.263067042Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-pwojlwgu/releases/app-release-j3solsy2"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "2.0.0",
+        "latestStable": {
+          "version": "2.0.0",
+          "publishedAt": "2026-10-11T00:38:40Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-g7tggrco/releases/app-release-rnm9bjxh"
+        },
+        "skillBaseline": "1.0.4",
+        "previousThemeContract": "1.0.4",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.1.1",
+        "latestStable": {
+          "version": "1.1.1",
+          "publishedAt": "2026-05-09T07:34:55Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://github.com/chengzhongxue/plugin-equipment/releases/tag/1.1.1"
+        },
+        "skillBaseline": "1.1.1",
+        "previousThemeContract": "1.1.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.21.0",
+        "targetVersion": "1.4.1",
+        "latestStable": {
+          "version": "1.4.1",
+          "publishedAt": "2026-07-08T09:00:11Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://github.com/Roozenlz/plugin-bilibili-bangumi/releases/tag/1.4.1"
+        },
+        "skillBaseline": "1.4.1",
+        "previousThemeContract": "1.4.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.1",
+        "targetVersion": "1.0.0",
+        "latestStable": {
+          "version": "1.0.0",
+          "publishedAt": "2026-06-27T18:29:43Z",
+          "requiresHalo": ">=2.22.1",
+          "url": "https://github.com/Tim0x0/halo-plugin-steam/releases/tag/v1.0.0"
+        },
+        "skillBaseline": "1.0.0",
+        "previousThemeContract": "1.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.1.3",
+        "latestStable": {
+          "version": "1.1.3",
+          "publishedAt": "2025-12-15T17:28:17Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-veyvzyhv/releases/app-release-np8tb8nv"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.1.3",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.5.1",
+        "latestStable": {
+          "version": "1.5.1",
+          "publishedAt": "2026-08-20T10:03:27Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-kzloktzn/releases/app-release-mzrz7aqk"
+        },
+        "skillBaseline": "1.5.1",
+        "previousThemeContract": "1.3.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": null,
+        "latestStable": null,
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": null
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.11.0",
+        "targetVersion": "1.5.2",
+        "latestStable": {
+          "version": "1.5.2",
+          "publishedAt": "2026-01-23T10:15:00Z",
+          "requiresHalo": ">=2.11.0",
+          "url": "https://www.halo.run/store/apps/app-ahBRi/releases/app-release-rqudxdgh"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.5.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.24.0",
+        "targetVersion": "1.17.0",
+        "latestStable": {
+          "version": "1.17.0",
+          "publishedAt": "2026-06-29T11:12:40.994766843Z",
+          "requiresHalo": ">=2.24.0",
+          "url": "https://www.halo.run/store/apps/app-Qxhpp/releases/app-release-hdy1v1xf"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.25.0",
+        "targetVersion": "1.9.0",
+        "latestStable": {
+          "version": "1.9.0",
+          "publishedAt": "2026-06-26T10:08:22.672303375Z",
+          "requiresHalo": ">=2.25.0",
+          "url": "https://www.halo.run/store/apps/app-HTyhC/releases/app-release-fvqxsvlk"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.7.0",
+        "latestStable": {
+          "version": "1.7.0",
+          "publishedAt": "2026-08-17T04:43:47.959127299Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-NgHnY/releases/app-release-lgexvgkn"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.1.2",
+        "latestStable": {
+          "version": "1.1.2",
+          "publishedAt": "2026-04-09T21:10:36.776276521Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-jZHhX/releases/app-release-soqqub9p"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.10.0",
+        "targetVersion": "1.2.1",
+        "latestStable": {
+          "version": "1.2.1",
+          "publishedAt": "2024-07-03T04:21:03Z",
+          "requiresHalo": ">=2.10.0",
+          "url": "https://github.com/halo-sigs/plugin-lightgallery/releases/tag/v1.2.1"
+        },
+        "skillBaseline": "1.2.1",
+        "previousThemeContract": "1.2.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "2.1.2",
+        "latestStable": {
+          "version": "2.1.2",
+          "publishedAt": "2026-06-22T16:06:46Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://github.com/halo-sigs/plugin-photos/releases/tag/v2.1.2"
+        },
+        "skillBaseline": "2.1.2",
+        "previousThemeContract": "2.1.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.23.0",
+        "targetVersion": "1.10.1",
+        "latestStable": {
+          "version": "1.10.1",
+          "publishedAt": "2026-08-08T15:20:30.801088110Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-zemd61lg"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.9.5",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "2.5.0",
+        "latestStable": {
+          "version": "2.5.0",
+          "publishedAt": "2026-10-12T04:09:44Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-sigs/plugin-links/releases/tag/v2.5.0"
+        },
+        "skillBaseline": "2.3.0",
+        "previousThemeContract": "2.3.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.19.0",
+        "latestStable": {
+          "version": "1.19.0",
+          "publishedAt": "2026-09-10T14:14:12Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-sigs/plugin-moments/releases/tag/v1.19.0"
+        },
+        "skillBaseline": "1.19.0",
+        "previousThemeContract": "1.16.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.23.0",
+        "targetVersion": "1.6.0",
+        "latestStable": {
+          "version": "1.6.0",
+          "publishedAt": "2026-08-13T04:39:13.008748281Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-BaamQ/releases/app-release-dgt4lgbd"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.8.0",
+        "latestStable": {
+          "version": "1.8.0",
+          "publishedAt": "2026-08-14T11:10:31.264415810Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-SUvBR/releases/app-release-58jwitjo"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "2.1.0",
+        "latestStable": {
+          "version": "2.1.0",
+          "publishedAt": "2026-10-23T05:04:03.496219433Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-gSebd/releases/app-release-ecpwsgto"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.6.4",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "3.1.0",
+        "latestStable": {
+          "version": "3.1.0",
+          "publishedAt": "2026-09-22T04:17:32.449134823Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-riNgb/releases/app-release-6orwsoce"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "3.0.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.20.0",
+        "targetVersion": "1.2.0",
+        "latestStable": {
+          "version": "1.2.0",
+          "publishedAt": "2026-06-18T07:02:56.850410558Z",
+          "requiresHalo": ">=2.20.0",
+          "url": "https://www.halo.run/store/apps/app-wEGMV/releases/app-release-d2ydr0xa"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.5.1",
+        "latestStable": {
+          "version": "1.5.1",
+          "publishedAt": "2026-01-02T10:36:09.532742627Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-dHakX/releases/app-release-3qec25tx"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.21.0",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2025-06-15T06:58:28.536362639Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://www.halo.run/store/apps/app-vrSqF/releases/app-release-wf3uzfck"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.10.2",
+        "latestStable": {
+          "version": "1.10.2",
+          "publishedAt": "2026-10-12T04:22:38.423274654Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-yffxw/releases/app-release-eyumqpmy"
+        },
+        "skillBaseline": "1.10.0",
+        "previousThemeContract": "1.7.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.0",
+        "targetVersion": "1.9.2",
+        "latestStable": {
+          "version": "1.9.2",
+          "publishedAt": "2026-06-10T07:56:10Z",
+          "requiresHalo": ">=2.22.0",
+          "url": "https://www.halo.run/store/apps/app-UpUJA/releases/app-release-epm4pje4"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.9.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.20.0",
+        "targetVersion": "1.7.2",
+        "latestStable": {
+          "version": "1.7.2",
+          "publishedAt": "2026-10-24T13:02:27.710268714Z",
+          "requiresHalo": ">=2.20.0",
+          "url": "https://www.halo.run/store/apps/app-ESVDK/releases/app-release-3uxqtxfc"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.23.0",
+        "targetVersion": "1.7.0",
+        "latestStable": {
+          "version": "1.7.0",
+          "publishedAt": "2026-03-13T08:48:02.760269072Z",
+          "requiresHalo": ">=2.23.0",
+          "url": "https://www.halo.run/store/apps/app-IXZkJ/releases/app-release-dbseugob"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.9.3",
+        "latestStable": {
+          "version": "1.9.3",
+          "publishedAt": "2026-09-29T04:09:39.757997910Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-TzRqd/releases/app-release-r8qwe1mg"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.8.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.27.0",
+        "targetVersion": "3.4.0",
+        "latestStable": {
+          "version": "3.4.0",
+          "publishedAt": "2026-10-14T10:00:03Z",
+          "requiresHalo": ">=2.27.0",
+          "url": "https://www.halo.run/store/apps/app-YXyaD/releases/app-release-orgmrzv2"
+        },
+        "skillBaseline": "3.3.2",
+        "previousThemeContract": "3.3.2",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.22.7",
+        "targetVersion": "1.3.0",
+        "latestStable": {
+          "version": "1.3.0",
+          "publishedAt": "2026-04-27T09:17:15.010574830Z",
+          "requiresHalo": ">=2.22.7",
+          "url": "https://www.halo.run/store/apps/app-QDFMI/releases/app-release-lytd42sz"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.8.0",
+        "latestStable": {
+          "version": "1.8.0",
+          "publishedAt": "2026-10-08T09:54:31Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://github.com/halo-dev/plugin-search-widget/releases/tag/v1.8.0"
+        },
+        "skillBaseline": "1.7.1",
+        "previousThemeContract": "1.7.1",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.21.0",
+        "targetVersion": "1.5.0",
+        "latestStable": {
+          "version": "1.5.0",
+          "publishedAt": "2025-06-15T06:59:05Z",
+          "requiresHalo": ">=2.21.0",
+          "url": "https://github.com/halo-dev/plugin-feed/releases/tag/v1.5.0"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": "1.5.0",
+        "matchesStableTarget": true
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED",
+        "requiresHalo": ">=2.26.0",
+        "targetVersion": "1.19.0",
+        "latestStable": {
+          "version": "1.19.0",
+          "publishedAt": "2026-09-20T03:57:46.359229939Z",
+          "requiresHalo": ">=2.26.0",
+          "url": "https://www.halo.run/store/apps/app-VYJbF/releases/app-release-dtqssqka"
+        },
+        "skillBaseline": null,
+        "previousThemeContract": null,
+        "matchesStableTarget": true
+      }
+    ]
+  },
+  "checks": {
+    "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+    "build": {
+      "command": "pnpm run build",
+      "result": "passed",
+      "localLog": "/tmp/sky1-v2241-acceptance-20261027/build-final-description.log",
+      "includes": [
+        "typecheck",
+        "typecheck:config",
+        "core-compatibility 17/17",
+        "doc-navigation 5/5",
+        "photos-lifecycle 7/7",
+        "contact-form-lifecycle 5/5",
+        "shiki-normalization 3/3",
+        "plugin-contracts 27 items",
+        "links-runtime",
+        "plugin-upgrades",
+        "plugin-evidence",
+        "SEO",
+        "heatmap Asia/Shanghai and America/Los_Angeles",
+        "Vite build",
+        "build artifacts",
+        "package and archive SEO"
+      ]
+    },
+    "lint": {
+      "command": "pnpm run lint",
+      "result": "passed",
+      "localLog": "/tmp/sky1-v2241-acceptance-20261027/lint-final-description.log"
+    },
+    "format": {
+      "command": "pnpm run format:check",
+      "result": "passed",
+      "localLog": "/tmp/sky1-v2241-acceptance-20261027/format-v2241-evidence-final.log"
+    },
+    "diff": {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    "httpReadChecks": {
+      "report": "v2.2.41-smoke.json",
+      "passed": 33,
+      "total": 33,
+      "boundary": "Browser-like HTML Accept, Page Cache age, HTTP/API reads and rendered markers; not browser interaction or write workflows"
+    },
+    "routeChecks": {
+      "report": "v2.2.41-routes.json",
+      "passed": 114,
+      "total": 114,
+      "http200": 113,
+      "expected404": ["/terms"],
+      "boundary": "HTTP/SSR及资源身份检查，不等同114个页面的全交互验收。"
+    }
+  },
+  "cacheVerification": {
+    "startedAt": "2026-10-27T10:01:14.827Z",
+    "completedAt": "2026-10-27T10:01:14.988Z",
+    "localTime": "2026-10-27 18:01:14 Asia/Shanghai",
+    "requests": [
+      {
+        "path": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "path": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "method": "DELETE",
+        "status": 200
+      }
+    ],
+    "browser": "同一浏览器连接Network.setCacheDisabled=true；整页导航检查主题身份与版本；PJAX另做交互。",
+    "http": {
+      "freshSince": "2026-10-27T10:01:14.827Z",
+      "nonce": "1793095290156",
+      "header": "Cache-Control: no-cache"
+    },
+    "assets": [
+      {
+        "asset": "css/main.css",
+        "status": 200,
+        "served": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "local": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "match": true
+      },
+      {
+        "asset": "css/doc.css",
+        "status": 200,
+        "served": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "local": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "match": true
+      },
+      {
+        "asset": "css/photos.css",
+        "status": 200,
+        "served": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb",
+        "local": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb",
+        "match": true
+      },
+      {
+        "asset": "css/auth-split.css",
+        "status": 200,
+        "served": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "local": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "match": true
+      },
+      {
+        "asset": "css/about.css",
+        "status": 200,
+        "served": "2bae27f908fc2894e00fa9202f5f3c29cfdcf308d20b5771d36ba46f70ac15a9",
+        "local": "2bae27f908fc2894e00fa9202f5f3c29cfdcf308d20b5771d36ba46f70ac15a9",
+        "match": true
+      },
+      {
+        "asset": "css/equipment.css",
+        "status": 200,
+        "served": "3d7a951e828b31f7fc2d79dcc59e2425d42cd672053fb3469f0ff8bc74fe3492",
+        "local": "3d7a951e828b31f7fc2d79dcc59e2425d42cd672053fb3469f0ff8bc74fe3492",
+        "match": true
+      },
+      {
+        "asset": "js/main.js",
+        "status": 200,
+        "served": "078f9f9ecfb1d7dca287ad17f5c7f016588b6018b72c3c2d5dff5a3c8152c469",
+        "local": "078f9f9ecfb1d7dca287ad17f5c7f016588b6018b72c3c2d5dff5a3c8152c469",
+        "match": true
+      },
+      {
+        "asset": "js/doc.js",
+        "status": 200,
+        "served": "cbf1cf2184848405edd28463e4f3a9bf889d8a5e240d838c7df5c269526a4078",
+        "local": "cbf1cf2184848405edd28463e4f3a9bf889d8a5e240d838c7df5c269526a4078",
+        "match": true
+      },
+      {
+        "asset": "js/photos.js",
+        "status": 200,
+        "served": "80a78c92fcfedf924db96f025eb5df2571b041e4206be784831203dc683b9eac",
+        "local": "80a78c92fcfedf924db96f025eb5df2571b041e4206be784831203dc683b9eac",
+        "match": true
+      },
+      {
+        "asset": "js/chunks/auth-common-2.2.41.js",
+        "status": 200,
+        "served": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "local": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "match": true
+      }
+    ],
+    "boundary": "同窗口10份主题CSS/JS的服务字节与磁盘一致；不代表生产代理/CDN缓存已经刷新。"
+  },
+  "browser": {
+    "engine": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "automation": "ego-browser TaskSpace 161；已结束任务窗口。",
+    "fullPageRound": {
+      "codeHash": "f4da4d7c771316ad70d91508e084a8a9082f64088477c5055206a09f5b10e0fd",
+      "at": "2026-10-27T09:54:43.374Z",
+      "passed": 48,
+      "total": 48,
+      "scope": "Real browser direct navigation, rendering, scroll, screenshot, viewport overflow and captured script errors. Interaction is covered separately; HTTP 200 is not used as the browser acceptance criterion.",
+      "viewports": [
+        {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        }
+      ],
+      "records": [
+        {
+          "page": "home",
+          "route": "/",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 5058,
+            "overflow": false,
+            "bodyTextLength": 2603
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 5058,
+            "overflow": false,
+            "bodyTextLength": 2603
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "article",
+          "route": "/archives/editor-feature-demo",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 6890,
+            "overflow": false,
+            "bodyTextLength": 1286
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 6890,
+            "overflow": false,
+            "bodyTextLength": 1316
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "docs",
+          "route": "/docs",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1003,
+            "overflow": false,
+            "bodyTextLength": 241
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "overflow": false,
+            "bodyTextLength": 241
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "doc-body",
+          "route": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 7095,
+            "overflow": false,
+            "bodyTextLength": 868
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 7095,
+            "overflow": false,
+            "bodyTextLength": 868
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "doc-catalog",
+          "route": "/docs/halo-theme-sky-blog-1/theme-settings",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1446,
+            "overflow": false,
+            "bodyTextLength": 539
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1446,
+            "overflow": false,
+            "bodyTextLength": 539
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "links",
+          "route": "/links",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 3343,
+            "overflow": false,
+            "bodyTextLength": 1857
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 3343,
+            "overflow": false,
+            "bodyTextLength": 1857
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": ["liyinwaihe.com"],
+          "passed": true
+        },
+        {
+          "page": "photos",
+          "route": "/photos",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2592,
+            "overflow": false,
+            "bodyTextLength": 723
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 4577,
+            "overflow": false,
+            "bodyTextLength": 1177
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "photo-detail",
+          "route": "/photos/photo-lglk3ors",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1434,
+            "overflow": false,
+            "bodyTextLength": 441
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1434,
+            "overflow": false,
+            "bodyTextLength": 441
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "moments",
+          "route": "/moments",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 5628,
+            "overflow": false,
+            "bodyTextLength": 648
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 5628,
+            "overflow": false,
+            "bodyTextLength": 648
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "moment-detail",
+          "route": "/moments/moment-1778854511638-3wpy3noe",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2047,
+            "overflow": false,
+            "bodyTextLength": 257
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2047,
+            "overflow": false,
+            "bodyTextLength": 257
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "archives",
+          "route": "/archives",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1650,
+            "overflow": false,
+            "bodyTextLength": 608
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1650,
+            "overflow": false,
+            "bodyTextLength": 608
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "author",
+          "route": "/authors/sky0821",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 3343,
+            "overflow": false,
+            "bodyTextLength": 2252
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 3343,
+            "overflow": false,
+            "bodyTextLength": 2252
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "categories",
+          "route": "/categories",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1453,
+            "overflow": false,
+            "bodyTextLength": 1478
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1453,
+            "overflow": false,
+            "bodyTextLength": 1478
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "category",
+          "route": "/categories/ai",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1429,
+            "overflow": false,
+            "bodyTextLength": 2081
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1429,
+            "overflow": false,
+            "bodyTextLength": 2081
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "tags",
+          "route": "/tags",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2797,
+            "overflow": false,
+            "bodyTextLength": 634
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2797,
+            "overflow": false,
+            "bodyTextLength": 634
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "tag",
+          "route": "/tags/ai",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2787,
+            "overflow": false,
+            "bodyTextLength": 773
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2787,
+            "overflow": false,
+            "bodyTextLength": 773
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "about",
+          "route": "/about",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 12365,
+            "overflow": false,
+            "bodyTextLength": 1113
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 12370,
+            "overflow": false,
+            "bodyTextLength": 1172
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": ["apis.map.qq.com"],
+          "passed": true
+        },
+        {
+          "page": "equipment",
+          "route": "/equipments",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1433,
+            "overflow": false,
+            "bodyTextLength": 446
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1796,
+            "overflow": false,
+            "bodyTextLength": 446
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "douban",
+          "route": "/douban",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1573,
+            "overflow": false,
+            "bodyTextLength": 845
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1573,
+            "overflow": false,
+            "bodyTextLength": 845
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "bangumi",
+          "route": "/bangumis",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2051,
+            "overflow": false,
+            "bodyTextLength": 482
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2051,
+            "overflow": false,
+            "bodyTextLength": 482
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "steam",
+          "route": "/steam",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2408,
+            "overflow": false,
+            "bodyTextLength": 957
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 2407,
+            "overflow": false,
+            "bodyTextLength": 957
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "dishes",
+          "route": "/dishes",
+          "independentPluginPage": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "overflow": false,
+            "bodyTextLength": 203
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "overflow": false,
+            "bodyTextLength": 203
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "schedule",
+          "route": "/schedule-calendar",
+          "independentPluginPage": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1733,
+            "overflow": false,
+            "bodyTextLength": 284
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1733,
+            "overflow": false,
+            "bodyTextLength": 284
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "login",
+          "route": "/login",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000,
+            "mobile": false,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "overflow": false,
+            "bodyTextLength": 188
+          },
+          "afterScroll": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "overflow": false,
+            "bodyTextLength": 188
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "home",
+          "route": "/",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 5722,
+            "overflow": false,
+            "bodyTextLength": 1222
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 5722,
+            "overflow": false,
+            "bodyTextLength": 1222
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "article",
+          "route": "/archives/editor-feature-demo",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 6264,
+            "overflow": false,
+            "bodyTextLength": 661
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 6291,
+            "overflow": false,
+            "bodyTextLength": 678
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "docs",
+          "route": "/docs",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1013,
+            "overflow": false,
+            "bodyTextLength": 226
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1013,
+            "overflow": false,
+            "bodyTextLength": 226
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "doc-body",
+          "route": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 5157,
+            "overflow": false,
+            "bodyTextLength": 734
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 5157,
+            "overflow": false,
+            "bodyTextLength": 734
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "doc-catalog",
+          "route": "/docs/halo-theme-sky-blog-1/theme-settings",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2295,
+            "overflow": false,
+            "bodyTextLength": 393
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2295,
+            "overflow": false,
+            "bodyTextLength": 393
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "links",
+          "route": "/links",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2109,
+            "overflow": false,
+            "bodyTextLength": 689
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2867,
+            "overflow": false,
+            "bodyTextLength": 689
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "photos",
+          "route": "/photos",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 7741,
+            "overflow": false,
+            "bodyTextLength": 629
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 7761,
+            "overflow": false,
+            "bodyTextLength": 629
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "photo-detail",
+          "route": "/photos/photo-lglk3ors",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2115,
+            "overflow": false,
+            "bodyTextLength": 426
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2115,
+            "overflow": false,
+            "bodyTextLength": 426
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "moments",
+          "route": "/moments",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 4542,
+            "overflow": false,
+            "bodyTextLength": 633
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 4542,
+            "overflow": false,
+            "bodyTextLength": 633
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "moment-detail",
+          "route": "/moments/moment-1778854511638-3wpy3noe",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2466,
+            "overflow": false,
+            "bodyTextLength": 242
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2466,
+            "overflow": false,
+            "bodyTextLength": 242
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "archives",
+          "route": "/archives",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1842,
+            "overflow": false,
+            "bodyTextLength": 462
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1842,
+            "overflow": false,
+            "bodyTextLength": 462
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "author",
+          "route": "/authors/sky0821",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3113,
+            "overflow": false,
+            "bodyTextLength": 1077
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3113,
+            "overflow": false,
+            "bodyTextLength": 1077
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "categories",
+          "route": "/categories",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3373,
+            "overflow": false,
+            "bodyTextLength": 1041
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3373,
+            "overflow": false,
+            "bodyTextLength": 1041
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "category",
+          "route": "/categories/ai",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3437,
+            "overflow": false,
+            "bodyTextLength": 1644
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 3437,
+            "overflow": false,
+            "bodyTextLength": 1644
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "tags",
+          "route": "/tags",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2684,
+            "overflow": false,
+            "bodyTextLength": 601
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2684,
+            "overflow": false,
+            "bodyTextLength": 601
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "tag",
+          "route": "/tags/ai",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2814,
+            "overflow": false,
+            "bodyTextLength": 740
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2814,
+            "overflow": false,
+            "bodyTextLength": 740
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "about",
+          "route": "/about",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 9579,
+            "overflow": false,
+            "bodyTextLength": 1098
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 9553,
+            "overflow": false,
+            "bodyTextLength": 1172
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": ["apis.map.qq.com"],
+          "passed": true
+        },
+        {
+          "page": "equipment",
+          "route": "/equipments",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2669,
+            "overflow": false,
+            "bodyTextLength": 423
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2669,
+            "overflow": false,
+            "bodyTextLength": 423
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "douban",
+          "route": "/douban",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2167,
+            "overflow": false,
+            "bodyTextLength": 522
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2167,
+            "overflow": false,
+            "bodyTextLength": 522
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "bangumi",
+          "route": "/bangumis",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2805,
+            "overflow": false,
+            "bodyTextLength": 467
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2805,
+            "overflow": false,
+            "bodyTextLength": 467
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "steam",
+          "route": "/steam",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 6835,
+            "overflow": false,
+            "bodyTextLength": 942
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 6835,
+            "overflow": false,
+            "bodyTextLength": 942
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "dishes",
+          "route": "/dishes",
+          "independentPluginPage": true,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 844,
+            "overflow": false,
+            "bodyTextLength": 203
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 844,
+            "overflow": false,
+            "bodyTextLength": 203
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "schedule",
+          "route": "/schedule-calendar",
+          "independentPluginPage": true,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1420,
+            "overflow": false,
+            "bodyTextLength": 214
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 1420,
+            "overflow": false,
+            "bodyTextLength": 214
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        },
+        {
+          "page": "login",
+          "route": "/login",
+          "independentPluginPage": false,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "mobile": true,
+            "deviceScaleFactor": 1
+          },
+          "initial": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 998,
+            "overflow": false,
+            "bodyTextLength": 97
+          },
+          "afterScroll": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 998,
+            "overflow": false,
+            "bodyTextLength": 97
+          },
+          "themeVersionCorrect": true,
+          "scriptErrorCount": 0,
+          "resourceErrorHosts": [],
+          "passed": true
+        }
+      ],
+      "reuseBoundary": "此轮在装备描述最后补修前执行。与最终ZIP相比236份文件不变，仅equipment.css改变；装备最终六档实测见equipmentFinal。没有把48组旧指纹改写为新指纹重跑。"
+    },
+    "interactionsAtFullPageRound": {
+      "codeHash": "f4da4d7c771316ad70d91508e084a8a9082f64088477c5055206a09f5b10e0fd",
+      "reuseReason": "认证、文档、图库、关于页所用打包文件均未被最终装备CSS补修改变。",
+      "auth": {
+        "at": "2026-10-27T09:48:35.674Z",
+        "passwordTogglePassed": true,
+        "rememberTrue": {
+          "checked": true,
+          "passkeyRemember": "true"
+        },
+        "rememberRestored": true,
+        "layouts": [
+          {
+            "width": 390,
+            "height": 844,
+            "documentWidth": 390,
+            "scrollY": 154,
+            "scrollHeight": 998,
+            "copyright": {
+              "top": 806.640625,
+              "bottom": 820.4375
+            },
+            "back": {
+              "top": 759.046875,
+              "bottom": 779.046875
+            },
+            "overlap": false,
+            "form": true
+          },
+          {
+            "width": 320,
+            "height": 568,
+            "documentWidth": 320,
+            "scrollY": 430,
+            "scrollHeight": 998,
+            "copyright": {
+              "top": 530.640625,
+              "bottom": 544.4375
+            },
+            "back": {
+              "top": 483.046875,
+              "bottom": 503.046875
+            },
+            "overlap": false,
+            "form": true
+          },
+          {
+            "width": 900,
+            "height": 760,
+            "documentWidth": 900,
+            "scrollY": 213,
+            "scrollHeight": 973,
+            "copyright": {
+              "top": 721.796875,
+              "bottom": 735.59375
+            },
+            "back": {
+              "top": 674.203125,
+              "bottom": 694.203125
+            },
+            "overlap": false,
+            "form": true
+          },
+          {
+            "width": 1440,
+            "height": 1000,
+            "documentWidth": 1440,
+            "scrollY": 0,
+            "scrollHeight": 1000,
+            "copyright": {
+              "top": 962.203125,
+              "bottom": 976
+            },
+            "back": {
+              "top": 908.90625,
+              "bottom": 928.90625
+            },
+            "overlap": false,
+            "form": true
+          }
+        ],
+        "oauthErrorVisible": true,
+        "noLoginSubmitted": true,
+        "boundary": "注册开关true/false及动态插画由实际生产函数/模板表达式回归覆盖；实站当前允许注册且使用features风格，未改配置制造真页覆盖。"
+      },
+      "docs": {
+        "at": "2026-10-27T09:49:23.548Z",
+        "breakpoints": [
+          {
+            "width": 390,
+            "visibility": {
+              "sidebar": false,
+              "toc": false,
+              "menuTrigger": true,
+              "tocTrigger": true,
+              "tocLinkCount": 4,
+              "versionButtons": 2,
+              "languageButtons": 0
+            },
+            "interactions": {
+              "toc": {
+                "count": 4,
+                "locked": true
+              },
+              "tocClosed": true,
+              "menu": {
+                "links": 23,
+                "locked": true
+              },
+              "menuClosed": true
+            },
+            "passed": true
+          },
+          {
+            "width": 900,
+            "visibility": {
+              "sidebar": false,
+              "toc": false,
+              "menuTrigger": true,
+              "tocTrigger": true,
+              "tocLinkCount": 4,
+              "versionButtons": 2,
+              "languageButtons": 0
+            },
+            "interactions": {
+              "toc": {
+                "count": 4,
+                "locked": true
+              },
+              "tocClosed": true,
+              "menu": {
+                "links": 23,
+                "locked": true
+              },
+              "menuClosed": true
+            },
+            "passed": true
+          },
+          {
+            "width": 1024,
+            "visibility": {
+              "sidebar": false,
+              "toc": false,
+              "menuTrigger": true,
+              "tocTrigger": true,
+              "tocLinkCount": 4,
+              "versionButtons": 2,
+              "languageButtons": 0
+            },
+            "interactions": {
+              "toc": {
+                "count": 4,
+                "locked": true
+              },
+              "tocClosed": true,
+              "menu": {
+                "links": 23,
+                "locked": true
+              },
+              "menuClosed": true
+            },
+            "passed": true
+          },
+          {
+            "width": 1280,
+            "visibility": {
+              "sidebar": true,
+              "toc": false,
+              "menuTrigger": false,
+              "tocTrigger": true,
+              "tocLinkCount": 4,
+              "versionButtons": 2,
+              "languageButtons": 0
+            },
+            "interactions": {
+              "toc": {
+                "count": 4,
+                "locked": true
+              },
+              "tocClosed": true
+            },
+            "passed": true
+          },
+          {
+            "width": 1440,
+            "visibility": {
+              "sidebar": true,
+              "toc": true,
+              "menuTrigger": false,
+              "tocTrigger": false,
+              "tocLinkCount": 4,
+              "versionButtons": 2,
+              "languageButtons": 0
+            },
+            "interactions": {},
+            "passed": true
+          }
+        ],
+        "catalog": {
+          "tocFunction": "undefined",
+          "tocTriggers": [],
+          "drawerOpen": false,
+          "scrollLocked": false,
+          "pageId": 1793094542502
+        },
+        "toBody": {
+          "sameDocument": true,
+          "tocRestored": true,
+          "overflow": ""
+        },
+        "returned": {
+          "sameDocument": true,
+          "scrollRestored": true,
+          "tocHidden": true,
+          "errors": []
+        },
+        "v1": {
+          "sameDocument": true,
+          "path": "/docs/halo-theme-sky-blog-1/v1",
+          "preview": "theme-sky-blog-1",
+          "selected": "v1",
+          "drawerClosed": true,
+          "scrollRestored": true
+        },
+        "v2": {
+          "sameDocument": true,
+          "selected": "v2",
+          "scrollRestored": true,
+          "languageButtons": 0,
+          "errors": []
+        },
+        "boundary": "Two real existing versions v2/v1 were switched through the mobile menu. No multi-language choices are configured, so real language route switching remains unverified. Headingless-body guard is covered by the production-function regression, and catalog absence of TOC is checked here."
+      },
+      "photos": {
+        "at": "2026-10-27T09:49:35.458Z",
+        "failure": {
+          "naturalWidth": 0,
+          "placeholderHeight": 180,
+          "tabIndex": -1,
+          "ariaDisabled": "true",
+          "retryVisible": true
+        },
+        "recovered": {
+          "naturalWidth": 366,
+          "height": 487.6875,
+          "tabIndex": 0,
+          "retryHidden": true
+        },
+        "lightboxOpened": 1,
+        "lightboxClosed": true,
+        "paginationCounts": [20, 46],
+        "uniqueDetailsAfterPagination": 46,
+        "networkRulesRestored": true,
+        "pjax": {
+          "at": "2026-10-27T09:49:47.864Z",
+          "before": {
+            "pageId": 1793094575582,
+            "count": 20
+          },
+          "away": {
+            "sameDocument": true,
+            "cleanupCleared": true,
+            "lightboxes": 0
+          },
+          "returned": {
+            "sameDocument": true,
+            "newCleanupInstance": true,
+            "count": 20,
+            "errorUI": 20,
+            "errors": []
+          },
+          "ok": true
+        }
+      },
+      "about": {
+        "at": "2026-10-27T09:51:47.376Z",
+        "widths": [320, 390, 640, 641, 768, 1440],
+        "passed": true
+      }
+    },
+    "equipmentFinal": {
+      "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+      "at": "2026-10-27T10:01:39.748Z",
+      "records": [
+        {
+          "width": 320,
+          "page": {
+            "width": 320,
+            "height": 844,
+            "scrollWidth": 320,
+            "scrollHeight": 2735,
+            "overflow": false,
+            "bodyTextLength": 423
+          },
+          "gridClientWidth": 254,
+          "gridScrollWidth": 254,
+          "cards": [
+            {
+              "cardWidth": 254,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 254,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 254,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true,
+          "filteredGroup": {
+            "viewport": 320,
+            "documentWidth": 320,
+            "gridWidth": 254,
+            "scrollWidth": 254,
+            "cards": [
+              {
+                "right": 287,
+                "gridRight": 287,
+                "footerVisible": true
+              }
+            ]
+          }
+        },
+        {
+          "width": 390,
+          "page": {
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 2669,
+            "overflow": false,
+            "bodyTextLength": 423
+          },
+          "gridClientWidth": 324,
+          "gridScrollWidth": 324,
+          "cards": [
+            {
+              "cardWidth": 324,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 324,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 324,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true
+        },
+        {
+          "width": 768,
+          "page": {
+            "width": 768,
+            "height": 1000,
+            "scrollWidth": 768,
+            "scrollHeight": 2593,
+            "overflow": false,
+            "bodyTextLength": 431
+          },
+          "gridClientWidth": 702,
+          "gridScrollWidth": 702,
+          "cards": [
+            {
+              "cardWidth": 702,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 702,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 702,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true
+        },
+        {
+          "width": 900,
+          "page": {
+            "width": 900,
+            "height": 1000,
+            "scrollWidth": 900,
+            "scrollHeight": 2073,
+            "overflow": false,
+            "bodyTextLength": 431
+          },
+          "gridClientWidth": 802,
+          "gridScrollWidth": 802,
+          "cards": [
+            {
+              "cardWidth": 385,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 385,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 385,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true
+        },
+        {
+          "width": 1024,
+          "page": {
+            "width": 1024,
+            "height": 1000,
+            "scrollWidth": 1024,
+            "scrollHeight": 1993,
+            "overflow": false,
+            "bodyTextLength": 446
+          },
+          "gridClientWidth": 910,
+          "gridScrollWidth": 910,
+          "cards": [
+            {
+              "cardWidth": 435,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 435,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 435,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "page": {
+            "width": 1440,
+            "height": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1433,
+            "overflow": false,
+            "bodyTextLength": 446
+          },
+          "gridClientWidth": 1166,
+          "gridScrollWidth": 1166,
+          "cards": [
+            {
+              "cardWidth": 362,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 362,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            },
+            {
+              "cardWidth": 362,
+              "descriptionHeight": 16.5,
+              "descriptionLineHeight": 16.5,
+              "descriptionAboveFooter": true,
+              "footerInsideCard": true
+            }
+          ],
+          "capturedErrors": 0,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "longDescriptionSample": {
+        "at": "2026-10-27T10:07:56.028Z",
+        "sample": {
+          "sampleOnly": true,
+          "height": 49.5,
+          "lineHeight": 16.5,
+          "lines": 3,
+          "footerInside": true,
+          "imageHeight": 232.00003051757812
+        }
+      },
+      "boundary": "临时三行长描述仅修改浏览器DOM，未写入站点内容。"
+    },
+    "excerptFinal": {
+      "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+      "at": "2026-10-27T10:07:54.893Z",
+      "width": 390,
+      "complete": true,
+      "errors": [],
+      "boundary": "等待主题文章摘要动画后与data-text一致，不是AI自定义摘要元素或模型生成验收。"
+    },
+    "photosSettledFinal": {
+      "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+      "at": "2026-10-27T10:08:00.417Z",
+      "visibleLoadedImages": 12,
+      "visibleImages": 12,
+      "failedVisibleImages": 0
+    }
+  },
+  "archive": {
+    "path": "dist/theme-sky-blog-1-2.2.41.zip",
+    "sha256": "ffe737bc0ef0bf92f3fd1401dcaaf5180f488cb60bb3339892d0ec8f69b279dd",
+    "size": 1007154,
+    "filesCompared": 237,
+    "mismatched": [],
+    "comparisonWithFullBrowserRound": {
+      "beforeCodeHash": "f4da4d7c771316ad70d91508e084a8a9082f64088477c5055206a09f5b10e0fd",
+      "beforeZipSHA256": "80d6afc5097e916ab34ae2541a60ddff10d02d5ef2bad32ef8752738c5facda3",
+      "changedPackagedFiles": ["templates/assets/css/equipment.css"],
+      "unchangedPackagedFiles": 236
+    },
+    "boundary": "本地候选包，未上传、发布或生产部署。"
+  },
+  "backend": {
+    "fullAcceptance": {
+      "since": "2026-10-27T09:27:23.585Z",
+      "until": "2026-10-27T10:10:46.860354Z",
+      "errorCount": 8,
+      "warnCount": 88,
+      "categories": {
+        "equipment-page-size": 72,
+        "template-processing-interrupted": 4,
+        "external-rss-fetch": 12,
+        "excluded-alist": 8
+      },
+      "templateExpressionOrParseCount": 0,
+      "otherErrorCount": 0,
+      "templateInterruptions": [
+        {
+          "at": "2026-10-27T17:35:21.129+08:00",
+          "level": "WARN",
+          "category": "template-processing-interrupted",
+          "template": "author"
+        },
+        {
+          "at": "2026-10-27T17:36:37.051+08:00",
+          "level": "WARN",
+          "category": "template-processing-interrupted",
+          "template": "author"
+        },
+        {
+          "at": "2026-10-27T17:53:09.482+08:00",
+          "level": "WARN",
+          "category": "template-processing-interrupted",
+          "template": "author"
+        },
+        {
+          "at": "2026-10-27T17:54:14.332+08:00",
+          "level": "WARN",
+          "category": "template-processing-interrupted",
+          "template": "author"
+        }
+      ],
+      "unclassified": []
+    },
+    "finalBuild": {
+      "since": "2026-10-27T10:01:14.827Z",
+      "until": "2026-10-27T10:10:46.860354Z",
+      "errorCount": 0,
+      "warnCount": 30,
+      "categories": {
+        "equipment-page-size": 30
+      },
+      "templateExpressionOrParseCount": 0,
+      "otherErrorCount": 0,
+      "templateInterruptions": [],
+      "unclassified": []
+    },
+    "interpretation": {
+      "equipment": "Existing plugin paging request exceeds Halo maximum. Theme layout fixes do not repair that plugin request.",
+      "rss": "Background link-feed refreshes could not fetch external sources. Not a template parse failure.",
+      "templateInterruptions": "Four author template processing warnings were observed in the full acceptance window. Author pages rendered in the browser checks. Cause was not isolated; not claimed fixed.",
+      "excluded": "AList errors remain excluded by user request.",
+      "sensitiveData": "Only timestamps, category counts and template names are retained; raw log bodies and request credentials are omitted."
+    }
+  },
+  "remaining": {
+    "unlocated": [
+      {
+        "item": "作者页模板处理中断WARN",
+        "observedCount": 4,
+        "route": "/authors/sky0821",
+        "status": "页面显示检查通过；后端警告触发原因未单独定位，不宣称已修复。"
+      }
+    ],
+    "notYetRuntimeVerified": [
+      "Docsme真实多语言切换（无多语言数据）",
+      "bottom Dock和illustration实站配置（未为验收切换配置）",
+      "关闭注册的实站状态（模板true/false分支回归通过）",
+      "外部OAuth成功/回调/绑定、完整WebAuthn、MCP独立密钥成功握手",
+      "AI实际模型生成/自动注入，表单/评论/投票/抽奖提交和插件后台完整业务"
+    ],
+    "userManualResults": "用户此前报告AI与通行密钥手测正常；该结论不冒充本次最终指纹自动端到端验收。",
+    "upstreamOrEnvironment": [
+      "装备插件分页size警告及缺少CommentSubject provider；主题不改插件源码或迁移评论",
+      "外部友链RSS抓取失败、QQ地图静态图与外部友链图标失败；记录域名/路径时去掉查询参数",
+      "抽奖Redis有效来源为NONE、未验证连接；未改基础设施"
+    ],
+    "excluded": [
+      "AList按用户明确要求不修复",
+      "Friends/link-submit退役，功能由Links承接",
+      "Live2d保持DISABLED，不为覆盖清单启用",
+      "Data Studio仅alpha.9，预发布不作稳定版承诺"
+    ],
+    "historicalFailures": [
+      "较早首页加载超时保留，后续复验与48组检查通过；超时原因未定位。",
+      "曾有补充脚本误期待AI摘要自定义元素；已按主题文章摘要data-text契约纠正，非确认产品故障。"
+    ],
+    "publication": "未暂存、提交、推送、打标签或发布；确定提交文件集合后需重新核对源码身份和最终制品。"
+  },
+  "privacy": "仅写入主题/插件版本、公开本地路由、尺寸、哈希及脱敏日志计数；不复制登录截图、原始日志、地图查询参数、PAT、密钥或认证响应。"
+}

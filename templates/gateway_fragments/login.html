@@ -1,7 +1,7 @@
 <!-- ========================================== -->
 <!--    Gateway Fragments - Login              -->
 <!--    登录表单片段 (Premium Style)            -->
-<!--    兼容基线：halo-plugin-auth-passkey v1.0.4；保留 .halo-form、#remember-me 和公共 submit 按钮。 -->
+<!--    Passkey：保留 1.x 表单嵌入与 .halo-form、#remember-me、公共 submit；兼容 2.0 原页认证入口。 -->
 <!-- ========================================== -->
 
 <!-- 登录表单 -->
@@ -14,7 +14,14 @@
             <span th:if="${error == 'invalid-credential'}">用户名或密码错误，请重试</span>
             <span th:if="${error == 'rate-limit-exceeded'}">登录尝试次数过多，请稍后再试</span>
             <span th:if="${error == 'account-disabled'}">该账户已被禁用</span>
+            <span th:if="${error == 'oauth2-flow-expired'}">登录流程已失效，请重新开始</span>
+            <span th:if="${error == 'impersonate'}">切换用户身份失败，请稍后再试</span>
         </div>
+    </div>
+    <div class="p-4 rounded-xl bg-error/10 border border-error/20 text-error text-sm flex items-start gap-3"
+        role="alert" th:if="${param.oauth2_error.size() > 0}">
+        <span class="icon-[heroicons--exclamation-circle] w-5 h-5 shrink-0 mt-0.5"></span>
+        <span>第三方账号登录失败，请重试或使用其他登录方式</span>
     </div>
 
     <!-- 成功提示 -->

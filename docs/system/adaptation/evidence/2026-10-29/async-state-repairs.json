@@ -1,0 +1,834 @@
+{
+  "schemaVersion": 1,
+  "completedAt": "2026-10-29T13:58:06.218680+00:00",
+  "scope": "Theme audit F1-F4 and optional verification harness; no plugin/config/database/Git mutations",
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "7130f206f00546e0b9f405ea1f768d5d0eab83fe123b01955be4f2f1a86b5cf2",
+    "fileCount": 400,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "runtime": {
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "themeVersion": "2.2.41",
+    "requiresHalo": ">=2.27.0",
+    "activeTheme": "theme-sky-blog-3",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "cache": {
+    "at": "2026-10-29T13:42:59.531Z",
+    "actions": [
+      {
+        "path": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "path": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "method": "DELETE",
+        "status": 200
+      }
+    ],
+    "assets": [
+      {
+        "asset": "css/main.css",
+        "status": 200,
+        "match": true,
+        "sha256": "2909c0ea7d66ecde1a85ee651fe0017b76accc334d4102ac5971880f4a46b9bf"
+      },
+      {
+        "asset": "js/main.js",
+        "status": 200,
+        "match": true,
+        "sha256": "31bc85c3ae8c1caa8cacc943a9e61cf2fbf9ab1d7cbb4bcc6049ecad896a30c3"
+      },
+      {
+        "asset": "js/links.js",
+        "status": 200,
+        "match": true,
+        "sha256": "56cb23927a0d994a0f5573646dd1d264cb1eba81c7d449eee49068e66b2a3789"
+      },
+      {
+        "asset": "css/links.css",
+        "status": 200,
+        "match": true,
+        "sha256": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf"
+      },
+      {
+        "asset": "js/photos.js",
+        "status": 200,
+        "match": true,
+        "sha256": "7bf1ae32b4c66b3d95473eba45287c74b2e51efe189d94a57fd5366e1ee44853"
+      },
+      {
+        "asset": "css/photos.css",
+        "status": 200,
+        "match": true,
+        "sha256": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb"
+      },
+      {
+        "asset": "js/bangumi.js",
+        "status": 200,
+        "match": true,
+        "sha256": "52134117458992b3be32efba83c2cea818c88f6bfb7ee946e623fe37a9649895"
+      },
+      {
+        "asset": "js/doc.js",
+        "status": 200,
+        "match": true,
+        "sha256": "dc1359c43b187f392483a695d3839e9d95f49bd04e8dd9afa3c30321513bc5fb"
+      },
+      {
+        "asset": "js/post.js",
+        "status": 200,
+        "match": true,
+        "sha256": "4af5ab39902c07b0cfb2eae2ad6efd919f6218dcfcd83e685bbc811d95a78b9e"
+      }
+    ]
+  },
+  "checks": {
+    "build": {
+      "status": "passed",
+      "node": {
+        "tests": 362,
+        "pass": 362,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "lint": "passed",
+    "format": "passed",
+    "diff": "passed",
+    "commentTemplates": {
+      "scenarios": 228,
+      "assertions": 652,
+      "passed": true,
+      "type": "offline; official bundled Thymeleaf plus local cached runtime dependencies"
+    },
+    "javaNavigation": {
+      "passed": 75,
+      "skipped": 0,
+      "includedInBuild": true
+    },
+    "authOptional": {
+      "passed": 3,
+      "includedInBuild": true,
+      "source": "http://localhost:8090/js/main.js?v=2.27.1",
+      "sha256": "e3f6c470dd19a451e030c96f53e634df9e33d1b38ae5fa19a1731249d2bfcf19"
+    }
+  },
+  "javaDependencies": [
+    {
+      "artifact": "thymeleaf-3.1.3.RELEASE.jar",
+      "sha256": "641e0a473ca40cd2ce32feb713300e7369133a5ca1024b44883bcdd1fce0b965"
+    },
+    {
+      "artifact": "thymeleaf-spring6-3.1.3.RELEASE.jar",
+      "sha256": "eaa9991b65f48d504658808ad45c54dd5ab61df9535ccd90bd1956a379e96377"
+    },
+    {
+      "artifact": "attoparser-2.0.7.RELEASE.jar",
+      "sha256": "75dd1c045492bff8e1963aabb28bfe903c2064e11e27fe2f0f0aff1ad3d84476"
+    },
+    {
+      "artifact": "unbescape-1.1.6.RELEASE.jar",
+      "sha256": "597cf87d5b1a4f385b9d1cec974b7b483abb3ee85fc5b3f8b62af8e4bec95c2c"
+    },
+    {
+      "artifact": "slf4j-api-2.0.18.jar",
+      "sha256": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55"
+    },
+    {
+      "artifact": "spring-core-7.0.9.jar",
+      "sha256": "5195f4722699b39878d99a832549fe65df2890b159d063b88fff31b1ca65ae36"
+    },
+    {
+      "artifact": "spring-beans-7.0.9.jar",
+      "sha256": "ff218b827a25c9e8929b0cd56dfb56916cea9d5b669ed97dc7cb262508ff548b"
+    },
+    {
+      "artifact": "spring-context-7.0.9.jar",
+      "sha256": "7552a2fcfa30cea53eb14d7a65a7a8e1b1dd82e832a7164fb7e6fb105f438858"
+    },
+    {
+      "artifact": "spring-expression-7.0.9.jar",
+      "sha256": "046434c40f43819729b9b1db0e6c659dfa68184c1c2c2efa5f7b3a5b27c4e2e2"
+    },
+    {
+      "artifact": "jsoup-1.23.1.jar",
+      "sha256": "8b15e2b28eeb1e0a88a9b7dab4dc0c23524491c56959785dea22f7846897b668"
+    },
+    {
+      "artifact": "commons-logging-1.4.0.jar",
+      "sha256": "d175dbd751dd782a63bde28c7a039520e971f25e84b79c19b8435edc3603e0dc"
+    },
+    {
+      "artifact": "spring-aop-7.0.9.jar",
+      "sha256": "b8c5d6bfcb1f4993f2cc124f7ab7fac40edf5256b9e43c2f7250a733cb5510e9"
+    },
+    {
+      "artifact": "jackson-databind-2.21.5.jar",
+      "sha256": "507418c0fafd38b2b2cfb704521630da613a8e4cc8381195a6f418017883e2c0"
+    },
+    {
+      "artifact": "jackson-core-2.21.5.jar",
+      "sha256": "b64b5874162b503a0e58a8f7758266e8dd9f91bf49e3a59ae0b5f47589a231b7"
+    },
+    {
+      "artifact": "jackson-annotations-2.21.jar",
+      "sha256": "53ca085f4a150f703f49e1aabd935bd03b43e1ea3d55d135438292af22cef56b"
+    },
+    {
+      "artifact": "spring-integration-core-7.1.1.jar",
+      "sha256": "4436d14d4bfa9c2353a2b761a3322b27947314edcd5ac82c8923e502e425c856"
+    },
+    {
+      "artifact": "jackson-core-3.1.5.jar",
+      "sha256": "9431b7fa2673bbb618c11d865fe15e13222fd182a214ff998cb7e56afd8f35d2"
+    },
+    {
+      "artifact": "jackson-databind-3.1.5.jar",
+      "sha256": "3a2338d996fd3056791df8d335fa9ba8a62a706ed4245ecf81b3e583df37d08a"
+    }
+  ],
+  "http": {
+    "at": "2026-10-29T13:53:29.787Z",
+    "code": {
+      "algorithm": "sha256",
+      "codeHash": "7130f206f00546e0b9f405ea1f768d5d0eab83fe123b01955be4f2f1a86b5cf2",
+      "fileCount": 400,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "activeThemes": ["theme-sky-blog-3"],
+    "routes": [
+      {
+        "route": "/",
+        "status": 200,
+        "identity": {
+          "ok": true,
+          "themes": ["theme-sky-blog-1"]
+        }
+      },
+      {
+        "route": "/photos",
+        "status": 200,
+        "identity": {
+          "ok": true,
+          "themes": ["theme-sky-blog-1"]
+        }
+      },
+      {
+        "route": "/photos?size=1",
+        "status": 200,
+        "identity": {
+          "ok": true,
+          "themes": ["theme-sky-blog-1"]
+        }
+      },
+      {
+        "route": "/links?view=apply",
+        "status": 200,
+        "identity": {
+          "ok": true,
+          "themes": ["theme-sky-blog-1"]
+        }
+      },
+      {
+        "route": "/bangumis",
+        "status": 200,
+        "identity": {
+          "ok": true,
+          "themes": ["theme-sky-blog-1"]
+        }
+      }
+    ]
+  },
+  "browser": {
+    "photos": [
+      {
+        "width": 1440,
+        "initial": {
+          "items": 3,
+          "next": "http://localhost:8090/photos?page=4&size=1&preview-theme=theme-sky-blog-1"
+        },
+        "final": {
+          "items": 46,
+          "next": false,
+          "ids": [
+            "/photos/photo-lglk3ors",
+            "/photos/photo-8os50ylm",
+            "/photos/photo-14xk1htg",
+            "/photos/photo-mogdulku",
+            "/photos/photo-qnwu0q3v",
+            "/photos/photo-0td6iccl",
+            "/photos/photo-ta4uaur3",
+            "/photos/photo-07mguode",
+            "/photos/photo-fzf4reeq",
+            "/photos/photo-brcdvihj",
+            "/photos/photo-b4croj3i",
+            "/photos/photo-nbgx3edf",
+            "/photos/photo-xqgifxkz",
+            "/photos/photo-gtulnjy1",
+            "/photos/photo-tidpcttl",
+            "/photos/photo-vyd6cj4k",
+            "/photos/photo-3x39qxyf",
+            "/photos/photo-7bgn8kpy",
+            "/photos/photo-feqrjne5",
+            "/photos/photo-gqkklrnx",
+            "/photos/photo-pjk5ykeh",
+            "/photos/photo-4xkeln3g",
+            "/photos/photo-04rpeyea",
+            "/photos/photo-ihzgnfm4",
+            "/photos/photo-yvqae9y4",
+            "/photos/photo-hysezd2w",
+            "/photos/photo-nsrwcpna",
+            "/photos/photo-gaazy0ws",
+            "/photos/photo-8ry4ignt",
+            "/photos/photo-25khdy2b",
+            "/photos/photo-ru7piy4q",
+            "/photos/photo-lyopomjr",
+            "/photos/photo-bhc7nwut",
+            "/photos/photo-lm11tzjd",
+            "/photos/photo-zepgpelt",
+            "/photos/photo-rgolxmbv",
+            "/photos/photo-ugdx4sx6",
+            "/photos/photo-dgzc3rqv",
+            "/photos/photo-2qclll5g",
+            "/photos/photo-fn1eiwgu",
+            "/photos/photo-nft7fcrq",
+            "/photos/photo-bdhpzswo",
+            "/photos/photo-dqskbwhp",
+            "/photos/photo-wvatbwa0",
+            "/photos/photo-asut1yty",
+            "/photos/photo-qgoitnbk"
+          ],
+          "scrollWidth": 1440,
+          "viewport": 1440
+        }
+      },
+      {
+        "width": 390,
+        "initial": {
+          "items": 2,
+          "next": "http://localhost:8090/photos?page=3&size=1&preview-theme=theme-sky-blog-1"
+        },
+        "final": {
+          "items": 46,
+          "next": false,
+          "ids": [
+            "/photos/photo-lglk3ors",
+            "/photos/photo-nbgx3edf",
+            "/photos/photo-ihzgnfm4",
+            "/photos/photo-zepgpelt",
+            "/photos/photo-rgolxmbv",
+            "/photos/photo-xqgifxkz",
+            "/photos/photo-yvqae9y4",
+            "/photos/photo-ugdx4sx6",
+            "/photos/photo-8os50ylm",
+            "/photos/photo-gtulnjy1",
+            "/photos/photo-hysezd2w",
+            "/photos/photo-dgzc3rqv",
+            "/photos/photo-nsrwcpna",
+            "/photos/photo-tidpcttl",
+            "/photos/photo-gaazy0ws",
+            "/photos/photo-14xk1htg",
+            "/photos/photo-2qclll5g",
+            "/photos/photo-vyd6cj4k",
+            "/photos/photo-mogdulku",
+            "/photos/photo-3x39qxyf",
+            "/photos/photo-qnwu0q3v",
+            "/photos/photo-8ry4ignt",
+            "/photos/photo-7bgn8kpy",
+            "/photos/photo-fn1eiwgu",
+            "/photos/photo-0td6iccl",
+            "/photos/photo-25khdy2b",
+            "/photos/photo-ta4uaur3",
+            "/photos/photo-nft7fcrq",
+            "/photos/photo-feqrjne5",
+            "/photos/photo-bdhpzswo",
+            "/photos/photo-ru7piy4q",
+            "/photos/photo-07mguode",
+            "/photos/photo-gqkklrnx",
+            "/photos/photo-dqskbwhp",
+            "/photos/photo-lyopomjr",
+            "/photos/photo-fzf4reeq",
+            "/photos/photo-pjk5ykeh",
+            "/photos/photo-bhc7nwut",
+            "/photos/photo-wvatbwa0",
+            "/photos/photo-brcdvihj",
+            "/photos/photo-lm11tzjd",
+            "/photos/photo-4xkeln3g",
+            "/photos/photo-asut1yty",
+            "/photos/photo-b4croj3i",
+            "/photos/photo-04rpeyea",
+            "/photos/photo-qgoitnbk"
+          ],
+          "scrollWidth": 390,
+          "viewport": 390
+        }
+      }
+    ],
+    "links": [
+      {
+        "width": 1440,
+        "stale": {
+          "title": "",
+          "busy": true,
+          "aborted": true
+        },
+        "fresh": {
+          "title": "My hand edited title",
+          "description": "Site B description"
+        },
+        "reset": {
+          "title": "",
+          "url": "",
+          "busy": false
+        },
+        "timeout": {
+          "message": "目标站点响应超时。可以继续手动填写。",
+          "busy": false,
+          "errors": []
+        },
+        "overflow": false
+      },
+      {
+        "width": 390,
+        "stale": {
+          "title": "",
+          "busy": true,
+          "aborted": true
+        },
+        "fresh": {
+          "title": "My hand edited title",
+          "description": "Site B description"
+        },
+        "reset": {
+          "title": "",
+          "url": "",
+          "busy": false
+        },
+        "overflow": false
+      }
+    ],
+    "state": [
+      {
+        "width": 1440,
+        "bangumi": {
+          "aba": true,
+          "abc": true,
+          "opacity": "0.4",
+          "overflow": false
+        },
+        "weather": {
+          "actualWeatherMode": false,
+          "method": "Current built Alpine component with temporary production weather DOM and production engine, storage substituted; no settings changed",
+          "rows": [
+            {
+              "mode": "normal",
+              "card": "rainy",
+              "eventCount": 1,
+              "event": "rainy",
+              "background": "weather-effect weather-rainy"
+            },
+            {
+              "mode": "QuotaExceededError",
+              "card": "snowy",
+              "eventCount": 1,
+              "event": "snowy",
+              "background": "weather-effect weather-snowy"
+            },
+            {
+              "mode": "SecurityError",
+              "card": "cloudy",
+              "eventCount": 1,
+              "event": "cloudy",
+              "background": "weather-effect weather-cloudy"
+            }
+          ]
+        },
+        "home": {
+          "overflow": false,
+          "fixtureRemoved": true
+        }
+      },
+      {
+        "width": 390,
+        "bangumi": {
+          "aba": true,
+          "abc": true,
+          "opacity": "0.4",
+          "overflow": false
+        },
+        "weather": {
+          "actualWeatherMode": false,
+          "method": "Current built Alpine component with temporary production weather DOM and production engine, storage substituted; no settings changed",
+          "rows": [
+            {
+              "mode": "normal",
+              "card": "rainy",
+              "eventCount": 1,
+              "event": "rainy",
+              "background": "weather-effect weather-rainy"
+            },
+            {
+              "mode": "QuotaExceededError",
+              "card": "snowy",
+              "eventCount": 1,
+              "event": "snowy",
+              "background": "weather-effect weather-snowy"
+            },
+            {
+              "mode": "SecurityError",
+              "card": "cloudy",
+              "eventCount": 1,
+              "event": "cloudy",
+              "background": "weather-effect weather-cloudy"
+            }
+          ]
+        },
+        "home": {
+          "overflow": false,
+          "fixtureRemoved": true
+        }
+      }
+    ],
+    "recovery": {
+      "failed": {
+        "items": 20,
+        "requests": ["2"]
+      },
+      "retried": {
+        "items": 40,
+        "requests": ["2", "2"],
+        "errorVisible": false
+      },
+      "leave": {
+        "sameDocument": true,
+        "cleanupCleared": true,
+        "requests": ["2", "2"]
+      },
+      "back": {
+        "sameDocument": true,
+        "items": 3,
+        "cleanupPresent": true
+      }
+    },
+    "spaceFinished": 23,
+    "method": "Actual Halo preview and current assets. Metadata/network failures and weather configuration explicitly use temporary browser substitutes; no business writes."
+  },
+  "backend": {
+    "since": "2026-10-29T13:42:59.531Z",
+    "levelCounts": {
+      "ERROR": 4
+    },
+    "categories": {
+      "AList excluded": 4
+    },
+    "records": [
+      {
+        "timestamp": "2026-10-29T21:43:30.939",
+        "level": "ERROR",
+        "category": "AList excluded",
+        "summary": "Attachment reconciler: int field received JSON array"
+      },
+      {
+        "timestamp": "2026-10-29T21:44:09.069",
+        "level": "ERROR",
+        "category": "AList excluded",
+        "summary": "Attachment reconciler: int field received JSON array"
+      },
+      {
+        "timestamp": "2026-10-29T21:44:24.753",
+        "level": "ERROR",
+        "category": "AList excluded",
+        "summary": "Attachment reconciler: int field received JSON array"
+      },
+      {
+        "timestamp": "2026-10-29T21:44:56.650",
+        "level": "ERROR",
+        "category": "AList excluded",
+        "summary": "Attachment reconciler: int field received JSON array"
+      }
+    ]
+  },
+  "archive": {
+    "files": 239,
+    "mismatches": [],
+    "sha256": "5f183431a161373c87b47ac33dfa755deed4339920b7f43bf4b71599c62532f1"
+  },
+  "review": {
+    "type": "author self-review",
+    "independentReviewer": false
+  },
+  "officialVersionAuditDate": "2026-10-27",
+  "remainingValidation": [
+    "Actual site weather background is not enabled; temporary DOM verifies current component and production engine only.",
+    "No full business writes or all-configuration plugin revalidation."
+  ],
+  "rawEvidenceDirectory": "/tmp/sky-audit-fixes-20261029"
+}

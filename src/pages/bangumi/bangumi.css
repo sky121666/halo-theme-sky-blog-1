@@ -293,6 +293,14 @@
 .bangumi-stagger-1 { animation-delay: 0.1s; }
 .bangumi-stagger-2 { animation-delay: 0.2s; }
 
+@media (prefers-reduced-motion: reduce) {
+  .bangumi-animate-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ========================================== */
 /*     响应式                                 */
 /* ========================================== */

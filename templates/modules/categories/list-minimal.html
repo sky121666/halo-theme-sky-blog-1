@@ -6,7 +6,7 @@
 <!--   设计理念：克制、呼吸、层次、细节            -->
 <!-- ============================================= -->
 
-<section th:fragment="minimal(posts, settings)" class="max-w-2xl mx-auto px-4 sm:px-6">
+<section th:fragment="minimal(posts, settings)" class="max-w-2xl mx-auto px-4 sm:px-6 [overflow-wrap:anywhere]">
   <article th:each="post, iterStat : ${posts.items}"
     th:with="isPinned = ${post.spec.pinned == true},
                     isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
@@ -40,16 +40,17 @@
     </h2>
 
     <!-- 摘要：舒适的阅读体验 -->
-    <p th:with="excerptText = ${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"
-      th:if="${excerptText != null and !excerptText.isEmpty()}"
-      class="text-lg sm:text-xl text-base-content/60 leading-relaxed mb-8 font-light" style="line-height: 1.8;">
-      <a th:href="@{${post.status.permalink}}" class="hover:text-base-content" th:text="${excerptText}"></a>
-    </p>
+    <th:block th:with="excerptText = ${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}">
+      <p th:if="${excerptText != null and !excerptText.isEmpty()}"
+        class="text-lg sm:text-xl text-base-content/60 leading-relaxed mb-8 font-light" style="line-height: 1.8;">
+        <a th:href="@{${post.status.permalink}}" class="hover:text-base-content" th:text="${excerptText}"></a>
+      </p>
+    </th:block>
 
     <!-- 底部信息栏 -->
-    <div class="flex items-center justify-between pt-8 border-t border-base-content/5">
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 pt-8 border-t border-base-content/5">
       <!-- 标签 -->
-      <div th:if="${!#lists.isEmpty(post.tags)}" class="flex flex-wrap gap-2">
+      <div th:if="${!#lists.isEmpty(post.tags)}" class="flex min-w-0 max-w-full flex-wrap gap-2">
         <a th:each="tag, tagStat : ${post.tags}" th:if="${tagStat.index < 3}" th:href="@{${tag.status.permalink}}"
           class="inline-block text-xs text-base-content/40 hover:text-primary transition-colors px-2.5 py-1 rounded-full border border-base-content/10 hover:border-primary/30"
           th:text="${tag.spec.displayName}">标签</a>
@@ -58,7 +59,8 @@
       </div>
 
       <!-- 阅读指示 -->
-      <div class="flex items-center gap-4 text-xs text-base-content/40">
+      <div class="flex shrink-0 items-center gap-4 whitespace-nowrap text-xs text-base-content/40"
+        th:classappend="${!#lists.isEmpty(post.tags)} ? 'ml-auto' : ''">
         <span th:if="${(post.stats.visit ?: 0) > 0}" class="inline-flex items-center gap-1.5">
           <span class="icon-[heroicons--eye] w-4 h-4"></span>
           <span th:text="${post.stats.visit}">0</span>

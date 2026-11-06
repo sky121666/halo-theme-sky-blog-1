@@ -45,9 +45,9 @@
           <!-- 自定义菜单图标 -->
           <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
             <th:block th:if="${dockMenu != null}">
-              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
-                th:title="${menuItem.status.displayName}">
+                th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
                   <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -58,7 +58,7 @@
                 </span>
                 <span
                   class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                  th:text="${menuItem.status.displayName}">
+                  th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 </span>
               </a>
             </th:block>
@@ -66,14 +66,14 @@
 
           <!-- 分隔线 -->
           <div class="w-px h-6" th:if="${cfg?.enable_toc_drawer 
-                                        or cfg?.enable_sidebar_drawer 
+                                        or cfg?.enable_sidebar_drawer != false
                                         or enableBackToTop}"></div>
 
           <!-- 评论按钮已移除，移至文章底部 -->
 
-          <!-- 目录按钮（仅手机端显示） -->
+          <!-- 右侧目录隐藏时显示抽屉入口 -->
           <button th:if="${cfg?.enable_toc_drawer}" onclick="window.openDocTocDrawer()"
-            class="dock-item dock-btn group relative md:hidden!" title="目录">
+            class="dock-item dock-btn group relative doc-toc-drawer-trigger" title="目录" aria-label="打开文档目录">
             <span class="icon-[heroicons--list-bullet] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
             </span>
             <span
@@ -82,9 +82,9 @@
             </span>
           </button>
 
-          <!-- 菜单按钮（仅手机端显示） -->
-          <button th:if="${cfg?.enable_sidebar_drawer}" onclick="window.openDocSidebarDrawer()"
-            class="dock-item dock-btn group relative md:hidden!" title="文档菜单">
+          <!-- 左侧文档树隐藏时显示抽屉入口 -->
+          <button th:if="${cfg?.enable_sidebar_drawer != false}" onclick="window.openDocSidebarDrawer()"
+            class="dock-item dock-btn group relative doc-sidebar-drawer-trigger" title="文档菜单" aria-label="打开文档菜单">
             <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
             </span>
             <span
@@ -94,7 +94,7 @@
           </button>
 
           <!-- 返回顶部按钮 -->
-          <button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+          <button th:if="${enableBackToTop}" @click="scrollToTop()" type="button" aria-label="返回顶部" class="dock-item dock-btn" title="返回顶部">
             <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
           </button>
 
@@ -120,7 +120,7 @@
     <!-- DaisyUI FAB 组件 -->
     <div class="fab fab-top">
       <!-- 触发按钮 -->
-      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+      <div tabindex="0" role="button" aria-label="展开文档工具" class="btn btn-circle btn-primary shadow-lg">
         <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
       </div>
 
@@ -136,9 +136,9 @@
       <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
-            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
-              th:title="${menuItem.status.displayName}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-5 h-5 flex items-center justify-center">
                 <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -153,18 +153,18 @@
 
       <!-- 评论按钮已移除，移至文章底部 -->
 
-      <!-- 目录按钮（仅手机端显示） -->
-      <div th:if="${cfg?.enable_toc_drawer}" class="md:hidden">
+      <!-- 右侧目录隐藏时显示抽屉入口 -->
+      <div th:if="${cfg?.enable_toc_drawer}" class="doc-toc-drawer-trigger">
         <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
-        <button class="btn btn-circle" onclick="window.openDocTocDrawer()">
+        <button class="btn btn-circle" onclick="window.openDocTocDrawer()" aria-label="打开文档目录">
           <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
         </button>
       </div>
 
-      <!-- 菜单按钮（仅手机端显示） -->
-      <div th:if="${cfg?.enable_sidebar_drawer}" class="md:hidden">
+      <!-- 左侧文档树隐藏时显示抽屉入口 -->
+      <div th:if="${cfg?.enable_sidebar_drawer != false}" class="doc-sidebar-drawer-trigger">
         <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
-        <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()">
+        <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()" aria-label="打开文档菜单">
           <span class="icon-[heroicons--book-open] w-5 h-5"></span>
         </button>
       </div>
@@ -172,7 +172,7 @@
       <!-- 返回顶部按钮 -->
       <div th:if="${enableBackToTop}">
         <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-        <button class="btn btn-circle" @click="scrollToTop()">
+        <button class="btn btn-circle" @click="scrollToTop()" type="button" aria-label="返回顶部">
           <span class="icon-[heroicons--arrow-up] w-5 h-5"></span>
         </button>
       </div>
@@ -198,14 +198,14 @@
     <!-- 遮罩层 -->
     <div id="doc-toc-overlay" class="doc-toc-overlay" onclick="window.closeDocTocDrawer()"></div>
     <!-- 抽屉面板 -->
-    <div id="doc-toc-drawer" class="doc-toc-drawer">
+    <div id="doc-toc-drawer" class="doc-toc-drawer" role="dialog" aria-modal="true" aria-label="文档目录" tabindex="-1" inert aria-hidden="true">
       <!-- 标题栏 -->
       <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
         <h3 class="text-base font-semibold flex items-center gap-2">
           <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary"></span>
           <span>文档目录</span>
         </h3>
-        <button onclick="window.closeDocTocDrawer()" class="btn btn-ghost btn-circle btn-sm">
+        <button onclick="window.closeDocTocDrawer()" class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档目录">
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </button>
       </div>
@@ -225,24 +225,25 @@
 
 <!-- 菜单抽屉 - 原生实现 -->
 <th:block th:fragment="doc-sidebar-drawer(config)" th:with="cfg = ${config ?: theme.config.docsme?.doc_settings}">
-  <th:block th:if="${cfg?.enable_sidebar_drawer}">
+  <th:block th:if="${cfg?.enable_sidebar_drawer != false}">
     <!-- 遮罩层 -->
     <div id="doc-sidebar-overlay" class="doc-sidebar-overlay" onclick="window.closeDocSidebarDrawer()"></div>
     <!-- 抽屉面板 -->
-    <div id="doc-sidebar-drawer" class="doc-sidebar-drawer">
+    <div id="doc-sidebar-drawer" class="doc-sidebar-drawer" role="dialog" aria-modal="true" aria-label="文档菜单" tabindex="-1" inert aria-hidden="true">
       <!-- 标题栏 -->
       <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
-        <a th:href="${project.status.permalink}"
+        <a th:href="@{${project.status.permalink}}"
            class="text-base font-semibold flex items-center gap-2 hover:text-primary transition-colors">
           <span class="icon-[heroicons--book-open] w-5 h-5 text-primary"></span>
           <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
         </a>
-        <button onclick="window.closeDocSidebarDrawer()" class="btn btn-ghost btn-circle btn-sm">
+        <button onclick="window.closeDocSidebarDrawer()" class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档菜单">
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </button>
       </div>
       <!-- 文档树内容 -->
-      <div class="flex-1 overflow-y-auto p-5 scrollbar-thin">
+      <div class="flex flex-1 flex-col gap-3 overflow-y-auto p-5 scrollbar-thin">
+        <th:block th:replace="~{modules/doc/selectors :: selectors}" />
         <ul class="doc-nav-tree">
           <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
         </ul>
@@ -281,9 +282,9 @@
         <div class="flex items-center gap-1">
           <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
             <th:block th:if="${dockMenu != null}">
-              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
-                th:title="${menuItem.status.displayName}">
+                th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
                   <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -293,12 +294,12 @@
                   class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
                 <span
                   class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                  th:text="${menuItem.status.displayName}"></span>
+                  th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"></span>
               </a>
             </th:block>
           </th:block>
           <div class="w-px h-6" th:if="${enableBackToTop}"></div>
-          <button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+          <button th:if="${enableBackToTop}" @click="scrollToTop()" type="button" aria-label="返回顶部" class="dock-item dock-btn" title="返回顶部">
             <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
           </button>
         </div>
@@ -314,7 +315,7 @@
           enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
   <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
     <div class="fab fab-top">
-      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+      <div tabindex="0" role="button" aria-label="展开文档工具" class="btn btn-circle btn-primary shadow-lg">
         <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
       </div>
       <div class="fab-close">
@@ -326,9 +327,9 @@
       <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
-            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
-              th:title="${menuItem.status.displayName}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-5 h-5 flex items-center justify-center">
                 <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -342,7 +343,7 @@
       </th:block>
       <div th:if="${enableBackToTop}">
         <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-        <button class="btn btn-circle" @click="scrollToTop()"><span
+        <button class="btn btn-circle" @click="scrollToTop()" type="button" aria-label="返回顶部"><span
             class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
       </div>
     </div>
@@ -380,9 +381,9 @@
         <div class="flex items-center gap-1">
           <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
             <th:block th:if="${dockMenu != null}">
-              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
-                th:title="${menuItem.status.displayName}">
+                th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
                   <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -392,17 +393,17 @@
                   class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110"></span>
                 <span
                   class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                  th:text="${menuItem.status.displayName}"></span>
+                  th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}"></span>
               </a>
             </th:block>
           </th:block>
 
 <!-- 分隔线 -->
-<div class="w-px h-6" th:if="${cfg?.enable_sidebar_drawer or enableBackToTop}"></div>
+<div class="w-px h-6" th:if="${cfg?.enable_sidebar_drawer != false or enableBackToTop}"></div>
 
-<!-- 菜单按钮（仅手机端显示） -->
-<button th:if="${cfg?.enable_sidebar_drawer}" onclick="window.openDocSidebarDrawer()"
-  class="dock-item dock-btn group relative md:hidden!" title="文档菜单">
+<!-- 左侧文档树隐藏时显示抽屉入口；旧配置缺字段时沿用设置项默认开启 -->
+<button th:if="${cfg?.enable_sidebar_drawer != false}" onclick="window.openDocSidebarDrawer()"
+  class="dock-item dock-btn group relative doc-sidebar-drawer-trigger" title="文档菜单" aria-label="打开文档菜单">
   <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
   </span>
   <span
@@ -412,7 +413,7 @@
 </button>
 
 <div class="w-px h-6" th:if="${enableBackToTop}"></div>
-<button th:if="${enableBackToTop}" @click="scrollToTop()" class="dock-item dock-btn" title="返回顶部">
+<button th:if="${enableBackToTop}" @click="scrollToTop()" type="button" aria-label="返回顶部" class="dock-item dock-btn" title="返回顶部">
   <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
 </button>
 </div>
@@ -428,7 +429,7 @@
           enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
   <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
     <div class="fab fab-top">
-      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+      <div tabindex="0" role="button" aria-label="展开文档工具" class="btn btn-circle btn-primary shadow-lg">
         <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
       </div>
       <div class="fab-close">
@@ -440,9 +441,9 @@
       <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
-            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
-              th:title="${menuItem.status.displayName}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-5 h-5 flex items-center justify-center">
                 <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -454,19 +455,17 @@
           </div>
         </th:block>
       </th:block>
-</th:block>
-
-<!-- 菜单按钮（仅手机端显示） -->
-<div th:if="${cfg?.enable_sidebar_drawer}" class="md:hidden">
+<!-- 左侧文档树隐藏时显示抽屉入口 -->
+<div th:if="${cfg?.enable_sidebar_drawer != false}" class="doc-sidebar-drawer-trigger">
   <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
-  <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()">
+  <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()" aria-label="打开文档菜单">
     <span class="icon-[heroicons--book-open] w-5 h-5"></span>
   </button>
 </div>
 
 <div th:if="${enableBackToTop}">
   <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-  <button class="btn btn-circle" @click="scrollToTop()"><span
+  <button class="btn btn-circle" @click="scrollToTop()" type="button" aria-label="返回顶部"><span
       class="icon-[heroicons--arrow-up] w-5 h-5"></span></button>
 </div>
 </div>

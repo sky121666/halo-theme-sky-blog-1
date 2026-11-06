@@ -5,46 +5,10 @@
   <aside class="doc-sidebar hidden lg:block">
     <div class="doc-sidebar-inner scrollbar-thin">
 
-      <!-- 版本选择器 - 仅当有多个版本时显示 -->
-      <th:block th:if="${#lists.size(versions) > 1}">
-        <div class="doc-version-selector">
-          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
-            <span class="flex items-center gap-2">
-              <span class="icon-[heroicons--tag] w-4 h-4"></span>
-              <span th:text="${currentVersion.spec.slug}">版本</span>
-            </span>
-            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-          </button>
-          <div class="doc-version-dropdown">
-            <a th:each="version : ${versions}" th:href="${version.status.permalink}" class="doc-version-item"
-              th:classappend="${version.metadata.name == currentVersion.metadata.name} ? 'active' : ''">
-              <span th:text="${version.spec.slug}">版本名</span>
-            </a>
-          </div>
-        </div>
-      </th:block>
-
-      <!-- 语言选择器 - 仅当有多个语言时显示 -->
-      <th:block th:if="${#lists.size(languages) > 1}">
-        <div class="doc-version-selector">
-          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
-            <span class="flex items-center gap-2">
-              <span class="icon-[heroicons--language] w-4 h-4"></span>
-              <span th:if="${currentLanguage != null}" th:text="${currentLanguage.label}">语言</span>
-              <span th:unless="${currentLanguage != null}">语言</span>
-            </span>
-            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-          </button>
-          <div class="doc-version-dropdown">
-            <a th:each="language : ${languages}" th:href="${language.link}" class="doc-version-item">
-              <span th:text="${language.label}">语言名</span>
-            </a>
-          </div>
-        </div>
-      </th:block>
+      <th:block th:replace="~{modules/doc/selectors :: selectors}" />
 
       <!-- 项目标题 -->
-      <a th:href="${project.status.permalink}" class="doc-project-title">
+      <a th:href="@{${project.status.permalink}}" class="doc-project-title">
         <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
         <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
       </a>
@@ -61,20 +25,20 @@
     <div class="doc-content-wrapper">
 
       <!-- 访问限制提示 - 非公开文档 -->
-      <div th:if="${project?.spec != null and project.spec['public'] == false}" class="doc-restricted-banner">
+      <div th:if="${project?.spec?.authorizeRequired == true}" class="doc-restricted-banner">
         <span class="icon-[heroicons--lock-closed] w-5 h-5 shrink-0"></span>
-        <span>此文档仅对登录用户可见</span>
+        <span>此文档需要授权访问</span>
       </div>
 
       <!-- 面包屑 -->
       <nav class="doc-breadcrumb" aria-label="面包屑导航">
-        <a th:href="${project.status.permalink}" class="flex items-center gap-1">
+        <a th:href="@{${project.status.permalink}}" class="flex items-center gap-1">
           <span class="icon-[heroicons--home] w-4 h-4"></span>
           <span th:text="${project.spec.displayName}">首页</span>
         </a>
         <th:block th:each="crumb : ${crumbs}">
           <span class="icon-[heroicons--chevron-right] w-3 h-3 opacity-40"></span>
-          <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}">分类</a>
+          <a th:href="@{${crumb.status.permalink}}" th:text="${crumb.spec.title}">分类</a>
         </th:block>
       </nav>
 
@@ -84,7 +48,7 @@
       <!-- 文档正文内容 -->
       <article class="doc-article">
         <div id="article-content" class="prose prose-lg max-w-none"
-          th:utext="${#strings.replace(#strings.replace(#strings.replace(docInfo.content.content, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}">
+          th:utext="${docInfo.content?.content}">
           文档内容
         </div>
       </article>
@@ -102,7 +66,7 @@
                 class="flex items-center gap-3">
                 <!-- 头像 -->
                 <div class="avatar">
-                  <a th:href="@{/authors/{name}(name=${contributor.name})}"
+                  <a th:href="@{/authors/{name}(name=${contributor?.name ?: docInfo.doc.spec.owner})}"
                     class="group/avatar block w-10 h-10 rounded-full ring ring-primary/20 ring-offset-base-100 ring-offset-1 overflow-hidden">
                     <img th:if="${contributor?.avatar}" th:src="${contributor.avatar}"
                       th:alt="${contributor.displayName}"
@@ -115,7 +79,7 @@
                 </div>
                 <!-- 作者名+时间 -->
                 <div class="flex flex-col">
-                  <a th:href="@{/authors/{name}(name=${contributor.name})}"
+                  <a th:href="@{/authors/{name}(name=${contributor?.name ?: docInfo.doc.spec.owner})}"
                     class="text-sm font-medium text-base-content hover:text-primary transition-colors"
                     th:text="${contributor?.displayName ?: docInfo.doc.spec.owner}">作者名</a>
                   <div class="flex items-center gap-2 text-xs text-base-content/50">
@@ -131,7 +95,7 @@
               <div class="divider divider-horizontal mx-0 h-8 hidden sm:flex"></div>
 
               <!-- 分享按钮 - 使用文档独立配置 -->
-              <button th:if="${theme.config.docsme.doc_settings?.enable_share != false}" x-data
+              <button type="button" aria-label="分享文档" th:if="${theme?.config?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}" x-data
                 @click="$dispatch('open-share-modal')"
                 class="btn btn-sm btn-ghost bg-base-200 border-0 rounded-full gap-2 transition-all duration-200 hover:bg-primary/10 hover:text-primary">
                 <span class="icon-[heroicons--share] w-5 h-5"></span>
@@ -142,7 +106,7 @@
             <!-- 右侧：翻页导航 -->
             <div th:if="${linkNavigation}" class="flex gap-2 w-full sm:w-auto sm:max-w-[60%]">
               <!-- 上一篇 -->
-              <a th:if="${linkNavigation.hasPrevious}" th:href="${linkNavigation.previous.link}"
+              <a th:if="${linkNavigation.hasPrevious}" th:href="@{${linkNavigation.previous.link}}"
                 class="flex-1 btn btn-ghost bg-base-200 border-0 rounded-xl h-auto py-2 px-3 flex-nowrap justify-start gap-2 hover:bg-primary/10 hover:text-primary group overflow-hidden">
                 <span
                   class="icon-[heroicons--arrow-left] w-4 h-4 shrink-0 opacity-60 group-hover:opacity-100 transition-all group-hover:-translate-x-0.5"></span>
@@ -162,7 +126,7 @@
               </div>
 
               <!-- 下一篇 -->
-              <a th:if="${linkNavigation.hasNext}" th:href="${linkNavigation.next.link}"
+              <a th:if="${linkNavigation.hasNext}" th:href="@{${linkNavigation.next.link}}"
                 class="flex-1 btn btn-ghost bg-base-200 border-0 rounded-xl h-auto py-2 px-3 flex-nowrap justify-end gap-2 hover:bg-primary/10 hover:text-primary group overflow-hidden">
                 <div class="flex flex-col items-end min-w-0 overflow-hidden">
                   <span class="text-[10px] opacity-50">下一篇</span>
@@ -185,8 +149,8 @@
         </div>
       </div>
 
-      <!-- 评论卡片 - 使用 project.spec.enableComment 判断是否启用评论 -->
-      <div th:if="${project?.spec?.enableComment == true}"
+      <!-- 评论卡片 - 叠加 Halo 全局与项目评论开关 -->
+      <div th:if="${haloCommentEnabled and project?.spec?.enableComment == true}"
         class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl mt-4 overflow-hidden">
         <!-- 评论区标题 -->
         <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-base-content/5 bg-base-200/30">
@@ -219,21 +183,23 @@
     </div>
   </aside>
 
-</div>
+  <!-- 分享弹窗 - 条件须在片段替换外层，关闭时不求值分享参数。 -->
+  <th:block th:if="${theme?.config?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}">
+    <th:block th:replace="~{modules/share-modal :: shareModal(
+      title='分享文档',
+      shareUrl=${docTree?.status?.permalink},
+      shareTitle=${docTree?.spec?.title},
+      shareItemIds=${theme?.config?.get('docsme')?.get('doc_settings')?.get('share_settings')?.get('share_item_ids')}
+    )}" />
+  </th:block>
 
-<!-- 分享弹窗 - 使用文档独立配置 -->
-<th:block th:if="${theme.config.docsme.doc_settings?.enable_share != false}" th:replace="~{modules/share-modal :: shareModal(
-    title='分享文档',
-    shareUrl=${docTree.status.permalink},
-    shareTitle=${docTree.spec.title},
-    shareItemIds=${theme.config.docsme.doc_settings.share_settings.share_item_ids}
-  )}" />
+</div>
 
 <!-- 递归渲染文档树 - 参考 Docsme 官方模板 -->
 <th:block th:fragment="tree-item(docTrees)">
   <li th:each="currentDocTree : ${docTrees}">
     <!-- 文档链接 -->
-    <a th:if="${currentDocTree.spec.type == 'DOC'}" th:href="${currentDocTree.status.permalink}"
+    <a th:if="${currentDocTree.spec.type == 'DOC'}" th:href="@{${currentDocTree.status.permalink}}"
       th:title="${currentDocTree.spec.title}"
       th:classappend="${currentDocTree.metadata.name == docTree.metadata.name} ? 'active' : ''">
       <span th:text="${currentDocTree.spec.title}" class="truncate">标题</span>
@@ -242,7 +208,7 @@
     <details th:if="${currentDocTree.spec.type == 'TREE'}" th:id="${currentDocTree.metadata.name}"
       th:open="${#arrays.contains(crumbs, currentDocTree) || currentDocTree.metadata.name == docTree.metadata.name}">
       <summary th:title="${currentDocTree.spec.title}">
-        <a th:href="${currentDocTree.status.permalink}" th:text="${currentDocTree.spec.title}"
+        <a th:href="@{${currentDocTree.status.permalink}}" th:text="${currentDocTree.spec.title}"
           th:classappend="${currentDocTree.metadata.name == docTree.metadata.name} ? 'active' : ''"
           class="truncate doc-nav-folder-link">分类标题</a>
       </summary>

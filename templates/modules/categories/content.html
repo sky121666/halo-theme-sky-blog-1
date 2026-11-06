@@ -45,7 +45,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与全部文章前 N（后台配置），并提供更多链接 -->
-      <section class="flex-1" th:classappend="${cfg.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
+      <section class="flex-1 min-w-0" th:classappend="${sidebarCfg.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <th:block th:with="categories = ${categoryFinder.listAsTree()}">
           <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
           <th:block th:switch="${theme.config.category_settings.basic_info.category_display_style}">
@@ -69,7 +69,7 @@
           <!-- 无分类提示 -->
           <th:block th:if="${#lists.isEmpty(categories)}">
             <div class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-gray-600" th:text="#{page.categories.empty}">暂无分类</span>
+              <span class="text-sm font-light text-gray-600">暂无分类</span>
             </div>
           </th:block>
 
@@ -77,6 +77,7 @@
           <th:block th:with="posts=${collectionPosts}">
             <!-- 动态渲染不同风格的列表 - 使用后台默认设置 -->
             <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
               <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
                 <th:block th:case="'modern'">
                   <th:block
@@ -100,11 +101,6 @@
                     th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
                 </th:block>
               </th:block>
-            </div>
-
-            <!-- 无文章提示 -->
-            <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-gray-600" th:text="#{common.noPosts}">暂无文章</span>
             </div>
 
             <!-- 分页：上一页/下一页 + 下拉选择（索引页） -->
@@ -145,7 +141,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <!-- 分类切换块 - 根据后台设置渲染不同风格 -->
         <th:block th:with="categories=${categoryFinder.listAsTree()}">
@@ -169,6 +165,7 @@
         </th:block>
 
         <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
           <!-- 文章列表（当前分类）：使用后台默认设置 -->
           <th:block th:switch="${theme.config.category_settings.basic_info.list_style}">
             <th:block th:case="'modern'">
@@ -197,7 +194,7 @@
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            context=${category.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},
@@ -231,7 +228,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <!-- 分类切换块 -->
         <th:block th:with="categories=${categoryFinder.listAsTree()}">
@@ -255,6 +252,7 @@
         </th:block>
 
         <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
           <!-- 文章列表（当前分类）：强制使用卡片风格 -->
           <th:block
             th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.category_settings})}" />
@@ -262,7 +260,7 @@
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            context=${category.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},
@@ -296,7 +294,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <!-- 分类切换块 -->
         <th:block th:with="categories=${categoryFinder.listAsTree()}">
@@ -320,6 +318,7 @@
         </th:block>
 
         <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
           <!-- 文章列表（当前分类）：强制使用列表风格 -->
           <th:block
             th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.category_settings})}" />
@@ -327,7 +326,7 @@
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            context=${category.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},
@@ -361,7 +360,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <!-- 分类切换块 -->
         <th:block th:with="categories=${categoryFinder.listAsTree()}">
@@ -385,6 +384,7 @@
         </th:block>
 
         <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
           <!-- 文章列表（当前分类）：强制使用杂志风格 -->
           <th:block
             th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.category_settings})}" />
@@ -392,7 +392,7 @@
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            context=${category.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},
@@ -426,7 +426,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与当前分类文章列表（分页） -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.category_settings.sidebar_settings.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <!-- 分类切换块 -->
         <th:block th:with="categories=${categoryFinder.listAsTree()}">
@@ -450,6 +450,7 @@
         </th:block>
 
         <div id="category-posts">
+          <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
           <!-- 文章列表（当前分类）：强制使用极简风格 -->
           <th:block
             th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.category_settings})}" />
@@ -457,7 +458,7 @@
 
         <!-- 分页（案例片段复用） -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/categories/{slug}/(slug=${category.metadata.name})},
+            context=${category.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},

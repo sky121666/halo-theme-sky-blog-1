@@ -1,142 +1,95 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 
-<!-- ========================================== -->
-<!--   装备分组切换组件 - 多种 Tab 样式          -->
-<!--   仅在 Tech 风格模式下使用                  -->
-<!-- ========================================== -->
+<!-- 分组切换使用插件的 group 路由；首次渲染与翻页均以服务端状态为准。 -->
+<th:block th:fragment="navigation(groups, currentGroup, tabStyle)" th:switch="${tabStyle}">
+    <th:block th:case="'chips'">
+        <th:block th:replace="~{modules/equipments/group-switch :: chips(${groups}, ${currentGroup})}" />
+    </th:block>
+    <th:block th:case="'underline'">
+        <th:block th:replace="~{modules/equipments/group-switch :: underline(${groups}, ${currentGroup})}" />
+    </th:block>
+    <th:block th:case="'glass'">
+        <th:block th:replace="~{modules/equipments/group-switch :: glass(${groups}, ${currentGroup})}" />
+    </th:block>
+    <th:block th:case="*">
+        <th:block th:replace="~{modules/equipments/group-switch :: pills(${groups}, ${currentGroup})}" />
+    </th:block>
+</th:block>
 
-<!-- 
-  风格说明:
-  1. pills - 药丸风格：简约标签，胶囊形状
-  2. chips - 芯片风格：圆角边框，带计数
-  3. underline - 下划线风格：极简，文字+下划线
-  4. glass - 玻璃拟态：毛玻璃背景
-
-  注：为"全部"按钮预设激活样式，避免 Alpine.js 初始化前闪烁
--->
-
-<!-- ===================== -->
-<!-- 药丸风格 - 胶囊徽章 -->
-<!-- ===================== -->
-<div th:fragment="pills(groups, activeTab)" class="equipment-tabs-pills mb-6">
+<div th:fragment="pills(groups, currentGroup)" class="equipment-tabs-pills mb-6">
     <div class="flex flex-wrap items-center gap-2">
-        <!-- 全部按钮 - 预设激活样式 -->
-        <button @click="activeTab = 'all'"
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer bg-base-100 text-base-content shadow-sm border-base-content/10"
-            :class="activeTab === 'all' 
-                ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' 
-                : '!bg-base-100/60 !text-base-content/60 !border-base-content/5 hover:!bg-base-100 hover:!text-base-content hover:shadow-sm hover:!border-base-content/10 !shadow-none'">
+        <a th:href="@{/equipments}" th:attr="aria-current=${#strings.isEmpty(currentGroup) ? 'page' : null}"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
+            th:classappend="${#strings.isEmpty(currentGroup)} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'">
             <span class="icon-[heroicons--squares-2x2] w-3.5 h-3.5"></span>
             <span>全部</span>
-        </button>
-
-        <!-- 分组按钮 -->
-        <th:block th:each="group : ${groups}">
-            <button th:attr="data-group-id=${group.metadata.name}" @click="activeTab = $el.dataset.groupId"
-                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer bg-base-100/60 text-base-content/60 border-base-content/5"
-                :class="activeTab === $el.dataset.groupId 
-                    ? '!bg-base-100 !text-base-content shadow-sm !border-base-content/10' 
-                    : ''">
-                <span th:if="${#annotations.get(group, 'icon') != null}" class="group-icon w-3.5 h-3.5"
-                    th:utext="${#annotations.get(group, 'icon')}"></span>
-                <span th:unless="${#annotations.get(group, 'icon') != null}"
-                    class="icon-[heroicons--folder] w-3.5 h-3.5 opacity-50"></span>
-                <span th:text="${group.spec.displayName}"></span>
-                <span class="text-xs opacity-50" th:text="${group.status.equipmentCount}"></span>
-            </button>
-        </th:block>
+        </a>
+        <a th:each="group : ${groups}" th:href="@{/equipments(group=${group.metadata.name})}"
+            th:attr="aria-current=${currentGroup == group.metadata.name ? 'page' : null}"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
+            th:classappend="${currentGroup == group.metadata.name} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'">
+            <span th:if="${#annotations.get(group, 'icon') != null}" class="group-icon w-3.5 h-3.5" th:utext="${#annotations.get(group, 'icon')}"></span>
+            <span th:unless="${#annotations.get(group, 'icon') != null}" class="icon-[heroicons--folder] w-3.5 h-3.5 opacity-50"></span>
+            <span th:text="${group.spec.displayName}"></span>
+            <span class="text-xs opacity-50" th:text="${group.status.equipmentCount}"></span>
+        </a>
     </div>
 </div>
 
-<!-- ===================== -->
-<!-- 芯片风格 - 边框卡片   -->
-<!-- ===================== -->
-<div th:fragment="chips(groups, activeTab)" class="equipment-tabs-chips mb-6">
+<div th:fragment="chips(groups, currentGroup)" class="equipment-tabs-chips mb-6">
     <div class="flex flex-wrap justify-center gap-2">
-        <!-- 全部芯片 - 预设激活样式 -->
-        <button @click="activeTab = 'all'"
-            class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200 cursor-pointer bg-primary/10 text-primary border-primary/30"
-            :class="activeTab === 'all' 
-                ? 'bg-primary/10 text-primary border-primary/30' 
-                : '!bg-base-100 !text-base-content/60 !border-base-content/10 hover:!border-primary/30 hover:!text-primary'">
+        <a th:href="@{/equipments}" th:attr="aria-current=${#strings.isEmpty(currentGroup) ? 'page' : null}"
+            class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
+            th:classappend="${#strings.isEmpty(currentGroup)} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'">
             <span class="icon-[heroicons--squares-2x2] w-4 h-4"></span>
             <span>全部</span>
-        </button>
-
-        <!-- 分组芯片 -->
-        <th:block th:each="group : ${groups}">
-            <button th:attr="data-group-id=${group.metadata.name}" @click="activeTab = $el.dataset.groupId"
-                class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200 cursor-pointer bg-base-100 text-base-content/60 border-base-content/10"
-                :class="activeTab === $el.dataset.groupId 
-                    ? '!bg-primary/10 !text-primary !border-primary/30' 
-                    : ''">
-                <span th:if="${#annotations.get(group, 'icon') != null}" class="group-icon w-4 h-4"
-                    th:utext="${#annotations.get(group, 'icon')}"></span>
-                <span th:unless="${#annotations.get(group, 'icon') != null}"
-                    class="icon-[heroicons--folder] w-4 h-4 opacity-50"></span>
-                <span th:text="${group.spec.displayName}"></span>
-                <span class="text-xs opacity-50" th:text="'(' + ${group.status.equipmentCount} + ')'"></span>
-            </button>
-        </th:block>
+        </a>
+        <a th:each="group : ${groups}" th:href="@{/equipments(group=${group.metadata.name})}"
+            th:attr="aria-current=${currentGroup == group.metadata.name ? 'page' : null}"
+            class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
+            th:classappend="${currentGroup == group.metadata.name} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'">
+            <span th:if="${#annotations.get(group, 'icon') != null}" class="group-icon w-4 h-4" th:utext="${#annotations.get(group, 'icon')}"></span>
+            <span th:unless="${#annotations.get(group, 'icon') != null}" class="icon-[heroicons--folder] w-4 h-4 opacity-50"></span>
+            <span th:text="${group.spec.displayName}"></span>
+            <span class="text-xs opacity-50" th:text="'(' + ${group.status.equipmentCount} + ')'"></span>
+        </a>
     </div>
 </div>
 
-<!-- ===================== -->
-<!-- 下划线风格 - 极简     -->
-<!-- ===================== -->
-<div th:fragment="underline(groups, activeTab)" class="equipment-tabs-underline mb-6">
+<div th:fragment="underline(groups, currentGroup)" class="equipment-tabs-underline mb-6">
     <div class="flex flex-wrap justify-center items-center gap-x-1 gap-y-0 border-b border-base-content/10 pb-px">
-        <!-- 全部 - 预设激活样式 -->
-        <button @click="activeTab = 'all'"
-            class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200 cursor-pointer text-primary"
-            :class="activeTab === 'all' ? 'text-primary' : '!text-base-content/50 hover:!text-base-content'">
+        <a th:href="@{/equipments}" th:attr="aria-current=${#strings.isEmpty(currentGroup) ? 'page' : null}"
+            class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+            th:classappend="${#strings.isEmpty(currentGroup)} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'">
             <span>全部</span>
-            <span class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"
-                :class="activeTab === 'all' ? '' : 'hidden'"></span>
-        </button>
-
-        <!-- 分组 -->
-        <th:block th:each="group : ${groups}">
-            <button th:attr="data-group-id=${group.metadata.name}" @click="activeTab = $el.dataset.groupId"
-                class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200 cursor-pointer text-base-content/50"
-                :class="activeTab === $el.dataset.groupId ? '!text-primary' : ''">
-                <span th:text="${group.spec.displayName}"></span>
-                <sup class="ml-0.5 text-xs opacity-40" th:text="${group.status.equipmentCount}"></sup>
-                <span class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full hidden"
-                    :class="activeTab === $el.dataset.groupId ? '!block' : ''"></span>
-            </button>
-        </th:block>
+            <span th:if="${#strings.isEmpty(currentGroup)}" class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
+        </a>
+        <a th:each="group : ${groups}" th:href="@{/equipments(group=${group.metadata.name})}"
+            th:attr="aria-current=${currentGroup == group.metadata.name ? 'page' : null}"
+            class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+            th:classappend="${currentGroup == group.metadata.name} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'">
+            <span th:text="${group.spec.displayName}"></span>
+            <sup class="ml-0.5 text-xs opacity-40" th:text="${group.status.equipmentCount}"></sup>
+            <span th:if="${currentGroup == group.metadata.name}" class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
+        </a>
     </div>
 </div>
 
-<!-- ===================== -->
-<!-- 玻璃拟态风格 - 轻量   -->
-<!-- ===================== -->
-<div th:fragment="glass(groups, activeTab)" class="equipment-tabs-glass mb-6">
-    <div
-        class="flex flex-wrap justify-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-sm dark:bg-base-300/30">
-        <!-- 全部 - 预设激活样式 -->
-        <button @click="activeTab = 'all'"
-            class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer bg-base-100 text-base-content shadow-sm dark:bg-base-100/90"
-            :class="activeTab === 'all' 
-                ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' 
-                : '!bg-transparent !text-base-content/50 hover:!text-base-content hover:!bg-base-100/60 !shadow-none'">
+<div th:fragment="glass(groups, currentGroup)" class="equipment-tabs-glass mb-6">
+    <div class="flex flex-wrap justify-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-sm dark:bg-base-300/30">
+        <a th:href="@{/equipments}" th:attr="aria-current=${#strings.isEmpty(currentGroup) ? 'page' : null}"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+            th:classappend="${#strings.isEmpty(currentGroup)} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'">
             全部
-        </button>
-
-        <!-- 分组 -->
-        <th:block th:each="group : ${groups}">
-            <button th:attr="data-group-id=${group.metadata.name}" @click="activeTab = $el.dataset.groupId"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer text-base-content/50"
-                :class="activeTab === $el.dataset.groupId 
-                    ? '!bg-base-100 !text-base-content shadow-sm dark:!bg-base-100/90' 
-                    : ''">
-                <span th:text="${group.spec.displayName}"></span>
-                <span class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
-                    th:text="${group.status.equipmentCount}"></span>
-            </button>
-        </th:block>
+        </a>
+        <a th:each="group : ${groups}" th:href="@{/equipments(group=${group.metadata.name})}"
+            th:attr="aria-current=${currentGroup == group.metadata.name ? 'page' : null}"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+            th:classappend="${currentGroup == group.metadata.name} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'">
+            <span th:text="${group.spec.displayName}"></span>
+            <span class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10" th:text="${group.status.equipmentCount}"></span>
+        </a>
     </div>
 </div>
 

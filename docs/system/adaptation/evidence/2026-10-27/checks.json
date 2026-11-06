@@ -1,0 +1,56 @@
+{
+  "checkedAt": "2026-10-27T03:38:17.277Z",
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+    "fileCount": 369,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "haloVersion": "2.27.0",
+  "activeThemeByPublicAssets": "theme-sky-blog-3",
+  "node": "24.21.0",
+  "pnpm": "12.6.0",
+  "checks": [
+    {
+      "command": "pnpm run build",
+      "status": "passed",
+      "scope": "current source; before documentation finalization; includes typecheck, contracts, core compatibility 9/9, form lifecycle 5/5, SEO, heatmap, Vite, artifact checks"
+    },
+    {
+      "command": "pnpm run verify:plugin-contracts",
+      "status": "passed",
+      "plugins": 27
+    },
+    {
+      "command": "pnpm run lint",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm run format:check",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  ],
+  "review": "独立代理复核代码与版本/路由证据无新增可复现P1/P2；不替代完整业务验收",
+  "gitActions": "none; existing untracked user QA files preserved",
+  "siteActions": "only previously authorized theme template invalidation and Page Cache refresh; no upgrade, migration or active theme switch",
+  "browserFinished": true
+}

@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-06",
+  "task": "Review prior UI changes, reduce redundant presentation and preserve official contracts",
+  "environment": {
+    "at": "2026-11-06T02:20:40.932Z",
+    "base": "http://localhost:8090",
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "2b223699f1f6adf994e4ef2c40883796bd1f9248abb174495a3e8d7c39836d09",
+      "fileCount": 402,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "cache": [
+      {
+        "method": "PUT",
+        "route": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "status": 204,
+        "redirected": false,
+        "contentType": null
+      },
+      {
+        "method": "DELETE",
+        "route": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "status": 200,
+        "redirected": false,
+        "contentType": null
+      }
+    ],
+    "assets": [
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "local": "27e0b55b999defde43e34d9d873d6839a18b0265c42b7aa72db2be81a817b93e",
+        "server": "27e0b55b999defde43e34d9d873d6839a18b0265c42b7aa72db2be81a817b93e",
+        "match": true
+      },
+      {
+        "file": "css/post.css",
+        "status": 200,
+        "local": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+        "server": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+        "match": true
+      },
+      {
+        "file": "css/archives.css",
+        "status": 200,
+        "local": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "server": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "match": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "local": "706c8f3082e591ace0141768424175ffa6cb158628a124d0f69c1434c6bcd3f2",
+        "server": "706c8f3082e591ace0141768424175ffa6cb158628a124d0f69c1434c6bcd3f2",
+        "match": true
+      },
+      {
+        "file": "css/links.css",
+        "status": 200,
+        "local": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf",
+        "server": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf",
+        "match": true
+      },
+      {
+        "file": "css/moments.css",
+        "status": 200,
+        "local": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+        "server": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+        "match": true
+      },
+      {
+        "file": "css/categories.css",
+        "status": 200,
+        "local": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "server": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "match": true
+      },
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "local": "bef41b720b810adcc876a7f35f7a3f60d81b31b6dc9bddbe7296623271a12eaa",
+        "server": "bef41b720b810adcc876a7f35f7a3f60d81b31b6dc9bddbe7296623271a12eaa",
+        "match": true
+      },
+      {
+        "file": "js/post.js",
+        "status": 200,
+        "local": "cdbd03801389949371dff0482c2a17967e9f82ee77b9b8da7ce0bffa28fd1527",
+        "server": "cdbd03801389949371dff0482c2a17967e9f82ee77b9b8da7ce0bffa28fd1527",
+        "match": true
+      },
+      {
+        "file": "js/doc.js",
+        "status": 200,
+        "local": "302783a333038b2fb35b6218fd58053c8fd0e03eed3ef85cb535268fd7fa2b95",
+        "server": "302783a333038b2fb35b6218fd58053c8fd0e03eed3ef85cb535268fd7fa2b95",
+        "match": true
+      },
+      {
+        "file": "js/links.js",
+        "status": 200,
+        "local": "b5816d95e812e5d3a37f59a831ae80e6d8b6a9d805d8381ec365ce391a218a67",
+        "server": "b5816d95e812e5d3a37f59a831ae80e6d8b6a9d805d8381ec365ce391a218a67",
+        "match": true
+      },
+      {
+        "file": "js/moments.js",
+        "status": 200,
+        "local": "c2b5d4583e6d762495c17d847de4974d8eb2b571186bacb4a3aad03a7740e60d",
+        "server": "c2b5d4583e6d762495c17d847de4974d8eb2b571186bacb4a3aad03a7740e60d",
+        "match": true
+      },
+      {
+        "file": "js/about.js",
+        "status": 200,
+        "local": "b83a37da18d1000cc6a371f153f433262d04396dd80949c152b007fb45f9313b",
+        "server": "b83a37da18d1000cc6a371f153f433262d04396dd80949c152b007fb45f9313b",
+        "match": true
+      },
+      {
+        "file": "js/steam.js",
+        "status": 200,
+        "local": "87f13f801f48180c049edecf5806014a3c7b8173a25b1e24b330b27a86a79d80",
+        "server": "87f13f801f48180c049edecf5806014a3c7b8173a25b1e24b330b27a86a79d80",
+        "match": true
+      },
+      {
+        "file": "js/categories.js",
+        "status": 200,
+        "local": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "server": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "match": true
+      }
+    ],
+    "cacheFreshSince": "2026-11-06T02:20:41.038Z",
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ],
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.50"
+    },
+    "halo": "2.27.1"
+  },
+  "changes": {
+    "runtimeFiles": [
+      "templates/modules/doc/selectors.html",
+      "src/apps/links/runtime.js",
+      "src/pages/about/about.js",
+      "src/pages/doc/doc.js",
+      "src/pages/moments/moment-publish.js",
+      "src/pages/post/post.css",
+      "src/pages/post/post.js",
+      "templates/modules/archives/content.html",
+      "templates/modules/categories/category-switch.html",
+      "templates/modules/doc/floating-dock.html",
+      "templates/modules/index/header/moments.html",
+      "templates/modules/links/content.html",
+      "templates/modules/moments/content.html",
+      "templates/modules/share-modal.html",
+      "templates/modules/steam/content.html",
+      "templates/modules/widgets/archive-sidebar.html"
+    ],
+    "changedFromTaskSnapshot": [
+      "scripts/fixtures/CommentTemplateChecks.java",
+      "scripts/fixtures/TemplateDataChecks.java",
+      "scripts/verify-doc-navigation.mjs",
+      "scripts/verify-links-history.mjs",
+      "scripts/verify-links-identification.mjs",
+      "scripts/verify-moments-post-actions.mjs",
+      "scripts/verify-steam-pagination.mjs",
+      "scripts/verify-ui-navigation.mjs",
+      "templates/modules/doc/selectors.html",
+      "src/apps/links/runtime.js",
+      "src/pages/about/about.js",
+      "src/pages/doc/doc.js",
+      "src/pages/moments/moment-publish.js",
+      "src/pages/post/post.css",
+      "src/pages/post/post.js",
+      "templates/assets/css/main.css",
+      "templates/assets/css/post.css",
+      "templates/assets/js/about.js",
+      "templates/assets/js/doc.js",
+      "templates/assets/js/links.js",
+      "templates/assets/js/moments.js",
+      "templates/assets/js/post.js",
+      "templates/modules/archives/content.html",
+      "templates/modules/categories/category-switch.html",
+      "templates/modules/doc/floating-dock.html",
+      "templates/modules/index/header/moments.html",
+      "templates/modules/links/content.html",
+      "templates/modules/moments/content.html",
+      "templates/modules/share-modal.html",
+      "templates/modules/steam/content.html",
+      "templates/modules/widgets/archive-sidebar.html"
+    ],
+    "scope": "Theme only; no plugin, data, config or Git writes"
+  },
+  "build": {
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "passed": 413,
+    "failed": 0,
+    "skipped": 2,
+    "fullBuild": true,
+    "lint": true,
+    "format": true,
+    "authCore": "Local Halo core script included"
+  },
+  "templateFixtures": {
+    "data": {
+      "passed": 181,
+      "engine": "Existing local Thymeleaf 3.1.5 / Spring 6.2.9, not Halo runtime identity"
+    },
+    "comments": {
+      "status": "not-validated",
+      "initial": "Missing JsonPropertyAccessor",
+      "existingIntegrationJarRetry": "SpringEL EL1008E: page_description missing on ComparableJsonNode",
+      "baselineReproducesSameFailure": true,
+      "dependenciesDownloaded": false
+    }
+  },
+  "browser": {
+    "tool": "Chrome DevTools MCP, isolated visitor context",
+    "viewports": [1440, 390],
+    "routeLayoutRecords": [
+      {
+        "route": "/archives",
+        "viewport": 390,
+        "path": "/archives?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "文章归档 - 5ee博客",
+        "h1": "文章归档",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/about",
+        "viewport": 390,
+        "path": "/about?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "关于我 - 5ee博客",
+        "h1": "SKY",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/",
+        "viewport": 390,
+        "path": "/?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "5ee博客 - 123",
+        "h1": "sky blog",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/categories",
+        "viewport": 390,
+        "path": "/categories?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "文章分类 - 5ee博客",
+        "h1": "文章分类",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/moments",
+        "viewport": 390,
+        "path": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "瞬间 - 5ee博客",
+        "h1": "瞬间",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/steam",
+        "viewport": 390,
+        "path": "/steam?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "Steam 游戏库 - 5ee博客",
+        "h1": "sky",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/docs",
+        "viewport": 390,
+        "path": "/docs?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "文档中心 - 5ee博客",
+        "h1": "文档中心",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/docs/halo-theme-sky-blog-1",
+        "viewport": 1440,
+        "path": "/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "简介 - 5ee博客",
+        "h1": "简介",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/archives",
+        "viewport": 1440,
+        "path": "/archives?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "文章归档 - 5ee博客",
+        "h1": "文章归档",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/links?view=apply",
+        "viewport": 1440,
+        "path": "/links?preview-theme=theme-sky-blog-1&view=apply",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "友情链接 - 5ee博客",
+        "h1": "申请友链",
+        "descriptionVisible": false,
+        "applyLabel": "生成申请内容",
+        "applyHint": "生成后复制到留言板提交",
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/",
+        "viewport": 1440,
+        "path": "/?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "5ee博客 - 123",
+        "h1": "sky blog",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/categories",
+        "viewport": 1440,
+        "path": "/categories?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "文章分类 - 5ee博客",
+        "h1": "文章分类",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/moments",
+        "viewport": 1440,
+        "path": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "瞬间 - 5ee博客",
+        "h1": "瞬间",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/about",
+        "viewport": 1440,
+        "path": "/about?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "关于我 - 5ee博客",
+        "h1": "SKY",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/steam",
+        "viewport": 1440,
+        "path": "/steam?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "Steam 游戏库 - 5ee博客",
+        "h1": "sky",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/docs/halo-theme-sky-blog-1",
+        "viewport": 390,
+        "path": "/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "简介 - 5ee博客",
+        "h1": "简介",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/docs",
+        "viewport": 1440,
+        "path": "/docs?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": 0,
+        "theme": true,
+        "title": "文档中心 - 5ee博客",
+        "h1": "文档中心",
+        "descriptionVisible": false,
+        "oldArchiveHint": false,
+        "blankPage": false
+      },
+      {
+        "route": "/links?view=apply",
+        "viewport": 390,
+        "path": "/links?preview-theme=theme-sky-blog-1&view=apply",
+        "width": 390,
+        "overflow": 0,
+        "theme": true,
+        "title": "友情链接 - 5ee博客",
+        "h1": "申请友链",
+        "descriptionVisible": false,
+        "applyLabel": "生成申请内容",
+        "applyHint": "生成后复制到留言板提交",
+        "oldArchiveHint": false,
+        "blankPage": false
+      }
+    ],
+    "checks": [
+      {
+        "name": "Article headings",
+        "routes": ["/archives/editor-feature-demo"],
+        "viewports": [1440, 390],
+        "result": "passed",
+        "observations": {
+          "nativeButton": true,
+          "keyboardClipboardCalls": 2,
+          "keyboard": ["Enter", "Space"],
+          "mobileTarget": [24, 24],
+          "mobileIconAfterText": true,
+          "horizontalOverflow": 0
+        },
+        "boundary": "Clipboard write replaced locally; no real clipboard modification"
+      },
+      {
+        "name": "Live category detail",
+        "routes": ["/categories/halo"],
+        "viewports": [1440, 390],
+        "result": "passed",
+        "observations": {
+          "liveCategoryCount": 5,
+          "currentVisible": true,
+          "horizontalOverflow": 0
+        }
+      },
+      {
+        "name": "Dense categories",
+        "viewports": [1920, 390],
+        "result": "passed",
+        "observations": {
+          "sampleNodes": 21,
+          "collapsedByStyle": {
+            "pills": 6,
+            "chips": 10,
+            "underline": 12,
+            "glass": 10
+          },
+          "expanded": 21,
+          "currentVisibleAfterCollapse": true,
+          "keyboard": ["Tab", "Enter", "Space"]
+        },
+        "boundary": "Rendered production template in isolated local fixture, not site data"
+      },
+      {
+        "name": "Docs version selector",
+        "routes": ["/docs/halo-theme-sky-blog-1"],
+        "viewports": [1440, 390],
+        "result": "passed",
+        "observations": {
+          "expandedState": true,
+          "desktopEscapeAndFocusReturn": true,
+          "mobileFirstEscapeClosesSelector": true,
+          "mobileSecondEscapeClosesDrawer": true,
+          "mobileFocusReturnsToDock": true,
+          "bodyScrollRestored": true,
+          "returnToTopAccessibleNameConfirmed": true
+        },
+        "boundary": "Existing version selector; no actual multilingual site data tested"
+      },
+      {
+        "name": "Steam pagination",
+        "routes": ["/steam"],
+        "viewport": 1440,
+        "result": "passed",
+        "observations": {
+          "bothButtonsDisabledPending": true,
+          "requestsForDoubleClick": 1,
+          "finalPage": "2 / 2",
+          "previousEnabledAfterResponse": true
+        },
+        "boundary": "Real read request delayed in current browser only"
+      },
+      {
+        "name": "Links draft",
+        "routes": ["/links?view=apply"],
+        "viewport": 1440,
+        "result": "passed",
+        "observations": {
+          "draftShown": true,
+          "copyThenSubmitInstruction": true,
+          "businessWriteRequests": 0
+        },
+        "boundary": "Local generation only; real link application not submitted"
+      },
+      {
+        "name": "Empty share platforms",
+        "routes": ["/archives/editor-feature-demo", "/docs/halo-theme-sky-blog-1"],
+        "viewports": [390, 1440],
+        "result": "passed",
+        "observations": {
+          "platformAreaHidden": true,
+          "copyRetained": true,
+          "focusInside": true,
+          "closeRestoresFocus": true,
+          "closeRestoresScroll": true
+        },
+        "boundary": "Temporary browser component state, restored; no site setting changed"
+      },
+      {
+        "name": "Moments feedback",
+        "result": "isolated-tests-only",
+        "observations": {
+          "cases": 69,
+          "firstPermissionLookupSilent": true,
+          "explicitRetryVisible": true,
+          "statusMutualExclusion": true,
+          "staleResultIsolation": true
+        },
+        "boundary": "Guest page layout visited both widths; authenticated publication feedback verified in Node isolation, no publication or upload"
+      }
+    ],
+    "screenshots": "Key layouts visually inspected through inline tool images; no new full before/after screenshot set saved",
+    "cacheIncident": "Links initially used a previous cached JS bundle; discarded that observation and reloaded with ignoreCache before acceptance"
+  },
+  "pluginSmoke": {
+    "summary": {
+      "passed": 36,
+      "failed": 0,
+      "notApplicable": 0,
+      "notCovered": 12,
+      "complete": false
+    },
+    "notCovered": [
+      {
+        "name": "Photo Detail",
+        "reason": "target URL is not configured: PHOTO_DETAIL_URL"
+      },
+      {
+        "name": "Moment Detail",
+        "reason": "target URL is not configured: MOMENT_DETAIL_URL"
+      },
+      {
+        "name": "Doc Detail",
+        "reason": "target URL is not configured: DOC_DETAIL_URL"
+      },
+      {
+        "name": "Vote Block",
+        "reason": "target URL is not configured: VOTE_PAGE_URL"
+      },
+      {
+        "name": "Text Diagram",
+        "reason": "target URL is not configured: TEXT_DIAGRAM_PAGE_URL"
+      },
+      {
+        "name": "Contact Form",
+        "reason": "target URL is not configured: CONTACT_FORM_PAGE_URL"
+      },
+      {
+        "name": "AI Summary",
+        "reason": "target URL is not configured: AI_SUMMARY_PAGE_URL"
+      },
+      {
+        "name": "Shiki Code Block",
+        "reason": "target URL is not configured: SHIKI_PAGE_URL"
+      },
+      {
+        "name": "Hyperlink Card",
+        "reason": "target URL is not configured: HYPERLINK_CARD_PAGE_URL"
+      },
+      {
+        "name": "Lottery Card",
+        "reason": "target URL is not configured: LOTTERY_PAGE_URL"
+      },
+      {
+        "name": "Restricted Reading",
+        "reason": "target URL is not configured: RESTRICTED_READING_PAGE_URL"
+      },
+      {
+        "name": "Maintenance Theme",
+        "reason": "target URL is not configured: MAINTENANCE_PAGE_URL"
+      }
+    ]
+  },
+  "limits": [
+    "Real plugin business writes and external services not tested",
+    "No full WCAG certification or physical mobile device acceptance",
+    "Prior 2026-11-03 dependency audit release gate remains outside this UI task",
+    "No Git staging, commits, push, tags or release"
+  ]
+}

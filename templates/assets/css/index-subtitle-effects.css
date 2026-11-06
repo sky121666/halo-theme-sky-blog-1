@@ -20,8 +20,9 @@
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: 0.05em;
-  /* 打字机文字颜色适配副标题主色；未设置则回退到主题主色 */
-  color: var(--subtitle-color, var(--color-primary));
+  /* 图片背景上以浅色正文保证辨识，主题色仍用于光标；显式自定义色保留。 */
+  color: var(--subtitle-color, #fff);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 80%);
   animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 

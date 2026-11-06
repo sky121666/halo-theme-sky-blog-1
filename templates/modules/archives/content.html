@@ -26,17 +26,11 @@
       <section class="flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
 
         <!-- 页面标题区 - Apple风格简洁 -> 衬线体优雅风格 -->
-        <header class="mb-14 border-b border-base-content/5 pb-8"
-          th:with="globalArchives = ${postFinder.archives(1, 100)}">
+        <header class="mb-14 border-b border-base-content/5 pb-8">
           <div class="flex items-end justify-between">
             <div>
               <h1 class="text-4xl md:text-5xl font-serif text-base-content tracking-wider font-semibold"
                 th:text="${archiveLabel}">文章归档</h1>
-              <p class="text-[14px] text-base-content/40 mt-3 font-serif tracking-[0.05em]"
-                th:if="${globalArchives != null and globalArchives.items != null}">
-                共 <span class="font-sans font-medium text-base-content/80 px-[3px]"
-                  th:text="${#lists.size(globalArchives.items)}">0</span> 个年份的文章记录
-              </p>
             </div>
           </div>
         </header>
@@ -79,7 +73,7 @@
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-base-200/80 text-base-content shadow-sm">
                         <span th:text="${monthData.month + ' 月'}"></span>
                         <span class="text-xs opacity-60 font-medium"
-                          th:text="'(' + ${#lists.size(monthData.posts)} + ' 篇)'"></span>
+                          th:text="'本页 ' + ${#lists.size(monthData.posts)} + ' 篇'"></span>
                       </span>
                     </div>
 
@@ -91,7 +85,7 @@
                                         isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
                         class="glow-card group relative flex items-start gap-4 p-4 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/[0.06] hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer">
                         <!-- 整卡片可点击链接 -->
-                        <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
+                        <a th:href="@{${post.status.permalink}}" class="absolute inset-0 z-10" th:aria-label="|阅读文章：${post.spec.title}|"></a>
 
                         <!-- 日期标记 -->
                         <div
@@ -122,14 +116,14 @@
                             <!-- 分类 -->
                             <span th:if="${!#lists.isEmpty(post.categories)}" class="inline-flex items-center gap-1">
                               <span class="icon-[heroicons--folder] w-3.5 h-3.5"></span>
-                              <a th:href="${post.categories[0].status.permalink}"
+                              <a th:href="@{${post.categories[0].status.permalink}}"
                                 th:text="${post.categories[0].spec.displayName}"
                                 class="relative z-20 hover:text-primary"></a>
                             </span>
                             <!-- 标签 -->
                             <span th:if="${!#lists.isEmpty(post.tags)}" class="inline-flex items-center gap-1">
                               <span class="icon-[heroicons--tag] w-3.5 h-3.5"></span>
-                              <a th:href="${post.tags[0].status.permalink}" th:text="${post.tags[0].spec.displayName}"
+                              <a th:href="@{${post.tags[0].status.permalink}}" th:text="${post.tags[0].spec.displayName}"
                                 class="relative z-20 hover:text-primary"></a>
                             </span>
                             <!-- 阅读量 -->
@@ -163,7 +157,7 @@
         <!-- 分页 -->
         <th:block th:if="${archives != null and archives.totalPages > 1}">
           <th:block th:replace="~{modules/categories/pagination :: pagination(
-              context=@{/archives/},
+              context=${site.routes?.archivesUri ?: '/archives'},
               prevUrl=${archives.prevUrl},
               nextUrl=${archives.nextUrl},
               totalPages=${archives.totalPages},
@@ -174,7 +168,10 @@
         </th:block>
 
         <!-- 评论区 -->
-        <section class="mt-12" th:if="${theme.config.archive_settings.basic_info.enable_comment == true}">
+        <section
+          class="mt-12"
+          th:if="${haloCommentEnabled and theme.config.archive_settings.basic_info.enable_comment == true and singlePage != null and singlePage.spec.allowComment != false}"
+        >
           <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
@@ -182,7 +179,7 @@
           <div class="glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
             <div class="card-body p-6 sm:p-8">
               <halo:comment group="content.halo.run" kind="SinglePage"
-                th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}" colorScheme="system">
+                th:attr="name=${singlePage.metadata.name}" colorScheme="system">
               </halo:comment>
             </div>
           </div>

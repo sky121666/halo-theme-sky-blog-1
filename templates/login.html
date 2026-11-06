@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org"
     th:replace="~{gateway_fragments/layout :: layout(title = |登录 - ${site.title}|, head = null, body = ~{::body})}">
-<!-- 兼容基线：halo-plugin-auth-passkey v1.0.4；登录表单结构由 gateway_fragments/login.html 保持兼容。 -->
+<!-- Passkey：保留 1.x 表单嵌入，兼容 2.0 原页认证入口；表单与入口结构由 gateway_fragments 保持兼容。 -->
 <th:block th:fragment="body">
     <!-- 大标题 -->
     <h1 class="auth-title">欢迎回来</h1>
@@ -19,7 +19,7 @@
     </div>
 
     <!-- 注册提示 -->
-    <div class="mt-8 text-center text-base-content/50">
+    <div th:if="${globalInfo.allowRegistration}" class="mt-8 text-center text-base-content/50">
         <span>还没有账户？</span>
         <a th:href="@{/signup}" class="text-primary font-semibold hover:underline ml-1">立即注册</a>
     </div>

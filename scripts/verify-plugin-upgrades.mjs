@@ -3,6 +3,7 @@
 import assert from "node:assert/strict";
 import { normalizeDoubanItem } from "../src/apps/douban/model.js";
 import { LINK_APPLICATION_API, requestLinkCaptcha, submitLinkApplication } from "../src/apps/links/application.js";
+import "./verify-douban-pagination.mjs";
 
 // Shape sampled from the public 1.2.6 API; do not require private user data.
 const current = {

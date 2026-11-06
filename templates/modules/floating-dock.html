@@ -49,9 +49,9 @@
         <!-- 自定义菜单图标 -->
         <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
           <th:block th:if="${dockMenu != null}">
-            <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+            <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
               th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
-              th:title="${menuItem.status.displayName}" th:aria-label="${menuItem.status.displayName}">
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}" th:aria-label="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <!-- 使用菜单的自定义元数据 icon 字段（SVG 代码） -->
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
@@ -64,7 +64,7 @@
               </span>
               <span
                 class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                th:text="${menuItem.status.displayName}">
+                th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               </span>
             </a>
           </th:block>
@@ -93,27 +93,34 @@
   <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
 
     <!-- DaisyUI FAB 组件 -->
-    <div class="fab fab-top">
+    <div class="fab fab-top"
+      @focusin="isExpanded = true"
+      @focusout="if (!$el.contains($event.relatedTarget)) isExpanded = false"
+      @keydown.escape.prevent.stop="document.activeElement.blur()">
       <!-- 触发按钮 -->
-      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
-        <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
+      <div tabindex="0" role="button" aria-label="展开快捷工具" aria-expanded="false"
+        :aria-expanded="isExpanded.toString()"
+        @keydown.enter.prevent="$el.focus()" @keydown.space.prevent="$el.focus()"
+        class="btn btn-circle btn-primary shadow-lg">
+        <span class="icon-[heroicons--squares-2x2] w-5 h-5" aria-hidden="true"></span>
       </div>
 
       <!-- 关闭按钮（展开时显示） -->
       <div class="fab-close">
         <span class="text-sm whitespace-nowrap text-base-content/70 hidden sm:block">关闭</span>
-        <span class="btn btn-circle btn-neutral shadow-lg">
-          <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
-        </span>
+        <button type="button" aria-label="收起快捷工具" @click="document.activeElement.blur()"
+          class="btn btn-circle btn-neutral shadow-lg">
+          <span class="icon-[heroicons--x-mark] w-5 h-5" aria-hidden="true"></span>
+        </button>
       </div>
 
       <!-- 自定义菜单项 -->
       <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
-            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
-              th:title="${menuItem.status.displayName}" th:aria-label="${menuItem.status.displayName}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}" th:aria-label="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-5 h-5 flex items-center justify-center">
                 <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -129,8 +136,8 @@
       <!-- 返回顶部按钮 -->
       <div th:if="${enableBackToTop}">
         <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
-        <button class="btn btn-circle" @click="scrollToTop()">
-          <span class="icon-[heroicons--arrow-up] w-5 h-5"></span>
+        <button type="button" class="btn btn-circle" aria-label="返回顶部" @click="scrollToTop()">
+          <span class="icon-[heroicons--arrow-up] w-5 h-5" aria-hidden="true"></span>
         </button>
       </div>
     </div>

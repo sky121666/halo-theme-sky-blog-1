@@ -7,8 +7,9 @@
   <!-- 主页脚容器 -->
   <footer
     th:with="dockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
-                 hasBottomDock = ${dockStyle != 'side' and theme.config.general.floating_dock?.enable_dock != false}"
-    th:class="${hasBottomDock} ? 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden pb-16' : 'relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden'"
+                 hasDock = ${theme.config.general.floating_dock?.enable_dock != false}"
+    class="relative bg-base-100/80 backdrop-blur-xl border-t border-base-content/5 overflow-hidden"
+    th:classappend="${hasDock ? (dockStyle == 'side' ? 'pb-16 md:pb-0' : 'pb-16') : ''}"
     th:fragment="footer"
   >
     <!-- 背景网格效果 -->
@@ -90,6 +91,8 @@
 
             <!-- 站点运行天数 -->
             <div
+              id="site-days"
+              style="display: none"
               class="text-base-content/60 mt-4 flex items-center gap-2 text-sm"
               th:if="${theme.config.footer.brand_settings.show_site_days}"
             >
@@ -171,7 +174,7 @@
           >
             <th:block th:each="legal, iterStat : ${theme.config.footer.copyright_settings.legal_links}">
               <a
-                th:href="${legal.url}"
+                th:href="@{${legal.url}}"
                 th:text="${legal.name}"
                 class="hover:text-primary group/link relative transition-colors"
               >
@@ -334,18 +337,23 @@
        * @description 计算并更新站点运行天数显示
        */
       function calculateSiteDays() {
+        const siteDaysRow = document.getElementById("site-days");
+        const siteDaysElement = document.getElementById("siteDays");
+        if (!siteDaysRow || !siteDaysElement) return;
+        siteDaysRow.style.display = "none";
         // 建站日期 - 从主题配置中获取
         const startDateStr = "[[${theme.config.footer.brand_settings.site_start_date}]]";
-        const startDate = new Date(startDateStr);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(startDateStr)) return;
+        const [year, month, day] = startDateStr.split("-").map(Number);
+        const startDate = new Date(year, month - 1, day);
         const currentDate = new Date();
+        if (startDate.getFullYear() !== year || startDate.getMonth() !== month - 1 ||
+            startDate.getDate() !== day || startDate > currentDate) return;
         const timeDiff = currentDate.getTime() - startDate.getTime();
         const siteDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-        // 更新页面显示
-        const siteDaysElement = document.getElementById("siteDays");
-        if (siteDaysElement) {
-          siteDaysElement.textContent = siteDays;
-        }
+        siteDaysElement.textContent = siteDays;
+        siteDaysRow.style.removeProperty("display");
       }
 
       /**

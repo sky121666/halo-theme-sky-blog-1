@@ -61,7 +61,7 @@
     <div id="swup-page-extras">
       <!-- 页面专属 Alpine 状态必须跟随 PJAX extras 容器进入和离开。 -->
       <div
-        x-data="{ gameBg: null }"
+        x-data="{ gameBg: null, backgroundFallback: false }"
         x-init="(async () => { for (const url of ['/apis/api.steam.timxs.com/v1alpha1/profile', '/apis/api.steam.halo.run/v1alpha1/profile']) { try { const r = await fetch(url); if (!r.ok) continue; const d = await r.json(); const gameId = d.summary?.gameId || d.summary?.gameid; if (d.playing && gameId) gameBg = gameId; break; } catch {} } })()"
       >
         <div x-show="gameBg" x-cloak class="steam-game-bg pointer-events-none fixed inset-0 z-0">
@@ -70,7 +70,7 @@
             alt=""
             aria-hidden="true"
             class="h-full w-full object-cover opacity-20"
-            @error="if(gameBg) $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'"
+            @error="if (gameBg &amp;&amp; !backgroundFallback) { backgroundFallback = true; $el.src = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + gameBg + '/header.jpg'; } else { gameBg = null; }"
           />
           <div class="via-base-100/80 to-base-100 absolute inset-0 bg-gradient-to-b from-transparent"></div>
         </div>

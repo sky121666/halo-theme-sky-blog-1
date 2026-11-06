@@ -40,7 +40,7 @@
       <a
         x-show="!loading && profile"
         x-cloak
-        href="/steam"
+        th:href="@{/steam}"
         class="card bg-base-100/80 border-base-content/5 group relative block overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl"
         :class="profile?.playing ? 'ring-2 ring-accent/50 hover:ring-accent/70' : 'hover:border-primary/20'"
       >
@@ -78,7 +78,7 @@
               :class="profile?.playing ? 'ring-accent' : ((profile?.summary?.personaState || profile?.summary?.personastate) == 1 ? 'ring-success' : 'ring-base-content/10')"
             >
               <img
-                :src="profile?.summary?.avatar || profile?.summary?.avatarfull || profile?.summary?.avatarFull"
+                :src="profile?.summary?.avatar || profile?.summary?.avatarfull || profile?.summary?.avatarFull || null"
                 :alt="profile?.summary?.personaname || profile?.summary?.personaName"
                 class="h-full w-full object-cover"
                 referrerpolicy="no-referrer"

@@ -87,22 +87,14 @@
                 瞬间
               </h3>
             </div>
-            <!-- 查看全部/发布按钮 -->
+            <!-- 查看全部瞬间 -->
             <a
-              href="/moments"
-              class="bg-primary/20 hover:bg-primary/30 border-primary/30 hover:text-primary-200 inline-flex items-center rounded-full border px-3 py-1.5 text-xs leading-4 text-white transition-all duration-300 ease-out hover:scale-105 md:px-4 md:py-2 md:text-sm"
-              th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}"
+              th:href="@{/moments}"
+              class="bg-primary/20 hover:bg-primary/30 border-primary/30 hover:text-primary-200 inline-flex size-8 items-center justify-center rounded-full border text-white transition-all duration-300 ease-out hover:scale-105 md:size-9"
+              title="查看全部瞬间"
               aria-label="查看全部瞬间"
             >
-              <span
-                th:if="${#authorization.expression('isAuthenticated()')}"
-                class="icon-[material-symbols--add] mr-1 h-3.5 w-3.5 md:h-4 md:w-4"
-              ></span>
-              <span th:if="${#authorization.expression('isAuthenticated()')}">发布</span>
-              <span
-                th:unless="${#authorization.expression('isAuthenticated()')}"
-                class="icon-[material-symbols--arrow-forward] h-4 w-4"
-              ></span>
+              <span class="icon-[material-symbols--arrow-forward] h-4 w-4" aria-hidden="true"></span>
             </a>
           </div>
 

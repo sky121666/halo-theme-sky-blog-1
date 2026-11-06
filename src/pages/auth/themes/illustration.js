@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 获取表单相关的输入体验容器
     const textInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
     const pwdInputs = document.querySelectorAll('input[type="password"], input.password-field');
-    // 适配现有的查看密码按钮逻辑 (由 auth-common.js 所控)
+    // 密码显隐由 Halo 核心脚本控制，插画只同步显示状态
     const togglePwdBtns = document.querySelectorAll('.toggle-password-button');
 
     // 检查页面是否处于错误提示状态 (Spring Security 报错拦截)
@@ -88,20 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     pwdInputs.forEach(input => {
-        input.addEventListener('focus', handleFocus);
+        input.addEventListener('focus', () => setState(input.type === 'text' ? 'peeking' : 'typing'));
         input.addEventListener('blur', handleBlur);
     });
 
-    // 劫持密码显示/隐藏按钮的点击交互
+    // 同步密码显示/隐藏按钮的点击状态
     togglePwdBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // 原生的 auth-common.js 在点击后会切换 data-show 属性和 input.type
-            // 我们延迟 10ms 确保类型已经变成 text 后做判断
+            // 延后读取 Halo 更新后的 input.type，避免依赖监听器注册顺序
             setTimeout(() => {
                 const wrapper = btn.closest('.toggle-password-display-flag');
                 if (!wrapper) return;
 
-                const isShowing = wrapper.dataset.show === 'true';
+                const isShowing = wrapper.querySelector('input')?.type === 'text';
                 if (isShowing) {
                     setState('peeking');
                 } else {

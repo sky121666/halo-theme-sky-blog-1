@@ -1,6 +1,6 @@
 import { requestLinkCaptcha, submitLinkApplication } from "./application.js";
+import { MANAGED_QUERY_KEYS, isSameLinksResource, linksHistoryState } from "./history.js";
 
-const MANAGED_QUERY_KEYS = ["view", "scope", "groupName", "linkName", "itemId", "group", "link"];
 const VALID_VIEWS = new Set(["friends", "apply", "board"]);
 const VALID_SCOPES = new Set(["all", "unread", "favorite", "later"]);
 const SAVED_SCOPES = new Set(["favorite", "later"]);
@@ -137,8 +137,7 @@ export function normalizeLinksState(rawState = {}, context = {}) {
     delete state.scope;
   }
   if (state.itemId && !state.scope && !state.groupName && !state.linkName) {
-    notes.push("孤立的 itemId 已移除");
-    delete state.itemId;
+    state.scope = "all";
   }
   if (context.canReadFeed === false) {
     if (SAVED_SCOPES.has(state.scope)) {
@@ -349,10 +348,10 @@ function httpError(response, message = "") {
 
 function formatFeedFailure(error) {
   const status = Number(error?.status || 0);
-  if (status === 404) return "站点尚未在 PluginLinks 中开启公开 RSS 订阅动态。";
+  if (status === 404) return "站点暂未开放订阅动态。";
   if (status === 429) return "动态请求过于频繁，请稍后重试。";
   if (status >= 500) return "动态服务暂时不可用，请稍后重试。";
-  return sanitizePlainText(error?.message) || "动态加载失败，请检查网络后重试。";
+  return "动态加载失败，请重试。";
 }
 
 function timeoutController(timeoutMs, parentSignal) {
@@ -508,7 +507,7 @@ function formatMetadataFailure(error) {
   if (error?.code === "not-html") return "目标地址没有返回可识别的网页";
   if (error?.code === "too-large") return "目标网页内容过大，已停止识别";
   if (error?.name === "TimeoutError" || error?.code === "timeout") return "目标站点响应超时";
-  return "目标站点的跨域或访问策略阻止了浏览器识别";
+  return "暂时无法识别站点信息";
 }
 
 function formatDate(value) {
@@ -660,9 +659,11 @@ function externalLink(href, className = "") {
 export function mountLinksApp() {
   const root = document.querySelector("[data-links-page]");
   if (!root) return undefined;
+  const mountedUrl = window.location.href;
 
   const lifecycle = new AbortController();
   const { signal } = lifecycle;
+  const programmaticDialogCloses = new WeakMap();
   const links = readLinkCatalog(root);
   const feedSources = readFeedSources(root);
   const prefetched = readPrefetchedFeed(root);
@@ -670,8 +671,8 @@ export function mountLinksApp() {
   const tabs = Array.from(root.querySelectorAll("[data-links-view-link]"));
   const pageTitle = root.querySelector("[data-links-page-title]");
   const pageDescription = root.querySelector("[data-links-page-description]");
-  const defaultTitle = pageTitle?.textContent?.trim() || "友情链接";
-  const defaultDescription = pageDescription?.textContent?.trim() || "感谢这些优秀的网站与博客";
+  const defaultTitle = root.dataset.linksDefaultTitle?.trim() || "友情链接";
+  const defaultDescription = root.dataset.linksDefaultDescription?.trim() || "感谢这些优秀的网站与博客";
   const titles = {
     links: defaultTitle,
     friends: "友链动态",
@@ -679,8 +680,8 @@ export function mountLinksApp() {
   };
   const descriptions = {
     links: defaultDescription,
-    friends: "来自友链接阅的最新内容，支持未读、收藏与稍后阅读",
-    apply: "提交站点信息，管理员审核后将出现在友链列表中",
+    friends: "来自友链公开订阅的最近更新",
+    apply: "",
   };
   const feed = {
     key: prefetched.key,
@@ -693,6 +694,7 @@ export function mountLinksApp() {
     replacing: false,
     controller: null,
     generation: 0,
+    cursors: new Set(),
   };
   const capabilities = {
     status: "checking",
@@ -707,9 +709,13 @@ export function mountLinksApp() {
     capabilityPromise: null,
     unreadCount: 0,
     feedActionBusy: new Set(),
+    feedFlagChanges: new Map(),
+    feedFlagRevision: 0,
     autoMarked: new Set(),
+    feedDetails: new Map(),
+    feedDetailItemId: "",
+    feedReturnFocus: null,
     identifyController: null,
-    dialogSync: false,
     boardFocusTimer: 0,
     applyBusy: false,
     captchaAttempted: false,
@@ -737,8 +743,10 @@ export function mountLinksApp() {
   function normalizeLocation({ announce = false } = {}) {
     const current = new URL(window.location.href);
     const result = normalizeLinksUrl(current, routeContext());
-    if (historyPath(current) !== historyPath(result.url)) {
-      window.history.replaceState(window.history.state, "", historyPath(result.url));
+    const nextPath = historyPath(result.url);
+    const nextHistoryState = linksHistoryState(window.history.state, nextPath);
+    if (historyPath(current) !== nextPath || nextHistoryState !== window.history.state) {
+      window.history.replaceState(nextHistoryState, "", nextPath);
     }
     state.route = result.state;
     if (announce) result.notes.forEach((note) => toast(note));
@@ -762,7 +770,7 @@ export function mountLinksApp() {
     const nextPath = historyPath(url);
     const currentPath = historyPath(new URL(window.location.href));
     if (nextPath !== currentPath) {
-      window.history[replace ? "replaceState" : "pushState"](window.history.state, "", nextPath);
+      window.history[replace ? "replaceState" : "pushState"](linksHistoryState(window.history.state, nextPath), "", nextPath);
     }
     state.route = result.state;
     if (announce) result.notes.forEach((note) => toast(note));
@@ -793,7 +801,10 @@ export function mountLinksApp() {
       else tab.removeAttribute("aria-current");
     }
     if (pageTitle) pageTitle.textContent = titles[view] || defaultTitle;
-    if (pageDescription) pageDescription.textContent = descriptions[view];
+    if (pageDescription) {
+      pageDescription.textContent = descriptions[view];
+      pageDescription.hidden = !descriptions[view];
+    }
   }
 
   function renderLinksView() {
@@ -807,12 +818,16 @@ export function mountLinksApp() {
       else filter.removeAttribute("aria-current");
     }
     for (const section of root.querySelectorAll("[data-link-group-section]")) {
-      section.hidden = Boolean(selectedGroup && section.dataset.linkGroupSection !== selectedGroup);
+      section.hidden = selectedGroup
+        ? section.dataset.linkGroupSection !== selectedGroup
+        : !section.querySelector("[data-link-card]");
     }
     for (const card of root.querySelectorAll("[data-link-card]")) {
       card.classList.toggle("links-card-active", card.dataset.linkKey === selectedLink);
     }
     const dynamicEmpty = root.querySelector("[data-links-filter-empty]");
+    const globalEmpty = root.querySelector("[data-links-empty]");
+    if (globalEmpty) globalEmpty.hidden = Boolean(selectedGroup || links.size);
     if (dynamicEmpty) {
       const hasSelectedSection = !selectedGroup || routeContext().groups.has(selectedGroup);
       dynamicEmpty.hidden = hasSelectedSection;
@@ -873,34 +888,25 @@ export function mountLinksApp() {
   }
 
   function renderApplyCapability() {
-    const capability = root.querySelector("[data-apply-capability]");
     const form = root.querySelector("[data-link-apply-form]");
     const primaryLabel = form?.querySelector("[data-apply-submit-label]");
     const actionHint = form?.querySelector("[data-apply-action-hint]");
     const type = form ? new FormData(form).get("type") || "add" : "add";
     const guestApplication = canSubmitGuestApplication(type);
-    if (capability) {
-      capability.textContent =
-        capabilities.status === "checking"
-          ? "正在确认可用的识别与提交方式…"
-          : capabilities.canManage && type === "add"
-            ? "管理员模式：可自动识别站点信息，提交后立即加入友链。"
-            : type === "update"
-              ? "更新申请：生成 Markdown 后到留言板提交，由管理员审核修改。"
-              : guestApplication
-                ? "填写网站信息和验证码后提交，管理员审核通过后将加入友链。"
-                : "填写网站信息后生成申请 Markdown，复制到留言板提交。识别失败时可手动填写。";
-    }
     if (primaryLabel)
       primaryLabel.textContent =
-        capabilities.canManage && type === "add" ? "直接创建友链" : guestApplication ? "提交申请" : "生成申请 Markdown";
+        capabilities.canManage && type === "add" ? "添加友链" : guestApplication ? "提交申请" : "生成申请内容";
     if (actionHint)
       actionHint.textContent =
-        capabilities.canManage && type === "add"
-          ? "管理员提交后立即加入友链"
-          : guestApplication
-            ? "提交后等待管理员审核"
-            : "生成 Markdown 后到留言板提交，等待管理员审核";
+        capabilities.status === "checking"
+          ? "正在确认申请方式…"
+          : capabilities.canManage && type === "add"
+            ? "直接添加，无需审核"
+            : guestApplication
+              ? "提交后等待审核"
+              : root.dataset.linksCommentsEnabled === "true"
+                ? "生成后复制到留言板提交"
+                : "留言已关闭，生成的内容可复制保存";
     const updateField = form?.querySelector("[data-apply-update-field]");
     if (updateField) updateField.hidden = type !== "update";
     for (const field of form?.querySelectorAll("[data-apply-guest-field]") || []) field.hidden = !guestApplication;
@@ -948,8 +954,16 @@ export function mountLinksApp() {
   function render() {
     renderPanels();
     const view = state.route.view === "board" ? "links" : state.route.view || "links";
-    if (view === "links") renderLinksView();
-    else if (view === "friends") renderFeedView();
+    if (view !== "friends" && feed.controller) {
+      feed.controller.abort();
+      feed.controller = null;
+      feed.generation++;
+      if (feed.status === "loading") feed.status = feed.items.length ? "ready" : "idle";
+    }
+    if (view === "links") {
+      syncFeedDialog(null);
+      renderLinksView();
+    } else if (view === "friends") renderFeedView();
     else {
       syncLinkDialog();
       syncFeedDialog(null);
@@ -995,6 +1009,11 @@ export function mountLinksApp() {
     try {
       const result = await state.capabilityPromise;
       if (signal.aborted) return;
+      if (!result?.canReadFeed || result.username !== capabilities.username) {
+        state.feedDetails.clear();
+        state.autoMarked.clear();
+        state.feedFlagChanges.clear();
+      }
       Object.assign(capabilities, result || normalizeLinkCapabilities({}, null), {
         status: result?.authenticated ? "ready" : "guest",
         error: "",
@@ -1008,7 +1027,8 @@ export function mountLinksApp() {
       if (capabilities.canReadFeed) refreshUnreadCount();
       const request = activeFeedRequest();
       if (request && (capabilities.canReadFeed || feed.key !== feedKey(request))) {
-        loadFeed(request, { replace: true, force: true });
+        // render/commitRoute already starts the active page. Reuse that request.
+        ensureFeed(request);
       }
     } catch (error) {
       if (error?.name === "AbortError") return;
@@ -1022,7 +1042,7 @@ export function mountLinksApp() {
       const normalized = normalizeLinksState(state.route, routeContext());
       commitRoute(normalized.state, { replace: true, announce: false });
       const request = activeFeedRequest();
-      if (request) loadFeed(request, { replace: true, force: true });
+      if (request) ensureFeed(request);
     } finally {
       state.capabilityPromise = null;
     }
@@ -1045,30 +1065,50 @@ export function mountLinksApp() {
       if (error?.name !== "AbortError" && [401, 403].includes(Number(error?.status || 0))) {
         capabilities.canReadFeed = false;
         capabilities.canManage = false;
+        normalizeLocation();
+        render();
       }
     }
   }
 
   function ensureFeed(request) {
-    if (capabilities.status === "checking" && ["unread", "favorite", "later"].includes(state.route.scope)) {
+    if (!request || signal.aborted) return;
+    if (
+      capabilities.status === "checking" &&
+      (state.route.itemId || ["unread", "favorite", "later"].includes(state.route.scope))
+    ) {
       feed.status = "permission";
       renderFeedResults(request);
       return;
     }
     const key = feedKey(request);
-    if (feed.key === key && ["ready", "empty", "loading", "disabled"].includes(feed.status)) return;
+    if (feed.key === key && ["ready", "empty", "loading", "disabled"].includes(feed.status)) {
+      return;
+    }
     loadFeed(request, { replace: true });
   }
 
   async function loadFeed(request, { replace = true, force = false } = {}) {
+    if (!request || signal.aborted) return;
     const key = feedKey(request);
     if (!force && feed.key === key && feed.status === "loading") return;
     feed.controller?.abort();
     const controller = new AbortController();
-    signal.addEventListener("abort", () => controller.abort(), { once: true });
+    const abortRequest = () => controller.abort();
+    signal.addEventListener("abort", abortRequest, { once: true });
     feed.controller = controller;
     const generation = ++feed.generation;
     const append = !replace;
+    const isCurrent = () => {
+      const current = activeFeedRequest();
+      return (
+        generation === feed.generation &&
+        !signal.aborted &&
+        !controller.signal.aborted &&
+        current &&
+        feedKey(current) === key
+      );
+    };
     feed.replacing = replace;
     feed.status = "loading";
     feed.message = "";
@@ -1078,36 +1118,63 @@ export function mountLinksApp() {
       feed.hasNext = false;
       feed.nextBeforePublishedAt = "";
       feed.nextBeforeId = "";
+      feed.cursors = new Set();
     }
     renderFeedResults(request);
-    const url = buildLinkFeedApiUrl({
-      ...request,
-      beforePublishedAt: append ? feed.nextBeforePublishedAt : "",
-      beforeId: append ? feed.nextBeforeId : "",
-      limit: PAGE_SIZE,
-    });
+    const beforePublishedAt = append ? feed.nextBeforePublishedAt : "";
+    const beforeId = append ? feed.nextBeforeId : "";
+    const cursors = new Set(append ? feed.cursors : []);
     try {
+      // The official API is cursor-based, not a single-item lookup. Each explicit
+      // load consumes one page; an unresolved itemId must not trigger a full scan.
+      const cursor = JSON.stringify([key, beforePublishedAt, beforeId]);
+      if (cursors.has(cursor)) throw new Error("动态分页游标重复，请重试。");
+      cursors.add(cursor);
+      const url = buildLinkFeedApiUrl({ ...request, beforePublishedAt, beforeId, limit: PAGE_SIZE });
+      const flagRevision = state.feedFlagRevision;
       const response = await fetch(url, {
         credentials: request.protectedMode ? "same-origin" : "omit",
         cache: "no-store",
         headers: { Accept: "application/json" },
         signal: controller.signal,
       });
+      if (!isCurrent()) return;
       if (!response.ok) throw httpError(response, await responseMessage(response));
       if (!safeJsonResponse(response)) throw httpError(response, "动态接口没有返回 JSON");
-      const page = normalizeLinkFeedPage(await response.json());
-      if (generation !== feed.generation || signal.aborted) return;
+      const payload = await response.json();
+      const page = normalizeLinkFeedPage(payload);
+      if (!isCurrent()) return;
+      if (payload.hasNext === true && !page.hasNext) throw new Error("动态分页游标缺失，请重试。");
+      const nextCursor = JSON.stringify([key, page.nextBeforePublishedAt, page.nextBeforeId]);
+      if (page.hasNext && cursors.has(nextCursor)) throw new Error("动态分页游标重复，请重试。");
+      // Preserve writes that were pending or completed after this list request started.
+      for (const item of page.items) {
+        const changes = state.feedFlagChanges?.get(item.id);
+        for (const [property, change] of Object.entries(changes || {})) {
+          if (change.pending || change.revision > flagRevision) item[property] = change.value;
+        }
+      }
       const seen = new Set(append ? feed.items.map((item) => item.id) : []);
       feed.items = append ? feed.items.concat(page.items.filter((item) => !seen.has(item.id))) : page.items;
+      if (request.protectedMode) {
+        feed.items = feed.items.filter((item) => {
+          const field =
+            request.scope === "unread" && item.read
+              ? "read"
+              : request.scope === "favorite" && !item.favorite
+                ? "favorite"
+                : request.scope === "later" && !item.readLater
+                  ? "later"
+                  : "";
+          return !field || item.id === state.route.itemId || state.feedActionBusy.has(`${item.id}:${field}`);
+        });
+      }
       feed.hasNext = page.hasNext;
       feed.nextBeforePublishedAt = page.nextBeforePublishedAt;
       feed.nextBeforeId = page.nextBeforeId;
-      feed.status = feed.items.length ? "ready" : "empty";
+      feed.cursors = cursors;
+      feed.status = feed.items.length || feed.hasNext ? "ready" : "empty";
       feed.message = "";
-      if (state.route.itemId && !feed.items.some((item) => item.id === state.route.itemId)) {
-        navigate({ itemId: null }, { replace: true, announce: false });
-        toast("目标动态不在当前加载结果中，已关闭内部详情");
-      }
     } catch (error) {
       if (error?.name === "AbortError") return;
       if (generation !== feed.generation) return;
@@ -1122,7 +1189,9 @@ export function mountLinksApp() {
         if (fallback) return loadFeed(fallback, { replace: true, force: true });
       }
     } finally {
+      signal.removeEventListener("abort", abortRequest);
       if (generation === feed.generation) {
+        if (feed.status === "loading") feed.status = feed.items.length ? "ready" : "idle";
         feed.replacing = false;
         if (feed.controller === controller) feed.controller = null;
         renderFeedResults(activeFeedRequest());
@@ -1130,23 +1199,96 @@ export function mountLinksApp() {
     }
   }
 
+  function captureFeedFocus(list) {
+    if (!list || !list.contains(document.activeElement)) return null;
+    const control = document.activeElement.closest("button, a");
+    const row = control?.closest("[data-feed-item]");
+    if (!row) return null;
+    return {
+      itemId: row.dataset.feedId,
+      action: control.dataset.feedToggle || (control.matches(".links-feed-title") ? "open" : "visit"),
+      index: Array.from(list.querySelectorAll("[data-feed-item]")).indexOf(row),
+    };
+  }
+
+  function restoreFeedFocus(list, previous) {
+    if (!previous || signal.aborted || state.route.view !== "friends") return;
+    const rows = list && !list.hidden ? Array.from(list.querySelectorAll("[data-feed-item]")) : [];
+    const sameRow = rows.find((row) => row.dataset.feedId === previous.itemId);
+    const row = sameRow || rows[Math.min(Math.max(previous.index, 0), rows.length - 1)];
+    let target;
+    if (sameRow) {
+      target = previous.action === "open"
+        ? sameRow.querySelector(".links-feed-title")
+        : previous.action === "visit"
+          ? sameRow.querySelector("a")
+          : Array.from(sameRow.querySelectorAll("[data-feed-toggle]"))
+            .find((button) => button.dataset.feedToggle === previous.action);
+    }
+    target ||= row?.querySelector(".links-feed-title");
+    target ||= Array.from(root.querySelectorAll("[data-feed-scope]"))
+      .filter((button) => !button.closest("[hidden]"))
+      .find((button) => button.classList.contains("links-filter-active"));
+    target ||= root.querySelector("[data-feed-filter-group]");
+    target?.focus({ preventScroll: true });
+  }
+
   function renderFeedResults(request) {
     const list = root.querySelector("[data-feed-list]");
+    // Capture only the focus present now, so a late response never pulls a user
+    // back after they have moved to another control or opened the detail dialog.
+    const previousFocus = captureFeedFocus(list);
+    if (request?.protectedMode && state.route.itemId && state.feedDetailItemId !== state.route.itemId) {
+      state.feedReturnFocus = previousFocus || {
+        itemId: state.route.itemId,
+        action: "open",
+        index: Math.max(0, feed.items.findIndex((item) => item.id === state.route.itemId)),
+      };
+    }
+    if (state.feedDetailItemId && state.feedDetailItemId !== state.route.itemId) {
+      const previousId = state.feedDetailItemId;
+      const previous = feed.items.find((item) => item.id === previousId) || state.feedDetails?.get(previousId);
+      const field =
+        state.route.scope === "unread" && previous?.read
+          ? "read"
+          : state.route.scope === "favorite" && previous && !previous.favorite
+            ? "favorite"
+            : state.route.scope === "later" && previous && !previous.readLater
+              ? "later"
+              : "";
+      if (request?.protectedMode && field && !state.feedActionBusy.has(`${previousId}:${field}`)) {
+        feed.items = feed.items.filter((item) => item.id !== previousId);
+        if (!feed.items.length && !feed.hasNext && feed.status === "ready") feed.status = "empty";
+      }
+      state.autoMarked.delete(previousId);
+      state.feedDetailItemId = "";
+    }
     const statePanel = root.querySelector("[data-feed-state]");
     const stateTitle = statePanel?.querySelector("[data-feed-state-title]");
     const stateDescription = statePanel?.querySelector("[data-feed-state-description]");
     const retry = statePanel?.querySelector("[data-feed-retry]");
-    const title = root.querySelector("[data-feed-results-title]");
-    const subtitle = root.querySelector("[data-feed-results-description]");
     const loadMore = root.querySelector("[data-feed-load-more]");
+    const detailNotice = root.querySelector("[data-feed-detail-notice]");
+    const unresolved =
+      request?.protectedMode &&
+      state.route.itemId &&
+      feed.key === feedKey(request) &&
+      ["ready", "empty"].includes(feed.status) &&
+      !feed.items.some((item) => item.id === state.route.itemId) &&
+      !state.feedDetails.has(state.route.itemId);
+    if (detailNotice) {
+      detailNotice.hidden = !unresolved;
+      detailNotice.textContent = unresolved
+        ? feed.hasNext
+          ? "目标动态尚未加载，可继续加载列表查找。"
+          : "当前列表未包含目标动态，可切换筛选查看其他动态。"
+        : "";
+    }
     if (!request) {
       if (list) list.replaceChildren();
       syncFeedDialog(null);
       return;
     }
-
-    if (title) title.textContent = "友链动态";
-    if (subtitle) subtitle.textContent = "来自友链公开订阅的最近更新";
 
     const showState =
       ["permission", "error", "disabled", "empty"].includes(feed.status) ||
@@ -1176,13 +1318,19 @@ export function mountLinksApp() {
     if (list && (!showState || feed.items.length)) {
       list.replaceChildren(...feed.items.map((item) => createFeedRow(item, request)));
       list.hidden = false;
+      for (const image of list.querySelectorAll("[data-feed-avatar-image]")) syncFeedAvatar(image);
     }
     if (loadMore) {
       loadMore.hidden = feed.status !== "ready" || !feed.hasNext;
       loadMore.disabled = feed.status === "loading";
       loadMore.textContent = feed.status === "loading" && !feed.replacing ? "正在加载…" : "加载更多";
     }
-    syncFeedDialog(request);
+    restoreFeedFocus(list, previousFocus);
+    syncFeedDialog(
+      request.protectedMode && feed.key !== feedKey(request) && !state.feedDetails?.has(state.route.itemId)
+        ? null
+        : request,
+    );
   }
 
   function createFeedRow(item, request) {
@@ -1194,17 +1342,20 @@ export function mountLinksApp() {
     row.classList.toggle("links-feed-active", state.route.itemId === item.id);
 
     const avatar = document.createElement("div");
-    avatar.className = "bg-base-200/60 flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl";
+    avatar.className = "bg-base-200/60 relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl";
     if (item.authorLogo) {
       const image = document.createElement("img");
-      image.src = item.authorLogo;
       image.alt = "";
       image.loading = "lazy";
-      image.className = "h-full w-full object-cover";
+      image.className = "absolute inset-0 h-full w-full object-cover";
+      image.style.opacity = "0";
+      image.dataset.feedAvatarImage = "";
       avatar.appendChild(image);
-    } else {
-      avatar.appendChild(icon("icon-[heroicons--rss] text-base-content/30 h-5 w-5"));
+      image.src = item.authorLogo;
     }
+    const fallback = icon("icon-[heroicons--rss] text-base-content/30 h-5 w-5");
+    fallback.dataset.feedAvatarFallback = "";
+    avatar.appendChild(fallback);
 
     const copy = document.createElement("div");
     copy.className = "list-col-grow min-w-0";
@@ -1273,7 +1424,7 @@ export function mountLinksApp() {
         button.title = label;
         button.setAttribute("aria-label", label);
         button.setAttribute("aria-pressed", String(active));
-        button.disabled = state.feedActionBusy.has(`${item.id}:${field}`);
+        button.setAttribute("aria-disabled", String(state.feedActionBusy.has(`${item.id}:${field}`)));
         button.appendChild(icon(`${iconName} h-4 w-4`));
         actions.appendChild(button);
       }
@@ -1302,21 +1453,32 @@ export function mountLinksApp() {
   }
 
   function showDialog(dialog) {
-    if (!dialog || dialog.open) return;
+    if (!dialog) return false;
+    if (dialog.open) return true;
     try {
       dialog.showModal();
     } catch {
-      dialog.setAttribute("open", "");
+      try {
+        dialog.setAttribute("open", "");
+      } catch {
+        return false;
+      }
     }
+    return dialog.open;
   }
 
   function closeDialog(dialog) {
     if (!dialog?.open) return;
-    state.dialogSync = true;
+    programmaticDialogCloses.set(dialog, (programmaticDialogCloses.get(dialog) || 0) + 1);
     dialog.close();
-    queueMicrotask(() => {
-      state.dialogSync = false;
-    });
+  }
+
+  function consumeProgrammaticDialogClose(dialog) {
+    const count = programmaticDialogCloses.get(dialog) || 0;
+    if (!count) return false;
+    if (count === 1) programmaticDialogCloses.delete(dialog);
+    else programmaticDialogCloses.set(dialog, count - 1);
+    return true;
   }
 
   function syncLinkDialog() {
@@ -1372,24 +1534,97 @@ export function mountLinksApp() {
       feedButton.hidden = !feedSources.has(link.key);
       feedButton.dataset.linkDetailFeed = link.key;
     }
-    const image = root.querySelector("[data-link-detail-logo]");
+    const previousImage = root.querySelector("[data-link-detail-logo]");
     const fallback = root.querySelector("[data-link-detail-logo-fallback]");
-    if (image) {
-      image.hidden = !link.logo;
+    if (previousImage) previousImage.alt = name;
+    if (previousImage && previousImage.dataset.linkDetailLogoUrl !== link.logo) {
+      // Give each request its own node so a late event from another selection
+      // cannot replace the current logo or hide its fallback.
+      const image = document.createElement("img");
+      image.className = previousImage.className;
+      image.setAttribute("data-link-detail-logo", "");
+      image.dataset.linkDetailLogoUrl = link.logo;
+      image.alt = name;
+      image.hidden = true;
+      if (fallback) fallback.hidden = false;
+      image.onload = () => {
+        if (signal.aborted || !image.isConnected) return;
+        image.hidden = false;
+        if (fallback) fallback.hidden = true;
+      };
+      image.onerror = () => {
+        if (signal.aborted || !image.isConnected) return;
+        image.hidden = true;
+        if (fallback) fallback.hidden = false;
+      };
+      previousImage.replaceWith(image);
       if (link.logo) image.src = link.logo;
-      image.alt = link.name || "";
     }
-    if (fallback) fallback.hidden = Boolean(link.logo);
     showDialog(dialog);
   }
 
   function syncFeedDialog(request) {
     const dialog = root.querySelector("[data-feed-detail-dialog]");
-    const item = request?.protectedMode ? feed.items.find((entry) => entry.id === state.route.itemId) : null;
-    closeDialog(dialog);
-    if (!item) {
+    if (!capabilities.canReadFeed || signal.aborted) {
+      state.feedDetails.clear();
+      state.autoMarked.clear();
+      state.feedFlagChanges?.clear();
+      state.feedDetailItemId = "";
+      closeDialog(dialog);
       return;
     }
+    const item =
+      request?.protectedMode && capabilities.canReadFeed
+        ? feed.items.find((entry) => entry.id === state.route.itemId) || state.feedDetails.get(state.route.itemId)
+        : null;
+    if (
+      !item ||
+      !dialog?.isConnected ||
+      !root.contains(dialog) ||
+      !root.querySelector("[data-feed-detail-title]") ||
+      !root.querySelector("[data-feed-detail-summary]") ||
+      !root.querySelector("[data-feed-detail-visit]")
+    ) {
+      closeDialog(dialog);
+      if (state.feedDetailItemId) state.autoMarked.delete(state.feedDetailItemId);
+      state.feedDetailItemId = "";
+      return;
+    }
+    setText("[data-feed-detail-title]", item.title || "未命名动态");
+    setText("[data-feed-detail-author]", item.author || "友链作者");
+    setText("[data-feed-detail-time]", formatDate(item.publishedAt));
+    setText("[data-feed-detail-summary]", item.summary || "暂无摘要，可前往原文阅读。");
+    const time = root.querySelector("[data-feed-detail-time]");
+    if (time) {
+      time.dateTime = item.publishedAt || "";
+      time.hidden = !item.publishedAt;
+    }
+    setLink("[data-feed-detail-visit]", item.url);
+    for (const button of root.querySelectorAll("[data-feed-detail-toggle]")) {
+      const field = button.dataset.feedDetailToggle;
+      const active = field === "favorite" ? item.favorite : field === "later" ? item.readLater : item.read;
+      const label =
+        field === "favorite"
+          ? active
+            ? "取消收藏"
+            : "收藏"
+          : field === "later"
+            ? active
+              ? "移出稍后阅读"
+              : "稍后阅读"
+            : active
+              ? "标记未读"
+              : "标记已读";
+      button.dataset.feedId = item.id;
+      button.setAttribute("aria-pressed", String(active));
+      button.setAttribute("aria-label", label);
+      button.setAttribute("aria-disabled", String(state.feedActionBusy.has(`${item.id}:${field}`)));
+      const labelNode = button.querySelector("[data-feed-detail-toggle-label]");
+      if (labelNode) labelNode.textContent = label;
+    }
+    if (!showDialog(dialog)) return;
+    state.feedDetails.set(item.id, item);
+    state.feedDetailItemId = item.id;
     if (!state.autoMarked.has(item.id) && (!item.read || item.readLater)) {
       state.autoMarked.add(item.id);
       if (!item.read) setFeedFlag(item.id, "read", true, { quiet: true });
@@ -1398,8 +1633,8 @@ export function mountLinksApp() {
   }
 
   async function setFeedFlag(itemId, field, value, { quiet = false } = {}) {
-    if (!capabilities.canReadFeed) return;
-    const item = feed.items.find((entry) => entry.id === itemId);
+    if (!capabilities.canReadFeed || signal.aborted) return;
+    const item = feed.items.find((entry) => entry.id === itemId) || state.feedDetails.get(itemId);
     if (!item) return;
     const busyKey = `${itemId}:${field}`;
     if (state.feedActionBusy.has(busyKey)) return;
@@ -1411,7 +1646,20 @@ export function mountLinksApp() {
     const config = map[field];
     if (!config) return;
     const previous = item[config.property];
-    item[config.property] = value;
+    const changes = state.feedFlagChanges.get(itemId) || {};
+    const change = {};
+    changes[config.property] = change;
+    state.feedFlagChanges.set(itemId, changes);
+    const updateValue = (next, pending) => {
+      Object.assign(change, { value: next, pending, revision: ++state.feedFlagRevision });
+      item[config.property] = next;
+      // A list refresh can replace the object while this state write is pending.
+      const current = feed.items.find((entry) => entry.id === itemId);
+      if (current) current[config.property] = next;
+      const detail = state.feedDetails?.get(itemId);
+      if (detail) detail[config.property] = next;
+    };
+    updateValue(value, true);
     state.feedActionBusy.add(busyKey);
     renderFeedResults(activeFeedRequest());
     const url = new URL(
@@ -1427,20 +1675,12 @@ export function mountLinksApp() {
         signal,
       });
       if (!response.ok) throw httpError(response, await responseMessage(response));
+      if (signal.aborted || !capabilities.canReadFeed) return;
+      updateValue(value, false);
       if (!quiet) toast("动态状态已保存", "success");
       if (field === "read") refreshUnreadCount();
-      const scope = state.route.scope;
-      const shouldRemove =
-        (scope === "favorite" && !item.favorite) ||
-        (scope === "later" && !item.readLater) ||
-        (scope === "unread" && item.read);
-      if (shouldRemove) {
-        feed.items = feed.items.filter((entry) => entry.id !== itemId);
-        feed.status = feed.items.length ? "ready" : "empty";
-        if (state.route.itemId === itemId) navigate({ itemId: null }, { replace: true, announce: false });
-      }
     } catch (error) {
-      item[config.property] = previous;
+      updateValue(previous, false);
       if (error?.name !== "AbortError") toast("状态保存失败，请稍后重试", "error");
       if ([401, 403].includes(Number(error?.status || 0))) {
         capabilities.canReadFeed = false;
@@ -1452,6 +1692,26 @@ export function mountLinksApp() {
       }
     } finally {
       state.feedActionBusy.delete(busyKey);
+      const current = feed.items.find((entry) => entry.id === itemId);
+      const scope = state.route.scope;
+      const filterField =
+        scope === "unread" && current?.read
+          ? "read"
+          : scope === "favorite" && current && !current.favorite
+            ? "favorite"
+            : scope === "later" && current && !current.readLater
+              ? "later"
+              : "";
+      // An unrelated save must not apply a filter whose own write is still pending.
+      if (
+        capabilities.canReadFeed &&
+        filterField &&
+        state.route.itemId !== itemId &&
+        !state.feedActionBusy.has(`${itemId}:${filterField}`)
+      ) {
+        feed.items = feed.items.filter((entry) => entry.id !== itemId);
+        feed.status = feed.items.length || feed.hasNext ? "ready" : "empty";
+      }
       renderFeedResults(activeFeedRequest());
     }
   }
@@ -1520,31 +1780,59 @@ export function mountLinksApp() {
     status.textContent = message;
   }
 
+  function cancelApplyIdentification() {
+    state.identifyController?.abort();
+    state.identifyController = null;
+    applyIdentificationStatus();
+  }
+
+  function applyIdentificationStatus(message = "", type = "info", { invalid = false, busy = false } = {}) {
+    const status = root.querySelector("[data-apply-identify-status]");
+    if (status) {
+      status.hidden = !message;
+      status.className = `mt-2 text-xs leading-relaxed ${type === "error" ? "text-error" : type === "success" ? "text-success" : "text-base-content/60"}`;
+      status.textContent = message;
+    }
+    const input = root.querySelector('[data-link-apply-form] [name="url"]');
+    if (invalid) input?.setAttribute("aria-invalid", "true");
+    else input?.removeAttribute("aria-invalid");
+    const button = root.querySelector("[data-apply-identify]");
+    if (button) {
+      button.disabled = busy;
+      button.setAttribute("aria-busy", String(busy));
+    }
+  }
+
   async function identifyApplySite() {
     const form = root.querySelector("[data-link-apply-form]");
     const button = form?.querySelector("[data-apply-identify]");
     if (!form || !button) return;
     const values = applyFormValues(form);
     const url = normalizeHttpUrl(values.url);
+    cancelApplyIdentification();
     if (!url) {
-      applyStatus("请先输入有效的 HTTP 或 HTTPS 网站地址。", "error");
+      applyIdentificationStatus("请先输入有效的 HTTP 或 HTTPS 网站地址。", "error", { invalid: true });
       form.elements.url?.focus();
       return;
     }
-    if (state.capabilityPromise) await state.capabilityPromise;
-    state.identifyController?.abort();
     const task = timeoutController(8000, signal);
     state.identifyController = task.controller;
-    button.disabled = true;
-    applyStatus(capabilities.canManage ? "正在调用 PluginLinks 官方识别接口…" : "正在尝试浏览器公开识别…");
-    let officialError = null;
+    applyIdentificationStatus("正在识别…", "info", { busy: true });
+    const ownsRequest = () =>
+      !signal.aborted &&
+      state.identifyController === task.controller &&
+      normalizeHttpUrl(form.elements.url?.value) === url;
     try {
+      // A capability lookup failure leaves public/manual identification available.
+      if (state.capabilityPromise) await state.capabilityPromise.catch(() => {});
+      if (!ownsRequest()) return;
+      if (task.controller.signal.aborted) throw task.controller.signal.reason;
       let metadata = null;
       if (capabilities.canManage) {
         try {
           metadata = await fetchOfficialSiteMetadata(url, task.controller.signal);
         } catch (error) {
-          officialError = error;
+          if (!ownsRequest() || task.controller.signal.aborted) throw error;
           if ([401, 403].includes(Number(error?.status || 0))) {
             capabilities.canManage = false;
             capabilities.canReadFeed = false;
@@ -1553,7 +1841,8 @@ export function mountLinksApp() {
         }
       }
       if (!metadata) metadata = await fetchPublicSiteMetadata(url, task.controller.signal);
-      if (task.controller.signal.aborted) return;
+      if (!ownsRequest()) return;
+      if (task.controller.signal.aborted) throw task.controller.signal.reason;
       const assignments = {
         displayName: metadata.title,
         description: metadata.description,
@@ -1565,26 +1854,24 @@ export function mountLinksApp() {
         if (field && value && !stringValue(field.value)) field.value = value;
       }
       updateApplyPreview();
-      applyStatus(
-        officialError
-          ? "官方识别不可用，已通过浏览器公开信息完成填充；请人工核对。"
-          : metadata.platform
-            ? `识别完成：${metadata.platform}；请核对后提交。`
-            : "识别完成，请核对后提交。",
-        officialError ? "info" : "success",
-      );
+      applyIdentificationStatus("识别完成，请核对站点信息。", "success");
     } catch (error) {
+      if (!ownsRequest()) return;
       if (error?.name === "AbortError" && task.controller.signal.reason?.name !== "TimeoutError") return;
-      if (task.controller.signal.reason?.name === "TimeoutError") error.code = "timeout";
-      applyStatus(
-        `${officialError ? "官方识别失败；" : ""}${formatMetadataFailure(error)}。可以继续手动填写。`,
+      const failure = task.controller.signal.reason?.name === "TimeoutError" ? task.controller.signal.reason : error;
+      applyIdentificationStatus(
+        `${formatMetadataFailure(failure)}，可重试或手动填写。`,
         "error",
       );
     } finally {
       task.dispose();
-      if (state.identifyController === task.controller) state.identifyController = null;
-      button.disabled = false;
-      renderApplyCapability();
+      if (state.identifyController === task.controller) {
+        if (!signal.aborted && !ownsRequest()) applyIdentificationStatus();
+        state.identifyController = null;
+        button.disabled = false;
+        button.setAttribute("aria-busy", "false");
+        if (!signal.aborted) renderApplyCapability();
+      }
     }
   }
 
@@ -1594,12 +1881,19 @@ export function mountLinksApp() {
     const outputPanel = root.querySelector("[data-apply-output]");
     if (output) output.value = markdown;
     if (outputPanel) outputPanel.hidden = false;
-    applyStatus("申请 Markdown 已生成，请核对后复制到留言板提交。", "success");
+    applyStatus(
+      root.dataset.linksCommentsEnabled === "true"
+        ? "申请内容已生成，复制后到留言板提交。"
+        : "申请内容已生成。留言已关闭，可复制保存。",
+      "success",
+    );
   }
 
   async function submitApplyForm(form) {
     if (state.applyBusy) return;
-    if (state.capabilityPromise) await state.capabilityPromise;
+    // Capability failures already clear elevated permissions in resolveCapabilities.
+    // Continue with the existing public/draft flow instead of rejecting the first submit.
+    if (state.capabilityPromise) await state.capabilityPromise.catch(() => {});
     if (state.applyBusy || signal.aborted) return;
     const values = applyFormValues(form);
     const validation = validateApplyForm(values);
@@ -1657,7 +1951,6 @@ export function mountLinksApp() {
       });
       if (!response.ok) throw httpError(response, await responseMessage(response));
       applyStatus("友链已添加，刷新页面后即可看到。", "success");
-      toast("友链创建成功", "success");
     } catch (error) {
       if (error?.name === "AbortError") return;
       const status = Number(error?.status || 0);
@@ -1665,8 +1958,13 @@ export function mountLinksApp() {
         capabilities.canManage = false;
         capabilities.canReadFeed = false;
         capabilities.status = status === 401 ? "guest" : "denied";
-        applyStatus("当前会话不能直接创建，已切换为留言申请。", "info");
         revealApplyDraft(values);
+        applyStatus(
+          root.dataset.linksCommentsEnabled === "true"
+            ? "当前会话无法直接添加。已生成申请内容，可复制到留言板提交。"
+            : "当前会话无法直接添加，留言也已关闭。已生成申请内容，可复制保存。",
+          "info",
+        );
       } else {
         const detail = sanitizePlainText(error?.message);
         applyStatus(
@@ -1695,6 +1993,21 @@ export function mountLinksApp() {
       !event.altKey
     );
   }
+
+  function syncFeedAvatar(image) {
+    if (signal.aborted || !image?.matches?.("[data-feed-avatar-image]") || !root.contains(image) || !image.complete)
+      return;
+    const loaded = image.naturalWidth > 0;
+    image.hidden = !loaded;
+    image.style.opacity = loaded ? "1" : "0";
+    const fallback = image.nextElementSibling;
+    if (fallback?.matches("[data-feed-avatar-fallback]")) fallback.hidden = loaded;
+  }
+
+  for (const type of ["load", "error"]) {
+    root.addEventListener(type, (event) => syncFeedAvatar(event.target), { capture: true, signal });
+  }
+  for (const image of root.querySelectorAll("[data-feed-avatar-image]")) syncFeedAvatar(image);
 
   root.addEventListener(
     "click",
@@ -1804,7 +2117,9 @@ export function mountLinksApp() {
       const feedToggle = target.closest("[data-feed-toggle], [data-feed-detail-toggle]");
       if (feedToggle) {
         event.preventDefault();
-        const item = feed.items.find((entry) => entry.id === feedToggle.dataset.feedId);
+        const item =
+          feed.items.find((entry) => entry.id === feedToggle.dataset.feedId) ||
+          state.feedDetails.get(feedToggle.dataset.feedId);
         const field = feedToggle.dataset.feedToggle || feedToggle.dataset.feedDetailToggle;
         if (!item) return;
         const next = field === "favorite" ? !item.favorite : field === "later" ? !item.readLater : !item.read;
@@ -1842,14 +2157,17 @@ export function mountLinksApp() {
         if (!form || !markdown) return;
         copyText(markdown)
           .then(() => {
-            applyStatus("申请 Markdown 已复制，请粘贴到留言板。", "success");
-            toast("申请内容已复制", "success");
+            applyStatus(
+              root.dataset.linksCommentsEnabled === "true" ? "已复制，请粘贴到留言板提交。" : "申请内容已复制。",
+              "success",
+            );
           })
           .catch(() => applyStatus("复制失败，请手动复制下方内容。", "error"));
         return;
       }
       if (target.closest("[data-apply-board]")) {
         event.preventDefault();
+        if (root.dataset.linksCommentsEnabled !== "true") return;
         navigate({ view: "board" }, { scroll: true });
       }
     },
@@ -1859,7 +2177,12 @@ export function mountLinksApp() {
   root.addEventListener(
     "input",
     (event) => {
-      if (event.target instanceof Element && event.target.closest("[data-link-apply-form]")) updateApplyPreview();
+      if (event.target instanceof Element && event.target.closest("[data-link-apply-form]")) {
+        if (event.target.matches('[name="url"]')) {
+          cancelApplyIdentification();
+        }
+        updateApplyPreview();
+      }
     },
     { signal },
   );
@@ -1907,7 +2230,9 @@ export function mountLinksApp() {
     "reset",
     (event) => {
       if (!(event.target instanceof HTMLFormElement) || !event.target.matches("[data-link-apply-form]")) return;
+      cancelApplyIdentification();
       globalThis.setTimeout(() => {
+        if (signal.aborted) return;
         const status = root.querySelector("[data-apply-status]");
         const output = root.querySelector("[data-apply-output]");
         if (status) status.hidden = true;
@@ -1922,7 +2247,8 @@ export function mountLinksApp() {
   linkDialog?.addEventListener(
     "close",
     () => {
-      if (!state.dialogSync && state.route.link) navigate({ link: null }, { announce: false });
+      if (!consumeProgrammaticDialogClose(linkDialog) && state.route.link)
+        navigate({ link: null }, { announce: false });
     },
     { signal },
   );
@@ -1930,13 +2256,24 @@ export function mountLinksApp() {
   feedDialog?.addEventListener(
     "close",
     () => {
-      if (!state.dialogSync && state.route.itemId) navigate({ itemId: null }, { announce: false });
+      const programmatic = consumeProgrammaticDialogClose(feedDialog);
+      if (feedDialog.open) return;
+      const previousFocus = state.feedReturnFocus;
+      state.feedReturnFocus = null;
+      if (!programmatic && state.route.itemId) navigate({ itemId: null }, { announce: false });
+      // Native dialog focus restoration may target a row replaced while the
+      // dialog was open. Restore only an orphaned/dialog focus, never another control.
+      const active = document.activeElement;
+      if (!active || active === document.body || feedDialog.contains(active)) {
+        restoreFeedFocus(root.querySelector("[data-feed-list]"), previousFocus);
+      }
     },
     { signal },
   );
   window.addEventListener(
     "popstate",
     () => {
+      if (!isSameLinksResource(mountedUrl, window.location.href)) return;
       normalizeLocation();
       render();
       if (state.route.view === "board") focusBoard();
@@ -1953,6 +2290,9 @@ export function mountLinksApp() {
 
   return () => {
     lifecycle.abort();
+    state.feedDetails.clear();
+    state.autoMarked.clear();
+    state.feedFlagChanges.clear();
     feed.controller?.abort();
     state.identifyController?.abort();
     state.captchaController?.abort();

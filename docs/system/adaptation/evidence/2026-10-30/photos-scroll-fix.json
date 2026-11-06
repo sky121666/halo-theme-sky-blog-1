@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-30",
+  "issue": "Photos pagination resets viewport to top",
+  "scope": "Theme-only lightGallery lifecycle and viewport preservation",
+  "environment": {
+    "url": "http://localhost:8090",
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "version": "2.2.41",
+    "preview": true,
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "plugins": [
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      }
+    ],
+    "lightGalleryJs": "1.4.0"
+  },
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "5aeedec5207b8573acb731222147705f75a0d59a124cf1c5f54d48b0f61d1b7e",
+    "fileCount": 401,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "assets": [
+    {
+      "asset": "js/photos.js",
+      "status": 200,
+      "match": true,
+      "sha256": "67040a7129241fa454d0eb98f769946c18d05c6399247d11b7a328270ba4288f"
+    },
+    {
+      "asset": "css/photos.css",
+      "status": 200,
+      "match": true,
+      "sha256": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb"
+    },
+    {
+      "asset": "js/main.js",
+      "status": 200,
+      "match": true,
+      "sha256": "f3317ab015d4c4830c16b724b61c36ac3deea14ffc214264257b3091fac2ccb5"
+    }
+  ],
+  "cacheActions": [
+    {
+      "method": "PUT",
+      "status": 204
+    },
+    {
+      "method": "DELETE",
+      "status": 200
+    }
+  ],
+  "reproduction": {
+    "beforeCount": 20,
+    "afterCount": 40,
+    "beforeY": 1151,
+    "afterY": 0,
+    "urlUnchanged": true,
+    "result": "failed as expected"
+  },
+  "rootCause": "Theme calls the legacy official destroy(true) to update items; library writes its open-time prevScrollTop to document scrollTop, including before it was ever opened.",
+  "changes": [
+    "Preserve viewport at the synchronous legacy teardown/rebuild boundary, including failure.",
+    "While the legacy gallery is open/closing, defer synchronization to its official onCloseAfter event.",
+    "Remove deferred listener during page cleanup."
+  ],
+  "checks": {
+    "buildOnly": {
+      "passed": true,
+      "node": {
+        "tests": 345,
+        "pass": 343,
+        "fail": 0,
+        "skipped": 2
+      },
+      "skippedReason": "Two optional navigation Java fixtures; SKY_UI_JAVA_FIXTURE_CLASSPATH not provided"
+    },
+    "lint": true,
+    "format": true,
+    "diff": true,
+    "photosLifecycle": {
+      "tests": 21,
+      "pass": 21,
+      "newTests": 5,
+      "newTestsRed": 4
+    }
+  },
+  "browser": {
+    "pagination": [
+      {
+        "width": 1440,
+        "beforePage2": 1251,
+        "afterPage2": 1251,
+        "page2Count": 40,
+        "page2LightboxCount": 40,
+        "noJumpInSampledFrames": true,
+        "newPhotoOpened": true,
+        "beforePage3": 3236,
+        "afterPage3": 3236,
+        "page3Count": 46,
+        "page3LightboxCount": 46,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "beforePage2": 6260,
+        "afterPage2": 6260,
+        "page2Count": 40,
+        "page2LightboxCount": 40,
+        "noJumpInSampledFrames": true,
+        "newPhotoOpened": true,
+        "beforePage3": 14334,
+        "afterPage3": 14334,
+        "page3Count": 46,
+        "page3LightboxCount": 46,
+        "errors": []
+      }
+    ],
+    "activeGallery": [
+      {
+        "width": 1440,
+        "original": {
+          "id": "lg0",
+          "y": 1251
+        },
+        "openPosition": 668,
+        "during": {
+          "id": "lg0",
+          "visible": true,
+          "count": "20"
+        },
+        "closed": {
+          "id": "lg1",
+          "y": 668,
+          "errors": []
+        }
+      },
+      {
+        "width": 390,
+        "original": {
+          "id": "lg0",
+          "y": 6183
+        },
+        "openPosition": 5495,
+        "during": {
+          "id": "lg0",
+          "visible": true,
+          "count": "20"
+        },
+        "closed": {
+          "id": "lg1",
+          "y": 5495,
+          "errors": []
+        }
+      }
+    ],
+    "navigation": [
+      {
+        "width": 1440,
+        "detail": {
+          "path": "/photos/photo-lglk3ors",
+          "cleaned": true,
+          "sameDoc": false
+        },
+        "before": 1223,
+        "returned": {
+          "y": 1223,
+          "sameDoc": false,
+          "count": 40,
+          "errors": [],
+          "lightboxItems": 40
+        }
+      },
+      {
+        "width": 390,
+        "detail": {
+          "path": "/photos/photo-lglk3ors",
+          "cleaned": true,
+          "sameDoc": false
+        },
+        "before": 5190,
+        "returned": {
+          "y": 5190,
+          "sameDoc": false,
+          "count": 40,
+          "errors": [],
+          "lightboxItems": 40
+        }
+      }
+    ],
+    "wheel": {
+      "width": 390,
+      "y": 7000,
+      "count": 40,
+      "steps": 10,
+      "noTopJumpAfterAppend": true
+    }
+  },
+  "boundaries": [
+    "Real local photo data and plugin assets; no plugin source or business data changes.",
+    "Active-gallery race uses actual GET response held by a browser-only gate.",
+    "Current detail navigation performs full document compatibility navigation; not reported as same-document PJAX.",
+    "Initial navigation test was corrected to wait for navigation/finite layout animations to settle before starting a new scroll. Original failed driver is retained.",
+    "Only affected gallery paths and lifecycle retested; no global latest-plugin audit or real business writes.",
+    "Author review; no independent reviewer in this batch.",
+    "No Git staging, commit, push, tag or release."
+  ],
+  "sources": [
+    "https://github.com/halo-sigs/plugin-lightgallery/blob/v1.2.1/src/main/resources/static/js/lightgallery.min.js",
+    "https://github.com/sachinchoolur/lightgallery.js/blob/1.4.0/src/js/lightgallery.js",
+    "https://sachinchoolur.github.io/lightgallery.js/docs/api.html"
+  ],
+  "localEvidence": "/tmp/sky-photos-scroll-20261030"
+}

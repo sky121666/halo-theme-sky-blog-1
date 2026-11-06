@@ -136,14 +136,14 @@
 
         <!-- 分页 -->
         <div th:if="${bangumis.hasPrevious or bangumis.hasNext}" class="bangumi-pagination">
-          <a th:if="${bangumis.hasPrevious}" th:href="@{${bangumis.prevUrl}}" class="bangumi-page-btn">
-            <span class="icon-[heroicons--chevron-left] h-5 w-5"></span>
+          <a th:if="${bangumis.hasPrevious}" th:href="@{${bangumis.prevUrl}}" class="bangumi-page-btn" aria-label="上一页">
+            <span class="icon-[heroicons--chevron-left] h-5 w-5" aria-hidden="true"></span>
           </a>
           <span class="bangumi-page-info">
             <span th:text="${bangumis.page}">1</span> / <span th:text="${bangumis.totalPages}">1</span>
           </span>
-          <a th:if="${bangumis.hasNext}" th:href="@{${bangumis.nextUrl}}" class="bangumi-page-btn">
-            <span class="icon-[heroicons--chevron-right] h-5 w-5"></span>
+          <a th:if="${bangumis.hasNext}" th:href="@{${bangumis.nextUrl}}" class="bangumi-page-btn" aria-label="下一页">
+            <span class="icon-[heroicons--chevron-right] h-5 w-5" aria-hidden="true"></span>
           </a>
         </div>
       </section>

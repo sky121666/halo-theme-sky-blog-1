@@ -1,7 +1,7 @@
 {
   "type": "module",
   "license": "GPL-3.0",
-  "version": "2.2.40",
+  "version": "2.2.41",
   "packageManager": "pnpm@12.6.0",
   "engines": {
     "node": ">=24.18.0 <25",
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "pnpm run build-only && theme-package && pnpm run verify:seo:package",
-    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:plugin-contracts && pnpm run verify:links-runtime && pnpm run verify:plugin-upgrades && pnpm run verify:plugin-evidence && pnpm run verify:seo && pnpm run verify:heatmap && vite build && pnpm run verify:build-artifacts",
+    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:core-compatibility && pnpm run verify:global-content && pnpm run verify:ui-actions && pnpm run verify:doc-navigation && pnpm run verify:photos-lifecycle && pnpm run verify:page-cover && pnpm run verify:about-location && pnpm run verify:contact-form-lifecycle && pnpm run verify:restricted-reading-lifecycle && pnpm run verify:plugin-script-lifecycle && pnpm run verify:shiki-normalization && pnpm run verify:plugin-contracts && pnpm run verify:plugin-scope && pnpm run verify:links-runtime && pnpm run verify:plugin-upgrades && pnpm run verify:plugin-evidence && pnpm run verify:seo && pnpm run verify:heatmap && pnpm run verify:steam-heatmap && vite build && pnpm run verify:build-artifacts",
     "dev": "vite build --watch",
     "lint": "eslint src scripts vite.config.ts eslint.config.js prettier.config.js postcss.config.cjs --max-warnings 0",
     "format": "prettier --write \"*.config.{js,cjs}\" \"**/*.{ts,json,yaml,yml,html}\"",
@@ -23,12 +23,28 @@
     "verify:build-artifacts": "node scripts/verify-build-artifacts.mjs",
     "verify:plugin-versions": "node scripts/check-plugin-versions.mjs",
     "verify:plugin-contracts": "node scripts/verify-plugin-contracts.mjs",
+    "verify:core-compatibility": "node scripts/verify-core-compatibility.mjs",
+    "verify:doc-navigation": "node scripts/verify-doc-navigation.mjs",
+    "verify:photos-lifecycle": "node scripts/verify-photos-lifecycle.mjs",
+    "verify:page-cover": "node scripts/verify-page-cover.mjs",
+    "verify:about-location": "node scripts/verify-about-location.mjs",
+    "verify:contact-form-lifecycle": "node scripts/verify-contact-form-lifecycle.mjs",
+    "verify:restricted-reading-lifecycle": "node scripts/verify-restricted-reading-lifecycle.mjs",
     "verify:links-runtime": "node scripts/verify-links-runtime.mjs",
     "verify:plugin-upgrades": "node scripts/verify-plugin-upgrades.mjs",
     "verify:plugin-evidence": "node scripts/verify-plugin-evidence.mjs",
     "verify:seo": "node scripts/verify-seo-contracts.mjs",
     "verify:heatmap": "TZ=Asia/Shanghai node scripts/verify-article-heatmap.mjs && TZ=America/Los_Angeles node scripts/verify-article-heatmap.mjs",
-    "verify:seo:package": "node scripts/verify-seo-contracts.mjs --archive"
+    "verify:seo:package": "node scripts/verify-seo-contracts.mjs --archive",
+    "verify:shiki-normalization": "node scripts/verify-shiki-normalization.mjs",
+    "verify:ui-actions": "node scripts/verify-ui-navigation.mjs && node scripts/verify-auth-forms.mjs && node scripts/verify-moments-post-actions.mjs && node scripts/verify-modal-focus.mjs",
+    "verify:plugin-script-lifecycle": "node scripts/verify-plugin-script-lifecycle.mjs",
+    "verify:steam-heatmap": "node scripts/verify-steam-heatmap-pagination.mjs && node scripts/verify-steam-pagination.mjs",
+    "verify:equipment-route": "node scripts/verify-equipment-route.mjs",
+    "verify:template-data": "node scripts/verify-template-data.mjs",
+    "verify:comment-contracts": "node scripts/verify-comment-contracts.mjs",
+    "verify:plugin-scope": "node scripts/verify-plugin-pages-scope.mjs",
+    "verify:global-content": "node scripts/verify-global-content.mjs"
   },
   "dependencies": {
     "@swup/head-plugin": "2.3.1",
@@ -49,7 +65,7 @@
     "esbuild": "0.28.2",
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
-    "glob": "13.0.6",
+    "glob": "14.0.3",
     "globals": "17.12.0",
     "postcss": "8.5.28",
     "prettier": "3.9.9",
@@ -57,6 +73,6 @@
     "tailwindcss": "4.3.3",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-eslint": "8.70.1",
-    "vite": "8.3.0"
+    "vite": "8.3.6"
   }
 }

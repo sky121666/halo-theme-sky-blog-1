@@ -1,0 +1,1228 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-06T09:35:04.138611+00:00",
+  "scope": "Theme-only slow navigation and existing official plugin components; no plugin, settings or business data mutations.",
+  "environment": {
+    "at": "2026-11-06T09:32:53.418Z",
+    "base": "http://localhost:8090",
+    "halo": "2.27.2",
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.51"
+    },
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "8641113520bd6aa038fd2d3df87a0d634079a3a529697d85f4c52fdcd87a256f",
+      "fileCount": 407,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.10.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.11.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.9.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.4",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "cache": {
+    "browserCacheDisabled": true,
+    "serverCachesCleared": false,
+    "assetMatches": 54,
+    "assets": [
+      {
+        "file": "css/about.css",
+        "status": 200,
+        "local": "350e4846bd5e74b5e823d400a0a9135a3a07384d0ed47017281d6740ec5fcdd3",
+        "server": "350e4846bd5e74b5e823d400a0a9135a3a07384d0ed47017281d6740ec5fcdd3",
+        "match": true
+      },
+      {
+        "file": "css/archives.css",
+        "status": 200,
+        "local": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "server": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "match": true
+      },
+      {
+        "file": "css/auth-centered.css",
+        "status": 200,
+        "local": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18",
+        "server": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18",
+        "match": true
+      },
+      {
+        "file": "css/auth-default.css",
+        "status": 200,
+        "local": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186",
+        "server": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186",
+        "match": true
+      },
+      {
+        "file": "css/auth-split.css",
+        "status": 200,
+        "local": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "server": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "match": true
+      },
+      {
+        "file": "css/author.css",
+        "status": 200,
+        "local": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5",
+        "server": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5",
+        "match": true
+      },
+      {
+        "file": "css/bangumi.css",
+        "status": 200,
+        "local": "b5892e70921b99c7d0e3d3666ff84122f2c6af8e73f5084d4e26ddc8bdbc4fa0",
+        "server": "b5892e70921b99c7d0e3d3666ff84122f2c6af8e73f5084d4e26ddc8bdbc4fa0",
+        "match": true
+      },
+      {
+        "file": "css/categories.css",
+        "status": 200,
+        "local": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "server": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "match": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "local": "bd0b35f3f299e5e92bf9314ca6932196c61bf9f8ebdb08d60aac1981021c6933",
+        "server": "bd0b35f3f299e5e92bf9314ca6932196c61bf9f8ebdb08d60aac1981021c6933",
+        "match": true
+      },
+      {
+        "file": "css/douban.css",
+        "status": 200,
+        "local": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889",
+        "server": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889",
+        "match": true
+      },
+      {
+        "file": "css/equipment.css",
+        "status": 200,
+        "local": "cdb5b957b83ccd99418e83d8ae19e1c5134354f526d395da0c9b6fc048028180",
+        "server": "cdb5b957b83ccd99418e83d8ae19e1c5134354f526d395da0c9b6fc048028180",
+        "match": true
+      },
+      {
+        "file": "css/index-effects.css",
+        "status": 200,
+        "local": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece",
+        "server": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece",
+        "match": true
+      },
+      {
+        "file": "css/index-subtitle-effects.css",
+        "status": 200,
+        "local": "5d0f26a778f4320ff4fed0eb7bd9cd5b1adf558926b52d03fdcbd0e6dda39245",
+        "server": "5d0f26a778f4320ff4fed0eb7bd9cd5b1adf558926b52d03fdcbd0e6dda39245",
+        "match": true
+      },
+      {
+        "file": "css/index-title-effects.css",
+        "status": 200,
+        "local": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe",
+        "server": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe",
+        "match": true
+      },
+      {
+        "file": "css/index-weather-effects.css",
+        "status": 200,
+        "local": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573",
+        "server": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573",
+        "match": true
+      },
+      {
+        "file": "css/index.css",
+        "status": 200,
+        "local": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3",
+        "server": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3",
+        "match": true
+      },
+      {
+        "file": "css/links.css",
+        "status": 200,
+        "local": "54821fa0383771594d675133b1f1d723811d27947a026bb8a765d7c55fcba836",
+        "server": "54821fa0383771594d675133b1f1d723811d27947a026bb8a765d7c55fcba836",
+        "match": true
+      },
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "local": "6a479dbcbc07ccc47bb9e440c966dedf2b524b17ca82c5ea4cc81143f5f1e6ad",
+        "server": "6a479dbcbc07ccc47bb9e440c966dedf2b524b17ca82c5ea4cc81143f5f1e6ad",
+        "match": true
+      },
+      {
+        "file": "css/moments.css",
+        "status": 200,
+        "local": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+        "server": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+        "match": true
+      },
+      {
+        "file": "css/page.css",
+        "status": 200,
+        "local": "3573231e8fdb66830967009fc607fe9078103aa689fe1a7b9dc99f834d06cf83",
+        "server": "3573231e8fdb66830967009fc607fe9078103aa689fe1a7b9dc99f834d06cf83",
+        "match": true
+      },
+      {
+        "file": "css/photos.css",
+        "status": 200,
+        "local": "7b5ad85e87a6fddf884ea281ca4abba06846bd18ee4023f396d9915a480144b2",
+        "server": "7b5ad85e87a6fddf884ea281ca4abba06846bd18ee4023f396d9915a480144b2",
+        "match": true
+      },
+      {
+        "file": "css/post.css",
+        "status": 200,
+        "local": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+        "server": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+        "match": true
+      },
+      {
+        "file": "css/steam.css",
+        "status": 200,
+        "local": "4eaf90685a3693a53594488196736ba9865bae7ad7de2be4f68b46cae0fbde38",
+        "server": "4eaf90685a3693a53594488196736ba9865bae7ad7de2be4f68b46cae0fbde38",
+        "match": true
+      },
+      {
+        "file": "emoji/emoji-selector.css",
+        "status": 200,
+        "local": "c51d3273a678e60c31980c49ebcc5990e4ede1f3ba9c3fba82e17a56945b1822",
+        "server": "c51d3273a678e60c31980c49ebcc5990e4ede1f3ba9c3fba82e17a56945b1822",
+        "match": true
+      },
+      {
+        "file": "emoji/emoji-selector.js",
+        "status": 200,
+        "local": "2880fc001aa6097e7fc4288a090c518f52d23754d81d35246f0e9f9a99306602",
+        "server": "2880fc001aa6097e7fc4288a090c518f52d23754d81d35246f0e9f9a99306602",
+        "match": true
+      },
+      {
+        "file": "js/about.js",
+        "status": 200,
+        "local": "cdaff7fd207464edf26fd627025b1d41fce14746f7509523d6578182ed49c94f",
+        "server": "cdaff7fd207464edf26fd627025b1d41fce14746f7509523d6578182ed49c94f",
+        "match": true
+      },
+      {
+        "file": "js/archives.js",
+        "status": 200,
+        "local": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d",
+        "server": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d",
+        "match": true
+      },
+      {
+        "file": "js/auth-centered.js",
+        "status": 200,
+        "local": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c",
+        "server": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c",
+        "match": true
+      },
+      {
+        "file": "js/auth-default.js",
+        "status": 200,
+        "local": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "match": true
+      },
+      {
+        "file": "js/auth-split.js",
+        "status": 200,
+        "local": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "server": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "match": true
+      },
+      {
+        "file": "js/author.js",
+        "status": 200,
+        "local": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e",
+        "server": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e",
+        "match": true
+      },
+      {
+        "file": "js/bangumi.js",
+        "status": 200,
+        "local": "52134117458992b3be32efba83c2cea818c88f6bfb7ee946e623fe37a9649895",
+        "server": "52134117458992b3be32efba83c2cea818c88f6bfb7ee946e623fe37a9649895",
+        "match": true
+      },
+      {
+        "file": "js/categories.js",
+        "status": 200,
+        "local": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "server": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "match": true
+      },
+      {
+        "file": "js/doc.js",
+        "status": 200,
+        "local": "e88cbc362ed37cf18d7b2ef3bee5bf54f086d8ab4aa0ee30e1c041916ce97934",
+        "server": "e88cbc362ed37cf18d7b2ef3bee5bf54f086d8ab4aa0ee30e1c041916ce97934",
+        "match": true
+      },
+      {
+        "file": "js/douban.js",
+        "status": 200,
+        "local": "a63502300e0eb2d5e93ab835e9fe13e2050d21f0ee1d5704c3d73f5d14c4371a",
+        "server": "a63502300e0eb2d5e93ab835e9fe13e2050d21f0ee1d5704c3d73f5d14c4371a",
+        "match": true
+      },
+      {
+        "file": "js/equipment.js",
+        "status": 200,
+        "local": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3",
+        "server": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3",
+        "match": true
+      },
+      {
+        "file": "js/index.js",
+        "status": 200,
+        "local": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a",
+        "server": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a",
+        "match": true
+      },
+      {
+        "file": "js/links.js",
+        "status": 200,
+        "local": "a0dbfe8f2b03c39618465beb916452e727bddec3a1b35790c33fa24b6d6fa98c",
+        "server": "a0dbfe8f2b03c39618465beb916452e727bddec3a1b35790c33fa24b6d6fa98c",
+        "match": true
+      },
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "local": "4078d719c876b9a4d7e2b52e338c44a1e52ea8260c55d29e5a209f7f6c39ccc2",
+        "server": "4078d719c876b9a4d7e2b52e338c44a1e52ea8260c55d29e5a209f7f6c39ccc2",
+        "match": true
+      },
+      {
+        "file": "js/moments.js",
+        "status": 200,
+        "local": "c0cb2113013767be7fff61715d547062818108b02809247450713259828e2ea0",
+        "server": "c0cb2113013767be7fff61715d547062818108b02809247450713259828e2ea0",
+        "match": true
+      },
+      {
+        "file": "js/page.js",
+        "status": 200,
+        "local": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27",
+        "server": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27",
+        "match": true
+      },
+      {
+        "file": "js/photos.js",
+        "status": 200,
+        "local": "b074e93a768314e0b62527bba3ca44f20e7a43500f14ce8710943f426a66afef",
+        "server": "b074e93a768314e0b62527bba3ca44f20e7a43500f14ce8710943f426a66afef",
+        "match": true
+      },
+      {
+        "file": "js/post.js",
+        "status": 200,
+        "local": "85464fb7c895021e97eb7075c63f22384eb9765504b1d5fe687b3903a5380bbd",
+        "server": "85464fb7c895021e97eb7075c63f22384eb9765504b1d5fe687b3903a5380bbd",
+        "match": true
+      },
+      {
+        "file": "js/steam.js",
+        "status": 200,
+        "local": "ee481e5b3f38e6ec3e1a51093c494976acefafbdd7de7200f366a5503a45d512",
+        "server": "ee481e5b3f38e6ec3e1a51093c494976acefafbdd7de7200f366a5503a45d512",
+        "match": true
+      },
+      {
+        "file": "qrcode/qrcode.min.js",
+        "status": 200,
+        "local": "c541ef06327885a8415bca8df6071e14189b4855336def4f36db54bde8484f36",
+        "server": "c541ef06327885a8415bca8df6071e14189b4855336def4f36db54bde8484f36",
+        "match": true
+      },
+      {
+        "file": "js/chunks/article-content-2.2.41.js",
+        "status": 200,
+        "local": "6c1981581ff7f350739cde6d699af0f8e59552261263f75d0d1141055b310d89",
+        "server": "6c1981581ff7f350739cde6d699af0f8e59552261263f75d0d1141055b310d89",
+        "match": true
+      },
+      {
+        "file": "js/chunks/article-heatmap-data-2.2.41.js",
+        "status": 200,
+        "local": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22",
+        "server": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22",
+        "match": true
+      },
+      {
+        "file": "js/chunks/auth-common-2.2.41.js",
+        "status": 200,
+        "local": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "server": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "match": true
+      },
+      {
+        "file": "js/chunks/debug-2.2.41.js",
+        "status": 200,
+        "local": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933",
+        "server": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933",
+        "match": true
+      },
+      {
+        "file": "js/chunks/external-links-2.2.41.js",
+        "status": 200,
+        "local": "8231b4955d13b32583d5542e7a105701de64b419db671f802456d3d58bf0e864",
+        "server": "8231b4955d13b32583d5542e7a105701de64b419db671f802456d3d58bf0e864",
+        "match": true
+      },
+      {
+        "file": "js/chunks/history-2.2.41.js",
+        "status": 200,
+        "local": "2fbc3957b88f74bc5e8acd666f11ce5948c5bbe6c4485f2c18dd13238f1f6427",
+        "server": "2fbc3957b88f74bc5e8acd666f11ce5948c5bbe6c4485f2c18dd13238f1f6427",
+        "match": true
+      },
+      {
+        "file": "js/chunks/modal-focus-2.2.41.js",
+        "status": 200,
+        "local": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a",
+        "server": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a",
+        "match": true
+      },
+      {
+        "file": "js/chunks/page-runtime-2.2.41.js",
+        "status": 200,
+        "local": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a",
+        "server": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a",
+        "match": true
+      },
+      {
+        "file": "js/chunks/toc-utils-2.2.41.js",
+        "status": 200,
+        "local": "5d318a5e4a93343d70bf1a2255cbec9cea5b0aabb2498094609a1357e9a71462",
+        "server": "5d318a5e4a93343d70bf1a2255cbec9cea5b0aabb2498094609a1357e9a71462",
+        "match": true
+      }
+    ]
+  },
+  "changes": ["src/common/main.js", "templates/assets/js/main.js", "scripts/verify-ui-navigation.mjs"],
+  "build": {
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "tests": 512,
+    "pass": 507,
+    "fail": 0,
+    "skipped": 5,
+    "command": "pnpm run build",
+    "exitCode": 0,
+    "skips": ["2 Java fixtures: missing classpath", "3 Halo auth core fixtures: missing runtime script"]
+  },
+  "navigationRegression": {
+    "pass": 92,
+    "skip": 2,
+    "newCases": 19,
+    "baselineRepro": {
+      "command": "pnpm exec node --test --test-name-pattern=慢资源切页 scripts/verify-ui-navigation.mjs",
+      "node": "24.21.0",
+      "pnpm": "12.6.0",
+      "exitCode": 1,
+      "tests": 11,
+      "pass": 1,
+      "fail": 10,
+      "skipped": 0,
+      "mainSha256": "fd7e6a3265903e97a2eb3501e3e64e2c1a5adb6c3bf6b00055969fdb1fceb688",
+      "mainMatchesBefore": true,
+      "scope": "Only scripts/verify-ui-navigation.mjs changed; simulated DOM/network timing with production visit hooks; no browser use",
+      "log": "/tmp/sky-slow-navigation-20261106/red-complete.log"
+    }
+  },
+  "quality": {
+    "lint": true,
+    "formatCheck": true,
+    "diffCheck": true,
+    "independentCodeReview": "Passed after fixing query normalization and owner restoration; 3 independent screenshot reviews passed with documented fixture overlap."
+  },
+  "browser": {
+    "taskSpace": 155,
+    "longModule": [
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "documentPreserved": true,
+        "path": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&qa-slow=next",
+        "current": {
+          "initial": false,
+          "pjax": true,
+          "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&qa-slow=next"
+        },
+        "errors": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "documentPreserved": true,
+        "path": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&qa-slow=next",
+        "current": {
+          "initial": false,
+          "pjax": true,
+          "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&qa-slow=next"
+        },
+        "errors": []
+      }
+    ],
+    "scenarios": [
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "scenario": "late-load",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/links?qa-case=next&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "scenario": "late-error",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/links?qa-case=next&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "scenario": "third-visit",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/photos?qa-case=third&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "scenario": "history-back",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/photos?qa-case=source&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "scenario": "current-timeout",
+        "pass": true,
+        "documentPreserved": false,
+        "expectedReload": true,
+        "finalPath": "/photos?qa-case=source&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "scenario": "late-load",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/links?qa-case=next&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "scenario": "late-error",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/links?qa-case=next&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "scenario": "third-visit",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/photos?qa-case=third&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "scenario": "history-back",
+        "pass": true,
+        "documentPreserved": true,
+        "expectedReload": false,
+        "finalPath": "/photos?qa-case=source&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "scenario": "current-timeout",
+        "pass": true,
+        "documentPreserved": false,
+        "expectedReload": true,
+        "finalPath": "/photos?qa-case=source&preview-theme=theme-sky-blog-1",
+        "errors": [],
+        "blockedWrites": []
+      }
+    ],
+    "shiki": [
+      {
+        "width": 1440,
+        "pass": true,
+        "cases": 4,
+        "modes": [
+          {
+            "mode": "light",
+            "viewport": 1440,
+            "documentWidth": 1440
+          },
+          {
+            "mode": "dark",
+            "viewport": 1440,
+            "documentWidth": 1440
+          }
+        ],
+        "clean": {
+          "removed": 1,
+          "remaining": 0
+        },
+        "errors": []
+      },
+      {
+        "width": 390,
+        "pass": true,
+        "cases": 4,
+        "modes": [
+          {
+            "mode": "light",
+            "viewport": 390,
+            "documentWidth": 390
+          },
+          {
+            "mode": "dark",
+            "viewport": 390,
+            "documentWidth": 390
+          }
+        ],
+        "clean": {
+          "removed": 1,
+          "remaining": 0
+        },
+        "errors": []
+      }
+    ],
+    "docsLanguage": [
+      {
+        "width": 1440,
+        "actualWidth": 1440,
+        "initial": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "opened": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "true",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": true,
+            "focused": true,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "closed": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": false,
+            "focused": true,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "validLinks": true,
+        "documentPreserved": true,
+        "errors": [],
+        "pass": true,
+        "clean": true
+      },
+      {
+        "width": 390,
+        "actualWidth": 390,
+        "initial": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": false,
+            "expanded": "false",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "opened": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": false,
+            "expanded": "false",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "true",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": true,
+            "focused": true,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "closed": [
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": false,
+            "expanded": "false",
+            "controls": "doc-selector-options-2",
+            "dropdownId": "doc-selector-options-2",
+            "shown": false,
+            "focused": false,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          },
+          {
+            "base": "/docs/halo-theme-sky-blog-1",
+            "visible": true,
+            "expanded": "false",
+            "controls": "doc-selector-options-4",
+            "dropdownId": "doc-selector-options-4",
+            "shown": false,
+            "focused": true,
+            "links": [
+              {
+                "label": "简体中文（隔离）",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=zh-CN",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=zh-CN"
+              },
+              {
+                "label": "English — isolated selector fixture",
+                "href": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-language=en",
+                "rootHref": "http://localhost:8090/docs/halo-theme-sky-blog-1?preview-theme=theme-sky-blog-1&qa-language=en"
+              }
+            ]
+          }
+        ],
+        "validLinks": true,
+        "documentPreserved": true,
+        "errors": [],
+        "pass": true,
+        "clean": true
+      }
+    ],
+    "delayedShiki": [
+      {
+        "width": 1440,
+        "pass": true,
+        "events": [
+          {
+            "at": 6360,
+            "detail": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-plugin=next",
+            "location": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-plugin=next",
+            "dom": "const isolatedPluginSample = \"next\";"
+          }
+        ],
+        "hosts": 1,
+        "nested": 0,
+        "errors": [],
+        "officialScopeReloadPreserved": true
+      },
+      {
+        "width": 390,
+        "pass": true,
+        "events": [
+          {
+            "at": 6356,
+            "detail": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-plugin=next",
+            "location": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-plugin=next",
+            "dom": "const isolatedPluginSample = \"next\";"
+          }
+        ],
+        "hosts": 1,
+        "nested": 0,
+        "errors": [],
+        "officialScopeReloadPreserved": true
+      }
+    ],
+    "completion": {
+      "clean": {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+        "temporaryElements": 0,
+        "markers": false,
+        "errors": [],
+        "blocked": []
+      },
+      "taskSpace": 155,
+      "finishedAt": "2026-11-06T09:34:20.699Z"
+    }
+  },
+  "readOnlyProbe": {
+    "passed": 45,
+    "failed": 0,
+    "notApplicable": 0,
+    "notCovered": 3,
+    "complete": false
+  },
+  "remaining": [
+    "Contact Form, AI Summary and Restricted Reading lack real article URLs; prior isolated display samples do not erase missing real-host coverage.",
+    "Real multilingual content, PlantUML, valid map credentials, conditional auth/SSO and disabled-plugin configurations remain outside observed samples.",
+    "Business writes, payments, unlocks, AI calls and credential operations not performed."
+  ],
+  "limitations": [
+    "First delayed Shiki attempt reloaded and lost temporary samples; first-trigger cause not captured. Instrumented retry and final desktop/mobile succeeded; original timeout not relabeled as success.",
+    "Early test locator/hidden FAB/aria-hidden waits were corrected to actual DOM; no product changes for those test issues.",
+    "Preview is request-scoped on shared Halo, not a private service/database."
+  ],
+  "sources": [
+    "https://swup.js.org/hooks/",
+    "https://github.com/halo-sigs/plugin-shiki/blob/a13a43f100d04f8739fc0b230cd3f8ef597bb0e1/shiki-code-element/README.md",
+    "https://www.halo.run/docs/docsme/develop/theme"
+  ],
+  "rawEvidenceDirectory": "/tmp/sky-slow-navigation-20261106"
+}

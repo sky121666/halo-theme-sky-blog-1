@@ -25,10 +25,32 @@
 
             document.addEventListener("DOMContentLoaded", function () {
                 const loginForm = document.getElementById("login-form");
+                let encryptionError = null;
                 loginForm.addEventListener("submit", function (event) {
                     const plainPasswordInput = document.getElementById("plainPassword");
                     const passwordInput = document.getElementById("password");
-                    passwordInput.value = encryptPassword(plainPasswordInput.value);
+                    passwordInput.value = "";
+                    try {
+                        const encryptedPassword = encryptPassword(plainPasswordInput.value);
+                        if (typeof encryptedPassword !== "string" || !encryptedPassword.trim()) {
+                            throw new Error("Password encryption failed");
+                        }
+                        passwordInput.value = encryptedPassword;
+                        encryptionError?.remove();
+                        encryptionError = null;
+                    } catch {
+                        event.preventDefault();
+                        if (!encryptionError) {
+                            encryptionError = document.createElement("p");
+                            encryptionError.id = "login-encryption-error";
+                            encryptionError.className = "text-sm text-error";
+                            encryptionError.setAttribute("role", "alert");
+                            encryptionError.tabIndex = -1;
+                            loginForm.appendChild(encryptionError);
+                        }
+                        encryptionError.textContent = "暂时无法处理登录，请刷新页面后重试。";
+                        encryptionError.focus();
+                    }
                 });
             });
         </script>
@@ -88,13 +110,18 @@
             });
         };
     </script>
-    <script type="module" src="/js/main.js"></script>
+    <script type="module" th:src="|/js/main.js?v=${site.version}|"></script>
     <!-- Altcha Captcha Scripts (Halo Pro only, guarded for open-source compatibility) -->
     <th:block th:if="${globalInfo != null and #strings.contains(globalInfo.toString(), 'captchaProvider')}">
     <th:block th:if="${#strings.equalsIgnoreCase(globalInfo.captchaProvider, 'ALTCHA')}">
-        <script async defer src="/webjars/altcha/dist/altcha.i18n.js" type="module"></script>
-        <script src="/js/altcha-lib.iife.js"></script>
-        <script src="/js/altcha-utils.js"></script>
+        <!-- Halo 2.26 ships ALTCHA 2.3.0; 2.27 replaces it and removes the separate solver library. -->
+        <script th:if="${#strings.startsWith(site.version, '2.26.')}" async defer
+            src="/webjars/altcha/2.3.0/dist/altcha.i18n.js" type="module"></script>
+        <script th:if="${#strings.startsWith(site.version, '2.26.')}"
+            th:src="|/js/altcha-lib.iife.js?v=${site.version}|"></script>
+        <script th:unless="${#strings.startsWith(site.version, '2.26.')}" async defer type="module"
+            src="/webjars/altcha/3.2.3/dist/main/altcha.i18n.min.js"></script>
+        <script th:src="|/js/altcha-utils.js?v=${site.version}|"></script>
     </th:block>
     </th:block>
 </th:block>
@@ -109,7 +136,7 @@
 <!-- ========================================== -->
 <div th:remove="tag" th:fragment="haloLogo">
     <div class="flex justify-center mb-8">
-        <a href="/" class="flex items-center gap-3 group transition-all duration-300 hover:scale-105">
+        <a th:href="@{/}" class="flex items-center gap-3 group transition-all duration-300 hover:scale-105">
             <!-- Logo 图片 -->
             <img th:if="${site.logo != null and !site.logo.isEmpty()}" th:src="${site.logo}" th:alt="${site.title}"
                 class="w-10 h-10 rounded-xl shadow-lg" />
@@ -155,11 +182,10 @@
             const socialAuthProviders = document.querySelectorAll(".social-auth-provider-form");
 
             if (rememberMeCheckbox) {
-                rememberMeCheckbox.addEventListener("change", function (e) {
-                    const rememberMe = e.target.checked;
-                    socialAuthProviders.forEach((form) => {
+                socialAuthProviders.forEach((form) => {
+                    form.addEventListener("submit", function () {
                         const url = new URL(form.action, window.location.origin);
-                        url.searchParams.set("remember-me", rememberMe ? "true" : "false");
+                        url.searchParams.set("remember-me", rememberMeCheckbox.checked ? "true" : "false");
                         form.action = url.pathname + url.search;
                     });
                 });
@@ -181,9 +207,9 @@
         </div>
 
         <!-- 其他登录方式 (Grid Layout) -->
-        <div class="auth-provider-grid">
+        <div class="auth-provider-grid pill-items">
             <th:block th:each="provider : ${formAuthProviders}">
-                <a th:href="'/login?method=' + ${provider.metadata.name}" class="auth-provider-btn">
+                <a th:href="@{/login(method=${provider.metadata.name})}" class="auth-provider-btn">
                     <img th:src="${provider.spec.logo}" th:alt="|${provider.spec.displayName}'s icon|" />
                     <span
                         th:text="${#messages.msgOrNull('formAuthProviders.' + provider.metadata.name + '.displayName') ?: provider.spec.displayName}">Method</span>

@@ -24,9 +24,9 @@ export const pluginContracts = [
     aliases: ["PluginMoments"],
     contractVersion: "1.16.1",
     status: "compatible-tested",
-    surface: "瞬间列表、详情、releaseTime、媒体和作者降级；发布接口仅核对契约",
+    surface: "瞬间列表/详情、媒体与作者降级；前台发布按官方UC权限/审核契约，真实发布待验",
     evidence:
-      "templates/moments.html; templates/moment.html; templates/modules/moments; docs/system/adaptation/main-halo-runtime-audit.md",
+      "templates/moments.html; templates/moment.html; templates/modules/moments; src/pages/moments/moment-publish.js; scripts/verify-moments-post-actions.mjs; docs/system/adaptation/main-halo-runtime-audit.md",
     testedVersion: "1.19.0",
   },
   {
@@ -82,7 +82,7 @@ export const pluginContracts = [
     aliases: ["plugin-equipment", "equipment", "PluginEquipment"],
     contractVersion: "1.1.1",
     status: "confirmed",
-    surface: "装备页面",
+    surface: "装备官方分组/分页路由与展示；不提供无官方主体的装备评论",
     evidence: "templates/equipments.html; templates/modules/equipments",
   },
   {
@@ -106,12 +106,11 @@ export const pluginContracts = [
   {
     plugin: "PluginCommentWidget",
     aliases: ["PluginCommentWidget"],
-    contractVersion: "3.3.2",
-    status: "compatible-tested",
-    surface: "halo:comment 注入、懒挂载、资源版本一致性与评论主体",
+    contractVersion: "3.4.0",
+    status: "confirmed",
+    surface: "halo:comment 宿主、3.4 公开配色变量、懒挂载与评论主体；发布和私密回复未验",
     evidence:
       "templates/modules/post/article-footer.html; templates/modules/moments; templates/modules/doc-content.html; docs/system/adaptation/main-halo-runtime-audit.md",
-    testedVersion: "3.3.2",
   },
   {
     plugin: "shiki",
@@ -136,13 +135,13 @@ export const pluginContracts = [
   {
     plugin: "auth-passkey",
     aliases: ["auth-passkey", "halo-plugin-auth-passkey"],
-    contractVersion: "1.0.4",
+    contractVersion: "2.0.0",
     status: "confirmed",
-    surface: "登录页认证入口",
+    surface: "登录页原页 Passkey 入口、pill-items 和登录上下文；真实 WebAuthn 待验",
     evidence: "templates/login.html; templates/gateway_fragments/login.html",
   },
   {
-    plugin: "plugin-online",
+    plugin: "online",
     aliases: ["plugin-online", "online"],
     contractVersion: "1.0.5",
     status: "confirmed",
@@ -169,9 +168,9 @@ export const pluginContracts = [
   {
     plugin: "PluginContactForm",
     aliases: ["PluginContactForm", "plugin-contact-form", "contact-form"],
-    contractVersion: "1.6.4",
+    contractVersion: "2.1.0",
     status: "confirmed",
-    surface: "正文内嵌表单和全局贴边/弹窗表单的主题配色",
+    surface: "旧/新表单宿主、embed 引导与按需加载、自动展示组件 PJAX 清理；提交/上传待验",
     evidence: "src/common/css/base.css; templates/modules/theme-script.html",
   },
   {
@@ -179,9 +178,9 @@ export const pluginContracts = [
     aliases: ["ai-assistant", "plugin-ai-assistant"],
     contractVersion: "3.0.0",
     status: "confirmed",
-    surface: "3.0/3.1 共用的摘要宿主与四个颜色变量；3.1 运行及自动注入待验",
+    surface: "3.0/3.1 摘要宿主与四个颜色变量；3.1 官方组件临时样本的明暗/打字/PJAX已验，实际自动注入和模型生成未在该批验证",
     evidence:
-      "src/pages/post/post.css; src/common/main.js; docs/system/adaptation/main-halo-runtime-audit.md; docs/system/adaptation/evidence/2026-09-23/ai-assistant-3.1.0-source-diff.json",
+      "src/pages/post/post.css; src/common/main.js; docs/system/adaptation/main-halo-runtime-audit.md; docs/system/adaptation/evidence/2026-09-23/ai-assistant-3.1.0-source-diff.json; docs/system/adaptation/plugin-coverage-followup-2026-11-01.md; docs/system/adaptation/evidence/2026-11-01/plugin-coverage-followup.json",
   },
   {
     plugin: "editor-hyperlink-card",
@@ -212,9 +211,9 @@ export const pluginContracts = [
     aliases: ["restricted-reading", "plugin-restricted-reading"],
     contractVersion: "1.8.1",
     status: "confirmed",
-    surface: "文章/单页受限阅读组件宿主布局、登录和评论解锁依赖",
+    surface: "文章/单页受限宿主、登录/评论依赖；answer/mp 官方关闭及暗色同步；answer浏览器样本已验，mp仅隔离回归，pay未验",
     evidence:
-      "src/static/css/article-content.css; templates/modules/post/article-footer.html; templates/modules/page/content.html",
+      "src/static/css/article-content.css; templates/modules/post/article-footer.html; templates/modules/page/content.html; src/common/main.js; scripts/verify-restricted-reading-lifecycle.mjs; docs/system/adaptation/plugin-coverage-followup-2026-11-01.md; docs/system/adaptation/evidence/2026-11-01/plugin-coverage-followup.json",
   },
   {
     plugin: "dishes",

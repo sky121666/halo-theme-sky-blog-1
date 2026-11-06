@@ -1,2 +1,2 @@
 /*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
-.scrollbar-none::-webkit-scrollbar{display:none}.scrollbar-none{-ms-overflow-style:none;scrollbar-width:none}
+.scrollbar-none::-webkit-scrollbar{display:none}.scrollbar-none{-ms-overflow-style:none;scrollbar-width:none}#moment-publish-modal>.moment-publish-panel{flex-direction:column;max-height:calc(100dvh - 2rem);display:flex}#moment-publish-modal>.moment-publish-panel>div{flex-shrink:0}#moment-publish-form{overscroll-behavior:contain;min-height:0;overflow-y:auto}

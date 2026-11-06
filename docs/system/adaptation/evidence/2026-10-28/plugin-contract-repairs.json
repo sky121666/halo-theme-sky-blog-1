@@ -1,0 +1,805 @@
+{
+  "schemaVersion": 1,
+  "scope": "Theme consumption of official existing plugin contracts only; no plugin/DB/config/auth-account/Git writes",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "haloVersionLastObserved": "2.27.1",
+    "lastObservedSource": "prior same-day authenticated actuator/info GET; current dynamic service unavailable",
+    "theme": "theme-sky-blog-1",
+    "themeVersion": "2.2.41",
+    "requiresHalo": ">=2.27.0",
+    "activeThemeLastObserved": "theme-sky-blog-3",
+    "previewTheme": "theme-sky-blog-1",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "officialReleaseInventoryAsOf": "2026-10-27",
+    "pluginsUsed": {
+      "PluginMoments": "1.19.0",
+      "shiki": "1.5.1",
+      "steam": "1.0.0",
+      "equipment": "1.1.1",
+      "PluginPhotos": "2.1.2",
+      "PluginCommentWidget": "3.4.0",
+      "PluginLinks": "2.5.0"
+    },
+    "pluginVersionSource": "prior same-day runtime inventory and fixed-version official artifacts; current full inventory GET timed out"
+  },
+  "codeIdentity": {
+    "algorithm": "sha256",
+    "codeHash": "4e0406e9a9bec3b65c8432d412296e887bccb9572c2416b8263a4cec6068b096",
+    "fileCount": 388,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "baselineIdentity": {
+    "codeHash": "4b5b6382d01dc6dba85d5596f47ce2f52d22fa4edc9a16b59c6cbe1ebcfb52a2",
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "sourceFilesSnapshot": "/tmp/sky-contract-repairs-20261028/before",
+    "sourceFileChanges": [
+      "src/common/main.js",
+      "src/pages/steam/steam.js",
+      "src/pages/moments/moment-publish.js",
+      "scripts/check-plugin-versions.mjs",
+      "scripts/verify-plugin-pages.mjs",
+      "scripts/verify-plugin-contracts.mjs",
+      "scripts/plugin-contracts.mjs",
+      "scripts/verify-moments-post-actions.mjs",
+      "package.json",
+      "settings.yaml",
+      "templates/modules/doc-content.html",
+      "templates/modules/page/content.html",
+      "templates/modules/moments/detail.html",
+      "templates/modules/moments/content.html",
+      "templates/modules/post/article-footer.html",
+      "templates/modules/archives/content.html",
+      "templates/modules/about/content.html",
+      "templates/modules/links/content.html",
+      "templates/modules/equipments/style-tech.html",
+      "templates/modules/equipments/style-simple.html",
+      "templates/modules/equipments/group-switch.html",
+      "templates/modules/equipments/content.html",
+      "templates/modules/photos/content.html"
+    ],
+    "headUnchanged": true,
+    "indexUnchanged": true
+  },
+  "checks": {
+    "gates": [
+      {
+        "name": "build",
+        "command": ["pnpm", "run", "build"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/build-final.log"
+      },
+      {
+        "name": "lint",
+        "command": ["pnpm", "run", "lint"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/lint-final.log"
+      },
+      {
+        "name": "format",
+        "command": ["pnpm", "run", "format:check"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/format-final.log"
+      },
+      {
+        "name": "comments-template",
+        "command": ["pnpm", "run", "verify:comment-contracts"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/comments-template-final.log"
+      },
+      {
+        "name": "equipment-template",
+        "command": ["pnpm", "run", "verify:equipment-route"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/equipment-template-final.log"
+      },
+      {
+        "name": "diff",
+        "command": ["git", "diff", "--check"],
+        "exitCode": 0,
+        "log": "/tmp/sky-contract-repairs-20261028/diff-final.log"
+      }
+    ],
+    "nodeRegressionTests": 315,
+    "nodeTestGroups": [19, 75, 21, 46, 14, 11, 5, 8, 5, 6, 3, 14, 76, 12],
+    "nodeSkipped": 0,
+    "pluginContracts": 27,
+    "commentTemplates": {
+      "scenarios": 228,
+      "assertions": 652,
+      "configRepresentations": ["Map", "Jackson"],
+      "runtime": "actual archived Halo Spring7.0.10/Thymeleaf3.1.3 runtime libraries; test expression objects where required"
+    },
+    "equipmentTemplates": {
+      "assertions": 400,
+      "styles": ["tech", "simple"],
+      "navigationStyles": ["pills", "chips", "underline", "glass"]
+    },
+    "assets": [
+      {
+        "file": "css/about.css",
+        "status": 200,
+        "served": "a5df2755ac59f9cb5163fd26a10ad989e461d9b061cd0565db61b12efb110798",
+        "local": "a5df2755ac59f9cb5163fd26a10ad989e461d9b061cd0565db61b12efb110798",
+        "match": true
+      },
+      {
+        "file": "css/archives.css",
+        "status": 200,
+        "served": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "local": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+        "match": true
+      },
+      {
+        "file": "css/auth-centered.css",
+        "status": 200,
+        "served": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18",
+        "local": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18",
+        "match": true
+      },
+      {
+        "file": "css/auth-default.css",
+        "status": 200,
+        "served": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186",
+        "local": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186",
+        "match": true
+      },
+      {
+        "file": "css/auth-split.css",
+        "status": 200,
+        "served": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "local": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "match": true
+      },
+      {
+        "file": "css/author.css",
+        "status": 200,
+        "served": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5",
+        "local": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5",
+        "match": true
+      },
+      {
+        "file": "css/bangumi.css",
+        "status": 200,
+        "served": "46b1a8fcca9ccb3f7802ec44ea448ca30f89e1ac7d91f92d1c91dc501552524d",
+        "local": "46b1a8fcca9ccb3f7802ec44ea448ca30f89e1ac7d91f92d1c91dc501552524d",
+        "match": true
+      },
+      {
+        "file": "css/categories.css",
+        "status": 200,
+        "served": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "local": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+        "match": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "served": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "local": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "match": true
+      },
+      {
+        "file": "css/douban.css",
+        "status": 200,
+        "served": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889",
+        "local": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889",
+        "match": true
+      },
+      {
+        "file": "css/equipment.css",
+        "status": 200,
+        "served": "3d7a951e828b31f7fc2d79dcc59e2425d42cd672053fb3469f0ff8bc74fe3492",
+        "local": "3d7a951e828b31f7fc2d79dcc59e2425d42cd672053fb3469f0ff8bc74fe3492",
+        "match": true
+      },
+      {
+        "file": "css/index-effects.css",
+        "status": 200,
+        "served": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece",
+        "local": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece",
+        "match": true
+      },
+      {
+        "file": "css/index-subtitle-effects.css",
+        "status": 200,
+        "served": "91840449c525ed3418cfbbc6e89069c9a47cdb32fe35af61259a2d860627669b",
+        "local": "91840449c525ed3418cfbbc6e89069c9a47cdb32fe35af61259a2d860627669b",
+        "match": true
+      },
+      {
+        "file": "css/index-title-effects.css",
+        "status": 200,
+        "served": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe",
+        "local": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe",
+        "match": true
+      },
+      {
+        "file": "css/index-weather-effects.css",
+        "status": 200,
+        "served": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573",
+        "local": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573",
+        "match": true
+      },
+      {
+        "file": "css/index.css",
+        "status": 200,
+        "served": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3",
+        "local": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3",
+        "match": true
+      },
+      {
+        "file": "css/links.css",
+        "status": 200,
+        "served": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf",
+        "local": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf",
+        "match": true
+      },
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "served": "3598547d7159f4c5e6138e38b623f36c927bfec184ff0d5489f4faf667434155",
+        "local": "3598547d7159f4c5e6138e38b623f36c927bfec184ff0d5489f4faf667434155",
+        "match": true
+      },
+      {
+        "file": "css/moments.css",
+        "status": 200,
+        "served": "be7ab3af44af8b99283fef3910355cba3860235ad6d696b7b395038b3d90acfa",
+        "local": "be7ab3af44af8b99283fef3910355cba3860235ad6d696b7b395038b3d90acfa",
+        "match": true
+      },
+      {
+        "file": "css/page.css",
+        "status": 200,
+        "served": "113b42d17788bb6e0730d0ecf045a8846b06f952767cfd92d9bca85326791dd6",
+        "local": "113b42d17788bb6e0730d0ecf045a8846b06f952767cfd92d9bca85326791dd6",
+        "match": true
+      },
+      {
+        "file": "css/photos.css",
+        "status": 200,
+        "served": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb",
+        "local": "27bb12a4305112f864225fb5ba608b84aba57f13d513e8981e793e02623ea0cb",
+        "match": true
+      },
+      {
+        "file": "css/post.css",
+        "status": 200,
+        "served": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "local": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "match": true
+      },
+      {
+        "file": "css/steam.css",
+        "status": 200,
+        "served": "0e81dc8644e196c801fc5b73b77d2124cb604758a96f1e1266fe1e015e8e3e04",
+        "local": "0e81dc8644e196c801fc5b73b77d2124cb604758a96f1e1266fe1e015e8e3e04",
+        "match": true
+      },
+      {
+        "file": "js/about.js",
+        "status": 200,
+        "served": "c7b839251a31b064f4aad3d66ccebcc7edf2e037f7992a64676e27d373b7d661",
+        "local": "c7b839251a31b064f4aad3d66ccebcc7edf2e037f7992a64676e27d373b7d661",
+        "match": true
+      },
+      {
+        "file": "js/archives.js",
+        "status": 200,
+        "served": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d",
+        "local": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d",
+        "match": true
+      },
+      {
+        "file": "js/auth-centered.js",
+        "status": 200,
+        "served": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c",
+        "local": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c",
+        "match": true
+      },
+      {
+        "file": "js/auth-default.js",
+        "status": 200,
+        "served": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "local": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "match": true
+      },
+      {
+        "file": "js/auth-split.js",
+        "status": 200,
+        "served": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "local": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "match": true
+      },
+      {
+        "file": "js/author.js",
+        "status": 200,
+        "served": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e",
+        "local": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e",
+        "match": true
+      },
+      {
+        "file": "js/bangumi.js",
+        "status": 200,
+        "served": "40f385b5147fe6bcc7cbc6400e1e682ebaf99246a271b56209b8e4b8e458b1ff",
+        "local": "40f385b5147fe6bcc7cbc6400e1e682ebaf99246a271b56209b8e4b8e458b1ff",
+        "match": true
+      },
+      {
+        "file": "js/categories.js",
+        "status": 200,
+        "served": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "local": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+        "match": true
+      },
+      {
+        "file": "js/chunks/article-content-2.2.41.js",
+        "status": 200,
+        "served": "e5db9e97154084848ba2192fca1cca0b7123deaf1e6121ff76bd8b8e686ccb84",
+        "local": "e5db9e97154084848ba2192fca1cca0b7123deaf1e6121ff76bd8b8e686ccb84",
+        "match": true
+      },
+      {
+        "file": "js/chunks/article-heatmap-data-2.2.41.js",
+        "status": 200,
+        "served": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22",
+        "local": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22",
+        "match": true
+      },
+      {
+        "file": "js/chunks/auth-common-2.2.41.js",
+        "status": 200,
+        "served": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "local": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "match": true
+      },
+      {
+        "file": "js/chunks/debug-2.2.41.js",
+        "status": 200,
+        "served": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933",
+        "local": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933",
+        "match": true
+      },
+      {
+        "file": "js/chunks/page-runtime-2.2.41.js",
+        "status": 200,
+        "served": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a",
+        "local": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a",
+        "match": true
+      },
+      {
+        "file": "js/chunks/toc-utils-2.2.41.js",
+        "status": 200,
+        "served": "b6f459711a5fbff47eba055f37bc2ecb23d8e64c3682766429f76415b2ca9e3b",
+        "local": "b6f459711a5fbff47eba055f37bc2ecb23d8e64c3682766429f76415b2ca9e3b",
+        "match": true
+      },
+      {
+        "file": "js/doc.js",
+        "status": 200,
+        "served": "f9d96496efb9a5e1589ac385c1f798305524718e4ec344231809c4433ac3654e",
+        "local": "f9d96496efb9a5e1589ac385c1f798305524718e4ec344231809c4433ac3654e",
+        "match": true
+      },
+      {
+        "file": "js/douban.js",
+        "status": 200,
+        "served": "58176311f74e460e54bdd5e1e9cb55d93785937b9d165ed1696a74acbfab6fc9",
+        "local": "58176311f74e460e54bdd5e1e9cb55d93785937b9d165ed1696a74acbfab6fc9",
+        "match": true
+      },
+      {
+        "file": "js/equipment.js",
+        "status": 200,
+        "served": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3",
+        "local": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3",
+        "match": true
+      },
+      {
+        "file": "js/index.js",
+        "status": 200,
+        "served": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a",
+        "local": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a",
+        "match": true
+      },
+      {
+        "file": "js/links.js",
+        "status": 200,
+        "served": "a4b50c6c69745643f88b2631722de29e7e4d46803060ac6c12a7611389e5e07d",
+        "local": "a4b50c6c69745643f88b2631722de29e7e4d46803060ac6c12a7611389e5e07d",
+        "match": true
+      },
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "served": "2f2522a31dd29d3030668f32fb0213bbe2fc65c97786526b4eacc52ddbafaf91",
+        "local": "2f2522a31dd29d3030668f32fb0213bbe2fc65c97786526b4eacc52ddbafaf91",
+        "match": true
+      },
+      {
+        "file": "js/moments.js",
+        "status": 200,
+        "served": "6d7ab253493cb856178d2766acf0ee121c634d36b1b6ac477404b743b33da40f",
+        "local": "6d7ab253493cb856178d2766acf0ee121c634d36b1b6ac477404b743b33da40f",
+        "match": true
+      },
+      {
+        "file": "js/page.js",
+        "status": 200,
+        "served": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27",
+        "local": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27",
+        "match": true
+      },
+      {
+        "file": "js/photos.js",
+        "status": 200,
+        "served": "a45f57155c77e09b0e853c860f9cb5b281c280e90fcb3adaa34e223f489352f9",
+        "local": "a45f57155c77e09b0e853c860f9cb5b281c280e90fcb3adaa34e223f489352f9",
+        "match": true
+      },
+      {
+        "file": "js/post.js",
+        "status": 200,
+        "served": "6c159129339ae1d3240be94e05f2175b255fbd028874bfdf164d124f6f77a35e",
+        "local": "6c159129339ae1d3240be94e05f2175b255fbd028874bfdf164d124f6f77a35e",
+        "match": true
+      },
+      {
+        "file": "js/steam.js",
+        "status": 200,
+        "served": "a6977b507c5fb95ef352abdb67bbf89389dad98cf0209ae9d5c71fc6c833ebe9",
+        "local": "a6977b507c5fb95ef352abdb67bbf89389dad98cf0209ae9d5c71fc6c833ebe9",
+        "match": true
+      }
+    ],
+    "archive": {
+      "files": 237,
+      "mismatches": [],
+      "sha256": "01dee42595d2c0cbfccfa5806bdd9b7aae93cb38b4126cdb16c409d39d44789f"
+    }
+  },
+  "browser": {
+    "taskSpace": 195,
+    "finished": true,
+    "viewports": [1440, 390],
+    "scope": "Production templates/current built resources, official Shiki component and explicit HTTP response/permission fixtures; not live Halo SSR or real business submission",
+    "results": {
+      "browser-shiki-current.json": [
+        {
+          "width": 1440,
+          "path": "/__contract-fixture/b",
+          "listeners": 1,
+          "calls": 1,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 1440,
+          "path": "/__contract-fixture/a",
+          "listeners": 1,
+          "calls": 2,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 1440,
+          "path": "/__contract-fixture/b",
+          "listeners": 1,
+          "calls": 3,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "path": "/__contract-fixture/a",
+          "listeners": 1,
+          "calls": 4,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "path": "/__contract-fixture/b",
+          "listeners": 1,
+          "calls": 5,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "path": "/__contract-fixture/a",
+          "listeners": 1,
+          "calls": 6,
+          "blocks": 1,
+          "nested": 0,
+          "guardPresent": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "exitPath": "/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html",
+          "newDocument": true,
+          "oldListenerStateGone": true
+        }
+      ],
+      "browser-moments.json": [
+        {
+          "width": 1440,
+          "phase": "pending",
+          "message": "瞬间已提交，待审核后公开。",
+          "refreshes": 0,
+          "requests": [
+            {
+              "url": "/apis/uc.api.moment.halo.run/v1alpha1/moments",
+              "body": {
+                "apiVersion": "moment.halo.run/v1alpha1",
+                "kind": "Moment",
+                "metadata": {
+                  "name": "moment-1793200860963-boiucpjs4"
+                },
+                "spec": {
+                  "content": {
+                    "raw": "本地隔离验收：等待审核",
+                    "html": "本地隔离验收：等待审核"
+                  },
+                  "visible": "PUBLIC",
+                  "releaseTime": "2026-10-28T15:21:00.963Z",
+                  "tags": []
+                }
+              }
+            }
+          ],
+          "modalHidden": true,
+          "errors": [],
+          "overflow": false
+        },
+        {
+          "width": 1440,
+          "phase": "public",
+          "message": "瞬间已公开发布。",
+          "refreshes": 1,
+          "requestCount": 2,
+          "errors": [],
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "phase": "pending",
+          "message": "瞬间已提交，待审核后公开。",
+          "refreshes": 0,
+          "requests": [
+            {
+              "url": "/apis/uc.api.moment.halo.run/v1alpha1/moments",
+              "body": {
+                "apiVersion": "moment.halo.run/v1alpha1",
+                "kind": "Moment",
+                "metadata": {
+                  "name": "moment-1793200865082-xucq1ltm4"
+                },
+                "spec": {
+                  "content": {
+                    "raw": "本地隔离验收：等待审核",
+                    "html": "本地隔离验收：等待审核"
+                  },
+                  "visible": "PUBLIC",
+                  "releaseTime": "2026-10-28T15:21:05.082Z",
+                  "tags": []
+                }
+              }
+            }
+          ],
+          "modalHidden": true,
+          "errors": [],
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "phase": "public",
+          "message": "瞬间已公开发布。",
+          "refreshes": 1,
+          "requestCount": 2,
+          "errors": [],
+          "overflow": false
+        }
+      ],
+      "browser-equipment.json": [
+        {
+          "width": 1440,
+          "style": "tech",
+          "phase": "group",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "items": 1,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 1440,
+          "style": "tech",
+          "phase": "history-return",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 1440,
+          "style": "simple",
+          "phase": "group",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "items": 1,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 1440,
+          "style": "simple",
+          "phase": "history-return",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "style": "tech",
+          "phase": "group",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "items": 1,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "style": "tech",
+          "phase": "history-return",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "style": "simple",
+          "phase": "group",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "items": 1,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "style": "simple",
+          "phase": "history-return",
+          "path": "/equipments?group=group-a",
+          "selected": "group-a\n            2",
+          "overflow": false,
+          "errors": []
+        }
+      ],
+      "browser-components.json": [
+        {
+          "kind": "moment-modal",
+          "width": 1440,
+          "dialog": {
+            "left": 496,
+            "top": 350,
+            "right": 944,
+            "bottom": 650
+          },
+          "inside": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "kind": "moment-modal",
+          "width": 390,
+          "dialog": {
+            "left": 16,
+            "top": 272,
+            "right": 374,
+            "bottom": 572
+          },
+          "inside": true,
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "kind": "steam-heatmap",
+          "width": 1440,
+          "pages": [1, 2],
+          "minutes": "60",
+          "hours": "1.0",
+          "overflow": false,
+          "errors": []
+        },
+        {
+          "kind": "steam-heatmap",
+          "width": 390,
+          "pages": [1, 2],
+          "minutes": "60",
+          "hours": "1.0",
+          "overflow": false,
+          "errors": []
+        }
+      ]
+    },
+    "screenshotFolder": "/tmp/sky-contract-repairs-20261028",
+    "screenshotReview": "Root and independent reviewer inspected four stable representative desktop/mobile screenshots; no actionable clipping or displacement found",
+    "cacheDiagnostic": {
+      "initialRun": "browser-shiki.json retained separately; lifecycle guard absent and old module replayed",
+      "acceptedRun": "browser-shiki-current.json; per-round Network cache disabled, new document URL and stamped resource URL; guard present; all 48 served JS/CSS hashes match disk"
+    }
+  },
+  "runtimeAttempt": {
+    "startedAt": "2026-10-28T15:29:09.154Z",
+    "finishedAt": "2026-10-28T15:29:12.417Z",
+    "exitCode": 1,
+    "summary": {
+      "passed": 0,
+      "failed": 1,
+      "notApplicable": 0,
+      "notCovered": 44,
+      "complete": false
+    },
+    "unchangedDuringRun": true,
+    "outcome": "runtime-validation-pending; localhost dynamic GET timeouts are not classified as confirmed theme defects",
+    "failed": [
+      {
+        "name": "Login",
+        "status": "-",
+        "error": "timeout after 1500ms"
+      }
+    ],
+    "inventory": "unavailable: timeout",
+    "cacheInvalidation": "not attempted while dynamic service unavailable; no settings changed"
+  },
+  "independentReview": {
+    "runtimeReview": "Initial P2 findings for Shiki initial failure/path exit and Steam terminal-page completeness repaired; follow-up no actionable defects,23 tests passed",
+    "templateReview": "Moments global comment gate omission repaired;228/652 rerun; follow-up no actionable defects",
+    "evidenceAndVisualReview": "No actionable contradictions or screenshot layout defects found"
+  },
+  "behaviorBoundary": [
+    "Shiki bootstrap disappearance/config change/unconfirmed initial import uses full-document navigation because official anonymous listeners have no public destroy API; this interrupts cross-page music",
+    "No new Photo-detail comments or Schedule theme override",
+    "Existing comment data retained; unsupported equipment/gallery list subjects no longer exposed",
+    "Actual localhost routes and real account write workflows remain unverified on this code"
+  ],
+  "artifactsPublished": false,
+  "gitStagedCommittedPushed": false
+}

@@ -35,8 +35,6 @@
       <th:block th:replace="${head}" />
     </th:block>
 
-    <!-- 文档项目自定义 head 内容（CSS/JS）- 需要 Docsme 插件支持 -->
-    <th:block th:if="${project?.spec != null and project.spec['head'] != null}" th:utext="${project.spec['head']}" />
     <!-- 音乐播放器 CSS -->
     <th:block th:replace="~{modules/music-player :: head}" />
   </head>
@@ -87,8 +85,6 @@
       <th:block th:if="${scripts != null}">
         <th:block th:replace="${scripts}" />
       </th:block>
-      <!-- 文档项目自定义 body 脚本 - 需要 Docsme 插件支持 -->
-      <th:block th:if="${project?.spec != null and project.spec['body'] != null}" th:utext="${project.spec['body']}" />
     </div>
     <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
 

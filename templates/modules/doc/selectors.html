@@ -1,0 +1,38 @@
+<th:block th:fragment="selectors">
+  <th:block th:if="${versions != null and #lists.size(versions) > 1}">
+    <div class="doc-version-selector" th:attr="data-doc-base=${currentVersion?.status?.permalink}">
+      <button class="doc-version-btn" type="button" aria-expanded="false"
+        aria-label="切换文档版本">
+        <span class="flex items-center gap-2">
+          <span class="icon-[heroicons--tag] w-4 h-4"></span>
+          <span th:text="${currentVersion?.spec?.slug ?: '版本'}">版本</span>
+        </span>
+        <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+      </button>
+      <div class="doc-version-dropdown">
+        <a th:each="version : ${versions}" th:href="@{${version.status.permalink}}" class="doc-version-item"
+          th:classappend="${version.metadata.name == currentVersion?.metadata?.name} ? 'active' : ''">
+          <span th:text="${version.spec.slug}">版本名</span>
+        </a>
+      </div>
+    </div>
+  </th:block>
+
+  <th:block th:if="${languages != null and #lists.size(languages) > 1}">
+    <div class="doc-version-selector" th:attr="data-doc-base=${currentLanguage?.link}">
+      <button class="doc-version-btn" type="button" aria-expanded="false"
+        aria-label="切换文档语言">
+        <span class="flex items-center gap-2">
+          <span class="icon-[heroicons--language] w-4 h-4"></span>
+          <span th:text="${currentLanguage?.label ?: '语言'}">语言</span>
+        </span>
+        <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
+      </button>
+      <div class="doc-version-dropdown">
+        <a th:each="language : ${languages}" th:href="@{${language.link}}" class="doc-version-item">
+          <span th:text="${language.label}">语言名</span>
+        </a>
+      </div>
+    </div>
+  </th:block>
+</th:block>

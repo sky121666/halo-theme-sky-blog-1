@@ -1,0 +1,670 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-11-06T10:34:30.546824+00:00",
+  "verdict": "hold-release",
+  "scope": "Read-only release review, browser-only diagnostic styles restored; no source/dependency/plugin/site/config/Git changes. Only this report and evidence are added.",
+  "environment": {
+    "at": "2026-11-06T10:32:04.276Z",
+    "base": "http://localhost:8090",
+    "halo": "2.27.2",
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.51"
+    },
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062",
+      "fileCount": 407,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    }
+  },
+  "candidate": {
+    "version": "2.2.41",
+    "minimumHalo": ">=2.27.0",
+    "previewTheme": "theme-sky-blog-1"
+  },
+  "blockers": [
+    {
+      "id": "dependency-audit",
+      "severity": "release-gate",
+      "counts": {
+        "info": 0,
+        "low": 1,
+        "moderate": 6,
+        "high": 2,
+        "critical": 0
+      },
+      "allAuditExit": 1,
+      "productionAuditExit": 0,
+      "developmentOnly": true,
+      "workflowLocations": [".github/workflows/ci.yaml:55", ".github/workflows/cd.yaml:49"]
+    },
+    {
+      "id": "mobile-tag-overflow",
+      "severity": "theme-layout",
+      "route": "/tags/halo?preview-theme=theme-sky-blog-1",
+      "deviceWidth": 390,
+      "beforeDocumentWidth": 501,
+      "minWidthOnly": 485,
+      "minWidthAndWrapping": 390,
+      "restoredWidth": 501,
+      "sourceChanged": false,
+      "locations": [
+        "templates/modules/tags/content.html:114",
+        "templates/modules/categories/list-minimal.html:38",
+        "templates/modules/categories/list-minimal.html:45"
+      ]
+    }
+  ],
+  "build": {
+    "sourceHash": "f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062",
+    "snapshotHashAfterBuild": "f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062",
+    "sourceFileCount": 407,
+    "node": "v24.21.0",
+    "pnpm": "12.6.0",
+    "checks": [
+      {
+        "command": "pnpm run build",
+        "exitCode": 0,
+        "elapsedSeconds": 9.64,
+        "log": "/tmp/sky-release-review-20261106/build.log"
+      },
+      {
+        "command": "pnpm run lint",
+        "exitCode": 0,
+        "elapsedSeconds": 1.57,
+        "log": "/tmp/sky-release-review-20261106/lint.log"
+      },
+      {
+        "command": "pnpm run format:check",
+        "exitCode": 0,
+        "elapsedSeconds": 1.06,
+        "log": "/tmp/sky-release-review-20261106/format.log"
+      }
+    ],
+    "buildCounts": {
+      "tests": 527,
+      "suites": 0,
+      "pass": 522,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 5,
+      "todo": 0
+    },
+    "supplemental": {
+      "auth": {
+        "log": "/tmp/sky-release-review-20261106/auth-fixture.log",
+        "counts": {
+          "tests": 28,
+          "pass": 28,
+          "fail": 0,
+          "skipped": 0
+        }
+      },
+      "java313": {
+        "log": "/tmp/sky-release-review-20261106/java-fixture-thymeleaf313-full.log",
+        "counts": {
+          "tests": 151,
+          "pass": 151,
+          "fail": 0,
+          "skipped": 0
+        }
+      },
+      "java315": {
+        "log": "/tmp/sky-release-review-20261106/java-fixture.log",
+        "counts": {
+          "tests": 151,
+          "pass": 146,
+          "fail": 5,
+          "skipped": 0
+        }
+      }
+    },
+    "artifactContentDrift": false,
+    "zipContainerByteIdentical": false,
+    "zipContainerDifference": "100 entry timestamps and entry ordering; all 240 file payloads identical",
+    "noWorkspaceEdits": true,
+    "noDependencyInstallation": true,
+    "currentRuntimeValidation": {
+      "result": "/tmp/sky-release-review-20261106/runtime-fixture-results.json",
+      "jarManifest": "/tmp/sky-release-review-20261106/runtime-lib-manifest.json",
+      "jarsVerified": 262,
+      "navigationPassed": 151,
+      "templateDataChecksPassed": 280,
+      "commentRenderScenariosPassed": 228,
+      "commentAssertionsPassed": 664,
+      "fail": 0,
+      "skip": 0,
+      "authIdentity": "/tmp/sky-release-review-20261106/auth-script-identity.json",
+      "authPassed": 28
+    },
+    "outOfScopeExperiment": {
+      "failedCases": ["jackson/image_ready", "jackson/svg_ready", "jackson/iconify_svg", "jackson/iconify_object"],
+      "error": "SpelEvaluationException EL1008E: nav property cannot be found on Jackson ObjectNode",
+      "template": "templates/modules/logo.html",
+      "lines": [31, 37, 43, 50],
+      "boundary": "Local existing-library fixture only; actual running Halo classpath not verified by this subtask. Thymeleaf 3.1.3 pair passes; 3.1.5 pair fails with other libraries unchanged.",
+      "classification": "Not a current environment bug or blocker: running Halo uses Thymeleaf 3.1.3.RELEASE, and all fixtures pass with its actual container JARs."
+    }
+  },
+  "runtimeFixtures": {
+    "classpath": "/tmp/sky-release-review-20261106/runtime-lib/*",
+    "javaHome": "/Users/sky/Library/Java/JavaVirtualMachines/temurin-21/Contents/Home",
+    "javaVersion": "openjdk version \"21.0.7\" 2025-04-15 LTS\nOpenJDK Runtime Environment Temurin-21.0.7+6 (build 21.0.7+6-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.7+6 (build 21.0.7+6-LTS, mixed mode, sharing)",
+    "containerJavaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+    "commands": [
+      {
+        "command": "node scripts/verify-ui-navigation.mjs",
+        "exitCode": 0,
+        "elapsedSeconds": 3.43,
+        "log": "/tmp/sky-release-review-20261106/runtime-navigation.log",
+        "testCounts": {
+          "tests": 151,
+          "pass": 151,
+          "fail": 0,
+          "skipped": 0
+        },
+        "tail": [
+          "✔ glass 分类条没有溢出时不提供无效展开入口 (0.77375ms)",
+          "✔ an older copy success cannot erase a newer refusal (0.985917ms)",
+          "ℹ tests 151",
+          "ℹ suites 0",
+          "ℹ pass 151",
+          "ℹ fail 0",
+          "ℹ cancelled 0",
+          "ℹ skipped 0",
+          "ℹ todo 0",
+          "ℹ duration_ms 3287.043"
+        ]
+      },
+      {
+        "command": "node scripts/verify-template-data.mjs",
+        "exitCode": 0,
+        "elapsedSeconds": 1.32,
+        "log": "/tmp/sky-release-review-20261106/runtime-template-data.log",
+        "testCounts": {
+          "checks": 280,
+          "pass": 280,
+          "fail": 0,
+          "skipped": 0
+        },
+        "tail": [
+          "  批注处理。未来发行版的 javac 可能会禁用批注处理，",
+          "  除非至少按名称指定了一个处理程序 (-processor)，",
+          "  或指定了搜索路径 (--processor-path, --processor-module-path)，",
+          "  或显式启用了批注处理 (-proc:only, -proc:full)。",
+          "  可使用 -Xlint:-options 隐藏此消息。",
+          "  可使用 -proc:none 禁用批注处理。",
+          "注: org.pf4j.processor.ExtensionAnnotationProcessor init",
+          "注: Options {}",
+          "注: Processing @org.pf4j.Extension",
+          "Template data checks: 280/280 passed"
+        ]
+      },
+      {
+        "command": "node scripts/verify-comment-contracts.mjs",
+        "exitCode": 0,
+        "elapsedSeconds": 1.39,
+        "log": "/tmp/sky-release-review-20261106/runtime-comment-contracts.log",
+        "testCounts": {
+          "scenarios": 228,
+          "assertions": 664,
+          "fail": 0,
+          "skipped": 0
+        },
+        "tail": [
+          "  批注处理。未来发行版的 javac 可能会禁用批注处理，",
+          "  除非至少按名称指定了一个处理程序 (-processor)，",
+          "  或指定了搜索路径 (--processor-path, --processor-module-path)，",
+          "  或显式启用了批注处理 (-proc:only, -proc:full)。",
+          "  可使用 -Xlint:-options 隐藏此消息。",
+          "  可使用 -proc:none 禁用批注处理。",
+          "注: org.pf4j.processor.ExtensionAnnotationProcessor init",
+          "注: Options {}",
+          "注: Processing @org.pf4j.Extension",
+          "PASS 228 real Thymeleaf render scenarios with Map/Jackson config, 664 assertions; no comment POST, plugin state or database mutation."
+        ]
+      }
+    ],
+    "runtimeJarsMatchContainer": true,
+    "runtimeJarCount": 262,
+    "importantJars": [
+      "jackson-annotations-2.21.jar",
+      "jackson-core-2.21.7.jar",
+      "jackson-core-3.1.7.jar",
+      "jackson-databind-2.21.7.jar",
+      "jackson-databind-3.1.7.jar",
+      "jackson-databind-nullable-0.2.2.jar",
+      "jsoup-1.23.1.jar",
+      "spring-context-7.0.10.jar",
+      "spring-context-support-7.0.10.jar",
+      "spring-core-7.0.10.jar",
+      "spring-expression-7.0.10.jar",
+      "spring-integration-core-7.1.2.jar",
+      "thymeleaf-3.1.3.RELEASE.jar",
+      "thymeleaf-extras-springsecurity6-3.1.3.RELEASE.jar",
+      "thymeleaf-spring6-3.1.3.RELEASE.jar"
+    ],
+    "snapshotIdentityAfterRuntimeFixtures": {
+      "algorithm": "sha256",
+      "codeHash": "f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062",
+      "fileCount": 407,
+      "baseCommit": null,
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "sourceIdentityAfterRuntimeFixtures": {
+      "algorithm": "sha256",
+      "codeHash": "f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062",
+      "fileCount": 407,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "usedApplicationJar": false,
+    "copiedConfiguration": false,
+    "authIdentity": {
+      "checkedAt": "2026-11-06T10:29:43.916568+00:00",
+      "loginUrl": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+      "loginStatus": 200,
+      "observedCoreSource": "/js/main.js?v=2.27.2",
+      "coreUrl": "http://localhost:8090/js/main.js?v=2.27.2",
+      "coreStatus": 200,
+      "coreFinalUrl": "http://localhost:8090/js/main.js?v=2.27.2",
+      "contentType": "text/javascript",
+      "currentScriptPath": "/tmp/sky-release-review-20261106/halo-auth-core-current-2.27.2.js",
+      "currentScriptBytes": 4755,
+      "currentSHA256": "e3f6c470dd19a451e030c96f53e634df9e33d1b38ae5fa19a1731249d2bfcf19",
+      "priorFixturePath": "/tmp/sky-ui-polish-fix-20261106/halo-auth-core.js",
+      "priorFixtureBytes": 4755,
+      "priorSHA256": "e3f6c470dd19a451e030c96f53e634df9e33d1b38ae5fa19a1731249d2bfcf19",
+      "byteIdentical": true,
+      "loginPageSaved": false,
+      "onlyGET": true,
+      "testEvidence": {
+        "log": "/tmp/sky-release-review-20261106/auth-fixture.log",
+        "tests": 28,
+        "pass": 28,
+        "fail": 0,
+        "skip": 0,
+        "rerun": false,
+        "reason": "Previously executed fixture is byte-identical to the current Halo 2.27.2 login page core script."
+      }
+    }
+  },
+  "frozenInstall": {
+    "cwd": "/tmp/sky-release-review-20261106/dependencies/frozen-install",
+    "command": "pnpm install --frozen-lockfile",
+    "exit_code": 0,
+    "elapsed_seconds": 0.46,
+    "source_unchanged": {
+      "package.json": true,
+      "pnpm-lock.yaml": true,
+      "pnpm-workspace.yaml": true
+    }
+  },
+  "http": {
+    "historicalSeedCount": 121,
+    "includedHistoricalCount": 120,
+    "total": 574,
+    "newlyDiscovered": 453,
+    "remainingUnvisited": 0,
+    "statuses": {
+      "200": 571,
+      "404": 3
+    },
+    "themeStatuses": {
+      "expected-theme": 572,
+      "independent-page": 2
+    },
+    "templateStatuses": {
+      "no-exception-marker": 574
+    },
+    "warningCount": 1
+  },
+  "httpWarnings": [
+    {
+      "path": "/%E5%9C%B0%E5%9D%80",
+      "status": 404,
+      "themeStatus": "expected-theme",
+      "templateStatus": "no-exception-marker"
+    }
+  ],
+  "browser": {
+    "routeViews": 44,
+    "viewportCombinations": 88,
+    "navigationErrors": 0,
+    "jsErrorPages": 0,
+    "overflowCases": [
+      {
+        "name": "tag",
+        "path": "/tags/halo",
+        "width": 390,
+        "documentWidth": 501
+      }
+    ],
+    "visibleBrokenImages": 0,
+    "sourceHashes": ["f0604c46861ae45f19b70539f5da1bf28c4605d85d282ca982e70f3ea3eb2062"]
+  },
+  "visualReview": {
+    "viewedCount": 20,
+    "scope": "Ten mobile route types, nine desktop route types, login mobile bottom; excludes other screenshots and browser interaction.",
+    "confirmedNewThemeFindings": [],
+    "observations": [
+      "No additional confirmed full-page blank, unintended content crop, critical text overlap, or broken typography found in these 20 still images.",
+      "About marquee edges show a bounded scrolling strip; not classified as page overflow.",
+      "Home and Moments development acceptance text, gallery test group names and post floating validation form are live-site sample content, not proof of source/package test contamination.",
+      "Home mobile annual heatmap labels are visually very small; this is a readability observation only, not a newly reproduced functional failure.",
+      "Login screenshots show authentication field content; do not publish raw screenshots without privacy review."
+    ],
+    "limits": [
+      "Screenshots do not establish clickability, keyboard behavior, network success, long-page completeness, or physical-device compatibility.",
+      "No claim that all screenshots in final directory were inspected.",
+      "Known tag overflow is separately confirmed by main-agent browser DOM comparison; no source fix made."
+    ],
+    "files": [
+      {
+        "file": "/tmp/sky-release-review-20261106/final/home-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "cadfe1b0e975332665543be46460c9642f2069f389e114e50290c3f58822aa19"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/post-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "47bb80c45fac7107a98b265b58e3d4c3eaa2b7fdbe61ea00ac6591a22728a748"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/about-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "225f88c1ffd6114fb16f7a7ed5ab34f0f2037f9788d419ca1dd80884ff37e147"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/docs-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "a1c53e7005dac4ae522d9af17bfbd68ecb3ec2e40ead54f719fdf7dd862c93d5"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/doc-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "b19f952d3adf7dffd6129e7be87fc1c06a482f60e43899fa24b0a67154bf4232"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/links-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "98c1408dace11e2aa39e3eb38adbf9da12baf86ef94e3a7e7e278b237687e370"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/photos-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "8fa076af23de053521d0a167aad5a790c6d37d3833c896cf8d231e17007b4ef7"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/moments-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "d978879b056818ae04f3341173d6fca3010000a86975d99ebf2a036f2361017f"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/login-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "d32157681fd77c31e7b74fe9214771d95ac85927edaa403bc8d460d1e0b88bd6"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/steam-390.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "c09d0eed963405a802c2843bddece9af830277279bb206226ffef462591e31ff"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/home-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "98bb37caef4f333c4134f4c8309aed2afcf3268b0639a8da22c541caf0195558"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/post-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "44e455f892e2905365c2209e6bd343e2648e3d2fe6540534be4de3ac8650582f"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/doc-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "0dbaad2e2c78dd72b563aa927b23fd5a48e98da9af2dd0aa868c621d74693003"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/about-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "6a830283f2b2a2d4ff1aadd76e576cba60feb9dea1af8c0c377516bf9827430a"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/login-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "a3790a1f4918984827dd20086f4c9bed73b773c1e770a5e819f6a59f622be87d"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/login-390-bottom.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "fd8c0cbc26f6737aa4817186a6656f2cff774bd46bc795f602ad9b273669b023"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/steam-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "71d46ebb1ea8728b8bcd4e79f2bad5bb9688bccff6cd5bcdc09545447771ab24"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/photos-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "34ffd2aa391a82854b83e31634c25a2d4e3b8faeb51ae32209d71660fbc81b0b"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/links-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "478e1302a4c02671b2e630b79cb7512830576fd04b78afc49fae914e5f615e77"
+      },
+      {
+        "file": "/tmp/sky-release-review-20261106/final/docs-1440.png",
+        "method": "tools.view_image; viewed individually in tool output",
+        "sha256": "5bb7cb3f0fda280628445ea86b9052a80bdd39c823813790ddcd622c511ac88c"
+      }
+    ]
+  },
+  "pluginProbe": {
+    "passed": 45,
+    "failed": 0,
+    "notApplicable": 0,
+    "notCovered": 3,
+    "complete": false
+  },
+  "assets": {
+    "checked": 54,
+    "matched": 54
+  },
+  "backend": {
+    "since": "2026-11-06T10:17:51.410Z",
+    "until": "2026-11-06T10:32:42.742358+00:00",
+    "source": "docker logs halo",
+    "exitCode": 0,
+    "counts": {
+      "errorLines": 0,
+      "warnLines": 22,
+      "templateException": 0,
+      "equipmentPaginationWarning": 15,
+      "templateEngineWarning": 5,
+      "attachmentReconciler": 0
+    },
+    "loggerCounts": {},
+    "sharedInstance": true,
+    "boundary": "Aggregate only; no raw credentials/content persisted; concurrent theme and background tasks prevent blanket attribution."
+  },
+  "interactions": {
+    "menu": "passed",
+    "gallery": [
+      {
+        "width": 1440,
+        "initial": 20,
+        "afterPagination": 40,
+        "scrollAtOpen": 1123,
+        "scrollAtClose": 1123,
+        "bodyLocked": false
+      },
+      {
+        "width": 390,
+        "initial": 20,
+        "afterPagination": 40,
+        "scrollAtOpen": 7439,
+        "scrollAtClose": 7439,
+        "bodyLocked": false
+      }
+    ]
+  },
+  "cleanup": {
+    "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+    "tagStyles": false,
+    "photosCapture": false,
+    "tempPhotoAttributes": 0,
+    "bodyLocked": false,
+    "space": 162,
+    "finished": true
+  },
+  "coverageBoundary": [
+    "44 representative route/views on two Chromium emulated viewport sizes, not every historical item and business state",
+    "3 real content host probes still not covered",
+    "No business submissions, payment/unlock, AI generation, personal Passkey, SSO or shared configuration switching",
+    "4 alternate category templates and conditional reset/maintenance/auth branches are not all live-browser configurations",
+    "Read-only shared backend logs are not attributed wholesale to this theme"
+  ],
+  "publishPreparation": [
+    "Include required untracked runtime files, 9 chunks, selectors fragment and build-invoked tests in the eventual release set",
+    "Update stale unreleased statement of 6 chunks to 9",
+    "Regenerate release-object code identity after selecting files; no staging/commit/tag authorized this turn"
+  ],
+  "artifactDirectory": "/tmp/sky-release-review-20261106",
+  "artifacts": [
+    {
+      "file": "build.log",
+      "sha256": "f8870939a7bdc20a52cea721a70e21c02785c0f25bbf88ff7f99e644e341d049"
+    },
+    {
+      "file": "lint.log",
+      "sha256": "632d3bd0b8aa4a4ddcc7fa5acc795db1f9cf38662f85c2dc011aa7175ffdbcb1"
+    },
+    {
+      "file": "format.log",
+      "sha256": "b9f03bf77f01ac77562919c37e87e992e0e21576d1fe3cf1e38eedb776019917"
+    },
+    {
+      "file": "runtime-navigation.log",
+      "sha256": "e231b53ec3c7d948f641e0910787dbddaee2fccdff33a9b2509ec0967eb00fab"
+    },
+    {
+      "file": "runtime-template-data.log",
+      "sha256": "72b30507a2b206f03160b8e2d5ab15324ff387c7a8964e9e4a5ec5e7e93906e9"
+    },
+    {
+      "file": "runtime-comment-contracts.log",
+      "sha256": "8975b7e6429025d57d3c21445e6f0a793895968928266b36b6922515800f507b"
+    },
+    {
+      "file": "auth-script-identity.json",
+      "sha256": "ccec6929a53f94555b6c838f1bfc0c2b766caf67a374f62dcfc51c7bdf3787fc"
+    },
+    {
+      "file": "browser-final.jsonl",
+      "sha256": "35c787b6f9e6b536d8a91239c68a6472f6cedab0115d8e973cca313f80e4b590"
+    },
+    {
+      "file": "browser-summary.json",
+      "sha256": "c298ffd381978b0af348858f9c988f1bc0e1cd0b7071f9c7711a6234c1cf613d"
+    },
+    {
+      "file": "tag-diagnosis.json",
+      "sha256": "c5c559a1dcca52a562e5a965b5dd2f13ed480af0c8489ef14fe695fa9a421ea0"
+    },
+    {
+      "file": "menu-browser.json",
+      "sha256": "833c0503b6ac133c3d103189ffa1adbe34b0df2d172c3f59b233e132ceab04cb"
+    },
+    {
+      "file": "photos-browser.json",
+      "sha256": "30afb0e331099a67ad3a259dc08f6bd27d4a1367e30f2691fe4409ff8d5a371f"
+    },
+    {
+      "file": "public-routes-initial.json",
+      "sha256": "5722db886f400d166c6a10abc4e9421998fbab530c1f64bcb7686064682c3325"
+    },
+    {
+      "file": "dependencies/audit-all.json",
+      "sha256": "55bbe3ecd61622ef3e09bc1eaa6f790ad61a0b6cbb7c67791956bc1f457c9ac2"
+    },
+    {
+      "file": "dependencies/audit-prod.json",
+      "sha256": "65b43008a3f422402029d37f0751548d5b462928e9ae2c2b81de95fbbc9c9725"
+    },
+    {
+      "file": "dependencies/frozen-install-metadata.json",
+      "sha256": "0c6770da5bcea62fc2e1dd633404a3e1c37799d672d64e2ed3f53e6a17f2ff53"
+    },
+    {
+      "file": "scope/review.md",
+      "sha256": "4511142689295d41f797873351b27eaf16fd1ee11433a3c1ff48213f585c5282"
+    },
+    {
+      "file": "scope/taxonomy-overflow-review.md",
+      "sha256": "c6b02dacc26558e1eb90406517f554013adbc60655276cb79b26159a2d3cb840"
+    },
+    {
+      "file": "scope/visual-sample-review.json",
+      "sha256": "b23ead7914bbda20c3df0455f484b462d7f5dd01368c411903254975511ba41a"
+    },
+    {
+      "file": "backend-summary.json",
+      "sha256": "9b99408e3fc9dab987a12ac728de9544d0e37941276d771bd2e3b1eb53811173"
+    },
+    {
+      "file": "tag-repro-before-390.png",
+      "sha256": "1e71e4e1b70ac18b5401e2f55065c0414438b16e525f80114f0545a80db891d2"
+    },
+    {
+      "file": "tag-proposed-dom-only-390.png",
+      "sha256": "7766915f2773dc82acf2db33fb2403c67acfd2306e5173f099b2e445c6838566"
+    }
+  ]
+}

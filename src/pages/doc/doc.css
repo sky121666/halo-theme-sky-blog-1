@@ -6,6 +6,13 @@
 /* 导入公共文章内容样式 */
 @import '../../static/css/article-content.css';
 
+/* Docsme 1.10.2：桌面端宽表格也在正文内滚动，避免撑开三栏布局。 */
+.doc-article #article-content table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 
 /* ==================== 变量与基础 ==================== */
 /* TOC 相关变量已在 main.css (toc.css) 中定义 */
@@ -451,8 +458,22 @@
 
 /* ==================== 响应式布局 ==================== */
 
+/* 抽屉入口与对应侧栏使用同一断点，覆盖 bottom Dock 和 side FAB。 */
+.doc-toc-drawer-trigger,
+.doc-sidebar-drawer-trigger {
+  display: none !important;
+}
+
+.doc-toc-drawer-trigger[hidden] {
+  display: none !important;
+}
+
 /* 隐藏右侧目录 */
 @media (max-width: 1280px) {
+  .doc-toc-drawer-trigger {
+    display: flex !important;
+  }
+
   .doc-toc {
     display: none;
   }
@@ -469,6 +490,10 @@
 
 /* 隐藏左侧导航 */
 @media (max-width: 1024px) {
+  .doc-sidebar-drawer-trigger {
+    display: flex !important;
+  }
+
   .doc-sidebar {
     display: none;
   }
@@ -501,6 +526,49 @@
   .doc-breadcrumb {
     font-size: 0.8125rem;
     margin-bottom: 1rem;
+  }
+
+  .doc-catalog-grid {
+    gap: 0.75rem;
+  }
+
+  .doc-catalog-card {
+    padding: 0.875rem 1rem;
+  }
+
+  .doc-catalog-card-inner {
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .doc-catalog-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .doc-catalog-icon > span {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .doc-catalog-card-content {
+    padding-top: 0;
+    padding-right: 1.5rem;
+  }
+
+  .doc-catalog-card-title {
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+
+  .doc-catalog-card-content > p {
+    margin-top: 0.25rem;
   }
 
 }
@@ -648,10 +716,13 @@
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0.3s ease;
 }
 
 .doc-toc-drawer.open {
+  visibility: visible;
+  transition: transform 0.3s ease;
   transform: translateX(0);
 }
 
@@ -668,10 +739,13 @@
   display: flex;
   flex-direction: column;
   transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0.3s ease;
 }
 
 .doc-sidebar-drawer.open {
+  visibility: visible;
+  transition: transform 0.3s ease;
   transform: translateX(0);
 }
 

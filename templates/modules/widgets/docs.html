@@ -28,7 +28,7 @@
           </div>
         </div>
         <a
-          href="/docs"
+          th:href="@{/docs}"
           class="group text-base-content/50 hover:text-primary inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-300"
         >
           View All
@@ -62,7 +62,7 @@
             <th:block th:each="project : ${result.items}" th:with="docCount = ${project.status.totalDocs ?: 0}">
               <a
                 th:if="${docCount > 0}"
-                th:href="${project.status.permalink}"
+                th:href="@{${project.status.permalink}}"
                 class="group hover:bg-primary/[0.03] flex items-center justify-between px-4 py-3 transition-colors duration-200 sm:py-3.5"
               >
                 <div class="flex min-w-0 flex-1 items-center gap-3.5 sm:gap-4">

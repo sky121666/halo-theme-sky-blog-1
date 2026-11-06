@@ -1,0 +1,1 @@
+function o(n,t){n.querySelectorAll("a[href]").forEach(r=>{let e;try{e=new URL(r.href,t.href)}catch{return}!["http:","https:"].includes(e.protocol)||e.origin===t.origin||(r.setAttribute("target","_blank"),r.relList.add("noopener","noreferrer"))})}export{o as t};

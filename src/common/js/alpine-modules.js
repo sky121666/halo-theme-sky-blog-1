@@ -4,6 +4,7 @@
  */
 
 import { skyDebug } from "./debug.js";
+import { createModalFocus } from "./modal-focus.js";
 
 /**
  * 悬浮 Dock 控制器
@@ -89,10 +90,14 @@ function createFloatingDock() {
  * - data-share-url: 分享链接
  * - data-share-title: 分享标题
  * - data-share-item-ids: 启用的平台ID列表（逗号分隔）
+ * - data-share-item-ids-configured: 是否明确配置平台（允许空列表）
  *
  * 触发方式：$dispatch('open-share-modal')
  */
 function createShareModal() {
+  // Alpine 为各事件创建不同作用域代理；所有权不能依赖 this 的对象身份。
+  const scrollLockOwner = Symbol("share-modal");
+  let exposedComponent;
   return {
     // 页面信息
     permalink: "",
@@ -102,9 +107,18 @@ function createShareModal() {
     // 状态
     isOpen: false,
     copied: false,
+    copyError: "",
+    _destroyed: false,
+    _openGeneration: 0,
+    _copyGeneration: 0,
+    _triggerElement: null,
+    _scrollLockBody: null,
+    _copyTimeout: null,
+    _nativeSharing: false,
 
     // 启用的平台 ID 列表
     shareItemIds: [],
+    shareItemIdsConfigured: false,
 
     // 预设的所有分享平台（含颜色）
     presetShareItems: [
@@ -174,9 +188,20 @@ function createShareModal() {
       const shareUrl = this.$el.dataset.shareUrl || this.$el.dataset.postUrl || "";
       const shareTitle = this.$el.dataset.shareTitle || this.$el.dataset.postTitle || "";
       const shareItemIdsStr = this.$el.dataset.shareItemIds || "";
+      this.shareItemIdsConfigured = this.$el.dataset.shareItemIdsConfigured === "true";
       this.qrcodePageUrl = this.$el.dataset.qrcodePageUrl || "/assets/qrcode/qrcode-share.html";
 
-      this.shareItemIds = shareItemIdsStr ? shareItemIdsStr.split(",").map((s) => s.trim()) : [];
+      // Jackson 文本节点被 Thymeleaf 拼接时保留 JSON 引号；普通配置仍是逗号分隔字符串。
+      let parsedShareItemIds;
+      try {
+        const parsed = JSON.parse(`[${shareItemIdsStr}]`);
+        if (parsed.every((item) => typeof item === "string")) parsedShareItemIds = parsed;
+      } catch {
+        // 普通的逗号分隔配置不是 JSON。
+      }
+      this.shareItemIds = shareItemIdsStr
+        ? (parsedShareItemIds || shareItemIdsStr.split(",")).map((item) => item.trim())
+        : [];
       this.title = shareTitle || document.title;
 
       // 设置分享链接（转换为绝对 URL）
@@ -193,13 +218,20 @@ function createShareModal() {
       }
 
       // 暴露到全局，供原生 onclick 调用（解决 teleport 后的作用域问题）
-      window.__shareModal = this;
+      exposedComponent = this;
+      window.__shareModal = exposedComponent;
+    },
+
+    destroy() {
+      this._destroyed = true;
+      this.closeModal(false);
+      if (window.__shareModal === exposedComponent) delete window.__shareModal;
     },
 
     // 计算属性：过滤出启用的分享平台
     get activeShareItems() {
       if (!this.shareItemIds || this.shareItemIds.length === 0) {
-        return this.presetShareItems;
+        return this.shareItemIdsConfigured ? [] : this.presetShareItems;
       }
       return this.shareItemIds.map((id) => this.presetShareItems.find((item) => item.id === id)).filter(Boolean);
       // 注意：不再过滤 native 类型，让所有配置的平台都显示
@@ -207,32 +239,115 @@ function createShareModal() {
     },
 
     // 打开弹窗
-    openModal() {
+    openModal(trigger = document.activeElement) {
+      if (this._destroyed || this.isOpen) return;
+      this._triggerElement = typeof trigger?.focus === "function" ? trigger : document.activeElement;
+      const body = document.body;
+      const previousLock = body._skyShareModalScrollLock;
+      body._skyShareModalScrollLock = {
+        owner: scrollLockOwner,
+        // 新页面的分享接管旧组件时，沿用最初样式，避免把 hidden 当作原始值。
+        overflow: previousLock && body.style.overflow === "hidden" ? previousLock.overflow : body.style.overflow,
+      };
+      this._scrollLockBody = body;
+      body.style.overflow = "hidden";
+      this.copied = false;
+      this.copyError = "";
       this.isOpen = true;
-      document.body.style.overflow = "hidden";
+      const generation = ++this._openGeneration;
+      this.$nextTick(() => {
+        if (!this._destroyed && this.isOpen && generation === this._openGeneration) {
+          // Native modalization enters the top layer and makes all background
+          // content inert, including plugin hosts added after opening.
+          if (!this.$refs.shareOverlay.open) this.$refs.shareOverlay.showModal();
+          this.focusDialog();
+        }
+      });
+    },
+
+    focusableControls() {
+      return [...(this.$refs.shareDialog?.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+      ) || [])].filter((element) => element.getClientRects().length > 0 && !element.closest("[inert]"));
+    },
+
+    focusDialog() {
+      (this.focusableControls()[0] || this.$refs.shareDialog)?.focus();
+    },
+
+    trapFocus(event) {
+      const dialog = this.$refs.shareDialog;
+      const items = this.focusableControls();
+      const active = document.activeElement;
+      const outsideControls = !items.includes(active);
+      if (!items.length || outsideControls || (event.shiftKey ? active === items[0] : active === items.at(-1))) {
+        event.preventDefault();
+        (event.shiftKey ? items.at(-1) || dialog : items[0] || dialog)?.focus();
+      }
     },
 
     // 关闭弹窗
-    closeModal() {
+    closeModal(restoreFocus = true) {
+      const wasOpen = this.isOpen;
       this.isOpen = false;
-      document.body.style.overflow = "";
+      this._nativeSharing = false;
+      this.copied = false;
+      this.copyError = "";
+      this.$refs.shareOverlay?.close();
+      const generation = ++this._openGeneration;
+      ++this._copyGeneration;
+      const body = this._scrollLockBody;
+      const lock = body?._skyShareModalScrollLock;
+      if (lock?.owner === scrollLockOwner) {
+        if (body.style.overflow === "hidden") body.style.overflow = lock.overflow;
+        delete body._skyShareModalScrollLock;
+      }
+      this._scrollLockBody = null;
+      clearTimeout(this._copyTimeout);
+      this._copyTimeout = null;
+      const trigger = this._triggerElement;
+      this._triggerElement = null;
+      if (restoreFocus && wasOpen) {
+        this.$nextTick(() => {
+          if (!this._destroyed && !this.isOpen && generation === this._openGeneration && trigger?.isConnected) {
+            trigger.focus({ preventScroll: true });
+          }
+        });
+      }
     },
 
     // 复制链接
     async copyUrl() {
+      if (this._destroyed || !this.isOpen) return;
+      const generation = this._openGeneration;
+      const operation = ++this._copyGeneration;
+      clearTimeout(this._copyTimeout);
+      this._copyTimeout = null;
+      this.copied = false;
+      this.copyError = "";
       try {
         await navigator.clipboard.writeText(this.permalink);
+        if (this._destroyed || !this.isOpen || generation !== this._openGeneration || operation !== this._copyGeneration) return;
         this.copied = true;
-        setTimeout(() => {
-          this.copied = false;
+        clearTimeout(this._copyTimeout);
+        this._copyTimeout = setTimeout(() => {
+          if (!this._destroyed && generation === this._openGeneration && operation === this._copyGeneration) {
+            this.copied = false;
+            this._copyTimeout = null;
+          }
         }, 2000);
       } catch {
-        // 复制失败静默处理
+        if (this._destroyed || !this.isOpen || generation !== this._openGeneration || operation !== this._copyGeneration) return;
+        this.copied = false;
+        this.copyError = "复制失败，请选择链接后手动复制。";
+        this.$refs.shareLink?.focus({ preventScroll: true });
+        this.$refs.shareLink?.select();
       }
     },
 
     // 处理分享 - 直接在点击事件中处理，确保用户手势有效
-    handleShare(platformId) {
+    async handleShare(platformId) {
+      if (this._destroyed || !this.isOpen) return;
       const platform = this.activeShareItems.find((item) => item?.id === platformId);
       if (!platform) {
         return;
@@ -241,14 +356,19 @@ function createShareModal() {
       if (platform.type === "native") {
         // 原生分享必须在用户手势中直接调用
         if (navigator.share) {
-          navigator
-            .share({
+          if (this._nativeSharing) return;
+          const generation = this._openGeneration;
+          this._nativeSharing = true;
+          try {
+            await navigator.share({
               title: this.title,
               url: this.permalink,
-            })
-            .finally(() => {
-              this.closeModal();
             });
+          } catch {
+            // 用户取消和浏览器拒绝都由当前弹窗收尾，避免未处理的 Promise 拒绝。
+          } finally {
+            if (!this._destroyed && generation === this._openGeneration) this.closeModal();
+          }
         } else {
           // 不支持原生分享（非 HTTPS 或浏览器不支持）
           this.copyUrl();
@@ -413,10 +533,71 @@ function createHeaderController() {
 function createNavbarController() {
   return {
     scrolled: false,
+    mobileMenuOpen: false,
     _scrollHandler: null,
     _pageLoadHandler: null,
+    _mobileFocus: null,
+    _mobileQuery: null,
+    _mobileBreakpointHandler: null,
+    _mobileFocusFrame: null,
+    _mobileOpenGeneration: 0,
+
+    toggleMobileMenu() {
+      if (this.mobileMenuOpen) {
+        this.closeMobileMenu(true);
+        return;
+      }
+      if (this._mobileQuery?.matches) return;
+      this.mobileMenuOpen = true;
+      const generation = ++this._mobileOpenGeneration;
+      const drawer = document.getElementById("mobile-menu-drawer");
+      if (drawer) drawer.checked = true;
+      // checkbox 更新后抽屉仍可能处于 visibility:hidden 的过渡阶段。
+      // 在实际可见的帧中启动模态焦点，避免聚焦失败后再把入口设为 inert。
+      const focusWhenVisible = () => {
+        if (generation !== this._mobileOpenGeneration || !this.mobileMenuOpen || this._mobileQuery?.matches) return;
+        this._mobileFocusFrame = null;
+        const panel = this.$refs.mobileMenuPanel;
+        if (!panel?.isConnected) return;
+        if (getComputedStyle(panel).visibility === "visible" && panel.getClientRects().length > 0) {
+          this._mobileFocus?.open();
+          return;
+        }
+        this._mobileFocusFrame = requestAnimationFrame(focusWhenVisible);
+      };
+      this.$nextTick(() => {
+        if (generation === this._mobileOpenGeneration && this.mobileMenuOpen) {
+          this._mobileFocusFrame = requestAnimationFrame(focusWhenVisible);
+        }
+      });
+    },
+
+    closeMobileMenu(restoreFocus = false) {
+      ++this._mobileOpenGeneration;
+      if (this._mobileFocusFrame !== null) cancelAnimationFrame(this._mobileFocusFrame);
+      this._mobileFocusFrame = null;
+      this.mobileMenuOpen = false;
+      const drawer = document.getElementById("mobile-menu-drawer");
+      if (drawer) drawer.checked = false;
+      this._mobileFocus?.close({ restoreFocus });
+      if (restoreFocus) this.$refs.mobileMenuTrigger?.focus({ preventScroll: true });
+    },
 
     init() {
+      const panel = this.$refs.mobileMenuPanel;
+      if (panel) {
+        this._mobileFocus = createModalFocus({
+          panel,
+          backdrop: this.$refs.mobileMenuBackdrop,
+          onClose: (options) => this.closeMobileMenu(options?.restoreFocus !== false),
+        });
+      }
+      this._mobileQuery = window.matchMedia("(min-width: 64rem)");
+      this._mobileBreakpointHandler = () => {
+        if (this._mobileQuery.matches) this.closeMobileMenu();
+      };
+      this._mobileQuery.addEventListener("change", this._mobileBreakpointHandler);
+
       // 使用 requestAnimationFrame 节流的滚动监听
       let ticking = false;
 
@@ -440,19 +621,23 @@ function createNavbarController() {
       window.addEventListener("scroll", this._scrollHandler, { passive: true });
 
       // 导航栏位于 Swup 容器外，页面切换后必须主动收起持久化的移动抽屉。
-      this._pageLoadHandler = () => {
-        const drawer = document.getElementById("mobile-menu-drawer");
-        if (drawer) drawer.checked = false;
-      };
+      this._pageLoadHandler = () => this.closeMobileMenu();
+      document.addEventListener("sky:page-cleanup", this._pageLoadHandler);
       document.addEventListener("sky:page-load", this._pageLoadHandler);
     },
 
     destroy() {
+      this.closeMobileMenu();
+      this._mobileFocus = null;
+      this._mobileQuery?.removeEventListener("change", this._mobileBreakpointHandler);
+      this._mobileQuery = null;
+      this._mobileBreakpointHandler = null;
       if (this._scrollHandler) {
         window.removeEventListener("scroll", this._scrollHandler);
         this._scrollHandler = null;
       }
       if (this._pageLoadHandler) {
+        document.removeEventListener("sky:page-cleanup", this._pageLoadHandler);
         document.removeEventListener("sky:page-load", this._pageLoadHandler);
         this._pageLoadHandler = null;
       }
@@ -480,7 +665,7 @@ function createThemeToggle() {
       this.darkTheme = this.$el.dataset.darkTheme || "dark";
       const defaultTheme = this.$el.dataset.defaultTheme || "dark_theme";
 
-      const savedTheme = localStorage.getItem("theme-mode");
+      const savedTheme = window.SkyThemePreference?.read();
       const effectiveMode = savedTheme || defaultTheme;
 
       this._onSystemChange = this.onSystemChange.bind(this);
@@ -524,15 +709,15 @@ function createThemeToggle() {
         // auto → light
         this.isAuto = false;
         this.isDark = false;
-        localStorage.setItem("theme-mode", "light_theme");
+        window.SkyThemePreference?.write("light_theme");
       } else if (!this.isDark) {
         // light → dark
         this.isDark = true;
-        localStorage.setItem("theme-mode", "dark_theme");
+        window.SkyThemePreference?.write("dark_theme");
       } else {
         // dark → auto
         this.isAuto = true;
-        localStorage.setItem("theme-mode", "auto");
+        window.SkyThemePreference?.write("auto");
         this.mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
         this.isDark = this.mediaQuery.matches;
         this.addSystemThemeListener();
@@ -745,6 +930,10 @@ function weatherNumber(value) {
 function welcomeWeatherCard() {
   const CACHE_KEY = "sky_weather_cache_v13";
   const CACHE_DURATION = 30 * 60 * 1000;
+  const lifecycle = new AbortController();
+  let idleId = null;
+  let startTimer = null;
+  let cacheTimer = null;
 
   // 清除旧缓存
   try {
@@ -778,10 +967,18 @@ function welcomeWeatherCard() {
       this.updateGreeting();
       this.updateDate();
       if ("requestIdleCallback" in window) {
-        requestIdleCallback(() => this.loadWeather(), { timeout: 2000 });
+        idleId = requestIdleCallback(() => { idleId = null; this.loadWeather(); }, { timeout: 2000 });
       } else {
-        setTimeout(() => this.loadWeather(), 100);
+        startTimer = setTimeout(() => { startTimer = null; this.loadWeather(); }, 100);
       }
+    },
+
+    destroy() {
+      lifecycle.abort();
+      if (idleId !== null) cancelIdleCallback(idleId);
+      clearTimeout(startTimer);
+      clearTimeout(cacheTimer);
+      idleId = startTimer = cacheTimer = null;
     },
 
     updateGreeting() {
@@ -822,6 +1019,7 @@ function welcomeWeatherCard() {
     // ═══════ 主流程 ═══════
 
     async loadWeather() {
+      if (lifecycle.signal.aborted) return;
       const cached = this.getCache();
       if (cached) {
         if (window.SYS_WEATHER_DEBUG) skyDebug.log("weather", "命中缓存");
@@ -830,7 +1028,9 @@ function welcomeWeatherCard() {
         // 缓存命中也需要通知 index.js 的背景引擎同步天气状态
         // 通过 setTimeout 确保 index.js 的监听器已完成注册
         if (cached.weatherBg) {
-          setTimeout(() => {
+          cacheTimer = setTimeout(() => {
+            cacheTimer = null;
+            if (lifecycle.signal.aborted) return;
             window.dispatchEvent(
               new CustomEvent("sky-weather-updated", {
                 detail: {
@@ -850,6 +1050,7 @@ function welcomeWeatherCard() {
 
       try {
         const loc = await this.getLocationByPconline();
+        if (lifecycle.signal.aborted) return;
         if (window.SYS_WEATHER_DEBUG) skyDebug.log("weather", "定位结果", { source: loc.source });
         if (!loc.city || loc.city === "未知") {
           skyDebug.warn("weather", "定位失败");
@@ -858,6 +1059,7 @@ function welcomeWeatherCard() {
         }
         await this.getWeatherByWttrProxy(loc);
       } catch (error) {
+        if (lifecycle.signal.aborted) return;
         skyDebug.warn("weather", "天气获取失败", error);
         this.showWeatherUnavailable();
       }
@@ -881,6 +1083,7 @@ function welcomeWeatherCard() {
         if (window.SYS_WEATHER_DEBUG) skyDebug.warn("weather", "IP 定位返回异常城市，已降级启用默认地区");
         return { city: fallbackRegion, adcode: "", source: "fallback_region" };
       } catch (error) {
+        if (lifecycle.signal.aborted) throw error;
         if (window.SYS_WEATHER_DEBUG) skyDebug.warn("weather", "pconline 请求失败或被拦截，已降级启用默认地区", error);
         return { city: fallbackRegion, adcode: "", source: "fallback_region" };
       }
@@ -895,6 +1098,7 @@ function welcomeWeatherCard() {
         const res = await this.fetchWithTimeout(url, {}, 8000);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+        if (lifecycle.signal.aborted) return;
 
         if (data.error) throw new Error(data.error);
         if (weatherNumber(data.temp) === null) throw new Error("返回数据格式异常");
@@ -925,19 +1129,27 @@ function welcomeWeatherCard() {
             temperature: wd.weather.temp,
           });
         await this.loadSvgIcon(wd.weatherIcon);
+        if (lifecycle.signal.aborted) return;
         wd.weatherIconSvg = this.weatherIconSvg;
         this.applyWeatherData(wd);
         this.setCache(wd);
       } catch (error) {
+        if (lifecycle.signal.aborted) return;
         skyDebug.warn("weather", "天气查询失败", error);
         throw error;
       }
     },
 
     fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+      if (lifecycle.signal.aborted) return Promise.reject(lifecycle.signal.reason);
       const controller = new AbortController();
+      const abort = () => controller.abort(lifecycle.signal.reason);
+      lifecycle.signal.addEventListener("abort", abort, { once: true });
       const timer = setTimeout(() => controller.abort(), timeoutMs);
-      return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+      return fetch(url, { ...options, signal: controller.signal }).finally(() => {
+        clearTimeout(timer);
+        lifecycle.signal.removeEventListener("abort", abort);
+      });
     },
 
     // ═══════ 天气代码 → 图标 & 背景映射 ═══════
@@ -1037,29 +1249,30 @@ function welcomeWeatherCard() {
 
     _lastDispatchedBg: null,
     setCache(data) {
+      if (lifecycle.signal.aborted) return;
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, timestamp: Date.now() }));
-        // 只要有数据就派发事件（去掉 weatherBg !== _lastDispatchedBg 的限制，因为物理参数可能在同种天气下变化）
-        if (data.weatherBg) {
-          this._lastDispatchedBg = data.weatherBg;
-          window.dispatchEvent(
-            new CustomEvent("sky-weather-updated", {
-              detail: {
-                weatherBg: data.weatherBg,
-                location: data.location,
-                rawData: data.weather, // 包含 temp, humidity, wind 等物理参数
-              },
-            }),
-          );
-        }
       } catch {
-        // 忽略缓存写入失败
+        // 缓存只影响后续访问；本次视图更新不能依赖存储可用。
+      }
+      if (data.weatherBg) {
+        this._lastDispatchedBg = data.weatherBg;
+        window.dispatchEvent(
+          new CustomEvent("sky-weather-updated", {
+            detail: {
+              weatherBg: data.weatherBg,
+              location: data.location,
+              rawData: data.weather,
+            },
+          }),
+        );
       }
     },
 
     // ═══════ 通用工具 ═══════
 
     applyWeatherData(d) {
+      if (lifecycle.signal.aborted) return;
       this.location = d.location;
       this.weather = d.weather;
       this.weatherIcon = d.weatherIcon;

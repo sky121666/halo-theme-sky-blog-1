@@ -1,0 +1,477 @@
+{
+  "environment": {
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "version": "2.2.41",
+    "preview": true,
+    "plugins": [
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "6a6b12be2eea4b729051e9154b30ccc9577dad783acb07e1403129cc9af867be",
+    "fileCount": 401,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "assets": [
+    {
+      "asset": "css/main.css",
+      "status": 200,
+      "match": true,
+      "sha256": "14e29c1e9de8915b19a64fd42026c3c364a620415e2ab3783b953d61b7cac715"
+    },
+    {
+      "asset": "css/moments.css",
+      "status": 200,
+      "match": true,
+      "sha256": "be7ab3af44af8b99283fef3910355cba3860235ad6d696b7b395038b3d90acfa"
+    },
+    {
+      "asset": "js/moments.js",
+      "status": 200,
+      "match": true,
+      "sha256": "d47570f2c3a9a35aa23a55ab776650ac8523814dff6c1f540c3d17854984e543"
+    },
+    {
+      "asset": "js/main.js",
+      "status": 200,
+      "match": true,
+      "sha256": "f3317ab015d4c4830c16b724b61c36ac3deea14ffc214264257b3091fac2ccb5"
+    },
+    {
+      "asset": "js/chunks/modal-focus-2.2.41.js",
+      "status": 200,
+      "match": true,
+      "sha256": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a"
+    }
+  ],
+  "checks": {
+    "build": true,
+    "nodeTests": 382,
+    "nodeSkipped": 0,
+    "momentActionTests": 54,
+    "templateDataAssertions": 66,
+    "lint": true,
+    "format": true,
+    "http": {
+      "total": 122,
+      "200": 120,
+      "404Expected": 2,
+      "500": 0
+    }
+  },
+  "browser": {
+    "routes": [
+      {
+        "name": "list",
+        "path": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 2 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": [
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          }
+        ]
+      },
+      {
+        "name": "tag",
+        "path": "/moments?tag=%E5%93%88%E5%93%88&preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 2 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": [
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          }
+        ]
+      },
+      {
+        "name": "detail",
+        "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": []
+      },
+      {
+        "name": "list",
+        "path": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "scrollWidth": 390,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 2 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 1 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          },
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": [
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          },
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          }
+        ]
+      },
+      {
+        "name": "tag",
+        "path": "/moments?tag=%E5%93%88%E5%93%88&preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "scrollWidth": 390,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 2 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": [
+          {
+            "label": "展开评论",
+            "expanded": "false",
+            "target": true
+          }
+        ]
+      },
+      {
+        "name": "detail",
+        "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "scrollWidth": 390,
+        "errors": [],
+        "likes": [
+          {
+            "label": "点赞瞬间，已有 0 次点赞",
+            "pressed": "false",
+            "icon": true
+          }
+        ],
+        "comments": []
+      }
+    ],
+    "navigation": [
+      {
+        "case": "comment-open",
+        "width": 390,
+        "expanded": "true",
+        "visible": true
+      },
+      {
+        "case": "detail-navigation",
+        "width": 390,
+        "pjax": true,
+        "errors": []
+      },
+      {
+        "case": "back-list",
+        "width": 390,
+        "expanded": "false",
+        "errors": []
+      },
+      {
+        "case": "comment-open",
+        "width": 1440,
+        "expanded": "true",
+        "visible": true
+      },
+      {
+        "case": "detail-navigation",
+        "width": 1440,
+        "pjax": true,
+        "errors": []
+      },
+      {
+        "case": "back-list",
+        "width": 1440,
+        "expanded": "false",
+        "errors": []
+      }
+    ],
+    "publication": {
+      "results": [
+        {
+          "width": 390,
+          "case": "cap-10-and-8-plus-2-rejected-9-submitted",
+          "passed": true
+        },
+        {
+          "width": 390,
+          "case": "cancel-reopen-new-upload-late-old-response",
+          "passed": true
+        },
+        {
+          "width": 390,
+          "case": "missing-permalink-no-legacy-polling",
+          "passed": true
+        },
+        {
+          "width": 390,
+          "case": "like-icon-and-accessible-state",
+          "passed": true,
+          "name": "已点赞，已有 1 次点赞",
+          "icon": true,
+          "count": "1"
+        },
+        {
+          "width": 1440,
+          "case": "cap-10-and-8-plus-2-rejected-9-submitted",
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "case": "cancel-reopen-new-upload-late-old-response",
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "case": "missing-permalink-no-legacy-polling",
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "case": "like-icon-and-accessible-state",
+          "passed": true,
+          "name": "已点赞，已有 1 次点赞",
+          "icon": true,
+          "count": "1"
+        }
+      ],
+      "errors": [],
+      "writes": "all substituted in browser"
+    }
+  },
+  "boundary": "Publication, upload and upvote used isolated browser responses; no business writes or plugin changes; no commit or release."
+}

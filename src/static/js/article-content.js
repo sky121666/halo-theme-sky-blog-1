@@ -8,6 +8,7 @@
  */
 
 import { skyDebug } from '../../common/js/debug.js';
+import { decorateExternalLinks } from '../../common/js/external-links.js';
 
 (function(window, document) {
   'use strict';
@@ -35,80 +36,6 @@ import { skyDebug } from '../../common/js/debug.js';
     images.forEach(function(img, index) {
       if (index >= skipCount) {
         img.setAttribute('loading', 'lazy');
-      }
-    });
-  }
-
-  /**
-   * HTTPS 页面中归一化旧内容里的 HTTP 子资源地址。
-   * 主要处理历史文章里保存的内网 Halo 地址，例如 http://192.168.x.x:8090/upload/...
-   */
-  function normalizeInsecureContentUrls() {
-    if (window.location.protocol !== 'https:') return;
-
-    const content = document.getElementById('article-content');
-    if (!content) return;
-
-    const localHostPattern = /^(localhost|127\.0\.0\.1|0\.0\.0\.0|10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/;
-    const mediaSelector = 'img[src], source[src], video[src], audio[src], iframe[src], embed[src]';
-
-    function normalizeUrl(value) {
-      if (!value || !/^http:\/\//i.test(value)) return value;
-
-      try {
-        const url = new URL(value);
-        if (url.hostname === window.location.hostname || localHostPattern.test(url.hostname)) {
-          return `${window.location.origin}${url.pathname}${url.search}${url.hash}`;
-        }
-        url.protocol = 'https:';
-        return url.toString();
-      } catch {
-        return value.replace(/^http:\/\//i, 'https://');
-      }
-    }
-
-    content.querySelectorAll(mediaSelector).forEach(function(el) {
-      const next = normalizeUrl(el.getAttribute('src'));
-      if (next && next !== el.getAttribute('src')) {
-        el.setAttribute('src', next);
-      }
-    });
-
-    content.querySelectorAll('[poster]').forEach(function(el) {
-      const next = normalizeUrl(el.getAttribute('poster'));
-      if (next && next !== el.getAttribute('poster')) {
-        el.setAttribute('poster', next);
-      }
-    });
-
-    content.querySelectorAll('[srcset]').forEach(function(el) {
-      const srcset = el.getAttribute('srcset');
-      if (!srcset || !srcset.includes('http://')) return;
-
-      const normalized = srcset.split(',').map(function(part) {
-        const trimmed = part.trim();
-        const firstSpace = trimmed.search(/\s/);
-        if (firstSpace === -1) return normalizeUrl(trimmed);
-        return `${normalizeUrl(trimmed.slice(0, firstSpace))}${trimmed.slice(firstSpace)}`;
-      }).join(', ');
-
-      el.setAttribute('srcset', normalized);
-    });
-  }
-
-  /**
-   * 外部链接处理
-   * 为外部链接添加 target="_blank" 和 rel="noopener noreferrer"
-   */
-  function setupExternalLinks() {
-    const content = document.getElementById('article-content');
-    if (!content) return;
-
-    const links = content.querySelectorAll('a[href^="http"]');
-    links.forEach(function(link) {
-      if (!link.hostname.includes(window.location.hostname)) {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer');
       }
     });
   }
@@ -143,21 +70,6 @@ import { skyDebug } from '../../common/js/debug.js';
   }
 
   /**
-   * 移除可能的内联 blur 样式
-   */
-  function removeBlurStyles() {
-    const content = document.getElementById('article-content');
-    if (!content) return;
-
-    const inlineStyles = content.querySelectorAll('style');
-    inlineStyles.forEach(function(style) {
-      if (style.textContent.includes('blur')) {
-        style.remove();
-      }
-    });
-  }
-
-  /**
    * Shiki 1.4.1 在 PJAX 返回已含服务端 <shiki-code> 的正文时，会再次把其
    * 直属 pre 包成新的 <shiki-code>。仅保留持有真实 pre 的内层宿主，避免
    * 每次往返都新增一层 Shadow DOM 和重复渲染。
@@ -170,6 +82,7 @@ import { skyDebug } from '../../common/js/debug.js';
     let nestedBlocks = Array.from(content.querySelectorAll('shiki-code > shiki-code'));
 
     while (nestedBlocks.length > 0) {
+      const previousCount = normalizedCount;
       nestedBlocks.forEach(function(inner) {
         const outer = inner.parentElement;
         if (
@@ -181,6 +94,8 @@ import { skyDebug } from '../../common/js/debug.js';
           normalizedCount += 1;
         }
       });
+      // 多子节点宿主不能安全解包；本轮无进展时保留原结构并停止。
+      if (normalizedCount === previousCount) break;
       nestedBlocks = Array.from(content.querySelectorAll('shiki-code > shiki-code'));
     }
 
@@ -366,11 +281,10 @@ import { skyDebug } from '../../common/js/debug.js';
   function initArticleContent() {
     const generation = ++articleContentGeneration;
     observeShikiStructure();
-    normalizeInsecureContentUrls();
     setupContentLazyLoad();
-    setupExternalLinks();
+    const content = document.getElementById('article-content');
+    if (content) decorateExternalLinks(content, window.location);
     initAdmonitionGlow();
-    removeBlurStyles();
     void renderTextDiagrams(generation);
   }
 

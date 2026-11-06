@@ -1318,6 +1318,27 @@
   opacity: 0.5;
 }
 
+/* 最近游玩是可选信息；空态保留提示，把空间留给下方游戏库。 */
+.steam-empty-state--compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.steam-empty-state--compact .steam-empty-icon {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  animation: none;
+}
+
+.steam-empty-state--compact .steam-empty-title {
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
 /* ========================================== */
 /*     Pagination                             */
 /* ========================================== */
@@ -1408,6 +1429,18 @@
 
 .steam-stagger-6 {
   animation-delay: 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steam-animate-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .steam-empty-icon {
+    animation: none;
+  }
 }
 
 /* ========================================== */

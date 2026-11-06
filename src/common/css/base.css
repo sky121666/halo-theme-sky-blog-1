@@ -165,6 +165,8 @@ html {
   --halo-cw-primary-1-color: var(--color-primary);
   --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent);
   --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent);
+  --halo-cw-primary-contrast-color: var(--color-primary-content);
+  --halo-cw-content-img-max-width: 100%;
 
   /* 文本色 - 使用 DaisyUI base-content */
   --halo-cw-text-1-color: var(--color-base-content);
@@ -189,7 +191,7 @@ html {
 }
 
 /* ========================================== */
-/* Halo 联系表单 1.6.4 主题变量适配            */
+/* Halo 联系表单旧版表单变量（2.x 仍保留）     */
 /* 全局加载，覆盖正文嵌入、贴边按钮和页面弹窗   */
 /* ========================================== */
 html body :is(halo-contact-form, halo-contact-form-single, halo-contact-form-auto-loader),
@@ -239,6 +241,11 @@ halo-contact-form-single {
   margin: 1.5em 0;
 }
 
+/* 2.1 的按钮表单由插件管理弹窗和表单主题；保留 inline 形式。 */
+halo-contact-form-trigger {
+  max-width: 100%;
+}
+
 /* 深色模式覆盖 - 使用高优先级选择器 */
 html[data-color-scheme="dark"],
 .dark,
@@ -258,6 +265,7 @@ html[data-color-scheme="dark"],
   --halo-cw-primary-1-color: var(--color-primary) !important;
   --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
   --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
+  --halo-cw-primary-contrast-color: var(--color-primary-content) !important;
 
   --halo-cw-text-1-color: var(--color-base-content) !important;
   --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent) !important;
@@ -566,7 +574,7 @@ html.theme-transitioning * {
 }
 
 /* 加载动画 GIF 尺寸 */
-.loading-gif {
+#loading-screen .sky-loading-gif {
   width: 64px;
   height: 64px;
   object-fit: contain;
@@ -1018,5 +1026,25 @@ html.is-animating #swup {
   html.is-changing .transition-fade {
     transition: none !important;
     opacity: 1 !important;
+  }
+}
+
+/* Touch devices keep magazine titles visible; hover devices also reveal on keyboard focus. */
+@media (min-width: 48rem) and (hover: hover) and (pointer: fine) {
+  .sky-magazine-card .sky-magazine-reveal { grid-template-rows: 0fr; }
+  .sky-magazine-card:hover .sky-magazine-reveal,
+  .sky-magazine-card:focus-within .sky-magazine-reveal { grid-template-rows: 1fr; }
+}
+
+/* Contact Form 2.x owns its floating host. Reserve a separate lane for the
+   theme's FAB without overriding the plugin's position, z-index or shadow DOM. */
+body:has(halo-contact-form-floating) [x-data="sideFloatingDock"] .fab {
+  bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Match the raised FAB only on phones; exclude footers inside page content. */
+@media (width < 48rem) {
+  body:has(halo-contact-form-floating):has([x-data="sideFloatingDock"]) #swup ~ footer {
+    padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px));
   }
 }

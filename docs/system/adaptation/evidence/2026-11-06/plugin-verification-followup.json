@@ -1,0 +1,3595 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-06",
+  "scope": "Theme integration read-only coverage; no plugin/config/content/database mutations; no Git writes",
+  "environment": {
+    "at": "2026-11-06T08:35:57.324Z",
+    "base": "http://localhost:8090",
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "802f8c5fe279350b34df0c839d2aef03ee15bf5baeb9426f56ff3a100feaef1a",
+      "fileCount": 407,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "cache": [],
+    "assets": [
+      {
+        "file": "css/about.css",
+        "status": 200,
+        "match": true,
+        "sha256": "350e4846bd5e74b5e823d400a0a9135a3a07384d0ed47017281d6740ec5fcdd3"
+      },
+      {
+        "file": "css/archives.css",
+        "status": 200,
+        "match": true,
+        "sha256": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924"
+      },
+      {
+        "file": "css/auth-centered.css",
+        "status": 200,
+        "match": true,
+        "sha256": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18"
+      },
+      {
+        "file": "css/auth-default.css",
+        "status": 200,
+        "match": true,
+        "sha256": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186"
+      },
+      {
+        "file": "css/auth-split.css",
+        "status": 200,
+        "match": true,
+        "sha256": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54"
+      },
+      {
+        "file": "css/author.css",
+        "status": 200,
+        "match": true,
+        "sha256": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5"
+      },
+      {
+        "file": "css/bangumi.css",
+        "status": 200,
+        "match": true,
+        "sha256": "b5892e70921b99c7d0e3d3666ff84122f2c6af8e73f5084d4e26ddc8bdbc4fa0"
+      },
+      {
+        "file": "css/categories.css",
+        "status": 200,
+        "match": true,
+        "sha256": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34"
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "match": true,
+        "sha256": "bd0b35f3f299e5e92bf9314ca6932196c61bf9f8ebdb08d60aac1981021c6933"
+      },
+      {
+        "file": "css/douban.css",
+        "status": 200,
+        "match": true,
+        "sha256": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889"
+      },
+      {
+        "file": "css/equipment.css",
+        "status": 200,
+        "match": true,
+        "sha256": "cdb5b957b83ccd99418e83d8ae19e1c5134354f526d395da0c9b6fc048028180"
+      },
+      {
+        "file": "css/index-effects.css",
+        "status": 200,
+        "match": true,
+        "sha256": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece"
+      },
+      {
+        "file": "css/index-subtitle-effects.css",
+        "status": 200,
+        "match": true,
+        "sha256": "5d0f26a778f4320ff4fed0eb7bd9cd5b1adf558926b52d03fdcbd0e6dda39245"
+      },
+      {
+        "file": "css/index-title-effects.css",
+        "status": 200,
+        "match": true,
+        "sha256": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe"
+      },
+      {
+        "file": "css/index-weather-effects.css",
+        "status": 200,
+        "match": true,
+        "sha256": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573"
+      },
+      {
+        "file": "css/index.css",
+        "status": 200,
+        "match": true,
+        "sha256": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3"
+      },
+      {
+        "file": "css/links.css",
+        "status": 200,
+        "match": true,
+        "sha256": "54821fa0383771594d675133b1f1d723811d27947a026bb8a765d7c55fcba836"
+      },
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "match": true,
+        "sha256": "6a479dbcbc07ccc47bb9e440c966dedf2b524b17ca82c5ea4cc81143f5f1e6ad"
+      },
+      {
+        "file": "css/moments.css",
+        "status": 200,
+        "match": true,
+        "sha256": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8"
+      },
+      {
+        "file": "css/page.css",
+        "status": 200,
+        "match": true,
+        "sha256": "3573231e8fdb66830967009fc607fe9078103aa689fe1a7b9dc99f834d06cf83"
+      },
+      {
+        "file": "css/photos.css",
+        "status": 200,
+        "match": true,
+        "sha256": "7b5ad85e87a6fddf884ea281ca4abba06846bd18ee4023f396d9915a480144b2"
+      },
+      {
+        "file": "css/post.css",
+        "status": 200,
+        "match": true,
+        "sha256": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51"
+      },
+      {
+        "file": "css/steam.css",
+        "status": 200,
+        "match": true,
+        "sha256": "4eaf90685a3693a53594488196736ba9865bae7ad7de2be4f68b46cae0fbde38"
+      },
+      {
+        "file": "emoji/emoji-selector.css",
+        "status": 200,
+        "match": true,
+        "sha256": "c51d3273a678e60c31980c49ebcc5990e4ede1f3ba9c3fba82e17a56945b1822"
+      },
+      {
+        "file": "emoji/emoji-selector.js",
+        "status": 200,
+        "match": true,
+        "sha256": "2880fc001aa6097e7fc4288a090c518f52d23754d81d35246f0e9f9a99306602"
+      },
+      {
+        "file": "js/about.js",
+        "status": 200,
+        "match": true,
+        "sha256": "cdaff7fd207464edf26fd627025b1d41fce14746f7509523d6578182ed49c94f"
+      },
+      {
+        "file": "js/archives.js",
+        "status": 200,
+        "match": true,
+        "sha256": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d"
+      },
+      {
+        "file": "js/auth-centered.js",
+        "status": 200,
+        "match": true,
+        "sha256": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c"
+      },
+      {
+        "file": "js/auth-default.js",
+        "status": 200,
+        "match": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "file": "js/auth-split.js",
+        "status": 200,
+        "match": true,
+        "sha256": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7"
+      },
+      {
+        "file": "js/author.js",
+        "status": 200,
+        "match": true,
+        "sha256": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e"
+      },
+      {
+        "file": "js/bangumi.js",
+        "status": 200,
+        "match": true,
+        "sha256": "52134117458992b3be32efba83c2cea818c88f6bfb7ee946e623fe37a9649895"
+      },
+      {
+        "file": "js/categories.js",
+        "status": 200,
+        "match": true,
+        "sha256": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068"
+      },
+      {
+        "file": "js/doc.js",
+        "status": 200,
+        "match": true,
+        "sha256": "e88cbc362ed37cf18d7b2ef3bee5bf54f086d8ab4aa0ee30e1c041916ce97934"
+      },
+      {
+        "file": "js/douban.js",
+        "status": 200,
+        "match": true,
+        "sha256": "a63502300e0eb2d5e93ab835e9fe13e2050d21f0ee1d5704c3d73f5d14c4371a"
+      },
+      {
+        "file": "js/equipment.js",
+        "status": 200,
+        "match": true,
+        "sha256": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3"
+      },
+      {
+        "file": "js/index.js",
+        "status": 200,
+        "match": true,
+        "sha256": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a"
+      },
+      {
+        "file": "js/links.js",
+        "status": 200,
+        "match": true,
+        "sha256": "a0dbfe8f2b03c39618465beb916452e727bddec3a1b35790c33fa24b6d6fa98c"
+      },
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "match": true,
+        "sha256": "1454e9da4ef825b23bb7a0cccd6af92b0863a2894db0750eb551eef061d8efb3"
+      },
+      {
+        "file": "js/moments.js",
+        "status": 200,
+        "match": true,
+        "sha256": "c0cb2113013767be7fff61715d547062818108b02809247450713259828e2ea0"
+      },
+      {
+        "file": "js/page.js",
+        "status": 200,
+        "match": true,
+        "sha256": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27"
+      },
+      {
+        "file": "js/photos.js",
+        "status": 200,
+        "match": true,
+        "sha256": "b074e93a768314e0b62527bba3ca44f20e7a43500f14ce8710943f426a66afef"
+      },
+      {
+        "file": "js/post.js",
+        "status": 200,
+        "match": true,
+        "sha256": "85464fb7c895021e97eb7075c63f22384eb9765504b1d5fe687b3903a5380bbd"
+      },
+      {
+        "file": "js/steam.js",
+        "status": 200,
+        "match": true,
+        "sha256": "ee481e5b3f38e6ec3e1a51093c494976acefafbdd7de7200f366a5503a45d512"
+      },
+      {
+        "file": "qrcode/qrcode.min.js",
+        "status": 200,
+        "match": true,
+        "sha256": "c541ef06327885a8415bca8df6071e14189b4855336def4f36db54bde8484f36"
+      },
+      {
+        "file": "js/chunks/article-content-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "6c1981581ff7f350739cde6d699af0f8e59552261263f75d0d1141055b310d89"
+      },
+      {
+        "file": "js/chunks/article-heatmap-data-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22"
+      },
+      {
+        "file": "js/chunks/auth-common-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2"
+      },
+      {
+        "file": "js/chunks/debug-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933"
+      },
+      {
+        "file": "js/chunks/external-links-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "8231b4955d13b32583d5542e7a105701de64b419db671f802456d3d58bf0e864"
+      },
+      {
+        "file": "js/chunks/history-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "2fbc3957b88f74bc5e8acd666f11ce5948c5bbe6c4485f2c18dd13238f1f6427"
+      },
+      {
+        "file": "js/chunks/modal-focus-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a"
+      },
+      {
+        "file": "js/chunks/page-runtime-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a"
+      },
+      {
+        "file": "js/chunks/toc-utils-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "5d318a5e4a93343d70bf1a2255cbec9cea5b0aabb2498094609a1357e9a71462"
+      }
+    ],
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.10.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.11.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.9.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.4",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ],
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.51"
+    },
+    "halo": "2.27.2"
+  },
+  "implementationChanges": [
+    {
+      "file": "scripts/verify-plugin-pages-scope.mjs",
+      "change": "modified"
+    },
+    {
+      "file": "scripts/verify-plugin-pages.mjs",
+      "change": "modified"
+    }
+  ],
+  "runtimeSourcesChanged": false,
+  "versionsAreInstalledNotLatestReleaseAudit": true,
+  "build": {
+    "command": "pnpm run build",
+    "startedAt": "2026-11-06T08:02:37.567246+00:00",
+    "completedAt": "2026-11-06T08:02:46.195007+00:00",
+    "elapsedSeconds": 8.628,
+    "exitCode": 0,
+    "log": "/tmp/sky-plugin-verification-20261106/build-final.log",
+    "nodeTests": {
+      "tests": 493,
+      "pass": 488,
+      "fail": 0,
+      "skipped": 5
+    },
+    "skipReasons": {
+      "2 Thymeleaf/Java fixtures": "SKY_UI_JAVA_FIXTURE_CLASSPATH not provided",
+      "3 Halo password-toggle fixtures": "coreScript not supplied; see scripts/verify-auth-forms.mjs"
+    }
+  },
+  "quality": [
+    {
+      "command": "pnpm run lint",
+      "startedAt": "2026-11-06T08:02:37.567258+00:00",
+      "elapsedSeconds": 1.497,
+      "exitCode": 0,
+      "log": "/tmp/sky-plugin-verification-20261106/lint-final.log"
+    },
+    {
+      "command": "pnpm run format:check",
+      "startedAt": "2026-11-06T08:02:39.064148+00:00",
+      "elapsedSeconds": 1.167,
+      "exitCode": 0,
+      "log": "/tmp/sky-plugin-verification-20261106/format-final.log"
+    },
+    {
+      "command": "git diff --check",
+      "startedAt": "2026-11-06T08:02:40.231273+00:00",
+      "elapsedSeconds": 0.069,
+      "exitCode": 0,
+      "log": "/tmp/sky-plugin-verification-20261106/diff-final.log"
+    }
+  ],
+  "artifacts": {
+    "beforeCount": 117,
+    "afterCount": 117,
+    "changes": [
+      {
+        "path": "dist/theme-sky-blog-1-2.2.41.zip",
+        "before": {
+          "path": "dist/theme-sky-blog-1-2.2.41.zip",
+          "bytes": 1022249,
+          "sha256": "6f05009e6892341eead6626bf869dca438a16deb4056deb3bb4859d1fb980e49"
+        },
+        "after": {
+          "path": "dist/theme-sky-blog-1-2.2.41.zip",
+          "bytes": 1022249,
+          "sha256": "d55fcf87032847896fba1abf47bb90d289d92df6e5a531b6b6053c00f748f204"
+        }
+      }
+    ],
+    "runtimeAssetContentChanges": [],
+    "currentPackage": {
+      "path": "dist/theme-sky-blog-1-2.2.41.zip",
+      "bytes": 1022249,
+      "sha256": "d55fcf87032847896fba1abf47bb90d289d92df6e5a531b6b6053c00f748f204"
+    },
+    "packageMemberCountBefore": 240,
+    "packageMemberCountAfter": 240,
+    "packageContentChanges": [],
+    "packageMetadataDifferences": {
+      "date_time": 100
+    }
+  },
+  "probe": {
+    "initial": {
+      "passed": 43,
+      "failed": 2,
+      "notApplicable": 0,
+      "notCovered": 3,
+      "complete": false
+    },
+    "final": {
+      "passed": 45,
+      "failed": 0,
+      "notApplicable": 0,
+      "notCovered": 3,
+      "complete": false
+    },
+    "environment": {
+      "baseUrl": "http://localhost:8090",
+      "haloVersion": "2.27.2",
+      "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+    },
+    "theme": {
+      "algorithm": "sha256",
+      "codeHash": "802f8c5fe279350b34df0c839d2aef03ee15bf5baeb9426f56ff3a100feaef1a",
+      "fileCount": 407,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ],
+      "unchangedDuringRun": true
+    },
+    "results": [
+      {
+        "name": "Links",
+        "plugin": "PluginLinks",
+        "path": "/links",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Photos",
+        "plugin": "PluginPhotos",
+        "path": "/photos",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Moments",
+        "plugin": "PluginMoments",
+        "path": "/moments",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links Friend Feed",
+        "plugin": "PluginLinks",
+        "path": "/links?view=friends",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Docsme",
+        "plugin": "plugin-docsme",
+        "path": "/docs",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Bangumi",
+        "plugin": "plugin-bilibili-bangumi",
+        "path": "/bangumis",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Steam",
+        "plugin": "steam",
+        "path": "/steam",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Equipment",
+        "plugin": "equipment",
+        "path": "/equipments",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Douban",
+        "plugin": "plugin-douban",
+        "path": "/douban",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Login",
+        "plugin": null,
+        "path": "/login",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Login Passkey",
+        "plugin": "auth-passkey",
+        "path": "/login",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Dishes External Route",
+        "plugin": "dishes",
+        "path": "/dishes",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Schedule External Route",
+        "plugin": "schedule-calendar",
+        "path": "/schedule-calendar",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Photo Detail",
+        "plugin": "PluginPhotos",
+        "path": "/photos/photo-14xk1htg",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Moment Detail",
+        "plugin": "PluginMoments",
+        "path": "/moments/moment-f6ircurs",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Doc Detail",
+        "plugin": "plugin-docsme",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Vote Block",
+        "plugin": "vote",
+        "path": "/archives/editor-feature-demo",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Text Diagram",
+        "plugin": "text-diagram",
+        "path": "/archives/CNnnwQh7",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Contact Form",
+        "plugin": "PluginContactForm",
+        "path": null,
+        "status": "-",
+        "outcome": "not-covered",
+        "error": "target URL is not configured: CONTACT_FORM_PAGE_URL"
+      },
+      {
+        "name": "AI Summary",
+        "plugin": "ai-assistant",
+        "path": null,
+        "status": "-",
+        "outcome": "not-covered",
+        "error": "target URL is not configured: AI_SUMMARY_PAGE_URL"
+      },
+      {
+        "name": "Shiki Code Block",
+        "plugin": "shiki",
+        "path": "/archives/CNnnwQh7",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Hyperlink Card",
+        "plugin": "editor-hyperlink-card",
+        "path": "/archives/editor-feature-demo",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Lottery Card",
+        "plugin": "lottery",
+        "path": "/archives/ijhJxHtw",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Restricted Reading",
+        "plugin": "restricted-reading",
+        "path": null,
+        "status": "-",
+        "outcome": "not-covered",
+        "error": "target URL is not configured: RESTRICTED_READING_PAGE_URL"
+      },
+      {
+        "name": "Maintenance Theme",
+        "plugin": "maintenance",
+        "path": "/maintenance",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Home Docs Widget",
+        "plugin": "plugin-docsme",
+        "path": "/",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Home Links Widget",
+        "plugin": "PluginLinks",
+        "path": "/",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Home Moments Widget",
+        "plugin": "PluginMoments",
+        "path": "/",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Docsme Catalog",
+        "plugin": "plugin-docsme",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Shiki Loader",
+        "plugin": "shiki",
+        "path": "/archives/editor-feature-demo",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Comment Widget",
+        "plugin": "PluginCommentWidget",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Search Widget",
+        "plugin": "PluginSearchWidget",
+        "path": "/",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Contact Form Loader Reference",
+        "plugin": "PluginContactForm",
+        "path": "/",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Moments Media Binding",
+        "plugin": "PluginMoments",
+        "path": "/moments",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Author Moments Gate",
+        "plugin": "PluginMoments",
+        "path": "/authors/sky0821",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Feed XML",
+        "plugin": "PluginFeed",
+        "path": "/feed.xml",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Sitemap XML",
+        "plugin": "PluginSitemap",
+        "path": "/sitemap.xml",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Robots Sitemap",
+        "plugin": "PluginSitemap",
+        "path": "/robots.txt",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links Populated Group Route",
+        "plugin": "PluginLinks",
+        "path": "/links?group=link-group-yOmci",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links Empty Group Route",
+        "plugin": "PluginLinks",
+        "path": "/links?group=link-group-gtqEW",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links Missing Group Route",
+        "plugin": "PluginLinks",
+        "path": "/links?group=theme-contract-missing-group",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links 2.2.1 Public API",
+        "plugin": "PluginLinks",
+        "path": "/apis/api.link.halo.run/v1alpha1/links",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links 2.2.1 Groups API",
+        "plugin": "PluginLinks",
+        "path": "/apis/api.link.halo.run/v1alpha1/linkgroups",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Links 2.2.1 Feed API",
+        "plugin": "PluginLinks",
+        "path": "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Douban Items API",
+        "plugin": "plugin-douban",
+        "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Douban Types API",
+        "plugin": "plugin-douban",
+        "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Douban Genres API",
+        "plugin": "plugin-douban",
+        "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      },
+      {
+        "name": "Online Summary API",
+        "plugin": "online",
+        "path": "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+        "status": 200,
+        "outcome": "passed",
+        "error": ""
+      }
+    ]
+  },
+  "browser": {
+    "completion": {
+      "at": "2026-11-06T08:35:57.091Z",
+      "space": 153,
+      "viewports": [1440, 390],
+      "closed": true
+    },
+    "pages": [
+      {
+        "name": "feature",
+        "path": "/archives/editor-feature-demo",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "vote-block",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "hyperlink-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-content-\"]",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "vote-block",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "hyperlink-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-content-\"]",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "feature",
+        "path": "/archives/editor-feature-demo",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "vote-block",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "hyperlink-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-content-\"]",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "vote-block",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "hyperlink-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-content-\"]",
+            "missing": false,
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "diagram-code",
+        "path": "/archives/CNnnwQh7",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "shiki-code",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "text-diagram",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "shiki-code",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "text-diagram",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "diagram-code",
+        "path": "/archives/CNnnwQh7",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "shiki-code",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "dark",
+            "selector": "text-diagram",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "shiki-code",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "text-diagram",
+            "missing": false,
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "lottery",
+        "path": "/archives/ijhJxHtw",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "lottery-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/ijhJxHtw?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                },
+                "lottery-card": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "lottery-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/ijhJxHtw?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                },
+                "lottery-card": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "lottery",
+        "path": "/archives/ijhJxHtw",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "lottery-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/ijhJxHtw?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "lottery-card": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "lottery-card",
+            "missing": false,
+            "state": {
+              "path": "/archives/ijhJxHtw?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                },
+                "lottery-card": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "photo",
+        "path": "/photos/photo-14xk1htg",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": ".photo-detail-page",
+            "missing": false,
+            "state": {
+              "path": "/photos/photo-14xk1htg?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          },
+          {
+            "mode": "light",
+            "selector": ".photo-detail-page",
+            "missing": false,
+            "state": {
+              "path": "/photos/photo-14xk1htg?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          }
+        ]
+      },
+      {
+        "name": "photo",
+        "path": "/photos/photo-14xk1htg",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": ".photo-detail-page",
+            "missing": false,
+            "state": {
+              "path": "/photos/photo-14xk1htg?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          },
+          {
+            "mode": "light",
+            "selector": ".photo-detail-page",
+            "missing": false,
+            "state": {
+              "path": "/photos/photo-14xk1htg?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          }
+        ]
+      },
+      {
+        "name": "moment",
+        "path": "/moments/moment-f6ircurs",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "moment",
+        "path": "/moments/moment-f6ircurs",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "doc",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": ".article-content",
+            "missing": true,
+            "state": null
+          },
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": ".article-content",
+            "missing": true,
+            "state": null
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "doc",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": ".article-content",
+            "missing": true,
+            "state": null
+          },
+          {
+            "mode": "dark",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "selector": ".article-content",
+            "missing": true,
+            "state": null
+          },
+          {
+            "mode": "light",
+            "selector": "[id^=\"comment-\"]",
+            "missing": false,
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "comment-widget": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "maintenance",
+        "path": "/maintenance",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "#maintenance-page",
+            "missing": false,
+            "state": {
+              "path": "/maintenance?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "#maintenance-page",
+            "missing": false,
+            "state": {
+              "path": "/maintenance?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          }
+        ]
+      },
+      {
+        "name": "maintenance",
+        "path": "/maintenance",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "selector": "#maintenance-page",
+            "missing": false,
+            "state": {
+              "path": "/maintenance?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          },
+          {
+            "mode": "light",
+            "selector": "#maintenance-page",
+            "missing": false,
+            "state": {
+              "path": "/maintenance?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 0
+            }
+          }
+        ]
+      }
+    ],
+    "contact": [
+      {
+        "width": 1440,
+        "samples": [
+          {
+            "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "scheme": "dark",
+            "errors": [],
+            "components": {
+              "vote-block": {
+                "count": 2,
+                "defined": true
+              },
+              "hyperlink-card": {
+                "count": 3,
+                "defined": true
+              },
+              "hyperlink-inline-card": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-floating": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-auto-display": {
+                "count": 1,
+                "defined": true
+              }
+            },
+            "commentHosts": 1
+          },
+          {
+            "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "scheme": "light",
+            "errors": [],
+            "components": {
+              "vote-block": {
+                "count": 2,
+                "defined": true
+              },
+              "hyperlink-card": {
+                "count": 3,
+                "defined": true
+              },
+              "hyperlink-inline-card": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-floating": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-auto-display": {
+                "count": 1,
+                "defined": true
+              }
+            },
+            "commentHosts": 1
+          }
+        ],
+        "escapeClosed": true,
+        "back": {
+          "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scheme": "light",
+          "errors": [],
+          "components": {
+            "vote-block": {
+              "count": 2,
+              "defined": true
+            },
+            "hyperlink-card": {
+              "count": 3,
+              "defined": true
+            },
+            "hyperlink-inline-card": {
+              "count": 1,
+              "defined": true
+            },
+            "halo-contact-form-floating": {
+              "count": 1,
+              "defined": true
+            },
+            "halo-contact-form-auto-display": {
+              "count": 1,
+              "defined": true
+            }
+          },
+          "commentHosts": 1
+        },
+        "intermediateAwayExcluded": true
+      },
+      {
+        "width": 390,
+        "samples": [
+          {
+            "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+            "width": 390,
+            "scrollWidth": 390,
+            "scheme": "dark",
+            "errors": [],
+            "components": {
+              "vote-block": {
+                "count": 2,
+                "defined": true
+              },
+              "hyperlink-card": {
+                "count": 3,
+                "defined": true
+              },
+              "hyperlink-inline-card": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-floating": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-auto-display": {
+                "count": 1,
+                "defined": true
+              }
+            },
+            "commentHosts": 1
+          },
+          {
+            "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+            "width": 390,
+            "scrollWidth": 390,
+            "scheme": "light",
+            "errors": [],
+            "components": {
+              "vote-block": {
+                "count": 2,
+                "defined": true
+              },
+              "hyperlink-card": {
+                "count": 3,
+                "defined": true
+              },
+              "hyperlink-inline-card": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-floating": {
+                "count": 1,
+                "defined": true
+              },
+              "halo-contact-form-auto-display": {
+                "count": 1,
+                "defined": true
+              }
+            },
+            "commentHosts": 1
+          }
+        ],
+        "escapeClosed": true,
+        "back": {
+          "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scheme": "light",
+          "errors": [],
+          "components": {
+            "vote-block": {
+              "count": 2,
+              "defined": true
+            },
+            "hyperlink-card": {
+              "count": 3,
+              "defined": true
+            },
+            "hyperlink-inline-card": {
+              "count": 1,
+              "defined": true
+            },
+            "halo-contact-form-floating": {
+              "count": 1,
+              "defined": true
+            },
+            "halo-contact-form-auto-display": {
+              "count": 1,
+              "defined": true
+            }
+          },
+          "commentHosts": 1
+        },
+        "intermediateAwayExcluded": true
+      }
+    ],
+    "inline": [
+      {
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      },
+      {
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ]
+      }
+    ],
+    "fixtures": [
+      {
+        "width": 1440,
+        "samples": [
+          {
+            "kind": "summary",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "kind": "answer",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-answer-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "color-scheme-dark",
+              "theme": "dark"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "mp",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-mp-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "color-scheme-dark",
+              "theme": "dark"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "summary",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "kind": "answer",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-answer-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "",
+              "theme": "light"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "mp",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-mp-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "",
+              "theme": "light"
+            },
+            "escapeClosed": true
+          }
+        ],
+        "away": {
+          "sameDocument": true,
+          "modals": 0,
+          "fixtures": 0,
+          "oldContactDisconnected": true,
+          "calls": [
+            {
+              "domain": "ai",
+              "path": "/apis/api.ai.halo.run/v1alpha1/summary",
+              "method": "GET",
+              "query": "?kind=Post&group=content.halo.run&name=qa-local-dom-only"
+            },
+            {
+              "domain": "ai",
+              "path": "/apis/api.ai.halo.run/v1alpha1/summary",
+              "method": "GET",
+              "query": "?kind=Post&group=content.halo.run&name=qa-local-dom-only"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            }
+          ],
+          "errors": []
+        }
+      },
+      {
+        "width": 390,
+        "samples": [
+          {
+            "kind": "summary",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "kind": "answer",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-answer-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "color-scheme-dark",
+              "theme": "dark"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "mp",
+            "mode": "dark",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-mp-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "color-scheme-dark",
+              "theme": "dark"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "summary",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "kind": "answer",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-answer-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "",
+              "theme": "light"
+            },
+            "escapeClosed": true
+          },
+          {
+            "kind": "mp",
+            "mode": "light",
+            "state": {
+              "path": "/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&qa-fixture=390",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "vote-block": {
+                  "count": 2,
+                  "defined": true
+                },
+                "hyperlink-card": {
+                  "count": 3,
+                  "defined": true
+                },
+                "hyperlink-inline-card": {
+                  "count": 1,
+                  "defined": true
+                },
+                "ai-summary-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "content-restrict-widget": {
+                  "count": 2,
+                  "defined": true
+                },
+                "halo-contact-form-floating": {
+                  "count": 1,
+                  "defined": true
+                },
+                "halo-contact-form-auto-display": {
+                  "count": 1,
+                  "defined": true
+                },
+                "content-restrict-mp-modal": {
+                  "count": 1,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            },
+            "modal": {
+              "className": "",
+              "theme": "light"
+            },
+            "escapeClosed": true
+          }
+        ],
+        "away": {
+          "sameDocument": true,
+          "modals": 0,
+          "fixtures": 0,
+          "oldContactDisconnected": true,
+          "calls": [
+            {
+              "domain": "ai",
+              "path": "/apis/api.ai.halo.run/v1alpha1/summary",
+              "method": "GET",
+              "query": "?kind=Post&group=content.halo.run&name=qa-local-dom-only"
+            },
+            {
+              "domain": "ai",
+              "path": "/apis/api.ai.halo.run/v1alpha1/summary",
+              "method": "GET",
+              "query": "?kind=Post&group=content.halo.run&name=qa-local-dom-only"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            },
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            }
+          ],
+          "errors": []
+        }
+      }
+    ],
+    "cleanup": [
+      {
+        "width": 1440,
+        "away": {
+          "sameDocument": true,
+          "modals": 0,
+          "fixtures": 0,
+          "oldContactDisconnected": true,
+          "contactHosts": 0,
+          "errors": [],
+          "calls": [
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            }
+          ]
+        }
+      },
+      {
+        "width": 390,
+        "away": {
+          "sameDocument": true,
+          "modals": 0,
+          "fixtures": 0,
+          "oldContactDisconnected": true,
+          "contactHosts": 0,
+          "errors": [],
+          "calls": [
+            {
+              "domain": "restricted",
+              "path": "/apis/anonymous.post.restrict.halo.run/v1alpha1/wechat/mp/setting",
+              "method": "GET",
+              "query": "?objMetadataName=qa-local-dom-only&kind=Post"
+            }
+          ]
+        }
+      }
+    ],
+    "math": [
+      {
+        "kind": "post",
+        "path": "/archives/CNnnwQh7",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1&qa-math=post-1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1&qa-math=post-1440",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ],
+        "back": {
+          "sameDocument": true,
+          "katex": 2,
+          "nested": 0,
+          "formulas": ["x^2", "\\frac{a}{b}"],
+          "intercepts": ["/archives/CNnnwQh7"],
+          "errors": []
+        },
+        "source": "browser-math.json"
+      },
+      {
+        "kind": "post",
+        "path": "/archives/CNnnwQh7",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1&qa-math=post-390-display",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/archives/CNnnwQh7?preview-theme=theme-sky-blog-1&qa-math=post-390-display",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {
+                "shiki-code": {
+                  "count": 9,
+                  "defined": true
+                },
+                "text-diagram": {
+                  "count": 1,
+                  "defined": false
+                },
+                "hyperlink-inline-card": {
+                  "count": 2,
+                  "defined": true
+                }
+              },
+              "commentHosts": 1
+            }
+          }
+        ],
+        "back": {
+          "notRun": "display-only follow-up; history reentry tracked separately"
+        },
+        "source": "browser-math-mobile.json"
+      },
+      {
+        "kind": "doc",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-390-display",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-390-display",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          }
+        ],
+        "back": {
+          "notRun": "display-only follow-up; history reentry tracked separately"
+        },
+        "source": "browser-math-mobile.json"
+      },
+      {
+        "kind": "doc",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "width": 1440,
+        "samples": [
+          {
+            "mode": "dark",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-1440-docs-range",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-1440-docs-range",
+              "width": 1440,
+              "scrollWidth": 1440,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          }
+        ],
+        "back": {
+          "sameDocument": true,
+          "katex": 2,
+          "nested": 0,
+          "formulas": ["x^2", "\\frac{a}{b}"],
+          "intercepts": ["/docs/halo-theme-sky-blog-1/theme-settings/global"],
+          "errors": []
+        },
+        "source": "browser-math-docs-history.json"
+      },
+      {
+        "kind": "doc",
+        "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+        "width": 390,
+        "samples": [
+          {
+            "mode": "dark",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-390-docs-range",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "dark",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          },
+          {
+            "mode": "light",
+            "formulas": ["x^2", "\\frac{a}{b}"],
+            "state": {
+              "path": "/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&qa-math=doc-390-docs-range",
+              "width": 390,
+              "scrollWidth": 390,
+              "scheme": "light",
+              "errors": [],
+              "components": {},
+              "commentHosts": 1
+            }
+          }
+        ],
+        "back": {
+          "sameDocument": true,
+          "katex": 2,
+          "nested": 0,
+          "formulas": ["x^2", "\\frac{a}{b}"],
+          "intercepts": ["/docs/halo-theme-sky-blog-1/theme-settings/global"],
+          "errors": []
+        },
+        "source": "browser-math-docs-history.json"
+      }
+    ],
+    "visualReview": {
+      "screenshotsInspected": 78,
+      "confirmedThemeVisualDefects": [],
+      "limits": [
+        "One desktop dark answer-modal screenshot includes browser password suggestion overlay",
+        "Initial screenshots captured loading/animation states and were superseded by settled screenshots"
+      ]
+    }
+  },
+  "observations": [
+    "Initial Feed XML 10s timeout was not reproduced in three sequential GETs or final probe; root cause unresolved",
+    "Document comment false negative fixed in verification script; not a runtime widget fix",
+    "Document to homepage may use full navigation to discard persistent Shiki extra-path listeners; temporary evaluate-only fixtures disappear on reload",
+    "Initial contact/fixture away samples were taken after URL update but before DOM replacement; final cleanup samples wait for replacement",
+    "Named Docsme KaTeX sample has plain dollar text, not official math attributes; used explicitly labelled HTML replacement fixtures instead",
+    "Shared active theme version changed from observed 0.9.50 to 0.9.51; this task did not upgrade it"
+  ],
+  "unverified": {
+    "realContentHosts": ["Contact Form embed", "AI Summary", "Restricted Reading"],
+    "writeOperations": [
+      "Comment/reply/like/notification",
+      "Form submit/upload/webhook",
+      "Links apply",
+      "Moment create/edit/delete/like",
+      "Vote submit",
+      "Lottery participate/draw",
+      "AI generation/RAG",
+      "Restricted content unlock/payment",
+      "Authentication/credential mutation"
+    ],
+    "missingSamples": [
+      "Docsme multilingual",
+      "PlantUML",
+      "Effective lottery",
+      "Open voting state",
+      "Valid configured map key"
+    ],
+    "notRerunThisBatch": [
+      "Shiki folding variants",
+      "All dependency release/audit gates",
+      "All earlier global routes under Halo 2.27.2"
+    ],
+    "historicalUserTests": ["AI reported working by user", "Passkey reported working by user"],
+    "outOfScope": [
+      "AList",
+      "Retired Friends",
+      "Plugin internals/Redis/equipment provider",
+      "Disabled Live2d",
+      "Backend-only plugin operations"
+    ],
+    "conditionalReview": "Old module-recovery timeout during a newer in-flight navigation was raised in static review; no live reproduction or attribution to this batch; extreme timing matrix is not claimed complete"
+  },
+  "evidenceDirectory": "/tmp/sky-plugin-verification-20261106"
+}

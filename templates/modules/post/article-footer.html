@@ -21,10 +21,19 @@
           <!-- 左侧：互动按钮 -->
           <div class="flex items-center gap-3">
             <!-- 点赞按钮 -->
-            <button
+            <div
               th:if="${theme.config.article.post_interaction?.enable_like != false}"
               x-data="postLike()"
+              class="flex flex-col items-start gap-1"
+            >
+            <button
+              type="button"
               @click="toggleLike()"
+              aria-label="点赞文章"
+              :aria-label="isPending ? '正在点赞' : (isLiked ? '已点赞' : '点赞文章')"
+              :aria-busy="isPending"
+              :aria-disabled="isPending || isLiked"
+              :disabled="isPending"
               class="btn btn-sm gap-2 rounded-full transition-all duration-200"
               :class="isLiked
               ? 'bg-error/15 text-error border-error/20 hover:bg-error/20'
@@ -36,9 +45,14 @@
               ></span>
               <span x-show="likeCount > 0" x-text="likeCount"></span>
             </button>
+            <p x-cloak x-show="errorMessage" x-text="errorMessage" role="status" aria-live="polite"
+               class="text-error text-xs"></p>
+            </div>
 
             <!-- 分享按钮 -->
             <button
+              type="button"
+              aria-label="分享文章"
               th:if="${theme.config.article.post_interaction?.enable_share != false}"
               x-data
               @click="$dispatch('open-share-modal')"
@@ -111,7 +125,7 @@
 
     <!-- 评论卡片 - 使用 DaisyUI card -->
     <div
-      th:if="${theme.config.article.post_interaction?.enable_comment != false}"
+      th:if="${haloCommentEnabled and theme.config.article.post_interaction?.enable_comment != false and post.spec.allowComment != false}"
       class="card bg-base-100/80 border-base-content/5 mt-4 overflow-hidden rounded-2xl border shadow-lg backdrop-blur-xl"
     >
       <!-- 评论区标题 -->

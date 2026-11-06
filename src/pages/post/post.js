@@ -5,15 +5,20 @@
 
 // 导入文章页面特定样式（已包含 article-content.css）
 import './post.css';
+import { createModalFocus } from '../../common/js/modal-focus.js';
 
 // 导入公共文章内容脚本
 import '../../static/js/article-content.js';
 
 // 导入 TOC 公共工具函数
 import {
+  ensureHeadingIds,
   buildDynamicTocTree, 
   createDynamicTocHTML, 
   smoothScrollToHeading,
+  headingDocumentTop,
+  restoreHeadingFragment,
+  isPlainTocClick,
   analyzeHeadingHierarchy 
 } from '../../common/js/toc-utils.js';
 import {
@@ -28,6 +33,15 @@ import {
  */
 (function() {
   function _registerAlpineComponents() {
+    function readUpvotedPostNames() {
+        try {
+            const names = JSON.parse(localStorage.getItem('halo.upvoted.post.names') || '[]');
+            return Array.isArray(names) ? names.filter((name) => typeof name === 'string') : [];
+        } catch {
+            return [];
+        }
+    }
+
     /**
      * 文章摘要打字机效果组件
      */
@@ -110,8 +124,14 @@ import {
     /**
      * 文章页点赞组件
      */
-    Alpine.data('postLike', () => ({
+    Alpine.data('postLike', () => {
+      let disposed = false;
+      let requestController = null;
+
+      return {
         isLiked: false,
+        isPending: false,
+        errorMessage: '',
         likeCount: 0,
         postName: '',
 
@@ -130,30 +150,22 @@ import {
         checkLikeStatus() {
             if (!this.postName) return;
 
-            // 从 localStorage 读取已点赞列表
-            const upvotedNames = JSON.parse(
-                localStorage.getItem('halo.upvoted.post.names') || '[]'
-            );
-
             // 判断当前文章是否已点赞
-            this.isLiked = upvotedNames.includes(this.postName);
+            this.isLiked = readUpvotedPostNames().includes(this.postName);
+        },
+
+        destroy() {
+            disposed = true;
+            requestController?.abort();
         },
 
         async toggleLike() {
-            if (!this.postName) {
-                // console.warn('文章名称未找到');
-                return;
-            }
+            if (!this.postName || this.isLiked || this.isPending || disposed) return;
 
-            // 检查是否已点赞（防止重复）
-            if (this.isLiked) {
-                // console.log('已经点赞过了');
-                return;
-            }
-
+            this.isPending = true;
+            this.errorMessage = '';
+            requestController = new AbortController();
             try {
-                // console.log('发送点赞请求:', this.postName);
-
                 // 调用 Halo 官方点赞 API
                 const response = await fetch('/apis/api.halo.run/v1alpha1/trackers/upvote', {
                     method: 'POST',
@@ -164,38 +176,40 @@ import {
                         group: 'content.halo.run',
                         plural: 'posts',
                         name: this.postName
-                    })
+                    }),
+                    signal: requestController.signal
                 });
 
-                // console.log('点赞响应状态:', response.status);
-
+                if (disposed) return;
                 if (response.ok) {
-                    // console.log('点赞成功');
-
                     // 更新点赞状态
                     this.isLiked = true;
                     this.likeCount += 1;
 
-                    // 保存到 localStorage
-                    const upvotedNames = JSON.parse(
-                        localStorage.getItem('halo.upvoted.post.names') || '[]'
-                    );
+                    const upvotedNames = readUpvotedPostNames();
                     if (!upvotedNames.includes(this.postName)) {
                         upvotedNames.push(this.postName);
-                        localStorage.setItem(
-                            'halo.upvoted.post.names',
-                            JSON.stringify(upvotedNames)
-                        );
+                        try {
+                            localStorage.setItem(
+                                'halo.upvoted.post.names',
+                                JSON.stringify(upvotedNames)
+                            );
+                        } catch {
+                            // 本地记录不可用时保留本次成功状态。
+                        }
                     }
                 } else {
-                    await response.text();
-                    // console.error('点赞失败:', response.status, errorText);
+                    this.errorMessage = '点赞失败，请稍后重试。';
                 }
             } catch {
-                // console.error('点赞请求错误:', error);
+                if (!disposed) this.errorMessage = '点赞失败，请检查网络后重试。';
+            } finally {
+                this.isPending = false;
+                requestController = null;
             }
         }
-    }));
+      };
+    });
 
     /**
      * 文章页评论数量组件
@@ -242,7 +256,6 @@ import {
     function cleanupPostPage() {
         _pageAbort?.abort();
         _pageAbort = null;
-        document.body.style.overflow = '';
         window.openPostTocDrawer = undefined;
         window.closePostTocDrawer = undefined;
     }
@@ -282,30 +295,30 @@ import {
             // 每次初始时清空小窗目录缓存，确保新文章目录正确生成
             if (drawerNav) drawerNav.innerHTML = '';
 
+            const focus = createModalFocus({
+                panel: drawer, backdrop: overlay, signal: this._signal,
+                onClose: options => window.closePostTocDrawer(options),
+            });
+
             // 暴露全局方法
             window.openPostTocDrawer = () => {
                 overlay.classList.add('open');
                 drawer.classList.add('open');
-                document.body.style.overflow = 'hidden';
 
                 // 初始化目录内容
                 if (drawerNav && !drawerNav.querySelector('.toc-list')) {
                     this.initTocDrawerContent(drawerNav);
                 }
+                focus.open();
             };
 
-            window.closePostTocDrawer = () => {
+            window.closePostTocDrawer = (options) => {
                 overlay.classList.remove('open');
                 drawer.classList.remove('open');
-                document.body.style.overflow = '';
+                focus.close(options);
             };
 
-            // ESC 键关闭（使用 abort signal 自动清理）
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && drawer.classList.contains('open')) {
-                    window.closePostTocDrawer();
-                }
-            }, { signal: this._signal });
+
         },
 
         /**
@@ -335,14 +348,14 @@ import {
 
             // 生成目录
             const headingArray = Array.from(headings);
+            ensureHeadingIds(headingArray);
             const levels = headingArray.map(h => parseInt(h.tagName.charAt(1)));
             const minLevel = Math.min(...levels);
 
             const ol = document.createElement('ol');
             ol.className = 'toc-list';
 
-            headingArray.forEach((heading, index) => {
-                if (!heading.id) heading.id = `heading-${index}`;
+            headingArray.forEach((heading) => {
                 const level = parseInt(heading.tagName.charAt(1));
                 const relativeLevel = level - minLevel;
 
@@ -351,7 +364,8 @@ import {
                 li.style.setProperty('--toc-indent-multiplier', relativeLevel.toString());
 
                 const link = document.createElement('a');
-                link.href = `#${heading.id}`;
+                link.href = `#${encodeURIComponent(heading.id)}`;
+                link.setAttribute('data-no-swup', '');
                 link.textContent = heading.textContent.trim();
                 link.className = 'toc-link';
                 link.setAttribute('data-heading-id', heading.id);
@@ -371,16 +385,14 @@ import {
             const links = container.querySelectorAll('.toc-link');
             links.forEach(link => {
                 link.addEventListener('click', (e) => {
+                    if (!isPlainTocClick(e)) return;
                     e.preventDefault();
                     const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
                     const heading = document.getElementById(headingId);
                     if (heading) {
                         window.closePostTocDrawer();
                         setTimeout(() => {
-                            window.scrollTo({
-                                top: heading.offsetTop - 80,
-                                behavior: 'smooth'
-                            });
+                            smoothScrollToHeading(heading, 80);
                         }, 100);
                     }
                 });
@@ -392,7 +404,8 @@ import {
          */
         initHeadingAnchors() {
             const articleContent = document.getElementById('article-content');
-            if (!articleContent) return;
+            const signal = this._signal;
+            if (!articleContent || signal?.aborted) return;
 
             const headings = articleContent.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
 
@@ -402,53 +415,63 @@ import {
 
                 // 创建锚点链接包装器
                 heading.style.position = 'relative';
-                heading.style.cursor = 'pointer';
 
                 // 创建锚点图标
-                const anchor = document.createElement('a');
-                anchor.href = `#${id}`;
+                const anchor = document.createElement('button');
+                anchor.type = 'button';
                 anchor.className = 'heading-anchor';
                 anchor.innerHTML = '<span class="icon-[heroicons--link] w-4 h-4"></span>';
                 anchor.setAttribute('aria-label', '复制链接');
-                anchor.style.cssText = `
-                    position: absolute;
-                    left: -1.5em;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    opacity: 0;
-                    transition: opacity 0.2s ease;
-                    color: var(--color-primary);
-                    text-decoration: none;
-                    display: inline-flex;
-                    align-items: center;
-                `;
-
-                // 悬停显示
-                heading.addEventListener('mouseenter', () => {
-                    anchor.style.opacity = '1';
-                });
-
-                heading.addEventListener('mouseleave', () => {
-                    anchor.style.opacity = '0';
-                });
-
+                const feedback = document.createElement('p');
+                feedback.className = 'heading-copy-feedback text-error text-sm font-normal';
+                feedback.setAttribute('role', 'status');
+                feedback.setAttribute('aria-live', 'polite');
+                feedback.hidden = true;
+                let operation = 0;
+                let resetTimer = null;
+                const active = (generation) => !signal?.aborted && anchor.isConnected && generation === operation;
                 // 点击复制链接
                 anchor.addEventListener('click', async (e) => {
                     e.preventDefault();
+                    const generation = ++operation;
+                    clearTimeout(resetTimer);
+                    resetTimer = null;
+                    feedback.hidden = true;
+                    feedback.textContent = '';
+                    feedback.remove();
                     const url = window.location.origin + window.location.pathname + `#${id}`;
 
                     try {
                         await navigator.clipboard.writeText(url);
+                        if (!active(generation)) return;
                         anchor.innerHTML = '<span class="icon-[heroicons--check] w-4 h-4"></span>';
-                        setTimeout(() => {
+                        anchor.setAttribute('aria-label', '已复制链接');
+                        anchor.setAttribute('title', '已复制链接');
+                        resetTimer = setTimeout(() => {
+                            if (!active(generation)) return;
                             anchor.innerHTML = '<span class="icon-[heroicons--link] w-4 h-4"></span>';
+                            anchor.setAttribute('aria-label', '复制链接');
+                            anchor.removeAttribute('title');
+                            resetTimer = null;
                         }, 2000);
                     } catch {
-                        // 复制失败静默处理
+                        if (!active(generation)) return;
+                        anchor.innerHTML = '<span class="icon-[heroicons--exclamation-triangle] w-4 h-4"></span>';
+                        anchor.setAttribute('aria-label', '复制失败，点击重试');
+                        anchor.setAttribute('title', '复制失败，点击重试');
+                        feedback.textContent = '复制失败，请重试。';
+                        feedback.hidden = false;
+                        heading.after(feedback);
                     }
-                });
+                }, { signal });
+                signal?.addEventListener('abort', () => {
+                    ++operation;
+                    clearTimeout(resetTimer);
+                    anchor.remove();
+                    feedback.remove();
+                }, { once: true });
 
-                heading.insertBefore(anchor, heading.firstChild);
+                heading.appendChild(anchor);
             });
         },
 
@@ -569,9 +592,9 @@ import {
                     activeIndex = headingElements.length - 1;
                 } else {
                     headingElements.forEach((headingElement, headingIndex) => {
-                        const headingTop = headingElement.offsetTop;
+                        const headingTop = headingDocumentTop(headingElement);
                         const nextHeading = headingElements[headingIndex + 1];
-                        const nextHeadingTop = nextHeading ? nextHeading.offsetTop : documentHeight;
+                        const nextHeadingTop = nextHeading ? headingDocumentTop(nextHeading) : documentHeight;
                         if (headingTop <= scrollPosition && scrollPosition < nextHeadingTop) {
                             activeIndex = headingIndex;
                         }
@@ -894,6 +917,7 @@ import {
     const handlePageEnter = () => {
         if (!isPostPage()) return;
         pageManager.init();
+        void restoreHeadingFragment(document.getElementById('article-content'), pageManager._signal);
     };
 
     if (window.SkyPjax?.onPage) {

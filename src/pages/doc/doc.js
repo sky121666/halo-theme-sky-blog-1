@@ -4,6 +4,8 @@
  */
 
 import './doc.css';
+import { createModalFocus } from '../../common/js/modal-focus.js';
+import { renderDocsMath } from './math.js';
 
 // 导入公共文章内容脚本
 import '../../static/js/article-content.js';
@@ -12,7 +14,9 @@ import '../../static/js/article-content.js';
 import {
   buildDynamicTocTree,
   createDynamicTocHTML,
-  smoothScrollToHeading
+  smoothScrollToHeading,
+  restoreHeadingFragment,
+  isPlainTocClick
 } from '../../common/js/toc-utils.js';
 import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
@@ -33,11 +37,8 @@ function on(target, type, handler, options = {}) {
 }
 
 function isDocPage() {
-  return Boolean(
-    document.querySelector('.doc-layout') &&
-    document.getElementById('article-content') &&
-    document.getElementById('toc-nav')
-  );
+  // 目录页没有正文/TOC，但同样需要文档树抽屉和版本选择器。
+  return Boolean(document.querySelector('.doc-layout'));
 }
 
 function cleanupDocPage() {
@@ -45,7 +46,6 @@ function cleanupDocPage() {
   _tocObserver = null;
   _pageAbort?.abort();
   _pageAbort = null;
-  document.body.style.overflow = '';
   window.openDocTocDrawer = undefined;
   window.closeDocTocDrawer = undefined;
   window.openDocSidebarDrawer = undefined;
@@ -62,14 +62,17 @@ function initTOC() {
   const tocNav = document.getElementById('toc-nav');
   const tocCard = document.getElementById('toc-card');
   const content = document.getElementById('article-content');
+  const allHeadings = content?.querySelectorAll('h1, h2, h3, h4, h5, h6') || [];
+  const hasHeadings = Boolean(tocNav && allHeadings.length);
 
-  if (!tocNav || !content) return;
-
-  const allHeadings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-  if (!allHeadings.length) {
-    if (tocCard) tocCard.style.display = 'none';
-    return;
-  }
+  document.querySelectorAll('.doc-toc-drawer-trigger').forEach((trigger) => {
+    trigger.hidden = !hasHeadings;
+  });
+  if (tocCard) tocCard.style.display = hasHeadings ? '' : 'none';
+  if (tocNav) tocNav.innerHTML = '';
+  const tocDrawerNav = document.getElementById('doc-toc-drawer-nav');
+  if (tocDrawerNav) tocDrawerNav.innerHTML = '';
+  if (!hasHeadings) return;
 
   const levels = Array.from(allHeadings, (h) => +h.tagName[1]);
   const minLevel = Math.min(...levels);
@@ -88,8 +91,7 @@ function initTOC() {
     onClick: (element) => smoothScrollToHeading(element, 80)
   });
 
-  // 清空现有内容并生成HTML结构
-  tocNav.innerHTML = '';
+  // 生成HTML结构
   tocNav.appendChild(tocList);
 
   // 点击事件已在 createDynamicTocHTML 中处理
@@ -126,7 +128,7 @@ function initTOC() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const headingId = entry.target.id;
-          const activeLink = tocNav.querySelector(`.toc-link[data-heading-id="${headingId}"]`);
+          const activeLink = Array.from(links).find(link => link.dataset.headingId === headingId);
           if (activeLink && activeLink !== currentActive) {
             links.forEach((l) => l.classList.remove('active'));
             activeLink.classList.add('active');
@@ -145,14 +147,61 @@ function initTOC() {
 
 // 版本选择器
 function initDropdowns() {
+  const currentUrl = new URL(window.location.href);
+  const selectors = Array.from(document.querySelectorAll('.doc-version-selector'));
+  const closeDropdown = (selector) => {
+    selector.querySelector('.doc-version-dropdown')?.classList.remove('show');
+    selector.querySelector('.doc-version-btn')?.setAttribute('aria-expanded', 'false');
+  };
+  selectors.forEach((selector, index) => {
+    const button = selector.querySelector('.doc-version-btn');
+    const dropdown = selector.querySelector('.doc-version-dropdown');
+    if (button && dropdown) {
+      dropdown.id ||= `doc-selector-options-${index + 1}`;
+      button.setAttribute('aria-controls', dropdown.id);
+      closeDropdown(selector);
+      on(button, 'click', () => {
+        const open = !dropdown.classList.contains('show');
+        selectors.forEach(closeDropdown);
+        dropdown.classList.toggle('show', open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+      on(selector, 'keydown', (event) => {
+        if (event.key !== 'Escape' || event.isComposing || !dropdown.classList.contains('show')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        closeDropdown(selector);
+        button.focus({ preventScroll: true });
+      });
+    }
+    if (!selector.dataset.docBase) return;
+    selector.querySelectorAll('.doc-version-item[href]').forEach((link) => {
+      const rootHref = link.dataset.docRootHref || link.getAttribute('href');
+      if (!rootHref) return;
+      try {
+        const currentBase = new URL(selector.dataset.docBase, currentUrl);
+        const basePath = currentBase.pathname.replace(/\/+$/, '');
+        if (currentBase.origin !== currentUrl.origin ||
+            (currentUrl.pathname !== basePath && !currentUrl.pathname.startsWith(`${basePath}/`))) return;
+
+        // Docsme 提供的是版本/语言根链接；保留正文后缀及 Halo LinkBuilder 的预览参数。
+        const targetUrl = new URL(rootHref, currentUrl);
+        const suffix = currentUrl.pathname.slice(basePath.length);
+        if (suffix) targetUrl.pathname = targetUrl.pathname.replace(/\/+$/, '') + suffix;
+        link.dataset.docRootHref = rootHref;
+        link.href = targetUrl.href;
+      } catch {
+        // 无法解析时继续使用插件提供的原始链接。
+      }
+    });
+  });
+
   on(
     document,
     'click',
     (e) => {
-      document.querySelectorAll('.doc-version-dropdown.show').forEach((d) => {
-        if (!d.closest('.doc-version-selector')?.contains(e.target)) {
-          d.classList.remove('show');
-        }
+      selectors.forEach((selector) => {
+        if (!selector.contains(e.target)) closeDropdown(selector);
       });
     },
     { passive: true }
@@ -233,25 +282,29 @@ function initDrawers() {
   const tocDrawerNav = document.getElementById('doc-toc-drawer-nav');
 
   if (tocOverlay && tocDrawer) {
+    const focus = createModalFocus({
+      panel: tocDrawer, backdrop: tocOverlay, signal: getPageSignal(),
+      onClose: options => window.closeDocTocDrawer(options),
+    });
     window.openDocTocDrawer = () => {
-      tocOverlay.classList.add('open');
-      tocDrawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      const tocNav = document.getElementById('toc-nav');
+      if (!tocDrawerNav || !tocNav?.querySelector('.toc-link')) return;
 
       // 初始化目录内容
-      if (tocDrawerNav && !tocDrawerNav.querySelector('.toc-list')) {
-        const tocNav = document.getElementById('toc-nav');
-        if (tocNav && tocNav.innerHTML.trim()) {
-          tocDrawerNav.innerHTML = tocNav.innerHTML;
-          bindTocDrawerEvents(tocDrawerNav);
-        }
+      if (!tocDrawerNav.querySelector('.toc-list')) {
+        tocDrawerNav.innerHTML = tocNav.innerHTML;
+        bindTocDrawerEvents(tocDrawerNav);
       }
+      window.closeDocSidebarDrawer?.();
+      tocOverlay.classList.add('open');
+      tocDrawer.classList.add('open');
+      focus.open();
     };
 
-    window.closeDocTocDrawer = () => {
+    window.closeDocTocDrawer = (options) => {
       tocOverlay.classList.remove('open');
       tocDrawer.classList.remove('open');
-      document.body.style.overflow = '';
+      focus.close(options);
     };
   }
 
@@ -260,32 +313,33 @@ function initDrawers() {
   const sidebarDrawer = document.getElementById('doc-sidebar-drawer');
 
   if (sidebarOverlay && sidebarDrawer) {
+    const focus = createModalFocus({
+      panel: sidebarDrawer, backdrop: sidebarOverlay, signal: getPageSignal(),
+      onClose: options => window.closeDocSidebarDrawer(options),
+    });
     window.openDocSidebarDrawer = () => {
+      window.closeDocTocDrawer?.();
       sidebarOverlay.classList.add('open');
       sidebarDrawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      focus.open();
     };
 
-    window.closeDocSidebarDrawer = () => {
+    window.closeDocSidebarDrawer = (options) => {
       sidebarOverlay.classList.remove('open');
       sidebarDrawer.classList.remove('open');
-      document.body.style.overflow = '';
+      focus.close(options);
     };
   }
 
-  // ESC 键关闭
-  on(document, 'keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (tocDrawer?.classList.contains('open')) window.closeDocTocDrawer();
-      if (sidebarDrawer?.classList.contains('open')) window.closeDocSidebarDrawer();
-    }
-  });
+
 }
 
 function bindTocDrawerEvents(container) {
   const links = container.querySelectorAll('.toc-link');
   links.forEach(link => {
+    link.setAttribute('data-no-swup', '');
     on(link, 'click', (e) => {
+      if (!isPlainTocClick(e)) return;
       e.preventDefault();
       const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
       const heading = document.getElementById(headingId);
@@ -310,9 +364,15 @@ function init() {
   initDrawers();
 }
 
-const handlePageEnter = () => {
+const handlePageEnter = (detail) => {
   if (!isDocPage()) return;
   init();
+  void restoreHeadingFragment(document.getElementById('article-content'), getPageSignal());
+  // 首屏由 Docsme 的 DOMContentLoaded 回调渲染；提前处理会让官方回调
+  // 把生成后的文字再次当作 TeX。主题只补上无 DOMContentLoaded 的 PJAX 路径。
+  if (detail?.pjax === true) {
+    void renderDocsMath({ signal: getPageSignal() });
+  }
 };
 
 if (window.SkyPjax?.onPage) {

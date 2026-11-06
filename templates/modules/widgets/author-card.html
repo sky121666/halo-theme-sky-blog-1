@@ -48,7 +48,7 @@
   </a>
 
   <!-- ========== 未登录访客卡片 ========== -->
-  <a th:unless="${isLoggedIn}" href="/about"
+  <a th:unless="${isLoggedIn}" th:href="@{/about}"
     class="block bg-base-100/80 backdrop-blur-xl shadow-md border border-base-content/5 rounded-2xl p-4 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 relative overflow-hidden"
     th:with="profile = ${theme.config.about_settings.profile}">
 

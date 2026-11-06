@@ -1,0 +1,692 @@
+{
+  "date": "2026-11-06",
+  "scope": "theme UI polish; no plugin, business setting, database or Git changes",
+  "identity": {
+    "algorithm": "sha256",
+    "codeHash": "5062ff16c919aae32867e91e49d477ac40c6eccbe7c7ad57f50486791eae59c5",
+    "fileCount": 402,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "environment": {
+    "base": "http://localhost:8090",
+    "halo": "2.27.1",
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.50"
+    },
+    "previewTheme": "theme-sky-blog-1",
+    "themeVersion": "2.2.41",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "browser": "Ego Lite Chromium; desktop and mobile viewport emulation, not physical handset"
+  },
+  "changes": [
+    "src/apps/links/runtime.js",
+    "src/pages/steam/steam.css",
+    "src/pages/about/about.js",
+    "src/pages/about/about.css",
+    "src/pages/links/links.css",
+    "src/pages/doc/doc.css",
+    "src/static/css/index-subtitle-effects.css",
+    "templates/modules/doc-catalog-content.html",
+    "templates/assets/css/index-subtitle-effects.css",
+    "templates/assets/css/steam.css",
+    "templates/assets/css/main.css",
+    "templates/assets/css/doc.css",
+    "templates/assets/css/links.css",
+    "templates/assets/css/about.css",
+    "templates/assets/js/about.js",
+    "templates/assets/js/links.js",
+    "templates/modules/steam/content.html",
+    "templates/modules/about/content.html",
+    "templates/modules/links/content.html",
+    "templates/modules/categories/list-modern.html",
+    "scripts/verify-links-identification.mjs",
+    "scripts/verify-links-regressions.mjs",
+    "scripts/verify-about-location.mjs",
+    "scripts/verify-plugin-contracts.mjs",
+    "scripts/fixtures/TemplateDataChecks.java"
+  ],
+  "cache": [
+    {
+      "method": "PUT",
+      "route": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+      "status": 204,
+      "redirected": false,
+      "contentType": null
+    },
+    {
+      "method": "DELETE",
+      "route": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+      "status": 200,
+      "redirected": false,
+      "contentType": null
+    }
+  ],
+  "assets": [
+    {
+      "file": "css/main.css",
+      "status": 200,
+      "local": "01b271abcb1bb6fc4879119c9172ac182cb1f1a75a8b44a4ca9911113c7b2e54",
+      "server": "01b271abcb1bb6fc4879119c9172ac182cb1f1a75a8b44a4ca9911113c7b2e54",
+      "match": true
+    },
+    {
+      "file": "css/post.css",
+      "status": 200,
+      "local": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+      "server": "8956cfbc6248462e92456ba12ebbb9764b27eb414d3855f0fb4ae69e555ada51",
+      "match": true
+    },
+    {
+      "file": "css/archives.css",
+      "status": 200,
+      "local": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+      "server": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924",
+      "match": true
+    },
+    {
+      "file": "css/doc.css",
+      "status": 200,
+      "local": "bd0b35f3f299e5e92bf9314ca6932196c61bf9f8ebdb08d60aac1981021c6933",
+      "server": "bd0b35f3f299e5e92bf9314ca6932196c61bf9f8ebdb08d60aac1981021c6933",
+      "match": true
+    },
+    {
+      "file": "css/links.css",
+      "status": 200,
+      "local": "afd7568d827435702e92b443d4e5b9eae0547b8c509d6ee274a046d984067eef",
+      "server": "afd7568d827435702e92b443d4e5b9eae0547b8c509d6ee274a046d984067eef",
+      "match": true
+    },
+    {
+      "file": "css/moments.css",
+      "status": 200,
+      "local": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+      "server": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8",
+      "match": true
+    },
+    {
+      "file": "css/categories.css",
+      "status": 200,
+      "local": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+      "server": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34",
+      "match": true
+    },
+    {
+      "file": "css/about.css",
+      "status": 200,
+      "local": "350e4846bd5e74b5e823d400a0a9135a3a07384d0ed47017281d6740ec5fcdd3",
+      "server": "350e4846bd5e74b5e823d400a0a9135a3a07384d0ed47017281d6740ec5fcdd3",
+      "match": true
+    },
+    {
+      "file": "css/steam.css",
+      "status": 200,
+      "local": "4eaf90685a3693a53594488196736ba9865bae7ad7de2be4f68b46cae0fbde38",
+      "server": "4eaf90685a3693a53594488196736ba9865bae7ad7de2be4f68b46cae0fbde38",
+      "match": true
+    },
+    {
+      "file": "css/index-subtitle-effects.css",
+      "status": 200,
+      "local": "5d0f26a778f4320ff4fed0eb7bd9cd5b1adf558926b52d03fdcbd0e6dda39245",
+      "server": "5d0f26a778f4320ff4fed0eb7bd9cd5b1adf558926b52d03fdcbd0e6dda39245",
+      "match": true
+    },
+    {
+      "file": "js/main.js",
+      "status": 200,
+      "local": "bef41b720b810adcc876a7f35f7a3f60d81b31b6dc9bddbe7296623271a12eaa",
+      "server": "bef41b720b810adcc876a7f35f7a3f60d81b31b6dc9bddbe7296623271a12eaa",
+      "match": true
+    },
+    {
+      "file": "js/post.js",
+      "status": 200,
+      "local": "cdbd03801389949371dff0482c2a17967e9f82ee77b9b8da7ce0bffa28fd1527",
+      "server": "cdbd03801389949371dff0482c2a17967e9f82ee77b9b8da7ce0bffa28fd1527",
+      "match": true
+    },
+    {
+      "file": "js/doc.js",
+      "status": 200,
+      "local": "302783a333038b2fb35b6218fd58053c8fd0e03eed3ef85cb535268fd7fa2b95",
+      "server": "302783a333038b2fb35b6218fd58053c8fd0e03eed3ef85cb535268fd7fa2b95",
+      "match": true
+    },
+    {
+      "file": "js/links.js",
+      "status": 200,
+      "local": "456009348ebfc011b067cbe724f29ce51d145737c2509964b34a69ef2476c15d",
+      "server": "456009348ebfc011b067cbe724f29ce51d145737c2509964b34a69ef2476c15d",
+      "match": true
+    },
+    {
+      "file": "js/moments.js",
+      "status": 200,
+      "local": "c2b5d4583e6d762495c17d847de4974d8eb2b571186bacb4a3aad03a7740e60d",
+      "server": "c2b5d4583e6d762495c17d847de4974d8eb2b571186bacb4a3aad03a7740e60d",
+      "match": true
+    },
+    {
+      "file": "js/about.js",
+      "status": 200,
+      "local": "cdaff7fd207464edf26fd627025b1d41fce14746f7509523d6578182ed49c94f",
+      "server": "cdaff7fd207464edf26fd627025b1d41fce14746f7509523d6578182ed49c94f",
+      "match": true
+    },
+    {
+      "file": "js/steam.js",
+      "status": 200,
+      "local": "87f13f801f48180c049edecf5806014a3c7b8173a25b1e24b330b27a86a79d80",
+      "server": "87f13f801f48180c049edecf5806014a3c7b8173a25b1e24b330b27a86a79d80",
+      "match": true
+    },
+    {
+      "file": "js/categories.js",
+      "status": 200,
+      "local": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+      "server": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068",
+      "match": true
+    }
+  ],
+  "checks": {
+    "build": "passed",
+    "nodePass": 421,
+    "nodeSkipped": 2,
+    "nodeSkippedReason": "optional Java checks not enabled in default build",
+    "lint": "passed",
+    "format": "passed",
+    "templateData": {
+      "pass": 243,
+      "runtime": "local Thymeleaf 3.1.5 and Spring 6.2.9; not asserted to be Halo bundled dependencies"
+    }
+  },
+  "layouts": [
+    {
+      "route": "/",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/home-1440.png"
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/home-390.png"
+    },
+    {
+      "route": "/categories",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/categories-1440.png"
+    },
+    {
+      "route": "/categories",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/categories-390.png"
+    },
+    {
+      "route": "/categories/halo",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/category-1440.png"
+    },
+    {
+      "route": "/categories/halo",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/category-390.png"
+    },
+    {
+      "route": "/tags",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/tags-1440.png"
+    },
+    {
+      "route": "/tags",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/tags-390.png"
+    },
+    {
+      "route": "/tags/ai",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/tag-1440.png"
+    },
+    {
+      "route": "/tags/ai",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/tag-390.png"
+    },
+    {
+      "route": "/about",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/about-1440.png"
+    },
+    {
+      "route": "/about",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/about-390.png"
+    },
+    {
+      "route": "/links?view=apply",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/apply-1440.png"
+    },
+    {
+      "route": "/links?view=apply",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/apply-390.png"
+    },
+    {
+      "route": "/links",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/links-1440.png"
+    },
+    {
+      "route": "/links",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/links-390.png"
+    },
+    {
+      "route": "/links?view=board",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/board-1440.png"
+    },
+    {
+      "route": "/links?view=board",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/board-390.png"
+    },
+    {
+      "route": "/links?view=friends",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/friends-1440.png"
+    },
+    {
+      "route": "/links?view=friends",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/friends-390.png"
+    },
+    {
+      "route": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/doc-directory-1440.png"
+    },
+    {
+      "route": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/doc-directory-390.png"
+    },
+    {
+      "route": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/doc-1440.png"
+    },
+    {
+      "route": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/doc-390.png"
+    },
+    {
+      "route": "/steam",
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/steam-1440.png"
+    },
+    {
+      "route": "/steam",
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "navigationError": null,
+      "runtimeErrors": [],
+      "screenshot": "/tmp/sky-ui-polish-fix-20261106/steam-390.png"
+    }
+  ],
+  "light": [
+    {
+      "name": "home",
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "home",
+      "width": 390,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "apply",
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "apply",
+      "width": 390,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "friends",
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "friends",
+      "width": 390,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "doc-directory",
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "doc-directory",
+      "width": 390,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "about",
+      "width": 1440,
+      "theme": "light",
+      "overflow": false
+    },
+    {
+      "name": "about",
+      "width": 390,
+      "theme": "light",
+      "overflow": false
+    }
+  ],
+  "linksInteractions": [
+    {
+      "width": 1440,
+      "invalid": {
+        "inputHeight": 40,
+        "otherHeight": 40,
+        "statusVisible": true,
+        "statusY": 500.5,
+        "statusText": "请先输入有效的 HTTP 或 HTTPS 网站地址。",
+        "invalid": "true",
+        "hintVisible": true
+      },
+      "pending": {
+        "text": "正在识别…",
+        "busy": "true",
+        "disabled": true
+      },
+      "failure": {
+        "text": "暂时无法识别站点信息，可重试或手动填写。",
+        "invalid": null
+      },
+      "identified": {
+        "name": "界面验收样本",
+        "text": "识别完成，请核对站点信息。"
+      },
+      "draft": {
+        "text": "申请内容已生成，复制后到留言板提交。",
+        "output": true
+      },
+      "edited": {
+        "identificationCleared": true,
+        "submitText": "申请内容已生成，复制后到留言板提交。",
+        "blockedWrites": 0
+      },
+      "metadataTransport": "isolated browser response; no remote fetch or application submission"
+    },
+    {
+      "width": 390,
+      "invalid": {
+        "inputHeight": 40,
+        "otherHeight": 40,
+        "statusVisible": true,
+        "statusY": 532.5,
+        "statusText": "请先输入有效的 HTTP 或 HTTPS 网站地址。",
+        "invalid": "true",
+        "hintVisible": true
+      },
+      "pending": {
+        "text": "正在识别…",
+        "busy": "true",
+        "disabled": true
+      },
+      "failure": {
+        "text": "暂时无法识别站点信息，可重试或手动填写。",
+        "invalid": null
+      },
+      "identified": {
+        "name": "界面验收样本",
+        "text": "识别完成，请核对站点信息。"
+      },
+      "draft": {
+        "text": "申请内容已生成，复制后到留言板提交。",
+        "output": true
+      },
+      "edited": {
+        "identificationCleared": true,
+        "submitText": "申请内容已生成，复制后到留言板提交。",
+        "blockedWrites": 0
+      },
+      "metadataTransport": "isolated browser response; no remote fetch or application submission"
+    }
+  ],
+  "stateInteractions": [
+    {
+      "width": 1440,
+      "all": {
+        "emptyHidden": true,
+        "emptyFilter": "[data-link-group-filter=\"link-group-gtqEW\"]",
+        "visibleGroups": 2
+      },
+      "selected": {
+        "visibleGroups": 1,
+        "emptyText": true,
+        "globalEmpty": true
+      },
+      "map": {
+        "state": "unconfigured",
+        "externalLinks": 1,
+        "locationNames": 1,
+        "mapHeight": 37,
+        "overflow": false
+      },
+      "doc": {
+        "cardHeight": 98,
+        "gap": "24px",
+        "width": 1440
+      },
+      "steam": {
+        "emptyHeight": 58,
+        "emptyText": "🎮\n暂无最近游玩",
+        "overflow": false
+      },
+      "longTitleSource": null
+    },
+    {
+      "width": 390,
+      "all": {
+        "emptyHidden": true,
+        "emptyFilter": "[data-link-group-filter=\"link-group-gtqEW\"]",
+        "visibleGroups": 2
+      },
+      "selected": {
+        "visibleGroups": 1,
+        "emptyText": true,
+        "globalEmpty": true
+      },
+      "map": {
+        "state": "unconfigured",
+        "externalLinks": 1,
+        "locationNames": 1,
+        "mapHeight": 37,
+        "overflow": false
+      },
+      "doc": {
+        "cardHeight": 66,
+        "gap": "12px",
+        "width": 390,
+        "longTitle": {
+          "cardHeight": 102,
+          "overflow": false,
+          "whiteSpace": "normal"
+        }
+      },
+      "steam": {
+        "emptyHeight": 58.00006103515625,
+        "emptyText": "🎮\n暂无最近游玩",
+        "overflow": false
+      },
+      "longTitleSource": "temporary DOM text restored"
+    }
+  ],
+  "invalidMap": [
+    {
+      "width": 1440,
+      "state": "failed",
+      "message": "地图暂不可用",
+      "display": "flex",
+      "height": 24,
+      "links": 0,
+      "source": "production initializer with temporary invalid-coordinate DOM fixture; no server setting change"
+    },
+    {
+      "width": 390,
+      "state": "failed",
+      "message": "地图暂不可用",
+      "display": "flex",
+      "height": 24,
+      "links": 0,
+      "source": "production initializer with temporary invalid-coordinate DOM fixture; no server setting change"
+    }
+  ],
+  "limitations": [
+    "Metadata identification success and transport failure used isolated browser Responses; no real external request or application submission.",
+    "Generated application draft is local only; editing URL retained the draft feedback.",
+    "Long document title and invalid coordinates were temporary DOM fixtures, restored.",
+    "Valid remote map Key not provided or exercised; image load/error transport remains covered by isolated lifecycle tests.",
+    "Tag pages currently use minimal list style; modern card branch verified in template fixtures, not by changing site settings.",
+    "Initial map wait targeted a hidden entrance animation before scrolling and timed out; DOM inspection confirmed the element existed; corrected attached-then-scroll check passed.",
+    "No release-readiness or all-plugin business compatibility claim."
+  ],
+  "evidenceDirectory": "/tmp/sky-ui-polish-fix-20261106",
+  "browserTaskSpace": 143,
+  "browserFinished": true
+}

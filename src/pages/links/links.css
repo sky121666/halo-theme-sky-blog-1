@@ -6,6 +6,7 @@
 
 [data-links-page] [data-links-view-panel][hidden],
 [data-links-page] [data-link-group-section][hidden],
+[data-links-page] [data-links-empty][hidden],
 [data-links-page] [data-links-filter-empty][hidden],
 [data-links-page] [data-links-protected-control][hidden],
 [data-links-page] [data-links-capability-status][hidden],
@@ -14,6 +15,7 @@
 [data-links-page] [data-feed-load-more][hidden],
 [data-links-page] [data-apply-update-field][hidden],
 [data-links-page] [data-apply-status][hidden],
+[data-links-page] [data-apply-identify-status][hidden],
 [data-links-page] [data-apply-output][hidden],
 [data-links-page] [data-link-detail-rss-row][hidden],
 [data-links-page] [data-link-detail-feed][hidden] {
@@ -149,7 +151,7 @@
   padding: 0.65rem 0.9rem;
   font-size: 0.75rem;
   line-height: 1.5;
-  pointer-events: auto;
+  pointer-events: none;
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px -12px rgb(0 0 0 / 50%);
   animation: links-toast-enter 0.25s ease both;
@@ -192,6 +194,11 @@
 
   [data-links-page] .links-apply-url-row {
     flex-direction: column;
+  }
+
+  [data-links-page] .links-apply-url-row > .input {
+    flex: none;
+    width: 100%;
   }
 
   [data-links-page] .links-apply-url-row > .btn,

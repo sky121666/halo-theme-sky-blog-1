@@ -7,6 +7,7 @@ import { skyDebug } from '../../common/js/debug.js';
 import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 const UPVOTED_MOMENTS_KEY = 'halo.upvoted.moment.names';
+const momentUpvoteStates = new Map();
 
 function readUpvotedMomentNames() {
   try {
@@ -57,6 +58,48 @@ function initializeMomentGalleries() {
   });
 }
 
+function readMomentUpvoteCount(btn) {
+  return parseInt(btn.querySelector('.upvote-count')?.textContent || '0', 10) || 0;
+}
+
+function currentMomentButtons(momentName, origin) {
+  const buttons = Array.from(document.querySelectorAll('[data-moment-name]'))
+    .filter((btn) => btn.dataset.momentName === momentName);
+  if (origin && !buttons.includes(origin)) buttons.push(origin);
+  return buttons;
+}
+
+function restoreMomentUpvoteButton(btn, upvotedNames) {
+  const state = momentUpvoteStates.get(btn.dataset.momentName);
+  btn.disabled = state?.pending === true;
+  if (state?.pending) btn.setAttribute('aria-busy', 'true');
+  else btn.removeAttribute('aria-busy');
+
+  const confirmed = Boolean(state?.confirmed || upvotedNames.includes(btn.dataset.momentName));
+  // Halo's tracker is a one-way action, not a like/unlike toggle.
+  btn.setAttribute('aria-disabled', String(confirmed || state?.pending === true));
+  if (!confirmed) {
+    btn.setAttribute('aria-label', `点赞瞬间，已有 ${readMomentUpvoteCount(btn)} 次点赞`);
+    return;
+  }
+  const icon = btn.querySelector('span[class*="icon"]');
+  if (icon) {
+    icon.className = icon.className.replace('icon-[heroicons--heart]', 'icon-[heroicons--heart-solid]');
+    btn.classList.add('text-error');
+    btn.classList.remove('text-base-content/50');
+  }
+  const count = btn.querySelector('.upvote-count');
+  if (count && state?.confirmed) {
+    count.textContent = String(Math.max(readMomentUpvoteCount(btn), state.count));
+  }
+  btn.setAttribute('aria-label', `已点赞，已有 ${readMomentUpvoteCount(btn)} 次点赞`);
+}
+
+function syncMomentUpvoteButtons(momentName, origin) {
+  const upvotedNames = readUpvotedMomentNames();
+  currentMomentButtons(momentName, origin).forEach((btn) => restoreMomentUpvoteButton(btn, upvotedNames));
+}
+
 /**
  * 瞬间点赞功能
  * 使用 Halo 官方 trackers API
@@ -64,16 +107,24 @@ function initializeMomentGalleries() {
 async function handleMomentUpvote(btn) {
   const momentName = btn.dataset.momentName;
   if (!momentName) return;
+  const existingState = momentUpvoteStates.get(momentName);
+  if (existingState?.pending) return;
   
   // 检查是否已点赞
   const upvotedNames = readUpvotedMomentNames();
-  if (upvotedNames.includes(momentName)) {
+  if (existingState?.confirmed || upvotedNames.includes(momentName)) {
     showMomentActionStatus(btn, '已经点过赞了');
     return; // 已点赞
   }
 
-  btn.disabled = true;
-  btn.setAttribute('aria-busy', 'true');
+  const state = {
+    pending: true,
+    confirmed: false,
+    count: readMomentUpvoteCount(btn),
+    controller: new AbortController(),
+  };
+  momentUpvoteStates.set(momentName, state);
+  syncMomentUpvoteButtons(momentName, btn);
   try {
     const response = await fetch('/apis/api.halo.run/v1alpha1/trackers/upvote', {
       method: 'POST',
@@ -82,37 +133,35 @@ async function handleMomentUpvote(btn) {
         group: 'moment.halo.run',
         plural: 'moments',
         name: momentName
-      })
+      }),
+      signal: state.controller.signal,
     });
-    
+    if (state.controller.signal.aborted) return;
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    if (response.ok) {
-      // 更新 UI
-      const countEl = btn.querySelector('.upvote-count');
-      const currentCount = parseInt(countEl?.textContent || '0', 10) || 0;
-      if (countEl) countEl.textContent = currentCount + 1;
-      
-      // 更新图标样式
-      const icon = btn.querySelector('span[class*="icon"]');
-      if (icon) {
-        icon.className = icon.className.replace('icon-[heroicons--heart]', 'icon-[heroicons--heart-solid]');
-        btn.classList.add('text-error');
-        btn.classList.remove('text-base-content/50');
-      }
-      
-      // 保存已点赞状态
-      rememberMomentUpvote(momentName, upvotedNames);
-    }
+    state.confirmed = true;
+    state.count += 1;
+    rememberMomentUpvote(momentName, readUpvotedMomentNames());
   } catch (err) {
-    skyDebug.error('moments', '点赞失败', err);
-    showMomentActionStatus(btn, '点赞失败，请稍后重试');
+    if (!state.controller.signal.aborted) {
+      skyDebug.error('moments', '点赞失败', err);
+      showMomentActionStatus(currentMomentButtons(momentName, btn)[0], '点赞失败，请稍后重试');
+    }
   } finally {
-    btn.disabled = false;
-    btn.removeAttribute('aria-busy');
+    state.pending = false;
+    if (!state.controller.signal.aborted && momentUpvoteStates.get(momentName) === state) {
+      if (!state.confirmed) momentUpvoteStates.delete(momentName);
+      syncMomentUpvoteButtons(momentName, btn);
+    }
   }
 }
 
-// 页面加载后恢复点赞状态
+function restoreMomentUpvotes(root = document) {
+  const upvotedNames = readUpvotedMomentNames();
+
+  root.querySelectorAll('[data-moment-name]').forEach((btn) => restoreMomentUpvoteButton(btn, upvotedNames));
+}
+
+// 页面加载和局部刷新后恢复点赞状态，不重复初始化发布弹窗。
 registerPageLifecycle(function() {
   const momentButtons = document.querySelectorAll('[data-moment-name]');
   const publishModal = document.getElementById('moment-publish-modal');
@@ -122,21 +171,17 @@ registerPageLifecycle(function() {
   initializeMomentGalleries();
 
   window.handleMomentUpvote = handleMomentUpvote;
-  const upvotedNames = readUpvotedMomentNames();
-  
-  momentButtons.forEach(function(btn) {
-    const momentName = btn.dataset.momentName;
-    if (upvotedNames.includes(momentName)) {
-      const icon = btn.querySelector('span[class*="icon"]');
-      if (icon) {
-        icon.className = icon.className.replace('icon-[heroicons--heart]', 'icon-[heroicons--heart-solid]');
-        btn.classList.add('text-error');
-        btn.classList.remove('text-base-content/50');
-      }
-    }
-  });
+  restoreMomentUpvotes();
+  const onListRefresh = () => {
+    const list = document.getElementById('moments-list');
+    if (list) restoreMomentUpvotes(list);
+  };
+  document.addEventListener('sky:moments-list-refreshed', onListRefresh);
 
   return function() {
+    document.removeEventListener('sky:moments-list-refreshed', onListRefresh);
+    momentUpvoteStates.forEach((state) => state.controller.abort());
+    momentUpvoteStates.clear();
     if (window.handleMomentUpvote === handleMomentUpvote) {
       window.handleMomentUpvote = undefined;
     }

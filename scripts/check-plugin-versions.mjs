@@ -6,6 +6,22 @@ import { pluginContracts as contracts } from "./plugin-contracts.mjs";
 import { compareVersions } from "./version-utils.mjs";
 
 const args = process.argv.slice(2);
+if (args.includes("--help") || args.includes("-h")) {
+  console.log(`Usage: node scripts/check-plugin-versions.mjs [--json] [--strict] [--env-file=PATH]
+
+Reads installed plugin versions and runtime state from the Halo plugin inventory.
+This is a version comparison against interface baselines and historical tested
+versions; it does not execute pages or prove runtime compatibility.
+
+--strict  Reject newer-version drift, missing plugins and inactive plugins.
+          Historical tested versions remain comparison points, not fresh test evidence.
+          Versions below the interface contract fail in every mode.
+--json    Print structured comparison results.
+
+Requires HALO_PAT/HALO_TOKEN/HALO_API_TOKEN for inventory reads.
+PLUGIN_VERSION_STRICT=1 also enables strict mode.`);
+  process.exit(0);
+}
 const jsonMode = args.includes("--json");
 const strictMode = args.includes("--strict") || /^(1|true|yes|on)$/i.test(process.env.PLUGIN_VERSION_STRICT || "");
 const envFileArg = args.find((arg) => arg.startsWith("--env-file="))?.slice("--env-file=".length);
@@ -68,6 +84,8 @@ if (jsonMode) {
         baseUrl,
         endpoint: endpoint.endpoint,
         strict: strictMode,
+        scope: "installed version/runtime-state comparison only; no runtime compatibility test is executed",
+        strictPolicy: "reject newer-version drift, missing/inactive plugins; below-contract versions fail in every mode",
         rows,
         inventory: {
           installed: endpoint.plugins.length,
@@ -293,10 +311,10 @@ function buildResultRow(contract, plugin) {
     note = "installed version is below theme contract";
   } else if (contract.testedVersion && compareToTested > 0) {
     result = "newer";
-    note = "newer than tested version; run smoke before marking compatible";
+    note = "newer than historical tested version; strict rejects drift; runtime compatibility is unverified";
   } else if (compareToContract > 0) {
     result = "newer";
-    note = "newer than contract; run smoke before updating docs";
+    note = "newer than interface baseline; strict rejects drift; runtime compatibility is unverified";
   }
 
   return {
@@ -330,6 +348,8 @@ function printTable(rows, endpoint) {
 
   console.log(`Halo plugin API: ${baseUrl}${endpoint}`);
   console.log(`Strict mode: ${strictMode ? "on" : "off"}`);
+  console.log("Scope: installed versions and runtime state only; this command does not test runtime compatibility.");
+  console.log("Strict policy: reject newer-version drift, missing and inactive plugins; below-contract versions always fail.");
   console.log(
     formatRow(
       columns.map(([label]) => label),

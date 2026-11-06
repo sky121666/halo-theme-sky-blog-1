@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-30",
+  "scope": "Theme gallery intrinsic dimensions plus explicitly approved 10 image references in two existing contents",
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "c53b947d6b38c8f91148b70f6a97a7f2fedd834686b90ec62757ce30c7a72618",
+    "fileCount": 401,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "runtime": {
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "version": "2.2.41",
+    "requiresHalo": ">=2.27.0",
+    "preview": "preview-theme=theme-sky-blog-1",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "plugins": [
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "versions": {
+    "photosExplanationBaseline": "2.1.2",
+    "projectPhotosContractBaseline": "2.1.1",
+    "runtimeTestedPhotos": "2.1.2",
+    "upstreamLatestReleaseInventoryRechecked": false,
+    "historicalMatrixNotRewritten": true
+  },
+  "rootCause": "Known preload dimensions were used in column estimates but not in DOM image width/height. Unloaded lazy images stayed at a 180px minimum and expanded later, moving a visible old card even when scrollY did not change.",
+  "officialSources": [
+    "https://github.com/halo-sigs/plugin-photos/blob/64e3b2faf38e265e52666d76b96452254dbfa5a0/dev/theme-api.md",
+    "https://html.spec.whatwg.org/multipage/embedded-content.html#the-img-element"
+  ],
+  "before": [
+    {
+      "round": 1,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 14334,
+      "scrollAfter": 14334,
+      "visibleCardTopBefore": 291.5625,
+      "visibleCardTopAfter": 2531.390625,
+      "visibleCardMovement": 2239.828125,
+      "visibleCardHeightBefore": 180,
+      "visibleCardHeightAfter": 562.71875,
+      "resizeEvents": [],
+      "errors": []
+    },
+    {
+      "round": 2,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 12459,
+      "scrollAfter": 12459,
+      "visibleCardTopBefore": 292.453125,
+      "visibleCardTopAfter": 2532.28125,
+      "visibleCardMovement": 2239.828125,
+      "visibleCardHeightBefore": 180,
+      "visibleCardHeightAfter": 562.71875,
+      "resizeEvents": [],
+      "errors": []
+    },
+    {
+      "round": 3,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 12459,
+      "scrollAfter": 12459,
+      "visibleCardTopBefore": 292.453125,
+      "visibleCardTopAfter": 2532.28125,
+      "visibleCardMovement": 2239.828125,
+      "visibleCardHeightBefore": 180,
+      "visibleCardHeightAfter": 562.71875,
+      "resizeEvents": [],
+      "errors": []
+    }
+  ],
+  "after": [
+    {
+      "round": 1,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 16342,
+      "scrollAfter": 16342,
+      "visibleCardTopBefore": 186.359375,
+      "visibleCardTopAfter": 185.890625,
+      "visibleCardMovement": -0.46875,
+      "visibleCardHeightBefore": 486.09375,
+      "visibleCardHeightAfter": 485.859375,
+      "resizeEvents": [],
+      "errors": []
+    },
+    {
+      "round": 2,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 16342,
+      "scrollAfter": 16341,
+      "visibleCardTopBefore": 186.359375,
+      "visibleCardTopAfter": 186.890625,
+      "visibleCardMovement": 0.53125,
+      "visibleCardHeightBefore": 486.09375,
+      "visibleCardHeightAfter": 485.859375,
+      "resizeEvents": [],
+      "errors": []
+    },
+    {
+      "round": 3,
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 16342,
+      "scrollAfter": 16342,
+      "visibleCardTopBefore": 186.359375,
+      "visibleCardTopAfter": 185.890625,
+      "visibleCardMovement": -0.46875,
+      "visibleCardHeightBefore": 486.09375,
+      "visibleCardHeightAfter": 485.859375,
+      "resizeEvents": [],
+      "errors": []
+    },
+    {
+      "round": 4,
+      "width": 1440,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "photos": 46,
+      "lightboxCount": "40",
+      "backdropLost": false,
+      "scrollBefore": 3236,
+      "scrollAfter": 3236,
+      "visibleCardTopBefore": 289.93994140625,
+      "visibleCardTopAfter": 288.5,
+      "visibleCardMovement": -1.43994140625,
+      "visibleCardHeightBefore": 383.828125,
+      "visibleCardHeightAfter": 383.828125,
+      "resizeEvents": [],
+      "errors": []
+    }
+  ],
+  "tests": {
+    "buildOnly": true,
+    "node": {
+      "tests": 409,
+      "pass": 409,
+      "fail": 0,
+      "skipped": 0
+    },
+    "photos": {
+      "passed": 30,
+      "failed": 0
+    },
+    "templateData": {
+      "passed": 78,
+      "failed": 0
+    },
+    "originalSourceWithCurrentPhotoRegressions": {
+      "passed": 25,
+      "failed": 5
+    },
+    "originalPhotoTemplateWithCurrentTemplateChecks": {
+      "passed": 74,
+      "failed": 4
+    },
+    "lint": true,
+    "formatCheck": true,
+    "diffCheck": true
+  },
+  "cache": [
+    {
+      "method": "PUT",
+      "status": 204
+    },
+    {
+      "method": "DELETE",
+      "status": 200
+    }
+  ],
+  "assets": {
+    "checked": 50,
+    "matched": 50
+  },
+  "routes": [
+    {
+      "path": "/photos",
+      "name": "photos",
+      "width": 1440,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 20,
+      "images": 20
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "name": "photo",
+      "width": 1440,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "name": "post",
+      "width": 1440,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    },
+    {
+      "path": "/about",
+      "name": "about",
+      "width": 1440,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    },
+    {
+      "path": "/photos",
+      "name": "photos",
+      "width": 390,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 8,
+      "images": 20
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "name": "photo",
+      "width": 390,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "name": "post",
+      "width": 390,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    },
+    {
+      "path": "/about",
+      "name": "about",
+      "width": 390,
+      "overflow": false,
+      "theme": true,
+      "legacyImages": 0,
+      "reserved": 0,
+      "images": 0
+    }
+  ],
+  "imageFailureRecovery": {
+    "failure": {
+      "height": 487.9999694824219,
+      "errorVisible": true,
+      "retryVisible": true,
+      "widthAttribute": "3072",
+      "heightAttribute": "4096"
+    },
+    "recovery": {
+      "errorHidden": true,
+      "width": 366,
+      "height": 488,
+      "tabIndex": 0
+    }
+  },
+  "contentRepair": {
+    "authorized": true,
+    "targetRoutes": ["/archives/editor-feature-demo", "/about"],
+    "logicalImageReferences": 10,
+    "sourceAndRenderedContentUpdatedTogether": true,
+    "rawTypePreserved": "HTML",
+    "sourceWasUnreachableOldInternalOrigin": "<redacted-old-internal-origin>",
+    "replacement": "Same verified /upload/ path relative to the current site",
+    "expectedPlanVerifiedInSavedAndReleasedContent": true,
+    "specChangesLimitedToOfficialSnapshotReferences": true,
+    "results": [
+      {
+        "route": "/archives/editor-feature-demo",
+        "kind": "posts",
+        "name": "42380544-214a-48e1-96b6-a60df0e0eab6",
+        "stage": "verified",
+        "changedImages": 4,
+        "snapshot": "082d0377-7984-4a0e-a3b6-b6a3ea33b16d",
+        "changedSpecKeys": ["headSnapshot", "releaseSnapshot"],
+        "rawEqualsPlan": true,
+        "releaseEqualsPlan": true
+      },
+      {
+        "route": "/about",
+        "kind": "singlepages",
+        "name": "373a5f79-f44f-441a-9df1-85a4f553ece8",
+        "stage": "verified",
+        "changedImages": 6,
+        "snapshot": "4a6d2c5b-53e6-4e8b-b261-1a6b62eef462",
+        "changedSpecKeys": ["releaseSnapshot"],
+        "rawEqualsPlan": true,
+        "releaseEqualsPlan": true
+      }
+    ],
+    "planHashes": [
+      {
+        "route": "/archives/editor-feature-demo",
+        "rawBefore": "b74b89bb753c9b83887f4b9f5107187186440a8b8ddd8dd90f58f3d006aea79e",
+        "rawAfter": "a5d604b6fec1c11033ddb0b791b8ac02470c71810ae3271d63e80e1afacaae6f",
+        "renderedBefore": "b74b89bb753c9b83887f4b9f5107187186440a8b8ddd8dd90f58f3d006aea79e",
+        "renderedAfter": "a5d604b6fec1c11033ddb0b791b8ac02470c71810ae3271d63e80e1afacaae6f"
+      },
+      {
+        "route": "/about",
+        "rawBefore": "96b4a1376736ccbb87087a583f79ddcdcc643b62bb411e95849c612e2b8fb287",
+        "rawAfter": "466f17940eba72936ec0684647dbd88a50e2dac031e3280c7c93e12102fa1fb5",
+        "renderedBefore": "96b4a1376736ccbb87087a583f79ddcdcc643b62bb411e95849c612e2b8fb287",
+        "renderedAfter": "466f17940eba72936ec0684647dbd88a50e2dac031e3280c7c93e12102fa1fb5"
+      }
+    ],
+    "realBrowser": [
+      {
+        "path": "/archives/editor-feature-demo",
+        "expected": 4,
+        "images": [
+          {
+            "path": "/upload/5BB751C4-JdQx.JPEG",
+            "width": 366,
+            "height": 628,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/2E3462BD-FtZg.jpeg",
+            "width": 366,
+            "height": 549,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/1D1AF973-QjDN.jpg",
+            "width": 366,
+            "height": 555,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/1D3408F2-pylZ.JPEG",
+            "width": 366,
+            "height": 489,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          }
+        ]
+      },
+      {
+        "path": "/about",
+        "expected": 6,
+        "images": [
+          {
+            "path": "/upload/9A84FDAE-jnur.jpg",
+            "width": 366,
+            "height": 364,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/6E2D7554-aLQD.JPEG",
+            "width": 366,
+            "height": 489,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/5BB751C4-JdQx.JPEG",
+            "width": 366,
+            "height": 628,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/2E3462BD-FtZg.jpeg",
+            "width": 366,
+            "height": 549,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/1D1AF973-QjDN.jpg",
+            "width": 366,
+            "height": 555,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          },
+          {
+            "path": "/upload/1D3408F2-pylZ.JPEG",
+            "width": 366,
+            "height": 489,
+            "complete": true,
+            "origin": "http://localhost:8090"
+          }
+        ]
+      }
+    ],
+    "privateOriginalBackup": "/tmp/sky-gallery-final-fix-20261030/content-before.json",
+    "guardedRecoveryScript": "/tmp/sky-gallery-final-fix-20261030/content-rollback.mjs",
+    "recoveryScriptExecuted": false
+  },
+  "pluginReadChecks": {
+    "passed": 41,
+    "failed": 0,
+    "notApplicable": 0,
+    "notCovered": 7,
+    "complete": false
+  },
+  "pluginNotCovered": [
+    "Text Diagram",
+    "Contact Form",
+    "AI Summary",
+    "Shiki Code Block",
+    "Lottery Card",
+    "Restricted Reading",
+    "Maintenance Theme"
+  ],
+  "backend": {
+    "startedAt": "2026-10-30T08:44:39.724Z",
+    "endedAt": "2026-10-30T09:07:36.648Z",
+    "levels": {
+      "WARN": 4,
+      "INFO": 30,
+      "ERROR": 4
+    },
+    "categories": {
+      "post reconciliation optimistic-lock warning": 1,
+      "AList excluded": 4,
+      "pagination limit": 3
+    }
+  },
+  "backendUnclassified": 0,
+  "limits": [
+    "Known positive dimension pairs reserve space; missing metadata or unfinished/failed preload keeps the existing skeleton and recovery path. Do not claim arbitrary unknown images can never change layout.",
+    "Current Chromium desktop/mobile emulation only; no Safari/Firefox/screen-reader or exhaustive plugin configuration run.",
+    "Seven uncovered probes are not confirmed defects. No plugins activated, installed or modified to force coverage.",
+    "Old 32-route/64-screen global verification used the previous hash; this batch reran the four affected routes at two sizes.",
+    "Original TaskSpace 52 disappeared; user approved its replacement with 53. No browser upgrade performed.",
+    "No Git stage/commit/push, no theme release or production deployment."
+  ]
+}

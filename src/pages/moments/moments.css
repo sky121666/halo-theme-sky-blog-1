@@ -12,3 +12,20 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* 图片预览增高时只滚动表单，短视口内仍能访问取消、发布和底部工具。 */
+#moment-publish-modal > .moment-publish-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 2rem);
+}
+
+#moment-publish-modal > .moment-publish-panel > div {
+  flex-shrink: 0;
+}
+
+#moment-publish-form {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

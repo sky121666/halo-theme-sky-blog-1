@@ -26,7 +26,7 @@
     locationDesc=${cfg?.location?.location_description},
     showPageContent=${cfg?.display?.show_page_content == true},
     showSiteStats=${cfg?.display?.show_site_stats != false},
-    enableComment=${cfg?.display?.enable_comment != false},
+    enableComment=${haloCommentEnabled and cfg?.display?.enable_comment != false and singlePage.spec.allowComment != false},
     pageContent=${singlePage.content?.content},
     heroActions=${cfg?.hero_actions},
     showPrimaryBtn=${cfg?.hero_actions?.primary_group?.show_primary != false},
@@ -35,6 +35,7 @@
     showSecondaryBtn=${cfg?.hero_actions?.secondary_group?.show_secondary != false},
     secondaryBtnText=${cfg?.hero_actions?.secondary_group?.secondary_text ?: '联系我'},
     secondaryBtnLink=${cfg?.hero_actions?.secondary_group?.secondary_link},
+    secondaryActionLink=${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? secondaryBtnLink : (socialLinks != null && !socialLinks.isEmpty() ? socialLinks[0]?.url : '#')},
     ctaCfg=${cfg?.cta},
     showCta=${cfg?.cta?.show_cta != false},
     ctaTitle=${cfg?.cta?.title ?: '让我们一起打造卓越的数字体验'},
@@ -66,11 +67,11 @@
           <!-- CTA 按钮 -->
           <div class="sf-hero-actions">
             <a th:if="${showPrimaryBtn}" 
-               th:href="${primaryBtnLink}" 
+               th:href="${#strings.startsWith(primaryBtnLink, '#')} ? ${primaryBtnLink} : @{${primaryBtnLink}}"
                th:text="${primaryBtnText}"
                class="btn btn-neutral btn-lg">查看作品</a>
             <a th:if="${showSecondaryBtn}" 
-               th:href="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? secondaryBtnLink : (socialLinks != null && !socialLinks.isEmpty() ? socialLinks[0]?.url : '#')}" 
+               th:href="${#strings.startsWith(secondaryActionLink, '#')} ? ${secondaryActionLink} : @{${secondaryActionLink}}"
                th:target="${secondaryBtnLink != null && !secondaryBtnLink.isEmpty() ? '_self' : '_blank'}"
                th:text="${secondaryBtnText}"
                class="btn btn-outline btn-lg">联系我</a>
@@ -185,6 +186,8 @@
           </div>
           
           <div class="sf-projects-grid">
+            <span th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}"
+                  id="about-color-probe" class="hidden bg-primary text-base-content"></span>
             
             <!-- 文章热力图 -->
             <div th:if="${showArticleHeatmap}" 
@@ -239,7 +242,6 @@
                 </div>
                 <img class="github-heatmap-img" alt="GitHub Contributions" style="display:none;" />
               </div>
-              <span id="about-color-probe" class="hidden bg-primary text-base-content"></span>
             </div>
 
             <!-- GitHub Stats -->
@@ -317,16 +319,14 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L12 22l6.5-7.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8"/></svg>
                 <span th:text="${locationLat} + '°N, ' + ${locationLng} + '°E'">39.9042°N, 116.4074°E</span>
               </div>
-              <a th:href="${'https://uri.amap.com/marker?position=' + locationLng + ',' + locationLat + '&name=' + locationName + '&coordinate=gaode&callnative=1'}"
-                 target="_blank"
-                 class="btn btn-neutral btn-sm gap-2 mt-4">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                在高德地图中查看
-              </a>
+              <noscript>
+                <a th:href="${'https://uri.amap.com/marker?position=' + locationLng + ',' + locationLat + '&name=' + locationName + '&coordinate=gaode&callnative=1'}"
+                   target="_blank" rel="noopener noreferrer" class="btn btn-neutral btn-sm mt-4">在高德地图中查看</a>
+              </noscript>
             </div>
             <div class="sf-location-map" 
                  id="location-map"
-                 th:attr="data-lat=${locationLat},data-lng=${locationLng},data-name=${locationName},data-desc=${locationDesc}">
+                 th:attr="data-lat=${locationLat},data-lng=${locationLng},data-name=${locationName},data-desc=${locationDesc},data-map-key=${cfg?.location?.tencent_map_key ?: ''},data-map-state=${#strings.isEmpty(#strings.trim(cfg?.location?.tencent_map_key ?: '')) ? 'unconfigured' : 'loading'}">
             </div>
           </div>
         </div>
@@ -341,19 +341,19 @@
           </div>
           <div class="sf-content-card sf-content-visible">
             <div id="article-content" class="sf-prose"
-                 th:utext="${#strings.replace(#strings.replace(#strings.replace(pageContent, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}"></div>
+                 th:utext="${pageContent}"></div>
           </div>
         </div>
       </section>
 
       <!-- ========== CTA ========== -->
-      <section th:if="${showCta}" class="sf-section">
+      <section th:if="${showCta and (ctaBtnLink != '#sf-comments' or enableComment)}" class="sf-section">
         <div class="sf-container">
           <div class="sf-cta-card" data-reveal="fade-up">
             <h2 class="sf-cta-title" th:text="${ctaTitle}">
               让我们一起打造卓越的数字体验 — 立即开始您的下一个项目
         </h2>
-            <a th:href="${ctaBtnLink}" 
+            <a th:href="${#strings.startsWith(ctaBtnLink, '#')} ? ${ctaBtnLink} : @{${ctaBtnLink}}"
                th:text="${ctaBtnText}"
                class="btn btn-neutral btn-lg sf-cta-btn">立即开始</a>
           </div>

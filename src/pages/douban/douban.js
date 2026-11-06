@@ -52,6 +52,7 @@ function createFilterButton({ label, value, filter, active, icon, count, extraCl
   button.type = "button";
   button.dataset.doubanFilter = filter;
   button.dataset.value = value || "";
+  button.setAttribute("aria-pressed", String(Boolean(active)));
 
   if (icon) {
     button.appendChild(createEl("span", `douban-type-icon ${icon}`));
@@ -222,6 +223,7 @@ function initDoubanPage() {
   const state = initialQuery.state;
   let itemsRequest = null;
   let genresRequest = null;
+  let pagination = null;
 
   const els = {
     total: root.querySelector("[data-douban-total]"),
@@ -244,28 +246,40 @@ function initDoubanPage() {
     root.querySelectorAll("[data-douban-filter]").forEach((button) => {
       const filter = button.dataset.doubanFilter;
       const value = button.dataset.value || "";
-      button.classList.toggle("active", (state[filter] || "") === value);
+      const active = (state[filter] || "") === value;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
     });
+  };
+
+  const updatePaginationButtons = () => {
+    if (els.prev) els.prev.disabled = Boolean(itemsRequest) || !pagination?.hasPrevious;
+    if (els.next) els.next.disabled = Boolean(itemsRequest) || !pagination?.hasNext;
   };
 
   const renderItems = (result) => {
     els.grid.replaceChildren(...result.items.map((item) => createCard(item, signal)));
     if (els.total) els.total.textContent = String(result.total);
     if (els.pageInfo) els.pageInfo.textContent = `${result.page} / ${Math.max(result.totalPages, 1)}`;
-    if (els.prev) els.prev.disabled = !result.hasPrevious;
-    if (els.next) els.next.disabled = !result.hasNext;
+    pagination = result;
+    updatePaginationButtons();
     setHidden(els.grid, result.items.length === 0);
     setHidden(els.empty, result.items.length > 0);
     setHidden(els.pagination, result.totalPages <= 1);
   };
 
   const renderError = (error) => {
+    pagination = null;
     const status = Number(error?.status || 0);
     let title = "豆瓣数据加载失败";
     let description = "暂时无法连接豆瓣服务，请稍后重试。";
     let canReset = false;
 
-    if (status === 400 || status === 404) {
+    if (error?.code === "page-out-of-range") {
+      title = "列表页码已变化";
+      description = "请重新加载，或恢复默认筛选后查看。";
+      canReset = true;
+    } else if (status === 400 || status === 404) {
       title = "筛选条件不可用";
       description = "当前筛选条件无法被插件处理，可恢复默认筛选后重试。";
       canReset = true;
@@ -289,29 +303,50 @@ function initDoubanPage() {
     const request = new AbortController();
     itemsRequest = request;
     const query = { ...state };
+    updatePaginationButtons();
 
     setHidden(els.loading, false);
     setHidden(els.error, true);
 
     try {
-      const response = await fetch(buildUrl(API_BASE, query), { signal: request.signal });
-      if (!response.ok) {
-        const error = new Error(`HTTP ${response.status}`);
-        error.status = response.status;
-        throw error;
+      // Deleted records or an old deep link may point beyond the last page.
+      // Correct once within the same request lifecycle; continued changes stay retryable.
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        const response = await fetch(buildUrl(API_BASE, query), { signal: request.signal });
+        if (!response.ok) {
+          const error = new Error(`HTTP ${response.status}`);
+          error.status = response.status;
+          throw error;
+        }
+        const result = normalizeListResult(await response.json());
+        if (signal.aborted || request.signal.aborted || itemsRequest !== request) return;
+        const lastPage = Math.max(result.totalPages, 1);
+        if (result.items.length === 0 && Number.isSafeInteger(lastPage) && result.page > lastPage) {
+          if (attempt > 0) {
+            const error = new Error("Douban page changed during correction");
+            error.code = "page-out-of-range";
+            throw error;
+          }
+          query.page = lastPage;
+          state.page = lastPage;
+          syncQueryState(state, "replace");
+          continue;
+        }
+        renderItems(result);
+        state.page = result.page;
+        if (result.page !== query.page) syncQueryState(state, "replace");
+        break;
       }
-      const result = normalizeListResult(await response.json());
-      if (signal.aborted || request.signal.aborted || itemsRequest !== request) return;
-      renderItems(result);
-      state.page = result.page;
-      if (result.page !== query.page) syncQueryState(state, "replace");
     } catch (error) {
       if (signal.aborted || request.signal.aborted || itemsRequest !== request) return;
       renderError(error);
     } finally {
       if (itemsRequest === request) {
         itemsRequest = null;
-        if (!signal.aborted) setHidden(els.loading, true);
+        if (!signal.aborted) {
+          setHidden(els.loading, true);
+          updatePaginationButtons();
+        }
       }
     }
   };
@@ -442,6 +477,7 @@ function initDoubanPage() {
     }
 
     if (target.closest("[data-douban-prev]") && state.page > 1) {
+      if (itemsRequest || !pagination?.hasPrevious) return;
       state.page -= 1;
       syncQueryState(state);
       loadItems();
@@ -449,7 +485,7 @@ function initDoubanPage() {
     }
 
     if (target.closest("[data-douban-next]")) {
-      if (state.page >= maxPageForSize(state.size)) return;
+      if (itemsRequest || !pagination?.hasNext || state.page >= maxPageForSize(state.size)) return;
       state.page += 1;
       syncQueryState(state);
       loadItems();

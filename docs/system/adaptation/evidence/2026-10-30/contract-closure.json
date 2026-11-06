@@ -1,0 +1,368 @@
+{
+  "date": "2026-10-30",
+  "scope": "Theme-only official contract closure; no plugin, business data or configuration changes",
+  "environment": {
+    "url": "http://localhost:8090",
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "version": "2.2.41",
+    "minimumHalo": ">=2.27.0",
+    "preview": true,
+    "plugins": [
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "bd962a1eb8131e4ac6ff7918a34335cd651756ffe7f11727e0265065fb3be1db",
+    "fileCount": 401,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "assets": [
+    {
+      "asset": "css/main.css",
+      "status": 200,
+      "match": true,
+      "sha256": "14e29c1e9de8915b19a64fd42026c3c364a620415e2ab3783b953d61b7cac715"
+    },
+    {
+      "asset": "css/moments.css",
+      "status": 200,
+      "match": true,
+      "sha256": "be7ab3af44af8b99283fef3910355cba3860235ad6d696b7b395038b3d90acfa"
+    },
+    {
+      "asset": "css/links.css",
+      "status": 200,
+      "match": true,
+      "sha256": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf"
+    },
+    {
+      "asset": "js/moments.js",
+      "status": 200,
+      "match": true,
+      "sha256": "e4f80b90fdcadaf256a0317c0b63a3f57fdd34c5686136e6704b890fff21d405"
+    },
+    {
+      "asset": "js/links.js",
+      "status": 200,
+      "match": true,
+      "sha256": "4c74984ffe4a568f6b035d9565018fcac59f22fe28f348b9ad471048375ad5c1"
+    },
+    {
+      "asset": "js/main.js",
+      "status": 200,
+      "match": true,
+      "sha256": "f3317ab015d4c4830c16b724b61c36ac3deea14ffc214264257b3091fac2ccb5"
+    },
+    {
+      "asset": "js/chunks/modal-focus-2.2.41.js",
+      "status": 200,
+      "match": true,
+      "sha256": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a"
+    }
+  ],
+  "cacheActions": [
+    {
+      "path": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+      "method": "PUT",
+      "status": 204
+    },
+    {
+      "path": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+      "method": "DELETE",
+      "status": 200
+    }
+  ],
+  "checks": {
+    "buildOnly": {
+      "passed": true,
+      "node": {
+        "tests": 340,
+        "pass": 338,
+        "fail": 0,
+        "skipped": 2
+      },
+      "skippedReason": "Two optional navigation Java fixtures: SKY_UI_JAVA_FIXTURE_CLASSPATH not provided"
+    },
+    "lint": true,
+    "format": true,
+    "diffCheck": true,
+    "moments": {
+      "tests": 61,
+      "pass": 61
+    },
+    "linksHistory": {
+      "tests": 49,
+      "pass": 49
+    },
+    "linksCombined": {
+      "tests": 87,
+      "pass": 87
+    }
+  },
+  "browser": {
+    "viewports": [1440, 390],
+    "routes": [
+      {
+        "name": "moments",
+        "url": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 10
+      },
+      {
+        "name": "tag",
+        "url": "/moments?tag=%E5%93%88%E5%93%88&preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 1
+      },
+      {
+        "name": "detail",
+        "url": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 1
+      },
+      {
+        "name": "links",
+        "url": "/links?preview-theme=theme-sky-blog-1",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      },
+      {
+        "name": "feed",
+        "url": "/links?preview-theme=theme-sky-blog-1&view=friends",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      },
+      {
+        "name": "apply",
+        "url": "/links?preview-theme=theme-sky-blog-1&view=apply",
+        "width": 1440,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      },
+      {
+        "name": "moments",
+        "url": "/moments?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 10
+      },
+      {
+        "name": "tag",
+        "url": "/moments?tag=%E5%93%88%E5%93%88&preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 1
+      },
+      {
+        "name": "detail",
+        "url": "/moments/moment-f6ircurs?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 1
+      },
+      {
+        "name": "links",
+        "url": "/links?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      },
+      {
+        "name": "feed",
+        "url": "/links?preview-theme=theme-sky-blog-1&view=friends",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      },
+      {
+        "name": "apply",
+        "url": "/links?preview-theme=theme-sky-blog-1&view=apply",
+        "width": 390,
+        "overflow": false,
+        "uncaughtErrors": [],
+        "iconLikeCount": 0
+      }
+    ],
+    "momentsIsolated": [
+      {
+        "width": 1440,
+        "liked": {
+          "count": 1,
+          "pressed": null,
+          "disabled": "true",
+          "solid": true,
+          "writes": 1,
+          "errors": []
+        },
+        "errorState": {
+          "text": "暂时无法确认发布权限，请重试。",
+          "trigger": true,
+          "retryLabel": "重新检查发布权限"
+        },
+        "checking": {
+          "count": 2,
+          "disabled": true,
+          "hidden": true
+        },
+        "allowed": {
+          "statusHidden": true,
+          "count": 2,
+          "focus": "moment-content",
+          "writes": 1,
+          "errors": []
+        }
+      },
+      {
+        "width": 390,
+        "liked": {
+          "count": 1,
+          "pressed": null,
+          "disabled": "true",
+          "solid": true,
+          "writes": 1,
+          "errors": []
+        },
+        "errorState": {
+          "text": "暂时无法确认发布权限，请重试。",
+          "trigger": true,
+          "retryLabel": "重新检查发布权限"
+        },
+        "checking": {
+          "count": 2,
+          "disabled": true,
+          "hidden": true
+        },
+        "allowed": {
+          "statusHidden": true,
+          "count": 2,
+          "focus": "moment-content",
+          "writes": 1,
+          "errors": []
+        }
+      }
+    ],
+    "linksIsolated": [
+      {
+        "width": 1440,
+        "first": {
+          "requests": ["/apis/console.api.link.halo.run/v1alpha1/rss/items?limit=20"],
+          "notice": "目标动态尚未加载，可继续加载列表查找。",
+          "dialog": false,
+          "errors": [],
+          "overflow": false
+        },
+        "opened": {
+          "requests": 2,
+          "cursors": 1,
+          "title": "验收动态 qa-target",
+          "noticeHidden": true,
+          "errors": []
+        },
+        "history": {
+          "requests": 2,
+          "errors": [],
+          "item": "qa-target",
+          "writes": ["/apis/console.api.link.halo.run/v1alpha1/rss/items/qa-target/read"]
+        }
+      },
+      {
+        "width": 390,
+        "first": {
+          "requests": ["/apis/console.api.link.halo.run/v1alpha1/rss/items?limit=20"],
+          "notice": "目标动态尚未加载，可继续加载列表查找。",
+          "dialog": false,
+          "errors": [],
+          "overflow": false
+        },
+        "opened": {
+          "requests": 2,
+          "cursors": 1,
+          "title": "验收动态 qa-target",
+          "noticeHidden": true,
+          "errors": []
+        },
+        "history": {
+          "requests": 2,
+          "errors": [],
+          "item": "qa-target",
+          "writes": ["/apis/console.api.link.halo.run/v1alpha1/rss/items/qa-target/read"]
+        }
+      }
+    ],
+    "realPjax": [
+      {
+        "width": 1440,
+        "token": 17,
+        "errors": [],
+        "writes": [],
+        "collapsed": "false",
+        "toggle": false
+      },
+      {
+        "width": 390,
+        "token": 17,
+        "errors": [],
+        "writes": [],
+        "collapsed": "false",
+        "toggle": false
+      }
+    ]
+  },
+  "boundaries": [
+    "Permissions and mutation responses were browser-local substitutes; no real publishing, upvotes, comments or RSS status writes.",
+    "Moment publish modal used current production template injected into an anonymous page; this is not real authenticated SSR acceptance.",
+    "Route screenshots inspected; RSS detail screenshot captured an opening-animation frame and is not used as settled-layout proof. Dialog opening, content and history restoration were asserted in the live browser.",
+    "Only affected routes retested, not all plugins, routes or official latest releases.",
+    "Image layout and Shiki fallback unchanged.",
+    "Author review only; no independent reviewer in this batch.",
+    "No Git staging, commit, push, tag or release."
+  ],
+  "localEvidence": "/tmp/sky-contract-close-20261030"
+}

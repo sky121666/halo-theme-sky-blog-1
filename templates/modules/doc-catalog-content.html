@@ -5,46 +5,10 @@
   <aside class="doc-sidebar hidden lg:block">
     <div class="doc-sidebar-inner scrollbar-thin">
 
-      <!-- 版本选择器 -->
-      <th:block th:if="${versions != null and #lists.size(versions) > 1}">
-        <div class="doc-version-selector">
-          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
-            <span class="flex items-center gap-2">
-              <span class="icon-[heroicons--tag] w-4 h-4"></span>
-              <span th:text="${currentVersion.spec.slug}">版本</span>
-            </span>
-            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-          </button>
-          <div class="doc-version-dropdown">
-            <a th:each="version : ${versions}" th:href="${version.status.permalink}" class="doc-version-item"
-              th:classappend="${version.metadata.name == currentVersion.metadata.name} ? 'active' : ''">
-              <span th:text="${version.spec.slug}">版本名</span>
-            </a>
-          </div>
-        </div>
-      </th:block>
-
-      <!-- 语言选择器 -->
-      <th:block th:if="${languages != null and #lists.size(languages) > 1}">
-        <div class="doc-version-selector">
-          <button class="doc-version-btn" onclick="this.nextElementSibling.classList.toggle('show')" type="button">
-            <span class="flex items-center gap-2">
-              <span class="icon-[heroicons--language] w-4 h-4"></span>
-              <span th:if="${currentLanguage != null}" th:text="${currentLanguage.label}">语言</span>
-              <span th:unless="${currentLanguage != null}">语言</span>
-            </span>
-            <span class="icon-[heroicons--chevron-down] w-4 h-4"></span>
-          </button>
-          <div class="doc-version-dropdown">
-            <a th:each="language : ${languages}" th:href="${language.link}" class="doc-version-item">
-              <span th:text="${language.label}">语言名</span>
-            </a>
-          </div>
-        </div>
-      </th:block>
+      <th:block th:replace="~{modules/doc/selectors :: selectors}" />
 
       <!-- 项目标题 -->
-      <a th:href="${project.status.permalink}" class="doc-project-title">
+      <a th:href="@{${project.status.permalink}}" class="doc-project-title">
         <span class="icon-[heroicons--book-open] w-5 h-5 text-primary shrink-0"></span>
         <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
       </a>
@@ -63,13 +27,13 @@
 
       <!-- 面包屑 - 与 doc-content.html 完全一致 -->
       <nav class="doc-breadcrumb" aria-label="面包屑导航">
-        <a th:href="${project.status.permalink}" class="flex items-center gap-1">
+        <a th:href="@{${project.status.permalink}}" class="flex items-center gap-1">
           <span class="icon-[heroicons--home] w-4 h-4"></span>
           <span th:text="${project.spec.displayName}">首页</span>
         </a>
         <th:block th:each="crumb : ${crumbs}">
           <span class="icon-[heroicons--chevron-right] w-3 h-3 opacity-40"></span>
-          <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}">分类</a>
+          <a th:href="@{${crumb.status.permalink}}" th:text="${crumb.spec.title}">分类</a>
         </th:block>
       </nav>
 
@@ -77,16 +41,16 @@
       <h1 class="doc-title" th:text="${docTree.spec.title}">目录名称</h1>
 
       <!-- 子项目列表 - Glassmorphism Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a th:each="node : ${sonNodes}" th:href="${node.status.permalink}" class="glow-card group relative overflow-hidden bg-base-100/80 backdrop-blur-xl rounded-2xl 
+      <div class="doc-catalog-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a th:each="node : ${sonNodes}" th:href="@{${node.status.permalink}}" class="doc-catalog-card glow-card group relative overflow-hidden bg-base-100/80 backdrop-blur-xl rounded-2xl
                   p-6 border border-base-content/[0.06] hover:border-primary/20
                   shadow-sm hover:shadow-xl hover:-translate-y-1 
                   transition-all duration-300 ease-out cursor-pointer">
 
-          <div class="flex items-start gap-5">
+          <div class="doc-catalog-card-inner flex items-start gap-5">
             <!-- 图标容器 -->
             <div
-              class="w-12 h-12 rounded-2xl bg-base-content/[0.03] group-hover:bg-primary/10 flex items-center justify-center shrink-0 transition-colors duration-300 border border-base-content/[0.05]">
+              class="doc-catalog-icon w-12 h-12 rounded-2xl bg-base-content/[0.03] group-hover:bg-primary/10 flex items-center justify-center shrink-0 transition-colors duration-300 border border-base-content/[0.05]">
               <span th:if="${node.spec.type == 'TREE'}"
                 class="icon-[heroicons--folder] w-6 h-6 text-base-content/70 group-hover:text-primary transition-colors"></span>
               <span th:if="${node.spec.type == 'DOC'}"
@@ -94,9 +58,9 @@
             </div>
 
             <!-- 内容区域 -->
-            <div class="flex-1 min-w-0 pt-0.5">
+            <div class="doc-catalog-card-content flex-1 min-w-0 pt-0.5">
               <h3
-                class="font-semibold text-base-content text-lg leading-snug group-hover:text-primary transition-colors truncate mb-2"
+                class="doc-catalog-card-title font-semibold text-base-content text-lg leading-snug group-hover:text-primary transition-colors truncate mb-2"
                 th:text="${node.spec.title}">项目名称</h3>
 
               <!-- 描述: 仅使用 spec.description (安全) -->

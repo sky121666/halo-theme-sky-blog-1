@@ -12,6 +12,12 @@
     <th:block th:replace="~{modules/theme-script :: inline-script}" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}">
     <style>
+        .error-page {
+            min-height: 100%;
+            padding-block: 4rem;
+            overflow-x: hidden;
+        }
+
         /* ============================= 高端按钮效果 (自 About 页面移植) ============================= */
         .error-actions .btn {
             position: relative;
@@ -171,7 +177,7 @@
 </head>
 
 <body
-    class="bg-base-100 h-full w-full flex flex-col items-center justify-center relative overflow-hidden font-sans text-base-content antialiased tracking-wide">
+    class="error-page bg-base-100 w-full flex flex-col items-center justify-center relative font-sans text-base-content antialiased tracking-wide">
 
     <!-- Subtle Grain/Dot Pattern -->
     <div aria-hidden="true" class="fixed inset-0 opacity-[0.03] pointer-events-none"

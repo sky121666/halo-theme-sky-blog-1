@@ -499,50 +499,100 @@ import '../../static/js/article-content.js';
     };
   };
 
-  // ============================= 静态地图（高德/腾讯） =============================
+  // ============================= 位置地图 =============================
   
   SF.initLocation = function() {
     const mapEl = document.getElementById('location-map');
     if (!mapEl) return;
 
-    const lat = parseFloat(mapEl.getAttribute('data-lat'));
-    const lng = parseFloat(mapEl.getAttribute('data-lng'));
+    const latitude = (mapEl.getAttribute('data-lat') || '').trim();
+    const longitude = (mapEl.getAttribute('data-lng') || '').trim();
+    const lat = Number(latitude);
+    const lng = Number(longitude);
     const name = mapEl.getAttribute('data-name') || '位置';
+    const key = (mapEl.getAttribute('data-map-key') || '').trim();
 
-    if (isNaN(lat) || isNaN(lng)) {
-      mapEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;opacity:0.5;">请配置位置坐标</div>';
+    if (!latitude || !longitude || !Number.isFinite(lat) || !Number.isFinite(lng) ||
+        Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+      mapEl.setAttribute('data-map-state', 'failed');
+      const message = document.createElement('div');
+      message.className = 'sf-location-fallback';
+      message.textContent = '地图暂不可用';
+      mapEl.replaceChildren(message);
       return;
     }
 
-    const zoom = 13;
-    const width = Math.min(800, mapEl.offsetWidth || 800);
-    const height = 320;
-    
-    // 腾讯地图静态图 API（无需 Key，公开可用）
-    const staticMapUrl = 'https://apis.map.qq.com/ws/staticmap/v2/?' +
-      'center=' + lat + ',' + lng +
-      '&zoom=' + zoom +
-      '&size=' + width + '*' + height +
-      '&markers=color:red|label:A|' + lat + ',' + lng +
-      '&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77';
-    
-    // 高德地图跳转
-    const encodedName = encodeURIComponent(name);
-    const amapUrl = 'https://uri.amap.com/marker?position=' + lng + ',' + lat + '&name=' + encodedName + '&coordinate=gaode&callnative=1';
-    
-    mapEl.innerHTML = 
-      '<a href="' + amapUrl + '" target="_blank" rel="noopener" ' +
-      'style="display:block;position:relative;width:100%;height:100%;min-height:' + height + 'px;border-radius:0.75rem;overflow:hidden;cursor:pointer;transition:all 0.3s ease;">' +
-        '<img src="' + staticMapUrl + '" alt="地图位置" ' +
-        'style="width:100%;height:100%;object-fit:cover;" ' +
-        'loading="lazy" />' +
-        '<div style="position:absolute;bottom:1rem;right:1rem;display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:var(--color-base-content);color:var(--color-base-100);border-radius:2rem;font-size:0.875rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.25);">' +
-          '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">' +
-            '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>' +
-          '</svg>' +
-          '在地图中查看' +
-        '</div>' +
-      '</a>';
+    const destination = new URL('https://uri.amap.com/marker');
+    destination.searchParams.set('position', lng + ',' + lat);
+    destination.searchParams.set('name', name);
+    destination.searchParams.set('coordinate', 'gaode');
+    destination.searchParams.set('callnative', '1');
+
+    const link = document.createElement('a');
+    link.className = 'sf-location-map-link';
+    link.href = destination.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.setAttribute('aria-label', '在高德地图中查看' + name);
+    mapEl.setAttribute('data-map-state', key ? 'loading' : 'unconfigured');
+
+    const fallback = document.createElement('span');
+    fallback.className = 'sf-location-fallback';
+    const pin = document.createElement('span');
+    pin.className = 'icon-[heroicons--map-pin] sf-location-fallback-icon';
+    pin.setAttribute('aria-hidden', 'true');
+    const status = document.createElement('span');
+    status.className = 'sf-location-fallback-status';
+    status.textContent = '地图加载中';
+    fallback.append(pin);
+    if (key) fallback.append(status);
+
+    const action = document.createElement('span');
+    action.className = 'sf-location-map-action';
+    action.textContent = '在高德地图中查看';
+    link.append(fallback, action);
+    mapEl.replaceChildren(link);
+
+    // 静态图需要站长自己的 Key；未配置时仅展示本地位置卡片。
+    if (!key) return;
+
+    const image = document.createElement('img');
+    image.className = 'sf-location-map-preview';
+    image.alt = name + '的位置地图';
+    image.decoding = 'async';
+    image.hidden = true;
+    const controller = new AbortController();
+    const showFailure = function() {
+      mapEl.setAttribute('data-map-state', 'failed');
+      image.hidden = true;
+      fallback.hidden = false;
+      status.textContent = '地图暂不可用';
+    };
+    image.addEventListener('load', function() {
+      if (!image.naturalWidth) {
+        showFailure();
+        return;
+      }
+      image.hidden = false;
+      fallback.hidden = true;
+      mapEl.setAttribute('data-map-state', 'ready');
+    }, { once: true, signal: controller.signal });
+    image.addEventListener('error', showFailure, { once: true, signal: controller.signal });
+    link.append(image);
+
+    const width = Math.round(Math.min(800, Math.max(50, mapEl.offsetWidth || 800)));
+    const preview = new URL('https://apis.map.qq.com/ws/staticmap/v2/');
+    preview.searchParams.set('center', lat + ',' + lng);
+    preview.searchParams.set('zoom', '13');
+    preview.searchParams.set('size', width + '*320');
+    preview.searchParams.set('markers', 'color:red|label:A|' + lat + ',' + lng);
+    preview.searchParams.set('key', key);
+    image.src = preview.href;
+
+    return function() {
+      controller.abort();
+      image.removeAttribute('src');
+    };
   };
 
   // ============================= 工具进度条 =============================
@@ -625,7 +675,10 @@ import '../../static/js/article-content.js';
       .forEach(function(task) {
         if (typeof task === 'function') cleanupTasks.push(task);
       });
-    const locationTimer = window.setTimeout(SF.initLocation, 500);
+    const locationTimer = window.setTimeout(function() {
+      const cleanup = SF.initLocation();
+      if (typeof cleanup === 'function') cleanupTasks.push(cleanup);
+    }, 500);
 
     return function() {
       window.clearTimeout(locationTimer);

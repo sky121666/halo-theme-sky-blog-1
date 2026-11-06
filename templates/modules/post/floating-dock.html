@@ -42,9 +42,9 @@
                      menuName = ${enableCustom ? (cfg?.post_dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
                      dockMenu = ${menuFinder.getByName(menuName)}">
             <th:block th:if="${dockMenu != null}">
-              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href}}"
+              <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
-                th:title="${menuItem.status.displayName}">
+                th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 <!-- 使用菜单的自定义元数据 icon 字段（SVG 代码） -->
                 <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                   class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
@@ -57,7 +57,7 @@
                 </span>
                 <span
                   class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-                  th:text="${menuItem.status.displayName}">
+                  th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
                 </span>
               </a>
             </th:block>
@@ -108,7 +108,7 @@
     <!-- DaisyUI FAB 组件 -->
     <div class="fab fab-top">
       <!-- 触发按钮 -->
-      <div tabindex="0" role="button" class="btn btn-circle btn-primary shadow-lg">
+      <div tabindex="0" role="button" aria-label="展开文章工具" class="btn btn-circle btn-primary shadow-lg">
         <span class="icon-[heroicons--squares-2x2] w-5 h-5"></span>
       </div>
 
@@ -128,9 +128,9 @@
                  dockMenu = ${menuFinder.getByName(menuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
-            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.displayName}">菜单</span>
-            <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
-              th:title="${menuItem.status.displayName}">
+            <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
+            <a th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" class="btn btn-circle"
+              th:title="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                 class="w-5 h-5 flex items-center justify-center">
                 <div th:utext="${menuItem.metadata.annotations['icon']}" class="dock-icon-svg"></div>
@@ -147,7 +147,7 @@
       <div th:if="${theme.config.article.dock_settings?.enable_toc_drawer}"
         th:classappend="${theme.config.article.sidebar_settings?.show_sidebar == true} ? 'lg:hidden!' : ''">
         <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
-        <button class="btn btn-circle" onclick="window.openPostTocDrawer()">
+        <button class="btn btn-circle" onclick="window.openPostTocDrawer()" aria-label="打开文章目录">
           <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
         </button>
       </div>
@@ -187,15 +187,15 @@
   <!-- 遮罩层 -->
   <div id="post-toc-overlay" class="post-toc-overlay" onclick="window.closePostTocDrawer()"></div>
   <!-- 抽屉面板 -->
-  <div id="post-toc-drawer" class="post-toc-drawer">
+  <div id="post-toc-drawer" class="post-toc-drawer" role="dialog" aria-modal="true" aria-label="文章目录" tabindex="-1" inert aria-hidden="true">
     <!-- 标题栏 -->
     <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
       <h3 class="text-base font-semibold flex items-center gap-2">
         <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary"></span>
         <span>文章目录</span>
       </h3>
-      <button onclick="window.closePostTocDrawer()" class="btn btn-ghost btn-circle btn-sm">
-        <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
+      <button type="button" aria-label="关闭文章目录" onclick="window.closePostTocDrawer()" class="btn btn-ghost btn-circle btn-sm">
+        <span class="icon-[heroicons--x-mark] w-5 h-5" aria-hidden="true"></span>
       </button>
     </div>
     <!-- 目录内容 -->

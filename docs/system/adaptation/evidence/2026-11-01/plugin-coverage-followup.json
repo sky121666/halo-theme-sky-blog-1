@@ -1,0 +1,2690 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "timezone": "Asia/Shanghai",
+  "generatedAt": "2026-10-31T17:29:32.473Z",
+  "scope": "Theme-only Restricted Reading lifecycle/theme bridge and optional-component coverage; no plugin/config/content/database/Git mutation or model/unlock/payment/form submission.",
+  "environment": {
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "themeVersion": "2.2.41",
+    "requiresHalo": ">=2.27.0",
+    "activeTheme": "theme-sky-blog-3",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "previewTheme": "theme-sky-blog-1",
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "18ed4d992503bb358901a7a1a30978a24ceb4d5a8d80629f1962b558ae3a0171",
+    "fileCount": 402,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "changes": [
+    "src/common/main.js: official answer/mp close before PJAX replacement; official color-scheme-dark class on body modal hosts",
+    "scripts/verify-restricted-reading-lifecycle.mjs: six regression cases",
+    "package.json: add regression to build gate"
+  ],
+  "verification": {
+    "build": {
+      "command": "pnpm run build",
+      "exitCode": 0,
+      "nodeTests": 440,
+      "pass": 440,
+      "fail": 0,
+      "skipped": 0
+    },
+    "cache": {
+      "startedAt": "2026-10-31T17:19:51.734Z",
+      "completedAt": "2026-10-31T17:19:52.074Z",
+      "operations": [
+        {
+          "method": "PUT",
+          "status": 204
+        },
+        {
+          "method": "DELETE",
+          "status": 200
+        }
+      ],
+      "assetCount": 50,
+      "matched": 50,
+      "assets": [
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/archives.js",
+          "status": 200,
+          "match": true,
+          "sha256": "01d8cca182bb33b62e68161e944757ece3bb8677c18bca1e947cafb93efce56d"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/auth-default.js",
+          "status": 200,
+          "match": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/auth-centered.js",
+          "status": 200,
+          "match": true,
+          "sha256": "167a8b204d25685c8ac94883d0d2668108e16a018f7ecb2f841acd95ec5d7e8c"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/about.js",
+          "status": 200,
+          "match": true,
+          "sha256": "c7b839251a31b064f4aad3d66ccebcc7edf2e037f7992a64676e27d373b7d661"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/bangumi.js",
+          "status": 200,
+          "match": true,
+          "sha256": "52134117458992b3be32efba83c2cea818c88f6bfb7ee946e623fe37a9649895"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/author.js",
+          "status": 200,
+          "match": true,
+          "sha256": "5d98f03a3989272ce1d153c6c156f249bac51edf0f597c3848b1ba3d5b48f61e"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/auth-split.js",
+          "status": 200,
+          "match": true,
+          "sha256": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/categories.js",
+          "status": 200,
+          "match": true,
+          "sha256": "ba7a51994097ae08956e0d001f3ecf729a4d5bb2b7aac1d01c7f880853663068"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/article-heatmap-data-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "4964e90f55137688a4205b9cb3e8e9ce801e39eb802230eefefa34e13357ab22"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/auth-common-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/debug-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "f6dec2f81416da3c4f8f4139e6f3339d3e97beaab730ea63e797eef2fe5aa933"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/external-links-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "8231b4955d13b32583d5542e7a105701de64b419db671f802456d3d58bf0e864"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/modal-focus-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/page-runtime-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "21fdea14e3d4563839bd8b757e0a36fe9c845b835ff09bf6fc1a68afbb6e8a1a"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/article-content-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "6c1981581ff7f350739cde6d699af0f8e59552261263f75d0d1141055b310d89"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/chunks/toc-utils-2.2.41.js",
+          "status": 200,
+          "match": true,
+          "sha256": "5d318a5e4a93343d70bf1a2255cbec9cea5b0aabb2498094609a1357e9a71462"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/equipment.js",
+          "status": 200,
+          "match": true,
+          "sha256": "c861562426884aa22042d50f64aef1f94a4fdd0545366fd1fe0d4dc6c10625b3"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/doc.js",
+          "status": 200,
+          "match": true,
+          "sha256": "a076cd92d39a96fb3ddaaf6b1d605eec2eb0acc710daae5dd637ae24bb8ddd19"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/douban.js",
+          "status": 200,
+          "match": true,
+          "sha256": "40c8362e84c94125f20d95dc871ff2a804bcdee86ce85ff669e19ce190203bd7"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/index.js",
+          "status": 200,
+          "match": true,
+          "sha256": "9cfd66c794678d6d6b59a0b011db7b8c5764aa14bb1a57ede4f02d201da4373a"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/moments.js",
+          "status": 200,
+          "match": true,
+          "sha256": "e4f80b90fdcadaf256a0317c0b63a3f57fdd34c5686136e6704b890fff21d405"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/page.js",
+          "status": 200,
+          "match": true,
+          "sha256": "688e6d2942eaf897fc04d887a8237f521e9b4c0409d8ab12ee85322ee5657d27"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/links.js",
+          "status": 200,
+          "match": true,
+          "sha256": "4c74984ffe4a568f6b035d9565018fcac59f22fe28f348b9ad471048375ad5c1"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/photos.js",
+          "status": 200,
+          "match": true,
+          "sha256": "b074e93a768314e0b62527bba3ca44f20e7a43500f14ce8710943f426a66afef"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/post.js",
+          "status": 200,
+          "match": true,
+          "sha256": "2a067848ff0e9034cbe41da2c375dd50301b3cbfe886bf91ecc8e731b93b3af3"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/steam.js",
+          "status": 200,
+          "match": true,
+          "sha256": "87f13f801f48180c049edecf5806014a3c7b8173a25b1e24b330b27a86a79d80"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/archives.css",
+          "status": 200,
+          "match": true,
+          "sha256": "a444e74a5c58a0fb596d10deb683485486f3c3ecd0d620c1fee9679fa76da924"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/auth-centered.css",
+          "status": 200,
+          "match": true,
+          "sha256": "659bac9e470e238f32d522a3f483b359b17d20e6f2524026d00017edcfd18d18"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/auth-default.css",
+          "status": 200,
+          "match": true,
+          "sha256": "d657fb33b478a09efc50551cd594239156fad844b535fcbcb905ee6f18b56186"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/about.css",
+          "status": 200,
+          "match": true,
+          "sha256": "dd721c0d55fc5d9677071fcbed1d660025c0c95315de98cba48b5a33ac290f16"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/js/main.js",
+          "status": 200,
+          "match": true,
+          "sha256": "bef41b720b810adcc876a7f35f7a3f60d81b31b6dc9bddbe7296623271a12eaa"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/author.css",
+          "status": 200,
+          "match": true,
+          "sha256": "dff728c8fde262692edc7314d9a4b37e651be27a04624c0db4a957d0adfedac5"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/auth-split.css",
+          "status": 200,
+          "match": true,
+          "sha256": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/bangumi.css",
+          "status": 200,
+          "match": true,
+          "sha256": "b5892e70921b99c7d0e3d3666ff84122f2c6af8e73f5084d4e26ddc8bdbc4fa0"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/categories.css",
+          "status": 200,
+          "match": true,
+          "sha256": "d323a8b3776b84517b8f1fa8ef1bcf6ad518a5fa99f8e78cddf02558f1474f34"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/douban.css",
+          "status": 200,
+          "match": true,
+          "sha256": "c85482c8f2d554bb2f1fad23b05f09f5e0a14d90fb77671bf73fc5f23cc26889"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/equipment.css",
+          "status": 200,
+          "match": true,
+          "sha256": "cdb5b957b83ccd99418e83d8ae19e1c5134354f526d395da0c9b6fc048028180"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/index-effects.css",
+          "status": 200,
+          "match": true,
+          "sha256": "b45e1cf5907850354b85d5366ed90e7108454f9ead16df6df2c944075b006ece"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/index-subtitle-effects.css",
+          "status": 200,
+          "match": true,
+          "sha256": "91840449c525ed3418cfbbc6e89069c9a47cdb32fe35af61259a2d860627669b"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/doc.css",
+          "status": 200,
+          "match": true,
+          "sha256": "706c8f3082e591ace0141768424175ffa6cb158628a124d0f69c1434c6bcd3f2"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/index-title-effects.css",
+          "status": 200,
+          "match": true,
+          "sha256": "bdb947b36f0e7a64c84a27b12ccd10eaaf4d0146b07b1abbfdb86542ee474cbe"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/links.css",
+          "status": 200,
+          "match": true,
+          "sha256": "c9302227de5e3b974df6efac6212d857c3251f6ba67f5c4a6aa74ce4eb492ddf"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/index.css",
+          "status": 200,
+          "match": true,
+          "sha256": "d297ff487476288765075f44c0f8d83082c7bf4dbed7aaa89cb132038f155dd3"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/index-weather-effects.css",
+          "status": 200,
+          "match": true,
+          "sha256": "64e7119132cd1124a89c534797a78902ce86cab24f78f6c29396a1a9ed279573"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/moments.css",
+          "status": 200,
+          "match": true,
+          "sha256": "73aafaa30380a356e192bd44f4c38651fbb120a49905cd3a5bd265b1b92701a8"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/photos.css",
+          "status": 200,
+          "match": true,
+          "sha256": "7b5ad85e87a6fddf884ea281ca4abba06846bd18ee4023f396d9915a480144b2"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/page.css",
+          "status": 200,
+          "match": true,
+          "sha256": "3573231e8fdb66830967009fc607fe9078103aa689fe1a7b9dc99f834d06cf83"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/post.css",
+          "status": 200,
+          "match": true,
+          "sha256": "bd1637f6f9b5d64405e57ae77c06bb371ec1da2852a1738ca44a823274d5dddc"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/steam.css",
+          "status": 200,
+          "match": true,
+          "sha256": "d84dac7addc6f030938bfb8e4cbb2f3156bbec7cd84fa23b415ca4c3af40dbb7"
+        },
+        {
+          "path": "/themes/theme-sky-blog-1/assets/css/main.css",
+          "status": 200,
+          "match": true,
+          "sha256": "80ec8037c2598f85c4b9e29d2fc61a4af3edc212237ba98e881f6c2e26909fe6"
+        }
+      ]
+    },
+    "pluginProbes": {
+      "summary": {
+        "passed": 45,
+        "failed": 0,
+        "notApplicable": 0,
+        "notCovered": 3,
+        "complete": false
+      },
+      "results": [
+        {
+          "name": "Links",
+          "plugin": "PluginLinks",
+          "path": "/links",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "data-links-page, data-plugin-links-contract=\"PluginLinks>=2.2.1\", data-plugin-links-title, data-link-group-navigation, data-link-access-state, links-comments",
+          "error": ""
+        },
+        {
+          "name": "Photos",
+          "plugin": "PluginPhotos",
+          "path": "/photos",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "photo-grid, 图库, photos.js",
+          "error": ""
+        },
+        {
+          "name": "Moments",
+          "plugin": "PluginMoments",
+          "path": "/moments",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "moments-list, 瞬间, moments.js",
+          "error": ""
+        },
+        {
+          "name": "Links Friend Feed",
+          "plugin": "PluginLinks",
+          "path": "/links?view=friends",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "data-links-view-panel=\"friends\", data-link-feeds, links.js",
+          "error": ""
+        },
+        {
+          "name": "Docsme",
+          "plugin": "plugin-docsme",
+          "path": "/docs",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "文档中心, doc.js",
+          "error": ""
+        },
+        {
+          "name": "Bangumi",
+          "plugin": "plugin-bilibili-bangumi",
+          "path": "/bangumis",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "bangumi-page, 追番, bangumi.js",
+          "error": ""
+        },
+        {
+          "name": "Steam",
+          "plugin": "steam",
+          "path": "/steam",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "steam-page, Steam, steam.js",
+          "error": ""
+        },
+        {
+          "name": "Equipment",
+          "plugin": "equipment",
+          "path": "/equipments",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "equipment-page, 装备, equipment.js",
+          "error": ""
+        },
+        {
+          "name": "Douban",
+          "plugin": "plugin-douban",
+          "path": "/douban",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "douban-page, douban-grid, douban.js",
+          "error": ""
+        },
+        {
+          "name": "Login",
+          "plugin": null,
+          "path": "/login",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "halo-form",
+          "error": ""
+        },
+        {
+          "name": "Login Passkey",
+          "plugin": "auth-passkey",
+          "path": "/login",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "login?method=passkey, /plugins/auth-passkey/assets/static/passkey.svg",
+          "error": ""
+        },
+        {
+          "name": "Dishes External Route",
+          "plugin": "dishes",
+          "path": "/dishes",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "id=\"app\", data-dishes-site-title, dishes-csrf-header, window.__DISHES_CSRF__, window.__DISHES_PUBLIC_BASE__, /plugins/dishes/assets/dishes-frontend/assets/index.css, /plugins/dishes/assets/dishes-frontend/app.js",
+          "error": ""
+        },
+        {
+          "name": "Schedule External Route",
+          "plugin": "schedule-calendar",
+          "path": "/schedule-calendar",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "id=\"calendar-view\", id=\"agenda-view\", /apis/api.schedule.calendar.sunny.dev/v1alpha1/summary",
+          "error": ""
+        },
+        {
+          "name": "Photo Detail",
+          "plugin": "PluginPhotos",
+          "path": "/photos/photo-14xk1htg",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "photo-detail-page, photo-detail-image",
+          "error": ""
+        },
+        {
+          "name": "Moment Detail",
+          "plugin": "PluginMoments",
+          "path": "/moments/moment-f6ircurs",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "moment, handleMomentUpvote",
+          "error": ""
+        },
+        {
+          "name": "Doc Detail",
+          "plugin": "plugin-docsme",
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "doc-layout, article-content, toc-nav",
+          "error": ""
+        },
+        {
+          "name": "Vote Block",
+          "plugin": "vote",
+          "path": "/archives/editor-feature-demo",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<vote-block, /plugins/vote/assets/static/vote.iife.js",
+          "error": ""
+        },
+        {
+          "name": "Text Diagram",
+          "plugin": "text-diagram",
+          "path": "/archives/CNnnwQh7",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<text-diagram",
+          "error": ""
+        },
+        {
+          "name": "Contact Form",
+          "plugin": "PluginContactForm",
+          "path": null,
+          "status": "-",
+          "outcome": "not-covered",
+          "marker": "-",
+          "error": "target URL is not configured: CONTACT_FORM_PAGE_URL"
+        },
+        {
+          "name": "AI Summary",
+          "plugin": "ai-assistant",
+          "path": null,
+          "status": "-",
+          "outcome": "not-covered",
+          "marker": "-",
+          "error": "target URL is not configured: AI_SUMMARY_PAGE_URL"
+        },
+        {
+          "name": "Shiki Code Block",
+          "plugin": "shiki",
+          "path": "/archives/CNnnwQh7",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<shiki-code, shiki-code.js?version=",
+          "error": ""
+        },
+        {
+          "name": "Hyperlink Card",
+          "plugin": "editor-hyperlink-card",
+          "path": "/archives/editor-feature-demo",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<hyperlink-card, <hyperlink-inline-card, /plugins/editor-hyperlink-card/assets/static/index.iife.js?version=",
+          "error": ""
+        },
+        {
+          "name": "Lottery Card",
+          "plugin": "lottery",
+          "path": "/archives/ijhJxHtw",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<lottery-card, /plugins/lottery/assets/static/lottery-card.js?version=",
+          "error": ""
+        },
+        {
+          "name": "Restricted Reading",
+          "plugin": "restricted-reading",
+          "path": null,
+          "status": "-",
+          "outcome": "not-covered",
+          "marker": "-",
+          "error": "target URL is not configured: RESTRICTED_READING_PAGE_URL"
+        },
+        {
+          "name": "Maintenance Theme",
+          "plugin": "maintenance",
+          "path": "/maintenance",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "id=\"maintenance-page\", data-plugin-contract=\"maintenance@1.1.0\"",
+          "error": ""
+        },
+        {
+          "name": "Home Docs Widget",
+          "plugin": "plugin-docsme",
+          "path": "/",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "文档中心",
+          "error": ""
+        },
+        {
+          "name": "Home Links Widget",
+          "plugin": "PluginLinks",
+          "path": "/",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "友情链接",
+          "error": ""
+        },
+        {
+          "name": "Home Moments Widget",
+          "plugin": "PluginMoments",
+          "path": "/",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "瞬间说说",
+          "error": ""
+        },
+        {
+          "name": "Docsme Catalog",
+          "plugin": "plugin-docsme",
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "doc-layout, 主题配置功能详解, var docsme = { disableThemeFunction: true }",
+          "error": ""
+        },
+        {
+          "name": "Shiki Loader",
+          "plugin": "shiki",
+          "path": "/archives/editor-feature-demo",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "plugin-shiki, shiki-code.js?version=",
+          "error": ""
+        },
+        {
+          "name": "Comment Widget",
+          "plugin": "PluginCommentWidget",
+          "path": "/archives/editor-feature-demo",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "plugin-comment-widget, comment-widget.js?version=, comment-content-, 评论交流",
+          "error": ""
+        },
+        {
+          "name": "Search Widget",
+          "plugin": "PluginSearchWidget",
+          "path": "/",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "PluginSearchWidget, SearchWidget.open()",
+          "error": ""
+        },
+        {
+          "name": "Contact Form Loader Reference",
+          "plugin": "PluginContactForm",
+          "path": "/",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "/contact-form/embed.js",
+          "error": ""
+        },
+        {
+          "name": "Moments Media Binding",
+          "plugin": "PluginMoments",
+          "path": "/moments",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "moment-media, data-src",
+          "error": ""
+        },
+        {
+          "name": "Author Moments Gate",
+          "plugin": "PluginMoments",
+          "path": "/authors/sky0821",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "author_tab, data-plugin-moments-contract=\"PluginMoments>=1.16.1\", data-plugin-moments-available=",
+          "error": ""
+        },
+        {
+          "name": "Feed XML",
+          "plugin": "PluginFeed",
+          "path": "/feed.xml",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<rss, <channel",
+          "error": ""
+        },
+        {
+          "name": "Sitemap XML",
+          "plugin": "PluginSitemap",
+          "path": "/sitemap.xml",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "<urlset, <loc",
+          "error": ""
+        },
+        {
+          "name": "Robots Sitemap",
+          "plugin": "PluginSitemap",
+          "path": "/robots.txt",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "Sitemap:",
+          "error": ""
+        },
+        {
+          "name": "Links Populated Group Route",
+          "plugin": "PluginLinks",
+          "path": "/links?group=link-group-yOmci",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "data-link-group-section=\"link-group-yOmci\", aria-current=\"page\"",
+          "error": ""
+        },
+        {
+          "name": "Links Empty Group Route",
+          "plugin": "PluginLinks",
+          "path": "/links?group=link-group-gtqEW",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "data-links-empty-state=\"group-empty\", 该分组暂无友情链接",
+          "error": ""
+        },
+        {
+          "name": "Links Missing Group Route",
+          "plugin": "PluginLinks",
+          "path": "/links?group=theme-contract-missing-group",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "data-links-empty-state=\"group-missing\", 未找到该友链分组",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Public API",
+          "plugin": "PluginLinks",
+          "path": "/apis/api.link.halo.run/v1alpha1/links",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "links=7, status-enums",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Groups API",
+          "plugin": "PluginLinks",
+          "path": "/apis/api.link.halo.run/v1alpha1/linkgroups",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "groups=3",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Feed API",
+          "plugin": "PluginLinks",
+          "path": "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "public-feeds=20",
+          "error": ""
+        },
+        {
+          "name": "Douban Items API",
+          "plugin": "plugin-douban",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "readable-items=8",
+          "error": ""
+        },
+        {
+          "name": "Douban Types API",
+          "plugin": "plugin-douban",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "movie",
+          "error": ""
+        },
+        {
+          "name": "Douban Genres API",
+          "plugin": "plugin-douban",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "喜剧, 剧情, 悬疑, 犯罪, 动作",
+          "error": ""
+        },
+        {
+          "name": "Online Summary API",
+          "plugin": "online",
+          "path": "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+          "status": 200,
+          "outcome": "passed",
+          "marker": "online-count",
+          "error": ""
+        }
+      ]
+    },
+    "browser": {
+      "widths": [1440, 390],
+      "cacheDisabled": true,
+      "realComponents": [
+        {
+          "case": "diagram-shiki-real",
+          "width": 1440,
+          "states": [
+            {
+              "scheme": "light",
+              "diagram": {
+                "count": 1,
+                "svgs": 1,
+                "sourceLength": 472,
+                "fill": "rgb(236, 236, 255)"
+              },
+              "shiki": {
+                "count": 9,
+                "nested": 0,
+                "variants": [
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  }
+                ]
+              },
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "diagram": {
+                "count": 1,
+                "svgs": 1,
+                "sourceLength": 472,
+                "fill": "rgb(31, 32, 32)"
+              },
+              "shiki": {
+                "count": 9,
+                "nested": 0,
+                "variants": [
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  }
+                ]
+              },
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "returned": {
+            "sameDocument": true,
+            "svgs": 1,
+            "shiki": 9,
+            "nested": 0,
+            "errors": []
+          }
+        },
+        {
+          "case": "lottery-existing-empty-state",
+          "width": 1440,
+          "states": [
+            {
+              "scheme": "light",
+              "host": {
+                "x": 96,
+                "y": 435,
+                "width": 896,
+                "height": 21,
+                "top": 435,
+                "right": 992,
+                "bottom": 456,
+                "left": 96
+              },
+              "text": " 活动不存在",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "host": {
+                "x": 96,
+                "y": 439,
+                "width": 896,
+                "height": 21,
+                "top": 439,
+                "right": 992,
+                "bottom": 460,
+                "left": 96
+              },
+              "text": " 活动不存在",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "participation": "not attempted"
+        },
+        {
+          "case": "contact-floating-existing",
+          "width": 1440,
+          "states": [
+            {
+              "scheme": "light",
+              "panel": {
+                "x": 962,
+                "y": 377.03125,
+                "width": 460,
+                "height": 498.96875,
+                "top": 377.03125,
+                "right": 1422,
+                "bottom": 876,
+                "left": 962
+              },
+              "background": "rgb(255, 255, 255)",
+              "formHost": "<halo-contact-form slug=\"dev-acceptance-contact-20261024-pjax\" width=\"100%\" role=\"region\" lang=\"zh-CN\" data-theme=\"inherit\"></halo-contact-form>",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "panel": {
+                "x": 962,
+                "y": 377.03125,
+                "width": 460,
+                "height": 498.96875,
+                "top": 377.03125,
+                "right": 1422,
+                "bottom": 876,
+                "left": 962
+              },
+              "background": "rgb(255, 255, 255)",
+              "formHost": "<halo-contact-form slug=\"dev-acceptance-contact-20261024-pjax\" width=\"100%\" role=\"region\" lang=\"zh-CN\" data-theme=\"inherit\"></halo-contact-form>",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "away": {
+            "loaders": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "floating": 1,
+            "errors": [],
+            "sameDocument": true
+          },
+          "submission": "not attempted"
+        },
+        {
+          "case": "maintenance-independent-route",
+          "width": 1440,
+          "states": [
+            {
+              "scheme": "light",
+              "title": "维护中 - 5ee博客",
+              "main": "维护中",
+              "card": {
+                "x": 384,
+                "y": 190.546875,
+                "width": 672,
+                "height": 518.890625,
+                "top": 190.546875,
+                "right": 1056,
+                "bottom": 709.4375,
+                "left": 384
+              },
+              "background": "oklch(1 0 0)",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "title": "维护中 - 5ee博客",
+              "main": "维护中",
+              "card": {
+                "x": 384,
+                "y": 190.546875,
+                "width": 672,
+                "height": 518.890625,
+                "top": 190.546875,
+                "right": 1056,
+                "bottom": 709.4375,
+                "left": 384
+              },
+              "background": "oklch(0.2533 0.016 252.42)",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "globalMaintenance": "not enabled"
+        },
+        {
+          "case": "diagram-shiki-real",
+          "width": 390,
+          "states": [
+            {
+              "scheme": "light",
+              "diagram": {
+                "count": 1,
+                "svgs": 1,
+                "sourceLength": 472,
+                "fill": "rgb(236, 236, 255)"
+              },
+              "shiki": {
+                "count": 9,
+                "nested": 0,
+                "variants": [
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  },
+                  {
+                    "scheme": "light",
+                    "background": "#23262E"
+                  }
+                ]
+              },
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "diagram": {
+                "count": 1,
+                "svgs": 1,
+                "sourceLength": 472,
+                "fill": "rgb(31, 32, 32)"
+              },
+              "shiki": {
+                "count": 9,
+                "nested": 0,
+                "variants": [
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  },
+                  {
+                    "scheme": "dark",
+                    "background": "#07090F"
+                  }
+                ]
+              },
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "returned": {
+            "sameDocument": true,
+            "svgs": 1,
+            "shiki": 9,
+            "nested": 0,
+            "errors": []
+          }
+        },
+        {
+          "case": "lottery-existing-empty-state",
+          "width": 390,
+          "states": [
+            {
+              "scheme": "light",
+              "host": {
+                "x": 16,
+                "y": 434,
+                "width": 358,
+                "height": 21,
+                "top": 434,
+                "right": 374,
+                "bottom": 455,
+                "left": 16
+              },
+              "text": " 活动不存在",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "host": {
+                "x": 16,
+                "y": 439,
+                "width": 358,
+                "height": 21,
+                "top": 439,
+                "right": 374,
+                "bottom": 460,
+                "left": 16
+              },
+              "text": " 活动不存在",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "participation": "not attempted"
+        },
+        {
+          "case": "contact-floating-existing",
+          "width": 390,
+          "states": [
+            {
+              "scheme": "light",
+              "panel": {
+                "x": 10,
+                "y": 424.125,
+                "width": 370,
+                "height": 465.875,
+                "top": 424.125,
+                "right": 380,
+                "bottom": 890,
+                "left": 10
+              },
+              "background": "rgb(255, 255, 255)",
+              "formHost": "<halo-contact-form slug=\"dev-acceptance-contact-20261024-pjax\" width=\"100%\" role=\"region\" lang=\"zh-CN\" data-theme=\"inherit\"></halo-contact-form>",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "panel": {
+                "x": 10,
+                "y": 424.125,
+                "width": 370,
+                "height": 465.875,
+                "top": 424.125,
+                "right": 380,
+                "bottom": 890,
+                "left": 10
+              },
+              "background": "rgb(255, 255, 255)",
+              "formHost": "<halo-contact-form slug=\"dev-acceptance-contact-20261024-pjax\" width=\"100%\" role=\"region\" lang=\"zh-CN\" data-theme=\"inherit\"></halo-contact-form>",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "away": {
+            "loaders": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "floating": 1,
+            "errors": [],
+            "sameDocument": true
+          },
+          "submission": "not attempted"
+        },
+        {
+          "case": "maintenance-independent-route",
+          "width": 390,
+          "states": [
+            {
+              "scheme": "light",
+              "title": "维护中 - 5ee博客",
+              "main": "维护中",
+              "card": {
+                "x": 20,
+                "y": 211.78125,
+                "width": 350,
+                "height": 476.421875,
+                "top": 211.78125,
+                "right": 370,
+                "bottom": 688.203125,
+                "left": 20
+              },
+              "background": "oklch(1 0 0)",
+              "overflow": false,
+              "errors": []
+            },
+            {
+              "scheme": "dark",
+              "title": "维护中 - 5ee博客",
+              "main": "维护中",
+              "card": {
+                "x": 20,
+                "y": 211.78125,
+                "width": 350,
+                "height": 476.421875,
+                "top": 211.78125,
+                "right": 370,
+                "bottom": 688.203125,
+                "left": 20
+              },
+              "background": "oklch(0.2533 0.016 252.42)",
+              "overflow": false,
+              "errors": []
+            }
+          ],
+          "globalMaintenance": "not enabled"
+        }
+      ],
+      "ai": [
+        {
+          "width": 1440,
+          "typewriter": false,
+          "modes": [
+            {
+              "scheme": "light",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.21 0.006 285.885)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            },
+            {
+              "scheme": "dark",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.97807 0.029 256.847)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            }
+          ],
+          "removed": {
+            "count": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "count": 1,
+            "scriptCount": 1,
+            "reads": 2,
+            "errors": [],
+            "sameDocument": true
+          },
+          "mode": "Browser-only injected official host and controlled summary GET; actual official script; no model invocation"
+        },
+        {
+          "width": 1440,
+          "typewriter": true,
+          "modes": [
+            {
+              "scheme": "light",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.21 0.006 285.885)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            },
+            {
+              "scheme": "dark",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.97807 0.029 256.847)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            }
+          ],
+          "removed": {
+            "count": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "count": 1,
+            "scriptCount": 1,
+            "reads": 2,
+            "errors": [],
+            "sameDocument": true
+          },
+          "mode": "Browser-only injected official host and controlled summary GET; actual official script; no model invocation"
+        },
+        {
+          "width": 390,
+          "typewriter": false,
+          "modes": [
+            {
+              "scheme": "light",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.21 0.006 285.885)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            },
+            {
+              "scheme": "dark",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.97807 0.029 256.847)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            }
+          ],
+          "removed": {
+            "count": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "count": 1,
+            "scriptCount": 1,
+            "reads": 2,
+            "errors": [],
+            "sameDocument": true
+          },
+          "mode": "Browser-only injected official host and controlled summary GET; actual official script; no model invocation"
+        },
+        {
+          "width": 390,
+          "typewriter": true,
+          "modes": [
+            {
+              "scheme": "light",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.21 0.006 285.885)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            },
+            {
+              "scheme": "dark",
+              "text": "摘要组件界面验收，未调用模型。",
+              "color": "oklch(0.97807 0.029 256.847)",
+              "hosts": 1,
+              "overflow": false,
+              "errors": [],
+              "reads": 1,
+              "sameDocument": true
+            }
+          ],
+          "removed": {
+            "count": 0,
+            "sameDocument": true
+          },
+          "returned": {
+            "count": 1,
+            "scriptCount": 1,
+            "reads": 2,
+            "errors": [],
+            "sameDocument": true
+          },
+          "mode": "Browser-only injected official host and controlled summary GET; actual official script; no model invocation"
+        }
+      ],
+      "restricted": [
+        {
+          "width": 1440,
+          "modes": [
+            {
+              "scheme": "dark",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            },
+            {
+              "scheme": "light",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "",
+                "--halo-restrict-widget-primary-subtle-color": "",
+                "--halo-restrict-widget-secondary-color": "",
+                "--halo-restrict-widget-light-color": "",
+                "--halo-restrict-widget-title-color": "",
+                "--halo-restrict-widget-title-subtle-color": "",
+                "--halo-restrict-widget-modal-bg-color": ""
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "",
+                "--halo-restrict-widget-primary-subtle-color": "",
+                "--halo-restrict-widget-secondary-color": "",
+                "--halo-restrict-widget-light-color": "",
+                "--halo-restrict-widget-title-color": "",
+                "--halo-restrict-widget-title-subtle-color": "",
+                "--halo-restrict-widget-modal-bg-color": ""
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            },
+            {
+              "scheme": "dark",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            }
+          ],
+          "after": {
+            "path": "/privacy",
+            "modalCount": 0,
+            "sameDocument": true,
+            "closeEvents": 1,
+            "requests": [],
+            "errors": []
+          },
+          "returned": {
+            "path": "/archives/editor-feature-demo",
+            "modalCount": 0,
+            "sameDocument": true,
+            "requests": [],
+            "errors": []
+          },
+          "mode": "Temporary official answer widget; actual 1.9.3 script; no unlock request or site content write"
+        },
+        {
+          "width": 390,
+          "modes": [
+            {
+              "scheme": "dark",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            },
+            {
+              "scheme": "light",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "",
+                "--halo-restrict-widget-primary-subtle-color": "",
+                "--halo-restrict-widget-secondary-color": "",
+                "--halo-restrict-widget-light-color": "",
+                "--halo-restrict-widget-title-color": "",
+                "--halo-restrict-widget-title-subtle-color": "",
+                "--halo-restrict-widget-modal-bg-color": ""
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "",
+                "--halo-restrict-widget-primary-subtle-color": "",
+                "--halo-restrict-widget-secondary-color": "",
+                "--halo-restrict-widget-light-color": "",
+                "--halo-restrict-widget-title-color": "",
+                "--halo-restrict-widget-title-subtle-color": "",
+                "--halo-restrict-widget-modal-bg-color": ""
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            },
+            {
+              "scheme": "dark",
+              "widget": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "modal": {
+                "--halo-restrict-widget-primary-color": "#1e40af",
+                "--halo-restrict-widget-primary-subtle-color": "#3b82f6",
+                "--halo-restrict-widget-secondary-color": "#3f3f46",
+                "--halo-restrict-widget-light-color": "#18181b",
+                "--halo-restrict-widget-title-color": "#e5e5e5",
+                "--halo-restrict-widget-title-subtle-color": "#a1a1aa",
+                "--halo-restrict-widget-modal-bg-color": "#27272a"
+              },
+              "count": 1,
+              "overflow": false,
+              "errors": [],
+              "requests": []
+            }
+          ],
+          "after": {
+            "path": "/privacy",
+            "modalCount": 0,
+            "sameDocument": true,
+            "closeEvents": 1,
+            "requests": [],
+            "errors": []
+          },
+          "returned": {
+            "path": "/archives/editor-feature-demo",
+            "modalCount": 0,
+            "sameDocument": true,
+            "requests": [],
+            "errors": []
+          },
+          "mode": "Temporary official answer widget; actual 1.9.3 script; no unlock request or site content write"
+        }
+      ],
+      "stableModalGeometry": [
+        {
+          "width": 1440,
+          "scheme": "light",
+          "panel": {
+            "x": 528,
+            "y": 364.75,
+            "width": 384,
+            "height": 170.5,
+            "top": 364.75,
+            "right": 912,
+            "bottom": 535.25,
+            "left": 528
+          },
+          "background": "rgb(255, 255, 255)",
+          "opacity": "1"
+        },
+        {
+          "width": 1440,
+          "scheme": "dark",
+          "panel": {
+            "x": 528,
+            "y": 364.75,
+            "width": 384,
+            "height": 170.5,
+            "top": 364.75,
+            "right": 912,
+            "bottom": 535.25,
+            "left": 528
+          },
+          "background": "rgb(39, 39, 42)",
+          "opacity": "1"
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "panel": {
+            "x": 16,
+            "y": 362,
+            "width": 358,
+            "height": 176,
+            "top": 362,
+            "right": 374,
+            "bottom": 538,
+            "left": 16
+          },
+          "background": "rgb(255, 255, 255)",
+          "opacity": "1"
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "panel": {
+            "x": 16,
+            "y": 362,
+            "width": 358,
+            "height": 176,
+            "top": 362,
+            "right": 374,
+            "bottom": 538,
+            "left": 16
+          },
+          "background": "rgb(39, 39, 42)",
+          "opacity": "1"
+        }
+      ],
+      "sharedNavigation": [
+        {
+          "path": "/archives/editor-feature-demo",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/privacy",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/links",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/photos",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/moments",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/about",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": false,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/",
+          "width": 1440,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/archives/editor-feature-demo",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/privacy",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/links",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/photos",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/moments",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/about",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": false,
+          "errors": [],
+          "modalCount": 0
+        },
+        {
+          "path": "/",
+          "width": 390,
+          "overflow": false,
+          "preview": "theme-sky-blog-1",
+          "sameDocument": true,
+          "errors": [],
+          "modalCount": 0
+        }
+      ],
+      "previousCodeExtraFixtures": {
+        "codeHash": "aa552cc833c3e494cac00b72f29b095ef6003c11cd8161ed61937878e9950a3a",
+        "unchangedRelevantSurface": "Shiki fold/layout and inline published Contact Form; not relabeled as final code run",
+        "cases": [
+          {
+            "case": "shiki-long-fold-fixture",
+            "width": 1440,
+            "variant": "mac",
+            "expanded": {
+              "expanded": "true",
+              "pre": {
+                "client": 896,
+                "scroll": 9684
+              },
+              "overflow": false,
+              "errors": []
+            },
+            "keyboardCollapse": true,
+            "mode": "temporary DOM; production Shiki element and theme resources"
+          },
+          {
+            "case": "shiki-long-fold-fixture",
+            "width": 1440,
+            "variant": "simple",
+            "expanded": {
+              "expanded": "true",
+              "pre": {
+                "client": 896,
+                "scroll": 9684
+              },
+              "overflow": false,
+              "errors": []
+            },
+            "keyboardCollapse": true,
+            "mode": "temporary DOM; production Shiki element and theme resources"
+          },
+          {
+            "case": "contact-inline-published-form-fixture",
+            "width": 1440,
+            "modes": [
+              {
+                "scheme": "light",
+                "host": {
+                  "x": 96,
+                  "y": 246.35671997070312,
+                  "width": 896,
+                  "height": 401.2343444824219,
+                  "top": 246.35671997070312,
+                  "right": 992,
+                  "bottom": 647.591064453125,
+                  "left": 96
+                },
+                "fields": 1,
+                "overflow": false,
+                "errors": []
+              },
+              {
+                "scheme": "dark",
+                "host": {
+                  "x": 96,
+                  "y": 249.0066375732422,
+                  "width": 896,
+                  "height": 401.234375,
+                  "top": 249.0066375732422,
+                  "right": 992,
+                  "bottom": 650.2410125732422,
+                  "left": 96
+                },
+                "fields": 1,
+                "overflow": false,
+                "errors": []
+              }
+            ],
+            "submission": "not attempted",
+            "mode": "temporary official host; existing published form read; no article write"
+          },
+          {
+            "case": "shiki-long-fold-fixture",
+            "width": 390,
+            "variant": "mac",
+            "expanded": {
+              "expanded": "true",
+              "pre": {
+                "client": 358,
+                "scroll": 9119
+              },
+              "overflow": false,
+              "errors": []
+            },
+            "keyboardCollapse": true,
+            "mode": "temporary DOM; production Shiki element and theme resources"
+          },
+          {
+            "case": "shiki-long-fold-fixture",
+            "width": 390,
+            "variant": "simple",
+            "expanded": {
+              "expanded": "true",
+              "pre": {
+                "client": 358,
+                "scroll": 9119
+              },
+              "overflow": false,
+              "errors": []
+            },
+            "keyboardCollapse": true,
+            "mode": "temporary DOM; production Shiki element and theme resources"
+          },
+          {
+            "case": "contact-inline-published-form-fixture",
+            "width": 390,
+            "modes": [
+              {
+                "scheme": "light",
+                "host": {
+                  "x": 16,
+                  "y": 244.8609619140625,
+                  "width": 358,
+                  "height": 402.875,
+                  "top": 244.8609619140625,
+                  "right": 374,
+                  "bottom": 647.7359619140625,
+                  "left": 16
+                },
+                "fields": 1,
+                "overflow": false,
+                "errors": []
+              },
+              {
+                "scheme": "dark",
+                "host": {
+                  "x": 16,
+                  "y": 248.35397338867188,
+                  "width": 358,
+                  "height": 402.8750305175781,
+                  "top": 248.35397338867188,
+                  "right": 374,
+                  "bottom": 651.22900390625,
+                  "left": 16
+                },
+                "fields": 1,
+                "overflow": false,
+                "errors": []
+              }
+            ],
+            "submission": "not attempted",
+            "mode": "temporary official host; existing published form read; no article write"
+          }
+        ]
+      },
+      "harnessCorrections": [
+        "A screenshot-only wait over all page animations timed out on a paused animation; actual modal verified with settled Shadow DOM animations and stable geometry.",
+        "Temporary navigation anchor was initially behind fixed navbar; moved only the browser fixture.",
+        "Shared navigation allowed document replacement and attached error collection to each new document; 14 same-document and 2 full-document transitions recorded."
+      ]
+    },
+    "redGreen": {
+      "red": {
+        "pass": 3,
+        "fail": 3
+      },
+      "green": {
+        "pass": 6,
+        "fail": 0
+      },
+      "before": {
+        "modalRemainedAfterHistoryBack": true,
+        "sameDocument": true,
+        "widgetVariables": {
+          "--halo-restrict-widget-title-color": "#e5e5e5",
+          "--halo-restrict-widget-modal-bg-color": "#27272a"
+        },
+        "modalVariables": {
+          "--halo-restrict-widget-title-color": "",
+          "--halo-restrict-widget-modal-bg-color": ""
+        }
+      },
+      "independentReview": "No confirmed code defect; actual official 1.9.3 close/disconnected contract and color class verified"
+    },
+    "logs": {
+      "current": {
+        "startedAt": "2026-10-31T17:19:51.734Z",
+        "endedAt": "2026-10-31T17:30:35.443Z",
+        "levels": {
+          "INFO": 27,
+          "WARN": 3,
+          "ERROR": 4
+        },
+        "categories": {
+          "pagination limit": 3,
+          "AList excluded": 4
+        },
+        "unknown": []
+      },
+      "historicalInterruption": {
+        "conclusion": {
+          "total": 8,
+          "byTemplate": {
+            "index": 1,
+            "author": 4,
+            "doc": 3
+          },
+          "confirmedThemeBugs": 0,
+          "confirmedRequestCancellations": 0,
+          "confirmedOtherRootCauses": 0,
+          "unresolved": 8,
+          "status": "中断事实已确认，8条原因及具体请求均未定位。",
+          "interpretation": "不能认定为主题Bug，也不能以请求取消假设关闭。当前6条完整GET成功仅证明这些请求成功，不解释历史中断。"
+        },
+        "runtimeVerification": {
+          "artifact": "halo-pro",
+          "version": "2.27.1",
+          "provenance": "只读docker cp当前halo容器的/application/application.jar到/tmp；读取build-info并用javap反汇编实际HaloTemplateEngine.class。",
+          "classSha256": "aae07727f798420adda73861e62f051f156bde4726f10db7f741ea52698c189f",
+          "className": "run.halo.app.theme.engine.HaloTemplateEngine",
+          "method": "logTemplateError(Exception,String)",
+          "trigger": "Exceptions.unwrap(exception.getCause()) instanceof InterruptedException",
+          "warnOverload": "Logger.warn(String,Object)",
+          "stackOmittedByThisWarn": true,
+          "scheduler": "processStream的Mono/Flux分支均subscribeOn(Schedulers.boundedElastic())",
+          "processingVersusOutputting": "ClosedByInterruptException另有Interrupted while outputting template分支；本轮8条均为processing分支。",
+          "boundary": "此分支不包含请求取消判定，不记录中断发起方、请求ID、路径或主题ID。"
+        },
+        "requestCorrelationLimitation": "No request ID, URL, stack or theme ID for eight historical warnings; current successful GETs do not identify their causes."
+      }
+    },
+    "quality": {
+      "lintExitCode": 0,
+      "formatExitCode": 0,
+      "gitDiffCheckExitCode": 0
+    }
+  },
+  "versionFreshness": {
+    "source": "version-freshness.json",
+    "installed": 46,
+    "matchLatestStable": 42,
+    "notInstalledLatestStable": ["PluginBytemd 1.10.0", "content-tools 1.9.0", "seo-tools 1.11.0", "data-studio 1.0.0"],
+    "businessValidationForTheseNewVersions": false
+  },
+  "visualReview": {
+    "caseCount": 24,
+    "themeDefects": 0,
+    "contentObservation": "Mermaid author hard-coded node B fill #f9f without text color; official dark preset #ccc gives poor contrast; theme preserves author input. Article not modified."
+  },
+  "boundaries": [
+    "No actual public inline Contact Form, AI Summary or Restricted Reading host found in 51 published posts; browser temporary fixtures are not configured real content.",
+    "Lottery verified only the existing activity-not-found state.",
+    "Maintenance verified independent route only; site-wide switch unchanged.",
+    "answer uses real plugin UI; mp is source/isolated regression only; pay untouched and untested.",
+    "AI controlled read response does not invoke model; earlier user manual AI/Passkey tests retain separate provenance.",
+    "No claim all routes/configurations/business submissions rerun; previous 64-route-view sweep retains previous code identity."
+  ],
+  "artifacts": {
+    "temporaryDirectory": "/tmp/sky-coverage-followup-20261101/",
+    "screenshots": [
+      {
+        "file": "ai-false-dark-1440.png",
+        "sha256": "e2c5675371d913f771e34328df917441af058d9fe84b82fac265745343900c82"
+      },
+      {
+        "file": "ai-false-dark-390.png",
+        "sha256": "2be03b0a2ad98f6b14477c007b7eef9a946538bc5ed6be2fe532f913777fe948"
+      },
+      {
+        "file": "ai-false-light-1440.png",
+        "sha256": "a990492c0e69c540a83154881cf64f6e580221560b09c74ca8c9a481ca27ddc1"
+      },
+      {
+        "file": "ai-false-light-390.png",
+        "sha256": "53e7c0e6afef68f67bdcfa23a7e469828143fea2a2248211e7b9394f4ba241d8"
+      },
+      {
+        "file": "ai-true-dark-1440.png",
+        "sha256": "a5ca4449eb404ed540c7d3fefd82976da6db768aeb6cfde28a35d84ff803bf5c"
+      },
+      {
+        "file": "ai-true-dark-390.png",
+        "sha256": "a66941a65c4d5b23781a5ee91e97905af7f73fa2eee91daa20410ae7b4e91b70"
+      },
+      {
+        "file": "ai-true-light-1440.png",
+        "sha256": "890fa8fb132cbe15f302eec04dffe4ebd3e33929c2d7c885034145b093e6b5f0"
+      },
+      {
+        "file": "ai-true-light-390.png",
+        "sha256": "20e7bb5ef0d14176c711adb337bedda530c6ea054806baba7ed4a6e2d898c2c6"
+      },
+      {
+        "file": "contact-dark-1440.png",
+        "sha256": "26f39d869d83ae83964d148f29cfc70ff32690c4587d08684763449024ce06c5"
+      },
+      {
+        "file": "contact-dark-390.png",
+        "sha256": "8c48804e3a7736494fdf0d8a8d6075b6972009bfa402690b0c963e8949f012b8"
+      },
+      {
+        "file": "contact-inline-dark-1440.png",
+        "sha256": "6f95444755bc8dcf5c095b6e7ecc95451f25a6c694d624d517763b17c6ade917"
+      },
+      {
+        "file": "contact-inline-dark-390.png",
+        "sha256": "65dd2aaaa52fda92b9a9dc216dd261f942702d9d6ded8c5afac8e01d6f6847b0"
+      },
+      {
+        "file": "contact-inline-light-1440.png",
+        "sha256": "50e9addc311e15af161fc5ae2bcb4cde5f8c4602c9b92854a49ee5ba85828578"
+      },
+      {
+        "file": "contact-inline-light-390.png",
+        "sha256": "324e93dfc2f41f60b4e40a30bca7899cc024d86a09744db61b62fe46188ac3a9"
+      },
+      {
+        "file": "contact-light-1440.png",
+        "sha256": "02ec6aa3886fe287d6ec897d91d57972f22dedd305a7f5595b8875a47334a482"
+      },
+      {
+        "file": "contact-light-390.png",
+        "sha256": "438fa9f3e663ea67a8f7f07fb90ac98d878035b51136c92bfa00d9ab71a98263"
+      },
+      {
+        "file": "diagram-dark-1440.png",
+        "sha256": "8c32cae4362fae1c069a18ad20f080e6140a506a80bc259fe66aedecb167dd01"
+      },
+      {
+        "file": "diagram-dark-390.png",
+        "sha256": "24d45cad4fbd90bacd780f5a07fef37132b91a3734677bb43e068fda1bd6910f"
+      },
+      {
+        "file": "diagram-light-1440.png",
+        "sha256": "f0db6a4e60918ae40da501b66f87eee56d2c203abbbc1c5ce1e27f4c4dfb8426"
+      },
+      {
+        "file": "diagram-light-390.png",
+        "sha256": "f78cc6abac2fdbb2f7f896839de1884f109a43d3f9e86c05d1cd65f8caef8aea"
+      },
+      {
+        "file": "final-ai-false-dark-1440.png",
+        "sha256": "2179f5fe62a53213c9bbd0b1d6e388405587b88cadbad526d627ff5b25e56a11"
+      },
+      {
+        "file": "final-ai-false-dark-390.png",
+        "sha256": "3c0fa8ed7356ae791b7cdc5d0364001e5b02a838da6f8f8432501a0aa0e4f974"
+      },
+      {
+        "file": "final-ai-false-light-1440.png",
+        "sha256": "087bc9d0c804e07e7c683ecd9c50d1892349da95b500eb000e02ca5ca44ece59"
+      },
+      {
+        "file": "final-ai-false-light-390.png",
+        "sha256": "dcb5ce628ebd21f41ea57cd1582cc29ea9ad9f8a303ec12d7ba234cf8da62402"
+      },
+      {
+        "file": "final-ai-true-dark-1440.png",
+        "sha256": "8c7099cd2b65cc9322f370ff6d98abffa3cc71bd25341782da5fb9d08811e6df"
+      },
+      {
+        "file": "final-ai-true-dark-390.png",
+        "sha256": "323d79acad5d75b27e8ff7f661f767964f42986728ccf78ebc94b9854d1dba42"
+      },
+      {
+        "file": "final-ai-true-light-1440.png",
+        "sha256": "dafd82518d74c51a2ba344a3937a0f39e340422f039deee7417853842e013162"
+      },
+      {
+        "file": "final-ai-true-light-390.png",
+        "sha256": "d5f4cdfe151fcc05ed80363403fd46daf069d1a3511469c768f659e9ae5c11f4"
+      },
+      {
+        "file": "final-contact-dark-1440.png",
+        "sha256": "5082ad5ec6a0f8e229aaa3553d8a3149e32ed669384c69cdfebb18e21dc9c668"
+      },
+      {
+        "file": "final-contact-dark-390.png",
+        "sha256": "3f8ffea2e717bdbe7133adf5a13f6371e7c8469162a2568001ff2f3677535a50"
+      },
+      {
+        "file": "final-contact-light-1440.png",
+        "sha256": "972b985cf181c6bf06e05b76574144e4047ddd7b9231158dd80b6d4d86fb859f"
+      },
+      {
+        "file": "final-contact-light-390.png",
+        "sha256": "438fa9f3e663ea67a8f7f07fb90ac98d878035b51136c92bfa00d9ab71a98263"
+      },
+      {
+        "file": "final-diagram-dark-1440.png",
+        "sha256": "281e05d03ce59bd4578a99ac69d93633a4d50a52b1771d033128ca756ee4d9a2"
+      },
+      {
+        "file": "final-diagram-dark-390.png",
+        "sha256": "ff2d2062798018841636179318b8e6a7b835db1815417870a04c4d5391d07f8f"
+      },
+      {
+        "file": "final-diagram-light-1440.png",
+        "sha256": "8066e70a3d1f6c7d67721d34fc079656238135364129df22d62fc8fd5dccb646"
+      },
+      {
+        "file": "final-diagram-light-390.png",
+        "sha256": "1af37ad683913c3d81e7cb56e5cfbceb7242c4b762b01613dc809a7b254738a9"
+      },
+      {
+        "file": "final-lottery-dark-1440.png",
+        "sha256": "ea6c19706dacbf6494a4443c23f4d1cd8efd9e6566be7a56901691d943f9f447"
+      },
+      {
+        "file": "final-lottery-dark-390.png",
+        "sha256": "a1f9b16a5b54c5b44819f5233448586a5d130a22960401a88ab89bfd7ea88c45"
+      },
+      {
+        "file": "final-lottery-light-1440.png",
+        "sha256": "f849ccdf463f9c7d64418becef3c7c23dadf814da24130f6f85bfdb0ea9f0074"
+      },
+      {
+        "file": "final-lottery-light-390.png",
+        "sha256": "e52efa6efde0d70d9be7dda0d95c928b7828418b322c185e27448b1eb2e00c22"
+      },
+      {
+        "file": "final-maintenance-dark-1440.png",
+        "sha256": "cfb1624981f2611b5b36bfeec1074d39f45f12fe7810cbead0212f7d3e729d74"
+      },
+      {
+        "file": "final-maintenance-dark-390.png",
+        "sha256": "d102d812029f2752c85f04cd4186543952f5ab37948c3913b3b1022e26481e06"
+      },
+      {
+        "file": "final-maintenance-light-1440.png",
+        "sha256": "0b59e5045455418a88cc883dfbce19f17fcd89d8603196684ba66d299ec47da1"
+      },
+      {
+        "file": "final-maintenance-light-390.png",
+        "sha256": "faca3ef3e16c27b02ec9aeee318d39d8eca3881f93193d7f7043078cf7020600"
+      },
+      {
+        "file": "lottery-dark-1440.png",
+        "sha256": "a4fdb24519bbd3ff29fd0bc39cbc96cb7820912ff71a69b4b39f854bea1bf82b"
+      },
+      {
+        "file": "lottery-dark-390.png",
+        "sha256": "1d0f7e557c82c63ab9ea959e96106669017623728882d60d51514a2da7029e5b"
+      },
+      {
+        "file": "lottery-light-1440.png",
+        "sha256": "36c3b6182f08372f4b139711404b32c1ced84c429046ae17ddd88f95226a8c65"
+      },
+      {
+        "file": "lottery-light-390.png",
+        "sha256": "d667b3316fd91c83dad38180d03df573d34310eb76c4c97d0c0155381292c0af"
+      },
+      {
+        "file": "maintenance-dark-1440.png",
+        "sha256": "59e374a1fc18050fde017f6e7a36b6f0344e7dbe2259401015311d598b9752cb"
+      },
+      {
+        "file": "maintenance-dark-390.png",
+        "sha256": "0523bcbdd56a0fbb5e0af30a151c5f6217fc772b8f87bc72dcc753bea0111e30"
+      },
+      {
+        "file": "maintenance-light-1440.png",
+        "sha256": "1fa4497af43bd9aa199e02bcff51817ff8d86c81d46d89b1086011561a96015d"
+      },
+      {
+        "file": "maintenance-light-390.png",
+        "sha256": "c10891daf3c546c8756c01cf942148a5bbfbcb64157ef3da7faaece26b8a5ee4"
+      },
+      {
+        "file": "restricted-dark-before.png",
+        "sha256": "4dffd2f36ffe3daa55f10c74892dc138b828e8209e136b140de749d620839f41"
+      },
+      {
+        "file": "restricted-final-dark-1440.png",
+        "sha256": "586af2a8f156e6c15bc3fe92100022145a7c5aec91dac3cb67b4979ca5c98a86"
+      },
+      {
+        "file": "restricted-final-dark-390.png",
+        "sha256": "ea4f38a67915bd44c35e32b04acd61eb6f989a8a5cc244fb455d59644de1aa01"
+      },
+      {
+        "file": "restricted-final-light-1440.png",
+        "sha256": "f026d8a068283e312acbd5a19aaa531f2a291f72e6e96e623f8f0bfc659cc447"
+      },
+      {
+        "file": "restricted-final-light-390.png",
+        "sha256": "8b8a1307d51d9e35c288e37737a96c2e06876152896ef2cee1a8416ab6dedf28"
+      },
+      {
+        "file": "restricted-stable-dark-1440.png",
+        "sha256": "39e6ff54d1fcfe562d6a715942eca60c4b4ea37d413f0ed1891436b46c9c1c8b"
+      },
+      {
+        "file": "restricted-stable-dark-390.png",
+        "sha256": "5efbd7ccd30b69d3628c51b2bb428873ca0f8847b7ecebea97959a15ac4797c2"
+      },
+      {
+        "file": "restricted-stable-inspect.png",
+        "sha256": "449cd3a4d8c979fd61ac6add308344076e4fbfa19cf6441d5df6979d27b52f90"
+      },
+      {
+        "file": "restricted-stable-light-1440.png",
+        "sha256": "43596d883898b175d1734bfb6d9d177e4ffccfc729ab87e20468d10f02491fa1"
+      },
+      {
+        "file": "restricted-stable-light-390.png",
+        "sha256": "2a8fde8991f63be62ef6e97d58733aadf2dbc31a2ed6a23805c2db669ff3da8f"
+      },
+      {
+        "file": "shiki-fold-mac-1440.png",
+        "sha256": "c1646eca66d0d22dff72927545f6a157d12cd75e8f6e23b314c5708f02577a9e"
+      },
+      {
+        "file": "shiki-fold-mac-390.png",
+        "sha256": "ee005309de2990aba36f9efa97d157c23939a14399878e80af0bad71d1ef4a3c"
+      },
+      {
+        "file": "shiki-fold-simple-1440.png",
+        "sha256": "c2f39e4e37d067dc74bcf4a2269e2bb6df909bd6924ae0dfa19bc46ea5119984"
+      },
+      {
+        "file": "shiki-fold-simple-390.png",
+        "sha256": "cf06511ab7d80ec009309fdec91f28e7a2eb6f466595fa92e04a5d26099de258"
+      }
+    ],
+    "package": {
+      "path": "dist/theme-sky-blog-1-2.2.41.zip",
+      "sha256": "cf8d2a0a856f09484c9c6f17c4f9264eed86cf1c317e5778d33ddd4634d3387c",
+      "published": false
+    }
+  },
+  "taskSpace": {
+    "id": 70,
+    "finishedAt": "2026-10-31T17:30:15.450Z",
+    "keep": [],
+    "finished": true
+  }
+}

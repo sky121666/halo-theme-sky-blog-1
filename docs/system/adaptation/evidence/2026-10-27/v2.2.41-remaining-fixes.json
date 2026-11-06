@@ -1,0 +1,2227 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-27T13:16:57.880Z",
+  "scope": "Continuation of unfinished theme work: four in-scope fixes, current-code read checks, browser UI and lifecycle checks, remaining boundary analysis. No claim of full plugin write-business coverage.",
+  "environment": {
+    "startedAt": "2026-10-27T12:45:41.231Z",
+    "completedAt": "2026-10-27T12:45:42.334Z",
+    "baseUrl": "http://localhost:8090",
+    "cache": [
+      {
+        "path": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "path": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "method": "DELETE",
+        "status": 200
+      }
+    ],
+    "haloVersion": "2.27.1",
+    "activeTheme": "theme-sky-blog-3",
+    "previewTheme": "theme-sky-blog-1",
+    "theme": {
+      "name": "theme-sky-blog-1",
+      "version": "2.2.41",
+      "requires": ">=2.27.0",
+      "phase": "READY"
+    },
+    "plugins": [
+      {
+        "id": "log-viewer",
+        "version": "1.3.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "mcp-server",
+        "version": "1.3.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-foundation",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-douban",
+        "version": "1.2.7",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "maintenance",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "dishes",
+        "version": "1.0.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "schedule-calendar",
+        "version": "3.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "lottery",
+        "version": "1.0.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLive2d",
+        "version": "2.2.0",
+        "enabled": false,
+        "phase": "DISABLED"
+      },
+      {
+        "id": "editor-emoji",
+        "version": "1.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "auth-passkey",
+        "version": "2.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "equipment",
+        "version": "1.1.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-bilibili-bangumi",
+        "version": "1.4.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "vote",
+        "version": "1.1.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginS3ObjectStorage",
+        "version": "1.17.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "hybrid-edit-block",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "chenhe-lsky-pro",
+        "version": "1.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLightGallery",
+        "version": "1.2.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginLinks",
+        "version": "2.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginContactForm",
+        "version": "2.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "ai-assistant",
+        "version": "3.1.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "alist-integration",
+        "version": "1.2.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "backup-improved",
+        "version": "1.5.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-ldap-login",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "editor-hyperlink-card",
+        "version": "1.9.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-oauth2",
+        "version": "1.7.2",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-social-login",
+        "version": "1.7.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "restricted-reading",
+        "version": "1.9.3",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginCommentWidget",
+        "version": "3.4.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSitemap",
+        "version": "1.3.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginSearchWidget",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginFeed",
+        "version": "1.5.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "app-store-integration",
+        "version": "1.19.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ],
+    "codeIdentity": {
+      "algorithm": "sha256",
+      "codeHash": "b71691fc3458883f1ebefc4938b0b01d929dad45cdeae5960da51f804a55f65c",
+      "fileCount": 374,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "asset": "css/about.css",
+        "status": 200,
+        "served": "a5df2755ac59f9cb5163fd26a10ad989e461d9b061cd0565db61b12efb110798",
+        "local": "a5df2755ac59f9cb5163fd26a10ad989e461d9b061cd0565db61b12efb110798",
+        "match": true
+      },
+      {
+        "asset": "css/doc.css",
+        "status": 200,
+        "served": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "local": "c4150bfa59d8555fd4f86da27f58767368a5850ce362d924d0f1bd6569619f5e",
+        "match": true
+      },
+      {
+        "asset": "css/main.css",
+        "status": 200,
+        "served": "cfb0dc8dca2457f0f3417e07542de83eb0a5759f222461b11abe19e1ed5c98c2",
+        "local": "cfb0dc8dca2457f0f3417e07542de83eb0a5759f222461b11abe19e1ed5c98c2",
+        "match": true
+      },
+      {
+        "asset": "css/auth-split.css",
+        "status": 200,
+        "served": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "local": "004aad23350d4ec613bd6c7a4ac3b7bf13f50c8472b20c5b9d3fc1628de65f54",
+        "match": true
+      },
+      {
+        "asset": "js/about.js",
+        "status": 200,
+        "served": "c7b839251a31b064f4aad3d66ccebcc7edf2e037f7992a64676e27d373b7d661",
+        "local": "c7b839251a31b064f4aad3d66ccebcc7edf2e037f7992a64676e27d373b7d661",
+        "match": true
+      },
+      {
+        "asset": "js/doc.js",
+        "status": 200,
+        "served": "f9d96496efb9a5e1589ac385c1f798305524718e4ec344231809c4433ac3654e",
+        "local": "f9d96496efb9a5e1589ac385c1f798305524718e4ec344231809c4433ac3654e",
+        "match": true
+      },
+      {
+        "asset": "js/links.js",
+        "status": 200,
+        "served": "dc81f45caacb20dba4987740f71ad4b10645b13bb263a3cb751e37ee92a26dc7",
+        "local": "dc81f45caacb20dba4987740f71ad4b10645b13bb263a3cb751e37ee92a26dc7",
+        "match": true
+      },
+      {
+        "asset": "js/main.js",
+        "status": 200,
+        "served": "078f9f9ecfb1d7dca287ad17f5c7f016588b6018b72c3c2d5dff5a3c8152c469",
+        "local": "078f9f9ecfb1d7dca287ad17f5c7f016588b6018b72c3c2d5dff5a3c8152c469",
+        "match": true
+      },
+      {
+        "asset": "js/auth-split.js",
+        "status": 200,
+        "served": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "local": "3690b7625946e2d3d1127111ddb4b8b02ceb8388d5a1ee79de5addddc0c98cb7",
+        "match": true
+      },
+      {
+        "asset": "js/chunks/auth-common-2.2.41.js",
+        "status": 200,
+        "served": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "local": "a4dceb4fc608521a90c3da8bd4dfdb2c1b8869f48b81702d72c638414c750fc2",
+        "match": true
+      }
+    ]
+  },
+  "officialContractEvidence": [
+    {
+      "id": "plugin-docsme",
+      "version": "1.10.2",
+      "artifact": "/Users/sky/Public/work/sky-blog1/plugins/plugin-docsme-1.10.2.jar",
+      "sha256": "f7d2280e59627565917816447862510d476944f452477e5204adc013c4fd4d7c",
+      "resource": "templates/modules/header.html",
+      "contract": "currentVersion.status.permalink and currentLanguage.link identify current roots; official version/language navigation replaces the root and preserves the current document suffix."
+    },
+    {
+      "id": "equipment",
+      "version": "1.1.1",
+      "sourceRecord": "equipment-comment-audit.md",
+      "paginationRecord": "../2026-09-23/backend-followup-latest-code.json",
+      "boundary": "Theme cannot prevent Router queries that construct the model before template rendering; no generic Plugin comment subject provider can be inferred from Links."
+    }
+  ],
+  "changes": [
+    {
+      "area": "about-map",
+      "files": [
+        "settings.yaml",
+        "templates/modules/about/content.html",
+        "src/pages/about/about.js",
+        "src/pages/about/about.css",
+        "scripts/verify-about-location.mjs"
+      ],
+      "problem": "Fixed sample key and missing image outcome/cleanup handling",
+      "resolution": "Optional key; no-key local card; native load/error handling before setting src; retain destination on error; cleanup on page leave."
+    },
+    {
+      "area": "links-detail-logo",
+      "files": ["src/apps/links/runtime.js", "scripts/verify-links-runtime.mjs"],
+      "problem": "Image pending/failure/empty-source handling and stale-selection updates",
+      "resolution": "Show fallback until valid load; remove src for empty logo; discard obsolete image callbacks; update accessible name even when logo URL is unchanged."
+    },
+    {
+      "area": "docs-version-language-path",
+      "files": ["templates/modules/doc/selectors.html", "src/pages/doc/doc.js", "scripts/verify-doc-navigation.mjs"],
+      "problem": "Switching versions/languages discarded current document suffix",
+      "resolution": "Use official current-root metadata; replace only full path-segment prefix; preserve encoded suffix and target query/hash; retain original link when metadata/path is invalid; safe repeated initialization."
+    },
+    {
+      "area": "auth-illustration-refocus",
+      "files": ["src/pages/auth/themes/illustration.js", "scripts/verify-core-compatibility.mjs"],
+      "problem": "Refocusing a visible password incorrectly selected typing state",
+      "resolution": "Read real input.type at focus; keep peeking for visible password, typing for hidden password, error state priority unchanged."
+    }
+  ],
+  "validation": {
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "commands": [
+      {
+        "command": "pnpm run build",
+        "exitCode": 0,
+        "log": "/tmp/sky1-v2241-remaining-20261027/build.log",
+        "sha256": "90928e561f3b30c009b106c73553bdf6b9d3b9fc394ba7c70754075833a6f700"
+      },
+      {
+        "command": "pnpm run lint",
+        "exitCode": 0,
+        "log": "/tmp/sky1-v2241-remaining-20261027/lint.log",
+        "sha256": "632d3bd0b8aa4a4ddcc7fa5acc795db1f9cf38662f85c2dc011aa7175ffdbcb1"
+      },
+      {
+        "command": "pnpm run format:check",
+        "exitCode": 0,
+        "log": "/tmp/sky1-v2241-remaining-20261027/format.log",
+        "sha256": "b9f03bf77f01ac77562919c37e87e992e0e21576d1fe3cf1e38eedb776019917"
+      }
+    ],
+    "regressionChecks": [
+      {
+        "id": "core-compatibility",
+        "passed": 19,
+        "failed": 0
+      },
+      {
+        "id": "doc-navigation",
+        "passed": 14,
+        "failed": 0
+      },
+      {
+        "id": "photos-lifecycle",
+        "passed": 7,
+        "failed": 0
+      },
+      {
+        "id": "about-location",
+        "passed": 8,
+        "failed": 0
+      },
+      {
+        "id": "contact-form-lifecycle",
+        "passed": 5,
+        "failed": 0
+      },
+      {
+        "id": "shiki-normalization",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "id": "links-runtime",
+        "passed": 7,
+        "failed": 0
+      }
+    ],
+    "regressionTotal": 63,
+    "pluginContracts": 27,
+    "note": "Commands ran for this code in the same task before evidence consolidation. Current source identity was compared again after continuation; docs are excluded from identity. Repeated docs-only checks are recorded separately.",
+    "pluginReads": {
+      "schemaVersion": 1,
+      "startedAt": "2026-10-27T12:48:02.745Z",
+      "finishedAt": "2026-10-27T12:48:11.449Z",
+      "environment": {
+        "baseUrl": "http://localhost:8090",
+        "haloVersion": "2.27.1",
+        "haloVersionSource": "http://localhost:8090/v3/api-docs#/info/version"
+      },
+      "theme": {
+        "algorithm": "sha256",
+        "codeHash": "b71691fc3458883f1ebefc4938b0b01d929dad45cdeae5960da51f804a55f65c",
+        "fileCount": 374,
+        "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+        "inputs": [
+          "src",
+          "templates",
+          "scripts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "theme.yaml",
+          "settings.yaml",
+          "annotation-setting.yaml",
+          "vite.config.ts",
+          "postcss.config.cjs",
+          "tsconfig.json",
+          "tsconfig.node.json"
+        ],
+        "unchangedDuringRun": true
+      },
+      "scope": "Browser-like HTML Accept, Page Cache age, HTTP/API reads and rendered markers; not browser interaction or write workflows",
+      "deepMode": true,
+      "previewTheme": "theme-sky-blog-1",
+      "cacheFreshSince": "2026-10-27T12:45:41.231Z",
+      "results": [
+        {
+          "name": "Links",
+          "path": "/links",
+          "requestedUrl": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "data-links-page, data-plugin-links-contract=\"PluginLinks>=2.2.1\", data-plugin-links-title, data-link-group-navigation, data-link-access-state, links-comments",
+          "error": ""
+        },
+        {
+          "name": "Photos",
+          "path": "/photos",
+          "requestedUrl": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "photo-grid, 图库, photos.js",
+          "error": ""
+        },
+        {
+          "name": "Moments",
+          "path": "/moments",
+          "requestedUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "moments-list, 瞬间, moments.js",
+          "error": ""
+        },
+        {
+          "name": "Links Friend Feed",
+          "path": "/links?view=friends",
+          "requestedUrl": "http://localhost:8090/links?view=friends&preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/links?view=friends&preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "data-links-view-panel=\"friends\", data-link-feeds, links.js",
+          "error": ""
+        },
+        {
+          "name": "Docsme",
+          "path": "/docs",
+          "requestedUrl": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "文档中心, doc.js",
+          "error": ""
+        },
+        {
+          "name": "Bangumi",
+          "path": "/bangumis",
+          "requestedUrl": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "bangumi-page, 追番, bangumi.js",
+          "error": ""
+        },
+        {
+          "name": "Steam",
+          "path": "/steam",
+          "requestedUrl": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "steam-page, Steam, steam.js",
+          "error": ""
+        },
+        {
+          "name": "Equipment",
+          "path": "/equipments",
+          "requestedUrl": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "equipment-page, 装备, equipment.js",
+          "error": ""
+        },
+        {
+          "name": "Douban",
+          "path": "/douban",
+          "requestedUrl": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "douban-page, douban-grid, douban.js",
+          "error": ""
+        },
+        {
+          "name": "Login",
+          "path": "/login",
+          "requestedUrl": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/login?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "halo-form, login?method=passkey, /plugins/auth-passkey/assets/static/passkey.svg",
+          "error": ""
+        },
+        {
+          "name": "Dishes External Route",
+          "path": "/dishes",
+          "requestedUrl": "http://localhost:8090/dishes?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/dishes?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": [],
+            "notApplicable": true
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "id=\"app\", data-dishes-site-title, dishes-csrf-header, window.__DISHES_CSRF__, window.__DISHES_PUBLIC_BASE__, /plugins/dishes/assets/dishes-frontend/assets/index.css, /plugins/dishes/assets/dishes-frontend/app.js",
+          "error": ""
+        },
+        {
+          "name": "Schedule External Route",
+          "path": "/schedule-calendar",
+          "requestedUrl": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": [],
+            "notApplicable": true
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "id=\"calendar-view\", id=\"agenda-view\", /apis/api.schedule.calendar.sunny.dev/v1alpha1/summary",
+          "error": ""
+        },
+        {
+          "name": "Home Plugin Widgets",
+          "path": "/",
+          "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "文档中心, 友情链接, 瞬间说说",
+          "error": ""
+        },
+        {
+          "name": "Docsme Catalog",
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+          "requestedUrl": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "doc-layout, 主题配置功能详解, var docsme = { disableThemeFunction: true }",
+          "error": ""
+        },
+        {
+          "name": "Shiki Loader",
+          "path": "/archives/editor-feature-demo",
+          "requestedUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "plugin-shiki, shiki-code.js?version=",
+          "error": ""
+        },
+        {
+          "name": "Comment Widget",
+          "path": "/archives/editor-feature-demo",
+          "requestedUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "plugin-comment-widget, comment-widget.js?version=, comment-content-, 评论交流",
+          "error": ""
+        },
+        {
+          "name": "Search Widget",
+          "path": "/",
+          "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "PluginSearchWidget, SearchWidget.open()",
+          "error": ""
+        },
+        {
+          "name": "Contact Form Loader Reference",
+          "path": "/",
+          "requestedUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "/contact-form/embed.js",
+          "error": ""
+        },
+        {
+          "name": "Moments Media Binding",
+          "path": "/moments",
+          "requestedUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "moment-media, data-src",
+          "error": ""
+        },
+        {
+          "name": "Author Moments Gate",
+          "path": "/authors/sky0821",
+          "requestedUrl": "http://localhost:8090/authors/sky0821?preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/authors/sky0821?preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "author_tab, data-plugin-moments-contract=\"PluginMoments>=1.16.1\", data-plugin-moments-available=",
+          "error": ""
+        },
+        {
+          "name": "Feed XML",
+          "path": "/feed.xml",
+          "requestedUrl": "http://localhost:8090/feed.xml",
+          "responseUrl": "http://localhost:8090/feed.xml",
+          "themeIdentity": {
+            "ok": true,
+            "themes": [],
+            "notApplicable": true
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "<rss, <channel",
+          "error": ""
+        },
+        {
+          "name": "Sitemap XML",
+          "path": "/sitemap.xml",
+          "requestedUrl": "http://localhost:8090/sitemap.xml",
+          "responseUrl": "http://localhost:8090/sitemap.xml",
+          "themeIdentity": {
+            "ok": true,
+            "themes": [],
+            "notApplicable": true
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "<urlset, <loc",
+          "error": ""
+        },
+        {
+          "name": "Robots Sitemap",
+          "path": "/robots.txt",
+          "requestedUrl": "http://localhost:8090/robots.txt",
+          "responseUrl": "http://localhost:8090/robots.txt",
+          "themeIdentity": {
+            "ok": true,
+            "themes": [],
+            "notApplicable": true
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "Sitemap:",
+          "error": ""
+        },
+        {
+          "name": "Links Populated Group Route",
+          "path": "/links?group=link-group-yOmci",
+          "requestedUrl": "http://localhost:8090/links?group=link-group-yOmci&preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/links?group=link-group-yOmci&preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "data-link-group-section=\"link-group-yOmci\", aria-current=\"page\"",
+          "error": ""
+        },
+        {
+          "name": "Links Empty Group Route",
+          "path": "/links?group=link-group-gtqEW",
+          "requestedUrl": "http://localhost:8090/links?group=link-group-gtqEW&preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/links?group=link-group-gtqEW&preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "data-links-empty-state=\"group-empty\", 该分组暂无友情链接",
+          "error": ""
+        },
+        {
+          "name": "Links Missing Group Route",
+          "path": "/links?group=theme-contract-missing-group",
+          "requestedUrl": "http://localhost:8090/links?group=theme-contract-missing-group&preview-theme=theme-sky-blog-1",
+          "responseUrl": "http://localhost:8090/links?group=theme-contract-missing-group&preview-theme=theme-sky-blog-1&_theme-verify=1793105282744",
+          "themeIdentity": {
+            "ok": true,
+            "themes": ["theme-sky-blog-1"]
+          },
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "data-links-empty-state=\"group-missing\", 未找到该友链分组",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Public API",
+          "path": "/apis/api.link.halo.run/v1alpha1/links",
+          "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/links",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "links=7, status-enums",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Groups API",
+          "path": "/apis/api.link.halo.run/v1alpha1/linkgroups",
+          "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/linkgroups",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "groups=3",
+          "error": ""
+        },
+        {
+          "name": "Links 2.2.1 Feed API",
+          "path": "/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+          "requestedUrl": "http://localhost:8090/apis/api.link.halo.run/v1alpha1/linkfeeds?limit=20",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "public-feeds=20",
+          "error": ""
+        },
+        {
+          "name": "Douban Items API",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+          "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies?page=1&size=20&status=done",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "readable-items=8",
+          "error": ""
+        },
+        {
+          "name": "Douban Types API",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+          "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/types",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "movie",
+          "error": ""
+        },
+        {
+          "name": "Douban Genres API",
+          "path": "/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+          "requestedUrl": "http://localhost:8090/apis/api.douban.moony.la/v1alpha1/doubanmovies/-/genres",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "喜剧, 剧情, 悬疑, 犯罪, 动作",
+          "error": ""
+        },
+        {
+          "name": "Online Summary API",
+          "path": "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+          "requestedUrl": "http://localhost:8090/apis/online-user.zyx2012.cn/v1alpha1/stats/summary",
+          "status": 200,
+          "ok": true,
+          "skipped": false,
+          "cacheAt": null,
+          "marker": "online-count",
+          "error": ""
+        }
+      ]
+    },
+    "affectedRoutes": {
+      "completedAt": "2026-10-27T12:48:12.052Z",
+      "codeIdentity": {
+        "algorithm": "sha256",
+        "codeHash": "b71691fc3458883f1ebefc4938b0b01d929dad45cdeae5960da51f804a55f65c",
+        "fileCount": 374,
+        "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+        "inputs": [
+          "src",
+          "templates",
+          "scripts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "theme.yaml",
+          "settings.yaml",
+          "annotation-setting.yaml",
+          "vite.config.ts",
+          "postcss.config.cjs",
+          "tsconfig.json",
+          "tsconfig.node.json"
+        ]
+      },
+      "unchangedDuringRun": true,
+      "cacheStrategy": {
+        "nonce": "1793105282744",
+        "freshSince": "2026-10-27T12:45:41.231Z"
+      },
+      "results": [
+        {
+          "path": "/about",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/links",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/login",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/login?oauth2_error",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/docs/halo-theme-sky-blog-1/v1/theme-settings/global",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        },
+        {
+          "path": "/authors/sky0821",
+          "status": 200,
+          "completeHtml": true,
+          "expectedTheme": true,
+          "cacheAt": null,
+          "fresh": true
+        }
+      ]
+    }
+  },
+  "browser": {
+    "tool": "ego-browser / Ego Lite 0.6.0.16",
+    "taskSpaceId": 164,
+    "finished": true,
+    "cacheDisabled": true,
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "map": {
+      "results": [
+        {
+          "kind": "real-site-no-key",
+          "width": 1440,
+          "state": {
+            "width": 1440,
+            "mapWidth": 522.546875,
+            "mapHeight": 322,
+            "imageCount": 0,
+            "imageHidden": null,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "点击前往地图查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "pjax": true,
+          "returnState": {
+            "width": 1440,
+            "mapWidth": 522.546875,
+            "mapHeight": 321.9999694824219,
+            "imageCount": 0,
+            "imageHidden": null,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "点击前往地图查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793105460702
+          }
+        },
+        {
+          "kind": "real-site-no-key",
+          "width": 390,
+          "state": {
+            "width": 390,
+            "mapWidth": 320,
+            "mapHeight": 200,
+            "imageCount": 0,
+            "imageHidden": null,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "点击前往地图查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "pjax": true,
+          "returnState": {
+            "width": 390,
+            "mapWidth": 320,
+            "mapHeight": 200,
+            "imageCount": 0,
+            "imageHidden": null,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "点击前往地图查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 390,
+            "scrollWidth": 390,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793105464946
+          }
+        },
+        {
+          "kind": "browser-image-transport-fixture",
+          "width": 1440,
+          "outcome": "load",
+          "state": {
+            "width": 1440,
+            "mapWidth": 522.546875,
+            "mapHeight": 322,
+            "imageCount": 1,
+            "imageHidden": false,
+            "imageLoaded": true,
+            "fallbackHidden": true,
+            "fallbackRendered": false,
+            "status": "地图预览加载中，可点击查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793105468307
+          }
+        },
+        {
+          "kind": "browser-image-transport-fixture",
+          "width": 1440,
+          "outcome": "error",
+          "state": {
+            "width": 1440,
+            "mapWidth": 522.546875,
+            "mapHeight": 322,
+            "imageCount": 1,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "地图预览暂不可用，可点击查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "image/png;base64,invalid"
+              }
+            ],
+            "consoleErrors": [],
+            "pageId": 1793105469705
+          }
+        },
+        {
+          "kind": "browser-image-transport-fixture",
+          "width": 390,
+          "outcome": "load",
+          "state": {
+            "width": 390,
+            "mapWidth": 320,
+            "mapHeight": 200,
+            "imageCount": 1,
+            "imageHidden": false,
+            "imageLoaded": true,
+            "fallbackHidden": true,
+            "fallbackRendered": false,
+            "status": "地图预览加载中，可点击查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 390,
+            "scrollWidth": 390,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793105471237
+          }
+        },
+        {
+          "kind": "browser-image-transport-fixture",
+          "width": 390,
+          "outcome": "error",
+          "state": {
+            "width": 390,
+            "mapWidth": 320,
+            "mapHeight": 200,
+            "imageCount": 1,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "status": "地图预览暂不可用，可点击查看位置",
+            "destination": "https://uri.amap.com/marker",
+            "safeNewTab": true,
+            "overflow": false,
+            "providerRequests": 0
+          },
+          "page": {
+            "path": "/about",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "关于我 - 5ee博客",
+            "width": 390,
+            "scrollWidth": 390,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/about.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/about.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "image/png;base64,invalid"
+              }
+            ],
+            "consoleErrors": [],
+            "pageId": 1793105472628
+          }
+        }
+      ],
+      "restored": {
+        "width": 390,
+        "mapWidth": 320,
+        "mapHeight": 200,
+        "imageCount": 0,
+        "imageHidden": null,
+        "imageLoaded": false,
+        "fallbackHidden": false,
+        "fallbackRendered": true,
+        "status": "点击前往地图查看位置",
+        "destination": "https://uri.amap.com/marker",
+        "safeNewTab": true,
+        "overflow": false,
+        "providerRequests": 0
+      },
+      "boundary": "No persistent setting writes; positive/negative image transport fixtures do not prove a real Tencent Key or remote map response."
+    },
+    "links": {
+      "results": [
+        {
+          "width": 1440,
+          "failure": {
+            "open": true,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "hasSource": true,
+            "alt": "5ee博客",
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "success": {
+            "open": true,
+            "imageHidden": false,
+            "imageLoaded": true,
+            "hasSource": true,
+            "alt": "楠笙の博客｜成长日记",
+            "fallbackHidden": true,
+            "fallbackRendered": false,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "empty": {
+            "open": true,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "hasSource": false,
+            "alt": "百度一下，你就知道",
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "page": {
+            "path": "/links",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "友情链接 - 5ee博客",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/links.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "/lsky/2024/12/10/67579d1334de7.webp"
+              },
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "/wp-content/uploads/2025/11/cropped-lywh-32x32.png"
+              }
+            ],
+            "consoleErrors": [],
+            "pageId": 1793105228029
+          },
+          "sample": "existing link data; one logo request blocked only in this browser session"
+        },
+        {
+          "width": 390,
+          "failure": {
+            "open": true,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "hasSource": true,
+            "alt": "5ee博客",
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "success": {
+            "open": true,
+            "imageHidden": false,
+            "imageLoaded": true,
+            "hasSource": true,
+            "alt": "楠笙の博客｜成长日记",
+            "fallbackHidden": true,
+            "fallbackRendered": false,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "empty": {
+            "open": true,
+            "imageHidden": true,
+            "imageLoaded": false,
+            "hasSource": false,
+            "alt": "百度一下，你就知道",
+            "fallbackHidden": false,
+            "fallbackRendered": true,
+            "visitAvailable": true,
+            "overflow": false
+          },
+          "page": {
+            "path": "/links",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "友情链接 - 5ee博客",
+            "width": 390,
+            "scrollWidth": 390,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/links.js?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+            ],
+            "errors": [
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "/wp-content/uploads/2025/11/cropped-lywh-32x32.png"
+              },
+              {
+                "kind": "resource",
+                "message": "resource failed",
+                "path": "/lsky/2024/12/10/67579d1334de7.webp"
+              }
+            ],
+            "consoleErrors": [],
+            "pageId": 1793105233241
+          },
+          "sample": "existing link data; one logo request blocked only in this browser session"
+        }
+      ]
+    },
+    "docs": {
+      "results": [
+        {
+          "width": 1440,
+          "switches": [
+            {
+              "version": "v1",
+              "state": {
+                "path": "/docs/halo-theme-sky-blog-1/v1/theme-settings/global",
+                "heading": "通用（全局）",
+                "selected": "v1",
+                "drawerClosed": true,
+                "scrollUnlocked": true
+              },
+              "page": {
+                "path": "/docs/halo-theme-sky-blog-1/v1/theme-settings/global",
+                "previewTheme": "theme-sky-blog-1",
+                "title": "通用（全局） - 5ee博客",
+                "width": 1440,
+                "scrollWidth": 1440,
+                "overflow": false,
+                "themeAssets": [
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/doc.js?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+                ],
+                "errors": [],
+                "consoleErrors": [],
+                "pageId": 1793105731951
+              },
+              "sameDocument": true
+            },
+            {
+              "version": "v2",
+              "state": {
+                "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+                "heading": "通用（全局）",
+                "selected": "v2",
+                "drawerClosed": true,
+                "scrollUnlocked": true
+              },
+              "page": {
+                "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+                "previewTheme": "theme-sky-blog-1",
+                "title": "通用（全局） - 5ee博客",
+                "width": 1440,
+                "scrollWidth": 1440,
+                "overflow": false,
+                "themeAssets": [
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/doc.js?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+                ],
+                "errors": [],
+                "consoleErrors": [],
+                "pageId": 1793105731951
+              },
+              "sameDocument": true
+            }
+          ]
+        },
+        {
+          "width": 390,
+          "switches": [
+            {
+              "version": "v1",
+              "state": {
+                "path": "/docs/halo-theme-sky-blog-1/v1/theme-settings/global",
+                "heading": "通用（全局）",
+                "selected": "v1",
+                "drawerClosed": true,
+                "scrollUnlocked": true
+              },
+              "page": {
+                "path": "/docs/halo-theme-sky-blog-1/v1/theme-settings/global",
+                "previewTheme": "theme-sky-blog-1",
+                "title": "通用（全局） - 5ee博客",
+                "width": 390,
+                "scrollWidth": 390,
+                "overflow": false,
+                "themeAssets": [
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/doc.js?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+                ],
+                "errors": [],
+                "consoleErrors": [],
+                "pageId": 1793105736406
+              },
+              "sameDocument": true
+            },
+            {
+              "version": "v2",
+              "state": {
+                "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+                "heading": "通用（全局）",
+                "selected": "v2",
+                "drawerClosed": true,
+                "scrollUnlocked": true
+              },
+              "page": {
+                "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+                "previewTheme": "theme-sky-blog-1",
+                "title": "通用（全局） - 5ee博客",
+                "width": 390,
+                "scrollWidth": 390,
+                "overflow": false,
+                "themeAssets": [
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/doc.js?v=2.2.41",
+                  "http://localhost:8090/themes/theme-sky-blog-1/assets/js/main.js?v=2.2.41"
+                ],
+                "errors": [],
+                "consoleErrors": [],
+                "pageId": 1793105736406
+              },
+              "sameDocument": true
+            }
+          ]
+        }
+      ],
+      "boundary": "Existing v1/v2 documents tested; no multilingual dataset was created or claimed as runtime-tested."
+    },
+    "auth": {
+      "results": [
+        {
+          "width": 1440,
+          "states": [
+            {
+              "label": "hidden-focus",
+              "scene": "art-scene state-typing",
+              "passwordType": "password"
+            },
+            {
+              "label": "show",
+              "scene": "art-scene state-peeking",
+              "passwordType": "text"
+            },
+            {
+              "label": "blur",
+              "scene": "art-scene state-idle",
+              "passwordType": "text"
+            },
+            {
+              "label": "visible-refocus",
+              "scene": "art-scene state-peeking",
+              "passwordType": "text"
+            },
+            {
+              "label": "hidden-refocus",
+              "scene": "art-scene state-typing",
+              "passwordType": "password"
+            }
+          ],
+          "page": {
+            "path": "/login",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "登录 - 5ee博客",
+            "width": 1440,
+            "scrollWidth": 1440,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/auth-split.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793106097909
+          },
+          "sample": "production illustration DOM inserted before natural DOMContentLoaded; unmodified served auth-split and Halo core scripts; no login submission; Bitwarden intercepted the pointer toggle, so its production click handler was triggered via DOM after setting a dummy password"
+        },
+        {
+          "width": 390,
+          "states": [
+            {
+              "label": "hidden-focus",
+              "scene": "art-scene state-typing",
+              "passwordType": "password"
+            },
+            {
+              "label": "show",
+              "scene": "art-scene state-peeking",
+              "passwordType": "text"
+            },
+            {
+              "label": "blur",
+              "scene": "art-scene state-idle",
+              "passwordType": "text"
+            },
+            {
+              "label": "visible-refocus",
+              "scene": "art-scene state-peeking",
+              "passwordType": "text"
+            },
+            {
+              "label": "hidden-refocus",
+              "scene": "art-scene state-typing",
+              "passwordType": "password"
+            }
+          ],
+          "page": {
+            "path": "/login",
+            "previewTheme": "theme-sky-blog-1",
+            "title": "登录 - 5ee博客",
+            "width": 390,
+            "scrollWidth": 390,
+            "overflow": false,
+            "themeAssets": [
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.41",
+              "http://localhost:8090/themes/theme-sky-blog-1/assets/js/auth-split.js?v=2.2.41"
+            ],
+            "errors": [],
+            "consoleErrors": [],
+            "pageId": 1793106101166
+          },
+          "sample": "production illustration DOM inserted before natural DOMContentLoaded; unmodified served auth-split and Halo core scripts; no login submission; Bitwarden intercepted the pointer toggle, so its production click handler was triggered via DOM after setting a dummy password"
+        }
+      ],
+      "restored": {
+        "path": "/login",
+        "previewTheme": "theme-sky-blog-1",
+        "title": "登录 - 5ee博客",
+        "width": 390,
+        "scrollWidth": 390,
+        "overflow": false,
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.41",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.41",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/js/auth-split.js?v=2.2.41"
+        ],
+        "errors": [],
+        "consoleErrors": [],
+        "pageId": 1793106103533,
+        "featuresRestored": true
+      },
+      "boundary": "Production JS + browser-only illustration fixture; persistent site layout remains features. No authentication, credential, or configuration changes."
+    },
+    "settledLayouts": {
+      "map": {
+        "results": [
+          {
+            "width": 1440,
+            "top": 308.6875,
+            "bottom": 630.6875,
+            "text": "北京·中国点击前往地图查看位置在地图中查看",
+            "overflow": false
+          },
+          {
+            "width": 390,
+            "top": 301.65625,
+            "bottom": 501.65625,
+            "text": "北京·中国点击前往地图查看位置在地图中查看",
+            "overflow": false
+          }
+        ],
+        "note": "Waited for scroll position and ancestor reveal opacity; earlier screenshots caught entrance animation."
+      },
+      "links": {
+        "results": [
+          {
+            "width": 1440,
+            "top": 295,
+            "bottom": 705,
+            "left": 464,
+            "right": 976,
+            "visibleFallback": true,
+            "imageHidden": true
+          },
+          {
+            "width": 390,
+            "top": 434,
+            "bottom": 844,
+            "left": 0,
+            "right": 390,
+            "visibleFallback": true,
+            "imageHidden": true
+          }
+        ],
+        "note": "Earlier screenshots were captured during modal entrance; these wait for finite animations to finish."
+      },
+      "docs": {
+        "desktop": {
+          "width": 1440,
+          "opacity": "1",
+          "background": "oklch(0.2533 0.016 252.42)",
+          "animationStates": [],
+          "top": 142,
+          "bottom": 230,
+          "text": "v2\n        \n          v1"
+        },
+        "mobileScreenshot": "docs-deep-menu-390.png",
+        "note": "Waited for the 150ms dropdown entrance animation; earlier desktop screenshot is not final visual evidence."
+      }
+    },
+    "screenshots": [
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/map-visible-1440.png",
+        "sha256": "86a8a53e065e6949b4aa79db46056aa6da6f4ec4dbb8c40be44549380a0c06ee"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/map-visible-390.png",
+        "sha256": "321f5b1793e7866173547e544ba05892d4d092a14d1dfd0799a6c9869f447636"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/links-fallback-settled-1440.png",
+        "sha256": "96f03ed981e5d469f1fb9be3f32bfcd4855b67444589b3cca26a155f99911660"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/links-fallback-settled-390.png",
+        "sha256": "316c08cfa515de1fa59fff72cbe629e32dc40f7881e730e106c295e1067628a7"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/docs-deep-menu-settled-1440.png",
+        "sha256": "69c6ffaecc65da8b9797a14835e6b65aa606f4060c3c5df1b6388e618465854e"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/docs-deep-menu-390.png",
+        "sha256": "6c842a0322c064d035f568bdd200cd9e7062dff8533554507341c511e2bd001c"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/illustration-refocus-1440.png",
+        "sha256": "c898e7957b354ca7ff5937382490eeffbf5317580ca40a52341aefadb708652d"
+      },
+      {
+        "path": "/tmp/sky1-v2241-remaining-20261027/illustration-refocus-390.png",
+        "sha256": "e42da107d72d80514efc951dc65e872be60a5f1a77bf7542944809aed15aa75c"
+      }
+    ],
+    "boundary": "Map provider success/error used image transport fixtures (zero provider requests); no real key validated. Auth uses temporary production illustration DOM before natural DOMContentLoaded with unmodified served scripts; Bitwarden intercepted pointer toggle, so DOM invoked production click handler. Site still uses features and no authentication was submitted."
+  },
+  "backend": {
+    "startedAt": "2026-10-27T12:45:41.231Z",
+    "endedAt": "2026-10-27T13:07:37.948Z",
+    "container": "halo",
+    "haloVersion": "2.27.1",
+    "themeCodeHash": "b71691fc3458883f1ebefc4938b0b01d929dad45cdeae5960da51f804a55f65c",
+    "commandExitCode": 0,
+    "total": {
+      "WARN": 3,
+      "ERROR": 4
+    },
+    "categories": {
+      "equipment-pagination-size": 3,
+      "alist-excluded": 4
+    },
+    "templateParseOrExpressionCount": 0,
+    "scope": "Readonly backend log classification for current remaining-fix browser and read checks; raw logs not persisted; excluded AList not counted as theme regression.",
+    "authorInterrupted": 0,
+    "events": [
+      {
+        "at": "2026-10-27T20:48:03.871+08:00",
+        "level": "WARN",
+        "category": "equipment-pagination-size",
+        "reason": "PageRequestImpl clamped plugin query size to 1000"
+      },
+      {
+        "at": "2026-10-27T20:48:03.879+08:00",
+        "level": "WARN",
+        "category": "equipment-pagination-size",
+        "reason": "PageRequestImpl clamped plugin query size to 1000"
+      },
+      {
+        "at": "2026-10-27T20:48:03.881+08:00",
+        "level": "WARN",
+        "category": "equipment-pagination-size",
+        "reason": "PageRequestImpl clamped plugin query size to 1000"
+      },
+      {
+        "at": "2026-10-27T20:59:50.956+08:00",
+        "level": "ERROR",
+        "category": "alist-excluded",
+        "reason": "AList current user role response is an array while plugin DTO expects int"
+      },
+      {
+        "at": "2026-10-27T20:59:52.126+08:00",
+        "level": "ERROR",
+        "category": "alist-excluded",
+        "reason": "AList current user role response is an array while plugin DTO expects int"
+      },
+      {
+        "at": "2026-10-27T20:59:53.267+08:00",
+        "level": "ERROR",
+        "category": "alist-excluded",
+        "reason": "AList current user role response is an array while plugin DTO expects int"
+      },
+      {
+        "at": "2026-10-27T20:59:54.906+08:00",
+        "level": "ERROR",
+        "category": "alist-excluded",
+        "reason": "AList current user role response is an array while plugin DTO expects int"
+      }
+    ],
+    "classificationMethod": "Inspect complete log event including nested cause chain, not only the header logger. All four ERRORs carry run.halo.alist.dto.response.AListGetCurrentUserInfoRes[role]."
+  },
+  "authorWarningDiagnosis": {
+    "at": "2026-10-27T12:23:27.970Z",
+    "codeIdentity": {
+      "algorithm": "sha256",
+      "codeHash": "8dbb72672e7ab74ee69d67ed2b7b7de29449822731a1764cfac2f93c8158e0e0",
+      "fileCount": 373,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "scope": "匿名只读，先完整消费作者页响应，再主动取消请求作对照；未更改配置或源码。",
+    "phases": [
+      {
+        "phase": "complete",
+        "startedAt": "2026-10-27T12:23:24.195Z",
+        "completedAt": "2026-10-27T12:23:26.680Z",
+        "records": [
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 213494,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 926
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 213494,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 164
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 213494,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 256
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 213494,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 158
+          },
+          {
+            "path": "/",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 315182,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 291
+          },
+          {
+            "path": "/",
+            "timeoutMs": 15000,
+            "status": 200,
+            "bytes": 315182,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 189
+          }
+        ],
+        "backend": {
+          "authorInterrupted": 0,
+          "templateParseOrExpression": 0
+        }
+      },
+      {
+        "phase": "cancelled",
+        "startedAt": "2026-10-27T12:23:26.998Z",
+        "completedAt": "2026-10-27T12:23:27.865Z",
+        "records": [
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 10,
+            "clientStopped": true,
+            "errorType": "TimeoutError",
+            "elapsedMs": 13
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 50,
+            "clientStopped": true,
+            "errorType": "TimeoutError",
+            "elapsedMs": 51
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 150,
+            "clientStopped": true,
+            "errorType": "TimeoutError",
+            "elapsedMs": 153
+          },
+          {
+            "path": "/authors/sky0821",
+            "timeoutMs": 500,
+            "status": 200,
+            "bytes": 213494,
+            "completeHtml": true,
+            "themes": ["theme-sky-blog-1"],
+            "elapsedMs": 148
+          }
+        ],
+        "backend": {
+          "authorInterrupted": 1,
+          "templateParseOrExpression": 0
+        }
+      }
+    ]
+  },
+  "archive": {
+    "path": "dist/theme-sky-blog-1-2.2.41.zip",
+    "sha256": "a30c7042a2d770e3fb449aa1ed7af33fb35ddda64c6ef5abed11d99e4c283278",
+    "filesCompared": 237,
+    "mismatched": []
+  },
+  "independentReview": {
+    "code": "Independent earlier review found same-logo alt synchronization issue; fixed and covered by regression before final build.",
+    "visuals": "remaining_plugin_scope reviewed map/links screenshots and browser JSON; later reviewed docs-deep-menu-settled-1440.png with opacity 1 and no active animation; no actionable layout issue in reviewed states.",
+    "authBoundary": "Production script and DOM fixture, not persisted illustration configuration or an actual account authentication.",
+    "deliveryClaims": "Independent read-only review found no material exaggeration or conflict in the four fixes, 63 regressions, 33 reads, 7 routes, cache/asset identity, historical author warning boundaries, fixture labeling or remaining work."
+  },
+  "remaining": [
+    {
+      "id": "equipment-pagination",
+      "status": "plugin-limitation",
+      "nextStep": "Plugin implementation should page through requests of <=1000 until groups and items are complete; preserve plugin sources in this theme-only task."
+    },
+    {
+      "id": "equipment-comments",
+      "status": "plugin-contract-gap",
+      "nextStep": "Implement official server-side CommentSubject provider and establish historical subject mapping before changing theme reference; missing provider does not alone prove comment POST fails."
+    },
+    {
+      "id": "lottery-redis",
+      "status": "environment-condition",
+      "evidence": "followup-runtime.json",
+      "observedState": {
+        "effectiveSource": "NONE",
+        "connectionVerified": false,
+        "instantLotteryAvailable": false
+      },
+      "nextStep": "Validate a configured Redis connection and instant-lottery conditions before its business test; no infrastructure change in this task."
+    },
+    {
+      "id": "author-warning",
+      "status": "trigger-reproduced-no-theme-fix-justified",
+      "nextStep": "Full responses are normal; cancellation reproduces same warning under previous 8dbb726 source. Do not attribute all four historical warnings without correlated request evidence."
+    },
+    {
+      "id": "real-map-key",
+      "status": "code-complete-runtime-pending",
+      "nextStep": "Test actual allowed Tencent key/quota/remote response; current fallback is runtime-tested."
+    },
+    {
+      "id": "real-multilingual-docs",
+      "status": "code-complete-runtime-pending",
+      "nextStep": "Test existing real language variants when available; present test covers production functions and encoded URL fixtures."
+    },
+    {
+      "id": "alternate-site-configurations",
+      "status": "runtime-pending",
+      "items": [
+        "illustration persistent configuration and unobstructed pointer toggle",
+        "bottom Dock configuration",
+        "registration disabled configuration"
+      ]
+    },
+    {
+      "id": "plugin-write-business",
+      "status": "not-covered-in-this-build",
+      "items": [
+        "external SSO success/callback/account binding",
+        "full WebAuthn ceremony",
+        "new model generation",
+        "form submission/upload/notification",
+        "comment creation/private reply",
+        "vote submission",
+        "lottery participation/draw",
+        "restricted-content full unlock",
+        "plugin administration operations"
+      ],
+      "priorUserManualTests": [
+        "AI manually tested successfully by user",
+        "Passkey manually tested successfully by user"
+      ]
+    },
+    {
+      "id": "scope-exclusions",
+      "status": "not-applicable",
+      "items": [
+        "AList excluded by user",
+        "Friends retired and replaced with Links",
+        "Live2d disabled",
+        "Data Studio alpha is not a stable release"
+      ]
+    }
+  ],
+  "authorizationBoundary": {
+    "themeCodeDocsTests": true,
+    "pluginSourceChanges": false,
+    "databaseChanges": false,
+    "siteBusinessConfigurationChanges": false,
+    "gitStageCommitPushTagRelease": false
+  },
+  "postDocumentationChecks": {
+    "commands": [
+      {
+        "id": "format-final",
+        "exitCode": 0
+      },
+      {
+        "id": "diff-final",
+        "exitCode": 0
+      },
+      {
+        "id": "identity-final",
+        "exitCode": 0
+      }
+    ],
+    "archive": {
+      "files": 237,
+      "different": [],
+      "sha256": "a30c7042a2d770e3fb449aa1ed7af33fb35ddda64c6ef5abed11d99e4c283278"
+    },
+    "brokenLocalDocumentLinks": [],
+    "sourceCodeUnchanged": true,
+    "runtimeRerun": "not required for docs-only consolidation; unchanged source hash verified"
+  }
+}

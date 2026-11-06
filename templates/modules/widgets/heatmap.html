@@ -194,7 +194,7 @@
   <th:block th:if="${showHeatmap and heatmapType == 'article'}">
       <div
         class="heatmap-card rounded-[1.5rem] backdrop-blur-xl bg-base-100/70 border border-base-content/5 shadow-lg p-5"
-        x-data="articleHeatmap()" x-cloak>
+        th:data-archives-base="@{${site.routes?.archivesUri ?: '/archives'}}" x-data="articleHeatmap()" x-cloak>
 
         <!-- 热力图容器 -->
         <div x-ref="container" class="w-full overflow-x-auto"></div>
@@ -515,7 +515,9 @@
               const dateStr = cell.getAttribute('data-date');
               const count = parseInt(cell.getAttribute('data-count') || '0');
               if (count > 0) {
-                window.location.href = `/archives?date=${dateStr}`;
+                const target = new URL(this.$el.dataset.archivesBase || '/archives', window.location.origin);
+                target.searchParams.set('date', dateStr);
+                window.location.href = target.href;
               }
             },
 

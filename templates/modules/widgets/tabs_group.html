@@ -257,7 +257,7 @@
           </th:block>
           <div class="mt-10 text-center">
             <a
-              href="/archives"
+              th:href="@{${site.routes?.archivesUri ?: '/archives'}}"
               class="group text-base-content/50 hover:text-primary inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-300"
             >
               View All
@@ -692,7 +692,7 @@
           </div>
           <div th:if="${momentsList != null and !momentsList.isEmpty()}" class="mt-10 text-center">
             <a
-              href="/moments"
+              th:href="@{/moments}"
               class="group text-base-content/50 hover:text-primary inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-300"
             >
               View All

@@ -11,7 +11,6 @@
     pageDesc=${cfg?.page_description ?: '记录生活中的美好瞬间'},
     showPhotoInfo=${cfg?.show_photo_info != false},
     showDownloadBtn=${cfg?.show_download_btn != false},
-    enableComment=${cfg?.enable_comment == true},
     layout=${cfg?.layout},
     fullWidth=${cfg?.layout?.full_width == true},
     maxCols=${cfg?.layout?.max_cols ?: 4},
@@ -40,7 +39,7 @@
       >
         <div class="inline-flex flex-wrap justify-center gap-2">
           <a
-            th:href="${photoUrl != null ? photoUrl.list() : '/photos'}"
+            th:href="@{${photoUrl != null ? photoUrl.list() : '/photos'}}"
             class="rounded-full px-4 py-2 text-sm font-medium transition-all duration-300"
             th:classappend="${param.group == null || #lists.isEmpty(param.group)} ? 'bg-base-content text-base-100 shadow-sm' : 'bg-base-100 text-base-content/60 border border-base-200 hover:border-base-300 hover:text-base-content'"
           >
@@ -48,7 +47,7 @@
           </a>
           <th:block th:each="group : ${groups}">
             <a
-              th:href="${photoUrl != null ? photoUrl.list(group.metadata.name) : '/photos'}"
+              th:href="@{${photoUrl != null ? photoUrl.list(group.metadata.name) : '/photos'}}"
               class="rounded-full px-4 py-2 text-sm font-medium transition-all duration-300"
               th:classappend="${param.group != null && !#lists.isEmpty(param.group) && param.group[0] == group.metadata.name} ? 'bg-base-content text-base-100 shadow-sm' : 'bg-base-100 text-base-content/60 border border-base-200 hover:border-base-300 hover:text-base-content'"
               th:text="${group.spec.displayName}"
@@ -72,15 +71,23 @@
             class="photo-item animate-fade-in-up group break-inside-avoid"
           >
             <img
+              th:with="imageWidth=${photo.exif?.imageWidth ?: 0}, imageHeight=${photo.exif?.imageHeight ?: 0}"
               th:src="${photo.spec.url}"
               th:alt="${photo.spec.displayName}"
-              th:attr="data-src=${photo.spec.url},aria-label=${'打开图片：' + (#strings.isEmpty(photo.spec.displayName) ? '未命名图片' : photo.spec.displayName)}"
+              th:attr="data-src=${photo.spec.url},aria-label=${'打开图片：' + (#strings.isEmpty(photo.spec.displayName) ? '未命名图片' : photo.spec.displayName)},
+                       width=${imageWidth > 0 and imageHeight > 0 ? imageWidth : null},
+                       height=${imageWidth > 0 and imageHeight > 0 ? imageHeight : null}"
               data-photo-lightbox-trigger
               role="button"
               tabindex="0"
               class="h-auto w-full object-cover"
               loading="lazy"
             />
+
+            <div class="photo-load-error" hidden>
+              <p role="status">图片加载失败</p>
+              <button class="photo-image-retry" type="button">重新加载</button>
+            </div>
 
             <!-- 悬浮信息层 -->
             <div
@@ -92,6 +99,7 @@
                 th:if="${showDownloadBtn}"
                 th:href="${photo.spec.url}"
                 download
+                aria-label="下载照片"
                 class="photo-download-btn rounded-full bg-white/12 p-1.5 text-white backdrop-blur-sm active:scale-90"
               >
                 <svg
@@ -113,7 +121,7 @@
               <!-- 详情按钮：独立入口，避免整张图链接影响 lightgallery 点击放大 -->
               <a
                 th:if="${photoUrl != null or photo.permalink != null}"
-                th:href="${photoUrl != null ? photoUrl.detail(photo) : photo.permalink}"
+                th:href="@{${photoUrl != null ? photoUrl.detail(photo) : photo.permalink}}"
                 class="photo-detail-btn rounded-full bg-white/12 px-2.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm active:scale-90"
                 title="查看详情"
                 aria-label="查看照片详情"
@@ -178,24 +186,6 @@
         <p class="text-base-content/30 mt-2 text-sm">请在后台添加照片</p>
       </div>
 
-      <!-- 评论区 -->
-      <section th:if="${enableComment}" class="mx-auto mt-16 max-w-4xl">
-        <h2 class="text-base-content mb-6 flex items-center gap-2 text-xl font-bold">
-          <span class="icon-[mdi--comment-text-outline] text-primary h-5 w-5"></span>
-          评论留言
-        </h2>
-        <div class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border backdrop-blur-xl">
-          <div class="p-6 sm:p-8">
-            <halo:comment
-              group="content.halo.run"
-              kind="SinglePage"
-              th:attr="name=${singlePage != null ? singlePage.metadata.name : 'photos'}"
-              colorScheme="system"
-            >
-            </halo:comment>
-          </div>
-        </div>
-      </section>
     </div>
   </th:block>
 </th:block>

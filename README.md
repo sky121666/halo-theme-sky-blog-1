@@ -2,7 +2,7 @@
 
 > 基于 Vite + Tailwind CSS v4 + DaisyUI + Alpine.js 构建的现代化 Halo 2.0 博客主题
 
-[![Halo](https://img.shields.io/badge/Halo-2.26.0+-blue)](https://halo.run)
+[![Halo](https://img.shields.io/badge/Halo-2.27.0+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-24.18.x-brightgreen)](https://nodejs.org)
 
@@ -126,7 +126,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 
 ## 🔌 插件适配
 
-主题对以下插件提供模板、DOM 或样式集成。精确的契约版本、测试版本和证据以[插件适配矩阵](./docs/system/adaptation/plugin-adaptation.md)为准；本地主实例结果见[主 Halo 插件运行态审计](./docs/system/adaptation/main-halo-runtime-audit.md)。安装后仍需在目标 Halo 站点回归。下表中的 ✅ 只表示仓库存在主题集成，不表示当前站点安装版本已完成运行态测试；未进入矩阵的插件也不能自动视为兼容。
+主题对以下插件提供模板、DOM 或样式集成。当前实装版本、官方稳定目标及本轮验证边界见[当前逐插件结果](./docs/system/adaptation/current-plugin-results.md)；契约基线见[插件适配矩阵](./docs/system/adaptation/plugin-adaptation.md)，以往测试保留在[历史运行态审计](./docs/system/adaptation/main-halo-runtime-audit.md)。安装后仍需在目标 Halo 站点回归。下表中的 ✅ 只表示仓库存在主题集成，不表示当前站点安装版本已完成运行态测试；未进入矩阵的插件也不能自动视为兼容。
 
 ### 内容类
 
@@ -138,7 +138,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 图库管理    | [app-BmQJW](https://www.halo.run/store/apps/app-BmQJW)       | [plugin-photos](https://github.com/halo-sigs/plugin-photos)                               | ✅ 瀑布流相册、照片详情页、PJAX 生命周期适配              |
 | 链接管理    | [app-hfbQg](https://www.halo.run/store/apps/app-hfbQg)       | [plugin-links](https://github.com/halo-sigs/plugin-links)                                 | ✅ 友链、分组、RSS 动态与申请统一展示                     |
 | 友链提交（退役） | [app-glejqzwk](https://www.halo.run/store/apps/app-glejqzwk) | [plugin-link-submit](https://github.com/chengzhongxue/link-submit) | 不再适配；访客申请统一使用 PluginLinks 2.3.0 的申请接口 |
-| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 1.6.4 的 21 个全局主题变量；提交与上传待实站回归       |
+| 联系表单    | [app-gSebd](https://www.halo.run/store/apps/app-gSebd)       | -                                                                                         | ✅ 兼容 2.1.0 的 embed/trigger/自动展示与 PJAX 清理，保留旧版变量；提交、上传及通知未验       |
 | 超链接卡片  | -                                                            | [plugin-editor-hyperlink-card](https://github.com/halo-sigs/plugin-editor-hyperlink-card) | ✅ 块级/行内 Shadow DOM、390px、暗色与 PJAX 重入通过      |
 | 抽奖卡片    | -                                                            | [plugin-lottery](https://github.com/Handsome/plugin-lottery)                              | ✅ 宿主布局；参与、验证码和开奖需有效活动回归             |
 | 限制阅读    | [app-TzRqd](https://www.halo.run/store/apps/app-TzRqd)       | -                                                                                         | ✅ 宿主、登录和文章/单页评论依赖；各模式待实站回归        |
@@ -163,7 +163,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 搜索组件       | [app-DlacW](https://www.halo.run/store/apps/app-DlacW)       | [plugin-search-widget](https://github.com/halo-sigs/plugin-search-widget)   | ✅ 全局搜索                                                                        |
 | 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                                                                        |
 | 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ 1.5.2 默认节点、SVG、明暗重绘与 PJAX 重入通过                                   |
-| AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ 1.5.1 实现契约；2.2.4 摘要小部件已完成无模型实站回归，生成/RAG/编辑器 AI 未验收 |
+| AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ 3.0.0 摘要宿主契约；前阶段 3.1.0 + Foundation 1.3.0 的既有摘要读取、展示与 PJAX 离页清理有证据，模型生成、自动注入、RAG/编辑器 AI 未验，见[适配状态](./docs/system/adaptation/plugin-adaptation.md) |
 | lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 稳定 selector DOM 与 PJAX 后兼容重放                                            |
 | Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 登录入口和认证 options 请求通过；真实凭据认证未执行                             |
 | 在线统计       | -                                                            | -                                                                           | ✅ 插件可用时显示；禁用或失败时不再请求 API                                        |
@@ -215,7 +215,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 - **必装**：搜索组件、评论组件
 - **推荐**：瞬间、图库、链接管理、装备管理
 - **可选**：Docsme 文档、追番、Steam、豆瓣、Passkey 认证
-- **友链版本**：当前适配目标为 PluginLinks 2.3.0；访客站内申请需在插件后台开启申请功能。旧版朋友圈和友链提交插件已退出主题集成。
+- **友链版本**：当前实装和稳定目标为 PluginLinks 2.5.0，主题继续采用 2.3.0 的 Finder/API 契约；访客站内申请需在插件后台开启申请功能，申请/审核写入未验。旧版朋友圈和友链提交插件已退出主题集成。
 
 ---
 

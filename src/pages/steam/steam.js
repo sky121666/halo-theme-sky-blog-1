@@ -75,6 +75,7 @@ async function fetchSteamEndpoint(endpoint, signal) {
   let lastError;
 
   for (const base of API_BASES) {
+    if (signal?.aborted) throw signal.reason;
     try {
       const response = await fetch(`${base}${endpoint}`, { signal });
       if (response.ok) return await response.json();
@@ -103,6 +104,7 @@ async function fetchSteamEndpoint(endpoint, signal) {
     badges: null,
     recentGames: [],
     games: { items: [], page: 1, totalPages: 1 },
+    gamesRequestedPage: 1,
     error: null,
     errors: {
       profile: null,
@@ -113,6 +115,7 @@ async function fetchSteamEndpoint(endpoint, signal) {
     },
     _initialized: false,
     _abortController: null,
+    _gamesController: null,
 
     // 加载状态
     loading: {
@@ -151,6 +154,8 @@ async function fetchSteamEndpoint(endpoint, signal) {
     },
 
     destroy() {
+      this._gamesController?.abort();
+      this._gamesController = null;
       this._abortController?.abort();
       this._abortController = null;
     },
@@ -220,19 +225,26 @@ async function fetchSteamEndpoint(endpoint, signal) {
     },
 
     async loadGames(page = 1) {
-      const signal = this._abortController?.signal;
+      if (!this._abortController || this._abortController.signal.aborted) return;
+      this.gamesRequestedPage = page;
+      this._gamesController?.abort();
+      const controller = new AbortController();
+      this._gamesController = controller;
+      const { signal } = controller;
+      const isCurrent = () => !signal.aborted && this._gamesController === controller;
       this.loading.games = true;
       this.errors.games = null;
       try {
         const size = this.config.gamesPageSize || 20;
         const data = await fetchAPI(`/games?page=${page}&size=${size}`, false, signal);
+        if (!isCurrent()) return;
         this.games = data || { items: [], page: 1, totalPages: 1 };
       } catch (e) {
-        if (signal?.aborted) return;
+        if (!isCurrent()) return;
         skyDebug.error('steam', 'games 加载失败', e);
         this.errors.games = '游戏库加载失败';
       } finally {
-        if (!signal?.aborted) this.loading.games = false;
+        if (isCurrent()) this.loading.games = false;
       }
     },
 
@@ -386,14 +398,48 @@ async function fetchHeatmapData(baseUrl, days, signal) {
     const url = new URL(apiUrl, window.location.origin);
     url.searchParams.set('startDate', formatDate(startDate));
     url.searchParams.set('endDate', formatDate(endDate));
-    url.searchParams.set('page', '1');
     url.searchParams.set('size', days);
 
     try {
-      const response = await fetch(url.toString(), { signal });
-      if (response.ok) return await response.json();
-      lastError = new Error(`Failed to fetch heatmap data: ${response.status}`);
+      const items = [];
+      const seenRecords = new Set();
+      let firstPage;
+      // DailyPlaytimeRecord is one record per game/day, so days is not a
+      // sufficient record limit. Follow ListResult pagination within this range.
+      for (let page = 1; page <= 1000; page += 1) {
+        if (signal?.aborted) throw signal.reason || new DOMException('Cancelled', 'AbortError');
+        url.searchParams.set('page', String(page));
+        const response = await fetch(url.toString(), { signal });
+        if (!response.ok) throw new Error(`Failed to fetch heatmap data: ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data.items) || (data.page != null && Number(data.page) !== page)) {
+          throw new Error('Invalid heatmap pagination response');
+        }
+        firstPage ||= data;
+        const previousCount = items.length;
+        for (const item of data.items) {
+          const key = item.metadata?.name
+            || `${item.spec.steamId}:${item.spec.appId}:${item.spec.date}`;
+          if (!seenRecords.has(key)) {
+            seenRecords.add(key);
+            items.push(item);
+          }
+        }
+        const totalPages = Number(data.totalPages);
+        const hasNext = data.hasNext === true || (Number.isInteger(totalPages) && page < totalPages);
+        if (!hasNext) {
+          const expectedTotal = Number(firstPage.total);
+          if (Number.isSafeInteger(expectedTotal) && expectedTotal >= 0
+            && (items.length !== expectedTotal || Number(data.total) !== expectedTotal)) {
+            throw new Error('Incomplete heatmap pagination response');
+          }
+          return { ...firstPage, items };
+        }
+        if (items.length === previousCount) throw new Error('Heatmap pagination made no progress');
+      }
+      throw new Error('Heatmap pagination exceeded the page limit');
     } catch (error) {
+      if (signal?.aborted || error?.name === 'AbortError') throw error;
       lastError = error;
     }
   }
@@ -443,8 +489,9 @@ function renderCustomHeatmap(container, dateMap, days, tooltip) {
     cell.dataset.minutes = minutes;
 
     cell.addEventListener('mouseenter', (e) => {
-      const date = new Date(dateStr);
-      const formattedDate = `${date.getMonth() + 1}月${date.getDate()}日`;
+      // This is a calendar date, not a UTC instant to convert to the viewer's timezone.
+      const [, month, day] = dateStr.split('-');
+      const formattedDate = `${Number(month)}月${Number(day)}日`;
 
       tooltip.innerHTML = `
         <div style="font-weight:600;margin-bottom:4px;">${formattedDate}</div>

@@ -166,7 +166,7 @@ for (const marker of [
   'th:each="linkGroup : ${groups}"',
   "displayLinks=${linkGroup.links}",
   'th:data-link-group-section="${linkGroup.metadata.name}"',
-  'th:hidden="${!#strings.isEmpty(group) and linkGroup.metadata.name != group}"',
+  'th:hidden="${!#strings.isEmpty(group) ? linkGroup.metadata.name != group : (displayLinks == null or #lists.isEmpty(displayLinks))}"',
   "data-link-card",
   'th:data-link-key="${link.metadata.name}"',
   "data-links-empty",
@@ -197,8 +197,7 @@ for (const marker of [
   "data-link-detail-dialog",
   "data-feed-detail-dialog",
   "linkFeedPage.items",
-  "pluginFinder.available('PluginCommentWidget', '>=3.1.2')",
-  "canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled and hasCommentWidget}",
+  "canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled}",
   'th:name="${pluginName}"',
 ]) {
   if (!linksContent.includes(marker)) fail(`PluginLinks 2.2.1 marker is missing: ${marker}`);
@@ -211,6 +210,7 @@ if (linksContent.includes("linkGroup.spec.links")) {
 }
 const linksScript = read("src/pages/links/links.js");
 const linksRuntime = read("src/apps/links/runtime.js");
+const linksHistory = read("src/apps/links/history.js");
 for (const [file, source] of [
   ["templates/modules/links/content.html", linksContent],
   ["src/pages/links/links.js", linksScript],
@@ -234,8 +234,13 @@ const pageRuntime = read("src/common/js/page-runtime.js");
 for (const marker of ["options.immediate && isCurrentPjaxPage()", "window.__skyPjaxState?.currentPage"]) {
   if (!pageRuntime.includes(marker)) fail(`shared page lifecycle immediate marker is missing: ${marker}`);
 }
+if (!/import\s*\{[^}]*\bMANAGED_QUERY_KEYS\b[^}]*\}\s*from\s*["']\.\/history\.js["']/.test(linksRuntime)) {
+  fail("PluginLinks runtime must import MANAGED_QUERY_KEYS from its shared history module");
+}
+if (!linksHistory.includes('export const MANAGED_QUERY_KEYS = ["view", "scope", "groupName", "linkName", "itemId", "group", "link"]')) {
+  fail("PluginLinks history module must define the seven managed query keys");
+}
 for (const marker of [
-  'const MANAGED_QUERY_KEYS = ["view", "scope", "groupName", "linkName", "itemId", "group", "link"]',
   "normalizeLinksState",
   "normalizeLinksUrl",
   "buildLinkFeedApiUrl",
@@ -620,7 +625,7 @@ const navTemplate = read("templates/modules/nav.html");
 if ((navTemplate.match(/@click="open = false"/g) || []).length < 2) {
   fail("desktop and mobile submenu links must close their persistent Alpine state before PJAX navigation");
 }
-if ((navTemplate.match(/@sky:page-load\.window="open = false"/g) || []).length < 2) {
+if ((navTemplate.match(/@sky:page-load\.document="open = false"/g) || []).length < 2) {
   fail("desktop and mobile submenu state must reset after PJAX navigation and history traversal");
 }
 for (const marker of [
@@ -718,7 +723,7 @@ for (const file of ["templates/modules/theme-script.html", "templates/modules/in
 for (const [file, marker] of [
   ["templates/modules/bangumi/layout.html", 'id="bangumi-bg-container"'],
   ["templates/modules/douban/layout.html", 'class="douban-bg pointer-events-none fixed inset-0 z-0"'],
-  ["templates/modules/steam/layout.html", 'x-data="{ gameBg: null }"'],
+  ["templates/modules/steam/layout.html", 'x-data="{ gameBg: null, backgroundFallback: false }"'],
 ]) {
   const source = read(file);
   const extrasIndex = source.indexOf('id="swup-page-extras"');

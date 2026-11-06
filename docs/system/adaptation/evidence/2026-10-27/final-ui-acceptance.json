@@ -1,0 +1,857 @@
+{
+  "checkedAt": "2026-10-27T06:45:38.643353+00:00",
+  "environment": {
+    "baseUrl": "http://localhost:8090",
+    "halo": "2.27.0",
+    "edition": "Pro",
+    "targetHalo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "metadataVersion": "2.2.40",
+    "activeTheme": "theme-sky-blog-3",
+    "preview": true,
+    "plugins": {
+      "plugin-docsme": "1.10.2",
+      "PluginContactForm": "2.1.0",
+      "PluginSearchWidget": "1.8.0",
+      "PluginPhotos": "2.1.2",
+      "PluginLightGallery": "1.2.1",
+      "PluginLinks": "2.5.0",
+      "auth-passkey": "2.0.0"
+    },
+    "node": "24.21.0",
+    "pnpm": "12.6.0"
+  },
+  "identity": {
+    "at": "2026-10-27T06:37:44.960Z",
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "e1bedbddde63e79d45dbe17f93f26d83173780f98cf9dfceb5a3860100ef9dc5",
+      "fileCount": 370,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "served": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "local": "1709cbc1501b57c999b1f971ffd55eba381f59a6b49db50765ef40374921dccb",
+        "match": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "served": "85180a6cf388aad6391e23527f3c4b081cbe61419d608cba8c2a2138cd920560",
+        "local": "85180a6cf388aad6391e23527f3c4b081cbe61419d608cba8c2a2138cd920560",
+        "match": true
+      },
+      {
+        "file": "css/auth-split.css",
+        "status": 200,
+        "served": "3336c6fe372d7dc91157345a54321b514cea21f611ef3d8cb61dfcf2d5cf622a",
+        "local": "3336c6fe372d7dc91157345a54321b514cea21f611ef3d8cb61dfcf2d5cf622a",
+        "match": true
+      },
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "served": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "local": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "match": true
+      },
+      {
+        "file": "js/doc.js",
+        "status": 200,
+        "served": "4855a1ada7673229c95feaef18e3e19d9529df69069e7318377e3eca2ecd3476",
+        "local": "4855a1ada7673229c95feaef18e3e19d9529df69069e7318377e3eca2ecd3476",
+        "match": true
+      }
+    ]
+  },
+  "cache": {
+    "browser": "Network.setCacheDisabled in same invocation as fresh full navigation",
+    "http": "Final deep plugin smoke and routes use unique _theme-verify query plus no-cache; stale x-halo-cache-at rejected.",
+    "assetByteMatch": true,
+    "templateMarkersObserved": ["doc-toc-drawer-trigger", "doc-sidebar-drawer-trigger"],
+    "siteCacheSettingsChanged": false
+  },
+  "responsive": {
+    "beforeCodeHash": "1ff4c506300189de5945d3f5f0423a409864b4a1ce3538ec4d053b90caefd0fe",
+    "beforeOrigin": "Retained RED tool output; concise transcription of observed values. The scratch script phase env was not forwarded by launcher and its JSON path was reused; before and after are distinguished here by actual run order and output.",
+    "before": [
+      {
+        "width": 390,
+        "sidebar": false,
+        "toc": false,
+        "sidebarTrigger": true,
+        "tocTrigger": true,
+        "brandDisplay": "flex",
+        "usernameTop": 818.734375,
+        "pass": false
+      },
+      {
+        "width": 900,
+        "sidebar": false,
+        "toc": false,
+        "sidebarTrigger": false,
+        "tocTrigger": false,
+        "brandDisplay": "flex",
+        "usernameTop": 826.390625,
+        "pass": false
+      },
+      {
+        "width": 1024,
+        "sidebar": false,
+        "toc": false,
+        "sidebarTrigger": false,
+        "tocTrigger": false,
+        "brandDisplay": "flex",
+        "usernameTop": 245.640625,
+        "pass": false
+      },
+      {
+        "width": 1100,
+        "sidebar": true,
+        "toc": false,
+        "sidebarTrigger": false,
+        "tocTrigger": false,
+        "brandDisplay": "flex",
+        "usernameTop": 245.640625,
+        "pass": false
+      },
+      {
+        "width": 1280,
+        "sidebar": true,
+        "toc": false,
+        "sidebarTrigger": false,
+        "tocTrigger": false,
+        "brandDisplay": "flex",
+        "usernameTop": 245.640625,
+        "pass": false
+      },
+      {
+        "width": 1440,
+        "sidebar": true,
+        "toc": true,
+        "sidebarTrigger": false,
+        "tocTrigger": false,
+        "brandDisplay": "flex",
+        "usernameTop": 245.640625,
+        "pass": true
+      }
+    ],
+    "afterOrigin": "Parsed final GREEN output from sky1-final-responsive-after.log",
+    "after": [
+      {
+        "width": 390,
+        "docs": {
+          "sidebar": false,
+          "toc": false,
+          "tocTrigger": true,
+          "sidebarTrigger": true,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 390,
+          "documentWidth": 390
+        },
+        "login": {
+          "brandDisplay": "none",
+          "usernameTop": 199.484375,
+          "viewport": 390,
+          "documentWidth": 390
+        },
+        "pass": true
+      },
+      {
+        "width": 900,
+        "docs": {
+          "sidebar": false,
+          "toc": false,
+          "tocTrigger": true,
+          "sidebarTrigger": true,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 900,
+          "documentWidth": 900
+        },
+        "login": {
+          "brandDisplay": "none",
+          "usernameTop": 229.640625,
+          "viewport": 900,
+          "documentWidth": 900
+        },
+        "pass": true
+      },
+      {
+        "width": 1024,
+        "docs": {
+          "sidebar": false,
+          "toc": false,
+          "tocTrigger": true,
+          "sidebarTrigger": true,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 1024,
+          "documentWidth": 1024
+        },
+        "login": {
+          "brandDisplay": "flex",
+          "usernameTop": 245.640625,
+          "viewport": 1024,
+          "documentWidth": 1024
+        },
+        "pass": true
+      },
+      {
+        "width": 1100,
+        "docs": {
+          "sidebar": true,
+          "toc": false,
+          "tocTrigger": true,
+          "sidebarTrigger": false,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 1100,
+          "documentWidth": 1100
+        },
+        "login": {
+          "brandDisplay": "flex",
+          "usernameTop": 245.640625,
+          "viewport": 1100,
+          "documentWidth": 1100
+        },
+        "pass": true
+      },
+      {
+        "width": 1280,
+        "docs": {
+          "sidebar": true,
+          "toc": false,
+          "tocTrigger": true,
+          "sidebarTrigger": false,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 1280,
+          "documentWidth": 1280
+        },
+        "login": {
+          "brandDisplay": "flex",
+          "usernameTop": 245.640625,
+          "viewport": 1280,
+          "documentWidth": 1280
+        },
+        "pass": true
+      },
+      {
+        "width": 1440,
+        "docs": {
+          "sidebar": true,
+          "toc": true,
+          "tocTrigger": false,
+          "sidebarTrigger": false,
+          "hasSidebarAccess": true,
+          "hasTocAccess": true,
+          "viewport": 1440,
+          "documentWidth": 1440
+        },
+        "login": {
+          "brandDisplay": "flex",
+          "usernameTop": 245.640625,
+          "viewport": 1440,
+          "documentWidth": 1440
+        },
+        "pass": true
+      }
+    ],
+    "afterPass": true
+  },
+  "catalog": {
+    "beforeCodeHash": "c294538a20ef692cf480dac21526598e1d99fe0722e78f9b91380c5757e51e69",
+    "before": {
+      "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+      "title": "主题配置功能详解 - 5ee博客",
+      "layout": true,
+      "article": false,
+      "sidebar": "none",
+      "openerCount": 0,
+      "drawerPresent": false,
+      "openFunction": "undefined"
+    },
+    "after": {
+      "before": {
+        "drawerOpen": true,
+        "links": 21,
+        "openFunction": "function"
+      },
+      "article": {
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+        "sameDocument": true,
+        "drawerClosed": true,
+        "overflow": ""
+      },
+      "returned": {
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+        "sameDocument": true,
+        "drawerClosed": true,
+        "overflow": "",
+        "errors": []
+      }
+    },
+    "oldThemeConfiguration": "doc_catalog_settings.enable_sidebar_drawer absent; child schema default true; no persisted config changed",
+    "mobileDrawer": {
+      "openedAndEscapeClosed": true
+    }
+  },
+  "pageChecks": {
+    "at": "2026-10-27T06:38:06.922Z",
+    "records": [
+      {
+        "name": "home",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+        "title": "5ee博客 - 123",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 5058,
+        "heads": ["sky blog", "文档中心", "图库", "友情链接"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-title-effects.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-subtitle-effects.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-home-1440.png"
+      },
+      {
+        "name": "article",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+        "title": "编辑器功能演示 - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 6890,
+        "heads": ["编辑器功能演示", "一级标题", "二级标题", "这是一个标题", "编辑器功能演示"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-article-1440.png"
+      },
+      {
+        "name": "docs",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+        "title": "通用（全局） - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 7095,
+        "heads": ["通用（全局）", "功能列表", "页面加载屏幕", "悬浮控制栏", "全局侧边栏"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-docs-1440.png"
+      },
+      {
+        "name": "catalog",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+        "title": "主题配置功能详解 - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 1446,
+        "heads": ["主题配置功能详解"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 446,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-catalog-1440.png"
+      },
+      {
+        "name": "links",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+        "title": "友情链接 - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 3343,
+        "heads": ["友情链接", "工具", "个人", "朋友", "评论留言"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-links-1440.png"
+      },
+      {
+        "name": "photos",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+        "title": "发现 细腻 的视觉美学 - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 2592,
+        "heads": ["发现 细腻 的视觉美学", "评论留言"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/photos.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 163,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-photos-1440.png"
+      },
+      {
+        "name": "login",
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "mobile": false
+        },
+        "url": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+        "title": "登录 - 5ee博客",
+        "width": 1440,
+        "documentWidth": 1440,
+        "height": 1000,
+        "heads": ["5ee博客", "欢迎来到", "欢迎回来"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 0,
+          "documentWidth": 1440,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-login-1440.png"
+      },
+      {
+        "name": "home",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+        "title": "5ee博客 - 123",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 5722,
+        "heads": ["sky blog", "文档中心", "图库", "友情链接"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-title-effects.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-subtitle-effects.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-home-390.png"
+      },
+      {
+        "name": "article",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+        "title": "编辑器功能演示 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 6264,
+        "heads": ["编辑器功能演示", "一级标题", "二级标题", "这是一个标题", "编辑器功能演示"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1203,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-article-390.png"
+      },
+      {
+        "name": "docs",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+        "title": "通用（全局） - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 5157,
+        "heads": ["通用（全局）", "功能列表", "页面加载屏幕", "悬浮控制栏", "全局侧边栏"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-docs-390.png"
+      },
+      {
+        "name": "catalog",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings?preview-theme=theme-sky-blog-1",
+        "title": "主题配置功能详解 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 2295,
+        "heads": ["主题配置功能详解"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "catalogDrawer": {
+          "openedAndEscapeClosed": true
+        },
+        "afterScroll": {
+          "scrollY": 1200,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-catalog-390.png"
+      },
+      {
+        "name": "links",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+        "title": "友情链接 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 2109,
+        "heads": ["友情链接", "工具", "个人", "朋友", "评论留言"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-links-390.png"
+      },
+      {
+        "name": "photos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+        "title": "发现 细腻 的视觉美学 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 7741,
+        "heads": ["发现 细腻 的视觉美学", "评论留言"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/photos.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 1176,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-photos-390.png"
+      },
+      {
+        "name": "login",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "mobile": true
+        },
+        "url": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+        "title": "登录 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390,
+        "height": 966,
+        "heads": ["欢迎回来"],
+        "themeAssets": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.40"
+        ],
+        "errors": [],
+        "blankBody": false,
+        "theme": "dark",
+        "afterScroll": {
+          "scrollY": 122,
+          "documentWidth": 390,
+          "errors": []
+        },
+        "screenshot": "/tmp/sky1-final-after-login-390.png"
+      }
+    ],
+    "pass": true
+  },
+  "interactions": {
+    "links": {
+      "group": {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&group=link-group-gtqEW",
+        "sameDocument": true,
+        "emptyState": true,
+        "width": 390,
+        "documentWidth": 390
+      },
+      "friends": {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&view=friends",
+        "sameDocument": true,
+        "title": "友情链接 - 5ee博客",
+        "width": 390,
+        "documentWidth": 390
+      }
+    },
+    "search": {
+      "query": "Halo",
+      "results": {
+        "resultCount": 22,
+        "present": true
+      },
+      "closed": {
+        "focus": "打开搜索",
+        "bodyOverflow": ""
+      }
+    },
+    "galleryAndMenu": {
+      "opened": {
+        "visibleLightboxes": 1
+      },
+      "closed": {
+        "visibleLightboxes": 0
+      },
+      "menu": {
+        "sameDocument": true,
+        "drawerClosed": true,
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+        "width": 390,
+        "documentWidth": 390
+      }
+    },
+    "contact": {
+      "opened": {
+        "autoDisplay": 1,
+        "formHost": 0
+      },
+      "left": {
+        "sameDocument": true,
+        "url": "http://localhost:8090/categories/ai?preview-theme=theme-sky-blog-1",
+        "autoDisplay": 0,
+        "formHost": 0
+      },
+      "submitted": false
+    },
+    "loginRememberMe": {
+      "before": false,
+      "selected": true,
+      "restored": false,
+      "passkeyUrls": [
+        "http://localhost:8090/login?preview-theme=theme-sky-blog-1&method=passkey&remember-me=false",
+        "http://localhost:8090/login?preview-theme=theme-sky-blog-1&method=passkey&remember-me=true",
+        "http://localhost:8090/login?preview-theme=theme-sky-blog-1&method=passkey&remember-me=false"
+      ],
+      "submitted": false
+    }
+  },
+  "visualReview": {
+    "reviewed": true,
+    "method": "14 viewport screenshots reviewed in two contact sheets; login390, docs900 TOC and catalog900 tree also viewed individually",
+    "screenshotsCommitted": false,
+    "localContactSheets": ["/tmp/sky1-final-sheet-390.jpg", "/tmp/sky1-final-sheet-1440.jpg"]
+  },
+  "checks": {
+    "build": {
+      "command": "pnpm run build",
+      "exitCode": 0
+    },
+    "lint": {
+      "command": "pnpm run lint",
+      "exitCode": 0
+    },
+    "format": {
+      "command": "pnpm run format:check",
+      "exitCode": 0
+    },
+    "diff": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "plugins": {
+      "passed": 33,
+      "total": 33,
+      "report": "final-ui-smoke.json",
+      "deepMode": true,
+      "cacheFreshSince": "2026-10-27T06:51:34.102Z",
+      "htmlCacheStrategy": {
+        "htmlQueryKey": "_theme-verify",
+        "value": "1793083894102",
+        "noCacheRequestHeader": true,
+        "actualUrls": "responseUrl",
+        "apiRequestsUnmodified": true
+      },
+      "method": "Temporary fetch wrapper adds a unique query to HTML GETs; unmodified verify-plugin-pages.mjs runs with VERIFY_PLUGIN_DEEP=1 and cache-fresh-since."
+    },
+    "routes": {
+      "passed": 114,
+      "total": 114,
+      "report": "final-ui-routes.json",
+      "expected404": "/terms"
+    },
+    "independentReview": "Responsive CSS, catalog fragment closure, null/false defaults and doc lifecycle reviewed; no blocking finding"
+  },
+  "backend": {
+    "since": "2026-10-27T06:24:00Z",
+    "capturedAt": "2026-10-27T06:42:10.086611+00:00",
+    "errorCount": 4,
+    "warningCount": 5,
+    "templateExceptionCount": 0,
+    "alistRoleErrorCount": 4,
+    "pageSizeWarnings": 3,
+    "templateInterruptedWarnings": 2,
+    "errorScope": "All 4 ERROR entries reference AListGetCurrentUserInfoRes[role], array to int; excluded by user",
+    "warningScope": "3 existing equipment page-size warnings; 2 template processing/output interruption warnings during navigation, cause not separately reproduced; no template parse/expression exception"
+  },
+  "boundaries": [
+    "Current browser configuration is side FAB; bottom Dock changes independently reviewed in code, not tested by changing site configuration.",
+    "No sign-in, personal WebAuthn, form submission, model call, voting, payment, database operation or plugin upgrade.",
+    "Password visibility probe read state immediately after clicks and did not establish both transitions; excluded from passing interaction results, no product failure inferred.",
+    "7 routes at 2 viewport sizes are UI coverage, not every route and business interaction.",
+    "Halo 2.27.1, MCP 1.3.2 and OAuth2 1.7.2 are not installed/tested in this environment."
+  ],
+  "taskCleanup": {
+    "browserTaskSpace": 155,
+    "finished": true,
+    "temporaryPasswordCleared": true,
+    "rememberMeRestored": true,
+    "themePreferenceChanged": false,
+    "siteConfigurationChanged": false,
+    "newSiteFixturesCreated": false,
+    "gitWrite": false
+  }
+}

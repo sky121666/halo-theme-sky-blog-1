@@ -37,16 +37,17 @@
                         th:with="specsText=${#annotations.get(equipment, 'specs')}">
                         <th:block th:each="line : ${#strings.arraySplit(specsText, '
 ')}">
-                            <th:block th:if="${!#strings.isEmpty(#strings.trim(line))}" th:with="parts=${#strings.arraySplit(line, '|')},
-                                               content=${parts[0]},
-                                               progressVal=${parts.length > 1 ? #strings.trim(parts[1]) : ''}">
+                            <th:block th:with="content=${#strings.contains(line, '|') ? #strings.substringBefore(line, '|') : line},
+                                               progressVal=${#strings.contains(line, '|') ? #strings.trim(#strings.substringAfter(line, '|')) : ''}">
 
                                 <th:block
-                                    th:with="kv=${#strings.contains(content, '：') ? #strings.arraySplit(content, '：') : (#strings.contains(content, ':') ? #strings.arraySplit(content, ':') : null)}">
-                                    <div class="ec-spec-unit" th:if="${kv != null and kv.length > 1}">
-                                        <span class="ec-spec-label" th:text="${#strings.trim(kv[0])}">KEY</span>
+                                    th:with="separator=${#strings.contains(content, '：') and (!#strings.contains(content, ':') or #strings.indexOf(content, '：') &lt; #strings.indexOf(content, ':')) ? '：' : ':'},
+                                             label=${#strings.contains(content, separator) ? #strings.trim(#strings.substringBefore(content, separator)) : ''},
+                                             value=${#strings.contains(content, separator) ? #strings.trim(#strings.substringAfter(content, separator)) : ''}">
+                                    <div class="ec-spec-unit" th:if="${!#strings.isEmpty(label) and !#strings.isEmpty(value)}">
+                                        <span class="ec-spec-label" th:text="${label}">KEY</span>
                                         <div class="ec-spec-val-group">
-                                            <span class="ec-spec-val" th:text="${#strings.trim(kv[1])}">VALUE</span>
+                                            <span class="ec-spec-val" th:text="${value}">VALUE</span>
 
                                             <!-- 进度条 -->
                                             <th:block th:if="${!#strings.isEmpty(progressVal)}">

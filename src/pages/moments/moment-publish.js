@@ -1,7 +1,11 @@
+import { createModalFocus } from '../../common/js/modal-focus.js';
 import { skyDebug } from '../../common/js/debug.js';
 import { registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 const BLOCKED_EXTENSIONS = ['.svg', '.html', '.htm', '.js', '.exe', '.bat', '.sh', '.php'];
+// Match PluginMoments' official editor limit, including mixed media and earlier batches.
+const MAX_MEDIA_COUNT = 9;
+const UPLOAD_TIMEOUT_MS = 300000;
 
 const MEDIA_ACCEPTS = {
   image: 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
@@ -40,32 +44,95 @@ function initMomentPublishModal() {
 
   const controller = new AbortController();
   const { signal } = controller;
-  const ownerName = modal.dataset.ownerName || '';
+  const refreshStatus = getElement('moments-refresh-status');
+  const refreshRetry = getElement('moments-refresh-retry');
+  const publishStatus = getElement('moments-publish-status');
+  const permissionStatus = getElement('moment-permission-status');
+  const permissionMessage = getElement('moment-permission-message');
+  const permissionRetry = getElement('moment-permission-retry');
   let selectedTags = [];
   let uploadedMedia = [];
   let refreshTimer = null;
-  const pendingDelays = new Map();
+  let statusTimer = null;
+  let refreshVersion = 0;
+  let isRefreshing = false;
+  let isPublishing = false;
+  let canPublish = false;
+  let permissionState = 'idle';
+  let permissionRetrying = false;
+  let modalSession = 0;
+  let activeUpload = null;
+  const focus = createModalFocus({
+    panel: modal, signal, onClose: closeMomentModal,
+    initialFocus: () => getElement('moment-content'),
+  });
 
-  function wait(delay) {
-    return new Promise((resolve, reject) => {
-      if (signal.aborted) {
-        reject(signal.reason || new DOMException('Aborted', 'AbortError'));
+  function syncPublishControls() {
+    document.querySelectorAll('[data-moment-publish-trigger]').forEach((button) => {
+      button.classList.toggle('hidden', !canPublish);
+      button.disabled = !canPublish;
+    });
+    const showRetry = permissionState === 'error' || (permissionState === 'checking' && permissionRetrying);
+    permissionStatus?.classList.toggle('hidden', !showRetry);
+    if (permissionMessage) {
+      permissionMessage.textContent = permissionState === 'error'
+        ? '暂时无法确认发布权限，请重试。' : showRetry ? '正在重试…' : '';
+    }
+    if (permissionRetry) {
+      permissionRetry.classList.toggle('hidden', !showRetry);
+      permissionRetry.disabled = permissionState === 'checking';
+    }
+  }
+
+  async function loadPublishPermission() {
+    if (signal.aborted || permissionState === 'checking') return;
+    permissionRetrying = permissionState === 'error';
+    permissionState = 'checking';
+    canPublish = false;
+    syncPublishControls();
+    try {
+      // Halo WebFlux 的 #authorization 仅支持登录状态；UI 权限由当前用户权限接口提供。
+      const response = await fetch('/apis/api.console.halo.run/v1alpha1/users/-/permissions', {
+        signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]),
+        cache: 'no-store',
+      });
+      if (signal.aborted) return;
+      if ([401, 403].includes(response.status)) {
+        permissionState = 'denied';
+        syncPublishControls();
         return;
       }
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const permissions = (await response.json()).uiPermissions;
+      if (signal.aborted) return;
+      if (!Array.isArray(permissions)) throw new Error('Invalid UI permissions response');
+      canPublish = permissions.includes('*') || permissions.includes('uc:plugin:moments:publish');
+      permissionState = canPublish ? 'allowed' : 'denied';
+      syncPublishControls();
+    } catch (error) {
+      if (signal.aborted) return;
+      permissionState = 'error';
+      syncPublishControls();
+      skyDebug.warn('moment-publish', '无法确认发布权限', error);
+    }
+  }
 
-      const onAbort = () => {
-        window.clearTimeout(timer);
-        pendingDelays.delete(timer);
-        reject(signal.reason || new DOMException('Aborted', 'AbortError'));
-      };
-      const timer = window.setTimeout(() => {
-        signal.removeEventListener('abort', onAbort);
-        pendingDelays.delete(timer);
-        resolve();
-      }, delay);
-      pendingDelays.set(timer, onAbort);
-      signal.addEventListener('abort', onAbort, { once: true });
-    });
+  function finishUpload(upload) {
+    if (activeUpload !== upload) return;
+    activeUpload = null;
+    upload.input.value = '';
+    if (upload.button && !signal.aborted) {
+      upload.button.disabled = false;
+      upload.button.removeAttribute('aria-busy');
+      upload.button.innerHTML = upload.originalHtml;
+    }
+  }
+
+  function cancelUpload() {
+    if (!activeUpload) return;
+    const upload = activeUpload;
+    upload.controller.abort();
+    finishUpload(upload);
   }
 
   function isBlockedExtension(fileName) {
@@ -252,14 +319,14 @@ function initMomentPublishModal() {
     return { valid: true, category };
   }
 
-  async function uploadFile(file, category) {
+  async function uploadFile(file, category, uploadSignal) {
     const formData = new FormData();
     formData.append('file', file);
 
     const response = await fetch('/apis/uc.api.storage.halo.run/v1alpha1/attachments/-/upload', {
       method: 'POST',
       body: formData,
-      signal,
+      signal: AbortSignal.any([signal, uploadSignal, AbortSignal.timeout(UPLOAD_TIMEOUT_MS)]),
     });
 
     if (!response.ok) {
@@ -273,21 +340,8 @@ function initMomentPublishModal() {
     }
 
     const attachment = await response.json();
-    let url = attachment.status?.permalink || attachment.spec?.permalink;
-
-    if (!url && attachment.metadata?.name) {
-      for (let i = 0; i < 5; i++) {
-        await wait(500);
-        const checkRes = await fetch(`/api/v1alpha1/attachments/${attachment.metadata.name}`, { signal });
-        if (checkRes.ok) {
-          const updated = await checkRes.json();
-          url = updated.status?.permalink || updated.spec?.permalink;
-          if (url) {
-            break;
-          }
-        }
-      }
-    }
+    // Halo 2.27's UC handler resolves the permalink before returning the attachment.
+    const url = attachment.status?.permalink;
 
     if (!url) {
       throw new Error('未获取到文件地址');
@@ -310,6 +364,9 @@ function initMomentPublishModal() {
   }
 
   async function publishMoment(content, tags, media) {
+    if (media?.length > MAX_MEDIA_COUNT) {
+      throw new Error(`最多允许添加 ${MAX_MEDIA_COUNT} 个附件`);
+    }
     const safeTags = (tags || [])
       .filter((tag) => typeof tag === 'string' && tag.length > 0 && tag.length <= 50)
       .map(sanitizeTag)
@@ -327,17 +384,13 @@ function initMomentPublishModal() {
       apiVersion: 'moment.halo.run/v1alpha1',
       kind: 'Moment',
       metadata: {
-        name: `moment-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
-        labels: { 'moment.halo.run/visible': 'PUBLIC' }
+        name: `moment-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
       },
       spec: {
-        approved: true,
-        approvedTime: new Date().toISOString(),
         content: {
           raw: content.trim(),
           html: escapeHtml(content.trim()).replace(/\n/g, '<br>')
         },
-        owner: ownerName,
         visible: 'PUBLIC',
         releaseTime: new Date().toISOString(),
         tags: safeTags
@@ -354,7 +407,7 @@ function initMomentPublishModal() {
 
     let response;
     try {
-      response = await fetch('/apis/moment.halo.run/v1alpha1/moments', {
+      response = await fetch('/apis/uc.api.moment.halo.run/v1alpha1/moments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(momentData),
@@ -377,13 +430,27 @@ function initMomentPublishModal() {
       throw new Error('发布失败，请重试');
     }
 
-    return true;
+    // POST 已被接受；响应体异常不能误报为发布失败而诱导用户重复提交。
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
   }
 
-  async function refreshMomentsList() {
+  async function refreshMomentsList(version) {
+    if (signal.aborted || version !== refreshVersion) return;
+    isRefreshing = true;
+    if (refreshRetry) {
+      refreshRetry.disabled = true;
+      refreshRetry.setAttribute('aria-busy', 'true');
+    }
+
     try {
       const response = await fetch(window.location.href, { signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const html = await response.text();
+      if (signal.aborted || version !== refreshVersion) return;
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       const newList = doc.getElementById('moments-list');
@@ -391,24 +458,47 @@ function initMomentPublishModal() {
 
       if (newList && currentList) {
         currentList.innerHTML = newList.innerHTML;
+        syncPublishControls();
+        document.dispatchEvent(new Event('sky:moments-list-refreshed'));
+        refreshStatus?.classList.add('hidden');
+        publishStatus?.classList.remove('hidden');
+        window.clearTimeout(statusTimer);
+        statusTimer = window.setTimeout(() => {
+          if (!signal.aborted && version === refreshVersion) publishStatus?.classList.add('hidden');
+        }, 4000);
+      } else {
+        throw new Error('未找到瞬间列表');
       }
     } catch (error) {
-      if (signal.aborted) return;
+      if (signal.aborted || version !== refreshVersion) return;
       skyDebug.error('moment-publish', '刷新失败', error);
-      window.location.reload();
+      publishStatus?.classList.add('hidden');
+      refreshStatus?.classList.remove('hidden');
+    } finally {
+      if (!signal.aborted && version === refreshVersion) {
+        isRefreshing = false;
+        if (refreshRetry) {
+          refreshRetry.disabled = false;
+          refreshRetry.removeAttribute('aria-busy');
+        }
+      }
     }
   }
 
   function openMomentModal() {
+    if (!canPublish) return;
     modal.classList.remove('hidden');
     modal.style.display = 'flex';
-    getElement('moment-content')?.focus();
+    focus.open();
   }
 
-  function closeMomentModal() {
+  function closeMomentModal(options) {
+    modalSession += 1;
+    cancelUpload();
     modal.classList.add('hidden');
     modal.style.display = 'none';
     window.hideEmojiSelector?.();
+    focus.close(options);
     selectedTags = [];
     uploadedMedia = [];
     updateTagsDisplay();
@@ -416,6 +506,7 @@ function initMomentPublishModal() {
   }
 
   function selectMedia(category) {
+    if (!canPublish || isPublishing || getElement('moment-publish-btn')?.disabled) return;
     const input = getElement('moment-file-input');
     if (!input) {
       return;
@@ -439,10 +530,25 @@ function initMomentPublishModal() {
     }
 
     const publishBtn = getElement('moment-publish-btn');
-    const originalHtml = publishBtn?.innerHTML || '发布';
+    if (!canPublish || isPublishing || publishBtn?.disabled) {
+      event.target.value = '';
+      return;
+    }
+    if (uploadedMedia.length + files.length > MAX_MEDIA_COUNT) {
+      alert(`最多允许添加 ${MAX_MEDIA_COUNT} 个附件，当前已添加 ${uploadedMedia.length} 个。请重新选择。`);
+      event.target.value = '';
+      return;
+    }
+    const uploadSession = modalSession;
+    const upload = {
+      controller: new AbortController(), input: event.target, button: publishBtn,
+      originalHtml: publishBtn?.innerHTML || '发布',
+    };
+    activeUpload = upload;
 
     if (publishBtn) {
       publishBtn.disabled = true;
+      publishBtn.setAttribute('aria-busy', 'true');
       publishBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> 上传中...';
     }
 
@@ -457,32 +563,29 @@ function initMomentPublishModal() {
             continue;
           }
 
-          const media = await uploadFile(file, validation.category);
+          const media = await uploadFile(file, validation.category, upload.controller.signal);
+          if (signal.aborted || uploadSession !== modalSession) return;
           if (media) {
             uploadedMedia.push(media);
           }
         } catch (error) {
-          if (signal.aborted) return;
-          errors.push(`${file.name}: ${error.message}`);
+          if (signal.aborted || uploadSession !== modalSession) return;
+          errors.push(`${file.name}: ${error.name === 'TimeoutError' ? '上传超时，请重试' : error.message}`);
         }
       }
 
-      if (signal.aborted) return;
+      if (signal.aborted || uploadSession !== modalSession) return;
       updateMediaPreview();
 
       if (errors.length > 0) {
         alert(`部分文件上传失败：\n${errors.join('\n')}`);
       }
     } catch (error) {
-      if (signal.aborted) return;
+      if (signal.aborted || uploadSession !== modalSession) return;
       skyDebug.error('moment-publish', '上传失败', error);
       alert('上传失败，请重试');
     } finally {
-      if (publishBtn) {
-        publishBtn.disabled = false;
-        publishBtn.innerHTML = originalHtml;
-      }
-      event.target.value = '';
+      finishUpload(upload);
     }
   };
 
@@ -520,36 +623,36 @@ function initMomentPublishModal() {
   window.addMomentTag = function addMomentTag() {
     const input = getElement('moment-tags');
     if (!input) {
-      return;
+      return true;
     }
 
     const tag = input.value.trim();
     if (!tag) {
-      return;
+      return true;
     }
 
     if (tag.length > 50) {
       alert('标签长度不能超过 50 个字符');
-      return;
-    }
-
-    if (selectedTags.length >= 10) {
-      alert('最多只能添加 10 个标签');
-      return;
+      return false;
     }
 
     const safeTag = sanitizeTag(tag);
     if (!safeTag) {
       alert('标签包含非法字符');
-      return;
+      return false;
     }
 
     if (!selectedTags.includes(safeTag)) {
+      if (selectedTags.length >= 10) {
+        alert('最多只能添加 10 个标签');
+        return false;
+      }
       selectedTags.push(safeTag);
       updateTagsDisplay();
     }
 
     input.value = '';
+    return true;
   };
 
   window.removeMomentTag = function removeMomentTag(index) {
@@ -560,29 +663,67 @@ function initMomentPublishModal() {
   const form = getElement('moment-publish-form');
   const contentInput = getElement('moment-content');
 
+  function snapshotDraft() {
+    return JSON.stringify({
+      content: contentInput?.value || '',
+      tags: selectedTags,
+      tagInput: getElement('moment-tags')?.value || '',
+      media: uploadedMedia,
+    });
+  }
+
+  refreshRetry?.addEventListener('click', () => {
+    if (signal.aborted || isRefreshing) return;
+    window.clearTimeout(refreshTimer);
+    refreshMomentsList(++refreshVersion);
+  }, { signal });
+
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    if (!contentInput) {
+    if (!contentInput || !canPublish || isPublishing) {
       return;
     }
 
     const publishBtn = getElement('moment-publish-btn');
+    if (publishBtn?.disabled) return;
     const content = contentInput.value.trim();
 
     if (!content && uploadedMedia.length === 0) {
       alert('请输入内容或上传媒体');
       return;
     }
+    if (!window.addMomentTag()) return;
 
+    // A new submission owns the result area; older refreshes cannot replace its feedback.
+    window.clearTimeout(refreshTimer);
+    window.clearTimeout(statusTimer);
+    ++refreshVersion;
+    isRefreshing = false;
+    publishStatus?.classList.add('hidden');
+    refreshStatus?.classList.add('hidden');
+    const submitSession = modalSession;
+    const submittedDraft = snapshotDraft();
+    isPublishing = true;
     if (publishBtn) {
       publishBtn.disabled = true;
-      publishBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span>';
+      publishBtn.setAttribute('aria-busy', 'true');
+      publishBtn.innerHTML = '<span class="loading loading-spinner loading-sm" aria-hidden="true"></span> 发布中...';
     }
 
     try {
-      const success = await publishMoment(content, [...selectedTags], [...uploadedMedia]);
-      if (success) {
+      const moment = await publishMoment(content, [...selectedTags], [...uploadedMedia]);
+      if (signal.aborted) return;
+      const isPublic = moment?.spec?.approved === true && moment.spec.visible === 'PUBLIC';
+      const resultMessage = isPublic ? '瞬间已公开发布。'
+        : moment?.spec?.approved === false ? '瞬间已提交，待审核后公开。'
+          : moment?.spec?.approved === true ? '瞬间已提交，当前未公开。'
+            : '瞬间已提交，发布状态暂未确认，请前往用户中心查看。';
+      if (publishStatus) {
+        publishStatus.textContent = resultMessage;
+        publishStatus.classList.remove('hidden');
+      }
+      if (submitSession === modalSession && submittedDraft === snapshotDraft()) {
         contentInput.value = '';
         selectedTags = [];
         uploadedMedia = [];
@@ -592,15 +733,24 @@ function initMomentPublishModal() {
         getElement('moment-tags').value = '';
         getElement('moment-tags-input-row').style.display = 'none';
         closeMomentModal();
-        refreshTimer = window.setTimeout(refreshMomentsList, 500);
+      } else if (submitSession === modalSession) {
+        alert(`${resultMessage} 当前编辑已保留。`);
+      }
+      if (isPublic) {
+        window.clearTimeout(refreshTimer);
+        const version = ++refreshVersion;
+        refreshTimer = window.setTimeout(() => refreshMomentsList(version), 500);
       }
     } catch (error) {
       if (signal.aborted) return;
       skyDebug.error('moment-publish', '发布异常', error);
-      alert(`发布失败: ${error.message}`);
+      const subject = submitSession === modalSession ? '发布失败' : '之前提交的瞬间发布失败';
+      alert(`${subject}: ${error.message}`);
     } finally {
-      if (publishBtn) {
+      isPublishing = false;
+      if (publishBtn && !signal.aborted) {
         publishBtn.disabled = false;
+        publishBtn.removeAttribute('aria-busy');
         publishBtn.textContent = '发布';
       }
     }
@@ -633,14 +783,15 @@ function initMomentPublishModal() {
     hideEmojiSelector: window.hideEmojiSelector,
   };
 
+  permissionRetry?.addEventListener('click', loadPublishPermission, { signal });
+  syncPublishControls();
+  loadPublishPermission();
+
   return () => {
     controller.abort();
+    cancelUpload();
     window.clearTimeout(refreshTimer);
-    pendingDelays.forEach((onAbort, timer) => {
-      window.clearTimeout(timer);
-      signal.removeEventListener('abort', onAbort);
-    });
-    pendingDelays.clear();
+    window.clearTimeout(statusTimer);
     modal.dataset.initialized = 'false';
     Object.entries(globalBindings).forEach(([name, handler]) => {
       if (window[name] === handler) window[name] = undefined;

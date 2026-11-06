@@ -165,10 +165,13 @@ html[data-color-scheme="dark"] ai-summary-widget {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0.3s ease;
 }
 
 .post-toc-drawer.open {
+  visibility: visible;
+  transition: transform 0.3s ease;
   transform: translateX(0);
 }
 
@@ -192,5 +195,38 @@ html[data-color-scheme="dark"] ai-summary-widget {
 @media (max-width: 1023px) {
   article.flex-1 {
     width: 100%;
+  }
+}
+
+/* Heading permalink remains discoverable to keyboard users. */
+#article-content .heading-anchor {
+  cursor: pointer;
+  position: absolute;
+  left: -1.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: var(--color-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+#article-content :is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within) > .heading-anchor {
+  opacity: 1;
+}
+
+/* Touch layouts keep a quiet, reachable action after the heading text. */
+@media (max-width: 640px) {
+  #article-content .heading-anchor {
+    position: static;
+    transform: none;
+    vertical-align: middle;
+    margin-inline-start: 0.35em;
+    min-width: 24px;
+    min-height: 24px;
+    justify-content: center;
+    color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    opacity: 1;
   }
 }

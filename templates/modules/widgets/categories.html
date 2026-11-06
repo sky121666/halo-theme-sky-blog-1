@@ -46,7 +46,7 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="text-xs text-base-content/30 bg-base-200/60 px-2 py-0.5 rounded-full"
-            th:text="${category.status.postCount ?: 0}">0</span>
+            th:text="${category.postCount ?: 0}">0</span>
           <span
             class="icon-[heroicons--chevron-right] w-4 h-4 text-base-content/20 group-hover:text-secondary group-hover:translate-x-0.5 transition-all"></span>
         </div>
@@ -71,7 +71,7 @@
               <span class="text-sm text-base-content/70 group-hover:text-secondary transition-colors"
                 th:text="${child.spec.displayName}">子分类</span>
             </div>
-            <span class="text-xs text-base-content/30" th:text="${child.status.postCount ?: 0}">0</span>
+            <span class="text-xs text-base-content/30" th:text="${child.postCount ?: 0}">0</span>
           </a>
         </th:block>
       </th:block>

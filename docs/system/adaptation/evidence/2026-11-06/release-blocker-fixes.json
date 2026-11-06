@@ -1,0 +1,532 @@
+{
+  "checkedAt": "2026-11-06T11:17:00.322511+00:00",
+  "theme": "theme-sky-blog-1",
+  "version": "2.2.41",
+  "requires": ">=2.27.0",
+  "halo": "2.27.2",
+  "node": "24.21.0",
+  "pnpm": "12.6.0",
+  "identity": {
+    "algorithm": "sha256",
+    "codeHash": "2dae66eb35df1bdba3ac708b2ebe4d8043e7cf9886a643310cbda2635475f9a7",
+    "fileCount": 407,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "activeThemeObservedBefore": {
+    "name": "theme-sky-blog-3",
+    "version": "0.9.51"
+  },
+  "activeThemeObservedAfter": {
+    "name": "theme-sky-blog-1",
+    "version": "2.2.41"
+  },
+  "activationChangedByThisTask": false,
+  "pluginVersions": [
+    {
+      "id": "log-viewer",
+      "version": "1.3.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "mcp-server",
+      "version": "1.3.3",
+      "phase": "STARTED"
+    },
+    {
+      "id": "ai-foundation",
+      "version": "1.3.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-katex",
+      "version": "3.0.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-douban",
+      "version": "1.2.7",
+      "phase": "STARTED"
+    },
+    {
+      "id": "maintenance",
+      "version": "1.1.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "online",
+      "version": "1.0.5",
+      "phase": "STARTED"
+    },
+    {
+      "id": "dishes",
+      "version": "1.0.5",
+      "phase": "STARTED"
+    },
+    {
+      "id": "schedule-calendar",
+      "version": "3.5.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "lottery",
+      "version": "1.0.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginLive2d",
+      "version": "2.2.0",
+      "phase": "DISABLED"
+    },
+    {
+      "id": "editor-emoji",
+      "version": "1.1.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "auth-passkey",
+      "version": "2.0.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "equipment",
+      "version": "1.1.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-bilibili-bangumi",
+      "version": "1.4.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "steam",
+      "version": "1.0.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "vote",
+      "version": "1.1.3",
+      "phase": "STARTED"
+    },
+    {
+      "id": "shiki",
+      "version": "1.5.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "data-studio",
+      "version": "1.0.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "text-diagram",
+      "version": "1.5.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginS3ObjectStorage",
+      "version": "1.17.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginBytemd",
+      "version": "1.10.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "hybrid-edit-block",
+      "version": "1.7.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "chenhe-lsky-pro",
+      "version": "1.1.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginLightGallery",
+      "version": "1.2.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginPhotos",
+      "version": "2.1.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "seo-tools",
+      "version": "1.11.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginLinks",
+      "version": "2.5.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginMoments",
+      "version": "1.19.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "page-cache",
+      "version": "1.6.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "content-tools",
+      "version": "1.9.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginContactForm",
+      "version": "2.1.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "ai-assistant",
+      "version": "3.1.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "alist-integration",
+      "version": "1.2.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "backup-improved",
+      "version": "1.5.1",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-ldap-login",
+      "version": "1.3.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-docsme",
+      "version": "1.10.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "editor-hyperlink-card",
+      "version": "1.9.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-oauth2",
+      "version": "1.7.2",
+      "phase": "STARTED"
+    },
+    {
+      "id": "plugin-social-login",
+      "version": "1.7.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "restricted-reading",
+      "version": "1.9.4",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginCommentWidget",
+      "version": "3.5.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginSitemap",
+      "version": "1.3.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginSearchWidget",
+      "version": "1.8.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "PluginFeed",
+      "version": "1.5.0",
+      "phase": "STARTED"
+    },
+    {
+      "id": "app-store-integration",
+      "version": "1.19.0",
+      "phase": "STARTED"
+    }
+  ],
+  "checks": [
+    {
+      "name": "build",
+      "command": ["pnpm", "run", "build"],
+      "exitCode": 0,
+      "elapsedSeconds": 10.79,
+      "log": "/tmp/sky-release-fix-20261106/build.log"
+    },
+    {
+      "name": "lint",
+      "command": ["pnpm", "run", "lint"],
+      "exitCode": 0,
+      "elapsedSeconds": 1.18,
+      "log": "/tmp/sky-release-fix-20261106/lint.log"
+    },
+    {
+      "name": "format",
+      "command": ["pnpm", "run", "format:check"],
+      "exitCode": 0,
+      "elapsedSeconds": 0.97,
+      "log": "/tmp/sky-release-fix-20261106/format.log"
+    },
+    {
+      "name": "template-data",
+      "command": ["node", "scripts/verify-template-data.mjs"],
+      "exitCode": 0,
+      "elapsedSeconds": 1.21,
+      "log": "/tmp/sky-release-fix-20261106/template-data.log"
+    },
+    {
+      "name": "comment-contracts",
+      "command": ["node", "scripts/verify-comment-contracts.mjs"],
+      "exitCode": 0,
+      "elapsedSeconds": 1.31,
+      "log": "/tmp/sky-release-fix-20261106/comment-contracts.log"
+    }
+  ],
+  "buildTests": {
+    "tests": 577,
+    "pass": 577,
+    "fail": 0,
+    "skipped": 0
+  },
+  "audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0
+  },
+  "dependencyConfigHashes": {
+    "package.json": "d91849fbff4f523558170e818129a69d48d997c1125bc20a5f66d968fd115c39",
+    "pnpm-workspace.yaml": "59fa37b376ef557301ddad438e481031eebe4a1ff3870665e6e9c2001bb9088b",
+    "pnpm-lock.yaml": "d78083e0002c4a18851810e6b05f8949426ecd4768a6c24369c4e71042090ab9"
+  },
+  "frozenInstall": {
+    "name": "install",
+    "command": ["pnpm", "install", "--frozen-lockfile", "--store-dir", "/private/tmp/.pnpm-store"],
+    "exitCode": 0,
+    "elapsedSeconds": 12.85,
+    "log": "/tmp/sky-release-fix-20261106/install.log"
+  },
+  "fullBrowserPhase": {
+    "routes": 44,
+    "combinations": 88,
+    "widths": [390, 1440],
+    "codeHashes": ["33dab4ed659913610416131e8db05b1bd2a748212285a53a71b9abd3b8238875"],
+    "navigationErrors": [],
+    "jsErrorPages": [],
+    "overflow": [],
+    "visibleBrokenImagePages": [],
+    "tagMobile": [
+      {
+        "top": 390,
+        "middle": 390,
+        "bottom": 390
+      }
+    ]
+  },
+  "finalAffectedBrowser": {
+    "routes": 9,
+    "combinations": 18,
+    "codeHash": "2dae66eb35df1bdba3ac708b2ebe4d8043e7cf9886a643310cbda2635475f9a7",
+    "failures": 0,
+    "paths": [
+      "/categories",
+      "/categories/ai",
+      "/tags",
+      "/tags/halo",
+      "/tags/pod",
+      "/categories?p=2",
+      "/categories/ai/page/2",
+      "/tags?p=2",
+      "/tags/halo/page/2"
+    ]
+  },
+  "finalIsolatedTemplates": {
+    "productionTemplates": 4,
+    "scenariosPerTemplate": 5,
+    "widths": [390, 1440],
+    "sidebarStates": [true, false],
+    "combinations": 80,
+    "overflow": 0,
+    "squashedActions": 0,
+    "emptyTagAlignment": "original-left-preserved",
+    "renderEngine": "actual Halo 2.27.2 runtime JARs",
+    "styles": "byte-verified generated CSS inlined into isolated HTML"
+  },
+  "fixtureEvidenceExcluded": "First data-URL run could not load external CSS; it is not a valid layout result.",
+  "assets": {
+    "checked": 54,
+    "matched": 54,
+    "p3Continuity": {
+      "before": "33dab4ed659913610416131e8db05b1bd2a748212285a53a71b9abd3b8238875",
+      "after": "2dae66eb35df1bdba3ac708b2ebe4d8043e7cf9886a643310cbda2635475f9a7",
+      "compared": 54,
+      "changed": []
+    }
+  },
+  "archive": {
+    "path": "/Users/sky/Public/work/sky-blog1/themes/theme-sky-blog-1/dist/theme-sky-blog-1-2.2.41.zip",
+    "files": 240,
+    "mismatches": [],
+    "sha256": "bb0d61b12da616794dca2329322fcd330638ca68c868811bd9b3cba40e2e0721"
+  },
+  "backend": {
+    "since": "2026-11-06T10:56:57.837Z",
+    "until": "2026-11-06T11:16:59.676716+00:00",
+    "dockerExitCode": 0,
+    "errors": 4,
+    "templateExceptionMatches": 0,
+    "warnings": 23,
+    "warningCategories": {
+      "PageRequestImpl": 6,
+      "HaloTemplateEngine": 5,
+      "other": 12
+    },
+    "rawLogsSaved": false,
+    "sharedInstance": true,
+    "errorClassification": [
+      {
+        "logger": "r.h.a.e.controller.DefaultController",
+        "exceptionClasses": [
+          "org.springframework.core.codec.DecodingException",
+          "org.springframework.http.codec.AbstractJacksonDecoder.processException"
+        ],
+        "mentionsAList": true,
+        "mentionsThemeTemplate": false
+      },
+      {
+        "logger": "r.h.a.e.controller.DefaultController",
+        "exceptionClasses": [
+          "org.springframework.core.codec.DecodingException",
+          "org.springframework.http.codec.AbstractJacksonDecoder.processException"
+        ],
+        "mentionsAList": true,
+        "mentionsThemeTemplate": false
+      },
+      {
+        "logger": "r.h.a.e.controller.DefaultController",
+        "exceptionClasses": [
+          "org.springframework.core.codec.DecodingException",
+          "org.springframework.http.codec.AbstractJacksonDecoder.processException"
+        ],
+        "mentionsAList": true,
+        "mentionsThemeTemplate": false
+      },
+      {
+        "logger": "r.h.a.e.controller.DefaultController",
+        "exceptionClasses": [
+          "org.springframework.core.codec.DecodingException",
+          "org.springframework.http.codec.AbstractJacksonDecoder.processException"
+        ],
+        "mentionsAList": true,
+        "mentionsThemeTemplate": false
+      }
+    ]
+  },
+  "independentReview": {
+    "unresolvedConfirmedFindings": 0,
+    "closed": "P3 empty-tag footer alignment",
+    "focusedImagesViewed": 8
+  },
+  "interactions": {
+    "menu": {
+      "focusChecks": 18,
+      "allFocusInside": true,
+      "escape": {
+        "open": false,
+        "overflow": "",
+        "trigger": "打开移动端菜单"
+      },
+      "backdrop": {
+        "open": false,
+        "overflow": ""
+      },
+      "resize": {
+        "open": false,
+        "overflow": "",
+        "inert": true
+      },
+      "pjax": {
+        "sameDocument": true,
+        "open": false,
+        "overflow": "",
+        "contentInert": false
+      }
+    },
+    "photos": [
+      {
+        "width": 1440,
+        "beforeCount": 20,
+        "loadedCount": 40,
+        "requests": [
+          {
+            "path": "/photos?page=2&size=20",
+            "before": 701,
+            "afterResponse": 832
+          }
+        ],
+        "open": {
+          "viewerOpen": true,
+          "scrollY": 1123
+        },
+        "close": {
+          "scrollY": 1123,
+          "bodyLocked": false
+        }
+      },
+      {
+        "width": 390,
+        "beforeCount": 20,
+        "loadedCount": 40,
+        "requests": [
+          {
+            "path": "/photos?page=2&size=20",
+            "before": 6581,
+            "afterResponse": 6581
+          }
+        ],
+        "open": {
+          "viewerOpen": true,
+          "scrollY": 7439
+        },
+        "close": {
+          "scrollY": 7439,
+          "bodyLocked": false
+        }
+      }
+    ]
+  },
+  "boundaries": [
+    "No plugin, data, CI, site-setting or global policy changes",
+    "No staging, commit, push, tag or release",
+    "Request preview on a shared Halo, not a separate database/runtime",
+    "Chromium desktop/mobile emulation; no physical-device or Safari certification",
+    "No real AI call, form submission, payment, external SSO or personal Passkey test",
+    "Three actual post hosts remain uncovered: Contact Form, AI Summary, Restricted Reading",
+    "Remote Ubuntu CI not executed"
+  ],
+  "temporaryEvidenceDirectory": "/tmp/sky-release-fix-20261106"
+}

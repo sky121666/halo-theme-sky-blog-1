@@ -1,0 +1,283 @@
+{
+  "recordedAt": "2026-10-29T06:27:25.365990+00:00",
+  "finding": "R01 / Docsme cold-start duplicate math rendering",
+  "scope": {
+    "themeCodeOnly": true,
+    "pluginChanged": false,
+    "businessDataOrSettingsChanged": false,
+    "databaseChanged": false,
+    "gitWrites": false
+  },
+  "beforeCode": {
+    "algorithm": "sha256",
+    "codeHash": "34069cc6a37381aff7e222f8ef741dad8fae463cc0fbba422fe97b0c3ffd9c4a",
+    "fileCount": 394,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "current": {
+    "at": "2026-10-29T06:20:42.215Z",
+    "code": {
+      "algorithm": "sha256",
+      "codeHash": "4ba48f0d9583a9fbc84b0073641e63b7c5ecfda0faced7af572502b8c1fad4c6",
+      "fileCount": 394,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "file": "templates/assets/js/doc.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "5bd8fd1a7480f7d7e06166fb327140226091353786991935a05f927a906937bc"
+      },
+      {
+        "file": "templates/assets/js/main.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "eedadb6d2d403a7c73decd27694eebaae2febe86305e0b88906f154c46dbacd3"
+      }
+    ]
+  },
+  "versions": {
+    "theme": "2.2.41",
+    "minimumHalo": ">=2.27.0",
+    "halo": "2.27.1",
+    "docsme": "1.10.2",
+    "katex": "3.0.0",
+    "runtimeVersionsLastObserved": "2026-10-29T05:32:38.146Z",
+    "runtimeInventoryRepeatedThisBatch": false,
+    "node": "24.21.0",
+    "pnpm": "12.6.0"
+  },
+  "implementation": "Official Docsme DOMContentLoaded callback owns initial rendering. Theme renderer runs only when the existing lifecycle detail.pjax is exactly true; navigation initialization remains active for both cases.",
+  "tests": {
+    "red": {
+      "passed": 15,
+      "failed": 2,
+      "cause": "Existing entry renders during initial/absent lifecycle context"
+    },
+    "green": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "docNavigation": {
+      "passed": 14,
+      "failed": 0
+    },
+    "buildOnly": "passed",
+    "buildNodeTests": {
+      "passed": 277,
+      "failed": 0,
+      "skipped": 5
+    },
+    "lint": "passed",
+    "format": "passed",
+    "diff": "passed"
+  },
+  "browser": {
+    "kind": "Real Chromium with isolated pages, actual current production main/doc bundles, inline theme script and unchanged Docsme official callback. Uses real Swup navigation; no saved business data.",
+    "cold": [
+      {
+        "width": 1440,
+        "mode": "official",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": true
+      },
+      {
+        "width": 1440,
+        "mode": "theme",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": true
+      },
+      {
+        "width": 1440,
+        "mode": "disabled",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": false
+      },
+      {
+        "width": 390,
+        "mode": "official",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": true
+      },
+      {
+        "width": 390,
+        "mode": "theme",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": true
+      },
+      {
+        "width": 390,
+        "mode": "disabled",
+        "annotations": ["x^2", "y^2"],
+        "timeline": [
+          {
+            "event": "dom-ready",
+            "math": 0
+          }
+        ],
+        "errors": [],
+        "pjax": false
+      }
+    ],
+    "pjax": [
+      {
+        "width": 1440,
+        "cycle": 1,
+        "next": {
+          "same": true,
+          "pjaxCount": 1,
+          "annotations": ["z^2", "z^3"],
+          "nested": 0,
+          "errors": []
+        },
+        "back": {
+          "same": true,
+          "pjaxCount": 2,
+          "annotations": ["x^2", "y^2"],
+          "nested": 0,
+          "errors": []
+        }
+      },
+      {
+        "width": 1440,
+        "cycle": 2,
+        "next": {
+          "same": true,
+          "pjaxCount": 3,
+          "annotations": ["z^2", "z^3"],
+          "nested": 0,
+          "errors": []
+        },
+        "back": {
+          "same": true,
+          "pjaxCount": 4,
+          "annotations": ["x^2", "y^2"],
+          "nested": 0,
+          "errors": []
+        }
+      },
+      {
+        "width": 390,
+        "cycle": 1,
+        "next": {
+          "same": true,
+          "pjaxCount": 1,
+          "annotations": ["z^2", "z^3"],
+          "nested": 0,
+          "errors": []
+        },
+        "back": {
+          "same": true,
+          "pjaxCount": 2,
+          "annotations": ["x^2", "y^2"],
+          "nested": 0,
+          "errors": []
+        }
+      },
+      {
+        "width": 390,
+        "cycle": 2,
+        "next": {
+          "same": true,
+          "pjaxCount": 3,
+          "annotations": ["z^2", "z^3"],
+          "nested": 0,
+          "errors": []
+        },
+        "back": {
+          "same": true,
+          "pjaxCount": 4,
+          "annotations": ["x^2", "y^2"],
+          "nested": 0,
+          "errors": []
+        }
+      }
+    ],
+    "liveHalo": {
+      "status": "pending",
+      "reason": "Two GET attempts to the actual Docsme route timed out at 8 seconds. Static doc.js/main.js returned 200 and matched disk. No service restart or settings change."
+    }
+  },
+  "cache": "Isolated server uses Cache-Control: no-store. Full documents opened via about:blank between cold cases. Actual served asset bytes compared with disk; no cache/setting mutation needed for unchanged templates.",
+  "review": "Primary-agent incremental self-review against exact pre-fix copies; no independent agent review.",
+  "sourceEvidence": {
+    "docsmeFragmentSha256": "b8818a62e6aa3ce58096c07a446bcfd19d31a19d5225083e55cd1cd248bca6de",
+    "katexAssetSha256": "3af0357ce10a17879f22ddd87afa6eb677b45736d5deaf21ff7b8d001bb933c5"
+  },
+  "logs": {
+    "red.log": "1c7c76b1e674be19f3fe75ee0b355ed4749758e716a268c717b2ac52c3624c8f",
+    "green.log": "a7fd8740a5881fe3e4b3316ac36696cd91a35c6c23b8d17d87a905cb369ab64f",
+    "navigation.log": "71bbe8bb43f52e7c650daeec29cf71f9e3ebd7b5d048bc194d46546901505cb7",
+    "build.log": "cbb6e1f06ad06317f5e55838cc25ae57b6536b307c0969e0c452a2b930da7785",
+    "lint.log": "632d3bd0b8aa4a4ddcc7fa5acc795db1f9cf38662f85c2dc011aa7175ffdbcb1",
+    "format.log": "b9f03bf77f01ac77562919c37e87e992e0e21576d1fe3cf1e38eedb776019917"
+  },
+  "temporaryEvidenceDirectory": "/tmp/sky-doc-math-fix-20261029"
+}

@@ -3317,6 +3317,7 @@ spec:
           label: 位置地图
           value:
             show_location: true
+            tencent_map_key: ""
             latitude: 39.9042
             longitude: 116.4074
             location_name: "北京·中国"
@@ -3326,8 +3327,15 @@ spec:
               id: about_show_location
               name: show_location
               label: 显示位置地图
-              help: 使用 Leaflet 开源地图展示你的位置（自动从CDN加载）
+              help: 展示位置卡片与地图跳转；配置腾讯静态图 Key 后可显示地图预览
               value: true
+            - $formkit: text
+              name: tencent_map_key
+              key: about_settings_location_tencent_map_key_field
+              label: 腾讯静态图 Key（可选）
+              if: $get(about_show_location).value
+              value: ""
+              help: "填写已开通 WebServiceAPI 的腾讯位置服务 Key；留空或预览失败时显示本地位置卡片。此 Key 会随页面公开，请勿填写 SecretKey（SK）。"
             - $formkit: number
               name: latitude
               key: about_settings_location_latitude_field
@@ -3462,11 +3470,6 @@ spec:
               min: 0
               max: 32
               step: 4
-        - $formkit: switch
-          name: enable_comment
-          label: 启用评论
-          help: 在图库页面底部显示评论区
-          value: true
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -3875,6 +3878,7 @@ spec:
             enable_custom_dock: false
             dock_style: bottom
             dock_menu: primary
+            enable_sidebar_drawer: true
             enable_back_to_top: true
           children:
             - $formkit: switch
@@ -4235,19 +4239,6 @@ spec:
               value: "https://www.dmoe.cc/random.php"
               accepts:
                 - "image/*"
-
-        # ===== 功能设置 =====
-        - $formkit: group
-          name: feature_settings
-          label: 功能设置
-          value:
-            enable_comment: true
-          children:
-            - $formkit: switch
-              name: enable_comment
-              label: 启用评论
-              help: 在装备页面底部显示评论区
-              value: true
 
         # ===== 侧边栏设置 =====
         - $formkit: group

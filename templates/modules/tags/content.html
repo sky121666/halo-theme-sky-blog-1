@@ -19,7 +19,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：标签切换块与文章列表 -->
-      <section class="flex-1" th:classappend="${sidebarCfg.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
+      <section class="flex-1 min-w-0" th:classappend="${sidebarCfg.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
         <th:block th:with="tags = ${tagFinder.listAll()}">
 
           <!-- 标签切换块 - 根据后台设置渲染不同风格 -->
@@ -50,6 +50,7 @@
 
           <!-- 标签为空不影响全部文章；分页与页头共用布局中的结果。 -->
           <th:block th:with="posts=${collectionPosts}">
+            <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
             <!-- 动态渲染不同风格的列表 -->
             <th:block th:switch="${theme.config.tag_settings.basic_info.list_style}">
               <th:block th:case="'modern'">
@@ -73,11 +74,6 @@
                   th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
               </th:block>
             </th:block>
-
-            <!-- 无文章提示 -->
-            <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-base-content/60">暂无文章</span>
-            </div>
 
             <!-- 分页 -->
             <th:block th:replace="~{modules/categories/pagination :: pagination(
@@ -115,7 +111,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：标签切换块与当前标签文章列表 -->
-      <section class="flex-1"
+      <section class="flex-1 min-w-0"
         th:classappend="${theme.config.tag_settings.sidebar_settings.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
 
         <!-- 标签切换块 -->
@@ -140,6 +136,7 @@
         </th:block>
 
         <!-- 文章列表（当前标签） -->
+        <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
         <th:block th:switch="${theme.config.tag_settings.basic_info.list_style}">
           <th:block th:case="'modern'">
             <th:block
@@ -165,7 +162,7 @@
 
         <!-- 分页 -->
         <th:block th:replace="~{modules/categories/pagination :: pagination(
-            context=@{/tags/{slug}/(slug=${tag.metadata.name})},
+            context=${tag.status.permalink},
             prevUrl=${posts.prevUrl},
             nextUrl=${posts.nextUrl},
             totalPages=${posts.totalPages},

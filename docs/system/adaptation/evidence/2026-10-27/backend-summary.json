@@ -1,0 +1,16 @@
+{
+  "capturedAt": "2026-10-27T03:36:45.879Z",
+  "since": "2026-10-27T03:10:05.921Z",
+  "errorCount": 4,
+  "warningCount": 12,
+  "templateExceptionCount": 0,
+  "errorEvidence": {
+    "reconciler": "AttachmentReconciler",
+    "upstreamPath": "/api/me",
+    "field": "run.halo.alist.dto.response.AListGetCurrentUserInfoRes[role]",
+    "message": "Cannot deserialize value of type int from Array value",
+    "scope": "AList集成；用户明确排除修复，未操作"
+  },
+  "warningEvidence": "Page size must not be greater than 1000, reset to 1000；Equipment groupBy既有查询",
+  "boundary": "后台同期错误仍如实记录；无模板异常不代表后台零错误"
+}

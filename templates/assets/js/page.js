@@ -1,1 +1,1 @@
-import{r as e,t}from"./chunks/page-runtime-2.2.40.js";import"./chunks/article-content-2.2.40.js";e(()=>{document.getElementById("page-container")},{entry:"page"});t();
+import{r as t,t as n}from"./chunks/page-runtime-2.2.41.js";import"./chunks/article-content-2.2.41.js";function o(e){if(!e)return()=>{};const r=()=>{e.hidden=!0};return e.addEventListener("error",r),e.complete&&e.naturalWidth===0&&r(),()=>e.removeEventListener("error",r)}t(()=>{if(document.getElementById("page-container"))return o(document.getElementById("page-cover"))},{entry:"page"});n();

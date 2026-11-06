@@ -1,0 +1,497 @@
+{
+  "recordedAt": "2026-10-29T05:54:35.441671+00:00",
+  "scope": {
+    "findings": ["G01", "G02", "G03", "G04", "G05"],
+    "themeOnly": true,
+    "pluginEdits": false,
+    "businessDataOrSettingsWrites": false,
+    "gitWrites": false,
+    "release": false
+  },
+  "environment": {
+    "observedAt": "2026-10-29T05:32:38.146Z",
+    "origin": "http://localhost:8090",
+    "halo": "2.27.1",
+    "theme": {
+      "version": "2.2.41",
+      "requires": ">=2.27.0"
+    },
+    "previewTheme": "theme-sky-blog-1",
+    "activeTheme": "theme-sky-blog-3",
+    "plugins": [
+      {
+        "id": "plugin-katex",
+        "version": "3.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "online",
+        "version": "1.0.5",
+        "phase": "STARTED"
+      },
+      {
+        "id": "shiki",
+        "version": "1.5.1",
+        "phase": "STARTED"
+      },
+      {
+        "id": "text-diagram",
+        "version": "1.5.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "page-cache",
+        "version": "1.6.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "versionBoundary": "Official release audit remains dated 2026-10-27. Installed versions and current code identity are not a claim that all official releases were rechecked today.",
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "34069cc6a37381aff7e222f8ef741dad8fae463cc0fbba422fe97b0c3ffd9c4a",
+    "fileCount": 394,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "officialDocsmeArtifact": {
+    "file": "plugin-docsme-1.10.2.jar",
+    "sha256": "f7d2280e59627565917816447862510d476944f452477e5204adc013c4fd4d7c",
+    "snippetSha256": "b8818a62e6aa3ce58096c07a446bcfd19d31a19d5225083e55cd1cd248bca6de"
+  },
+  "checks": {
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "buildOnly": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "diffCheck": "passed",
+    "globalContent": {
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    },
+    "docNavigation": {
+      "passed": 14,
+      "failed": 0
+    },
+    "buildNodeTests": {
+      "passed": 275,
+      "failed": 0,
+      "skipped": 5
+    },
+    "logSha256": {
+      "build-final.log": "6b3411f17320db88e082e9bb14a74d9ff5819b0b2ef0839a39dbe82505b93eb4",
+      "global-content-final.log": "d4bc3e0d5c428df8f9df2b1342ed0cd2b9cb460fbc96c00099dad7b43e5b126f",
+      "doc-navigation.log": "ae39f990369475d0bb9969148052e019eb60ab05401fd763cc49865017154d14",
+      "lint.log": "632d3bd0b8aa4a4ddcc7fa5acc795db1f9cf38662f85c2dc011aa7175ffdbcb1",
+      "format.log": "b9f03bf77f01ac77562919c37e87e992e0e21576d1fe3cf1e38eedb776019917"
+    }
+  },
+  "assets": {
+    "at": "2026-10-29T05:34:07.315Z",
+    "cacheAt": null,
+    "templateHasSafePreference": true,
+    "assets": [
+      {
+        "file": "templates/assets/js/main.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "eedadb6d2d403a7c73decd27694eebaae2febe86305e0b88906f154c46dbacd3"
+      },
+      {
+        "file": "templates/assets/js/doc.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "025d6fd4325d0cf260ccbf81406e7972a86b12050cda2f6ddc20fb13315b1b50"
+      },
+      {
+        "file": "templates/assets/js/chunks/article-content-2.2.41.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "6c1981581ff7f350739cde6d699af0f8e59552261263f75d0d1141055b310d89"
+      },
+      {
+        "file": "templates/assets/js/chunks/external-links-2.2.41.js",
+        "status": 200,
+        "matching": true,
+        "sha256": "8231b4955d13b32583d5542e7a105701de64b419db671f802456d3d58bf0e864"
+      }
+    ]
+  },
+  "cache": {
+    "themeInvalidationStatus": 204,
+    "pageCacheClearStatus": 200,
+    "at": "2026-10-29T05:32:38.146Z",
+    "browser": "Current resource function and transfer verified after replacing stale document. No profile-wide cache or storage clearing."
+  },
+  "realBrowser": {
+    "storageFaults": [
+      {
+        "mode": "read",
+        "before": {
+          "fixture": "read",
+          "scheme": "dark",
+          "pjax": true,
+          "debug": true,
+          "title": "简介",
+          "errors": ["Uncaught SecurityError: acceptance storage blocked"]
+        },
+        "states": [
+          {
+            "scheme": "dark",
+            "mode": "auto",
+            "errors": ["Uncaught SecurityError: acceptance storage blocked"]
+          },
+          {
+            "scheme": "light",
+            "mode": "light_theme",
+            "errors": ["Uncaught SecurityError: acceptance storage blocked"]
+          },
+          {
+            "scheme": "dark",
+            "mode": "dark_theme",
+            "errors": ["Uncaught SecurityError: acceptance storage blocked"]
+          }
+        ]
+      },
+      {
+        "mode": "write",
+        "before": {
+          "fixture": "write",
+          "scheme": "dark",
+          "pjax": true,
+          "debug": true,
+          "title": "简介",
+          "errors": []
+        },
+        "states": [
+          {
+            "scheme": "dark",
+            "mode": "auto",
+            "errors": []
+          },
+          {
+            "scheme": "light",
+            "mode": "light_theme",
+            "errors": []
+          },
+          {
+            "scheme": "dark",
+            "mode": "dark_theme",
+            "errors": []
+          }
+        ]
+      }
+    ],
+    "content": {
+      "grid": "grid",
+      "stylePreserved": true,
+      "externalRel": "nofollow ugc sponsored noopener noreferrer",
+      "externalTarget": "_blank",
+      "sameTarget": "",
+      "portTarget": "_blank",
+      "errors": []
+    },
+    "docsMath": {
+      "first": {
+        "url": "/docs/halo-theme-sky-blog-1/docsme-katex-sample",
+        "sameDocument": true,
+        "pjaxCount": 1,
+        "title": "Docsme KaTeX 样本",
+        "rendered": 2,
+        "nested": 0,
+        "errors": []
+      },
+      "return": {
+        "sameDocument": true,
+        "pjaxCount": 3,
+        "rendered": 2,
+        "nested": 0,
+        "errors": []
+      },
+      "width1440": {
+        "overflow": false,
+        "title": "Docsme KaTeX 样本",
+        "rendered": 2,
+        "errors": []
+      },
+      "width390": {
+        "overflow": false,
+        "title": "Docsme KaTeX 样本",
+        "rendered": 2,
+        "errors": []
+      }
+    },
+    "routes": [
+      {
+        "width": 1440,
+        "name": "home",
+        "path": "/",
+        "title": "5ee博客 - 123",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 61042,
+        "errors": []
+      },
+      {
+        "width": 1440,
+        "name": "post",
+        "path": "/archives/editor-feature-demo",
+        "title": "编辑器功能演示 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 8746,
+        "errors": []
+      },
+      {
+        "width": 1440,
+        "name": "docs",
+        "path": "/docs/halo-theme-sky-blog-1",
+        "title": "简介 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 4263,
+        "errors": []
+      },
+      {
+        "width": 1440,
+        "name": "links",
+        "path": "/links",
+        "title": "友情链接 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 27325,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "name": "home",
+        "path": "/",
+        "title": "5ee博客 - 123",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 61360,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "name": "post",
+        "path": "/archives/editor-feature-demo",
+        "title": "编辑器功能演示 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 8783,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "name": "docs",
+        "path": "/docs/halo-theme-sky-blog-1",
+        "title": "简介 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 4263,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "name": "links",
+        "path": "/links",
+        "title": "友情链接 - 5ee博客",
+        "theme": true,
+        "overflow": false,
+        "contentLength": 27349,
+        "errors": []
+      }
+    ],
+    "method": "Temporary DOM/incomingDocument samples for official legacy math markers and mixed style/link content; no persisted post/doc writes. Real sidebar click followed by scripted history.back. Storage fault injection removed in finally."
+  },
+  "isolatedBrowser": {
+    "cases": [
+      {
+        "mode": "normal",
+        "before": {
+          "theme": "dark",
+          "preference": true,
+          "pjax": true,
+          "debug": true,
+          "init": "function d(){const e=++f;M(),D();const r=o.getElementById(\"article-content\");r&&v(r,n.location),T(),A(e)}",
+          "grid": "grid",
+          "style": true,
+          "externalRel": "nofollow ugc sponsored noopener noreferrer",
+          "externalTarget": "_blank",
+          "sameTarget": "",
+          "portTarget": "_blank",
+          "math": 2,
+          "errors": []
+        },
+        "after": {
+          "theme": "dark",
+          "math": 2,
+          "nested": 0,
+          "errors": []
+        }
+      },
+      {
+        "mode": "read",
+        "before": {
+          "theme": "dark",
+          "preference": true,
+          "pjax": true,
+          "debug": true,
+          "init": "function d(){const e=++f;M(),D();const r=o.getElementById(\"article-content\");r&&v(r,n.location),T(),A(e)}",
+          "grid": "grid",
+          "style": true,
+          "externalRel": "nofollow ugc sponsored noopener noreferrer",
+          "externalTarget": "_blank",
+          "sameTarget": "",
+          "portTarget": "_blank",
+          "math": 2,
+          "errors": []
+        },
+        "after": {
+          "theme": "dark",
+          "math": 2,
+          "nested": 0,
+          "errors": []
+        }
+      },
+      {
+        "mode": "write",
+        "before": {
+          "theme": "dark",
+          "preference": true,
+          "pjax": true,
+          "debug": true,
+          "init": "function d(){const e=++f;M(),D();const r=o.getElementById(\"article-content\");r&&v(r,n.location),T(),A(e)}",
+          "grid": "grid",
+          "style": true,
+          "externalRel": "nofollow ugc sponsored noopener noreferrer",
+          "externalTarget": "_blank",
+          "sameTarget": "",
+          "portTarget": "_blank",
+          "math": 2,
+          "errors": []
+        },
+        "after": {
+          "theme": "light",
+          "math": 2,
+          "nested": 0,
+          "errors": []
+        }
+      }
+    ],
+    "responsive": [
+      {
+        "width": 1440,
+        "states": [
+          {
+            "scheme": "dark",
+            "auto": false,
+            "dark": true,
+            "stored": "dark_theme"
+          },
+          {
+            "scheme": "dark",
+            "auto": true,
+            "dark": true,
+            "stored": "auto"
+          },
+          {
+            "scheme": "light",
+            "auto": false,
+            "dark": false,
+            "stored": "light_theme"
+          }
+        ],
+        "math": 2,
+        "nested": 0,
+        "overflow": false,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "states": [
+          {
+            "scheme": "dark",
+            "auto": false,
+            "dark": true,
+            "stored": "dark_theme"
+          },
+          {
+            "scheme": "dark",
+            "auto": true,
+            "dark": true,
+            "stored": "auto"
+          },
+          {
+            "scheme": "light",
+            "auto": false,
+            "dark": false,
+            "stored": "light_theme"
+          }
+        ],
+        "math": 2,
+        "nested": 0,
+        "overflow": false,
+        "errors": []
+      }
+    ],
+    "method": "Actual built doc/article chunks, current inline theme script and extracted production toggle factory; official KaTeX asset. Manual lifecycle invocation, not a complete Halo route or Swup network test."
+  },
+  "storagePluginBoundary": {
+    "observed": "One uncaught SecurityError when all localStorage reads are denied; theme mode cycle and SkyPjax remain functional.",
+    "source": "/plugins/online/assets/static/js/client.js:15",
+    "cause": "Plugin reads localStorage outside try/catch. Mermaid also reads storage but handles it; theme reads are now guarded.",
+    "action": "No plugin modification or global Storage shim."
+  },
+  "backend": {
+    "from": "2026-10-29T05:32:38Z",
+    "to": "2026-10-29T05:51:47.730392+00:00",
+    "tailLimit": 2000,
+    "linesRead": 647,
+    "counts": {
+      "templateParsing": 0,
+      "ERROR": 19,
+      "WARN": 15,
+      "timeoutExceptions": 34,
+      "equipment": 0,
+      "alist": 0
+    },
+    "observation": "Periodic task/attachment coordinator timeouts observed during temporary dynamic-page unavailability. Root cause unlocated; no service/config/database changes."
+  },
+  "limitations": [
+    "HTTPS resource origin/port/poster/srcset preservation verified by production-code Node fixture; live Halo endpoint uses HTTP.",
+    "Formula loading failure/retry, cancellation and detached document paths covered by isolated regression, not changes to plugin availability.",
+    "Stored sample document contains literal dollar syntax; only official math-inline/math-display temporary samples are rendered by this adaptation.",
+    "Shiki special configuration/slow failure paths and baseline full comment fixture Links/Jackson issue remain verification gaps, not confirmed theme failures.",
+    "External resources and backend business writes are not exhaustively tested."
+  ],
+  "attemptsNotCountedAsPass": [
+    "Initial browser retained old article-content module despite matching server asset hashes; content mutation and navigation failures retained in /tmp/content-browser.json under this evidence directory.",
+    "Temporary Halo dynamic route timeout; later recovered without restart/config changes.",
+    "Initial isolated HTML lacked charset causing decoding error; fixed only the temporary fixture before passing runs."
+  ],
+  "review": "Primary-agent incremental self-review against before snapshot; no new independent agent review.",
+  "temporaryEvidenceDirectory": "/tmp/sky-global-fixes-20261029"
+}

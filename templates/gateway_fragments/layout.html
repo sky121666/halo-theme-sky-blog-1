@@ -7,13 +7,13 @@
                featuresWelcome = ${theme.config.auth?.auth_settings?.features_welcome ?: '欢迎来到'},
                feature1Title = ${theme.config.auth?.auth_settings?.feature_1_title ?: '安全可靠'},
                feature1Desc = ${theme.config.auth?.auth_settings?.feature_1_desc ?: '基于 Spring Security 的账户保护'},
-               feature1Icon = ${theme.config.auth?.auth_settings?.feature_1_icon ?: 'icon-[heroicons--shield-check]'},
+               feature1Icon = ${theme.config.auth?.auth_settings?.feature_1_icon},
                feature2Title = ${theme.config.auth?.auth_settings?.feature_2_title ?: '内容推荐'},
                feature2Desc = ${theme.config.auth?.auth_settings?.feature_2_desc ?: '为您量身定制的阅读体验'},
-               feature2Icon = ${theme.config.auth?.auth_settings?.feature_2_icon ?: 'icon-[heroicons--sparkles]'},
+               feature2Icon = ${theme.config.auth?.auth_settings?.feature_2_icon},
                feature3Title = ${theme.config.auth?.auth_settings?.feature_3_title ?: '多端同步'},
                feature3Desc = ${theme.config.auth?.auth_settings?.feature_3_desc ?: '随时随地访问您的创作'},
-               feature3Icon = ${theme.config.auth?.auth_settings?.feature_3_icon ?: 'icon-[heroicons--device-phone-mobile]'},
+               feature3Icon = ${theme.config.auth?.auth_settings?.feature_3_icon},
                authSideImage = ${theme.config.auth?.auth_settings?.auth_side_image},
                authLogo = ${theme.config.auth?.auth_settings?.auth_logo},
                authSiteTitle = ${theme.config.auth?.auth_settings?.auth_site_title},
@@ -52,7 +52,7 @@
             <div class="auth-card-default">
                 <!-- Logo -->
                 <div class="auth-logo-default">
-                    <a href="/" class="flex items-center justify-center gap-3 group">
+                    <a th:href="@{/}" class="flex items-center justify-center gap-3 group">
                         <img th:if="${site.logo != null and !site.logo.isEmpty()}" th:src="${site.logo}"
                             th:alt="${site.title}" class="w-10 h-10 rounded-xl shadow-md" />
                         <span class="text-2xl font-bold text-primary" th:text="${site.title}">Site</span>
@@ -66,7 +66,7 @@
             <!-- 版权 -->
             <div class="auth-copyright-default">
                 <span>©</span>
-                <a href="/" class="ml-1" th:text="${site.title}">Site</a>
+                <a th:href="@{/}" class="ml-1" th:text="${site.title}">Site</a>
             </div>
         </div>
     </th:block>
@@ -97,7 +97,7 @@
                 <div th:if="${authSideImage}" class="auth-brand-overlay"></div>
                 <div class="features-content">
                     <div class="features-logo">
-                        <img th:if="${not #strings.isEmpty(authLogo)} or ${site.logo}"
+                        <img th:if="${not #strings.isEmpty(authLogo) or not #strings.isEmpty(site.logo)}"
                             th:src="${not #strings.isEmpty(authLogo) ? authLogo : site.logo}"
                             th:alt="${not #strings.isEmpty(authSiteTitle) ? authSiteTitle : site.title}" />
                         <h2 th:text="${not #strings.isEmpty(authSiteTitle) ? authSiteTitle : site.title}">Site</h2>
@@ -106,23 +106,36 @@
                     <p class="features-slogan" th:text="${brandSlogan}">探索、记录、分享</p>
                     <ul class="features-list">
                         <li>
-                            <span class="feature-icon"><span
-                                    class="icon-[heroicons--shield-check] w-5 h-5"></span></span>
+                            <span class="feature-icon">
+                                <span th:if="${not #strings.isEmpty(feature1Icon)}" th:utext="${feature1Icon}"
+                                    class="inline-flex [&_svg]:w-5 [&_svg]:h-5"></span>
+                                <span th:unless="${not #strings.isEmpty(feature1Icon)}"
+                                    class="icon-[heroicons--shield-check] w-5 h-5"></span>
+                            </span>
                             <div class="feature-text">
                                 <h3 th:text="${feature1Title}">安全可靠</h3>
                                 <p th:text="${feature1Desc}">基于 Spring Security 的账户保护</p>
                             </div>
                         </li>
                         <li>
-                            <span class="feature-icon"><span class="icon-[heroicons--sparkles] w-5 h-5"></span></span>
+                            <span class="feature-icon">
+                                <span th:if="${not #strings.isEmpty(feature2Icon)}" th:utext="${feature2Icon}"
+                                    class="inline-flex [&_svg]:w-5 [&_svg]:h-5"></span>
+                                <span th:unless="${not #strings.isEmpty(feature2Icon)}"
+                                    class="icon-[heroicons--sparkles] w-5 h-5"></span>
+                            </span>
                             <div class="feature-text">
                                 <h3 th:text="${feature2Title}">内容推荐</h3>
                                 <p th:text="${feature2Desc}">为您量身定制的阅读体验</p>
                             </div>
                         </li>
                         <li>
-                            <span class="feature-icon"><span
-                                    class="icon-[heroicons--device-phone-mobile] w-5 h-5"></span></span>
+                            <span class="feature-icon">
+                                <span th:if="${not #strings.isEmpty(feature3Icon)}" th:utext="${feature3Icon}"
+                                    class="inline-flex [&_svg]:w-5 [&_svg]:h-5"></span>
+                                <span th:unless="${not #strings.isEmpty(feature3Icon)}"
+                                    class="icon-[heroicons--device-phone-mobile] w-5 h-5"></span>
+                            </span>
                             <div class="feature-text">
                                 <h3 th:text="${feature3Title}">多端同步</h3>
                                 <p th:text="${feature3Desc}">随时随地访问您的创作</p>
@@ -216,7 +229,7 @@
                     <th:block th:replace="${body}" />
                 </main>
                 <div class="absolute bottom-6 left-0 right-0 auth-copyright">
-                    <span>©</span><a href="/" class="ml-1" th:text="${site.title}">Site</a>
+                    <span>©</span><a th:href="@{/}" class="ml-1" th:text="${site.title}">Site</a>
                 </div>
             </div>
         </div>
@@ -245,7 +258,7 @@
                 </main>
             </div>
             <div class="mt-6 auth-copyright">
-                <span>©</span><a href="/" class="ml-1" th:text="${site.title}">Site</a>
+                <span>©</span><a th:href="@{/}" class="ml-1" th:text="${site.title}">Site</a>
             </div>
         </div>
 

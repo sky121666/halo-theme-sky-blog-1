@@ -1,0 +1,420 @@
+{
+  "scope": "Four confirmed theme UI defects only; no plugin, database, business data, Git or release writes",
+  "code": {
+    "algorithm": "sha256",
+    "codeHash": "f0b20f3b0d0ba23919b1446d418c4f578cbb3961392a9072ad46d23b421fdc3d",
+    "fileCount": 398,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "environment": {
+    "halo": "2.27.1",
+    "theme": "theme-sky-blog-1",
+    "themeVersion": "2.2.41",
+    "minimumHalo": ">=2.27.0",
+    "mode": "preview-theme; active theme remains theme-sky-blog-3",
+    "node": "24.21.0",
+    "pnpm": "12.6.0",
+    "installedPluginCount": 46,
+    "affectedPlugins": [
+      {
+        "id": "steam",
+        "version": "1.0.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginPhotos",
+        "version": "2.1.2",
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginMoments",
+        "version": "1.19.0",
+        "phase": "STARTED"
+      },
+      {
+        "id": "plugin-docsme",
+        "version": "1.10.2",
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "verification": {
+    "build": "passed; local package created, not published",
+    "node": {
+      "passed": 288,
+      "failed": 0,
+      "skipped": 5,
+      "skipReason": "2 optional Thymeleaf/Jackson harnesses and 3 optional official Halo authentication-script fixtures not configured; unrelated to these four fixes"
+    },
+    "newRegression": {
+      "steam": 5,
+      "modalFocus": 6
+    },
+    "lint": "passed",
+    "format": "passed",
+    "contracts": 27,
+    "review": "author self-review of task-before/task-after diff; no independent reviewer"
+  },
+  "cache": {
+    "actions": [
+      {
+        "path": "/apis/api.console.halo.run/v1alpha1/themes/theme-sky-blog-1/invalidate-cache",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "path": "/apis/console.api.cache.halo.run/v1alpha1/caches/page",
+        "method": "DELETE",
+        "status": 200
+      }
+    ],
+    "assets": [
+      {
+        "asset": "css/main.css",
+        "status": 200,
+        "match": true,
+        "sha256": "2909c0ea7d66ecde1a85ee651fe0017b76accc334d4102ac5971880f4a46b9bf"
+      },
+      {
+        "asset": "css/doc.css",
+        "status": 200,
+        "match": true,
+        "sha256": "3196d4068b142cd728dc21d3f4ed1553d522ce68d4436a7650924178a1d5991b"
+      },
+      {
+        "asset": "css/post.css",
+        "status": 200,
+        "match": true,
+        "sha256": "32ab73a101cc5ab40c6fffed36c7e2949dd0ba871e11b74fe70ac6d69faa4791"
+      },
+      {
+        "asset": "js/doc.js",
+        "status": 200,
+        "match": true,
+        "sha256": "dc1359c43b187f392483a695d3839e9d95f49bd04e8dd9afa3c30321513bc5fb"
+      },
+      {
+        "asset": "js/post.js",
+        "status": 200,
+        "match": true,
+        "sha256": "4af5ab39902c07b0cfb2eae2ad6efd919f6218dcfcd83e685bbc811d95a78b9e"
+      },
+      {
+        "asset": "js/moments.js",
+        "status": 200,
+        "match": true,
+        "sha256": "5d50f36fec8ff6a444ffce0631ffc6924aab9128853188fd7619a616f9729743"
+      },
+      {
+        "asset": "js/steam.js",
+        "status": 200,
+        "match": true,
+        "sha256": "9fd2121c2b9bbc1d58a1b1d1e27a7105859ddca71134c6a9b9521f0cff73d229"
+      },
+      {
+        "asset": "js/chunks/modal-focus-2.2.41.js",
+        "status": 200,
+        "match": true,
+        "sha256": "61042b95278dc98da40df8c6bb62218a645a3e5432369d4d5d86d2962d4dc76a"
+      },
+      {
+        "asset": "emoji/emoji-selector.js",
+        "status": 200,
+        "match": true,
+        "sha256": "2880fc001aa6097e7fc4288a090c518f52d23754d81d35246f0e9f9a99306602"
+      }
+    ],
+    "note": "Actual browser initially reused pre-fix doc.js. After disabling cache and reloading, the executed handler matched the new implementation. No global browser storage was cleared."
+  },
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": null,
+      "cacheAt": null
+    },
+    {
+      "path": "/archives/editor-feature-demo",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": true,
+      "cacheAt": null
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1/theme-settings",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": true,
+      "cacheAt": null
+    },
+    {
+      "path": "/docs/halo-theme-sky-blog-1/theme-settings/global",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": true,
+      "cacheAt": null
+    },
+    {
+      "path": "/photos/photo-14xk1htg",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": null,
+      "cacheAt": null
+    },
+    {
+      "path": "/moments",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": null,
+      "cacheAt": null
+    },
+    {
+      "path": "/steam",
+      "status": 200,
+      "theme": ["theme-sky-blog-1"],
+      "hasNewDialog": null,
+      "cacheAt": null
+    }
+  ],
+  "browserKeyboard": [
+    {
+      "kind": "doc",
+      "width": 390,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "post",
+      "width": 390,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "moments",
+      "width": 390,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "photos-focus",
+      "width": 390,
+      "pass": true
+    },
+    {
+      "kind": "post-focus",
+      "width": 390,
+      "pass": true
+    },
+    {
+      "kind": "doc",
+      "width": 1440,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "post",
+      "width": 1440,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "moments",
+      "width": 1440,
+      "hiddenFocus": false,
+      "opened": {
+        "inside": true,
+        "locked": true,
+        "background": true
+      },
+      "trapped": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "unlocked": true
+      },
+      "pass": true
+    },
+    {
+      "kind": "photos-focus",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "kind": "post-focus",
+      "width": 1440,
+      "pass": true
+    }
+  ],
+  "browserExtras": [
+    {
+      "kind": "live-heading-focus",
+      "width": 390,
+      "focused": true,
+      "visible": true
+    },
+    {
+      "kind": "isolated-emoji-and-cleanup",
+      "width": 390,
+      "popupInside": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "scroll": "scroll"
+      },
+      "cleanup": {
+        "hidden": true,
+        "background": true,
+        "scroll": "scroll",
+        "globalsRemoved": true
+      },
+      "scope": "production template/scripts with simulated publish permission; no upload or submission"
+    },
+    {
+      "kind": "live-heading-focus",
+      "width": 1440,
+      "focused": true,
+      "visible": true
+    },
+    {
+      "kind": "isolated-emoji-and-cleanup",
+      "width": 1440,
+      "popupInside": true,
+      "closed": {
+        "hidden": true,
+        "restored": true,
+        "scroll": "scroll"
+      },
+      "cleanup": {
+        "hidden": true,
+        "background": true,
+        "scroll": "scroll",
+        "globalsRemoved": true
+      },
+      "scope": "production template/scripts with simulated publish permission; no upload or submission"
+    }
+  ],
+  "browserLifecycle": [
+    {
+      "kind": "live-doc-open-drawer-pjax-round-trip",
+      "forward": {
+        "sameDocument": true,
+        "loads": 1,
+        "scrollUnlocked": true,
+        "contentInteractive": true,
+        "title": "简介 - 5ee博客"
+      },
+      "back": {
+        "sameDocument": true,
+        "loads": 2,
+        "scrollUnlocked": true,
+        "drawerClosed": true,
+        "title": "通用（全局） - 5ee博客"
+      }
+    },
+    {
+      "kind": "browser-steam-race",
+      "requests": [3, 1],
+      "oldAborted": true,
+      "page": 1,
+      "loading": false,
+      "error": null,
+      "scope": "real theme Alpine and keyboard; controlled read responses, no plugin writes"
+    }
+  ],
+  "backend": {
+    "since": "2026-10-29T09:17:59.556000+00:00",
+    "latestTimestamp": "2026-10-29T17:21:00.612000+08:00",
+    "matchingLines": {
+      "error-line": 1,
+      "warning-line": 12
+    },
+    "linesInWindow": 158,
+    "note": "Counts are matching log lines, not requests; no log bodies or credentials exported.",
+    "errorClassification": {
+      "component": "Halo AttachmentReconciler background task",
+      "exception": "DecodingException: Cannot deserialize int from Array",
+      "alistMarkerInStack": true,
+      "themeTemplateExceptionFound": false,
+      "scope": "Outside four theme fixes; no storage/plugin modification"
+    }
+  },
+  "limitations": [
+    "Moment editor used production template/scripts with simulated permission; no real publish/upload.",
+    "Steam out-of-order responses controlled in Node and the actual browser Alpine component; ordinary paging used the live plugin.",
+    "Viewport widths 390 and 1440 in Chromium; no physical-device or multi-engine claim.",
+    "No repeat of all 122 routes or all plugin business scenarios.",
+    "Initial browser-driver selector ambiguity on post anchors was resolved by the supplemental first-anchor keyboard-focus check; intermediate raw records retained."
+  ],
+  "rawEvidence": "/tmp/sky-ui-repairs-20261029"
+}

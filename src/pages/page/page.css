@@ -33,6 +33,19 @@
 /*              页面头部                       */
 /* ========================================== */
 
+#page-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+#page-cover[hidden] {
+  display: none;
+}
+
 #page-header {
   margin-bottom: 2rem;
   text-align: center;

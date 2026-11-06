@@ -21,7 +21,7 @@
       <!-- 顶部导航：返回与上下文 -->
       <div class="photo-detail-toolbar mb-6 flex items-center justify-between gap-4">
         <a
-          th:href="${backUrl ?: '/photos'}"
+          th:href="@{${backUrl ?: '/photos'}}"
           class="btn btn-ghost btn-sm text-base-content/70 hover:text-base-content pl-0 transition-colors hover:bg-transparent"
         >
           <span class="icon-[heroicons--chevron-left] size-5"></span>
@@ -40,8 +40,8 @@
         <section class="photo-detail-viewer group relative">
           <a
             th:if="${photoUrl != null and prev != null}"
-            th:href="${photoUrl.detail(prev)}"
-            class="btn btn-circle btn-sm md:btn-md border-base-content/10 bg-base-100/70 text-base-content hover:bg-base-100 absolute top-1/2 left-3 z-10 -translate-y-1/2 opacity-100 shadow-sm backdrop-blur transition-all hover:scale-105 md:left-5 md:opacity-0 md:group-hover:opacity-100"
+            th:href="@{${photoUrl.detail(prev)}}"
+            class="btn btn-circle btn-sm md:btn-md border-base-content/10 bg-base-100/70 text-base-content hover:bg-base-100 absolute top-1/2 left-3 z-10 -translate-y-1/2 opacity-100 shadow-sm backdrop-blur transition-all hover:scale-105 md:left-5 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
             aria-label="上一张"
           >
             <span class="icon-[heroicons--chevron-left] size-5"></span>
@@ -51,8 +51,8 @@
 
           <a
             th:if="${photoUrl != null and next != null}"
-            th:href="${photoUrl.detail(next)}"
-            class="btn btn-circle btn-sm md:btn-md border-base-content/10 bg-base-100/70 text-base-content hover:bg-base-100 absolute top-1/2 right-3 z-10 -translate-y-1/2 opacity-100 shadow-sm backdrop-blur transition-all hover:scale-105 md:right-5 md:opacity-0 md:group-hover:opacity-100"
+            th:href="@{${photoUrl.detail(next)}}"
+            class="btn btn-circle btn-sm md:btn-md border-base-content/10 bg-base-100/70 text-base-content hover:bg-base-100 absolute top-1/2 right-3 z-10 -translate-y-1/2 opacity-100 shadow-sm backdrop-blur transition-all hover:scale-105 md:right-5 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
             aria-label="下一张"
           >
             <span class="icon-[heroicons--chevron-right] size-5"></span>
@@ -174,7 +174,7 @@
             <div class="grid grid-cols-3 gap-3">
               <a
                 th:each="neighbor : ${neighbors}"
-                th:href="${photoUrl.detail(neighbor)}"
+                th:href="@{${photoUrl.detail(neighbor)}}"
                 class="group/neighbor border-base-content/5 hover:border-base-content/30 bg-base-200 block aspect-square overflow-hidden rounded-xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                 th:classappend="${neighbor.metadata.name == photo.metadata.name} ? ' ring-2 ring-base-content/25' : ''"
               >
@@ -195,6 +195,6 @@
   <div th:if="${photo == null}" class="mx-auto max-w-4xl px-4 py-20 text-center">
     <span class="icon-[mdi--image-off-outline] text-base-content/30 mx-auto mb-4 h-16 w-16"></span>
     <p class="text-base-content/50 text-lg">照片不存在</p>
-    <a href="/photos" class="btn btn-neutral btn-sm mt-4">返回图库</a>
+    <a th:href="@{/photos}" class="btn btn-neutral btn-sm mt-4">返回图库</a>
   </div>
 </th:block>

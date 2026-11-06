@@ -31,7 +31,9 @@ import "./css/toc.css"; // TOC 目录导航公共样式
  * ==================================================*/
 import "./js/base.js"; // 全局工具函数和事件处理
 import { skyDebug } from "./js/debug.js";
+import { createPluginScriptLifecycle } from "./js/plugin-script-lifecycle.js";
 import { fetchAnnualPublicPosts, localDateKey, annualWindow } from "./js/article-heatmap-data.js";
+import { isSameLinksResource } from "../apps/links/history.js";
 
 // 模板中的 Alpine 热力图与关于页共用同一公开 API 和访客本地日期规则。
 window.skyArticleHeatmapData = { fetchAnnualPublicPosts, localDateKey, annualWindow };
@@ -64,6 +66,23 @@ import Swup from "swup";
 import SwupHeadPlugin from "@swup/head-plugin";
 import SwupScriptsPlugin from "@swup/scripts-plugin";
 
+// Restricted Reading appends these dialogs to body, outside its colored widget.
+// Reuse the official class so the plugin's configured dark variables still win.
+function initializeRestrictedReadingModals() {
+  const syncTheme = () => {
+    const dark = document.documentElement.dataset.colorScheme === "dark";
+    document
+      .querySelectorAll("body > content-restrict-answer-modal, body > content-restrict-mp-modal")
+      .forEach((modal) => modal.classList.toggle("color-scheme-dark", dark));
+  };
+  const observer = new MutationObserver(syncTheme);
+  observer.observe(document.body, { childList: true });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-color-scheme"] });
+  syncTheme();
+}
+
+initializeRestrictedReadingModals();
+
 function isRouteOrDescendant(url, route) {
   try {
     const resolved = new URL(url, window.location.href);
@@ -85,6 +104,12 @@ if (window.__skyPjaxEnabled !== false) {
     // like the typewriter subtitle and can stall navigation for seconds.
     animationSelector: "#swup, .transition-fade",
     requestHeaders: {},
+    // Links owns its local query history. Let its mounted runtime close/reopen
+    // dialogs without replacing the document; other history stays with Swup.
+    skipPopStateHandling: (event) =>
+      event.state?.source !== "swup" ||
+      (Boolean(document.querySelector("[data-links-page]")) &&
+        isSameLinksResource(window.location.href, swup.location.url)),
     ignoreVisit: (url, { el } = {}) => {
       return (
         Boolean(el?.closest("[data-no-swup]")) ||
@@ -105,6 +130,42 @@ if (window.__skyPjaxEnabled !== false) {
   const MANAGED_BODY_CLASSES = ["text-base-content", "flex", "flex-col", "bg-base-100", "bg-base-200", "bg-base-300"];
   let navigationId = 0;
   let pageGeneration = 0;
+  let latestVisit = null;
+  let pendingPageAction = null;
+  let pendingPluginAction = null;
+  let currentPluginAction = null;
+  let cancelPageModuleWait = null;
+
+  function canApplyPageAction(action) {
+    if (action.generation !== pageGeneration) return false;
+    // visit:start precedes DOM replacement. Keep results for the retained DOM,
+    // but never publish or reload it under the pending destination's URL.
+    if (latestVisit && latestVisit !== action.visit && !latestVisit.done) return false;
+    const current = new URL(window.location.href);
+    const owner = new URL(action.url, current);
+    current.hash = owner.hash = "";
+    // Mounted pages can normalize/filter their own query without a Swup visit.
+    if (action.allowLocalState && latestVisit === action.visit) {
+      return current.origin === owner.origin && current.pathname === owner.pathname;
+    }
+    return current.href === owner.href;
+  }
+
+  function flushPendingPageAction() {
+    const retainedAction = pendingPageAction || pendingPluginAction;
+    if (retainedAction && latestVisit?.done && canApplyPageAction(retainedAction)) {
+      // A cancelled visit may retain this DOM. Restore ownership only after
+      // its original URL is back, including when the plugin is still loading.
+      latestVisit = retainedAction.visit;
+    }
+    const action = pendingPageAction;
+    if (action && canApplyPageAction(action)) action.run();
+    const pluginAction = pendingPluginAction;
+    if (pluginAction?.ready && canApplyPageAction(pluginAction)) {
+      pendingPluginAction = null;
+      pluginAction.run();
+    }
+  }
   const visitDebugState = new WeakMap();
   const debugPath = (value) => {
     try {
@@ -141,6 +202,14 @@ if (window.__skyPjaxEnabled !== false) {
   };
 
   swup.hooks.on("visit:start", (visit) => {
+    if (!visit.history?.popstate) {
+      // Ordinary visits start before Swup changes history. Retain the current
+      // local filter URL as the restoration target while its plugin is loading.
+      for (const action of [pendingPluginAction, currentPluginAction]) {
+        if (action?.visit === latestVisit) action.url = window.location.href;
+      }
+    }
+    latestVisit = visit;
     const state = getVisitDebug(visit);
     skyDebug.event("pjax", "visit:start", {
       id: state.id,
@@ -150,8 +219,14 @@ if (window.__skyPjaxEnabled !== false) {
     });
   });
   swup.hooks.on("page:view", (visit) => finishVisitDebug(visit, "page:view"));
-  swup.hooks.on("visit:end", (visit) => finishVisitDebug(visit, "visit:end"));
-  swup.hooks.on("visit:abort", (visit) => finishVisitDebug(visit, "visit:abort"));
+  for (const event of ["visit:end", "visit:abort"]) {
+    swup.hooks.on(event, (visit) => {
+      finishVisitDebug(visit, event);
+      // Swup emits abort before starting the replacement visit and marking the
+      // old one done. Recheck after that handoff, rather than during the hook.
+      requestAnimationFrame(flushPendingPageAction);
+    });
+  }
   swup.hooks.on("fetch:error", (visit, detail) => {
     const state = getVisitDebug(visit);
     skyDebug.error("pjax", "fetch:error", { id: state.id, path: debugPath(detail.url), status: detail.status });
@@ -185,6 +260,22 @@ if (window.__skyPjaxEnabled !== false) {
         .filter(Boolean),
     );
   window.__skyLoadingPluginScripts = window.__skyLoadingPluginScripts || new Set();
+  window.__skyPluginScriptLifecycle = createPluginScriptLifecycle({
+    initialScripts: document.querySelectorAll('script[type="module"]:not([src])'),
+    onLateReady: () => {
+      const action = currentPluginAction;
+      if (!action || action.generation !== pageGeneration || pendingPluginAction) return;
+      // The six-second fallback may have fired before Shiki could listen.
+      // Replay only its official event for the retained page, not form setup.
+      pendingPluginAction = {
+        ...action,
+        ready: true,
+        run: () =>
+          dispatchPjaxCompatibilityEvents({ initial: false, pjax: true, url: window.location.href }, ["pjax:complete"]),
+      };
+      flushPendingPageAction();
+    },
+  });
   // HeadPlugin 会同步 head 标签，但浏览器不会执行通过 DOM 替换插入的外部脚本。
   // 记录首屏已由浏览器执行的脚本；后续只重放 PJAX 首次引入或版本 URL 变化的脚本。
   window.__skyLoadedHeadScripts =
@@ -236,8 +327,11 @@ if (window.__skyPjaxEnabled !== false) {
     });
   }
 
-  function dispatchPjaxCompatibilityEvents(detail) {
-    ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced"].forEach((name) => {
+  function dispatchPjaxCompatibilityEvents(
+    detail,
+    names = ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced"],
+  ) {
+    names.forEach((name) => {
       document.dispatchEvent(
         new CustomEvent(name, {
           detail,
@@ -392,31 +486,56 @@ if (window.__skyPjaxEnabled !== false) {
   });
 
   /** Alpine 恢复动作，rAF 后执行确保 DOM paint 完成 */
-  function _resumeAlpine(reason, expectedGeneration) {
-    requestAnimationFrame(() => {
-      if (expectedGeneration !== pageGeneration) {
-        skyDebug.event("pjax", "alpine:resume-skip", {
-          reason,
-          expectedGeneration,
-          currentGeneration: pageGeneration,
+  function _resumeAlpine(reason, expectedGeneration, visit, pageUrl) {
+    if (expectedGeneration !== pageGeneration) return;
+    let scheduled = false;
+    const action = {
+      generation: expectedGeneration,
+      visit,
+      url: pageUrl,
+      run: () => {
+        if (scheduled) return;
+        scheduled = true;
+        requestAnimationFrame(() => {
+          scheduled = false;
+          if (pendingPageAction !== action || !canApplyPageAction(action)) return;
+          pendingPageAction = null;
+          const mode = window.Alpine?.flushAndStopDeferringMutations ? "flush" : "init-tree";
+          if (window.Alpine?.flushAndStopDeferringMutations) {
+            Alpine.flushAndStopDeferringMutations();
+          } else if (window.Alpine) {
+            SKY_PJAX_CONTAINERS.forEach((selector) => {
+              const container = document.querySelector(selector);
+              if (container) Alpine.initTree(container);
+            });
+          }
+          window.SkyEvents?.onPageLoad();
+          const pageDetail = { initial: false, pjax: true, url: window.location.href };
+          window.SkyPjax?._runPage?.(pageDetail);
+          // The first Shiki extra-path module is asynchronous. Send the official
+          // PJAX event after its listener is ready, without delaying the page UI.
+          const pluginAction = {
+            generation: action.generation,
+            visit: action.visit,
+            url: window.location.href,
+            allowLocalState: true,
+            ready: false,
+            run: () => dispatchPjaxCompatibilityEvents({ ...pageDetail, url: window.location.href }),
+          };
+          pendingPluginAction = pluginAction;
+          currentPluginAction = pluginAction;
+          const pluginReady = window.__skyPluginScriptLifecycle?.ready() || Promise.resolve();
+          pluginReady.then(() => {
+            if (pendingPluginAction !== pluginAction || action.generation !== pageGeneration) return;
+            pluginAction.ready = true;
+            flushPendingPageAction();
+          });
+          skyDebug.event("pjax", "alpine:resume", { reason, mode, path: debugPath() });
         });
-        return;
-      }
-      const mode = window.Alpine?.flushAndStopDeferringMutations ? "flush" : "init-tree";
-      if (window.Alpine?.flushAndStopDeferringMutations) {
-        Alpine.flushAndStopDeferringMutations();
-      } else if (window.Alpine) {
-        SKY_PJAX_CONTAINERS.forEach((selector) => {
-          const container = document.querySelector(selector);
-          if (container) Alpine.initTree(container);
-        });
-      }
-      window.SkyEvents?.onPageLoad();
-      const pageDetail = { initial: false, pjax: true, url: window.location.href };
-      window.SkyPjax?._runPage?.(pageDetail);
-      dispatchPjaxCompatibilityEvents(pageDetail);
-      skyDebug.event("pjax", "alpine:resume", { reason, mode, path: debugPath() });
-    });
+      },
+    };
+    pendingPageAction = action;
+    flushPendingPageAction();
   }
 
   // ① DOM 替换前：重置状态，暂停 Alpine MutationObserver，销毁旧页面组件树
@@ -427,24 +546,30 @@ if (window.__skyPjaxEnabled !== false) {
       const incomingDocument = visit.to.document;
       const missingSelectors = SKY_PJAX_CONTAINERS.filter((selector) => !incomingDocument?.querySelector(selector));
       const supportsSkyPjax = missingSelectors.length === 0;
+      const pluginBootstrapChanged = window.__skyPluginScriptLifecycle?.requiresReload(incomingDocument) === true;
       skyDebug.event("pjax", "content:replace:before", {
         id: debugState.id,
         to: debugState.to,
         supportsSkyPjax,
         missingSelectors,
       });
-      if (!supportsSkyPjax) {
+      if (!supportsSkyPjax || pluginBootstrapChanged) {
         // 404、维护页和插件独立响应没有主题容器，必须在清理旧页面之前退出 PJAX。
-        // Swup 此时已写入目标历史记录。先退回上一条正常文档，再整页打开目标，
-        // 避免浏览器“返回”时只恢复 URL、却仍保留 404 / 插件独立页面的文档。
+        // popstate 已经移动到目标，直接加载它，避免再退一次丢失历史。
+        // 普通访问已由 Swup 推入目标记录，先返回原文档再整页导航。
         const target = visit.to.url + (visit.to.hash || "");
         pageGeneration += 1;
         skyDebug.event("pjax", "full-reload:fallback", {
           id: debugState.id,
           target: debugPath(target),
-          reason: "missing-pjax-containers",
+          reason: pluginBootstrapChanged ? "plugin-bootstrap-changed" : "missing-pjax-containers",
         });
         visit.abort();
+        if (visit.history.popstate) {
+          // URL 已由 popstate 恢复；reload 确保带锚点时也重新加载文档。
+          window.location.reload();
+          return undefined;
+        }
         swup.options.skipPopStateHandling = () => {
           window.location.assign(target);
           return true;
@@ -469,9 +594,18 @@ if (window.__skyPjaxEnabled !== false) {
       }
 
       window.SkyPjax?._cleanup?.({ pjax: true, url: window.location.href });
-      // Contact Form 1.6.4 将悬浮表单挂在 body 下；目标页没有表单时，插件会直接
-      // 跳过初始化及旧节点清理。离页时先销毁，目标页再按自己的配置重新挂载。
-      document.querySelectorAll("halo-contact-form-auto-loader").forEach((element) => element.remove());
+      // Use the plugin close event: its creator removes the host, disconnecting
+      // the inner dialog's key/click listeners. Payment has a separate lifecycle.
+      document.querySelectorAll("content-restrict-answer-modal, content-restrict-mp-modal").forEach((modal) => {
+        if (typeof modal.close === "function") modal.close();
+      });
+      // Contact Form 1.x/2.x 将自动表单挂在 body 下；无配置的目标页不会清理它们。
+      // 新页面脚本执行前移除自动宿主并重置页面配置，避免 pjax:success 重建旧入口。
+      document
+        .querySelectorAll("halo-contact-form-auto-loader, halo-contact-form-auto-display")
+        .forEach((element) => element.remove());
+      if ("autoContactFrom" in window) window.autoContactFrom = [];
+      if ("contactFormTracking" in window) window.contactFormTracking = [];
       skyDebug.event("pjax", "page:cleanup", { id: debugState.id, path: debugPath() });
       if (typeof window.__skyMusicSave === "function") window.__skyMusicSave();
       if (typeof window.__pageCleanup === "function") {
@@ -505,6 +639,12 @@ if (window.__skyPjaxEnabled !== false) {
   swup.hooks.on("content:replace", (visit) => {
     const debugState = getVisitDebug(visit);
     const expectedGeneration = debugState.generation || pageGeneration;
+    const pageUrl = window.location.href;
+    cancelPageModuleWait?.();
+    cancelPageModuleWait = null;
+    pendingPageAction = null;
+    pendingPluginAction = null;
+    currentPluginAction = null;
     replayNewHeadScripts(debugState);
     // 只重放当前页面明确声明支持 PJAX 的脚本。
     // 兼容两类标记：
@@ -517,6 +657,8 @@ if (window.__skyPjaxEnabled !== false) {
     const loadedPluginScripts = window.__skyLoadedPluginScripts;
     const loadingPluginScripts = window.__skyLoadingPluginScripts;
     pjaxScripts.forEach((script) => {
+      const registration = window.__skyPluginScriptLifecycle?.prepare(script);
+      if (registration?.skip) return;
       // 避免重复加载已执行过的脚本源（主要针对外部 js，如 comment-widget 的全局核心代码）
       // 对于内联 script（无 src），每次都执行以初始化组件
       if (script.src) {
@@ -529,6 +671,7 @@ if (window.__skyPjaxEnabled !== false) {
       const newScript = document.createElement("script");
       Array.from(script.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
       newScript.textContent = script.textContent;
+      registration?.track?.(newScript);
       if (script.src) {
         const source = script.src;
         newScript.addEventListener(
@@ -554,7 +697,7 @@ if (window.__skyPjaxEnabled !== false) {
     });
     // 快速路径：内联脚本同步执行已发信号
     if (_currentSignaled) {
-      _resumeAlpine("inline-signal", expectedGeneration);
+      _resumeAlpine("inline-signal", expectedGeneration, visit, pageUrl);
       return;
     }
 
@@ -564,19 +707,54 @@ if (window.__skyPjaxEnabled !== false) {
 
     if (moduleScripts.length === 0) {
       // 无 module 脚本且未收到内联信号（不应发生，兜底保护）
-      setTimeout(() => _resumeAlpine("no-module-fallback", expectedGeneration), 100);
+      const timer = window.setTimeout(
+        () => _resumeAlpine("no-module-fallback", expectedGeneration, visit, pageUrl),
+        100,
+      );
+      cancelPageModuleWait = () => window.clearTimeout(timer);
       return;
     }
 
-    // 监听所有 module 脚本的 load/error 事件，全部 settled 后恢复 Alpine
+    // 只有全部模块成功加载后才能恢复 Alpine；超时不代表组件已注册。
     let resumed = false;
     let fallbackTimer = null;
+    const moduleListeners = [];
+    function finishWaiting() {
+      resumed = true;
+      if (fallbackTimer) window.clearTimeout(fallbackTimer);
+      moduleListeners.forEach(([script, settle]) => {
+        script.removeEventListener("load", settle);
+        script.removeEventListener("error", settle);
+      });
+    }
+    cancelPageModuleWait = finishWaiting;
     function tryResume(reason) {
-      if (!resumed) {
-        resumed = true;
-        if (fallbackTimer) window.clearTimeout(fallbackTimer);
-        _resumeAlpine(reason, expectedGeneration);
+      if (resumed) return;
+      finishWaiting();
+      _resumeAlpine(reason, expectedGeneration, visit, pageUrl);
+    }
+    function recoverPage(reason) {
+      if (resumed) return;
+      if (expectedGeneration !== pageGeneration) {
+        finishWaiting();
+        return;
       }
+      // Keep listeners while navigation is pending: a real load can still
+      // supersede a timeout if the user cancels and returns to this same DOM.
+      const action = {
+        generation: expectedGeneration,
+        visit,
+        url: pageUrl,
+        run: () => {
+          if (pendingPageAction !== action) return;
+          pendingPageAction = null;
+          finishWaiting();
+          skyDebug.warn("pjax", "module:full-reload", { id: debugState.id, reason });
+          window.location.reload();
+        },
+      };
+      pendingPageAction = action;
+      flushPendingPageAction();
     }
 
     let pending = moduleScripts.length;
@@ -587,8 +765,13 @@ if (window.__skyPjaxEnabled !== false) {
           id: debugState.id,
           path: debugPath(script.src),
         });
+        if (event.type === "error") {
+          recoverPage("module-error");
+          return;
+        }
         if (--pending <= 0) tryResume("module-settled");
       };
+      moduleListeners.push([script, settle]);
       script.addEventListener("load", settle, { once: true });
       script.addEventListener("error", settle, { once: true });
     });
@@ -596,7 +779,7 @@ if (window.__skyPjaxEnabled !== false) {
     // 5s 安全兜底（网络极慢 / load 事件未触发等极端情况）
     fallbackTimer = window.setTimeout(() => {
       skyDebug.warn("pjax", "module:timeout", { id: debugState.id, pending });
-      tryResume("module-timeout");
+      recoverPage("module-timeout");
     }, 5000);
 
     // 不显式 return Promise → swup 立即继续，不阻塞导航管线

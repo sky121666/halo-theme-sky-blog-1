@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "timezone": "Asia/Shanghai",
+  "generatedAt": "2026-11-01T03:25:32.511Z",
+  "scope": "Four newly observed stable targets, 27 existing theme integration entry points, and correction of contract records. No plugin installation or runtime theme edits.",
+  "environment": {
+    "observedAt": "2026-11-01T03:06:52.257Z",
+    "halo": "2.27.1",
+    "installedPluginCount": 46,
+    "changesSincePreviousRuntimeInventory": [],
+    "reviewedInstalled": [
+      {
+        "id": "data-studio",
+        "version": "1.0.0-alpha.9",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "PluginBytemd",
+        "version": "1.9.0",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "seo-tools",
+        "version": "1.10.1",
+        "enabled": true,
+        "phase": "STARTED"
+      },
+      {
+        "id": "content-tools",
+        "version": "1.8.0",
+        "enabled": true,
+        "phase": "STARTED"
+      }
+    ]
+  },
+  "identity": {
+    "currentWorkspace": {
+      "algorithm": "sha256",
+      "codeHash": "ffb333ce2c76964a6455aa7c88781eb14516e1e1cb15b0e300af55d806e615bd",
+      "fileCount": 402,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "previousRuntimeCodeHash": "18ed4d992503bb358901a7a1a30978a24ceb4d5a8d80629f1962b558ae3a0171",
+    "runtimeFilesCompared": 345,
+    "runtimeFilesChanged": [],
+    "codeHashChangeReason": "scripts/plugin-contracts.mjs surface/evidence metadata only; src/templates and generated assets unchanged"
+  },
+  "decisions": [
+    {
+      "id": "PluginBytemd",
+      "decision": "no-theme-change-required-for-supported-unique-IDs-and-normal-img-output",
+      "evidence": "fixed-tag-source + actual-locked-parser + production-theme-functions",
+      "upstreamLimitation": "custom ID can collide with automatic slug; duplicate exists before theme executes"
+    },
+    {
+      "id": "content-tools",
+      "decision": "no-new-theme-integration-required",
+      "evidence": "fixed-tag HTML snapshot save and insertion implementation; actual helper executed with editor command harness",
+      "notProven": "real Tiptap schema and Console persist/readback"
+    },
+    {
+      "id": "data-studio",
+      "decision": "theme-specific-adaptation-not-applicable",
+      "evidence": "fixed-tag ToolsRoot route, super-admin permissions, empty extension points; complete 45 changed file list"
+    }
+  ],
+  "officialFixedSources": [
+    {
+      "url": "https://github.com/halo-sigs/plugin-bytemd/blob/v1.10.0/console/src/components/bytemd.vue",
+      "checkedAt": "2026-11-01T02:42:43.776Z",
+      "localFile": "source-01.txt",
+      "sha256": "8a2637befb44e1bef911f9db09edd4c0a0905143a3a3612b237c8c2d81b83857"
+    },
+    {
+      "url": "https://github.com/halo-sigs/plugin-bytemd/blob/v1.9.0/console/src/components/bytemd.vue",
+      "checkedAt": "2026-11-01T02:42:44.472Z",
+      "localFile": "source-02.txt",
+      "sha256": "cd6e5bd59e10ab501d22083f06d7036c66ad54a38bfca9a3c260d0b2a929ff6a"
+    },
+    {
+      "url": "https://github.com/halo-sigs/plugin-bytemd/blob/v1.10.0/console/src/plugins/index.ts",
+      "checkedAt": "2026-11-01T02:42:44.432Z",
+      "localFile": "source-03.txt",
+      "sha256": "30142856441506f10559ce3c038c8d80fccefb516739541a447570af98dfac68"
+    },
+    {
+      "url": "https://github.com/halo-sigs/plugin-bytemd/blob/v1.10.0/console/pnpm-lock.yaml",
+      "checkedAt": "2026-11-01T02:42:48.431Z",
+      "localFile": "source-04.txt",
+      "sha256": "79a5117b1408658d374a5a870ac38b8e84dcb8a56d8191811edea3628082d5b8"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/ui/src/utils/snippet.ts",
+      "checkedAt": "2026-11-01T02:42:44.822Z",
+      "localFile": "source-05.txt",
+      "sha256": "0b69c44d7ccbd9cfe396d9516776a411663b1199645a217e6bf4a7ae97eb078d"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/ui/src/components/snippet/SaveSnippetModal.vue",
+      "checkedAt": "2026-11-01T02:42:44.873Z",
+      "localFile": "source-06.txt",
+      "sha256": "a9bf8a40bd8591a1a972aa648b12d82f968c3c262ddbd017f503ba6aad2bbfa5"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/ui/src/components/snippet/SaveSnippetBubbleItem.vue",
+      "checkedAt": "2026-11-01T02:42:44.398Z",
+      "localFile": "source-07.txt",
+      "sha256": "08b578a7bea9248e9a326668b70d7189420d12b2ac00d4b69dfa44a3d658132e"
+    },
+    {
+      "url": "https://github.com/halo-sigs/plugin-data-studio/blob/v1.0.0/ui/src/index.ts",
+      "checkedAt": "2026-11-01T02:42:43.658Z",
+      "localFile": "source-08.txt",
+      "sha256": "381c1064f6acdccdf3af20e879e59f34b1d3aa86e5e73d469c2211a05cb66936"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/ui/src/views/snippets/ContentSnippetEditor.vue",
+      "checkedAt": "2026-11-01T02:48:09.427Z",
+      "localFile": "source-09.txt",
+      "sha256": "a3351326de7f9cc840618ab43e94530d0f40e7092a133824cea07e3fdd251e2d"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/ui/src/index.ts",
+      "checkedAt": "2026-11-01T02:48:09.384Z",
+      "localFile": "source-10.txt",
+      "sha256": "b95bbc341a6858aed2531d0096d51c69577e7ccccbe143425135c9be056cf278"
+    },
+    {
+      "url": "https://github.com/ruibaby/plugin-content-tools/blob/v1.9.0/README.md",
+      "checkedAt": "2026-11-01T02:48:09.013Z",
+      "localFile": "source-11.txt",
+      "sha256": "b2875085b7c09106ff847f4ebea05660f7016fc20342841d20193e386bfc8a71"
+    },
+    {
+      "url": "https://github.com/halo-sigs/plugin-bytemd/blob/v1.10.0/console/src/plugins/mermaid.ts",
+      "checkedAt": "2026-11-01T02:48:09.092Z",
+      "localFile": "source-12.txt",
+      "sha256": "7e9e77318dadb847a9e3cefc1e21d93de80221df883784a96d197e19080bd761"
+    }
+  ],
+  "seoArtifact": {
+    "officialRelease": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-0pbjuymk",
+    "downloadPathSource": "official-main.js appDownload.downloadUrl with public release x-data identifiers",
+    "status": 200,
+    "contentType": "application/java-archive",
+    "size": 15931911,
+    "sha256": "31daef732feeb5c03849ac655f88def26c53d28a4b2f681dceb7709b0357991d",
+    "zip": true,
+    "installed": false
+  },
+  "seoThemeDiff": {
+    "scope": "Static inspection of official 1.11.0 JAR against locally installed 1.10.1; no installation or execution of plugin.",
+    "officialRelease": "https://www.halo.run/store/apps/app-FNGbT/releases/app-release-0pbjuymk",
+    "oldArtifact": {
+      "version": "1.10.1",
+      "sha256": "40413a0e803c3510e547e5022d9ab4960a4d7c35803626c13967a0bf259c31e4"
+    },
+    "newArtifact": {
+      "version": "1.11.0",
+      "sha256": "31daef732feeb5c03849ac655f88def26c53d28a4b2f681dceb7709b0357991d",
+      "requiresHalo": ">=2.26.0",
+      "installed": false
+    },
+    "comparedEntries": [
+      {
+        "entry": "extensions/settings.yaml",
+        "oldSha256": "fdfe4494b34dd250a2587ed61d138d9510905080e693b4b31605381fda9bc48f",
+        "newSha256": "fdfe4494b34dd250a2587ed61d138d9510905080e693b4b31605381fda9bc48f",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/processor/CanonicalLinkProcessor.class",
+        "oldSha256": "5c7d9dc2c17fba85da817a28cdec102ea88e86d51f94820ced2b8c99257c7d77",
+        "newSha256": "5c7d9dc2c17fba85da817a28cdec102ea88e86d51f94820ced2b8c99257c7d77",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/processor/SocialMediaMetaProcessor.class",
+        "oldSha256": "74e109757c07ec5d68fdaa57070e84e4746a123ed4750fac601371d721cfd7a2",
+        "newSha256": "fe1076150373c0e350ece1629997a7078dc223bfbd6abc5f19d46f3a0d4efd1c",
+        "identical": false
+      },
+      {
+        "entry": "run/halo/seo/tools/processor/StructuredDataProcessor.class",
+        "oldSha256": "b9495502983e012383d7bb8cacb9f7a1b6504f36345634f6622595efb14982b0",
+        "newSha256": "d5c9ba1618f4160bdb5167772db92e75cace1e96528088088ce81d2c35f3c4b7",
+        "identical": false
+      },
+      {
+        "entry": "run/halo/seo/tools/wechat/WechatPlatformShareMetaProcessor.class",
+        "oldSha256": "4e8ae2eccaae9fd79ba2778e599eebe9b25aef2bd78974ddb7a42d3ee9b99235",
+        "newSha256": "4e8ae2eccaae9fd79ba2778e599eebe9b25aef2bd78974ddb7a42d3ee9b99235",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/OpenGraph.class",
+        "oldSha256": "181f826e2c3e06dc83619ee59cb6d6b969df880f4849f13a58dcedd35aec6e94",
+        "newSha256": "181f826e2c3e06dc83619ee59cb6d6b969df880f4849f13a58dcedd35aec6e94",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/push/IndexNowVerificationRouter.class",
+        "oldSha256": "f6f5b082c569b6b1971b779ed6d63c7ea64034e88a882cf763214e94f24f0fb3",
+        "newSha256": "f6f5b082c569b6b1971b779ed6d63c7ea64034e88a882cf763214e94f24f0fb3",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$CanonicalLink.class",
+        "oldSha256": "ff3aaa3864734d8098511e4cdcd9f2fe457600864e294291bf10391064b9934e",
+        "newSha256": "ff3aaa3864734d8098511e4cdcd9f2fe457600864e294291bf10391064b9934e",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$CrawlRecordRetentionPolicy.class",
+        "oldSha256": "67e078138b1b4b4b7f4272960bb79b001eeecdd7d3e405f1f125dc4dc573159e",
+        "newSha256": "67e078138b1b4b4b7f4272960bb79b001eeecdd7d3e405f1f125dc4dc573159e",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$Crawler.class",
+        "oldSha256": "951a3ad2f43eb47a37565383c0658630f18289e39ce618651cc491f3b147c5a0",
+        "newSha256": "951a3ad2f43eb47a37565383c0658630f18289e39ce618651cc491f3b147c5a0",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$OpenGraph.class",
+        "oldSha256": "10bb464ae625a101c97272b5cd4ea5edc1838eaa33054dcc5b6c962418a95924",
+        "newSha256": "10bb464ae625a101c97272b5cd4ea5edc1838eaa33054dcc5b6c962418a95924",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$RedirectItem.class",
+        "oldSha256": "c5e7e723ae830d7d6d2e22c116e6305215da52c53e31d1bd747f8587f40b745d",
+        "newSha256": "c5e7e723ae830d7d6d2e22c116e6305215da52c53e31d1bd747f8587f40b745d",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$Redirection.class",
+        "oldSha256": "d0d98e51dae2d23652e38566b11755e6a56e1a0b67b23dd51c48a77b639ce13d",
+        "newSha256": "d0d98e51dae2d23652e38566b11755e6a56e1a0b67b23dd51c48a77b639ce13d",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$SearchEngineVerification.class",
+        "oldSha256": "16876b6a384b5576fdeaeec9ea4d94c7377d08f9e97dcc3f8718b11b06d9139a",
+        "newSha256": "16876b6a384b5576fdeaeec9ea4d94c7377d08f9e97dcc3f8718b11b06d9139a",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$SearchTraffic.class",
+        "oldSha256": "afdf419e2c95d3794232036e6c7fb0248ad7d8fdad40200b35ed08b5d6d69e17",
+        "newSha256": "afdf419e2c95d3794232036e6c7fb0248ad7d8fdad40200b35ed08b5d6d69e17",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$SocialMedia.class",
+        "oldSha256": "a5091680939cda3e812a458ef3666c608ffb5d238f06739bd5fa50b3df8c2474",
+        "newSha256": "a5091680939cda3e812a458ef3666c608ffb5d238f06739bd5fa50b3df8c2474",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$StructuredDataSetting$Publisher.class",
+        "oldSha256": "70654ae2a7284d917b78131d23b71ae24f7f0522f43636bbd203f8349444a611",
+        "newSha256": "70654ae2a7284d917b78131d23b71ae24f7f0522f43636bbd203f8349444a611",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$StructuredDataSetting.class",
+        "oldSha256": "a82ca4fe76ee1d45a90a8cf06a497efa50f2fe97db0a1f4e36e91d2d75d4a545",
+        "newSha256": "a82ca4fe76ee1d45a90a8cf06a497efa50f2fe97db0a1f4e36e91d2d75d4a545",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$TwitterCard.class",
+        "oldSha256": "314119bde2a1103de8ff8b63c58d2a37225f450dc7ad26243aed7bda657b3715",
+        "newSha256": "314119bde2a1103de8ff8b63c58d2a37225f450dc7ad26243aed7bda657b3715",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting$WeChatShare.class",
+        "oldSha256": "a6cdaf2a5444606cf72f1f2bb86845b3c32850697e73fef1f637dd5b57a94ac5",
+        "newSha256": "a6cdaf2a5444606cf72f1f2bb86845b3c32850697e73fef1f637dd5b57a94ac5",
+        "identical": true
+      },
+      {
+        "entry": "run/halo/seo/tools/model/SeoSetting.class",
+        "oldSha256": "1b38122dd2c652504a3b04dbedca2d842d290c1055e6a040841036c71eaa7c4d",
+        "newSha256": "1b38122dd2c652504a3b04dbedca2d842d290c1055e6a040841036c71eaa7c4d",
+        "identical": true
+      }
+    ],
+    "processorFindings": [
+      {
+        "surface": "canonical",
+        "finding": "CanonicalLinkProcessor byte-identical. No change to its current canonical logic."
+      },
+      {
+        "surface": "social meta",
+        "finding": "Normalized javap diff adds local OpenGraph deepCopy using tools.jackson JsonMapper.shared instead of core JsonUtils.deepCopy; tag construction and setting access preserved in inspected processor. OpenGraph model is byte-identical."
+      },
+      {
+        "surface": "JSON-LD",
+        "finding": "StructuredDataProcessor serializer and exception types migrate to Jackson 3. StructuredDataMaker interface and manager classes are byte-identical, while individual makers changed and are not fully behavior-verified here."
+      },
+      {
+        "surface": "config",
+        "finding": "extensions/settings.yaml and all SeoSetting model class entries are byte-identical."
+      },
+      {
+        "surface": "startup/license",
+        "finding": "New start() no longer contains the old immediate CheckLicense.hasLicensed rejection, consistent with official free-tier release. Entitlement runtime and licensing combinations are not tested."
+      }
+    ],
+    "themeDecision": "Inspected official Head processors/settings provide no evidence requiring theme seo-head.html changes. Keep single Head ownership and plugin-unavailable fallback. This is not certification of complete 1.11.0 runtime behavior.",
+    "limits": [
+      "No live 1.11.0 Head output, authorization-state switch, redirect, push or data migration test.",
+      "No claim every plugin class or individual structured-data maker is unchanged.",
+      "IndexNowVerificationRouter is byte-identical; advanced redirect implementation changed and was not fully audited, with no theme API change inferred."
+    ],
+    "evidenceFiles": [
+      "seo-artifact.json",
+      "seo-javap/diff-processor.CanonicalLinkProcessor.txt",
+      "seo-javap/diff-processor.SocialMediaMetaProcessor.txt",
+      "seo-javap/diff-processor.StructuredDataProcessor.txt",
+      "seo-javap/diff-SeoToolsPlugin.txt"
+    ]
+  },
+  "validation": {
+    "isolatedParserAndTheme": {
+      "scope": "Isolated parser/output/theme contract checks; no Halo plugin installed, no site write, no browser, no business API",
+      "passed": 13,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "fixed ByteMD processor emits explicit ASCII IDs and removes supported markers",
+          "status": "passed"
+        },
+        {
+          "name": "production theme preserves generated IDs and avoids fallback ID collisions",
+          "status": "passed"
+        },
+        {
+          "name": "production TOC links encode and resolve every generated heading ID",
+          "status": "passed"
+        },
+        {
+          "name": "production TOC click retains the actual generated heading target",
+          "status": "passed"
+        },
+        {
+          "name": "production fragment restoration resolves the encoded Chinese output ID",
+          "status": "passed"
+        },
+        {
+          "name": "official attachment selection uses author alt and processor escapes HTML attributes",
+          "status": "passed"
+        },
+        {
+          "name": "official attachment selection preserves empty/media-type/string fallbacks",
+          "status": "passed"
+        },
+        {
+          "name": "production lazy loading leaves editor image alt/src unchanged",
+          "status": "passed"
+        },
+        {
+          "name": "production heading copy method preserves valid ByteMD custom anchors",
+          "status": "passed"
+        },
+        {
+          "name": "official snippet insertion passes the HTML snapshot unchanged to the editor",
+          "status": "passed"
+        },
+        {
+          "name": "official snippet insertion failure returns false without theme processing",
+          "status": "passed"
+        },
+        {
+          "name": "theme TOC and image handling accept the unchanged ordinary snippet HTML",
+          "status": "passed"
+        },
+        {
+          "name": "upstream custom/automatic ID collision is characterized before theme execution",
+          "status": "passed"
+        }
+      ],
+      "upstreamObservations": {
+        "unsupportedCustomSyntax": {
+          "input": "## 标题 {#custom:id}",
+          "html": "<h2 id=\"标题-customid\">标题 {#custom:id}</h2>",
+          "explanation": "rehype-slug-custom-id 2.0.0 only recognizes [\\w-]+; colon is not a supported custom ID marker."
+        },
+        "customAndAutomaticCollision": {
+          "input": "## 手动标题 {#shared}\n\n## shared",
+          "html": "<h2 id=\"shared\">手动标题</h2>\n<h2 id=\"shared\">shared</h2>",
+          "explanation": "Dependency does not reserve custom IDs in its automatic slugger. Duplicate output already exists before the theme runs; author-ID rewriting is not inferred as a theme requirement."
+        }
+      },
+      "limits": [
+        "Uses actual ByteMD 1.22.0 getProcessor and the exact 1.10.0 pluginSlug function; other unchanged GFM/math/Mermaid plugins are not activated because samples do not use those syntaxes.",
+        "LinkeDOM tests DOM attributes and selection, not browser layout, computed CSS, or visual overflow.",
+        "Content Tools calls the actual insertion helper against an editor command harness; real Tiptap schema, Console interaction, save/readback and persistence are not exercised.",
+        "No 1.10.0/1.9.0/1.0.0/1.11.0 Halo plugin was installed or marked end-to-end tested."
+      ]
+    },
+    "runtimeDependencyIntegrity": [
+      {
+        "package": "bytemd",
+        "version": "1.22.0",
+        "upstreamLockIntegrity": "sha512-2vmegXnnsOxNufRrrQGHYKwgTmx6H+h40ZZs3DAw/SS5O4mBzO9evc1HD39CqW9wglGNBJxMg257pv9pgAGl+A==",
+        "installedTarballIntegrity": "sha512-2vmegXnnsOxNufRrrQGHYKwgTmx6H+h40ZZs3DAw/SS5O4mBzO9evc1HD39CqW9wglGNBJxMg257pv9pgAGl+A==",
+        "matches": true,
+        "tarballUrl": "https://registry.npmjs.org/bytemd/-/bytemd-1.22.0.tgz"
+      },
+      {
+        "package": "rehype-slug-custom-id",
+        "version": "2.0.0",
+        "upstreamLockIntegrity": "sha512-3ED9HjExIZrC6WiC6V/9SnSuvGMdDb3dYM0WqSpIrLZDdEuSYlkr3iPp43urbgl7xz0Qy/7ZVj64sZbCr046bw==",
+        "installedTarballIntegrity": "sha512-3ED9HjExIZrC6WiC6V/9SnSuvGMdDb3dYM0WqSpIrLZDdEuSYlkr3iPp43urbgl7xz0Qy/7ZVj64sZbCr046bw==",
+        "matches": true,
+        "tarballUrl": "https://registry.npmjs.org/rehype-slug-custom-id/-/rehype-slug-custom-id-2.0.0.tgz"
+      }
+    ],
+    "pluginContractGate": {
+      "contracts": 27,
+      "exitCode": 0
+    },
+    "pluginScopeRegression": {
+      "tests": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    "overview": {
+      "uniqueContracts": 27,
+      "missing": []
+    },
+    "lintExitCode": 0,
+    "browserRun": false,
+    "pluginInstallation": false,
+    "actualEditorSave": false,
+    "newStableSiteRuntimeTest": false
+  },
+  "recordCorrections": [
+    "Add the 11 already supported integrations missing from the user overview.",
+    "Record actual AI 3.1 widget fixture and restricted answer/mp lifecycle coverage; preserve original contract/status/testedVersion fields.",
+    "Date the former 45-stable/Data-Studio-alpha summary as historical, pointing to four newer stable targets."
+  ],
+  "upstreamObservations": {
+    "unsupportedCustomSyntax": {
+      "input": "## 标题 {#custom:id}",
+      "html": "<h2 id=\"标题-customid\">标题 {#custom:id}</h2>",
+      "explanation": "rehype-slug-custom-id 2.0.0 only recognizes [\\w-]+; colon is not a supported custom ID marker."
+    },
+    "customAndAutomaticCollision": {
+      "input": "## 手动标题 {#shared}\n\n## shared",
+      "html": "<h2 id=\"shared\">手动标题</h2>\n<h2 id=\"shared\">shared</h2>",
+      "explanation": "Dependency does not reserve custom IDs in its automatic slugger. Duplicate output already exists before the theme runs; author-ID rewriting is not inferred as a theme requirement."
+    }
+  },
+  "limits": [
+    "No newly confirmed theme runtime defect; no new frontend change was justified.",
+    "The 13 isolated cases include one characterization of upstream duplicate-heading-ID behavior, not 13 fixed defects.",
+    "Official SEO JAR static inspection does not replace runtime Head output, entitlement or redirect verification.",
+    "Previous browser tests remain associated with their original identity; no new browser run or cache refresh was needed for metadata/documentation edits.",
+    "Four target Halo plugin versions remain uninstalled and untested on the site."
+  ],
+  "git": {
+    "staged": false,
+    "committed": false,
+    "pushed": false,
+    "released": false
+  }
+}

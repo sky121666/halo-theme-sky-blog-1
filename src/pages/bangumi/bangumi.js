@@ -31,7 +31,14 @@ function initHoverBackground() {
 
     card.addEventListener('mouseenter', () => {
       const newSrc = coverImg.getAttribute('src');
-      if (newSrc && newSrc !== currentSrc) {
+      if (!newSrc) return;
+      timers.forEach((timer) => window.clearTimeout(timer));
+      timers.clear();
+      if (newSrc === currentSrc) {
+        bgImg.style.opacity = '0.4';
+        return;
+      }
+      if (newSrc !== currentSrc) {
         // 淡出
         bgImg.style.opacity = '0';
         

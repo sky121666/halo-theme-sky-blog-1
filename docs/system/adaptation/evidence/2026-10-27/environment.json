@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-10-27T03:10:05.921Z",
+  "cacheFreshSince": "2026-10-27T03:10:05.921Z",
+  "baseUrl": "http://localhost:8090",
+  "haloVersion": "2.27.0",
+  "activeTheme": {
+    "name": "theme-sky-blog-3",
+    "version": "0.9.50"
+  },
+  "previewTheme": "theme-sky-blog-1",
+  "theme": {
+    "algorithm": "sha256",
+    "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+    "fileCount": 369,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "assets": [
+    {
+      "file": "js/main.js",
+      "status": 200,
+      "localSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+      "servedSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+      "matches": true
+    },
+    {
+      "file": "css/main.css",
+      "status": 200,
+      "localSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+      "servedSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+      "matches": true
+    },
+    {
+      "file": "css/doc.css",
+      "status": 200,
+      "localSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+      "servedSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+      "matches": true
+    }
+  ]
+}

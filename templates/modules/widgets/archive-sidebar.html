@@ -6,7 +6,7 @@
 <!-- ========================================== -->
 
 <th:block th:fragment="widget" th:with="globalArchives = ${postFinder.archives(1, 100)}">
-    <div th:if="${globalArchives != null and globalArchives.items != null}" class="archive-sidebar-widget mb-8">
+    <div th:if="${globalArchives != null and globalArchives.items != null}" class="archive-sidebar-widget mb-8" th:data-archives-base="${site.routes?.archivesUri ?: '/archives'}">
         <h3 class="text-[11px] font-bold text-base-content/40 uppercase tracking-[0.15em] pl-3 mb-5 flex items-center gap-2.5"
             th:with="cfg = ${theme.config.archive_settings?.sidebar_settings?.archive_sidebar_config}">
             <!-- Default icon if nothing is set -->
@@ -27,7 +27,7 @@
                     th:utext="${cfg.icon}"></span>
             </th:block>
 
-            <span th:text="${cfg?.title ?: '归档探索'}">归档探索</span>
+            <span th:text="${cfg?.title ?: '近期归档'}">近期归档</span>
         </h3>
 
         <!-- 归档树形菜单 -->
@@ -54,17 +54,18 @@
                     <div class="overflow-hidden">
                         <div class="ml-[38px] mt-1 space-y-0.5 border-l-2 border-base-content/10 mb-2">
                             <a th:each="monthData : ${archive.months}"
-                                th:href="@{/archives/{year}/{month}(year=${archive.year},month=${monthData.month})}"
+                                th:href="@{${(site.routes?.archivesUri ?: '/archives') + '/' + archive.year + '/' + monthData.month}}"
                                 class="archive-month-link flex items-center justify-between py-1.5 pl-4 pr-3 rounded-r-xl text-[13.5px] transition-all relative left-[-2px] border-l-2 border-transparent text-base-content/60 hover:text-primary hover:bg-primary/5">
                                 <span th:text="${monthData.month} + '月'"></span>
-                                <span class="text-[11px] font-medium opacity-40 font-mono"
-                                    th:text="${#lists.size(monthData.posts)}"></span>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <a th:href="@{${site.routes?.archivesUri ?: '/archives'}}"
+            class="mt-3 inline-flex px-3 py-2 text-sm text-primary hover:underline">查看全部归档</a>
 
         <!-- Native JS Toggle Script -->
         <script data-swup-reload-script>
@@ -122,11 +123,10 @@
 
                     // Highlight active route logic
                     const currentPath = window.location.pathname;
-                    if (currentPath.includes('/archives/')) {
-                        const pathParts = currentPath.split('/');
-                        const yearIndex = pathParts.indexOf('archives') + 1;
-                        if (yearIndex < pathParts.length) {
-                            const activeYear = pathParts[yearIndex];
+                    const archiveBase = document.querySelector('.archive-sidebar-widget')?.dataset.archivesBase?.replace(/\/$/, '') || '/archives';
+                    if (currentPath.startsWith(archiveBase + '/')) {
+                        const activeYear = currentPath.slice(archiveBase.length + 1).split('/')[0];
+                        if (/^\d{4}$/.test(activeYear)) {
 
                             // Find matching year group button
                             const activeBtn = document.querySelector(`.archive-sidebar-widget .archive-toggle-btn[data-year="${activeYear}"]`);

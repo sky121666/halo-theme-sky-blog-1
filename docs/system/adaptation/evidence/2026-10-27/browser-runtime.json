@@ -1,0 +1,471 @@
+{
+  "checkedAt": "2026-10-27T03:36:45.802Z",
+  "environment": {
+    "checkedAt": "2026-10-27T03:10:05.921Z",
+    "cacheFreshSince": "2026-10-27T03:10:05.921Z",
+    "baseUrl": "http://localhost:8090",
+    "haloVersion": "2.27.0",
+    "activeTheme": {
+      "name": "theme-sky-blog-3",
+      "version": "0.9.50"
+    },
+    "previewTheme": "theme-sky-blog-1",
+    "theme": {
+      "algorithm": "sha256",
+      "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+      "fileCount": 369,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "file": "js/main.js",
+        "status": 200,
+        "localSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "servedSha256": "f9ad2f8e98ae37fc38a1cbadd504d111c74c8d1b709368b5dba242ade87b57e3",
+        "matches": true
+      },
+      {
+        "file": "css/main.css",
+        "status": 200,
+        "localSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+        "servedSha256": "69a497365b32de655c7470f90e4c22cbcee1b62806c65305f604f9e37b0fc08c",
+        "matches": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "localSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+        "servedSha256": "0dfae8a74029590a9012125d4747682c54cf744fad6d45189435d4a3eac028c9",
+        "matches": true
+      }
+    ]
+  },
+  "source": {
+    "algorithm": "sha256",
+    "codeHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+    "fileCount": 369,
+    "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+    "inputs": [
+      "src",
+      "templates",
+      "scripts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "theme.yaml",
+      "settings.yaml",
+      "annotation-setting.yaml",
+      "vite.config.ts",
+      "postcss.config.cjs",
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ]
+  },
+  "routes": {
+    "cacheDisabledInSameInvocation": true,
+    "viewport": 1440,
+    "rows": [
+      {
+        "url": "http://localhost:8090/?preview-theme=theme-sky-blog-1",
+        "title": "5ee博客 - 123",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-title-effects.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/index-subtitle-effects.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1",
+        "title": "友情链接 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&view=friends",
+        "title": "友情链接 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/links.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1",
+        "title": "发现 细腻 的视觉美学 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/photos.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/moments?preview-theme=theme-sky-blog-1",
+        "title": "瞬间 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/moments.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/docs?preview-theme=theme-sky-blog-1",
+        "title": "文档中心 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1",
+        "title": "通用（全局） - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/bangumis?preview-theme=theme-sky-blog-1",
+        "title": "追番列表 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/bangumi.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/steam?preview-theme=theme-sky-blog-1",
+        "title": "Steam 游戏库 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/steam.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/equipments?preview-theme=theme-sky-blog-1",
+        "title": "我的装备 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/equipment.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/douban?preview-theme=theme-sky-blog-1",
+        "title": "豆瓣记录 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/douban.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/login?preview-theme=theme-sky-blog-1",
+        "title": "登录 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/auth-split.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": false,
+        "passkeyPill": true,
+        "coreScript": "/js/main.js?v=2.27.0"
+      },
+      {
+        "url": "http://localhost:8090/dishes/?preview-theme=theme-sky-blog-1",
+        "title": "首页 · 家庭私厨",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": ["https://avrinbai.cn/themes/theme-acard/assets/styles/HarmonySanc.css?v=1.0.1"],
+        "errors": [],
+        "currentCleanup": false,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/schedule-calendar?preview-theme=theme-sky-blog-1",
+        "title": "日程日历",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [],
+        "errors": [],
+        "currentCleanup": false,
+        "passkeyPill": false,
+        "coreScript": null
+      },
+      {
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+        "title": "编辑器功能演示 - 5ee博客",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "themeCss": [
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+          "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40"
+        ],
+        "errors": [],
+        "currentCleanup": true,
+        "passkeyPill": false,
+        "coreScript": null
+      }
+    ]
+  },
+  "layout": {
+    "rows": [
+      {
+        "url": "http://localhost:8090/links?preview-theme=theme-sky-blog-1&adaptation=20261027-mobile",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme1": true,
+        "errors": []
+      },
+      {
+        "url": "http://localhost:8090/photos?preview-theme=theme-sky-blog-1&adaptation=20261027-mobile",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme1": true,
+        "errors": []
+      },
+      {
+        "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1&adaptation=20261027-mobile",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme1": true,
+        "errors": []
+      },
+      {
+        "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/theme-settings/global?preview-theme=theme-sky-blog-1&adaptation=20261027-mobile",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme1": true,
+        "errors": []
+      }
+    ],
+    "wideTable": {
+      "mobile": {
+        "scope": "temporary DOM fixture in actual theme Docsme page",
+        "viewport": 390,
+        "pageWidth": 390,
+        "tableWidth": 356,
+        "tableScrollWidth": 4427,
+        "overflow": "auto"
+      },
+      "desktop": {
+        "viewport": 1440,
+        "pageWidth": 1440,
+        "tableWidth": 754,
+        "tableScrollWidth": 969,
+        "overflow": "auto"
+      }
+    }
+  },
+  "contact": {
+    "before": {
+      "autoHosts": 1,
+      "hasAutoConfig": true,
+      "handlers": [
+        {
+          "priority": -100,
+          "hasNewCleanup": true
+        },
+        {
+          "hasNewCleanup": false
+        }
+      ]
+    },
+    "after": {
+      "sameDocument": true,
+      "url": "http://localhost:8090/categories/ai?preview-theme=theme-sky-blog-1",
+      "autoHosts": 0,
+      "autoConfig": [],
+      "trackingConfig": [],
+      "theme1Css": true
+    },
+    "cache": "Network.setCacheDisabled in same round as full navigation; registered handler source inspected",
+    "returnToForm": {
+      "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "sameDocument": true,
+      "autoHosts": 1,
+      "configCount": 1,
+      "handlerCurrent": true
+    },
+    "popupSnapshotObservation": {
+      "source": "Ego TaskSpace148 p1 semantic snapshot after returnToForm and opening the floating button; observed in this run",
+      "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "dialogName": "联系表单",
+      "closeButton": "关闭联系表单",
+      "fieldName": "acceptance_text",
+      "fieldLabel": "开发验收字段（勿提交）",
+      "submitButtonVisible": true,
+      "submitted": false,
+      "closedBy": "真实点击关闭联系表单按钮后开始15路由验收",
+      "limit": "语义快照人工摘录，未保存完整快照；不代表数据提交通过"
+    }
+  },
+  "comment": {
+    "result": {
+      "url": "http://localhost:8090/archives/editor-feature-demo?preview-theme=theme-sky-blog-1",
+      "hosts": [
+        {
+          "shadow": true,
+          "form": false,
+          "subjectContainer": "comment-content-halo-run-Post-42380544-214a-48e1-96b6-a60df0e0eab6",
+          "contrast": "oklch(96% .018 272.314)",
+          "imageMax": "100%"
+        }
+      ],
+      "errors": [],
+      "mode": "dark"
+    },
+    "scope": "只读懒加载和样式；未提交评论",
+    "initialProbe": "首次等待 halo-comment 超时；检查DOM确认官方实际宿主为 comment-widget，非组件加载失败",
+    "semanticSnapshotObservation": {
+      "source": "Ego p1 snapshot after lazy container scroll; same run",
+      "visibleLabels": ["编写评论", "昵称", "电子邮件", "网站", "请输入验证码", "提交评论", "0 条评论"],
+      "note": "结果hosts[0].form=false只检查第一层shadowRoot；可访问性快照可见嵌套表单，不能据此认定未加载",
+      "submitted": false
+    }
+  },
+  "gallery": {
+    "opened": {
+      "open": true,
+      "img": "http://localhost:8090/upload/IMG20260503131609.jpg",
+      "naturalWidth": 3072
+    },
+    "closed": {
+      "open": false,
+      "preview": "theme-sky-blog-1"
+    },
+    "initialProbe": "旧的.lg-show选择器超时；真实DOM使用.lg-visible；页面灯箱实际已打开"
+  },
+  "search": {
+    "query": "Halo",
+    "resultsObserved": true,
+    "closeFocus": {
+      "activeLabel": "打开搜索",
+      "preview": "theme-sky-blog-1",
+      "themeCss": [
+        "http://localhost:8090/themes/theme-sky-blog-1/assets/css/main.css?v=2.2.40",
+        "http://localhost:8090/themes/theme-sky-blog-1/assets/css/post.css?v=2.2.40",
+        "http://localhost:8090/themes/theme-sky-blog-1/assets/css/doc.css?v=2.2.40"
+      ],
+      "errors": []
+    }
+  },
+  "cacheNegative": {
+    "observation": {
+      "scope": "real existing published form auto-display, no submit or setting changes",
+      "before": {
+        "autoHosts": 1,
+        "hasAutoConfig": true,
+        "bootstrap": true,
+        "scripts": [
+          "http://localhost:8090/contact-form/embed.js",
+          "http://localhost:8090/plugins/PluginContactForm/assets/static/contact-form-loader.iife.js?build=c57caca4-aefb-428a-8daf-4f47d804ba0d",
+          "http://localhost:8090/plugins/PluginContactForm/assets/static/contact-form.iife.js?build=c57caca4-aefb-428a-8daf-4f47d804ba0d",
+          "http://localhost:8090/plugins/PluginContactForm/assets/static/contact-form-display.iife.js?build=c57caca4-aefb-428a-8daf-4f47d804ba0d",
+          "http://localhost:8090/plugins/PluginContactForm/assets/static/contact-form-floating.iife.js?build=c57caca4-aefb-428a-8daf-4f47d804ba0d"
+        ],
+        "errors": []
+      },
+      "after": {
+        "sameDocument": true,
+        "url": "http://localhost:8090/categories/ai?preview-theme=theme-sky-blog-1",
+        "title": "AI 分类 - 5ee博客",
+        "autoHosts": 1,
+        "autoConfig": [],
+        "trackingConfig": [],
+        "theme1Css": true,
+        "errors": []
+      }
+    },
+    "interpretation": "早轮未核执行模块，不能证明当前代码缺陷；最终同次禁缓存+注册handler检查后通过"
+  },
+  "limits": [
+    "未执行提交、付款、模型调用或WebAuthn",
+    "15路由浏览器表为同一轮禁用缓存；早轮搜索交互未逐次核模块，不作为新版清理函数证据",
+    "移动宽表格为真实预览页临时DOM样本，不代表已保存文章或全部表格",
+    "评论初次错误宿主选择器/灯箱旧class探针超时已保留，纠正后实际组件可用",
+    "截图移动Links已人工视觉查看；未对所有插件穷举视觉状态"
+  ]
+}

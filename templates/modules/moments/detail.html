@@ -8,7 +8,7 @@
     cfg=${theme.config.moments_settings},
     basicCfg=${cfg?.basic_info},
     enableUpvote=${basicCfg?.enable_upvote != false},
-    enableComment=${basicCfg?.enable_comment != false},
+    enableComment=${haloCommentEnabled and basicCfg?.enable_comment != false},
     enableShare=${cfg?.enable_share != false},
     shareSettings=${cfg?.share_settings},
     shareItemIds=${shareSettings?.share_item_ids ?: {'wechat','weibo','x','qq'}},
@@ -23,7 +23,7 @@
 
       <!-- 返回按钮 -->
       <div class="mb-6">
-        <a href="/moments" class="btn btn-sm btn-ghost gap-1">
+        <a th:href="@{/moments}" class="btn btn-sm btn-ghost gap-1">
           <span class="icon-[heroicons--arrow-left] size-4"></span>
           返回瞬间
         </a>
@@ -109,7 +109,7 @@
                   #lists.size(nonPostMedia) == 8 ? 'grid-cols-6' : 'grid-cols-3'
                 }">
               <th:block th:each="medium, stat : ${nonPostMedia}">
-                <a th:if="${medium.type.name == 'PHOTO' && stat.index < 9}" th:href="${medium.url}"
+                <a th:if="${medium.type.name == 'PHOTO'}" th:href="${medium.url}"
                   th:attr="data-src=${medium.url}" data-no-swup class="moment-grid-item" th:classappend="${
                     #lists.size(nonPostMedia) == 3 && stat.index == 0 ? 'col-span-2 row-span-2 aspect-square' :
                     #lists.size(nonPostMedia) == 3 && stat.index > 0 ? 'col-span-1 aspect-square' :
@@ -121,11 +121,6 @@
                     #lists.size(nonPostMedia) == 8 && stat.index >= 2 ? 'col-span-2 aspect-square' : 'aspect-square'
                   }">
                   <img th:src="${medium.url}" alt="瞬间图片" loading="lazy" />
-                  <div th:if="${stat.index == 8 && #lists.size(nonPostMedia) > 9}"
-                    class="absolute inset-0 bg-black/50 flex items-center justify-center" style="z-index:2">
-                    <span class="text-white text-xl font-semibold"
-                      th:text="'+' + (${#lists.size(nonPostMedia)} - 9)">+3</span>
-                  </div>
                 </a>
                 <video th:if="${medium.type.name == 'VIDEO'}" th:src="${medium.url}" controls preload="metadata"
                   class="col-span-full rounded-xl max-h-72 w-full">
@@ -152,10 +147,10 @@
           <!-- 互动操作 -->
           <div class="flex items-center gap-4 pt-2 border-t border-base-200 text-sm text-base-content/50">
             <!-- 点赞按钮 -->
-            <button th:if="${enableUpvote}" class="inline-flex items-center gap-1.5 hover:text-error transition-colors"
+            <button type="button" aria-label="点赞瞬间" th:if="${enableUpvote}" class="inline-flex items-center gap-1.5 hover:text-error transition-colors"
               th:data-moment-name="${moment.metadata.name}" th:data-upvote-count="${moment.stats?.upvote ?: 0}"
               onclick="handleMomentUpvote(this)">
-              <span class="icon-[heroicons--heart] size-5"></span>
+              <span class="icon-[heroicons--heart] size-5" aria-hidden="true"></span>
               <span class="upvote-count" th:text="${moment.stats?.upvote ?: 0}">0</span>
             </button>
             <!-- 评论数 -->
@@ -164,7 +159,7 @@
               <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
             </div>
             <!-- 分享 -->
-            <button th:if="${enableShare}" x-data @click="$dispatch('open-share-modal')"
+            <button type="button" aria-label="分享瞬间" th:if="${enableShare}" x-data @click="$dispatch('open-share-modal')"
               class="inline-flex items-center gap-1.5 hover:text-primary transition-colors">
               <span class="icon-[heroicons--share] size-5"></span>
             </button>

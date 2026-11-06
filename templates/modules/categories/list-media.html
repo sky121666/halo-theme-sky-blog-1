@@ -8,7 +8,7 @@
 <!-- ============================================= -->
 
 <!-- 片段：media_text(posts) -->
-<section th:fragment="media_text(posts, settings)" class="space-y-8">
+<section th:fragment="media_text(posts, settings)" class="space-y-8 [overflow-wrap:anywhere]">
   <!-- 循环文章列表：使用非卡片、左图右文布局 -->
   <article th:each="post : ${posts.items}"
     th:with="isPinned = ${post.spec.pinned == true},
@@ -32,7 +32,7 @@
     ">
       <!-- 左侧图片区域：4:3 比例 -->
       <figure class="relative w-full md:basis-[25%] md:max-w-[25%] shrink-0 overflow-hidden rounded-xl">
-        <a th:href="@{${post.status.permalink}}" class="block w-full aspect-4/3">
+        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="block w-full aspect-4/3">
           <img th:if="${coverUrl != null}" th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
           <!-- 无封面占位：与有图片时尺寸完全一致 -->
@@ -49,16 +49,16 @@
     </th:block>
 
     <!-- 右侧文字区域：自适应高度与宽度，支持多段落排版 -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 min-w-0 flex flex-col">
       <!-- 标题：可点击，强调可读性 -->
       <h3 class="text-base md:text-lg font-bold leading-6 md:leading-7 tracking-tight">
-        <a th:href="@{${post.status.permalink}}" class="hover:text-primary transition-colors"
+        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary transition-colors"
           th:text="${post.spec.title}">文章标题</a>
       </h3>
 
       <!-- 摘要：响应式占满宽度，双行省略，移除固定宽度与高度以适配窄屏 -->
       <p class="mt-2 text-sm text-base-content/70 line-clamp-2 w-full leading-relaxed">
-        <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
+        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
           th:text="${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"></a>
       </p>
 

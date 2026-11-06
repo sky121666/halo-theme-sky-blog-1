@@ -40,8 +40,21 @@
 | plugin-online           | 在线访客统计                     | 侧边栏小工具                   | [在线统计](../../theme/enhancements/online-stats.md) |
 | vote                    | 正文投票块                       | 文章、页面和文档正文           | 1.1.3 主题变量；交互需实站回归                       |
 | text-diagram            | Mermaid/PlantUML 文本绘图        | 文章、页面和文档正文           | 1.5.2 绘图容器与暗色 selector                        |
-| PluginContactForm       | 联系表单                         | 正文、单页、贴边按钮和页面弹窗 | 契约 1.6.4；完整提交与上传流程仍待实站回归           |
+| PluginContactForm       | 联系表单                         | 正文、单页、贴边按钮和页面弹窗 | 已适配 2.1.0 的 embed/trigger/自动展示与 PJAX 清理；提交、上传和通知未验，见[当前结果](../../system/adaptation/current-plugin-results.md) |
 | ai-assistant            | AI 总结小部件                    | 文章顶部                       | 当前版本与验证范围见插件适配状态                     |
+| seo-tools               | canonical、社交标签及结构化数据 | 全站 Head                     | 插件拥有输出；主题仅按明确设置或插件不可用时兜底      |
+| PluginFeed              | RSS 自动发现与订阅              | Head、`/feed.xml`             | RSS 内容由插件提供                                  |
+| shiki                   | 代码高亮、折叠与主题切换        | 文章、文档代码块              | 沿用官方组件与插件配置，处理 PJAX 生命周期           |
+| auth-passkey            | 通行密钥登录入口                | `/login`                      | 交由官方认证流程；用户手测与自动验收证据分开记录      |
+| editor-hyperlink-card   | 块级及行内超链接卡片            | 正文内容                      | 消费官方宿主，约束布局并保留插件配色                 |
+| plugin-katex            | 行内和块级数学公式              | 文章、单页、文档正文          | 保留官方 HTML/MathML；仅在必要的 PJAX 环节补渲染      |
+| lottery                 | 抽奖卡片展示                    | 正文内容                      | 目前只验实际空态，参与与开奖不计作通过               |
+| restricted-reading      | 受限内容提示及官方弹窗接入      | 文章、单页正文                | answer 样本已验，mp 仅隔离回归；不代替服务端解锁      |
+| dishes                  | 在线点菜独立页面                | `/dishes`                     | 沿用插件完整页面，主题只绕过 PJAX                    |
+| schedule-calendar       | 日程独立页面                    | `/schedule-calendar`          | 沿用插件完整页面；未覆盖主题模板不等于不兼容          |
+| maintenance             | 独立维护模板                    | `/maintenance`                | 展示已验；全站维护接管开关未切换                     |
+
+以上27项对应[主题适配矩阵](../../system/adaptation/plugin-adaptation.md)，是已有接入点清单，不代表27项全部业务或全部最新版本均通过。[当前逐插件结果](../../system/adaptation/current-plugin-results.md)分别记录实际安装、官方稳定目标和测试范围；编辑器、后台管理及存储插件按其对主题的实际影响另行说明。
 
 `plugin-friends` 已退出当前主题集成；历史说明见[朋友圈退役记录](../content/friends.md)。
 
@@ -94,7 +107,7 @@
 
 | 插件组合                | 注意事项                                                                                                |
 | ----------------------- | ------------------------------------------------------------------------------------------------------- |
-| PluginLinks             | 当前目标 `2.3.0`：分组、公开 RSS、访客申请接口；申请写入仍待运行验证                                    |
+| PluginLinks             | 当前实装和稳定目标 `2.5.0`，主题保留 `2.3.0` 的分组、公开 RSS、访客申请契约；申请/审核写入仍待验证 |
 | PluginPhotos            | `2.1.2` 列表、详情、PJAX、20→40→46 张无限滚动灯箱与 46 个唯一详情路由均通过                             |
 | plugin-bilibili-bangumi | 稳定版 `1.4.1` 已通过数值越界 404、文本参数回退及真页 PJAX；实现契约继续保持 `1.4.0`                    |
 | plugin-shiki            | 当前实装 `1.5.1`；主题代码块换行与 26 个代码块的代表文章已验证，完整插件结果见适配状态                 |
@@ -102,7 +115,7 @@
 | plugin-douban           | 图片代理在插件后台配置，主题只做失败占位                                                                |
 | halo-plugin-steam       | Steam 资料需要 API Key、SteamID 和公开隐私设置                                                          |
 | Passkey                 | 主题负责登录入口；认证完成情况与用户手动验收记录见适配状态                                               |
-| ai-assistant            | 当前实装 `3.1.0`；摘要小部件、模型调用与未覆盖能力分别见适配状态                                         |
+| ai-assistant            | 当前实装 `3.1.0` + Foundation `1.3.0`，主题采用 `3.0.0` 摘要宿主契约；前阶段既有摘要读取、390px 展示及 PJAX 离页清理已验，模型生成与自动注入未验，精确组合见[适配状态](../../system/adaptation/plugin-adaptation.md) |
 
 更完整的版本基线见 [插件适配状态](../../system/adaptation/plugin-adaptation.md)。
 

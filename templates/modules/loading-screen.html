@@ -18,28 +18,28 @@
     cssStyle=${loadingSettings.css_style ?: 'spinner'}
   ">
         <!-- CSS 动画 - Spinner -->
-        <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="loading-spinner"></div>
+        <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" class="sky-loading-spinner"></div>
 
         <!-- CSS 动画 - Dots -->
-        <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="loading-dots">
+        <div th:if="${animationType == 'css' && cssStyle == 'dots'}" class="sky-loading-dots">
             <span></span><span></span><span></span>
         </div>
 
         <!-- CSS 动画 - Bars -->
-        <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="loading-bars">
+        <div th:if="${animationType == 'css' && cssStyle == 'bars'}" class="sky-loading-bars">
             <span></span><span></span><span></span><span></span><span></span>
         </div>
 
         <!-- CSS 动画 - Ring -->
-        <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="loading-ring"></div>
+        <div th:if="${animationType == 'css' && cssStyle == 'ring'}" class="sky-loading-ring"></div>
 
         <!-- 自定义 GIF -->
         <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
-            th:src="${loadingSettings.custom_gif}" alt="加载中" class="loading-gif" />
+            th:src="${loadingSettings.custom_gif}" alt="加载中" class="sky-loading-gif" />
     </div>
 
     <!-- 加载文字 -->
-    <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
+    <p class="sky-loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
 </div>
 
 </html>

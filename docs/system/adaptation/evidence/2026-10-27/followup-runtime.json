@@ -1,0 +1,408 @@
+{
+  "checkedAt": "2026-10-27T05:24:29.453Z",
+  "environment": {
+    "halo": "2.27.0",
+    "theme": "theme-sky-blog-1",
+    "preview": true,
+    "activeTheme": "theme-sky-blog-3",
+    "plugins": {
+      "plugin-katex": "3.0.0",
+      "shiki": "1.5.1",
+      "text-diagram": "1.5.2",
+      "editor-hyperlink-card": "1.9.2",
+      "ai-assistant": "3.1.0",
+      "ai-foundation": "1.3.0",
+      "restricted-reading": "1.9.3"
+    }
+  },
+  "identity": {
+    "at": "2026-10-27T05:24:29.453Z",
+    "identity": {
+      "algorithm": "sha256",
+      "codeHash": "1ff4c506300189de5945d3f5f0423a409864b4a1ce3538ec4d053b90caefd0fe",
+      "fileCount": 370,
+      "baseCommit": "5323cb64b859334b19f8aa6787eac4f4eb1a98ae",
+      "inputs": [
+        "src",
+        "templates",
+        "scripts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "theme.yaml",
+        "settings.yaml",
+        "annotation-setting.yaml",
+        "vite.config.ts",
+        "postcss.config.cjs",
+        "tsconfig.json",
+        "tsconfig.node.json"
+      ]
+    },
+    "assets": [
+      {
+        "file": "css/post.css",
+        "status": 200,
+        "local": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "served": "d2d306628f43c846f597add1118bd39c04b4341cb6d66e102b7c128167bf254c",
+        "match": true
+      },
+      {
+        "file": "css/doc.css",
+        "status": 200,
+        "local": "c368fe760f7d806eee38c1fb90744e9c1b6684f6b7253992ad55ed604123edf5",
+        "served": "c368fe760f7d806eee38c1fb90744e9c1b6684f6b7253992ad55ed604123edf5",
+        "match": true
+      },
+      {
+        "file": "js/chunks/article-content-2.2.40.js",
+        "status": 200,
+        "local": "12a82fcb5b14ac936609e77d567c675c8a8449a99fd27adeb0abf2ff411de62d",
+        "served": "12a82fcb5b14ac936609e77d567c675c8a8449a99fd27adeb0abf2ff411de62d",
+        "match": true
+      }
+    ]
+  },
+  "beforeSourceHash": "2e5cdbdd1a3b507fe2505ab63c028f25f8fffdbcb3dbdb8eeb928acecee70f70",
+  "mathML": {
+    "before": {
+      "scope": "official katex3 serializer output in temporary browser DOM",
+      "viewport": 390,
+      "page": 390,
+      "block": 358,
+      "scroll": 2132,
+      "overflow": "visible",
+      "mathDisplay": "block",
+      "legacyRendered": 2,
+      "accessibility": {
+        "scrollLeft": 0,
+        "ancestors": [
+          {
+            "tag": "DIV",
+            "id": "qa-katex-modern",
+            "overflow": "visible",
+            "width": 896,
+            "scroll": 2286
+          },
+          {
+            "tag": "DIV",
+            "id": "article-content",
+            "overflow": "visible",
+            "width": 896,
+            "scroll": 2286
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "overflow": "visible",
+            "width": 896,
+            "scroll": 2286
+          }
+        ],
+        "scope": "另一次桌面采样；CDP移动模拟已重置，未记录视口。不可与顶层390px视为同一采样。"
+      }
+    },
+    "after": {
+      "mobile": {
+        "viewport": 390,
+        "page": 390,
+        "block": 358,
+        "scroll": 2132,
+        "overflow": "auto",
+        "scrollLeft": 500,
+        "legacy": 2,
+        "svg": 1,
+        "shiki": 1
+      },
+      "desktop": {
+        "viewport": 1440,
+        "page": 1440,
+        "block": 896,
+        "scroll": 2286,
+        "overflow": "auto",
+        "scrollLeft": 500
+      },
+      "scope": "temporary DOM of official serialized MathML in real theme article"
+    }
+  },
+  "oldDocsSamples": {
+    "math": {
+      "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/docsme-katex-sample?preview-theme=theme-sky-blog-1",
+      "html": "<h1 id=\"docsme-katex-样本\">Docsme KaTeX 样本</h1>\n<p>行内公式：$E = mc^2$</p>\n<p>块级公式：</p>\n<p>$$\n\\int_0<sup>1 x</sup>2 dx = \\frac{1}{3}\n$$</p>\n",
+      "rendered": 0
+    },
+    "diagram": {
+      "url": "http://localhost:8090/docs/halo-theme-sky-blog-1/docsme-mermaid-sample?preview-theme=theme-sky-blog-1",
+      "html": "<h1 id=\"docsme-mermaid-样本\">Docsme Mermaid 样本</h1>\n<pre><code class=\"language-mermaid\">flowchart TD\n  A[打开 Docsme 文档] --&gt; B{是否存在图表}\n  B --&gt;|是| C[渲染 Mermaid]\n  B --&gt;|否| D[跳过专项复验]\n  C --&gt; E[检查 PJAX 和暗亮色]\n</code></pre>\n",
+      "svg": 0,
+      "sameDocument": true,
+      "errors": []
+    }
+  },
+  "pjax": [
+    {
+      "sameDocument": true,
+      "url": "http://localhost:8090/archives/sky1-followup-20261027-mvq8l189-components?preview-theme=theme-sky-blog-1",
+      "legacyMath": 2,
+      "svg": 1,
+      "shiki": 1,
+      "nested": 0,
+      "pending": 0
+    },
+    {
+      "sameDocument": true,
+      "url": "http://localhost:8090/archives/sky1-followup-20261027-mvq8l189-components?preview-theme=theme-sky-blog-1",
+      "legacyMath": 2,
+      "svg": 1,
+      "shiki": 1,
+      "nested": 0,
+      "pending": 0
+    }
+  ],
+  "diagramTheme": {
+    "initial": {
+      "scheme": "dark",
+      "theme": "dark",
+      "label": "当前深色模式，点击切换跟随系统",
+      "svg": "mermaid-1793078623739"
+    },
+    "light": {
+      "scheme": "light",
+      "svg": "mermaid-1793078669419",
+      "count": 1,
+      "changed": true
+    },
+    "restored": {
+      "scheme": "dark",
+      "count": 1,
+      "shiki": 1,
+      "nested": 0,
+      "codeShadow": true
+    }
+  },
+  "cards": {
+    "dark": {
+      "scheme": "dark",
+      "viewport": 390,
+      "page": 390,
+      "cards": [
+        {
+          "tag": "HYPERLINK-INLINE-CARD",
+          "theme": "inline",
+          "shadow": true,
+          "width": 205.59375,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(63, 63, 70)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "small",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "regular",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "grid",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        }
+      ]
+    },
+    "light": {
+      "scheme": "light",
+      "viewport": 390,
+      "page": 390,
+      "cards": [
+        {
+          "tag": "HYPERLINK-INLINE-CARD",
+          "theme": "inline",
+          "shadow": true,
+          "width": 196.3125,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(63, 63, 70)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "small",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "regular",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        },
+        {
+          "tag": "HYPERLINK-CARD",
+          "theme": "grid",
+          "shadow": true,
+          "width": 358,
+          "target": "_blank",
+          "rel": "noopener",
+          "background": "rgb(24, 24, 27)"
+        }
+      ]
+    },
+    "lightAfterStyleUpdate": {
+      "scheme": "light",
+      "cards": [
+        {
+          "theme": "inline",
+          "background": "rgb(97, 97, 103)"
+        },
+        {
+          "theme": "small",
+          "background": "rgb(66, 66, 69)"
+        },
+        {
+          "theme": "regular",
+          "background": "rgb(66, 66, 69)"
+        },
+        {
+          "theme": "grid",
+          "background": "rgb(66, 66, 69)"
+        }
+      ],
+      "width": 390,
+      "pageWidth": 390
+    },
+    "note": "立即取样的light颜色仍为旧值，等实际计算样式变化后再取样；截图已显示浅色"
+  },
+  "ai": {
+    "shown": {
+      "widgetCount": 1,
+      "contentMatches": true,
+      "htmlContentLength": 301,
+      "textContentLength": 243,
+      "width": 390,
+      "pageWidth": 390,
+      "widgetWidth": 358,
+      "scheme": "dark"
+    },
+    "scope": "Temporary DOM mount official3.1 widget; GET existing summary only; Foundation1.3 installed; no model call/automatic injection",
+    "initialProbe": "包含HTML的spec.content与文本比较导致超时；纠正为渲染文本后匹配。390px隐藏侧栏链接不可点击，切1440后操作。",
+    "after": {
+      "sameDocument": true,
+      "widgets": 0,
+      "tempResources": 0,
+      "theme1": true
+    },
+    "note": "about导航探针匹配隐藏副本，改用可见分类链接完成真实PJAX；未调用隐藏链接click或修改页面导航。"
+  },
+  "shikiRealPage": {
+    "url": "http://localhost:8090/archives/lKkDC8OW?preview-theme=theme-sky-blog-1",
+    "shiki": 26,
+    "nested": 0,
+    "shadows": 26,
+    "preWhiteSpace": ["pre", "pre"]
+  },
+  "restrictedAnonymous": {
+    "status": 200,
+    "privateBodyLeaked": false,
+    "hasWidget": true,
+    "theme1": true
+  },
+  "lottery": {
+    "connectionVerified": false,
+    "effectiveSource": "NONE",
+    "instantLotteryAvailable": false,
+    "source": "本轮只读Console redis-config返回，不操作配置"
+  },
+  "cleanup": {
+    "at": "2026-10-27T05:29:02.265Z",
+    "report": [
+      {
+        "route": "/apis/content.halo.run/v1alpha1/posts/sky1-followup-20261027-mvq8l189-restricted",
+        "deleteRequested": true
+      },
+      {
+        "route": "/apis/content.halo.run/v1alpha1/posts/sky1-followup-20261027-mvq8l189-components",
+        "deleteRequested": true
+      },
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-pk",
+        "deleteRequested": true
+      },
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-multiple",
+        "deleteRequested": true
+      },
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-single",
+        "deleteRequested": true
+      }
+    ],
+    "readback": [
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-single",
+        "status": 404
+      },
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-multiple",
+        "status": 404
+      },
+      {
+        "route": "/apis/vote.kunkunyu.com/v1alpha1/votes/sky1-followup-20261027-mvq8l189-pk",
+        "status": 404
+      },
+      {
+        "route": "/apis/content.halo.run/v1alpha1/posts/sky1-followup-20261027-mvq8l189-components",
+        "status": 404
+      },
+      {
+        "route": "/apis/content.halo.run/v1alpha1/posts/sky1-followup-20261027-mvq8l189-restricted",
+        "status": 404
+      }
+    ],
+    "related": {
+      "snapshotPageComplete": true,
+      "snapshotMatches": 0,
+      "voteDataPageComplete": true,
+      "voteDataMatches": 0
+    }
+  },
+  "cacheFreshSince": "2026-10-27T05:30:37.990Z",
+  "backend": {
+    "since": "2026-10-27T05:30:37.990Z",
+    "errors": 0,
+    "templateExceptions": 0,
+    "warnings": 3,
+    "warningType": "Equipment Page size must not be greater than1000"
+  },
+  "checks": {
+    "build": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "diffCheck": "passed",
+    "shikiRegression": {
+      "red": "2/3 pass; multi-child VM timeout500ms; exit1",
+      "green": "3/3 pass; exit0",
+      "method": "直接执行生产函数，最小元素树模拟；真实CustomElement和布局另有浏览器验证"
+    },
+    "independentReview": "增量复核通过，无阻断问题；RED两次视口采样已区分"
+  },
+  "scope": "仅主题代码和只读/临时浏览器样本；不升级核心/插件，不改数据库配置，不调用模型、支付、发送通知或操作个人Passkey。既有授权创建的2Post/3Vote已清理。"
+}

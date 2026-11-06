@@ -1,6 +1,13 @@
 <!-- 单页面内容 -->
 <th:block th:fragment="content">
   <article id="page-container">
+    <!-- 单页封面由页面设置提供；未配置或加载失败时不占用空间。 -->
+    <img
+      id="page-cover"
+      th:if="${!#strings.isEmpty(singlePage.spec.cover)}"
+      th:src="${singlePage.spec.cover}"
+      alt=""
+    />
     <!-- 页面标题 -->
     <header id="page-header">
       <h1 id="page-title" th:text="${singlePage.spec.title}">页面标题</h1>
@@ -12,7 +19,7 @@
     <!-- 文章内容 -->
     <div
       id="article-content"
-      th:utext="${#strings.replace(#strings.replace(#strings.replace(singlePage.content.content, 'http://192.168.1.23:8090', ''), 'http://localhost:8090', ''), 'http://127.0.0.1:8090', '')}"
+      th:utext="${singlePage.content?.content}"
     >
       <p>页面内容...</p>
     </div>
@@ -26,7 +33,10 @@
     </footer>
 
     <!-- 单页评论也是 Restricted Reading「评论后可见」模式的解锁锚点。 -->
-    <section id="page-comments" th:if="${singlePage.spec.allowComment == null || singlePage.spec.allowComment}">
+    <section
+      id="page-comments"
+      th:if="${haloCommentEnabled and (singlePage.spec.allowComment == null || singlePage.spec.allowComment)}"
+    >
       <h2 id="page-comments-title">评论留言</h2>
       <div id="page-comments-card">
         <halo:comment

@@ -18,10 +18,18 @@
 <!-- ===================== -->
 <div th:fragment="pills(tags, currentTag)" class="tags-switch-pills mb-8"
   th:with="maxVisible = 6, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="6" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-tag-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap items-center gap-2">
     <!-- 全部按钮 -->
-    <a th:href="@{/tags}"
+    <a th:href="@{${site.routes?.tagsUri ?: '/tags'}}"
       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
       th:classappend="${currentTag == null} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'">
       <span class="icon-[heroicons--squares-2x2] w-3.5 h-3.5"></span>
@@ -30,13 +38,12 @@
 
     <!-- 标签 -->
     <th:block th:each="t, iterStat : ${tags}">
-      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.postCount ?: 0}"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all duration-200"
         th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        data-tag-item
+        th:attr="aria-current=${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
         <span class="text-base-content/40">#</span>
         <span th:text="${t.spec.displayName}"></span>
         <span th:if="${postCount > 0}" class="text-xs text-base-content/50" th:text="${postCount}"></span>
@@ -44,7 +51,8 @@
     </th:block>
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" th:if="${needsCollapse}" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起标签' : '展开另外 ' + hiddenCount + ' 个标签'"
       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-dashed border-base-content/20 text-base-content/50 hover:text-base-content hover:border-base-content/30 hover:bg-base-100/50 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="icon-[heroicons--chevron-down] w-3.5 h-3.5"></span>
       <span x-show="expanded" class="icon-[heroicons--chevron-up] w-3.5 h-3.5"></span>
@@ -59,10 +67,18 @@
 <!-- ===================== -->
 <div th:fragment="chips(tags, currentTag)" class="tags-switch-chips mb-8"
   th:with="maxVisible = 10, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="10" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-tag-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center gap-2">
     <!-- 全部芯片 -->
-    <a th:href="@{/tags}"
+    <a th:href="@{${site.routes?.tagsUri ?: '/tags'}}"
       class="inline-flex items-center gap-2 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
       th:classappend="${currentTag == null} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'">
       <span class="icon-[heroicons--squares-2x2] w-4 h-4"></span>
@@ -71,13 +87,12 @@
 
     <!-- 标签芯片 -->
     <th:block th:each="t, iterStat : ${tags}">
-      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.postCount ?: 0}"
         class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium border transition-all duration-200"
         th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-primary/10 text-primary border-primary/30' : 'bg-base-100 text-base-content/60 border-base-content/10 hover:border-primary/30 hover:text-primary'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        data-tag-item
+        th:attr="aria-current=${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
         <span class="opacity-40">#</span>
         <span th:text="${t.spec.displayName}"></span>
         <span th:if="${postCount > 0}" class="text-xs opacity-50" th:text="'(' + ${postCount} + ')'"></span>
@@ -85,7 +100,8 @@
     </th:block>
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" th:if="${needsCollapse}" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起标签' : '展开另外 ' + hiddenCount + ' 个标签'"
       class="inline-flex items-center gap-1 h-9 px-3 rounded-lg text-sm font-medium border border-dashed border-primary/30 text-primary/70 hover:text-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="icon-[heroicons--plus] w-4 h-4"></span>
       <span x-show="expanded" class="icon-[heroicons--minus] w-4 h-4"></span>
@@ -100,10 +116,18 @@
 <!-- ===================== -->
 <div th:fragment="underline(tags, currentTag)" class="tags-switch-underline mb-8"
   th:with="maxVisible = 12, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="12" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-tag-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center items-center gap-x-1 gap-y-0 border-b border-base-content/10 pb-px">
     <!-- 全部 -->
-    <a th:href="@{/tags}" class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+    <a th:href="@{${site.routes?.tagsUri ?: '/tags'}}" class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
       th:classappend="${currentTag == null} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'">
       <span>全部</span>
       <span th:if="${currentTag == null}" class="absolute bottom-0 left-1 right-1 h-0.5 bg-primary rounded-full"></span>
@@ -111,13 +135,12 @@
 
     <!-- 标签 -->
     <th:block th:each="t, iterStat : ${tags}">
-      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.postCount ?: 0}"
         class="relative px-3 py-2.5 text-sm font-medium transition-colors duration-200"
         th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'text-primary' : 'text-base-content/50 hover:text-base-content'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        data-tag-item
+        th:attr="aria-current=${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
         <span th:text="${t.spec.displayName}"></span>
         <sup th:if="${postCount > 0}" class="ml-0.5 text-xs opacity-40" th:text="${postCount}"></sup>
         <span th:if="${currentTag != null and currentTag.metadata.name == t.metadata.name}"
@@ -126,7 +149,8 @@
     </th:block>
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" th:if="${needsCollapse}" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起标签' : '展开另外 ' + hiddenCount + ' 个标签'"
       class="px-3 py-2.5 text-sm font-medium text-primary/60 hover:text-primary transition-colors duration-200 cursor-pointer">
       <span x-show="!expanded" th:text="'+' + ${totalTags - maxVisible} + ' 更多'"></span>
       <span x-show="expanded">收起</span>
@@ -139,23 +163,30 @@
 <!-- ===================== -->
 <div th:fragment="glass(tags, currentTag)" class="tags-switch-glass mb-8"
   th:with="maxVisible = 10, totalTags = ${#lists.size(tags)}, needsCollapse = ${totalTags > maxVisible}"
-  x-data="{ expanded: false }">
+  data-visible-limit="10" x-data="{ expanded: false, hiddenCount: 0 }"
+  x-init="
+    const items = Array.from($el.querySelectorAll('[data-tag-item]'));
+    const limit = Number($el.dataset.visibleLimit);
+    const currentIndex = items.findIndex(item => item.getAttribute('aria-current') === 'page');
+    const visibleLimit = currentIndex >= limit ? limit - 1 : limit;
+    items.forEach((item, index) => { item.dataset.collapsible = String(index >= visibleLimit &amp;&amp; index !== currentIndex) });
+    hiddenCount = items.filter(item => item.dataset.collapsible === 'true').length;
+  ">
   <div class="flex flex-wrap justify-center gap-2 p-3 rounded-2xl bg-base-200/40 backdrop-blur-sm dark:bg-base-300/30">
     <!-- 全部 -->
-    <a th:href="@{/tags}" class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+    <a th:href="@{${site.routes?.tagsUri ?: '/tags'}}" class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
       th:classappend="${currentTag == null} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'">
       全部
     </a>
 
     <!-- 标签 -->
     <th:block th:each="t, iterStat : ${tags}">
-      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.status.postCount ?: 0}"
+      <a th:href="@{${t.status.permalink}}" th:with="postCount=${t.postCount ?: 0}"
         class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
         th:classappend="${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'bg-base-100 text-base-content shadow-sm dark:bg-base-100/90' : 'text-base-content/50 hover:text-base-content hover:bg-base-100/60'"
-        th:data-collapsible="${needsCollapse and iterStat.index >= maxVisible}"
-        th:style="${needsCollapse and iterStat.index >= maxVisible ? 'display: none' : ''}"
-        th:attr="x-init=${needsCollapse and iterStat.index >= maxVisible and currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'expanded = true' : null"
-        x-effect="if ($el.dataset.collapsible === 'true') { $el.style.display = expanded ? '' : 'none' }">
+        data-tag-item
+        th:attr="aria-current=${currentTag != null and currentTag.metadata.name == t.metadata.name} ? 'page' : null"
+        x-effect="$el.style.display = expanded || $el.dataset.collapsible !== 'true' ? '' : 'none'">
         <span th:text="${t.spec.displayName}"></span>
         <span th:if="${postCount > 0}" class="px-1.5 py-0.5 rounded-md text-xs bg-base-content/10"
           th:text="${postCount}"></span>
@@ -163,7 +194,8 @@
     </th:block>
 
     <!-- 展开/收起 -->
-    <button th:if="${needsCollapse}" @click="expanded = !expanded"
+    <button type="button" th:if="${needsCollapse}" @click="expanded = !expanded"
+      :aria-expanded="expanded" :aria-label="expanded ? '收起标签' : '展开另外 ' + hiddenCount + ' 个标签'"
       class="px-4 py-2 rounded-xl text-sm font-medium text-primary/70 hover:text-primary hover:bg-base-100/60 transition-all duration-200 cursor-pointer">
       <span x-show="!expanded" class="inline-flex items-center gap-1">
         <span th:text="'+' + ${totalTags - maxVisible}"></span>

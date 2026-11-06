@@ -67,23 +67,6 @@
                     <p class="text-lg font-medium">装备数据加载失败</p>
                 </div>
 
-                <!-- 评论区 -->
-                <th:block th:if="${cfg?.feature_settings?.enable_comment != false}">
-                    <div class="flex items-center gap-3 mb-5 mt-16">
-                        <div
-                            class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ">
-                            <span class="icon-[heroicons--chat-bubble-left-right] w-4 h-4 text-primary"></span>
-                        </div>
-                        <h2 class="text-lg font-semibold text-base-content">评论留言</h2>
-                    </div>
-                    <div class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6 card">
-                        <halo:comment th:if="${equipmentName != null}" group="equipment.kunkunyu.com"
-                            kind="EquipmentPage" th:name="${equipmentName}" colorScheme="system"></halo:comment>
-                        <halo:comment th:unless="${equipmentName != null}" group="plugin.halo.run" kind="Plugin"
-                            th:name="${pluginName != null ? pluginName : 'PluginEquipment'}" colorScheme="system">
-                        </halo:comment>
-                    </div>
-                </th:block>
             </section>
 
             <!-- 侧边栏 -->

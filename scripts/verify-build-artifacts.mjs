@@ -34,6 +34,9 @@ const logicalChunks = [
   "article-heatmap-data",
   "auth-common",
   "debug",
+  "external-links",
+  "history",
+  "modal-focus",
   "page-runtime",
   "toc-utils",
 ];

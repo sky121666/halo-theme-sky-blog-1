@@ -16,8 +16,8 @@
            displayCfg = ${rootCfg.display_settings},
            pageTitle = ${!#strings.isEmpty(cfg?.page_title) ? cfg.page_title : (!#strings.isEmpty(linksTitle) ? linksTitle : '友情链接')},
            selectedGroupExists = ${#strings.isEmpty(group) or (simpleGroups != null and #lists.contains(simpleGroups.![metadata.name], group))},
-           hasCommentWidget = ${pluginFinder.available('PluginCommentWidget', '>=3.1.2')},
-           canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled and hasCommentWidget},
+           hasLinkCards = ${groups != null and !#lists.isEmpty(groups.?[links != null and !#lists.isEmpty(links)])},
+           canUseComments = ${cfg?.enable_comment != false and haloCommentEnabled},
            hasLatestLinks = ${pluginFinder.available('PluginLinks', '>=2.2.1')},
            showLinkFeeds = ${hasLatestLinks and displayCfg?.show_link_feeds != false},
            currentView = ${param.view != null and !#lists.isEmpty(param.view) ? param.view[0] : ''},
@@ -37,6 +37,9 @@
     data-plugin-links-contract="PluginLinks>=2.2.1"
     th:data-plugin-links-available="${hasLatestLinks}"
     th:data-plugin-links-title="${linksTitle}"
+    th:data-links-default-title="${pageTitle}"
+    th:data-links-default-description="${cfg?.page_description ?: '感谢这些优秀的网站与博客'}"
+    th:data-links-comments-enabled="${canUseComments}"
     th:data-link-application-enabled="${pluginFinder.available('PluginLinks', '>=2.3.0') and linkApplicationEnabled == true}"
     th:data-feed-prefetch-key="${feedPrefetchKey}"
     th:data-feed-prefetch-has-next="${linkFeedPage != null and linkFeedPage.hasNext}"
@@ -58,7 +61,8 @@
             </h1>
             <p
               class="text-base-content/50 mt-1 max-w-2xl"
-              th:text="${currentView == 'friends' ? '来自友链接阅的最新内容，支持未读、收藏与稍后阅读' : (currentView == 'apply' ? '提交站点信息，管理员审核后将出现在友链列表中' : (cfg?.page_description ?: '感谢这些优秀的网站与博客'))}"
+              th:text="${currentView == 'friends' ? '来自友链公开订阅的最近更新' : (cfg?.page_description ?: '感谢这些优秀的网站与博客')}"
+              th:hidden="${currentView == 'apply'}"
               data-links-page-description
             >
               感谢这些优秀的网站与博客
@@ -146,7 +150,7 @@
                 class="link-group"
                 th:with="displayLinks=${linkGroup.links}"
                 th:data-link-group-section="${linkGroup.metadata.name}"
-                th:hidden="${!#strings.isEmpty(group) and linkGroup.metadata.name != group}"
+                th:hidden="${!#strings.isEmpty(group) ? linkGroup.metadata.name != group : (displayLinks == null or #lists.isEmpty(displayLinks))}"
               >
                 <!-- 分组标题 -->
                 <div class="mb-5 flex items-center gap-3">
@@ -263,7 +267,7 @@
 
           <!-- 无友链提示 -->
           <div
-            th:if="${groups == null or #lists.isEmpty(groups)}"
+            th:hidden="${!#strings.isEmpty(group) or hasLinkCards}"
             data-links-empty
             data-links-empty-state="all-empty"
             class="bg-base-100/60 border-base-content/5 rounded-2xl border backdrop-blur-xl"
@@ -319,22 +323,6 @@
               </section>
             </div>
 
-            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
-                  <span class="icon-[heroicons--rss] text-primary h-4 w-4" aria-hidden="true"></span>
-                </div>
-                <div>
-                  <h2 class="text-base-content text-lg font-semibold" data-feed-results-title>友链动态</h2>
-                  <p class="text-base-content/50 text-xs" data-feed-results-description>来自友链公开订阅的最近更新</p>
-                </div>
-              </div>
-              <span class="badge badge-ghost badge-sm gap-1">
-                RSS
-                <span data-feed-unread-count class="badge badge-primary badge-xs" hidden>0</span>
-              </span>
-            </div>
-
             <nav class="links-scroll-nav mb-4 flex gap-2 overflow-x-auto pb-1" aria-label="动态范围">
               <button type="button" class="btn btn-sm border-base-content/10 shrink-0 rounded-full" data-feed-scope="all">
                 <span class="icon-[heroicons--rss] h-3.5 w-3.5" aria-hidden="true"></span>
@@ -349,6 +337,7 @@
               >
                 <span class="icon-[heroicons--inbox] h-3.5 w-3.5" aria-hidden="true"></span>
                 未读
+                <span data-feed-unread-count class="badge badge-primary badge-xs" hidden>0</span>
               </button>
               <button
                 type="button"
@@ -405,8 +394,9 @@
                   </th:block>
                 </select>
               </label>
-              <span class="text-base-content/35 text-[11px]">分组与来源互斥，分组优先（groupName &gt; linkName）</span>
             </div>
+
+            <p data-feed-detail-notice role="status" aria-live="polite" class="text-base-content/60 mb-4 text-sm" hidden></p>
 
             <div
               data-feed-state
@@ -444,16 +434,18 @@
                 data-feed-read-later="false"
                 class="list-row border-base-content/[0.06] border-b last:border-b-0"
               >
-                <div class="bg-base-200/60 flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl">
+                <div class="bg-base-200/60 relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl">
                   <img
                     th:if="${!#strings.isEmpty(feed.authorLogo)}"
                     th:src="${feed.authorLogo}"
                     alt=""
                     loading="lazy"
-                    class="h-full w-full object-cover"
+                    class="absolute inset-0 h-full w-full object-cover"
+                    style="opacity: 0"
+                    data-feed-avatar-image
                   />
                   <span
-                    th:if="${#strings.isEmpty(feed.authorLogo)}"
+                    data-feed-avatar-fallback
                     class="icon-[heroicons--rss] text-base-content/30 h-5 w-5"
                     aria-hidden="true"
                   ></span>
@@ -485,26 +477,13 @@
             th:hidden="${currentView != 'apply'}"
           >
             <section class="link-group">
-              <div class="mb-5 flex items-center gap-3">
-                <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
-                  <span class="icon-[heroicons--paper-airplane] text-primary h-4 w-4" aria-hidden="true"></span>
-                </div>
-                <h2 class="text-base-content text-lg font-semibold">提交友链申请</h2>
-              </div>
-
               <form
                 class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 shadow-sm backdrop-blur-xl sm:p-8"
                 data-link-apply-form
                 novalidate
               >
-                <div
-                  class="mb-6 flex items-start gap-2.5 rounded-xl border border-base-content/10 bg-base-200/50 px-4 py-3 text-xs leading-relaxed text-base-content/60"
-                >
-                  <span class="icon-[heroicons--information-circle] text-info h-4 w-4 shrink-0" aria-hidden="true"></span>
-                  <span data-apply-capability>正在确认可用的识别与提交方式…</span>
-                </div>
-
                 <div class="grid gap-5">
+                  <p class="text-base-content/60 text-xs leading-relaxed" data-apply-action-hint aria-live="polite">正在确认申请方式…</p>
                   <fieldset>
                     <legend class="mb-1.5 block text-xs font-medium text-base-content/60">申请类型</legend>
                     <div class="links-apply-type flex gap-2">
@@ -519,31 +498,34 @@
                     </div>
                   </fieldset>
 
-                  <label>
-                    <span class="mb-1.5 block text-xs font-medium text-base-content/60">
+                  <div>
+                    <label for="links-apply-url" class="mb-1.5 block text-xs font-medium text-base-content/60">
                       站点地址 <span class="text-error">*</span>（仅 HTTP/HTTPS）
-                    </span>
-                    <span class="links-apply-url-row flex gap-2">
+                    </label>
+                    <div class="links-apply-url-row flex gap-2">
                       <input
+                        id="links-apply-url"
                         class="input min-w-0 flex-1"
                         type="url"
                         name="url"
                         inputmode="url"
                         autocomplete="url"
+                        aria-describedby="links-apply-identify-status"
                         placeholder="https://example.com"
                         required
                       />
-                      <button type="button" class="btn btn-ghost bg-base-200/50 hover:bg-base-200 shrink-0 rounded-xl" data-apply-identify>
+                      <button type="button" class="btn btn-ghost bg-base-200/50 hover:bg-base-200 shrink-0 rounded-xl" data-apply-identify aria-describedby="links-apply-identify-status">
                         <span class="icon-[heroicons--magnifying-glass] h-4 w-4" aria-hidden="true"></span>
                         识别
                       </button>
-                    </span>
-                  </label>
+                    </div>
+                    <p id="links-apply-identify-status" data-apply-identify-status role="status" aria-live="polite" aria-atomic="true" class="mt-2 text-xs leading-relaxed" hidden></p>
+                  </div>
 
                   <div class="grid gap-5 sm:grid-cols-2">
                     <label>
                       <span class="mb-1.5 block text-xs font-medium text-base-content/60">站点名称 <span class="text-error">*</span></span>
-                      <input class="input w-full" type="text" name="displayName" maxlength="120" placeholder="displayName" required />
+                      <input class="input w-full" type="text" name="displayName" maxlength="120" placeholder="你的网站名称" required />
                     </label>
                     <label>
                       <span class="mb-1.5 block text-xs font-medium text-base-content/60">Logo 地址</span>
@@ -600,14 +582,13 @@
                   <div class="links-form-actions mt-1 flex flex-wrap items-center gap-3">
                     <button type="submit" class="btn btn-primary rounded-xl shadow-lg" data-apply-submit>
                       <span class="icon-[heroicons--paper-airplane] h-4 w-4" aria-hidden="true"></span>
-                      <span data-apply-submit-label>生成申请 Markdown</span>
+                      <span data-apply-submit-label>生成申请内容</span>
                     </button>
-                    <span class="text-base-content/40 text-xs" data-apply-action-hint>生成 Markdown 后到留言板提交，等待管理员审核</span>
                   </div>
 
                   <div data-apply-output hidden>
                     <label class="mb-1.5 block text-xs font-medium text-base-content/60" for="links-apply-markdown">
-                      生成的申请 Markdown（复制后前往留言板提交）
+                      申请内容
                     </label>
                     <textarea
                       id="links-apply-markdown"
@@ -619,9 +600,9 @@
                     <div class="links-form-actions mt-3 flex flex-wrap gap-2">
                       <button type="button" class="btn btn-primary btn-sm rounded-xl shadow-lg" data-apply-copy>
                         <span class="icon-[heroicons--clipboard-document] h-4 w-4" aria-hidden="true"></span>
-                        复制 Markdown
+                        复制内容
                       </button>
-                      <button type="button" class="btn btn-ghost btn-sm bg-base-200/50 hover:bg-base-200 rounded-xl" data-apply-board>
+                      <button type="button" class="btn btn-ghost btn-sm bg-base-200/50 hover:bg-base-200 rounded-xl" data-apply-board th:hidden="${!canUseComments}">
                         <span class="icon-[heroicons--chat-bubble-left-right] h-4 w-4" aria-hidden="true"></span>
                         前往留言板提交
                       </button>
@@ -642,9 +623,9 @@
               <span class="icon-[heroicons--information-circle] h-5 w-5" aria-hidden="true"></span>
               <div>
                 <h2 class="font-semibold">暂未开放友链申请</h2>
-                <p class="mt-1 text-sm opacity-70">你仍可以在留言板与站长联系。</p>
+                <p th:if="${canUseComments}" class="mt-1 text-sm opacity-70">你仍可以在留言板与站长联系。</p>
               </div>
-              <button type="button" class="btn btn-sm" data-links-view-trigger="board">前往留言板</button>
+              <button th:if="${canUseComments}" type="button" class="btn btn-sm" data-links-view-trigger="board">前往留言板</button>
             </div>
           </section>
 
@@ -682,22 +663,7 @@
             id="links-comments"
             class="links-board-section mt-12"
           >
-            <div class="mb-5 flex items-center gap-3">
-              <div class="from-primary/20 to-primary/10 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br">
-                <span class="icon-[mdi--comment-text-outline] text-primary h-4 w-4" aria-hidden="true"></span>
-              </div>
-              <div>
-                <h2 class="text-base-content text-lg font-semibold">评论留言</h2>
-                <p class="text-base-content/50 text-xs">提交友链申请、分享想法或打个招呼</p>
-              </div>
-            </div>
-            <div class="alert alert-soft">
-              <span class="icon-[heroicons--chat-bubble-left-right] h-5 w-5" aria-hidden="true"></span>
-              <div>
-                <h3 class="font-semibold">留言组件暂不可用</h3>
-                <p class="mt-1 text-sm opacity-70">页面可以正常浏览，但当前站点未启用 PluginCommentWidget。</p>
-              </div>
-            </div>
+            <p role="status" class="text-base-content/50 text-sm">留言已关闭</p>
           </section>
 
           <!-- 普通友链详情：link 参数只选择资源，访问外站由弹窗中的明确按钮完成。 -->
@@ -809,15 +775,15 @@
                   data-feed-detail-toggle="favorite"
                 >
                   <span class="icon-[heroicons--star] h-4 w-4" aria-hidden="true"></span>
-                  收藏
+                  <span data-feed-detail-toggle-label>收藏</span>
                 </button>
                 <button type="button" class="btn btn-sm btn-ghost rounded-full" data-feed-detail-toggle="later">
                   <span class="icon-[heroicons--bookmark] h-4 w-4" aria-hidden="true"></span>
-                  稍后阅读
+                  <span data-feed-detail-toggle-label>稍后阅读</span>
                 </button>
                 <button type="button" class="btn btn-sm btn-ghost rounded-full" data-feed-detail-toggle="read">
                   <span class="icon-[heroicons--envelope-open] h-4 w-4" aria-hidden="true"></span>
-                  未读
+                  <span data-feed-detail-toggle-label>未读</span>
                 </button>
               </div>
               <div class="modal-action">

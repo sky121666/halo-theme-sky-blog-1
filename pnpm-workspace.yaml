@@ -11,6 +11,11 @@ allowBuilds:
   esbuild@0.28.2: true
 
 overrides:
+  # Security fixes scoped to verified build-tool callers; remove when upstream adopts them.
+  "@eslint/config-array@0.23.5>minimatch": 11.0.4
+  "@typescript-eslint/typescript-estree@8.70.1>minimatch": 11.0.4
+  "archiver-utils@5.0.2>glob": 14.0.3
+  "eslint@10.11.0>minimatch": 11.0.4
   "@humanfs/node@0.16": 0.16.8
   "brace-expansion@2": 2.1.7
   "brace-expansion@5": 5.0.12
@@ -19,7 +24,7 @@ overrides:
   "js-yaml@4": 4.3.2
   "lodash@4": 4.18.1
   "minimatch@5": 5.1.9
-  "minimatch@9": 9.0.9
   "nanoid@3": 3.3.19
+  "source-map-js@1": 1.2.2
   "svgo@4": 4.1.0
   "yaml@2": 2.9.1

@@ -3,17 +3,6 @@
  * 认证页面通用脚本
  */
 
-// 密码显示切换
-document.querySelectorAll('.toggle-password-button').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-        const wrapper = this.closest('.toggle-password-display-flag');
-        const input = wrapper.querySelector('input');
-        const isShowing = wrapper.dataset.show === 'true';
-        wrapper.dataset.show = isShowing ? 'false' : 'true';
-        input.type = isShowing ? 'password' : 'text';
-    });
-});
-
 // 密码确认验证
 window.setupPasswordConfirmation = function (passwordId, confirmPasswordId) {
     const password = document.getElementById(passwordId);

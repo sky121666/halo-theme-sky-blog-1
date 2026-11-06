@@ -84,6 +84,7 @@ class EmojiSelector {
    * 显示表情选择器
    */
   show(targetElement, triggerElement) {
+    (targetElement.closest('[aria-modal="true"]') || document.body).appendChild(this.selectorElement);
     this.currentTarget = targetElement;
     this.isVisible = true;
     

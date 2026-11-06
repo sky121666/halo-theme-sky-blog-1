@@ -18,14 +18,14 @@
     <div class="space-y-2">
         <div class="flex items-center justify-between">
             <label for="plainPassword" class="block text-sm font-medium text-base-content/70">密码</label>
-            <a class="text-sm text-primary/80 hover:text-primary transition-colors" tabindex="-1"
+            <a class="text-sm text-primary/80 hover:text-primary transition-colors"
                 th:href="@{/password-reset/email}">忘记密码?</a>
         </div>
         <div class="relative toggle-password-display-flag">
             <input id="plainPassword" type="password" placeholder="请输入密码" autocomplete="off" spellcheck="false"
                 autocorrect="off" autocapitalize="off" required maxlength="257" class="premium-input pr-12" />
             <!-- 密码显示/隐藏切换 -->
-            <div
+            <button type="button" aria-label="显示密码" aria-controls="plainPassword" aria-pressed="false"
                 class="absolute right-4 top-1/2 -translate-y-1/2 toggle-password-button cursor-pointer text-base-content/40 hover:text-base-content transition-colors">
                 <svg class="password-hidden-icon w-5 h-5" style="display: none" viewBox="0 0 24 24">
                     <path fill="currentColor"
@@ -37,7 +37,28 @@
                         d="M17.883 19.297A10.949 10.949 0 0 1 12 21c-5.392 0-9.878-3.88-10.818-9A10.982 10.982 0 0 1 4.52 5.935L1.394 2.808l1.414-1.414l19.799 19.798l-1.414 1.415l-3.31-3.31ZM5.936 7.35A8.965 8.965 0 0 0 3.223 12a9.005 9.005 0 0 0 13.201 5.838l-2.028-2.028A4.5 4.5 0 0 1 8.19 9.604L5.936 7.35Zm6.978 6.978l-3.242-3.241a2.5 2.5 0 0 0 3.241 3.241Zm7.893 2.265l-1.431-1.431A8.935 8.935 0 0 0 20.778 12A9.005 9.005 0 0 0 9.552 5.338L7.974 3.76C9.221 3.27 10.58 3 12 3c5.392 0 9.878 3.88 10.819 9a10.947 10.947 0 0 1-2.012 4.593Zm-9.084-9.084a4.5 4.5 0 0 1 4.769 4.769l-4.77-4.77Z">
                     </path>
                 </svg>
-            </div>
+            </button>
         </div>
     </div>
+    <th:block th:replace="~{login_local::passwordDisplayState}"></th:block>
 </div>
+
+<th:block th:fragment="passwordDisplayState">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".toggle-password-display-flag").forEach(function (container) {
+                const input = container.querySelector("input");
+                const button = container.querySelector(".toggle-password-button");
+                if (!input || !button || button.dataset.passwordStateBound) return;
+                button.dataset.passwordStateBound = "true";
+
+                // Halo owns the click handler; observe its result for accessible toggle state.
+                const updateState = function () {
+                    button.setAttribute("aria-pressed", String(input.type === "text"));
+                };
+                new MutationObserver(updateState).observe(input, { attributes: true, attributeFilter: ["type"] });
+                updateState();
+            });
+        });
+    </script>
+</th:block>
