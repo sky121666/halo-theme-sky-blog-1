@@ -3,11 +3,11 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
 
-const typescriptFiles = ["src/**/*.ts", "vite.config.ts", "scripts/**/*.{ts,mts,cts}"];
+const typescriptFiles = ["src/**/*.ts", "vite.config.ts", "ui-plugin/vite.config.ts", "scripts/**/*.{ts,mts,cts}"];
 
 export default [
   {
-    ignores: ["dist/**", "node_modules/**", "templates/assets/**", "src/static/qrcode/qrcode.min.js"],
+    ignores: ["dist/**", "ui-plugin/dist/**", "node_modules/**", "templates/assets/**", "src/static/qrcode/qrcode.min.js"],
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended.map((config) => ({

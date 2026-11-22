@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#e9eef7"/>
+  <defs>
+    <linearGradient id="photo" x2="1" y2="1">
+      <stop stop-color="#b9c8e6"/>
+      <stop offset="1" stop-color="#e0d9f4"/>
+    </linearGradient>
+    <g id="simple">
+      <rect x="0.5" y="0.5" width="48" height="67" rx="9" fill="#fff" stroke="#b4c5e0"/>
+      <rect x="3" y="3" width="43" height="34" rx="7" fill="url(#photo)"/>
+      <rect x="17" y="11" width="16" height="16" rx="3" fill="#7f91ae"/>
+      <path d="M21 15h8v8h-8z" fill="#cfdbef"/>
+      <rect x="8" y="43" width="26" height="4" rx="2" fill="#4f5d75"/>
+      <rect x="8" y="51" width="31" height="2.5" rx="1.25" fill="#a1aec3"/>
+      <rect x="8" y="59" width="31" height="2.5" rx="1.25" fill="#d7dfee"/>
+      <rect x="8" y="59" width="21" height="2.5" rx="1.25" fill="#9183d3"/>
+    </g>
+  </defs>
+  <use href="#simple" x="11" y="10"/>
+  <use href="#simple" x="68" y="10"/>
+</svg>

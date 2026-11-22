@@ -4,5 +4,5 @@
     "lib": ["ESNext"],
     "types": ["node"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "ui-plugin/vite.config.ts"]
 }

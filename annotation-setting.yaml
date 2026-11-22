@@ -29,23 +29,30 @@ spec:
     group: equipment.kunkunyu.com
     kind: Equipment
   formSchema:
-    # 卡片风格选择
-    - $formkit: "select"
+    - $formkit: toggle
       id: cardStyle
       name: "cardStyle"
-      label: "卡片风格"
-      help: "选择装备卡片的视觉风格"
+      label: 卡片强调色
+      help: 仅用于当前装备。主题色跟随站点主色。
+      render-type: image
+      size: 66
+      gap: 8
       options:
         - label: "白银"
           value: "silver"
+          render: /themes/theme-sky-blog-1/assets/previews/equipment/silver.svg
         - label: "黄金"
           value: "gold"
+          render: /themes/theme-sky-blog-1/assets/previews/equipment/gold.svg
         - label: "炫彩"
           value: "rainbow"
+          render: /themes/theme-sky-blog-1/assets/previews/equipment/rainbow.svg
         - label: "自定义颜色"
           value: "custom"
+          render: /themes/theme-sky-blog-1/assets/previews/equipment/custom.svg
         - label: "主题色"
           value: "theme"
+          render: /themes/theme-sky-blog-1/assets/previews/equipment/theme.svg
       value: "gold"
 
     # 自定义颜色 (仅 custom 模式生效)
@@ -78,7 +85,7 @@ spec:
     - $formkit: "iconify"
       name: "icon"
       label: "菜单图标"
-      help: "填入完整的 SVG 代码，将显示在导航菜单和悬浮控制栏中"
+      help: "用于顶部菜单和悬浮栏。"
       format: svg
       value-only: true
 
@@ -129,27 +136,27 @@ spec:
     group: content.halo.run
     kind: Post
   formSchema:
-    - $formkit: select
+    - $formkit: radio
       id: post_copyright_notice_mode
       name: copyrightNoticeMode
       label: 底部声明
-      help: 跟随默认读取主题设置；自定义声明会直接显示，并展开下方结构化声明字段
+      options-class: &notice_radio_options flex flex-wrap gap-3
       value: inherit
       options:
-        - label: 跟随默认
+        - label: 跟随主题
           value: inherit
         - label: 显示
           value: show
         - label: 隐藏
           value: hide
-        - label: 自定义声明
+        - label: 自定义
           value: custom
-    - $formkit: select
+    - $formkit: radio
       id: post_copyright_notice_type
       name: copyrightNoticeType
       label: 声明类型
       if: "$get(post_copyright_notice_mode).value === 'custom'"
-      help: 决定前端声明卡片的文案结构
+      options-class: *notice_radio_options
       value: original
       options:
         - label: 原创

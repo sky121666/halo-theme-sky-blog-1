@@ -1,0 +1,75 @@
+<th:block th:fragment="styles" th:with="visual=${theme.config?.visual}">
+  <th:block th:if="${visual != null}">
+    <th:block th:replace="~{modules/card-glow :: profile(':root', 'site-', ${visual.card_base}, ${visual.interaction}, 'custom')}" />
+    <style th:if="${visual.card_base?.enabled == false}" data-card-glow-settings>
+      .sky-glow-card[data-glow-owner] {
+        --sky-glow-enabled: 0;
+      }
+    </style>
+    <th:block th:if="${visual.components != null and !#lists.isEmpty(visual.components)}">
+      <th:block th:each="targetId : ${ {'nav', 'widgets', 'home', 'reading', 'discovery', 'personal', 'integration', 'system'} }">
+        <th:block th:replace="~{modules/card-glow :: target(${visual.components}, ${targetId}, |.sky-glow-card[data-glow-owner='${targetId}']|)}" />
+      </th:block>
+      <th:block th:replace="~{modules/card-glow :: target(${visual.components}, 'home-page', ':where(#swup[data-page=index]) .sky-glow-card[data-glow-owner=home]')}" />
+      <th:block th:replace="~{modules/card-glow :: target(${visual.components}, 'post-page', ':where(#swup[data-page=post]) .sky-glow-card[data-glow-owner=reading]')}" />
+      <th:block th:each="plugin : ${ {'equipment': 'integration', 'douban': 'integration', 'bangumi': 'integration',
+        'steam': 'integration', 'doc': 'reading', 'links': 'personal', 'moments': 'personal', 'photos': 'personal'} }">
+        <th:block th:replace="~{modules/card-glow :: target(${visual.components}, |${plugin.key}-page|, |:where(#swup[data-page='${plugin.key}']) .sky-glow-card[data-glow-owner='${plugin.value}']|)}" />
+      </th:block>
+      <th:block th:each="targetId : ${ {'nav-bar', 'nav-dropdown', 'nav-account', 'nav-drawer',
+        'widget-author', 'widget-welcome', 'widget-steam', 'widget-bangumi',
+        'home-heatmap', 'home-docs', 'home-gallery', 'home-links', 'post-toc'} }">
+        <th:block th:replace="~{modules/card-glow :: target(${visual.components}, ${targetId}, |.sky-glow-card[data-glow-owner][data-glow-component='${targetId}']|)}" />
+      </th:block>
+    </th:block>
+  </th:block>
+</th:block>
+
+<th:block th:fragment="target(components, targetId, selector)"
+  th:with="profile=${components.^[#this != null and #this['id'] == #vars.targetId and (#this['mode'] == 'custom' or #this['mode'] == 'off')]}">
+  <th:block th:replace="~{modules/card-glow :: profile(${selector}, '', ${profile?.appearance}, ${profile?.interaction}, ${profile?.mode})}" />
+</th:block>
+
+<!-- Only fixed selectors, hex colors and bounded integers are emitted as CSS. -->
+<style th:fragment="profile(selector, prefix, appearance, interaction, mode)"
+  th:if="${mode == 'custom' or mode == 'off'}"
+  data-card-glow-settings
+  th:inline="css"
+  th:with="colorMode=${appearance?.color_mode},
+    light=${#strings.toString(appearance?.light_custom_color)},
+    dark=${#strings.toString(appearance?.dark_custom_color)},
+    strength=${#strings.toString(appearance?.strength)},
+    geometry=${appearance?.advanced_geometry == true ? appearance?.geometry : null},
+    geometryValues=${ { 'offset': geometry?.offset, 'blur': geometry?.blur, 'spread': geometry?.spread } },
+    geometryDefaults=${ { 'offset': 2, 'blur': 8, 'spread': 0 } },
+    stateProfile=${interaction?.state_profile},
+    states=${interaction?.states},
+    stateValues=${ { 'default': states?.default, 'hover': states?.hover, 'pressed': states?.pressed,
+      'selected': states?.selected, 'focus': states?.focus } },
+    stateDefaults=${ { 'default': 100, 'hover': 125, 'pressed': 85, 'selected': 135, 'focus': 120 } },
+    percentPattern='[0-9]{1,2}|1[0-9]{2}|200',
+    geometryPatterns=${ { 'offset': '-?([0-9]|1[0-6])', 'blur': '[0-9]|[1-3][0-9]|40', 'spread': '[0-9]|1[0-2]' } }">
+  [(${selector})] {
+    [# th:if="${prefix == ''}"]
+      --sky-glow-enabled: [(${mode == 'off' ? 0 : 1})];
+    [/]
+    [# th:if="${mode == 'custom'}"]
+      --sky-glow-[(${prefix})]light: [(${colorMode == 'primary' ? 'var(--color-primary)' : (colorMode == 'custom' and light != null and light.matches('^#[0-9A-Fa-f]{6}$') ? light : 'var(--color-base-content)')})];
+      --sky-glow-[(${prefix})]dark: [(${colorMode == 'primary' ? 'var(--color-primary)' : (colorMode == 'custom' and dark != null and dark.matches('^#[0-9A-Fa-f]{6}$') ? dark : 'var(--color-base-content)')})];
+      --sky-glow-[(${prefix})]strength: [(${strength != null and strength.matches(percentPattern) ? strength : 100})];
+      [# th:each="entry : ${geometryDefaults}"]
+        [# th:with="size=${#strings.toString(geometryValues[entry.key])},
+                    fallback=${entry.key == 'offset' and prefix == '' ? 'var(--sky-glow-offset-default, 2px)' : entry.value + 'px'}"]
+          --sky-glow-[(${prefix})][(${entry.key})]: [(${size != null and size.matches(geometryPatterns[entry.key]) ? size + 'px' : fallback})];
+        [/]
+      [/]
+      [# th:each="entry : ${stateDefaults}"]
+        [# th:with="value=${#strings.toString(stateValues[entry.key])}"]
+          --sky-glow-[(${prefix})][(${entry.key})]: [(${stateProfile == 'rest' ? 100 :
+            (stateProfile == 'interactive' and entry.key == 'default' ? 0 :
+            (stateProfile == 'custom' and value != null and value.matches(percentPattern) ? value : entry.value))})];
+        [/]
+      [/]
+    [/]
+  }
+</style>

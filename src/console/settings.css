@@ -1,0 +1,574 @@
+.sky-settings-errors {
+  margin-block: 8px 16px;
+  max-width: 32rem;
+  padding: 10px 12px;
+  border: 1px solid #f1d28b;
+  border-radius: 6px;
+  background: #fff9eb;
+  color: #652b00;
+  font-size: 13px;
+}
+
+.sky-settings-errors-heading {
+  font-weight: 600;
+}
+.sky-settings-errors ul {
+  margin-top: 4px;
+}
+.sky-settings-errors li + li {
+  margin-top: 4px;
+}
+.sky-settings-errors button {
+  min-height: 28px;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sky-settings-errors-notice {
+  margin-top: 6px;
+}
+
+:is(
+  .sky-settings-errors button,
+  [data-sky-settings-array-edit],
+  [data-sky-settings-array-add],
+  [data-sky-settings-array-remove],
+  [data-sky-settings-choices] [data-sky-settings-order-item]
+):focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.sky-settings-order-help {
+  margin-block-start: 6px;
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sky-settings-field-row:not([hidden]) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  align-items: start;
+  gap: 0 12px;
+  max-inline-size: 32rem;
+}
+
+.sky-settings-paired-field {
+  min-inline-size: 0;
+  padding-block: 8px;
+}
+
+.sky-settings-switch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: 6px 12px;
+  max-inline-size: 32rem;
+}
+
+.sky-settings-inline-switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 36px;
+  cursor: pointer;
+}
+
+.sky-settings-number-row,
+.sky-settings-choice-row {
+  min-inline-size: 0;
+  max-inline-size: 32rem;
+  padding-block: 6px;
+}
+
+.sky-settings-number-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--sky-settings-number-width, 4.5rem);
+  align-items: center;
+  gap: 8px;
+}
+
+.sky-settings-number-control,
+.sky-settings-number-input {
+  min-inline-size: 0;
+}
+
+.sky-settings-number-input {
+  padding-inline: 8px;
+}
+
+.sky-settings-choice-layout {
+  display: grid;
+  grid-template-columns: fit-content(var(--sky-settings-choice-label-width, 5.5rem)) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sky-settings-choice-label {
+  float: inline-start;
+  overflow-wrap: anywhere;
+}
+
+.sky-settings-choice-row.sky-setting-segments .sky-settings-choice-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  margin-block-start: 0;
+  padding: 2px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f6f7f9;
+  column-gap: 2px;
+  row-gap: 2px;
+}
+
+.sky-settings-choice-row.sky-setting-segments .formkit-wrapper {
+  min-block-size: 30px;
+  margin: 0;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+}
+
+.sky-settings-choice-row.sky-setting-segments .formkit-wrapper:hover {
+  border: 0;
+  background: #eef0f3;
+}
+
+.sky-settings-choice-row.sky-setting-segments .formkit-wrapper:has(input:checked) {
+  border: 0;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px #4ccba0,
+    0 1px 2px rgb(15 23 42 / 0.08);
+  color: #146846;
+}
+
+.sky-settings-choice-row.sky-setting-segments .formkit-wrapper:has(input:focus-visible) {
+  outline-offset: 0;
+}
+
+.sky-settings-style-picker {
+  container-type: inline-size;
+  min-inline-size: 0;
+}
+
+.sky-settings-preview-layout {
+  padding: 0;
+  border: 0;
+}
+
+.sky-settings-preview.sky-settings-style-picker .sky-settings-preview-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-block-start: 8px;
+  padding: 0;
+}
+
+.sky-settings-preview.sky-settings-style-picker .sky-settings-preview-option {
+  padding: 8px;
+}
+
+@container (max-width: 380px) {
+  .sky-settings-preview.sky-settings-style-picker .sky-settings-preview-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sky-settings-details.sky-settings-palette-editor[open] > summary {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.sky-settings-palette-heading,
+.sky-settings-palette-current {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.sky-settings-palette-heading {
+  flex: 1;
+  justify-content: space-between;
+  gap: 2px 12px;
+  min-inline-size: 0;
+}
+
+.sky-settings-palette-current {
+  gap: 2px 12px;
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.sky-settings-palette-current [data-palette="cmyk"] {
+  text-transform: uppercase;
+}
+
+.sky-settings-palette-body {
+  display: grid;
+  gap: 12px;
+  min-inline-size: 0;
+  padding: 12px;
+  border: 1px solid #dfe3e8;
+  border-block-start: 0;
+  border-radius: 0 0 6px 6px;
+}
+
+.sky-settings-palette-body > .sky-settings-choice-row {
+  padding-block: 0;
+}
+
+.sky-settings-palette {
+  min-inline-size: 0;
+  padding-block-start: 12px;
+  border-block-start: 1px solid #e5e7eb;
+}
+
+.sky-settings-palette-editor .sky-settings-preview .sky-settings-palette-options {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 92px), 1fr));
+  margin: 0;
+  padding: 0;
+}
+
+.sky-settings-rules,
+.sky-post-list-cover {
+  min-inline-size: 0;
+  max-inline-size: 32rem;
+  margin: 0;
+  padding: 8px 12px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.sky-settings-group-title {
+  padding-inline: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sky-settings-rules > .sky-settings-note,
+.sky-settings-rule-list > .sky-settings-note {
+  padding-block-start: 0;
+}
+
+.sky-settings-rules .sky-settings-rule-empty {
+  color: #6b7280;
+}
+
+.sky-settings-rule-list:not([hidden]) {
+  display: grid;
+  gap: 12px;
+}
+
+.sky-settings-rule-list > .sky-settings-rule-array {
+  padding-block: 0;
+}
+
+.sky-settings-rule-array :has(> [data-sky-settings-array-edit]) {
+  min-block-size: 48px;
+  block-size: auto;
+  padding-block: 6px;
+}
+
+.sky-settings-rule-array [data-sky-settings-array-edit] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 4px;
+  min-inline-size: 0;
+  line-height: 1.3;
+}
+
+.sky-settings-rule-array [data-sky-settings-array-edit] > span {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sky-settings-rule-array [data-sky-settings-array-edit] > span:first-child {
+  flex-basis: 100%;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.sky-settings-rule-array [data-sky-settings-array-edit] > span:empty {
+  display: none;
+}
+
+.sky-settings-rule-array [data-sky-settings-array-edit] > span:not(:first-child),
+.sky-settings-rule-array [data-sky-settings-array-edit]::after {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #e9edf2;
+  color: #4b5563;
+  font-size: 11px;
+}
+
+#sidebar-overrides-panel [data-sky-settings-array-edit] > span:last-child:not(:first-child, :empty)::before {
+  content: "已配置 ";
+}
+
+#sidebar-overrides-panel [data-sky-settings-array-edit] > span:last-child:not(:first-child, :empty)::after {
+  content: " 个小工具";
+}
+
+:is(#sidebar-overrides-panel, #dock-overrides-panel)
+  [data-sky-settings-array-edit]:not(:has(> span:nth-child(n + 2):not(:empty)))::after {
+  content: "跟随上级" / "跟随上级";
+}
+
+/* The last sharing label holds the saved list and marks copy-only rules when empty. */
+:is(#sky-share-suites-panel, #sky-share-overrides-panel) [data-sky-settings-array-edit] > span:last-child {
+  display: none;
+}
+
+:is(#sky-share-suites-panel, #sky-share-overrides-panel)
+  [data-sky-settings-array-edit]:has(> span:last-child:empty)::after {
+  content: "仅复制链接" / "仅复制链接";
+}
+
+.sky-settings-rule-array [data-sky-settings-array-remove][aria-disabled="false"] {
+  opacity: 1;
+}
+
+.sky-post-list-scene:not([hidden]) {
+  display: grid;
+  gap: 16px;
+}
+
+.sky-home-content:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  max-width: 32rem;
+  padding-block: 8px;
+}
+
+.sky-home-content .formkit-outer {
+  min-inline-size: 0;
+  padding-block: 4px;
+}
+
+.sky-home-content > .formkit-outer,
+.sky-home-content-panel > .formkit-outer[data-type="group"],
+[data-sky-home-plugins] > .formkit-outer {
+  padding-block: 0;
+}
+
+.sky-home-content .sky-home-content-card {
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.sky-home-content .sky-home-content-card > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 12px;
+}
+
+.sky-home-content-card[open] > summary {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.sky-home-content-state {
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sky-home-content-panel {
+  padding: 4px 12px 8px;
+  border: 1px solid #dfe3e8;
+  border-block-start: 0;
+  border-radius: 0 0 6px 6px;
+}
+
+[data-sky-home-card="channels"] > summary {
+  min-block-size: 44px;
+  padding-inline: 16px;
+}
+
+[data-sky-home-card="channels"] > .sky-home-content-panel {
+  --sky-settings-choice-label-width: 4rem;
+  padding: 8px 16px 16px;
+}
+
+[data-sky-home-card="channels"] > .sky-home-content-panel > .sky-home-channel-group + .sky-home-channel-group {
+  border-block-start: 1px solid #e8ecf0;
+}
+
+.sky-settings-switch-number-row {
+  --sky-settings-number-width: 4.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--sky-settings-number-width) + 4rem);
+  align-items: center;
+  column-gap: 12px;
+  min-block-size: 50px;
+  padding-block: 6px;
+}
+
+.sky-home-content .sky-settings-switch-number-row > :is(.sky-settings-inline-switch, .sky-settings-number-row),
+.sky-home-content .sky-home-tab-options-list {
+  min-inline-size: 0;
+  padding-block: 0;
+}
+
+.sky-home-content .sky-settings-switch-number-row + .sky-settings-choice-row {
+  padding-block: 4px 0;
+}
+
+#sky-home-tab-options:not([hidden]) {
+  display: grid;
+  gap: 14px;
+  margin-block-start: 14px;
+  padding-block-start: 14px;
+  border-block-start: 1px solid #e8ecf0;
+}
+
+@media (width < 360px) {
+  [data-sky-home-card="channels"] > :is(summary, .sky-home-content-panel) {
+    padding-inline: 12px;
+  }
+
+  .sky-settings-switch-number-row {
+    --sky-settings-number-width: 3.125rem;
+    column-gap: 4px;
+  }
+
+  .sky-settings-switch-number-row .sky-settings-number-wrapper {
+    column-gap: 4px;
+  }
+
+  .sky-settings-switch-number-row .sky-settings-number-input {
+    padding-inline: 5px;
+  }
+}
+
+[data-sky-home-plugins] > div + div {
+  margin-block-start: 6px;
+}
+
+.sky-home-module-order,
+.sky-home-order-list {
+  display: grid;
+  gap: 6px;
+}
+
+.sky-home-order-list:empty {
+  display: none;
+}
+
+.sky-home-order-label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sky-home-order-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding-inline: 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.sky-home-order-row[data-dragging] {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.sky-home-order-row[data-drop="before"] {
+  box-shadow: inset 0 2px #2563eb;
+}
+
+.sky-home-order-row[data-drop="after"] {
+  box-shadow: inset 0 -2px #2563eb;
+}
+
+.sky-home-order-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.sky-home-order-row button {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: #475569;
+}
+
+.sky-home-order-row button:enabled:hover {
+  background: #e7edf4;
+  color: #1f2937;
+}
+
+.sky-home-order-row button:disabled {
+  color: #9ca3af;
+}
+
+.sky-home-order-handle:enabled {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.sky-home-order-handle:enabled:active {
+  cursor: grabbing;
+}
+
+.sky-home-order-handle::before {
+  width: 10px;
+  height: 15px;
+  background: radial-gradient(circle, currentColor 1px, transparent 1.2px) 0 0 / 5px 5px;
+  content: "";
+}
+
+.sky-home-order-add {
+  justify-self: start;
+  min-height: 34px;
+  padding-inline: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  color: #374151;
+  font-size: 14px;
+}
+
+.sky-home-module-order :is(button, select):focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+[data-sky-settings-array] div:empty:has(+ [data-sky-settings-array-add]) {
+  display: none;
+}
+
+[data-sky-settings-array-remove]:focus-visible,
+[data-sky-settings-array-edit]:focus-visible + [data-sky-settings-array-remove][aria-disabled="false"] {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  [data-sky-settings-array-remove][aria-disabled="false"] {
+    opacity: 1;
+  }
+}

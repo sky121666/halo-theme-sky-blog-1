@@ -1,0 +1,44 @@
+<th:block th:fragment="sidebar(host, content)"
+  th:with="settings=${theme.config?.components},
+           defaults=${settings?.sidebar_settings},
+           overrides=${settings?.sidebar_overrides},
+           suites=${settings?.sidebar_suites},
+           local=${overrides == null ? null : overrides.^[#this['host'] == #vars.host]},
+           applicable=${suites == null ? null : suites.?[#this['hosts'] != null and #lists.contains(#this['hosts'], #vars.host)]},
+           positionSuite=${applicable == null ? null : applicable.^[#this['position'] != null and #this['position'] != 'inherit']},
+           widgetsSuite=${applicable == null ? null : applicable.^[#this['override_widgets'] == true]},
+           sidebarHost=${host},
+           showSidebar=${local?.display != 'off' and local?.display != false},
+           sidebarPosition=${local?.position != null and local.position != 'inherit' ? local.position : (positionSuite?.position ?: (defaults?.position ?: 'right'))},
+           sidebarWidgets=${local?.override_widgets == true ? local.widgets : (widgetsSuite != null ? widgetsSuite.widgets : defaults?.widgets)}">
+  <th:block th:replace="${content}" />
+</th:block>
+
+<th:block th:fragment="dock(host, content)"
+  th:with="settings=${theme.config?.components},
+           defaults=${settings?.floating_dock},
+           overrides=${settings?.dock_overrides},
+           suites=${settings?.dock_suites},
+           local=${host == null or overrides == null ? null : overrides.^[#this['host'] == #vars.host]},
+           applicable=${host == null or suites == null ? null : suites.?[#this['hosts'] != null and #lists.contains(#this['hosts'], #vars.host)]},
+           styleSuite=${applicable == null ? null : applicable.^[#this['style'] != null and #this['style'] != 'inherit']},
+           menuSuite=${applicable == null ? null : applicable.^[#this['override_menu'] == true]},
+           backSuite=${applicable == null ? null : applicable.^[#this['back_to_top'] != null and #this['back_to_top'] != 'inherit']},
+           dockDisplay=${local?.display},
+           enableDock=${dockDisplay == 'on' or dockDisplay == true or (dockDisplay != 'off' and dockDisplay != false and defaults?.enable_dock != false)},
+           dockStyle=${local?.style != null and local.style != 'inherit' ? local.style : (styleSuite?.style ?: (defaults?.dock_style ?: 'bottom'))},
+           dockMenuName=${(local?.override_menu == true ? local.dock_menu : (menuSuite?.dock_menu ?: defaults?.dock_menu)) ?: 'primary'},
+           backSetting=${local?.back_to_top != null and local.back_to_top != 'inherit' ? local.back_to_top : backSuite?.back_to_top},
+           enableBackToTop=${backSetting != null ? (backSetting == 'on' or backSetting == true) : defaults?.enable_back_to_top != false}">
+  <th:block th:replace="${content}" />
+</th:block>
+
+<th:block th:fragment="share(host, content)"
+  th:with="settings=${theme.config?.components},
+           overrides=${settings?.share_overrides},
+           suites=${settings?.share_suites},
+           local=${overrides == null ? null : overrides.^[#this['host'] == #vars.host and #this['share_item_ids'] != null]},
+           suite=${suites == null ? null : suites.^[#this['hosts'] != null and #lists.contains(#this['hosts'], #vars.host) and #this['share_item_ids'] != null]},
+           shareItemIds=${local != null ? local.share_item_ids : (suite != null ? suite.share_item_ids : settings?.share_settings?.share_item_ids)}">
+  <th:block th:replace="${content}" />
+</th:block>

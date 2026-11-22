@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#e9eef7"/>
+  <defs>
+    <g id="tech">
+      <path d="M1 7l6-6h33l6 6v57l-6 6H7l-6-6z" fill="#1f2a3d" stroke="#526078"/>
+      <path d="M1 12V7l6-6h8m25 69 6-6v-7" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+      <rect x="7" y="8" width="19" height="2" rx="1" fill="#fbbf24"/>
+      <rect x="7" y="13" width="27" height="3" rx="1.5" fill="#dbe4f1"/>
+      <path d="M7 21h33v25H7z" fill="#354764" stroke="#667b9c"/>
+      <path d="M10 26v-3h5m22 18v3h-5" fill="none" stroke="#fbbf24"/>
+      <rect x="17" y="27" width="13" height="12" rx="2" fill="#9aaecb"/>
+      <path d="M20 30h7v6h-7z" fill="#465b7a"/>
+      <path d="M8 51h29m-29 5h20m-20 5h25" stroke="#a1b1c9" stroke-linecap="round" stroke-width="2"/>
+    </g>
+  </defs>
+  <use href="#tech" x="13" y="8"/>
+  <use href="#tech" x="68" y="8"/>
+</svg>

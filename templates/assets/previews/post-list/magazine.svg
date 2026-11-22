@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#eef2f8"/>
+  <defs>
+    <linearGradient id="cover" x2="0" y2="1">
+      <stop stop-color="#a9b9e7"/>
+      <stop offset="1" stop-color="#34415d"/>
+    </linearGradient>
+    <g id="tile">
+      <rect width="54" height="31" rx="5" fill="url(#cover)"/>
+      <path d="M3 22l16-16 9 9 7-4 16 11" fill="none" stroke="#e1e6fa" stroke-opacity=".46"/>
+      <circle cx="41" cy="7" r="3" fill="#e7eafd"/>
+      <rect x="6" y="17" width="13" height="3" rx="1.5" fill="#eee8ff" fill-opacity=".85"/>
+      <rect x="6" y="23" width="36" height="3.5" rx="1.75" fill="#fff"/>
+    </g>
+  </defs>
+  <use href="#tile" x="7" y="10"/>
+  <use href="#tile" x="67" y="10"/>
+  <use href="#tile" x="7" y="47"/>
+  <use href="#tile" x="67" y="47"/>
+</svg>

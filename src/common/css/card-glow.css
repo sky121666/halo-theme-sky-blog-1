@@ -1,0 +1,89 @@
+/* Keep the panel's elevation and Tailwind rings independent of its glow. */
+:where(.sky-glow-card) {
+  --sky-card-elevation: var(--tw-shadow, 0 0 transparent);
+}
+
+.sky-glow-card {
+  --sky-glow-enabled: 1;
+  --sky-glow-light: var(--sky-glow-site-light, var(--color-base-content));
+  --sky-glow-dark: var(--sky-glow-site-dark, var(--color-base-content));
+  --sky-glow-strength: var(--sky-glow-site-strength, 100);
+  --sky-glow-offset: var(--sky-glow-site-offset, 2px);
+  --sky-glow-blur: var(--sky-glow-site-blur, 8px);
+  --sky-glow-spread: var(--sky-glow-site-spread, 0px);
+  --sky-glow-default: var(--sky-glow-site-default, 100);
+  --sky-glow-hover: var(--sky-glow-site-hover, 125);
+  --sky-glow-pressed: var(--sky-glow-site-pressed, 85);
+  --sky-glow-selected: var(--sky-glow-site-selected, 135);
+  --sky-glow-focus: var(--sky-glow-site-focus, 120);
+
+  --sky-glow-color: var(--sky-glow-light);
+  --sky-glow-opacity: 7%;
+  --sky-glow-at-hover: initial;
+  --sky-glow-at-selected: initial;
+  --sky-glow-at-focus: initial;
+  --sky-glow-at-press: initial;
+  --sky-glow-current: var(--sky-glow-at-press,
+    var(--sky-glow-at-focus, var(--sky-glow-at-selected, var(--sky-glow-at-hover, var(--sky-glow-default)))));
+
+  --sky-glow-alpha: clamp(
+    0%,
+    calc(var(--sky-glow-opacity) * var(--sky-glow-strength) * var(--sky-glow-current)
+      * var(--sky-glow-enabled) / 10000),
+    100%
+  );
+  box-shadow:
+    var(--tw-inset-shadow, 0 0 transparent),
+    var(--tw-inset-ring-shadow, 0 0 transparent),
+    var(--tw-ring-offset-shadow, 0 0 transparent),
+    var(--tw-ring-shadow, 0 0 transparent),
+    var(--sky-card-elevation),
+    0 var(--sky-glow-offset) var(--sky-glow-blur) var(--sky-glow-spread)
+      color-mix(in srgb, var(--sky-glow-color) var(--sky-glow-alpha), transparent);
+}
+
+[data-color-scheme="dark"] .sky-glow-card {
+  --sky-glow-color: var(--sky-glow-dark);
+  --sky-glow-opacity: 15%;
+}
+
+@layer components {
+  .sky-glow-card {
+    transition: box-shadow 160ms ease;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sky-glow-card[data-glow-interaction~="hover"]:hover:not(:disabled, [aria-disabled="true"]) {
+    --sky-glow-at-hover: var(--sky-glow-hover);
+  }
+}
+
+.sky-glow-card[data-glow-interaction~="toggle"]:is(
+  [aria-selected="true"],
+  [aria-pressed="true"],
+  [aria-expanded="true"],
+  [aria-current="page"],
+  details[open]
+) {
+  --sky-glow-at-selected: var(--sky-glow-selected);
+}
+
+.sky-glow-card[data-glow-interaction~="focus"]:is(:focus-visible, :has([data-glow-trigger]:focus-visible)) {
+  --sky-glow-at-focus: var(--sky-glow-focus);
+  outline: 2px solid var(--color-base-content);
+  outline-offset: -2px;
+}
+
+.sky-glow-card[data-glow-interaction~="press"]:is(
+  :is(a[href], button:enabled, summary, [role="button"]):not([aria-disabled="true"]):active,
+  :has([data-glow-trigger]:active)
+) {
+  --sky-glow-at-press: var(--sky-glow-pressed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-glow-card[data-glow-owner] {
+    transition: none;
+  }
+}

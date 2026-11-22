@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#eef2f8"/>
+  <defs>
+    <g id="entry">
+      <rect x="0" y="0" width="25" height="2.5" rx="1.25" fill="#8391a7"/>
+      <circle cx="30" cy="1.25" r="1.25" fill="#a9a0de"/>
+      <rect x="35" y="0" width="13" height="2.5" rx="1.25" fill="#8391a7"/>
+      <rect x="0" y="8" width="61" height="5" rx="2.5" fill="#4f5d75"/>
+      <rect x="0" y="18" width="83" height="2.5" rx="1.25" fill="#a1aec3"/>
+      <rect x="0" y="23" width="63" height="2.5" rx="1.25" fill="#a1aec3"/>
+    </g>
+  </defs>
+  <use href="#entry" x="22" y="12"/>
+  <path d="M22 44h84" stroke="#cbd5e5"/>
+  <use href="#entry" x="22" y="52"/>
+</svg>

@@ -9,9 +9,9 @@
   },
   "scripts": {
     "build": "pnpm run build-only && theme-package && pnpm run verify:seo:package",
-    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:core-compatibility && pnpm run verify:global-content && pnpm run verify:ui-actions && pnpm run verify:doc-navigation && pnpm run verify:photos-lifecycle && pnpm run verify:page-cover && pnpm run verify:about-location && pnpm run verify:contact-form-lifecycle && pnpm run verify:restricted-reading-lifecycle && pnpm run verify:plugin-script-lifecycle && pnpm run verify:shiki-normalization && pnpm run verify:plugin-contracts && pnpm run verify:plugin-scope && pnpm run verify:links-runtime && pnpm run verify:plugin-upgrades && pnpm run verify:plugin-evidence && pnpm run verify:seo && pnpm run verify:heatmap && pnpm run verify:steam-heatmap && vite build && pnpm run verify:build-artifacts",
+    "build-only": "pnpm run typecheck && pnpm run typecheck:config && pnpm run verify:core-compatibility && pnpm run verify:global-content && pnpm run verify:ui-actions && pnpm run verify:doc-navigation && pnpm run verify:photos-lifecycle && pnpm run verify:page-cover && pnpm run verify:about-location && pnpm run verify:contact-form-lifecycle && pnpm run verify:restricted-reading-lifecycle && pnpm run verify:plugin-script-lifecycle && pnpm run verify:shiki-normalization && pnpm run verify:plugin-contracts && pnpm run verify:plugin-scope && pnpm run verify:links-runtime && pnpm run verify:plugin-upgrades && pnpm run verify:plugin-evidence && pnpm run verify:seo && pnpm run verify:heatmap && pnpm run verify:steam-heatmap && vite build && pnpm run build:settings && pnpm run verify:build-artifacts",
     "dev": "vite build --watch",
-    "lint": "eslint src scripts vite.config.ts eslint.config.js prettier.config.js postcss.config.cjs --max-warnings 0",
+    "lint": "eslint src scripts vite.config.ts ui-plugin/vite.config.ts eslint.config.js prettier.config.js postcss.config.cjs --max-warnings 0",
     "format": "prettier --write \"*.config.{js,cjs}\" \"**/*.{ts,json,yaml,yml,html}\"",
     "format:check": "prettier --check \"*.config.{js,cjs}\" \"**/*.{ts,json,yaml,yml,html}\"",
     "typecheck": "tsc --project tsconfig.json",
@@ -44,7 +44,8 @@
     "verify:template-data": "node scripts/verify-template-data.mjs",
     "verify:comment-contracts": "node scripts/verify-comment-contracts.mjs",
     "verify:plugin-scope": "node scripts/verify-plugin-pages-scope.mjs",
-    "verify:global-content": "node scripts/verify-global-content.mjs"
+    "verify:global-content": "node scripts/verify-global-content.mjs",
+    "build:settings": "vite build --config ui-plugin/vite.config.ts"
   },
   "dependencies": {
     "@swup/head-plugin": "2.3.1",
@@ -54,13 +55,17 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@formkit/core": "2.1.2",
     "@halo-dev/theme-package-cli": "1.1.1",
+    "@halo-dev/ui-plugin-bundler-kit": "2.27.0",
     "@iconify/json": "2.2.533",
     "@iconify/tailwind4": "1.2.3",
     "@tailwindcss/postcss": "4.3.3",
-    "@typescript/native": "npm:typescript@7.0.2",
     "@types/alpinejs": "3.13.11",
     "@types/node": "24.13.6",
+    "@typescript/native": "npm:typescript@7.0.2",
+    "@vitejs/plugin-vue": "6.0.6",
+    "axios": "1.16.1",
     "daisyui": "5.7.44",
     "esbuild": "0.28.2",
     "eslint": "10.11.0",
@@ -73,6 +78,7 @@
     "tailwindcss": "4.3.3",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-eslint": "8.70.1",
-    "vite": "8.3.6"
+    "vite": "8.3.6",
+    "vue": "3.5.41"
   }
 }

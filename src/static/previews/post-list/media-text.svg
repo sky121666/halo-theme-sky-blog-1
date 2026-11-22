@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#eef2f8"/>
+  <defs>
+    <g id="row">
+      <rect x="0.5" y="0.5" width="111" height="29" rx="5" fill="#fff" stroke="#c7d2e2"/>
+      <rect x="4" y="4" width="30" height="22" rx="3" fill="#d6dafa"/>
+      <path d="M7 24l7-9 5 5 5-4 6 8z" fill="#a5b2e0"/>
+      <circle cx="26" cy="9" r="2.5" fill="#fff"/>
+      <rect x="40" y="6" width="48" height="4" rx="2" fill="#4f5d75"/>
+      <rect x="40" y="14" width="62" height="2.5" rx="1.25" fill="#abb7cb"/>
+      <rect x="40" y="21" width="13" height="4" rx="2" fill="#ddd5f7"/>
+      <rect x="79" y="22" width="23" height="2" rx="1" fill="#abb7cb"/>
+    </g>
+  </defs>
+  <use href="#row" x="8" y="11"/>
+  <use href="#row" x="8" y="47"/>
+</svg>

@@ -893,11 +893,12 @@ for (let index = 0; index < settingsLines.length; index += 1) {
   const nodeIndent = propertyIndent - 2;
   let start = index - 1;
   while (start >= 0) {
-    const indent = settingsLines[start].match(/^\s*/)?.[0].length || 0;
-    if (indent === nodeIndent && /^\s*-\s+(\$formkit|\$el|\$cmp):/.test(settingsLines[start])) break;
+    const line = settingsLines[start];
+    if (line.trim() && !/^\s*#/.test(line) && line.search(/\S/) < propertyIndent) break;
     start -= 1;
   }
-  if (start < 0) continue;
+  const nodePattern = new RegExp(`^\\s{${nodeIndent}}-\\s+(\\$formkit|\\$el|\\$cmp):`);
+  if (start < 0 || !nodePattern.test(settingsLines[start])) continue;
 
   let end = index + 1;
   while (end < settingsLines.length) {

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="88" viewBox="0 0 128 88">
+  <rect width="128" height="88" rx="9" fill="#eef2f8"/>
+  <defs>
+    <g id="card">
+      <rect x="0.5" y="0.5" width="34" height="59" rx="5" fill="#fff" stroke="#c7d2e2"/>
+      <rect x="3" y="3" width="29" height="22" rx="3" fill="#d6dafa"/>
+      <path d="M6 23l7-9 5 5 5-4 6 8z" fill="#a5b2e0"/>
+      <circle cx="25" cy="9" r="2.5" fill="#fff"/>
+      <rect x="5" y="30" width="13" height="3" rx="1.5" fill="#a18ee5"/>
+      <rect x="5" y="37" width="24" height="3.5" rx="1.75" fill="#4f5d75"/>
+      <rect x="5" y="44" width="21" height="2.5" rx="1.25" fill="#abb7cb"/>
+      <path d="M5 51h25" stroke="#dce3ed"/>
+      <rect x="5" y="54" width="10" height="2" rx="1" fill="#abb7cb"/>
+    </g>
+  </defs>
+  <use href="#card" x="7" y="14"/>
+  <use href="#card" x="46.5" y="14"/>
+  <use href="#card" x="86" y="14"/>
+</svg>
