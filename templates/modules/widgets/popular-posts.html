@@ -6,7 +6,7 @@
 <!-- ========================================== -->
 
 <div th:fragment="list"
-  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5" th:with="cfg = ${theme.config.general.sidebar_settings},
+  data-glow-owner="widgets" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5" th:with="cfg = ${theme.config.components.sidebar_settings},
            postCount = ${cfg?.popular_posts_count ?: 5},
            popularPosts = ${postFinder.list({page: 1, size: postCount, sort: {'stats.visit,desc'}})}">
 

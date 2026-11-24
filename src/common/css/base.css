@@ -17,23 +17,6 @@
  */
 
 /* ========================================== */
-/* 页面切换时的持久化元素 */
-/* ========================================== */
-.navbar {
-  view-transition-name: navbar;
-}
-
-.footer {
-  view-transition-name: footer;
-}
-
-/* 
- * 只有在非 Safari 浏览器或明确支持时才为 main 启用
- * 防止在某些情况下内容区域闪烁
- */
-/* main { view-transition-name: main-content; } */
-
-/* ========================================== */
 /* 全局网格背景效果                           */
 /* ========================================== */
 .bg-grid-pattern {
@@ -470,32 +453,6 @@ html.theme-transitioning * {
   }
 }
 
-/* 深色模式组件微光效果 - 使用 data-color-scheme 统一判断亮暗模式 */
-/* 优势：无需枚举所有暗色主题，新增暗色主题自动生效 */
-
-/* 卡片组件阴影 */
-[data-color-scheme="dark"] .card {
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
-}
-
-[data-color-scheme="dark"] .card:hover {
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
-}
-
-/* 发光卡片效果 - 不影响布局的独立发光类 */
-[data-color-scheme="dark"] .glow-card {
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
-}
-
-[data-color-scheme="dark"] .glow-card:hover {
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
-}
-
-/* 模态框阴影 */
-[data-color-scheme="dark"] .modal-box {
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
-}
-
 /* 抽屉侧边栏阴影 */
 [data-color-scheme="dark"] .drawer-side > div {
   box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
@@ -574,11 +531,7 @@ html.theme-transitioning * {
 }
 
 /* 加载动画 GIF 尺寸 */
-#loading-screen .sky-loading-gif {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-}
+
 
 /* 滚动容器细滚动条 */
 .scrollbar-thin {
@@ -595,65 +548,6 @@ html.theme-transitioning * {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* ===================================================
- * View Transitions API - 页面过渡动画
- * 浏览器支持：Chrome 111+, Edge 111+, Safari 18+
- * 作为渐进增强，不支持的浏览器会自动忽略
- * ==================================================*/
-
-/* 启用页面导航过渡（MPA同文档导航） */
-@view-transition {
-  navigation: auto;
-}
-
-/* 页面过渡动画 - 淡入淡出 */
-::view-transition-old(root) {
-  animation: view-fade-out 0.3s ease-out both;
-  background-color: var(--color-base-100);
-}
-
-::view-transition-new(root) {
-  animation: view-fade-in 0.3s ease-in both;
-  animation-delay: 0.1s;
-  background-color: var(--color-base-100);
-}
-
-@keyframes view-fade-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-}
-
-@keyframes view-fade-in {
-  from {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* 减少动作偏好 - 尊重用户设置 */
-@media (prefers-reduced-motion: reduce) {
-  @view-transition {
-    navigation: none;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
   }
 }
 
@@ -995,37 +889,6 @@ article img[loading="lazy"] {
 
   .moment-grid-item::after {
     transition: none;
-  }
-}
-
-/* ===================================================
- * Swup PJAX 过渡动画
- * html[class~="swup-transition-fade"] 在切换期间由 swup 添加
- * ==================================================*/
-
-/* 内容区域淡出 */
-html.is-changing .transition-fade {
-  opacity: 1;
-  transition: opacity 0.18s ease-out;
-}
-html.is-animating .transition-fade {
-  opacity: 0;
-}
-
-/* #swup 内容区默认加过渡类 */
-#swup {
-  transition: opacity 0.18s ease;
-}
-html.is-animating #swup {
-  opacity: 0;
-}
-
-/* 减少动画偏好：关闭 swup 过渡 */
-@media (prefers-reduced-motion: reduce) {
-  #swup,
-  html.is-changing .transition-fade {
-    transition: none !important;
-    opacity: 1 !important;
   }
 }
 

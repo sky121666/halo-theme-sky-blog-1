@@ -7,12 +7,8 @@
 <!-- 变量：author (UserVo), posts (分页列表)    -->
 <!-- ========================================== -->
 
-<div class="relative" th:fragment="author-content" th:with="cfg = ${theme.config.author_settings},
-               sidebarCfg = ${cfg.sidebar_settings},
+<div class="relative" th:fragment="author-content" th:with="cfg = ${theme.config.pages.author},
                contentCfg = ${cfg?.content_settings},
-               globalSidebarCfg = ${theme.config.general.sidebar_settings},
-               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')},
                pageSize = ${contentCfg?.page_size ?: 10}">
 
   <!-- 主体内容区域 -->
@@ -20,11 +16,11 @@
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
 
       <!-- 左侧：作者信息 + 内容区 -->
-      <section class="flex-1 min-w-0" th:classappend="${sidebarCfg.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
+      <section class="flex-1 min-w-0" th:classappend="${not showSidebar ? 'max-w-4xl mx-auto' : ''}">
 
         <!-- ========== 作者信息卡片 ========== -->
         <div
-          class="author-hero card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl p-6 md:p-8 mb-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+          data-glow-owner="discovery" class="sky-glow-card author-hero card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl p-6 md:p-8 mb-8 relative overflow-hidden group transition-all duration-300">
           <!-- 背景装饰 -->
           <div
             class="absolute -top-20 -right-20 w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500">
@@ -112,11 +108,11 @@
               <div th:if="${posts.total > 0}" class="author-posts-list space-y-4">
                 <th:block th:each="post, stat : ${posts.items}">
                   <article
-                    class="group card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
+                    data-glow-owner="discovery" data-glow-interaction="hover press focus" class="sky-glow-card group card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-5 shadow-sm hover:border-primary/20 transition-all duration-300">
                     <!-- 封面 -->
                     <figure th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}"
                       class="relative w-full md:w-40 md:h-28 shrink-0 overflow-hidden rounded-xl">
-                      <a th:href="@{${post.status.permalink}}" class="block w-full aspect-video md:aspect-auto md:h-full">
+                      <a data-glow-trigger th:href="@{${post.status.permalink}}" class="block w-full aspect-video md:aspect-auto md:h-full">
                         <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy"
                           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                       </a>
@@ -124,12 +120,12 @@
                     <!-- 内容 -->
                     <div class="flex-1 flex flex-col min-w-0">
                       <h3 class="text-base md:text-lg font-bold leading-snug">
-                        <a th:href="@{${post.status.permalink}}" class="hover:text-primary transition-colors"
+                        <a data-glow-trigger th:href="@{${post.status.permalink}}" class="hover:text-primary transition-colors"
                           th:text="${post.spec.title}">文章标题</a>
                       </h3>
                       <p th:if="${post.status.excerpt != null and !#strings.isEmpty(post.status.excerpt)}"
                         class="mt-2 text-sm text-base-content/70 line-clamp-2 leading-relaxed">
-                        <a th:href="@{${post.status.permalink}}" class="hover:text-base-content"
+                        <a data-glow-trigger th:href="@{${post.status.permalink}}" class="hover:text-base-content"
                           th:text="${post.status.excerpt}">文章摘要...</a>
                       </p>
                       <div class="mt-auto pt-3 flex flex-wrap items-center justify-between gap-y-2">
@@ -169,7 +165,7 @@
               </div>
               <!-- 空状态 -->
               <div th:if="${posts.total == 0}"
-                class="card bg-base-100/80 backdrop-blur-sm border border-base-content/5 rounded-xl p-12 text-center">
+                data-glow-owner="discovery" class="sky-glow-card card bg-base-100/80 backdrop-blur-sm border border-base-content/5 rounded-xl p-12 text-center">
                 <span
                   class="icon-[heroicons--document-magnifying-glass] w-16 h-16 text-base-content/20 mx-auto mb-4"></span>
                 <p class="text-base-content/60">该作者暂未发布任何文章</p>
@@ -207,7 +203,7 @@
               <div role="tabpanel" class="tab-content pt-6">
                 <div class="space-y-4">
                   <article th:each="moment : ${authorMoments.items}" th:with="content=${moment.spec.content}"
-                    class="card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col min-w-0 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
+                    data-glow-owner="discovery" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-2xl p-4 md:p-5 flex flex-col min-w-0 shadow-sm hover:border-primary/20 transition-all duration-300">
                     <!-- 文本 -->
                     <div th:if="${not #strings.isEmpty(content.html)}"
                       class="prose prose-sm max-w-none text-base-content/80 mb-4 prose-a:text-primary hover:prose-a:text-primary-focus leading-relaxed [&_a.tag]:hidden"
@@ -350,9 +346,9 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${sidebarCfg.show_sidebar == true}"
+      <aside th:if="${showSidebar}"
         class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
       </aside>
 
     </div>

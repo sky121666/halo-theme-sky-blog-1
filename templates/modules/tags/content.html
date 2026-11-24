@@ -8,22 +8,18 @@
 
 <!-- 标签集合内容片段：/tags -->
 <div class="relative" th:fragment="tag-collection"
-  th:with="rootCfg = ${theme.config.tag_settings},
-               cfg = ${rootCfg.basic_info},
-               sidebarCfg = ${rootCfg.sidebar_settings},
-               globalSidebarCfg = ${theme.config.general.sidebar_settings},
-               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  th:with="rootCfg = ${theme.config.pages.tag},
+               cfg = ${rootCfg.basic_info}">
   <h1 class="sr-only">文章标签</h1>
   <!-- 主体内容区域（两列布局） -->
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：标签切换块与文章列表 -->
-      <section class="flex-1 min-w-0" th:classappend="${sidebarCfg.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
+      <section class="flex-1 min-w-0" th:classappend="${not showSidebar ? 'max-w-6xl mx-auto' : ''}">
         <th:block th:with="tags = ${tagFinder.listAll()}">
 
           <!-- 标签切换块 - 根据后台设置渲染不同风格 -->
-          <th:block th:switch="${theme.config.tag_settings.basic_info.tag_display_style}">
+          <th:block th:switch="${theme.config.pages.tag.basic_info.tag_display_style}">
             <th:block th:case="'pills'">
               <th:block th:replace="~{modules/tags/tag-switch :: pills(${tags}, null)}" />
             </th:block>
@@ -52,26 +48,26 @@
           <th:block th:with="posts=${collectionPosts}">
             <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
             <!-- 动态渲染不同风格的列表 -->
-            <th:block th:switch="${theme.config.tag_settings.basic_info.list_style}">
+            <th:block th:switch="${theme.config.components.post_lists.tag.list_style}">
               <th:block th:case="'modern'">
                 <th:block
-                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
+                  th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.components.post_lists.tag})}" />
               </th:block>
               <th:block th:case="'media_text'">
                 <th:block
-                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
+                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.components.post_lists.tag})}" />
               </th:block>
               <th:block th:case="'magazine'">
                 <th:block
-                  th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.tag_settings})}" />
+                  th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.components.post_lists.tag})}" />
               </th:block>
               <th:block th:case="'minimal'">
                 <th:block
-                  th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.tag_settings})}" />
+                  th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.components.post_lists.tag})}" />
               </th:block>
               <th:block th:case="*">
                 <th:block
-                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
+                  th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.components.post_lists.tag})}" />
               </th:block>
             </th:block>
 
@@ -90,9 +86,9 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${sidebarCfg.show_sidebar == true}"
+      <aside th:if="${showSidebar}"
         class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
       </aside>
     </div>
   </div>
@@ -100,23 +96,19 @@
 
 <!-- 标签归档内容片段：/tags/:slug -->
 <div class="relative" th:fragment="tag-archive"
-  th:with="rootCfg = ${theme.config.tag_settings},
-               cfg = ${rootCfg.basic_info},
-               sidebarCfg = ${rootCfg.sidebar_settings},
-               globalSidebarCfg = ${theme.config.general.sidebar_settings},
-               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+  th:with="rootCfg = ${theme.config.pages.tag},
+               cfg = ${rootCfg.basic_info}">
   <h1 class="sr-only" th:text="${tag.spec.displayName + ' 标签'}">标签文章</h1>
   <!-- 主体内容区域 -->
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：标签切换块与当前标签文章列表 -->
       <section class="flex-1 min-w-0"
-        th:classappend="${theme.config.tag_settings.sidebar_settings.show_sidebar != true ? 'max-w-6xl mx-auto' : ''}">
+        th:classappend="${not showSidebar ? 'max-w-6xl mx-auto' : ''}">
 
         <!-- 标签切换块 -->
         <th:block th:with="tags = ${tagFinder.listAll()}">
-          <th:block th:switch="${theme.config.tag_settings.basic_info.tag_display_style}">
+          <th:block th:switch="${theme.config.pages.tag.basic_info.tag_display_style}">
             <th:block th:case="'pills'">
               <th:block th:replace="~{modules/tags/tag-switch :: pills(${tags}, ${tag})}" />
             </th:block>
@@ -137,26 +129,26 @@
 
         <!-- 文章列表（当前标签） -->
         <p th:if="${posts.total == 0}" role="status" class="py-10 text-center text-base-content/60">暂无文章</p>
-        <th:block th:switch="${theme.config.tag_settings.basic_info.list_style}">
+        <th:block th:switch="${theme.config.components.post_lists.tag.list_style}">
           <th:block th:case="'modern'">
             <th:block
-              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
+              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.components.post_lists.tag})}" />
           </th:block>
           <th:block th:case="'media_text'">
             <th:block
-              th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.tag_settings})}" />
+              th:replace="~{modules/categories/list-media :: media_text(${posts}, ${theme.config.components.post_lists.tag})}" />
           </th:block>
           <th:block th:case="'magazine'">
             <th:block
-              th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.tag_settings})}" />
+              th:replace="~{modules/categories/list-magazine :: magazine(${posts}, ${theme.config.components.post_lists.tag})}" />
           </th:block>
           <th:block th:case="'minimal'">
             <th:block
-              th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.tag_settings})}" />
+              th:replace="~{modules/categories/list-minimal :: minimal(${posts}, ${theme.config.components.post_lists.tag})}" />
           </th:block>
           <th:block th:case="*">
             <th:block
-              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.tag_settings})}" />
+              th:replace="~{modules/categories/list-modern :: modern(${posts}, ${theme.config.components.post_lists.tag})}" />
           </th:block>
         </th:block>
 
@@ -173,9 +165,9 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${sidebarCfg.show_sidebar == true}"
+      <aside th:if="${showSidebar}"
         class="right-sidebar w-80 space-y-6 hidden lg:block sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
       </aside>
     </div>
   </div>

@@ -5,10 +5,10 @@
 
 // 导入文章页面特定样式（已包含 article-content.css）
 import './post.css';
-import { createModalFocus } from '../../common/js/modal-focus.js';
+import { mountContentDrawer } from '../../common/js/modal-focus.js';
 
 // 导入公共文章内容脚本
-import '../../static/js/article-content.js';
+
 
 // 导入 TOC 公共工具函数
 import {
@@ -21,11 +21,10 @@ import {
   isPlainTocClick,
   analyzeHeadingHierarchy 
 } from '../../common/js/toc-utils.js';
-import {
-    notifySwupPageReady,
-    registerAlpinePageComponents,
-    runPageInit
-} from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 /**
  * 文章页 Alpine.js 组件
@@ -52,7 +51,6 @@ import {
         charIndex: 0,
         typingSpeed: 50, // 打字速度（毫秒）
         _typingTimer: null,
-        _cleanupRegistered: false,
 
         init() {
             this.resetTypingState();
@@ -61,7 +59,6 @@ import {
             const excerptEl = this.$refs.excerptText;
             if (excerptEl) {
                 this.fullText = excerptEl.dataset.text || '';
-                this.registerCleanup();
                 this.startTyping();
             }
         },
@@ -81,12 +78,8 @@ import {
             }
         },
 
-        registerCleanup() {
-            if (this._cleanupRegistered) return;
-            this._cleanupRegistered = true;
-            document.addEventListener('sky:page-cleanup', () => {
-                this.clearTypingTimer();
-            }, { once: true });
+        destroy() {
+            this.clearTypingTimer();
         },
 
         startTyping() {
@@ -233,7 +226,7 @@ import {
         }
     }));
 }
-  registerAlpinePageComponents(_registerAlpineComponents);
+  page.useAlpine(_registerAlpineComponents);
 })();
 
 /**
@@ -243,7 +236,7 @@ import {
 (function () {
     'use strict';
 
-    // AbortController for page-level event listeners — aborted on each PJAX navigation
+    // AbortController for page-level event listeners — aborted on each page replacement
     let _pageAbort = null;
 
     function isPostPage() {
@@ -256,8 +249,7 @@ import {
     function cleanupPostPage() {
         _pageAbort?.abort();
         _pageAbort = null;
-        window.openPostTocDrawer = undefined;
-        window.closePostTocDrawer = undefined;
+        pageManager._tocDrawer = undefined;
     }
 
     /**
@@ -286,39 +278,17 @@ import {
          * 初始化目录抽屉（原生实现）
          */
         initTocDrawer() {
-            const overlay = document.getElementById('post-toc-overlay');
-            const drawer = document.getElementById('post-toc-drawer');
             const drawerNav = document.getElementById('post-toc-drawer-nav');
-
-            if (!overlay || !drawer) return;
-
-            // 每次初始时清空小窗目录缓存，确保新文章目录正确生成
-            if (drawerNav) drawerNav.innerHTML = '';
-
-            const focus = createModalFocus({
-                panel: drawer, backdrop: overlay, signal: this._signal,
-                onClose: options => window.closePostTocDrawer(options),
+            if (!drawerNav) return;
+            drawerNav.replaceChildren();
+            this._tocDrawer = mountContentDrawer({
+                id: 'post-toc-drawer',
+                backdropId: 'post-toc-overlay',
+                signal: this._signal,
+                beforeOpen: () => {
+                    if (!drawerNav.querySelector('.toc-list')) this.initTocDrawerContent(drawerNav);
+                },
             });
-
-            // 暴露全局方法
-            window.openPostTocDrawer = () => {
-                overlay.classList.add('open');
-                drawer.classList.add('open');
-
-                // 初始化目录内容
-                if (drawerNav && !drawerNav.querySelector('.toc-list')) {
-                    this.initTocDrawerContent(drawerNav);
-                }
-                focus.open();
-            };
-
-            window.closePostTocDrawer = (options) => {
-                overlay.classList.remove('open');
-                drawer.classList.remove('open');
-                focus.close(options);
-            };
-
-
         },
 
         /**
@@ -390,12 +360,10 @@ import {
                     const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
                     const heading = document.getElementById(headingId);
                     if (heading) {
-                        window.closePostTocDrawer();
-                        setTimeout(() => {
-                            smoothScrollToHeading(heading, 80);
-                        }, 100);
+                        this._tocDrawer?.close({ restoreFocus: false });
+                        smoothScrollToHeading(heading, 80, { focus: true });
                     }
-                });
+                }, { signal: this._signal });
             });
         },
 
@@ -920,13 +888,9 @@ import {
         void restoreHeadingFragment(document.getElementById('article-content'), pageManager._signal);
     };
 
-    if (window.SkyPjax?.onPage) {
-        window.SkyPjax.onPage(handlePageEnter, { immediate: false });
-        window.SkyPjax.onCleanup(cleanupPostPage);
-    } else {
-        runPageInit(handlePageEnter);
-    }
+    page.onMount(() => {
+        handlePageEnter();
+        return cleanupPostPage;
+    });
 
 })();
-
-notifySwupPageReady();

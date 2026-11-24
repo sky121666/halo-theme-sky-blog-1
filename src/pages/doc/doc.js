@@ -4,11 +4,10 @@
  */
 
 import './doc.css';
-import { createModalFocus } from '../../common/js/modal-focus.js';
+import { mountContentDrawer } from '../../common/js/modal-focus.js';
 import { renderDocsMath } from './math.js';
 
 // 导入公共文章内容脚本
-import '../../static/js/article-content.js';
 
 // 导入 TOC 公共工具函数
 import {
@@ -18,7 +17,6 @@ import {
   restoreHeadingFragment,
   isPlainTocClick
 } from '../../common/js/toc-utils.js';
-import { notifySwupPageReady, runPageInit } from '../../common/js/page-runtime.js';
 
 let _pageAbort = null;
 let _tocObserver = null;
@@ -46,10 +44,6 @@ function cleanupDocPage() {
   _tocObserver = null;
   _pageAbort?.abort();
   _pageAbort = null;
-  window.openDocTocDrawer = undefined;
-  window.closeDocTocDrawer = undefined;
-  window.openDocSidebarDrawer = undefined;
-  window.closeDocSidebarDrawer = undefined;
 }
 
 /**
@@ -276,65 +270,32 @@ function initSidebarFooterCollision() {
 
 // 初始化抽屉
 function initDrawers() {
-  // 目录抽屉
-  const tocOverlay = document.getElementById('doc-toc-overlay');
-  const tocDrawer = document.getElementById('doc-toc-drawer');
   const tocDrawerNav = document.getElementById('doc-toc-drawer-nav');
+  const signal = getPageSignal();
+  const sidebar = mountContentDrawer({
+    id: 'doc-sidebar-drawer',
+    backdropId: 'doc-sidebar-overlay',
+    signal,
+    beforeOpen: () => toc?.close({ restoreFocus: false }),
+  });
 
-  if (tocOverlay && tocDrawer) {
-    const focus = createModalFocus({
-      panel: tocDrawer, backdrop: tocOverlay, signal: getPageSignal(),
-      onClose: options => window.closeDocTocDrawer(options),
-    });
-    window.openDocTocDrawer = () => {
+  const toc = mountContentDrawer({
+    id: 'doc-toc-drawer',
+    backdropId: 'doc-toc-overlay',
+    signal,
+    beforeOpen: () => {
       const tocNav = document.getElementById('toc-nav');
-      if (!tocDrawerNav || !tocNav?.querySelector('.toc-link')) return;
-
-      // 初始化目录内容
+      if (!tocDrawerNav || !tocNav?.querySelector('.toc-link')) return false;
+      sidebar?.close({ restoreFocus: false });
       if (!tocDrawerNav.querySelector('.toc-list')) {
         tocDrawerNav.innerHTML = tocNav.innerHTML;
-        bindTocDrawerEvents(tocDrawerNav);
+        bindTocDrawerEvents(tocDrawerNav, () => toc.close({ restoreFocus: false }));
       }
-      window.closeDocSidebarDrawer?.();
-      tocOverlay.classList.add('open');
-      tocDrawer.classList.add('open');
-      focus.open();
-    };
-
-    window.closeDocTocDrawer = (options) => {
-      tocOverlay.classList.remove('open');
-      tocDrawer.classList.remove('open');
-      focus.close(options);
-    };
-  }
-
-  // 侧边栏抽屉
-  const sidebarOverlay = document.getElementById('doc-sidebar-overlay');
-  const sidebarDrawer = document.getElementById('doc-sidebar-drawer');
-
-  if (sidebarOverlay && sidebarDrawer) {
-    const focus = createModalFocus({
-      panel: sidebarDrawer, backdrop: sidebarOverlay, signal: getPageSignal(),
-      onClose: options => window.closeDocSidebarDrawer(options),
-    });
-    window.openDocSidebarDrawer = () => {
-      window.closeDocTocDrawer?.();
-      sidebarOverlay.classList.add('open');
-      sidebarDrawer.classList.add('open');
-      focus.open();
-    };
-
-    window.closeDocSidebarDrawer = (options) => {
-      sidebarOverlay.classList.remove('open');
-      sidebarDrawer.classList.remove('open');
-      focus.close(options);
-    };
-  }
-
-
+    },
+  });
 }
 
-function bindTocDrawerEvents(container) {
+function bindTocDrawerEvents(container, close) {
   const links = container.querySelectorAll('.toc-link');
   links.forEach(link => {
     link.setAttribute('data-no-swup', '');
@@ -344,10 +305,8 @@ function bindTocDrawerEvents(container) {
       const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
       const heading = document.getElementById(headingId);
       if (heading) {
-        window.closeDocTocDrawer();
-        setTimeout(() => {
-          smoothScrollToHeading(heading, 80);
-        }, 100);
+        close();
+        smoothScrollToHeading(heading, 80, { focus: true });
       }
     });
   });
@@ -364,22 +323,14 @@ function init() {
   initDrawers();
 }
 
-const handlePageEnter = (detail) => {
+export function mount({ initial }) {
   if (!isDocPage()) return;
   init();
   void restoreHeadingFragment(document.getElementById('article-content'), getPageSignal());
   // 首屏由 Docsme 的 DOMContentLoaded 回调渲染；提前处理会让官方回调
-  // 把生成后的文字再次当作 TeX。主题只补上无 DOMContentLoaded 的 PJAX 路径。
-  if (detail?.pjax === true) {
+  // 把生成后的文字再次当作 TeX。主题只补上无 DOMContentLoaded 的 站内切换路径。
+  if (!initial) {
     void renderDocsMath({ signal: getPageSignal() });
   }
-};
-
-if (window.SkyPjax?.onPage) {
-  window.SkyPjax.onPage(handlePageEnter, { immediate: false });
-  window.SkyPjax.onCleanup(cleanupDocPage);
-} else {
-  runPageInit(handlePageEnter);
+  return cleanupDocPage;
 }
-
-notifySwupPageReady();

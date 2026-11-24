@@ -6,7 +6,7 @@
 <!--   3D卡片 + 暗色内容区布局                   -->
 <!-- ========================================== -->
 
-<th:block th:fragment="style-tech" th:with="cfg = ${theme.config.equipment_settings?.basic_info},
+<th:block th:fragment="style-tech" th:with="cfg = ${theme.config.plugins.equipment?.basic_info},
              pageTitle = ${cfg?.page_title ?: '我的装备'},
              pageSubtitle = ${cfg?.page_subtitle ?: ''},
              pageDesc = ${cfg?.page_description ?: '分享我日常使用的硬件与软件'},
@@ -40,9 +40,9 @@
         </header>
 
         <!-- 展示区容器 (毛玻璃效果) -->
-        <div class="equipment-showcase">
+        <div data-glow-owner="integration" class="sky-glow-card equipment-showcase">
 
-            <th:block th:replace="~{modules/equipments/group-switch :: navigation(${groups}, ${currentGroup}, ${theme.config.equipment_settings?.style_settings?.tab_style ?: 'pills'})}" />
+            <th:block th:replace="~{modules/equipments/group-switch :: navigation(${groups}, ${currentGroup}, ${theme.config.plugins.equipment?.style_settings?.tab_style ?: 'pills'})}" />
 
             <!-- 当前路由的分页结果；分组过滤由插件处理。 -->
             <div>

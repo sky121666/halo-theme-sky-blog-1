@@ -77,8 +77,9 @@ public class EquipmentRouteChecks {
           boolean missingGroup = !noGroup && !selected.equals("group-a");
           var context = new Context();
           context.setVariable("param", m("group", selected.isEmpty() ? null : List.of(selected)));
-          context.setVariable("theme", m("config", m("equipment_settings", m("basic_info", m("page_title", null,
-            "page_subtitle", null, "page_description", null), "style_settings", m("tab_style", tab, "hero_background", null)))));
+          var settings = m("basic_info", m("page_title", null, "page_subtitle", null, "page_description", null),
+            "style_settings", m("tab_style", tab, "hero_background", null));
+          context.setVariable("theme", m("config", m("plugins", m("equipment", settings))));
           context.setVariable("groups", groups);
           var routed = missingGroup ? List.of() : List.of(a2);
           String suffix = noGroup ? "" : "?group=" + selected.replace(" ", "%20");

@@ -6,25 +6,25 @@
     :style="`transform: translateY(${scrollOffset * 0.3}px); opacity: ${1 - scrollOffset * 0.001}`">
 
     <!-- 主标题 - 增强特效 -->
-    <h1 id="main-title" th:if="${theme.config.index.title_settings.show_title}"
-        th:class="${'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 sm:mb-4 md:mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base transition-all ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font}"
-        th:style="${!#strings.isEmpty(theme.config.index.title_settings.effect_color) ? '--title-color: ' + theme.config.index.title_settings.effect_color + '; animation-delay: 0.2s;' : 'animation-delay: 0.2s;'}"
-        th:data-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
-        th:data-original-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
-        th:data-decoration-effect="${theme.config.index.title_settings.decoration_effect}">
+    <h1 id="main-title" th:if="${theme.config.pages.index.title_settings.show_title}"
+        th:class="${'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 sm:mb-4 md:mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base transition-all ' + theme.config.pages.index.title_settings.style_effect + ' ' + theme.config.pages.index.title_settings.title_font}"
+        th:style="${!#strings.isEmpty(theme.config.pages.index.title_settings.effect_color) ? '--title-color: ' + theme.config.pages.index.title_settings.effect_color + '; animation-delay: 0.2s;' : 'animation-delay: 0.2s;'}"
+        th:data-text="${#strings.isEmpty(theme.config.pages.index.title_settings.custom_title) ? site.title : theme.config.pages.index.title_settings.custom_title}"
+        th:data-original-text="${#strings.isEmpty(theme.config.pages.index.title_settings.custom_title) ? site.title : theme.config.pages.index.title_settings.custom_title}"
+        th:data-decoration-effect="${theme.config.pages.index.title_settings.decoration_effect}">
         <span
-            th:text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}">Sky
+            th:text="${#strings.isEmpty(theme.config.pages.index.title_settings.custom_title) ? site.title : theme.config.pages.index.title_settings.custom_title}">Sky
             Blog</span>
     </h1>
 
     <!-- 副标题 - 增强特效 -->
-    <div th:if="${theme.config.index.subtitle_settings.show_subtitle}"
+    <div th:if="${theme.config.pages.index.subtitle_settings.show_subtitle}"
         class="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-8 max-w-xs sm:max-w-md md:max-w-2xl animate-in text-white fade-in slide-in-from-bottom-4 duration-700 transition-all"
         style="animation-delay: 0.4s;">
         <p id="subtitle"
-            th:class="${'transition-all duration-300 ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + theme.config.index.subtitle_settings.subtitle_effect}"
-            th:style="${!#strings.isEmpty(theme.config.index.subtitle_settings.subtitle_color) ? '--subtitle-color: ' + theme.config.index.subtitle_settings.subtitle_color : ''}"
-            th:text="${theme.config.index.subtitle_settings.subtitle_text}">
+            th:class="${'transition-all duration-300 ' + theme.config.pages.index.subtitle_settings.subtitle_font + ' ' + theme.config.pages.index.subtitle_settings.subtitle_effect}"
+            th:style="${!#strings.isEmpty(theme.config.pages.index.subtitle_settings.subtitle_color) ? '--subtitle-color: ' + theme.config.pages.index.subtitle_settings.subtitle_color : ''}"
+            th:text="${theme.config.pages.index.subtitle_settings.subtitle_text}">
             记录生活，分享思考，探索无限可能
         </p>
     </div>

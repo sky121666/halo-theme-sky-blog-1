@@ -72,6 +72,9 @@ function normalizeCurrentSettings(config) {
 
 export function migrateThemeSettings(current) {
   const config = structuredClone(current);
+  delete config.music;
+  if (config.components) delete config.components.music;
+
   if (config.components && config.pages && config.plugins) return normalizeCurrentSettings(config);
 
   const general = config.general ?? {};

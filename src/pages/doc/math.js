@@ -4,7 +4,7 @@ const ASSET_PATH = '/plugins/plugin-katex/assets/static/katex.min.js';
 let loading = null;
 
 function officialAsset(document) {
-  return Array.from(document.querySelectorAll('#swup-scripts script[src]')).find((script) => {
+  return Array.from(document.querySelectorAll('#swup script[src], head script[src]')).find((script) => {
     try {
       const url = new URL(script.src, document.baseURI);
       return url.origin === new URL(document.baseURI).origin && url.pathname === ASSET_PATH;
@@ -17,7 +17,7 @@ function officialAsset(document) {
 function loadKatex(source, document, window) {
   if (typeof window.katex?.render === 'function') return Promise.resolve(window.katex);
   if (loading) return loading;
-  // Docsme's defer script is inert after PJAX insertion. Load only the official
+  // Docsme's defer script is inert after a Swup visit. Load only the official
   // asset declared by the current plugin response, never a guessed CDN resource.
   loading = new Promise((resolve, reject) => {
     const script = document.createElement('script');

@@ -272,7 +272,7 @@ public class TemplateDataChecks {
         ? "<svg data-fixture-icon='" + i + "' viewBox='0 0 24 24'><path d='M0 0h1v1'/></svg>"
         : mode.equals("empty") ? "" : null);
       var result = Jsoup.parse(render(featureList.outerHtml(),
-        map("theme", map("config", map("auth", map("auth_settings", settings))))));
+        map("theme", map("config", map("pages", map("auth", map("auth_settings", settings)))))));
       for (int i = 1; i <= 3; i++) {
         Element icon = result.select(".feature-icon").get(i - 1);
         check(mode.equals("custom") ? icon.select("svg[data-fixture-icon='" + i + "']").size() == 1
@@ -313,8 +313,7 @@ public class TemplateDataChecks {
     var section = document.getElementsByAttributeValue("th:fragment", "category-collection").first()
       .selectFirst("section").clone().empty();
     for (boolean sidebar : new boolean[] {true, false}) {
-      var result = Jsoup.parse(render(section.outerHtml(),
-        map("cfg", map("show_sidebar", null), "sidebarCfg", map("show_sidebar", sidebar)))).selectFirst("section");
+      var result = Jsoup.parse(render(section.outerHtml(), map("showSidebar", sidebar))).selectFirst("section");
       check(result.hasClass("max-w-6xl") == !sidebar && result.hasClass("mx-auto") == !sidebar,
         "category collection width follows sidebar setting=" + sidebar);
     }
@@ -331,7 +330,7 @@ public class TemplateDataChecks {
     for (String style : new String[] {null, "bottom", "side", "unknown"}) {
       for (Boolean enabled : new Boolean[] {null, true, false}) {
         var dock = map("dock_style", style, "enable_dock", enabled);
-        var theme = map("config", map("general", map("floating_dock", dock)));
+        var theme = map("config", map("components", map("floating_dock", dock)));
         var result = Jsoup.parse(render(footer.outerHtml(), map("theme", theme))).selectFirst("footer");
         boolean hasDock = !Boolean.FALSE.equals(enabled);
         String label = "footer dock style=" + style + " enabled=" + enabled;
@@ -342,7 +341,7 @@ public class TemplateDataChecks {
           label + " preserves footer appearance");
       }
     }
-    var theme = map("config", map("general", map("floating_dock", null)));
+    var theme = map("config", map("components", map("floating_dock", null)));
     var result = Jsoup.parse(render(footer.outerHtml(), map("theme", theme))).selectFirst("footer");
     check(result.hasClass("pb-16") && !result.hasClass("md:pb-0"),
       "missing dock config retains default bottom dock clearance");

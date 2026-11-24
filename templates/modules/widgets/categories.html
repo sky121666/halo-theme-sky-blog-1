@@ -7,7 +7,7 @@
 <!-- ========================================== -->
 
 <div th:fragment="list"
-  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
+  data-glow-owner="widgets" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5"
   th:with="categories = ${categoryFinder.listAsTree()}">
 
   <!-- 标题栏 -->

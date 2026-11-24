@@ -1,6 +1,10 @@
+import { createHistoryRecord, updateHistoryRecord } from "swup";
 import "./douban.css";
 import { skyDebug } from "../../common/js/debug.js";
-import { notifySwupPageReady, registerPageLifecycle } from "../../common/js/page-runtime.js";
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 import { normalizeDoubanItem } from "../../apps/douban/model.js";
 
 const API_BASE = "/apis/api.douban.moony.la/v1alpha1/doubanmovies";
@@ -48,8 +52,10 @@ function appendMeta(meta, value) {
 }
 
 function createFilterButton({ label, value, filter, active, icon, count, extraClass = "" }) {
-  const button = createEl("button", `douban-filter-item ${extraClass}${active ? " active" : ""}`.trim());
+  const button = createEl("button", `douban-filter-item sky-glow-card ${extraClass}${active ? " active" : ""}`.trim());
   button.type = "button";
+  button.dataset.glowOwner = "integration";
+  button.dataset.glowInteraction = "hover press toggle focus";
   button.dataset.doubanFilter = filter;
   button.dataset.value = value || "";
   button.setAttribute("aria-pressed", String(Boolean(active)));
@@ -84,7 +90,9 @@ function normalizeGenre(genre) {
 function createCard(item, signal) {
   const spec = normalizeDoubanItem(item);
   const article = createEl("article", "douban-card-wrap");
-  const link = createEl("a", "douban-card");
+  const link = createEl("a", "douban-card sky-glow-card");
+  link.dataset.glowOwner = "integration";
+  link.dataset.glowInteraction = "hover press focus";
   link.href = spec.link || "#";
   link.target = "_blank";
   link.rel = "noopener noreferrer";
@@ -203,12 +211,8 @@ function syncQueryState(state, method = "push") {
   const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (nextUrl === currentUrl) return;
 
-  const nextHistoryState = {
-    ...(window.history.state || {}),
-    url: nextUrl,
-    skyDouban: { ...state },
-  };
-  window.history[method === "replace" ? "replaceState" : "pushState"](nextHistoryState, "", nextUrl);
+  if (method === "replace") updateHistoryRecord(nextUrl);
+  else createHistoryRecord(nextUrl);
 }
 
 function initDoubanPage() {
@@ -512,5 +516,4 @@ function initDoubanPage() {
   };
 }
 
-registerPageLifecycle(initDoubanPage, { entry: "douban" });
-notifySwupPageReady();
+page.onMount(initDoubanPage);

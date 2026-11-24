@@ -11,7 +11,7 @@
     class="relative"
     data-links-page
     th:fragment="links-content"
-    th:with="rootCfg = ${theme.config.links_settings},
+    th:with="rootCfg = ${theme.config.plugins.links},
            cfg = ${rootCfg.basic_info},
            displayCfg = ${rootCfg.display_settings},
            pageTitle = ${!#strings.isEmpty(cfg?.page_title) ? cfg.page_title : (!#strings.isEmpty(linksTitle) ? linksTitle : '友情链接')},
@@ -29,11 +29,7 @@
            hasFeedSources = ${linkFeedGroups != null and !#lists.isEmpty(linkFeedGroups)},
            shouldPrefetchFeeds = ${hasFeedSources and currentView == 'friends' and (#strings.isEmpty(currentFeedScope) or currentFeedScope == 'all' or (!#strings.isEmpty(currentFeedGroup)) or (!#strings.isEmpty(currentFeedLink)))},
            linkFeedPage = ${!shouldPrefetchFeeds ? null : (!#strings.isEmpty(currentFeedGroup) ? linkFeedFinder.list({limit: linkFeedLimit, groupName: currentFeedGroup}) : (!#strings.isEmpty(currentFeedLink) ? linkFeedFinder.list({limit: linkFeedLimit, linkName: currentFeedLink}) : linkFeedFinder.list({limit: linkFeedLimit})))},
-           feedPrefetchKey = ${linkFeedPage == null ? '' : (!#strings.isEmpty(currentFeedGroup) ? 'public:group:' + currentFeedGroup : (!#strings.isEmpty(currentFeedLink) ? 'public:link:' + currentFeedLink : 'public:all'))},
-           sidebarCfg = ${rootCfg.sidebar_settings},
-           globalSidebarCfg = ${theme.config.general.sidebar_settings},
-           useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-           sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+           feedPrefetchKey = ${linkFeedPage == null ? '' : (!#strings.isEmpty(currentFeedGroup) ? 'public:group:' + currentFeedGroup : (!#strings.isEmpty(currentFeedLink) ? 'public:link:' + currentFeedLink : 'public:all'))}"
     data-plugin-links-contract="PluginLinks>=2.2.1"
     th:data-plugin-links-available="${hasLatestLinks}"
     th:data-plugin-links-title="${linksTitle}"
@@ -49,7 +45,7 @@
     <div class="mx-auto max-w-7xl px-4 py-8">
       <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
         <!-- 主内容区 -->
-        <section class="min-w-0 flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-5xl mx-auto' : ''}">
+        <section class="min-w-0 flex-1" th:classappend="${not showSidebar ? 'max-w-5xl mx-auto' : ''}">
           <!-- 与静态 Demo 一致：标题区不增加眉标、CTA 或额外卡片。 -->
           <header class="links-hero mb-10">
             <h1
@@ -70,11 +66,11 @@
           </header>
 
           <!-- 视图导航由 Links 页脚本同步 URL；无脚本时仍可使用普通链接访问。 -->
-          <nav class="links-view-navigation mb-8 flex gap-2 overflow-x-auto pb-2" aria-label="友链页面视图">
+          <nav data-motion-tabs class="links-view-navigation mb-8 flex gap-2 overflow-x-auto pb-2" aria-label="友链页面视图">
             <a
               th:href="@{/links}"
-              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
-              th:classappend="${#strings.isEmpty(currentView) or currentView == 'board' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${#strings.isEmpty(currentView) or currentView == 'board' ? 'links-filter-active' : ''}"
               data-links-view-link="links"
               data-links-local-navigation
               data-no-swup
@@ -82,8 +78,8 @@
             >友链</a>
             <a
               th:href="@{/links(view='friends')}"
-              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
-              th:classappend="${currentView == 'friends' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${currentView == 'friends' ? 'links-filter-active' : ''}"
               data-links-view-link="friends"
               data-links-local-navigation
               data-no-swup
@@ -91,8 +87,8 @@
             >友链动态</a>
             <a
               th:href="@{/links(view='apply')}"
-              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
-              th:classappend="${currentView == 'apply' ? 'bg-primary text-primary-content border-primary' : ''}"
+              data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${currentView == 'apply' ? 'links-filter-active' : ''}"
               data-links-view-link="apply"
               data-links-local-navigation
               data-no-swup
@@ -118,8 +114,8 @@
               data-links-local-navigation
               data-no-swup
               th:attr="aria-current=${#strings.isEmpty(group) ? 'page' : null}"
-              th:classappend="${#strings.isEmpty(group) ? 'bg-primary text-primary-content border-primary' : ''}"
-              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${#strings.isEmpty(group) ? 'links-filter-active' : ''}"
+              data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card btn btn-sm border-base-content/10 shrink-0 rounded-full"
             >
               全部
             </a>
@@ -131,8 +127,8 @@
               data-links-local-navigation
               data-no-swup
               th:attr="aria-current=${group == groupOption.metadata.name ? 'page' : null}"
-              th:classappend="${group == groupOption.metadata.name ? 'bg-primary text-primary-content border-primary' : ''}"
-              class="btn btn-sm border-base-content/10 shrink-0 rounded-full"
+              th:classappend="${group == groupOption.metadata.name ? 'links-filter-active' : ''}"
+              data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card btn btn-sm border-base-content/10 shrink-0 rounded-full"
             >
               分组
             </a>
@@ -193,7 +189,7 @@
                     th:data-link-backlink-state="${backlinkState}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="links-link-card glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg"
+                    data-glow-owner="personal" data-glow-interaction="hover press toggle focus" class="sky-glow-card links-link-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 ease-out hover:scale-[1.02]"
                   >
                     <!-- Logo -->
                     <div
@@ -478,7 +474,7 @@
           >
             <section class="link-group">
               <form
-                class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 shadow-sm backdrop-blur-xl sm:p-8"
+                data-glow-owner="personal" class="sky-glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 shadow-sm backdrop-blur-xl sm:p-8"
                 data-link-apply-form
                 novalidate
               >
@@ -646,7 +642,7 @@
                 </div>
               </div>
             </div>
-            <div class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 backdrop-blur-xl">
+            <div data-glow-owner="personal" class="sky-glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-6 backdrop-blur-xl">
               <halo:comment
                 group="plugin.halo.run"
                 kind="Plugin"
@@ -668,7 +664,7 @@
 
           <!-- 普通友链详情：link 参数只选择资源，访问外站由弹窗中的明确按钮完成。 -->
           <dialog class="modal modal-bottom sm:modal-middle" data-link-detail-dialog>
-            <div class="modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl">
+            <div data-glow-owner="personal" class="sky-glow-card modal-box bg-base-100/95 border-base-content/10 max-w-lg border backdrop-blur-2xl">
               <form method="dialog">
                 <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2" aria-label="关闭友链详情">
                   ✕
@@ -755,7 +751,7 @@
 
           <!-- RSS 内部详情只在有 plugin:links:view 能力时打开。 -->
           <dialog class="modal modal-bottom sm:modal-middle" data-feed-detail-dialog>
-            <div class="modal-box bg-base-100/95 border-base-content/10 max-w-2xl border backdrop-blur-2xl">
+            <div data-glow-owner="personal" class="sky-glow-card modal-box bg-base-100/95 border-base-content/10 max-w-2xl border backdrop-blur-2xl">
               <form method="dialog">
                 <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2" aria-label="关闭动态详情">
                   ✕
@@ -802,10 +798,10 @@
 
         <!-- 右侧边栏 -->
         <aside
-          th:if="${sidebarCfg?.show_sidebar == true}"
+          th:if="${showSidebar}"
           class="sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block"
         >
-          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
         </aside>
       </div>
     </div>

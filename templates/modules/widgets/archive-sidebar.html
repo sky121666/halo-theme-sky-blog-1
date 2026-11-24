@@ -8,7 +8,7 @@
 <th:block th:fragment="widget" th:with="globalArchives = ${postFinder.archives(1, 100)}">
     <div th:if="${globalArchives != null and globalArchives.items != null}" class="archive-sidebar-widget mb-8" th:data-archives-base="${site.routes?.archivesUri ?: '/archives'}">
         <h3 class="text-[11px] font-bold text-base-content/40 uppercase tracking-[0.15em] pl-3 mb-5 flex items-center gap-2.5"
-            th:with="cfg = ${theme.config.archive_settings?.sidebar_settings?.archive_sidebar_config}">
+            th:with="cfg = ${theme.config.components.sidebar_settings?.archive_sidebar_config}">
             <!-- Default icon if nothing is set -->
             <th:block th:if="${cfg == null or cfg.icon == null or #strings.isEmpty(cfg.icon)}">
                 <span class="icon-[heroicons--archive-box] w-3.5 h-3.5"></span>
@@ -34,9 +34,10 @@
         <div class="space-y-2">
             <div th:each="archive, iterStat : ${globalArchives.items}" class="archive-year-group">
                 <!-- 年份头部 -->
-                <button type="button"
-                    class="w-full flex items-center justify-between py-2.5 px-3 rounded-xl hover:bg-base-content/5 transition-colors group text-base-content archive-toggle-btn"
-                    th:data-year="${archive.year}" th:data-expanded="${iterStat.first}">
+                <button type="button" data-glow-owner="widgets" data-glow-interaction="hover press toggle focus"
+                    class="sky-glow-card w-full flex items-center justify-between py-2.5 px-3 rounded-xl hover:bg-base-content/5 transition-all group text-base-content archive-toggle-btn"
+                    th:data-year="${archive.year}" th:data-expanded="${iterStat.first}"
+                    th:attr="aria-expanded=${iterStat.first}">
                     <div
                         class="flex items-center gap-2.5 font-bold text-[15px] group-hover:text-primary transition-colors">
                         <span
@@ -67,102 +68,6 @@
         <a th:href="@{${site.routes?.archivesUri ?: '/archives'}}"
             class="mt-3 inline-flex px-3 py-2 text-sm text-primary hover:underline">查看全部归档</a>
 
-        <!-- Native JS Toggle Script -->
-        <script data-swup-reload-script>
-            (function () {
-                const initArchiveSidebar = () => {
-                    document.querySelectorAll('.archive-sidebar-widget .archive-toggle-btn').forEach(btn => {
-                        if (btn.dataset.initialized) return;
-                        btn.dataset.initialized = 'true';
-
-                        const setExpandedState = (btn, isExpanded) => {
-                            btn.setAttribute('data-expanded', isExpanded);
-
-                            if (isExpanded) {
-                                btn.classList.add('text-primary', 'bg-base-content/5');
-                                const icon = btn.querySelector('.archive-year-icon');
-                                if (icon) icon.classList.replace('opacity-40', 'text-primary');
-                                if (icon) icon.classList.remove('opacity-40');
-                            } else {
-                                btn.classList.remove('text-primary', 'bg-base-content/5');
-                                const icon = btn.querySelector('.archive-year-icon');
-                                if (icon) icon.classList.add('opacity-40');
-                                if (icon) icon.classList.remove('text-primary');
-                            }
-
-                            const chevron = btn.querySelector('.archive-chevron');
-                            if (isExpanded) {
-                                chevron.classList.add('rotate-180');
-                            } else {
-                                chevron.classList.remove('rotate-180');
-                            }
-
-                            const wrapper = btn.nextElementSibling;
-                            if (isExpanded) {
-                                wrapper.classList.remove('grid-rows-[0fr]');
-                                wrapper.classList.add('grid-rows-[1fr]');
-                            } else {
-                                wrapper.classList.remove('grid-rows-[1fr]');
-                                wrapper.classList.add('grid-rows-[0fr]');
-                            }
-                        };
-
-                        // Handle initial active state from DOM attributes 
-                        if (btn.getAttribute('data-expanded') === 'true') {
-                            setExpandedState(btn, true);
-                        }
-
-                        btn.addEventListener('click', () => {
-                            const isExpanded = btn.getAttribute('data-expanded') === 'true';
-                            setExpandedState(btn, !isExpanded);
-                        });
-
-                        // Expose setter for external active routing logic
-                        btn._setExpandedState = setExpandedState;
-                    });
-
-                    // Highlight active route logic
-                    const currentPath = window.location.pathname;
-                    const archiveBase = document.querySelector('.archive-sidebar-widget')?.dataset.archivesBase?.replace(/\/$/, '') || '/archives';
-                    if (currentPath.startsWith(archiveBase + '/')) {
-                        const activeYear = currentPath.slice(archiveBase.length + 1).split('/')[0];
-                        if (/^\d{4}$/.test(activeYear)) {
-
-                            // Find matching year group button
-                            const activeBtn = document.querySelector(`.archive-sidebar-widget .archive-toggle-btn[data-year="${activeYear}"]`);
-                            if (activeBtn) {
-                                // Collapse all first
-                                document.querySelectorAll('.archive-sidebar-widget .archive-toggle-btn').forEach(btn => {
-                                    if (btn._setExpandedState) btn._setExpandedState(btn, false);
-                                });
-                                // Expand active
-                                if (activeBtn._setExpandedState) activeBtn._setExpandedState(activeBtn, true);
-                            }
-
-                            // Highlight exact month link
-                            document.querySelectorAll('.archive-sidebar-widget .archive-month-link').forEach(link => {
-                                // check relative URLs matching path
-                                const linkPath = new URL(link.href).pathname;
-                                if (linkPath === currentPath) {
-                                    link.classList.remove('text-base-content/60', 'border-transparent');
-                                    link.classList.add('text-primary', 'bg-primary/5', 'font-bold', 'border-primary');
-                                } else {
-                                    link.classList.add('text-base-content/60', 'border-transparent');
-                                    link.classList.remove('text-primary', 'bg-primary/5', 'font-bold', 'border-primary');
-                                }
-                            });
-                        }
-                    }
-                };
-
-                // 确保在DOM加载或是Pjax加载后执行
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initArchiveSidebar);
-                } else {
-                    initArchiveSidebar();
-                }
-            })();
-        </script>
     </div>
 </th:block>
 

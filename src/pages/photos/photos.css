@@ -15,7 +15,7 @@
   overflow: hidden;
   background: var(--color-base-200);
   /* 静态时只有一层极淡的边线，不靠阴影撑场 */
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+  --sky-card-elevation: 0 0 0 1px color-mix(in srgb, var(--color-base-content) 6%, transparent);
   transition:
     box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1),
     transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
@@ -25,9 +25,6 @@
 /* 只在有鼠标的设备上启用 hover 效果 */
 @media (hover: hover) {
   .photo-item:hover {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-base-content) 8%, transparent),
-      0 8px 24px -6px color-mix(in srgb, var(--color-base-content) 12%, transparent);
     transform: translateY(-2px);
   }
 }
@@ -381,4 +378,17 @@
 
 .photo-item-new {
   animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+
+.photo-item[data-photo-appended] {
+  animation: none;
+}
+
+.photo-item[data-photo-appended].loaded {
+  animation: sky-content-in 160ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-item[data-photo-appended].loaded { animation: none; }
 }

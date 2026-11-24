@@ -3,10 +3,8 @@
 <!-- 兼容基线：PluginMoments v1.16.1；路由注入 moments/tags，分页使用 prevUrl/nextUrl。 -->
 <!-- 当前媒体渲染覆盖 PHOTO/VIDEO/AUDIO/POST；POST 仅使用 url/originType 渲染关联内容卡。 -->
 <!-- ========================================== -->
-<div th:fragment="content" th:with="
-    rootCfg=${theme.config.moments_settings},
+<div th:fragment="content" th:with="rootCfg=${theme.config.plugins.moments},
     cfg=${rootCfg.basic_info},
-    sidebarCfg=${rootCfg.sidebar_settings},
     pageTitle=${cfg?.page_title ?: '瞬间'},
     enableUpvote=${cfg?.enable_upvote != false},
     enableComment=${haloCommentEnabled and cfg?.enable_comment != false},
@@ -14,12 +12,7 @@
     enablePublish=${publishSettings?.enable_publish != false},
     enableImageUpload=${enablePublish && (publishSettings?.enable_image_upload != false)},
     enableVideoUpload=${enablePublish && (publishSettings?.enable_video_upload != false)},
-    enableAudioUpload=${enablePublish && (publishSettings?.enable_audio_upload != false)},
-    showSidebar=${sidebarCfg?.show_sidebar == true},
-    globalSidebarCfg = ${theme.config.general.sidebar_settings},
-    useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-    sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}
-">
+    enableAudioUpload=${enablePublish && (publishSettings?.enable_audio_upload != false)}">
 
     <h1 class="sr-only" th:text="${pageTitle}">瞬间</h1>
 
@@ -39,7 +32,7 @@
             </button>
           </div>
 
-          <div id="moments-publish-status" role="status" aria-live="polite"
+          <div id="moments-publish-status" role="status" aria-live="polite" aria-atomic="true"
             class="hidden mb-4 rounded-xl bg-base-200 p-4 text-sm"></div>
 
           <div id="moments-refresh-status" role="status" aria-live="polite"
@@ -80,7 +73,7 @@
 
             <th:block th:each="moment : ${moments.items}" th:with="content=${moment.spec.content}">
 
-              <article class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden" x-data="{ showComment: false }">
+              <article data-glow-owner="personal" class="sky-glow-card card bg-base-100 shadow-sm rounded-2xl overflow-hidden" x-data="{ showComment: false }">
                 <div class="p-4">
                   <!-- 头部：头像 + 用户名 + 时间 -->
                   <div class="flex items-center gap-3 mb-3">
@@ -279,7 +272,7 @@
 
           <!-- 空状态 -->
           <div th:if="${moments == null || moments.total == 0}"
-            class="card bg-base-100 shadow-sm rounded-2xl p-12 text-center">
+            data-glow-owner="personal" class="sky-glow-card card bg-base-100 shadow-sm rounded-2xl p-12 text-center">
             <span class="icon-[heroicons--camera] size-16 text-base-content/10 mx-auto block mb-4"></span>
             <p class="text-base-content/40">暂无瞬间</p>
           </div>
@@ -289,7 +282,7 @@
 
         <!-- 右侧边栏 -->
         <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+          <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
         </aside>
 
       </div>
@@ -300,14 +293,6 @@
       th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}"
       class="fixed inset-0 bg-black/60 backdrop-blur-sm z-100 items-center justify-center hidden"
       onclick="if(event.target === this) closeMomentModal();" style="display: none;">
-
-      <!-- 引入表情选择器 -->
-      <link rel="stylesheet"
-        th:href="@{/assets/emoji/emoji-selector.css?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script>
-      <script
-        th:src="@{/assets/emoji/emoji-selector.js?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script></script>
 
       <div class="moment-publish-panel w-full max-w-md mx-4 bg-base-100 rounded-2xl shadow-2xl overflow-hidden"
         onclick="event.stopPropagation();">
@@ -345,9 +330,11 @@
             </div>
 
             <!-- 输入区 -->
-            <textarea id="moment-content"
+            <textarea id="moment-content" aria-describedby="moment-publish-feedback"
               class="w-full bg-transparent text-base-content placeholder-base-content/40 resize-none border-0 focus:outline-none text-base leading-relaxed min-h-24"
               placeholder="分享新鲜事..." maxlength="1000" oninput="updateCharCount(this)"></textarea>
+            <p id="moment-publish-feedback" class="moment-publish-feedback whitespace-pre-line text-sm"
+              role="status" aria-live="polite" aria-atomic="true"></p>
 
             <!-- 标签显示区 -->
             <div id="moment-tags-display" class="hidden mt-3">

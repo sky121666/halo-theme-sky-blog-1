@@ -23,32 +23,39 @@
         </div>
       </header>
 
-      <nav class="douban-filter-panel douban-animate-in douban-stagger-1" aria-label="豆瓣筛选">
-        <div class="douban-filter-row" data-douban-types>
-          <button class="douban-filter-item active" type="button" data-douban-filter="type" data-value="">
+      <nav data-glow-owner="integration" class="sky-glow-card douban-filter-panel douban-animate-in douban-stagger-1" aria-label="豆瓣筛选">
+        <div class="douban-filter-row" data-douban-types data-motion-tabs>
+          <button class="douban-filter-item sky-glow-card active" type="button" data-douban-filter="type" data-value=""
+            data-glow-owner="integration" data-glow-interaction="hover press toggle focus" aria-pressed="true">
             <span class="icon-[heroicons--squares-2x2] h-4 w-4"></span>
             全部
           </button>
         </div>
 
         <div class="douban-filter-row douban-status-row" data-douban-status>
-          <button class="douban-filter-item active" type="button" data-douban-filter="status" data-value="done">
+          <button class="douban-filter-item sky-glow-card active" type="button" data-douban-filter="status" data-value="done"
+            data-glow-owner="integration" data-glow-interaction="hover press toggle focus" aria-pressed="true">
             已看/已读
           </button>
-          <button class="douban-filter-item" type="button" data-douban-filter="status" data-value="doing">
+          <button class="douban-filter-item sky-glow-card" type="button" data-douban-filter="status" data-value="doing"
+            data-glow-owner="integration" data-glow-interaction="hover press toggle focus" aria-pressed="false">
             在看/在读
           </button>
-          <button class="douban-filter-item" type="button" data-douban-filter="status" data-value="mark">
+          <button class="douban-filter-item sky-glow-card" type="button" data-douban-filter="status" data-value="mark"
+            data-glow-owner="integration" data-glow-interaction="hover press toggle focus" aria-pressed="false">
             想看/想读
           </button>
         </div>
 
         <div class="douban-filter-row douban-genre-row" data-douban-genres hidden>
           <button
-            class="douban-filter-item douban-genre-item active"
+            class="douban-filter-item sky-glow-card douban-genre-item active"
             type="button"
             data-douban-filter="genre"
             data-value=""
+            data-glow-owner="integration"
+            data-glow-interaction="hover press toggle focus"
+            aria-pressed="true"
           >
             全部题材
           </button>

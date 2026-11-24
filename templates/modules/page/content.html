@@ -38,7 +38,7 @@
       th:if="${haloCommentEnabled and (singlePage.spec.allowComment == null || singlePage.spec.allowComment)}"
     >
       <h2 id="page-comments-title">评论留言</h2>
-      <div id="page-comments-card">
+      <div id="page-comments-card" class="sky-glow-card" data-glow-owner="reading">
         <halo:comment
           group="content.halo.run"
           kind="SinglePage"

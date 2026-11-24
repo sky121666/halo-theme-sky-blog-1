@@ -2,8 +2,8 @@
 <div th:fragment="content" class="doc-layout">
 
   <!-- 左侧文档树 - 固定定位 -->
-  <aside class="doc-sidebar hidden lg:block">
-    <div class="doc-sidebar-inner scrollbar-thin">
+  <aside data-glow-owner="reading" class="sky-glow-card doc-sidebar hidden lg:block">
+    <div class="doc-sidebar-inner scrollbar-thin" data-swup-scroll-container>
 
       <th:block th:replace="~{modules/doc/selectors :: selectors}" />
 
@@ -54,7 +54,7 @@
       </article>
 
       <!-- 互动卡片 - 作者/分享/翻页 -->
-      <div class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl mt-8">
+      <div data-glow-owner="reading" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl mt-8">
         <div class="card-body p-4 sm:p-6">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
@@ -95,7 +95,7 @@
               <div class="divider divider-horizontal mx-0 h-8 hidden sm:flex"></div>
 
               <!-- 分享按钮 - 使用文档独立配置 -->
-              <button type="button" aria-label="分享文档" th:if="${theme?.config?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}" x-data
+              <button type="button" aria-label="分享文档" th:if="${theme?.config?.get('plugins')?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}" x-data
                 @click="$dispatch('open-share-modal')"
                 class="btn btn-sm btn-ghost bg-base-200 border-0 rounded-full gap-2 transition-all duration-200 hover:bg-primary/10 hover:text-primary">
                 <span class="icon-[heroicons--share] w-5 h-5"></span>
@@ -151,7 +151,7 @@
 
       <!-- 评论卡片 - 叠加 Halo 全局与项目评论开关 -->
       <div th:if="${haloCommentEnabled and project?.spec?.enableComment == true}"
-        class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl mt-4 overflow-hidden">
+        data-glow-owner="reading" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl mt-4 overflow-hidden">
         <!-- 评论区标题 -->
         <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-base-content/5 bg-base-200/30">
           <div class="flex items-center gap-2 text-sm font-semibold text-base-content">
@@ -170,7 +170,7 @@
 
   <!-- 右侧目录 - 固定定位，与文章页目录样式一致 -->
   <aside class="doc-toc hidden xl:block">
-    <div id="toc-card" class="doc-toc-card">
+    <div id="toc-card" data-glow-owner="reading" class="sky-glow-card doc-toc-card">
       <h3 class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-4 flex items-center gap-2">
         <span class="icon-[heroicons--list-bullet] w-4 h-4"></span>
         <span>本页目录</span>
@@ -184,12 +184,12 @@
   </aside>
 
   <!-- 分享弹窗 - 条件须在片段替换外层，关闭时不求值分享参数。 -->
-  <th:block th:if="${theme?.config?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}">
-    <th:block th:replace="~{modules/share-modal :: shareModal(
+  <th:block th:if="${theme?.config?.get('plugins')?.get('docsme')?.get('doc_settings')?.get('enable_share')?.toString() != 'false'}">
+    <th:block th:replace="~{modules/share-modal :: shareFor(
+      host='docsBody',
       title='分享文档',
       shareUrl=${docTree?.status?.permalink},
-      shareTitle=${docTree?.spec?.title},
-      shareItemIds=${theme?.config?.get('docsme')?.get('doc_settings')?.get('share_settings')?.get('share_item_ids')}
+      shareTitle=${docTree?.spec?.title}
     )}" />
   </th:block>
 

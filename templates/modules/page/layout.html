@@ -8,11 +8,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-    <meta name="view-transition" content="same-origin" />
 
     <!-- 防止主题闪烁 -->
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <th:block th:replace="~{modules/theme-script :: head}" />
 
     <th:block
       th:replace="~{modules/seo-head :: meta(${documentTitle}, ${singlePage.status.excerpt}, ${singlePage.status.permalink}, ${!#strings.isEmpty(singlePage.spec.cover) ? singlePage.spec.cover : site.logo}, 'article')}"
@@ -24,26 +22,23 @@
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <!-- 页面样式 -->
     <link rel="stylesheet" th:href="@{/assets/css/page.css?v={version}(version=${theme.spec.version})}" />
-    <!-- 音乐播放器 CSS -->
-    <th:block th:replace="~{modules/music-player :: head}" />
+
   </head>
 
   <body
-    th:with="bgConfig = ${theme.config.general.global_background},
+    th:with="bgConfig = ${theme.config.visual.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
     th:class="'min-h-screen relative flex flex-col ' + ${bgClass}"
   >
     <div class="relative z-10">
-      <!-- 加载屏幕 -->
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
       <!-- 导航栏 -->
       <th:block th:replace="~{modules/nav :: navbar}" />
 
       <!-- 主要内容 -->
-      <main id="swup" class="flex-1">
+      <main id="swup" data-page="page" class="flex-1">
         <th:block th:replace="${content}" />
       </main>
 
@@ -58,15 +53,7 @@
     </div>
 
     <!-- JavaScript - 使用 ES Module -->
-    <div id="swup-scripts" hidden>
-      <script
-        type="module"
-        th:src="@{/assets/js/page.js?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script
-      ></script>
-    </div>
+
     <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-    <!-- 悬浮音乐播放器 -->
-    <th:block th:replace="~{modules/music-player :: player}" />
   </body>
 </html>

@@ -13,176 +13,66 @@ const masonrySource = source.match(/ {2}function estimateHeight[\s\S]*?(?= {2}\/
 assert.ok(masonrySource, "production masonry height calculation must be available");
 const firstScreenSource = source.match(/ {2}function checkFirstScreenDone[\s\S]*?(?=\n {2}initMasonry\(\);)/)?.[0];
 assert.ok(firstScreenSource, "production first-screen reflow must be available");
-const preloadSuccess = source.match(/preload\.onload = \(\) => \{([\s\S]*?)\n {18}\};/)?.[1];
-assert.ok(preloadSuccess, "production preload success handler must be available");
 const lightboxSource = source.match(
-  / {2}function ensureLightGalleryImageContract[\s\S]*?(?= {2}function getLightGalleryInstance)/,
+  / {2}function ensureLightGalleryImageContract[\s\S]*?(?= {2}function syncLightGalleryItems)/,
 )?.[0];
 assert.ok(lightboxSource, "production lightbox image registration must be available");
-const lightboxSyncSource = source.match(/ {2}let lightGallerySyncPending[\s\S]*?(?= {2}let masonryCols)/)?.[0];
-assert.ok(lightboxSyncSource, "production pagination lightbox update must be available");
 
-function lightboxSyncFixture({ open = false, refresh = false, rebuildFails = false } = {}) {
-  const photoGrid = new EventTarget();
-  const cleanups = [];
-  const calls = { destroy: 0, rebuild: 0, refresh: 0, init: 0 };
-  let now = 0;
-  let timerId = 0;
-  const timers = new Map();
-  const schedule = (fn, delay) => { const id = ++timerId; timers.set(id, { fn, time: now + delay }); return id; };
-  photoGrid.isConnected = true;
-  let backdrop = false;
-  const settings = { selector: "img", zoom: true, backdropDuration: 150 };
-  const window = {
-    setTimeout: schedule,
-    clearTimeout: id => timers.delete(id),
-    scrollX: 7,
-    scrollY: 1540,
-    scrollTo({ left, top, behavior }) {
-      assert.equal(behavior, "instant");
-      this.scrollX = left;
-      this.scrollY = top;
-    },
-    lightGallery(grid, options) {
-      calls.rebuild++;
-      assert.equal(grid, photoGrid);
-      assert.deepEqual({ ...options }, settings);
-      if (rebuildFails) throw new Error("Gallery rebuild failed");
-      instance = { ...instance, outer: null, lGalleryOn: false };
-    },
-    SkyLightGallery: { initNow: () => calls.init++ },
-  };
-  let instance = {
-    s: settings,
-    lGalleryOn: open,
-    outer: open ? { isConnected: true } : null,
-    destroy(full) {
-      assert.equal(full, true);
-      calls.destroy++;
-      // lightgallery.js 1.4.0 restores prevScrollTop during destroy(), even
-      // when the instance was never opened and that value is still undefined.
-      window.scrollY = this.prevScrollTop || 0;
-      schedule(() => { backdrop = false; }, this.s.backdropDuration + 50);
-    },
-  };
-  if (refresh) instance.refresh = () => calls.refresh++;
-  const context = vm.createContext({
-    disposed: false,
-    photoGrid,
-    window,
-    clearTimeout: id => timers.delete(id),
-    allPhotoItems: [{}, {}],
-    ensureLightGalleryImageContract() {},
-    getLightGalleryInstance: () => instance,
-    addCleanupTask: (fn) => cleanups.push(fn),
+test("gallery opens appended photos in the current lightbox and releases it on abort", () => {
+  const gallerySource = fs.readFileSync(new URL("../src/common/js/gallery.js", import.meta.url), "utf8")
+    .replace(/^import .*;\n/gm, "").replace(/^export /gm, "");
+  const image = (href) => ({
+    matches: (selector) => selector === "img",
+    getAttribute: (name) => name === "src" ? href : null,
+    closest(selector) { return selector === "img" ? this : null; },
+    isConnected: true,
+    focus() { this.focused = true; },
+    tabIndex: 0,
   });
-  const sync = vm.runInContext(`${lightboxSyncSource}\nsyncLightGalleryItems`, context);
-  return {
-    sync,
-    advance(ms = 200) {
-      const until = now + ms;
-      while (true) {
-        const next = [...timers].sort((a, b) => a[1].time - b[1].time || a[0] - b[0]).find(([, value]) => value.time <= until);
-        if (!next) break;
-        timers.delete(next[0]); now = next[1].time; next[1].fn();
-      }
-      now = until;
+  const first = image("/first.jpg");
+  const second = image("/second.jpg");
+  const nodes = [first];
+  const root = Object.assign(new EventTarget(), {
+    contains: (node) => nodes.includes(node),
+    querySelectorAll: () => nodes,
+    getAttribute: () => null,
+  });
+  const controller = new AbortController();
+  const actions = [];
+  let events = {};
+  const mount = vm.runInNewContext(gallerySource + "\nmountGalleries", {
+    document: {
+      querySelectorAll: () => [],
+      getElementById: (id) => id === "glightbox-body" ? {} : null,
+      activeElement: { closest: () => null },
     },
-    click() {
-      const image = { isConnected: true, getAttribute: () => null, click() { backdrop = true; } };
-      const event = new Event("click", { cancelable: true });
-      Object.defineProperty(event, "target", { value: { closest: () => image } });
-      photoGrid.dispatchEvent(event);
-      return event.defaultPrevented;
+    window: {}, matchMedia: () => ({ matches: false }),
+    GLightbox() {
+      actions.push("mount");
+      return {
+        on(name, callback) { events[name] = callback; },
+        setElements(slides) { actions.push(...slides.map((slide) => slide.href)); },
+        openAt(index) { actions.push(index); },
+        insertSlide(slide) { actions.push(slide.href); },
+        destroy() { actions.push("destroy"); },
+      };
     },
-    hasBackdrop: () => backdrop,
-    window,
-    calls,
-    settings,
-    close() {
-      instance.lGalleryOn = false;
-      instance.outer = null;
-      photoGrid.dispatchEvent(new Event("onCloseAfter"));
-    },
-    cleanup() {
-      context.disposed = true;
-      cleanups.splice(0).forEach((fn) => fn());
-    },
-  };
-}
-
-test("pagination rebuild of an unopened legacy lightbox preserves the current viewport", () => {
-  const f = lightboxSyncFixture();
-  f.sync();
-  assert.equal(f.calls.destroy, 1);
-  f.advance();
-  assert.equal(f.calls.rebuild, 1);
-  assert.equal(f.window.scrollX, 7);
-  assert.equal(f.window.scrollY, 1540, "page 2 must not restore the lightbox's absent open-time position");
-  f.window.scrollY = 2300;
-  f.sync();
-  assert.equal(f.window.scrollY, 2300, "later pages preserve the position at append time");
-});
-
-test("pagination waits until the active legacy lightbox closes before rebuilding its items", () => {
-  const f = lightboxSyncFixture({ open: true });
-  f.sync();
-  f.sync();
-  assert.equal(f.calls.destroy, 0, "appending must not close the user's open lightbox");
-  assert.equal(f.window.scrollY, 1540);
-  f.close();
-  assert.equal(f.calls.destroy, 1, "several appends require one update after close");
-  f.advance();
-  assert.equal(f.calls.rebuild, 1);
-  assert.equal(f.window.scrollY, 1540);
-});
-
-test("leaving the page cancels a deferred lightbox item update", () => {
-  const f = lightboxSyncFixture({ open: true });
-  f.sync();
-  f.cleanup();
-  f.close();
-  assert.equal(f.calls.destroy, 0);
-  assert.equal(f.calls.rebuild, 0);
-});
-
-test("a lightbox with a refresh API updates without teardown or scrolling", () => {
-  const f = lightboxSyncFixture({ refresh: true });
-  f.sync();
-  assert.equal(f.calls.refresh, 1);
-  assert.equal(f.calls.destroy, 0);
-  assert.equal(f.window.scrollY, 1540);
-});
-
-test("a failed legacy lightbox rebuild still preserves the reading position", () => {
-  const f = lightboxSyncFixture({ rebuildFails: true });
-  f.sync();
-  assert.throws(() => f.advance(), /Gallery rebuild failed/);
-  assert.equal(f.window.scrollY, 1540);
-});
-
-test("legacy teardown finishes before a newly appended image opens its lightbox", () => {
-  const f = lightboxSyncFixture();
-  f.sync();
-  assert.equal(f.calls.rebuild, 0, "do not expose a new instance to the old global backdrop cleanup");
-  assert.equal(f.click(), true, "remember the user's click during teardown");
-  f.advance(199);
-  assert.equal(f.calls.rebuild, 0);
-  f.advance(1);
-  assert.equal(f.calls.rebuild, 1);
-  assert.equal(f.hasBackdrop(), true, "the queued image opens after old cleanup has finished");
-  f.advance(500);
-  assert.equal(f.hasBackdrop(), true);
-});
-
-test("appends during legacy teardown coalesce and leaving cancels rebuild and queued clicks", () => {
-  const f = lightboxSyncFixture();
-  f.sync(); f.sync(); f.click();
-  assert.equal(f.calls.destroy, 1);
-  assert.equal(f.calls.init, 0, "do not reinitialize through the plugin while teardown is pending");
-  f.cleanup(); f.advance(1000);
-  assert.equal(f.calls.rebuild, 0);
-  assert.equal(f.hasBackdrop(), false);
+  });
+  mount({ querySelectorAll: () => [root] }, [{ root: "#photo-grid", selector: "img" }],
+    controller.signal, false);
+  const click = new Event("click", { cancelable: true });
+  Object.defineProperties(click, { target: { value: first }, button: { value: 0 } });
+  root.dispatchEvent(click);
+  assert.equal(click.defaultPrevented, true);
+  nodes.push(second);
+  root.dispatchEvent(new Event("sky:gallery-items"));
+  root.dispatchEvent(new Event("sky:gallery-items"));
+  events.close();
+  actions.push("open");
+  assert.equal(first.focused, true, "closing a lightbox returns focus to the triggering image");
+  controller.abort();
+  root.dispatchEvent(new Event("sky:gallery-items"));
+  assert.deepEqual(actions, ["mount", "/first.jpg", 0, "/second.jpg", "open", "destroy"]);
 });
 
 function classList() {
@@ -448,32 +338,6 @@ test("first-screen reflow waits for every image and restores focus and scroll af
   assert.equal(resets, 1, "later notifications must not repeat first-screen reflow");
 });
 
-test("preload finishing after its timeout updates a placed card but cannot overwrite a settled image", () => {
-  const img = { dataset: {}, classList: classList() };
-  const item = {};
-  let updates = 0;
-  const context = vm.createContext({
-    img,
-    item,
-    disposed: false,
-    preload: { naturalWidth: 400, naturalHeight: 800 },
-    clearTimeout: () => {},
-    t: 1,
-    resolve: () => {},
-    updateItemHeight: () => updates++,
-  });
-  vm.runInContext(preloadSuccess, context);
-  assert.equal(img._nw, 400);
-  assert.equal(img._nh, 800);
-  assert.equal(updates, 1);
-  img.dataset.settled = "1";
-  delete img._nw;
-  delete img._nh;
-  vm.runInContext(preloadSuccess, context);
-  assert.equal(img._nw, undefined);
-  assert.equal(updates, 1);
-});
-
 test("refreshing lightbox items after pagination leaves failed images out of keyboard navigation", () => {
   const state = setup({ complete: true });
   state.registerLightbox();
@@ -515,6 +379,8 @@ function paginationFixture(pages) {
   nodes.get("photos-load-error").classList.add("hidden");
   const requests = [];
   const appended = [];
+  const boundImages = [];
+  let preloads = 0;
   let callback;
   const context = vm.createContext({
     disposed: false,
@@ -522,7 +388,6 @@ function paginationFixture(pages) {
     resizeTimer: null,
     cleanupTasks: [],
     photoGrid: { removeEventListener() {} },
-    handleGridClick() {},
     handleGridKeydown() {},
     handleResize() {},
     document: { getElementById: (id) => nodes.get(id), addEventListener() {} },
@@ -536,6 +401,9 @@ function paginationFixture(pages) {
     URL,
     setTimeout,
     clearTimeout,
+    Image: class {
+      constructor() { preloads++; }
+    },
     fetch: async (url) => {
       requests.push(url);
       const value = pages[requests.length - 1];
@@ -545,14 +413,15 @@ function paginationFixture(pages) {
     DOMParser: class {
       parseFromString(page) {
         return {
-          querySelectorAll: () => (page?.empty ? [] : [{ style: {}, querySelector: () => null }]),
+          querySelectorAll: () => (page?.empty ? [] : [{ style: {}, dataset: {}, querySelector: () => page?.image ?? null }]),
           querySelector: () => (page?.next ? { href: page.next } : null),
         };
       }
     },
     allPhotoItems: [],
     appendToShortest: (item) => appended.push(item),
-    bindImageLoad() {},
+    bindImageLoad(image) { boundImages.push(image); },
+    ensureLightGalleryImageContract(item) { return item.querySelector("img"); },
     syncLightGalleryItems() {},
     skyDebug: { error() {} },
     IntersectionObserver: class {
@@ -563,17 +432,31 @@ function paginationFixture(pages) {
       disconnect() {}
     },
   });
-  vm.runInContext(`(function () { ${source.slice(start, end)} })()`, context);
+  const cleanup = vm.runInContext(`(function () { ${source.slice(start, end)} })()`, context);
   return {
     requests,
     appended,
+    boundImages,
+    preloadCount: () => preloads,
     nodes,
     sentinel,
     enter: () => callback([{ isIntersecting: true }]),
-    cleanup: () => context.window.__skyPhotosCleanup(),
+    cleanup,
     settle: () => new Promise((resolve) => setTimeout(resolve, 40)),
   };
 }
+
+test("a paginated card is placed and registered before the browser image finishes", async () => {
+  const image = { complete: false, src: "/photos/pending.jpg" };
+  const f = paginationFixture([{ image }]);
+  f.enter();
+  await f.settle();
+  assert.equal(f.appended.length, 1);
+  assert.equal(f.appended[0].dataset.photoAppended, "");
+  assert.deepEqual(f.boundImages, [image]);
+  assert.equal(f.preloadCount(), 0);
+  f.cleanup();
+});
 
 test("a visible photo sentinel continues through small pages until exhaustion", async () => {
   const f = paginationFixture([{ next: "https://halo.test/photos?page=3&size=1" }, {}]);

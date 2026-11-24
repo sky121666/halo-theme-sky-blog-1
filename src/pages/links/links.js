@@ -4,8 +4,9 @@
  */
 import "./links.css";
 import { mountLinksApp } from "../../apps/links/runtime.js";
-import { notifySwupPageReady, registerPageLifecycle } from "../../common/js/page-runtime.js";
+import { createPage } from "../../common/js/page.js";
 
-registerPageLifecycle(mountLinksApp, { entry: "links", immediate: true });
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
-notifySwupPageReady();
+page.onMount(mountLinksApp);

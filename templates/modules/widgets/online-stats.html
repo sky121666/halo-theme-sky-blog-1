@@ -7,9 +7,9 @@
 <!-- ========================================== -->
 
 <div th:fragment="online"
-  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] overflow-hidden"
+  data-glow-owner="widgets" class="sky-glow-card card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] overflow-hidden"
   x-data="onlineStats()"
-  th:with="onlineCfg = ${theme.config.general.sidebar_settings?.online_stats_config}"
+  th:with="onlineCfg = ${theme.config.components.sidebar_settings?.online_stats_config}"
   th:attr="data-show-hot-pages=${onlineCfg?.show_hot_pages != false}">
 
   <!-- 加载 -->

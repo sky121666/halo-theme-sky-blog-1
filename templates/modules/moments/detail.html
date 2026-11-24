@@ -5,13 +5,13 @@
 <th:block th:fragment="content">
 
   <th:block th:with="
-    cfg=${theme.config.moments_settings},
+    cfg=${theme.config.plugins.moments},
     basicCfg=${cfg?.basic_info},
     enableUpvote=${basicCfg?.enable_upvote != false},
     enableComment=${haloCommentEnabled and basicCfg?.enable_comment != false},
     enableShare=${cfg?.enable_share != false},
-    shareSettings=${cfg?.share_settings},
-    shareItemIds=${shareSettings?.share_item_ids ?: {'wechat','weibo','x','qq'}},
+
+
     content=${moment.spec.content}
   ">
 
@@ -30,7 +30,7 @@
       </div>
 
       <!-- 瞬间卡片 - 与列表页样式一致 -->
-      <article class="card bg-base-100 shadow-sm rounded-2xl overflow-hidden">
+      <article data-glow-owner="personal" class="sky-glow-card card bg-base-100 shadow-sm rounded-2xl overflow-hidden">
         <div class="p-4">
           <!-- 头部：头像 + 用户名 + 时间 -->
           <div class="flex items-center gap-3 mb-3">
@@ -178,11 +178,11 @@
 
     <!-- 分享弹窗 - 使用通用组件 -->
     <th:block th:if="${enableShare}">
-      <th:block th:replace="~{modules/share-modal :: shareModal(
-        title='分享瞬间',
+      <th:block th:replace="~{modules/share-modal :: shareFor(
+      host='momentsDetail',
+      title='分享瞬间',
         shareUrl=${'/moments/' + moment.metadata.name},
-        shareTitle=${(moment.owner?.displayName ?: '匿名用户') + ' 的瞬间'},
-        shareItemIds=${shareItemIds}
+        shareTitle=${(moment.owner?.displayName ?: '匿名用户') + ' 的瞬间'}
       )}" />
     </th:block>
 

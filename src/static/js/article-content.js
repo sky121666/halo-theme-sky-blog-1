@@ -1,17 +1,8 @@
-/**
- * 公共文章内容处理脚本
- * 适用于所有使用 #article-content 的页面（post、doc、page、about 等）
- * 
- * 使用方式：
- * 1. 在模板 <head> 中引入：<script th:src="@{/assets/js/article-content.js}"></script>
- * 2. 脚本会在首屏和每次 PJAX page-load 时自动初始化
- */
-
 import { skyDebug } from '../../common/js/debug.js';
 import { decorateExternalLinks } from '../../common/js/external-links.js';
 
-(function(window, document) {
-  'use strict';
+export function mountArticleContent() {
+  if (!document.getElementById('article-content')) return;
 
   const TEXT_DIAGRAM_MERMAID_SRC = '/plugins/text-diagram/assets/static/mermaid.min.js';
   const TEXT_DIAGRAM_MERMAID_SELECTOR = 'text-diagram[data-type="mermaid"]';
@@ -70,7 +61,7 @@ import { decorateExternalLinks } from '../../common/js/external-links.js';
   }
 
   /**
-   * Shiki 1.4.1 在 PJAX 返回已含服务端 <shiki-code> 的正文时，会再次把其
+   * Shiki 1.4.1 在 站内返回已含服务端 <shiki-code> 的正文时，会再次把其
    * 直属 pre 包成新的 <shiki-code>。仅保留持有真实 pre 的内层宿主，避免
    * 每次往返都新增一层 Shadow DOM 和重复渲染。
    */
@@ -100,7 +91,7 @@ import { decorateExternalLinks } from '../../common/js/external-links.js';
     }
 
     if (normalizedCount > 0) {
-      skyDebug.warn('shiki', '已归一化 PJAX 重复代码块包装', { count: normalizedCount });
+      skyDebug.warn('shiki', '已归一化 重复代码块包装', { count: normalizedCount });
     }
   }
 
@@ -131,7 +122,7 @@ import { decorateExternalLinks } from '../../common/js/external-links.js';
   }
 
   /**
-   * Text Diagram 的资源由插件按页面注入，但 PJAX 替换正文时不会执行新页面脚本。
+   * Text Diagram 的资源由插件按页面注入，但 Swup 替换正文时不会执行新页面脚本。
    * 仅在检测到尚未处理的 Mermaid 节点时加载插件资源并补跑渲染。
    */
   function isCompatibleMermaid(candidate) {
@@ -273,6 +264,7 @@ import { decorateExternalLinks } from '../../common/js/external-links.js';
       attributes: true,
       attributeFilter: ['data-color-scheme'],
     });
+    return observer;
   }
 
   /**
@@ -288,29 +280,13 @@ import { decorateExternalLinks } from '../../common/js/external-links.js';
     void renderTextDiagrams(generation);
   }
 
-  // 自动初始化。ES Module 在 PJAX 返回时不会重新执行，因此只注册一次持久回调，
-  // 由 SkyPjax 在首屏及每次 DOM 替换后重新处理当前 #article-content。
-  if (!window.__skyArticleContentLifecycleRegistered) {
-    window.__skyArticleContentLifecycleRegistered = true;
-    observeTextDiagramTheme();
-
-    if (window.SkyPjax?.onPage) {
-      window.SkyPjax.onPage(initArticleContent, { immediate: false });
-      window.SkyPjax.onCleanup(function() {
-        articleContentGeneration += 1;
-        textDiagramRenderRequest += 1;
-        shikiStructureObserver?.disconnect();
-        shikiStructureObserver = null;
-        shikiNormalizeQueued = false;
-      });
-    } else if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initArticleContent, { once: true });
-    } else {
-      initArticleContent();
-    }
-  }
-
-  // 暴露给全局（可选，供页面手动调用）
-  window.initArticleContent = initArticleContent;
-
-})(window, document);
+  const themeObserver = observeTextDiagramTheme();
+  initArticleContent();
+  return () => {
+    articleContentGeneration += 1;
+    textDiagramRenderRequest += 1;
+    textDiagramThemeRequest += 1;
+    shikiStructureObserver?.disconnect();
+    themeObserver.disconnect();
+  };
+}

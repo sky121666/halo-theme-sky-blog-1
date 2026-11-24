@@ -5,16 +5,16 @@
 
 // 导入页面样式（已包含 article-content.css）
 import './page.css';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 import { initializePageCover } from './cover.js';
 
 // 导入公共文章内容脚本
-import '../../static/js/article-content.js';
 
 // 页面初始化
-registerPageLifecycle(() => {
+page.onMount(() => {
   if (!document.getElementById('page-container')) return;
   return initializePageCover(document.getElementById('page-cover'));
-}, { entry: 'page' });
-
-notifySwupPageReady();
+});

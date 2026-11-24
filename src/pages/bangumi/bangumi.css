@@ -125,7 +125,8 @@
 .bangumi-card {
   display: block;
   text-decoration: none;
-  transition: transform 0.3s ease;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease, box-shadow 0.16s ease;
   overflow: hidden; /* 防止内容溢出 */
   min-width: 0; /* 允许收缩 */
 }
@@ -144,10 +145,6 @@
   background: color-mix(in srgb, var(--color-base-content) 5%, transparent);
   box-shadow: var(--art-shadow-md);
   transition: box-shadow 0.3s ease;
-}
-
-.bangumi-card:hover .bangumi-cover {
-  box-shadow: var(--art-shadow-xl);
 }
 
 .bangumi-cover img {

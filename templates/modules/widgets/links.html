@@ -1,9 +1,9 @@
 <th:block th:fragment="links(context)">
   <!-- 兼容基线：PluginLinks v2.2.1；首页模块使用 groupBy()，并对主题分组筛选后的真实空集显示空态。 -->
-  <th:block th:with="linksSettings = ${theme.config.index.links_settings}">
+  <th:block th:with="linksSettings = ${theme.config.pages.index.links_settings}">
     <section
       th:if="${linksSettings != null and linksSettings.enable_links == true}"
-      class="card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-6 shadow-lg backdrop-blur-xl sm:p-8 lg:mb-0"
+      data-glow-owner="home" data-glow-component="home-links" class="sky-glow-card card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-6 shadow-lg backdrop-blur-xl sm:p-8 lg:mb-0"
     >
       <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -62,32 +62,10 @@
                    filteredGroups = ${linksSettings.links_groups == null or #lists.isEmpty(linksSettings.links_groups) ? groups : groups.?[#lists.contains(#root.linksSettings.links_groups, metadata.name)]},
                    visibleLinkCount = ${filteredGroups == null or #lists.isEmpty(filteredGroups) ? 0 : #aggregates.sum(filteredGroups.![#lists.size(links)])}"
         >
-          <!-- JS 数量截断（仅前端展示效果，后端实际加载全部数据）-->
-          <script th:inline="javascript" data-swup-reload-script>
-            (function () {
-              function applyLimit() {
-                var grid = document.getElementById("index-links-grid");
-                if (!grid) return;
-
-                var links = grid.querySelectorAll(":scope > a");
-                var max = /*[[${linksSettings.links_count}]]*/ 0;
-                max = parseInt(max, 10);
-                for (var i = 0; i < links.length; i++) {
-                  links[i].hidden = max > 0 && i >= max;
-                }
-              }
-
-              if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", applyLimit, { once: true });
-              } else {
-                applyLimit();
-              }
-            })();
-          </script>
 
           <div
             th:if="${visibleLinkCount > 0}"
-            id="index-links-grid"
+            id="index-links-grid" th:attr="data-links-limit=${linksSettings.links_count}" x-data x-init="Array.from($el.children).forEach((link, index) => { link.hidden = Number($el.dataset.linksLimit) > 0 &amp;&amp; index >= Number($el.dataset.linksLimit) })"
             class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
           >
             <th:block

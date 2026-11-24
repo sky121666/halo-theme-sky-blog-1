@@ -530,10 +530,7 @@
     border-radius: 1.5rem;
     border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
 
-    /* 柔和阴影 - 增强深度 */
-    box-shadow:
-        0 8px 32px -8px color-mix(in oklch, var(--color-base-content) 12%, transparent),
-        inset 0 1px 0 color-mix(in oklch, var(--color-base-100) 80%, transparent);
+    --sky-card-elevation: inset 0 1px 0 color-mix(in oklch, var(--color-base-100) 80%, transparent);
 }
 
 /* 内部微暗渐变 (增强对比度) */
@@ -559,9 +556,7 @@
 [data-color-scheme="light"] .equipment-showcase {
     background: color-mix(in oklch, var(--color-base-100) 85%, transparent);
     border-color: color-mix(in oklch, var(--color-base-content) 8%, transparent);
-    box-shadow:
-        0 8px 32px -8px color-mix(in oklch, var(--color-base-content) 8%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    --sky-card-elevation: inset 0 1px 0 rgb(255 255 255 / 0.8);
 }
 
 /* 展示区内的内容层 */

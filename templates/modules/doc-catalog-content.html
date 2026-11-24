@@ -42,10 +42,7 @@
 
       <!-- 子项目列表 - Glassmorphism Cards -->
       <div class="doc-catalog-grid grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a th:each="node : ${sonNodes}" th:href="@{${node.status.permalink}}" class="doc-catalog-card glow-card group relative overflow-hidden bg-base-100/80 backdrop-blur-xl rounded-2xl
-                  p-6 border border-base-content/[0.06] hover:border-primary/20
-                  shadow-sm hover:shadow-xl hover:-translate-y-1 
-                  transition-all duration-300 ease-out cursor-pointer">
+        <a th:each="node : ${sonNodes}" th:href="@{${node.status.permalink}}" data-glow-owner="reading" data-glow-interaction="hover press focus" class="sky-glow-card doc-catalog-card group relative overflow-hidden bg-base-100/80 backdrop-blur-xl rounded-2xl p-6 border border-base-content/[0.06] hover:border-primary/20 shadow-sm hover:-translate-y-1 transition-all duration-300 ease-out cursor-pointer">
 
           <div class="doc-catalog-card-inner flex items-start gap-5">
             <!-- 图标容器 -->
@@ -81,7 +78,7 @@
 
       <!-- 空状态 -->
       <div th:if="${sonNodes == null || sonNodes.isEmpty()}"
-        class="glow-card bg-base-100/60 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] shadow-lg p-16 text-center mt-8">
+        data-glow-owner="reading" class="sky-glow-card bg-base-100/60 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] shadow-lg p-16 text-center mt-8">
         <div class="w-20 h-20 mx-auto bg-base-content/5 rounded-full flex items-center justify-center mb-6">
           <span class="icon-[heroicons--folder-open] w-10 h-10 text-base-content/30"></span>
         </div>

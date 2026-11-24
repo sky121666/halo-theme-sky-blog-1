@@ -98,9 +98,9 @@ if (!momentHeader.includes("momentFinder.list(1, 3).items") || !momentHeader.inc
 
 const momentList = read("templates/modules/moments/content.html");
 const momentDetail = read("templates/modules/moments/detail.html");
-const momentsScript = read("src/pages/moments/moments.js");
 const emojiScript = read("src/static/emoji/emoji-selector.js");
-const mainScript = read("src/common/main.js");
+const navigationPolicy = read("src/common/js/navigation-policy.js");
+const onPagePlugins = read("src/common/js/plugin-page.js");
 const publicLayout = read("templates/layout.html");
 if (!/th:fragment="html\s*\(head,\s*content\)"/.test(publicLayout)) {
   fail("Halo 2.26 public layout must expose html(head, content)");
@@ -111,8 +111,15 @@ if (/\$\{[^}]*\b(?:post|singlePage)\??\./.test(publicLayout)) {
 if (!publicLayout.includes('th:if="${head == null}"') || !publicLayout.includes('th:replace="${head}"')) {
   fail("public plugin layout must accept caller head and provide a title only when it is null");
 }
-if (!publicLayout.includes("modules/footer :: footer") || !publicLayout.includes("window.__skyPjaxEnabled = false")) {
-  fail("public plugin layout must preserve plugin injection and the full-document lifecycle");
+if (!publicLayout.includes("modules/footer :: footer") ||
+    !publicLayout.includes('id="swup" data-page="page"') ||
+    !publicLayout.includes('id="swup-page-extras"')) {
+  fail("public plugin layout must include the Swup containers and footer injection");
+}
+const errorTemplate = read("templates/error/error.html");
+if (!errorTemplate.includes('error.status == 404') ||
+    !errorTemplate.includes('~{layout :: html(') || !errorTemplate.includes('data-theme-swup')) {
+  fail("recoverable 404 must opt into the public Swup layout");
 }
 const authorContent = read("templates/modules/author/content.html");
 for (const [file, source] of [
@@ -126,18 +133,18 @@ for (const [file, source] of [
     fail(`${file}: Moments image links must opt out of Swup before LightGallery handles them`);
   }
 }
-if (!mainScript.includes('Boolean(el?.closest("[data-no-swup]"))')) {
+if (!navigationPolicy.includes('element?.closest("[data-no-swup]")')) {
   fail("custom Swup ignoreVisit must preserve the standard data-no-swup escape hatch");
 }
-if (!momentsScript.includes("window.SkyLightGallery?.initNow?.()")) {
+if (!onPagePlugins.includes("mountGalleries(content, settings.galleries, signal, initial)")) {
   fail("Moments PJAX lifecycle must actively initialize LightGallery");
 }
 if (!momentList.includes("data-emoji-trigger")) {
   fail("Moments emoji trigger must expose a stable outside-click contract");
 }
 for (const marker of [
-  "window.__skyEmojiSelectorCleanup?.()",
-  "document.addEventListener('sky:page-cleanup', cleanupEmojiSelector",
+  "export function mountEmojiSelector()",
+  "return cleanupEmojiSelector;",
   "e.target.closest('[data-emoji-trigger]')",
 ]) {
   if (!emojiScript.includes(marker)) fail(`Moments emoji PJAX marker is missing: ${marker}`);
@@ -224,15 +231,8 @@ for (const [file, source] of [
 for (const forbidden of ["feedUrls", "status.rss.feeds", "linkGroup.spec.links"]) {
   if (linksContent.includes(forbidden)) fail(`PluginLinks public template must not expose ${forbidden}`);
 }
-if (!linksScript.includes("notifySwupPageReady()")) {
-  fail("PluginLinks page entry must notify the shared PJAX lifecycle");
-}
-if (!linksScript.includes('registerPageLifecycle(mountLinksApp, { entry: "links", immediate: true })')) {
-  fail("PluginLinks page entry must close the late-module initial mount race");
-}
-const pageRuntime = read("src/common/js/page-runtime.js");
-for (const marker of ["options.immediate && isCurrentPjaxPage()", "window.__skyPjaxState?.currentPage"]) {
-  if (!pageRuntime.includes(marker)) fail(`shared page lifecycle immediate marker is missing: ${marker}`);
+if (!linksScript.includes("page.onMount(mountLinksApp)")) {
+  fail("PluginLinks page entry must register its public mount function");
 }
 if (!/import\s*\{[^}]*\bMANAGED_QUERY_KEYS\b[^}]*\}\s*from\s*["']\.\/history\.js["']/.test(linksRuntime)) {
   fail("PluginLinks runtime must import MANAGED_QUERY_KEYS from its shared history module");
@@ -302,7 +302,7 @@ if (indexMomentsHeader.includes(")} hidden h-24")) {
 }
 if (
   !indexContent.includes(
-    "th:class=\"${theme.config.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'\"",
+    "th:class=\"${theme.config.pages.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'\"",
   )
 ) {
   fail("Home shell conditional class expression must remain valid after formatting");
@@ -338,9 +338,8 @@ for (const marker of [
   "visibleLinkCount = ${",
   "data-index-links-empty",
   "this.nextElementSibling.hidden = false",
-  "function applyLimit()",
-  'document.readyState === "loading"',
-  "applyLimit();",
+  "data-links-limit",
+  "x-init=",
 ]) {
   if (!linksWidget.includes(marker)) fail(`Home Links PJAX limit marker is missing: ${marker}`);
 }
@@ -351,13 +350,10 @@ const galleryWidget = read("templates/modules/widgets/gallery.html");
 for (const marker of [
   'event.key !== "Enter" && event.key !== " "',
   'img.setAttribute("data-src", src)',
-  "window.lgData?.[id]",
-  'typeof instance.refresh === "function"',
-  "instance.destroy(true)",
-  "window.lightGallery(photoGrid, settings)",
+  'new Event("sky:gallery-items")',
   "syncLightGalleryItems();",
 ]) {
-  if (!photosScript.includes(marker)) fail(`Photos dynamic LightGallery marker is missing: ${marker}`);
+  if (!photosScript.includes(marker)) fail(`Photos dynamic lightbox marker is missing: ${marker}`);
 }
 for (const marker of ["data-photo-lightbox-trigger", 'role="button"', 'tabindex="0"', "data-src="]) {
   if (!photosContent.includes(marker)) fail(`Photos keyboard/lightbox template marker is missing: ${marker}`);
@@ -379,7 +375,7 @@ if (!docsme.includes("name=${docTree.metadata.name}")) {
 
 const steam = read("templates/modules/steam/content.html");
 const sidebarTemplate = read("templates/modules/widgets/sidebar.html");
-const steamCard = read("templates/modules/widgets/steam-card.html");
+const steamCard = read("src/common/js/widget-components.js");
 if (!steam.includes("game.delisted")) fail("Steam 1.0 contract must render delisted state");
 if (/games\.items\.filter\([^\n]*headerImageUrl/.test(steam)) {
   fail("Steam games with missing headerImageUrl must not be filtered out");
@@ -411,8 +407,9 @@ for (const marker of ["cover=${bangumi.spec.cover ?: ''}", "this.nextElementSibl
 }
 
 const alpineModules = read("src/common/js/alpine-modules.js");
-for (const marker of ["_titleAbortController", "this._abortController?.abort()", "signal: controller.signal"]) {
-  if (!alpineModules.includes(marker)) fail(`Online widget PJAX cancellation marker is missing: ${marker}`);
+const onlineStats = read("src/common/js/online-stats.js");
+if (!onlineStats.includes("/apis/online-user.zyx2012.cn/v1alpha1/stats")) {
+  fail("Online widget must use the plugin's public stats API");
 }
 
 const articleCss = read("src/static/css/article-content.css");
@@ -482,7 +479,7 @@ if (
 }
 if (
   !articleScript.includes("generation !== articleContentGeneration") ||
-  !articleScript.includes("window.SkyPjax.onCleanup")
+  !articleScript.includes("shikiStructureObserver?.disconnect()")
 ) {
   fail("Text Diagram PJAX fallback must abandon not-yet-started stale renders after page cleanup");
 }
@@ -536,7 +533,7 @@ if (
 ) {
   fail("Contact Form 1.6.4 high-specificity light/dark host selectors are missing");
 }
-if (!/import\s+["']\.\/css\/base\.css["']/.test(read("src/common/main.js"))) {
+if (!/import\s+["']\.\/css\/base\.css["']/.test(read("src/common/main.ts"))) {
   fail("Contact Form variables must be loaded globally through base.css");
 }
 for (const selector of [
@@ -548,53 +545,25 @@ for (const selector of [
 ]) {
   if (!articleCss.includes(selector)) fail(`content plugin host rule is missing: ${selector}`);
 }
-const commonMain = read("src/common/main.js");
-if (!commonMain.includes("script[data-pjax], script.pjax")) {
-  fail("KaTeX and content plugin inline scripts require the PJAX script replay contract");
-}
+const navigation = read("src/common/navigation.ts");
 for (const marker of [
-  'const SKY_PJAX_CONTAINERS = ["#swup", "#swup-scripts", "#swup-page-extras"]',
-  "incomingDocument?.querySelector(selector)",
-  "visit.abort()",
-  "swup.options.skipPopStateHandling",
-  "window.location.assign(target)",
-  "window.history.back()",
-  "{ priority: -100 }",
-  "window.__skyLoadedPluginScripts ||",
-  "window.__skyLoadingPluginScripts || new Set()",
-  "window.__skyLoadedHeadScripts ||",
-  "window.__skyLoadingHeadScripts || new Set()",
-  "replayNewHeadScripts(debugState)",
-  'document.head.querySelectorAll("script[src]")',
-  'script.hasAttribute("data-swup-ignore-script")',
-  'replacement.async = script.hasAttribute("async")',
-  'skyDebug.event("pjax", "head-script:load"',
-  "loadingPluginScripts.add(script.src)",
-  "loadingPluginScripts.delete(source)",
-  "loadedPluginScripts.add(source)",
-  "MANAGED_BODY_CLASSES",
-  "document.body.classList.toggle(className, enabled)",
-  "new SwupHeadPlugin()",
+  'const containers = ["#swup", "#swup-page-extras"]',
+  'swup.hooks.on("content:replace"',
+  "new SwupHeadPlugin(",
+  "new SwupA11yPlugin(",
+  "new SwupScrollPlugin(",
+  "new SwupProgressPlugin(",
+  "controller.abort()",
 ]) {
-  if (!commonMain.includes(marker)) fail(`PJAX boundary/script lifecycle marker is missing: ${marker}`);
+  if (!navigation.includes(marker)) fail(`navigation contract marker missing: ${marker}`);
 }
-if (/persist(?:Assets|Tags)\s*:/.test(commonMain)) {
-  fail("Swup HeadPlugin must diff versioned assets instead of persisting stale main.css");
+if (!/swup\.hooks\.before\(\s*["']content:replace["']\s*,/.test(navigation)) {
+  fail('navigation must clean up the previous page before "content:replace"');
 }
-if (commonMain.includes("{ after: true }")) {
-  fail("unsupported Swup hook option after:true must not be used");
+if (/document\.body\.className\s*=/.test(navigation)) {
+  fail("body sync must preserve third-party runtime classes");
 }
-if (/document\.body\.className\s*=/.test(commonMain)) {
-  fail("PJAX body sync must preserve third-party runtime classes");
-}
-const compatibilityEvents = commonMain.slice(
-  commonMain.indexOf("function dispatchPjaxCompatibilityEvents"),
-  commonMain.indexOf("function getLightGalleryInlineScripts"),
-);
-if (compatibilityEvents.includes("swup:page:view")) {
-  fail("Swup already dispatches swup:page:view; the compatibility bridge must not duplicate it");
-}
-const heatmapTemplate = read("templates/modules/widgets/heatmap.html");
+const heatmapTemplate = read("src/common/js/widget-components.js");
 for (const marker of [
   "_themeObserver?.disconnect()",
   "_resizeObserver?.disconnect()",
@@ -618,34 +587,26 @@ for (const marker of [
 ]) {
   if (!baseScript.includes(marker)) fail(`PJAX base observer lifecycle marker is missing: ${marker}`);
 }
-if (!commonMain.includes("window.SkyEvents?.cleanupPageObservers?.()")) {
+if (!navigation.includes("disposeEffects()")) {
   fail("PJAX cleanup must release base observers before replacing the page containers");
 }
 const navTemplate = read("templates/modules/nav.html");
-if ((navTemplate.match(/@click="open = false"/g) || []).length < 2) {
-  fail("desktop and mobile submenu links must close their persistent Alpine state before PJAX navigation");
-}
-if ((navTemplate.match(/@sky:page-load\.document="open = false"/g) || []).length < 2) {
+if ((navTemplate.match(/@swup:page:view\.document="[^"]*\bopen = false\b[^"]*"/g) || []).length < 2) {
   fail("desktop and mobile submenu state must reset after PJAX navigation and history traversal");
+}
+if (!navTemplate.includes('@swup:page:view.document="open = false; hovering = false"')) {
+  fail("desktop submenu hover state must reset after Swup navigation");
 }
 for (const marker of [
   "_pageLoadHandler: null",
-  'document.addEventListener("sky:page-load", this._pageLoadHandler)',
-  'document.removeEventListener("sky:page-load", this._pageLoadHandler)',
+  'document.addEventListener("swup:page:view", this._pageLoadHandler)',
+  'document.removeEventListener("swup:page:view", this._pageLoadHandler)',
   'document.getElementById("mobile-menu-drawer")',
 ]) {
   if (!alpineModules.includes(marker)) fail(`persistent navbar cleanup marker is missing: ${marker}`);
 }
 for (const route of ["/dishes", "/schedule-calendar"]) {
-  if (!commonMain.includes(`isRouteOrDescendant(url, ${JSON.stringify(route)})`)) {
-    fail(`${route}: independent plugin page must bypass theme PJAX`);
-  }
-}
-if (
-  !commonMain.includes("resolved.pathname === route") ||
-  !commonMain.includes("resolved.pathname.startsWith(`${route}/`)")
-) {
-  fail("independent plugin route matching must not swallow similarly prefixed non-plugin pages");
+  if (!navigationPolicy.includes(JSON.stringify(route))) fail(`${route}: independent plugin page must bypass Swup`);
 }
 const pjaxLayouts = [
   "templates/modules/about/layout.html",
@@ -670,16 +631,16 @@ const fontFragmentMarker = "modules/font-loader :: fonts";
 for (const file of pjaxLayouts) {
   const source = read(file);
   const extrasIndex = source.indexOf('id="swup-page-extras"');
-  const scriptsIndex = source.indexOf('id="swup-scripts"');
+  const entryIndex = source.indexOf("/assets/js/main.js");
   const gridIndex = source.indexOf(gridFragmentMarker);
   const gridCount = source.split(gridFragmentMarker).length - 1;
   const fontCount = source.split(fontFragmentMarker).length - 1;
   if (
     extrasIndex === -1 ||
-    scriptsIndex === -1 ||
+    entryIndex === -1 || !/id="swup" data-page="[^"]+"/.test(source) ||
     gridCount !== 1 ||
     gridIndex < extrasIndex ||
-    gridIndex > scriptsIndex
+    gridIndex > entryIndex
   ) {
     fail(`${file}: global grid fragment must appear exactly once inside #swup-page-extras`);
   }

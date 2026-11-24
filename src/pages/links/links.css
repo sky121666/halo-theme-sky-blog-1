@@ -33,8 +33,11 @@
   display: none;
 }
 
-[data-links-page] .links-view-navigation > *,
-[data-links-page] .links-scroll-nav > * {
+[data-links-page] {
+  scroll-margin-top: 4rem;
+}
+
+[data-links-page] :is(.links-view-navigation, .links-scroll-nav) > :is(a, button) {
   min-height: 2.5rem;
 }
 
@@ -56,6 +59,13 @@
 
 [data-links-page] .links-card-active {
   border-color: color-mix(in oklch, var(--color-primary) 40%, transparent) !important;
+}
+
+[data-links-page] .sky-glow-card.links-card-active {
+  --sky-glow-at-selected: var(--sky-glow-selected);
+}
+
+[data-links-page] [data-feed-source].links-card-active {
   box-shadow:
     0 0 0 1px color-mix(in oklch, var(--color-primary) 35%, transparent),
     0 8px 24px -12px color-mix(in oklch, var(--color-primary) 45%, transparent) !important;

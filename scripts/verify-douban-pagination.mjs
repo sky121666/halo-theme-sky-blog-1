@@ -42,6 +42,8 @@ function setup(page = 1, filters = {}) {
     return { loadItems, cleanup() { controller.abort(); itemsRequest?.abort(); } };
   })()`, {
     state, els, controller, signal: controller.signal, window, URL, AbortController,
+    createHistoryRecord: (url) => window.history.pushState({ source: "swup", url }, "", url),
+    updateHistoryRecord: (url) => window.history.replaceState({ ...window.history.state, source: "swup", url }, "", url),
     API_BASE: "/apis/api.douban.moony.la/v1alpha1/doubanmovies",
     QUERY_KEYS: ["dataType", "genre", "page", "size", "type", "status"],
     createCard: item => item, updatePaginationButtons() {},

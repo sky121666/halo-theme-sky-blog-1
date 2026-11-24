@@ -3,11 +3,7 @@
  * 修复点击隐藏功能
  */
 
-(() => {
-  'use strict';
-
-  // Swup ScriptsPlugin 会在返回瞬间页时重新执行本文件，先清理旧闭包实例。
-  window.__skyEmojiSelectorCleanup?.();
+export function mountEmojiSelector() {
 
 // 常用表情数据
 const EMOJI_DATA = [
@@ -283,18 +279,9 @@ function cleanupEmojiSelector() {
 
   if (window.showEmojiSelector === showEmojiSelector) window.showEmojiSelector = undefined;
   if (window.hideEmojiSelector === hideEmojiSelector) window.hideEmojiSelector = undefined;
-  if (window.__skyEmojiSelectorCleanup === cleanupEmojiSelector) {
-    window.__skyEmojiSelectorCleanup = undefined;
-  }
-  window.removeEventListener('beforeunload', cleanupEmojiSelector);
-  document.removeEventListener('sky:page-cleanup', cleanupEmojiSelector);
 }
 
-// 导出全局函数
 window.showEmojiSelector = showEmojiSelector;
 window.hideEmojiSelector = hideEmojiSelector;
-window.__skyEmojiSelectorCleanup = cleanupEmojiSelector;
-window.addEventListener('beforeunload', cleanupEmojiSelector, { once: true });
-document.addEventListener('sky:page-cleanup', cleanupEmojiSelector, { once: true });
-
-})();
+return cleanupEmojiSelector;
+}

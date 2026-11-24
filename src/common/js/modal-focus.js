@@ -38,10 +38,10 @@ export function createModalFocus({ panel, backdrop, signal, onClose, initialFocu
     panel.setAttribute('aria-hidden', 'true');
   }
 
-  function open() {
+  function open(trigger = document.activeElement) {
     if (session || signal?.aborted) return;
     session = {
-      trigger: document.activeElement,
+      trigger,
       events: new AbortController(),
       background: [],
       overflow: document.body.style.overflow,
@@ -80,4 +80,37 @@ export function createModalFocus({ panel, backdrop, signal, onClose, initialFocu
 
   signal?.addEventListener('abort', () => onClose({ restoreFocus: false }), { once: true });
   return { open, close };
+}
+
+export function mountContentDrawer({ id, backdropId, signal, beforeOpen }) {
+  const panel = document.getElementById(id);
+  const backdrop = document.getElementById(backdropId);
+  if (!panel || !backdrop) return;
+
+  const triggers = document.querySelectorAll(`[data-drawer-open="${id}"]`);
+  const focus = createModalFocus({ panel, backdrop, signal, onClose: close });
+
+  function setOpen(open) {
+    panel.classList.toggle('open', open);
+    backdrop.classList.toggle('open', open);
+    for (const trigger of triggers) trigger.setAttribute('aria-expanded', String(open));
+  }
+
+  function close(options) {
+    setOpen(false);
+    focus.close(options);
+  }
+
+  function open(event) {
+    if (panel.classList.contains('open') || beforeOpen?.() === false) return;
+    setOpen(true);
+    focus.open(event.currentTarget);
+  }
+
+  for (const trigger of triggers) trigger.addEventListener('click', open, { signal });
+  for (const button of panel.querySelectorAll('[data-drawer-close]')) {
+    button.addEventListener('click', () => close(), { signal });
+  }
+  backdrop.addEventListener('click', () => close(), { signal });
+  return { close };
 }

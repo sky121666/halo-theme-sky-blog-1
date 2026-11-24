@@ -6,7 +6,7 @@
 <th:block th:fragment="content">
   <th:block
     th:with="
-    cfg=${theme.config.photos_settings},
+    cfg=${theme.config.plugins.photos},
     pageTitle=${cfg?.page_title ?: '图库'},
     pageDesc=${cfg?.page_description ?: '记录生活中的美好瞬间'},
     showPhotoInfo=${cfg?.show_photo_info != false},
@@ -68,9 +68,9 @@
         <th:block th:each="photo, stat : ${photos.items}">
           <div
             th:style="'animation-delay: ' + (${stat.index} * 35) + 'ms;'"
-            class="photo-item animate-fade-in-up group break-inside-avoid"
+            data-glow-owner="personal" data-glow-interaction="hover press focus" class="sky-glow-card photo-item animate-fade-in-up group break-inside-avoid"
           >
-            <img
+            <img data-glow-trigger
               th:with="imageWidth=${photo.exif?.imageWidth ?: 0}, imageHeight=${photo.exif?.imageHeight ?: 0}"
               th:src="${photo.spec.url}"
               th:alt="${photo.spec.displayName}"

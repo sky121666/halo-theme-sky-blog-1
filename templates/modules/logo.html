@@ -11,50 +11,55 @@
   
   logo_type 可选值：
   - none: 不显示图标
-  - system: 使用系统设置（Halo 后台设置 → 基本设置 → Logo）
+  - system: 默认读取 Halo 站点 Logo
+  - iconify: 显示图标库图标
   - svg: 显示 SVG 代码
   - image: 显示上传的图片
 -->
 
 <!-- Logo 图标渲染片段 -->
-<span th:fragment="icon(sizeClass)">
+<span th:fragment="icon(sizeClass)"
+  th:with="logo=${theme.config?.get('components')?.get('nav')?.get('logo_settings')},
+           logoType=${logo?.logo_type ?: 'system'},
+           logoTitle=${#strings.isEmpty(logo?.custom_logo_title) ? site.title : logo.custom_logo_title}">
   <!-- 系统设置类型 -->
-  <img th:if="${theme.config.nav.logo_settings.logo_type == 'system' && !#strings.isEmpty(site.logo)}"
+  <img th:if="${logoType == 'system' && !#strings.isEmpty(site.logo)}"
     th:src="${site.logo}"
-    th:alt="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}"
+    th:alt="${logoTitle}"
     th:class="${sizeClass} + ' object-contain'" />
 
   <!-- Iconify 图标选择器类型 - 兼容两种数据格式 -->
   <!-- 对象格式：不是以 <svg 开头 -->
   <span
-    th:if="${theme.config.nav.logo_settings.logo_type == 'iconify' and theme.config.nav.logo_settings.logo_icon != null and !theme.config.nav.logo_settings.logo_icon.toString().startsWith('<svg')}"
-    th:utext="${theme.config.nav.logo_settings.logo_icon['value']}"
+    th:if="${logoType == 'iconify' and logo.logo_icon != null and !logo.logo_icon.toString().startsWith('<svg')}"
+    th:utext="${logo.logo_icon['value']}"
     th:class="${sizeClass} + ' text-primary flex items-center justify-center'">
   </span>
   <!-- 字符串格式：以 <svg 开头 -->
   <span
-    th:if="${theme.config.nav.logo_settings.logo_type == 'iconify' and theme.config.nav.logo_settings.logo_icon != null and theme.config.nav.logo_settings.logo_icon.toString().startsWith('<svg')}"
-    th:utext="${theme.config.nav.logo_settings.logo_icon}"
+    th:if="${logoType == 'iconify' and logo.logo_icon != null and logo.logo_icon.toString().startsWith('<svg')}"
+    th:utext="${logo.logo_icon}"
     th:class="${sizeClass} + ' text-primary flex items-center justify-center'">
   </span>
 
   <!-- SVG 代码类型 -->
-  <span th:if="${theme.config.nav.logo_settings.logo_type == 'svg'}"
-    th:utext="${theme.config.nav.logo_settings.logo_icon_html}"
+  <span th:if="${logoType == 'svg'}"
+    th:utext="${logo.logo_icon_html}"
     th:class="${sizeClass} + ' text-primary flex items-center justify-center'">
   </span>
 
   <!-- 图片类型 -->
   <img
-    th:if="${theme.config.nav.logo_settings.logo_type == 'image' && !#strings.isEmpty(theme.config.nav.logo_settings.logo_image)}"
-    th:src="${theme.config.nav.logo_settings.logo_image}"
-    th:alt="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}"
+    th:if="${logoType == 'image' && !#strings.isEmpty(logo.logo_image)}"
+    th:src="${logo.logo_image}"
+    th:alt="${logoTitle}"
     th:class="${sizeClass} + ' object-contain'" />
 </span>
 
 <!-- Logo 标题渲染片段 -->
-<span th:fragment="title" th:if="${theme.config.nav.logo_settings.show_logo_title}"
-  th:text="${#strings.isEmpty(theme.config.nav.logo_settings.custom_logo_title) ? site.title : theme.config.nav.logo_settings.custom_logo_title}">
+<span th:fragment="title" th:with="logo=${theme.config?.get('components')?.get('nav')?.get('logo_settings')}"
+  th:if="${theme.config?.get('components')?.get('nav')?.get('logo_settings')?.get('show_logo_title')?.toString() != 'false'}"
+  th:text="${#strings.isEmpty(logo?.custom_logo_title) ? site.title : logo.custom_logo_title}">
 </span>
 
 </html>

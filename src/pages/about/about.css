@@ -485,23 +485,15 @@
 .sf-project-card {
   background: var(--color-base-100);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-  /* Clip 大圆角 */
-  clip-path: polygon(
-    20px 0, 100% 0, 100% calc(100% - 20px),
-    calc(100% - 20px) 100%, 0 100%, 0 20px
-  );
+  border-radius: 1.25rem;
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  box-shadow: 0 2px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
 }
 
 .sf-project-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 16px 40px color-mix(in oklch, var(--color-primary) 25%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
 }
 
 .sf-card-wide {
@@ -795,23 +787,15 @@
 .sf-tool-card {
   background: var(--color-base-100);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-  /* Clip 效果 */
-  clip-path: polygon(
-    16px 0, 100% 0, 100% calc(100% - 16px),
-    calc(100% - 16px) 100%, 0 100%, 0 16px
-  );
+  border-radius: 1.25rem;
   padding: 2rem 1.5rem;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
 }
 
 .sf-tool-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   transform: translateY(-6px);
-  box-shadow: 
-    0 12px 30px color-mix(in oklch, var(--color-primary) 25%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
 }
 
 .sf-tool-icon {
@@ -875,22 +859,15 @@
   gap: 1.5rem;
   background: var(--color-base-100);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-  clip-path: polygon(
-    20px 0, 100% 0, 100% calc(100% - 20px),
-    calc(100% - 20px) 100%, 0 100%, 0 20px
-  );
+  border-radius: 1.25rem;
   padding: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 2px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sf-location-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   transform: translateY(-6px);
-  box-shadow: 
-    0 12px 30px color-mix(in oklch, var(--color-primary) 25%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
 }
 
 @media (min-width: 768px) {
@@ -1108,21 +1085,14 @@
 .sf-content-card {
   background: var(--color-base-100);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-  clip-path: polygon(
-    20px 0, 100% 0, 100% calc(100% - 20px),
-    calc(100% - 20px) 100%, 0 100%, 0 20px
-  );
+  border-radius: 1.25rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sf-content-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   transform: translateY(-6px);
-  box-shadow: 
-    0 12px 30px color-mix(in oklch, var(--color-primary) 20%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 10%, transparent);
 }
 
 @media (min-width: 768px) {
@@ -1188,9 +1158,6 @@
 
 .sf-cta-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 40%, transparent);
-  box-shadow: 
-    0 8px 30px color-mix(in oklch, var(--color-primary) 15%, transparent),
-    inset 0 0 60px color-mix(in oklch, var(--color-primary) 3%, transparent);
 }
 
 /* CTA 装饰光晕 */
@@ -1249,21 +1216,14 @@
 .sf-comment-card {
   background: var(--color-base-100);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-  clip-path: polygon(
-    20px 0, 100% 0, 100% calc(100% - 20px),
-    calc(100% - 20px) 100%, 0 100%, 0 20px
-  );
+  border-radius: 1.25rem;
   padding: 2.5rem;
-  box-shadow: 0 2px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sf-comment-card:hover {
   border-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   transform: translateY(-6px);
-  box-shadow: 
-    0 12px 30px color-mix(in oklch, var(--color-primary) 20%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 10%, transparent);
 }
 
 /* ============================= 滚动动画 ============================= */

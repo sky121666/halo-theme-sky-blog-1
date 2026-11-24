@@ -205,7 +205,7 @@ test("leaving the page removes image handlers and cancels the pending preview so
 test("the page lifecycle runs cleanup returned by the delayed location initializer", () => {
   const state = setup({ key: "TEST_ONLY_KEY", initialize: false });
   const lifecycle = source.match(
-    /registerPageLifecycle\(function\(\) \{[\s\S]*?\n {2}\}, \{ entry: 'about' \}\);/,
+    /page\.onMount\(function\(\) \{[\s\S]*?\n {2}\}\);/,
   )?.[0];
   assert.ok(lifecycle, "the production about page lifecycle must be available");
   let timer;
@@ -217,9 +217,7 @@ test("the page lifecycle runs cleanup returned by the delayed location initializ
       },
       clearTimeout() {},
     },
-    registerPageLifecycle(mount) {
-      dispose = mount();
-    },
+    page: { onMount(mount) { dispose = mount(); } },
   });
   state.context.document.querySelector = () => state.map;
   for (const method of [

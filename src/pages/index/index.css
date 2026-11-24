@@ -78,10 +78,48 @@
  * 用于说说模块的卡片样式，包含悬停动画和毛玻璃效果
  */
 .moment-card {
+  position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.moment-glow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.moment-glow-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--color-primary) 50%, transparent),
+    color-mix(in oklch, var(--color-primary) 30%, transparent),
+    color-mix(in oklch, var(--color-primary) 10%, transparent),
+    transparent 70%
+  );
+  filter: blur(20px);
+  transform: translate(var(--moment-glow-x, 0px), var(--moment-glow-y, 0px)) translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.moment-glow-container[data-active]::before {
+  opacity: 1;
+}
+
+.moment-card-content {
+  position: relative;
 }
 
 .moment-floating-card {
@@ -99,88 +137,6 @@
     /* 外层阴影：30% 主色浓度 */
     0 0 20px color-mix(in srgb, var(--color-primary) 20%, transparent);
   /* 内层发光：20% 主色浓度 */
-}
-
-/**
- * 3.2 瞬间卡片鼠标跟随发光效果
- * 实现基于鼠标位置的动态光晕效果，增强用户交互体验
- */
-
-/* 带发光效果的卡片基础样式 */
-.moment-card-with-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-/* 发光效果容器 - 绝对定位且不响应鼠标事件 */
-.moment-glow-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 动态光效元素 - 跟随鼠标位置移动 */
-.moment-glow {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-  background: radial-gradient(circle,
-      color-mix(in oklch, var(--color-primary) 50%, transparent),
-      color-mix(in oklch, var(--color-primary) 30%, transparent),
-      color-mix(in oklch, var(--color-primary) 10%, transparent),
-      transparent 70%);
-  filter: blur(20px);
-  transform: translate(-50%, -50%);
-}
-
-/* 确保卡片内容在光效之上 */
-.moment-card-content {
-  position: relative;
-  z-index: 10;
-}
-
-/* 增强卡片悬停效果，与发光效果协调 */
-.moment-card-with-glow:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
-  box-shadow:
-    0 8px 32px color-mix(in oklch, var(--color-primary) 50%, transparent),
-    0 0 20px color-mix(in oklch, var(--color-primary) 20%, transparent), ;
-}
-
-/* 为瞬间浮动卡片添加发光效果支持 */
-.moment-floating-card-with-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-.moment-floating-card-with-glow .moment-glow-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.moment-floating-card-with-glow .moment-glow {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-  background: radial-gradient(circle,
-      color-mix(in oklch, var(--color-primary) 50%, transparent),
-      color-mix(in oklch, var(--color-primary) 30%, transparent),
-      color-mix(in oklch, var(--color-primary) 10%, transparent),
-      transparent 70%);
-  filter: blur(15px);
-  transform: translate(-50%, -50%);
 }
 
 /* ===================================================
@@ -318,6 +274,10 @@
   .wave,
   .wave-dot {
     animation: none;
+  }
+
+  .moment-glow-container {
+    display: none;
   }
 }
 
@@ -488,14 +448,6 @@
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.3s ease;
-}
-
-/* 暗色模式热力图卡片发光效果 */
-[data-theme="dark"] .heatmap-card,
-[data-color-scheme="dark"] .heatmap-card {
-  box-shadow:
-    0 0 30px color-mix(in oklch, var(--color-primary) 12%, transparent),
-    0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /**

@@ -2,9 +2,13 @@
  * 瞬间页面脚本
  */
 import './moments.css';
-import './moment-publish.js';
+import { initMomentPublishModal } from './moment-publish.js';
 import { skyDebug } from '../../common/js/debug.js';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
+page.onMount(initMomentPublishModal);
 
 const UPVOTED_MOMENTS_KEY = 'halo.upvoted.moment.names';
 const momentUpvoteStates = new Map();
@@ -40,22 +44,6 @@ function showMomentActionStatus(btn, message) {
   status.textContent = message;
   btn.insertAdjacentElement('afterend', status);
   window.setTimeout(() => status.remove(), 4000);
-}
-
-/**
- * LightGallery 插件通过 DOMContentLoaded 初始化瞬间图片。PJAX 注入页面时，
- * 需要主动重放插件初始化；图片链接本身保留为插件缺失时的原图降级入口。
- */
-function initializeMomentGalleries() {
-  if (!document.querySelector('.moment-media img')) return;
-
-  Promise.resolve(window.SkyLightGallery?.initNow?.()).then((ready) => {
-    if (ready) {
-      skyDebug.event('moments', 'lightgallery:ready');
-    }
-  }).catch((error) => {
-    skyDebug.warn('moments', '灯箱初始化失败，保留原图链接作为降级', error);
-  });
 }
 
 function readMomentUpvoteCount(btn) {
@@ -162,13 +150,11 @@ function restoreMomentUpvotes(root = document) {
 }
 
 // 页面加载和局部刷新后恢复点赞状态，不重复初始化发布弹窗。
-registerPageLifecycle(function() {
+page.onMount(function() {
   const momentButtons = document.querySelectorAll('[data-moment-name]');
   const publishModal = document.getElementById('moment-publish-modal');
   const momentMedia = document.querySelector('.moment-media');
   if (momentButtons.length === 0 && !publishModal && !momentMedia) return;
-
-  initializeMomentGalleries();
 
   window.handleMomentUpvote = handleMomentUpvote;
   restoreMomentUpvotes();
@@ -186,6 +172,4 @@ registerPageLifecycle(function() {
       window.handleMomentUpvote = undefined;
     }
   };
-}, { entry: 'moments' });
-
-notifySwupPageReady();
+});

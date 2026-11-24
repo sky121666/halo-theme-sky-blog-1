@@ -19,13 +19,11 @@
 </th:block>
 
 <!-- 支持传参的悬浮 Dock 片段 - 根据样式选择显示底部或右侧 -->
-<th:block th:fragment="dockWithConfig(pageCfg, pageType)" th:with="globalCfg = ${theme.config.general.floating_dock},
-                   dockStyle = ${globalCfg?.dock_style ?: 'bottom'},
-                   useCustom = ${pageCfg?.floating_dock?.enable_custom_dock == true},
-                   cfg = ${useCustom ? pageCfg.floating_dock : globalCfg},
-                   enableDock = ${cfg?.enable_dock != false},
-                   dockMenuName = ${cfg?.dock_menu ?: 'primary'},
-                   enableBackToTop = ${cfg?.enable_back_to_top != false}">
+<th:block th:fragment="dockWithConfig(host, pageType)">
+  <th:block th:replace="~{modules/component-settings :: dock(${host}, ~{:: resolvedDock})}" />
+</th:block>
+
+<th:block th:fragment="resolvedDock">
   <!-- 底部居中样式 -->
   <th:block th:if="${enableDock and dockStyle != 'side'}" th:insert="~{:: bottomDockInner}" />
   <!-- 右侧可折叠样式 -->

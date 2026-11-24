@@ -1,52 +1,34 @@
 <!-- 契约基线：PluginMoments 1.16.1；当前验收版本：1.19.0。首页只读取需要展示的 3 条。 -->
-<!-- 瞬间卡片发光效果脚本 -->
-<script th:inline="none" data-swup-reload-script>
-  window.handleMomentCardGlow =
-    window.handleMomentCardGlow ||
-    function (event, card) {
-      if (!event) return;
-      var glowElement = card.querySelector(".moment-glow");
-      if (!glowElement) return;
-      var rect = card.getBoundingClientRect();
-      var x = event.clientX - rect.left;
-      var y = event.clientY - rect.top;
-      glowElement.style.background =
-        "radial-gradient(circle 180px at " + x + "px " + y + "px, oklch(var(--p) / 0.35), transparent 70%)";
-    };
-  window.showMomentCardGlow =
-    window.showMomentCardGlow ||
-    function (card) {
-      var glow = card.querySelector(".moment-glow");
-      if (glow) glow.style.opacity = "1";
-    };
-  window.hideMomentCardGlow =
-    window.hideMomentCardGlow ||
-    function (card) {
-      var glow = card.querySelector(".moment-glow");
-      if (glow) glow.style.opacity = "0";
-    };
-</script>
 
 <!-- 瞬间模块 - 统一布局方案 -->
 <div
   class="absolute inset-x-0 bottom-0 z-30 flex items-end justify-center px-4 pb-20"
-  th:if="${theme.config.index.moment_settings.show_moment}"
+  th:if="${theme.config.pages.index.moment_settings.show_moment}"
 >
   <!-- 瞬间卡片容器 -->
   <div class="w-full max-w-6xl">
-    <!-- 未安装插件时的简单提醒 -->
-    <th:block th:unless="${pluginFinder.available('PluginMoments', '>=1.16.1')}">
-      <div
-        class="moment-card border-primary/20 rounded-2xl border shadow-xl backdrop-blur-sm"
-        onmousemove="handleMomentCardGlow(event, this)"
-        onmouseenter="showMomentCardGlow(this)"
-        onmouseleave="hideMomentCardGlow(this)"
-      >
-        <!-- 发光效果容器 -->
-        <div class="moment-glow-container">
-          <div class="moment-glow"></div>
-        </div>
-        <div class="p-5 text-center">
+    <div
+      class="moment-card border-primary/20 rounded-2xl border shadow-xl backdrop-blur-sm"
+      x-data="{
+        trackGlow(event) {
+          if (event.pointerType !== 'mouse') return;
+          const layer = this.$refs.momentGlow;
+          const { left, top } = layer.getBoundingClientRect();
+          layer.style.setProperty('--moment-glow-x', `${event.clientX - left}px`);
+          layer.style.setProperty('--moment-glow-y', `${event.clientY - top}px`);
+          layer.dataset.active ??= '';
+        }
+      }"
+      @pointerenter.passive="trackGlow($event)"
+      @pointermove.passive="trackGlow($event)"
+      @pointerleave.passive="delete $refs.momentGlow.dataset.active"
+      @pointercancel.passive="delete $refs.momentGlow.dataset.active"
+    >
+      <div class="moment-glow-container" x-ref="momentGlow" aria-hidden="true"></div>
+
+      <!-- 未安装插件时的简单提醒 -->
+      <th:block th:unless="${pluginFinder.available('PluginMoments', '>=1.16.1')}">
+        <div class="moment-card-content p-5 text-center">
           <p class="mb-4 text-white/80">需要安装瞬间插件来展示动态内容</p>
           <a
             href="https://github.com/halo-sigs/plugin-moments"
@@ -57,21 +39,10 @@
             <span>下载瞬间插件</span>
           </a>
         </div>
-      </div>
-    </th:block>
+      </th:block>
 
-    <!-- 已安装插件时显示完整功能 -->
-    <th:block th:if="${pluginFinder.available('PluginMoments', '>=1.16.1')}">
-      <div
-        class="moment-card border-primary/20 rounded-2xl border shadow-xl backdrop-blur-sm"
-        onmousemove="handleMomentCardGlow(event, this)"
-        onmouseenter="showMomentCardGlow(this)"
-        onmouseleave="hideMomentCardGlow(this)"
-      >
-        <!-- 发光效果容器 -->
-        <div class="moment-glow-container">
-          <div class="moment-glow"></div>
-        </div>
+      <!-- 已安装插件时显示完整功能 -->
+      <th:block th:if="${pluginFinder.available('PluginMoments', '>=1.16.1')}">
         <div class="moment-card-content p-5">
           <!-- 标题栏 -->
           <div class="mb-4 flex items-center justify-between md:mb-6">
@@ -82,7 +53,7 @@
               ></span>
               <h3
                 class="moment-title text-base leading-5 font-medium text-white transition-all duration-200 md:text-lg md:leading-6"
-                th:text="${theme.config.index.moment_settings.moment_title ?: '瞬间'}"
+                th:text="${theme.config.pages.index.moment_settings.moment_title ?: '瞬间'}"
               >
                 瞬间
               </h3>
@@ -169,7 +140,7 @@
             </th:block>
           </div>
         </div>
-      </div>
-    </th:block>
+      </th:block>
+    </div>
   </div>
 </div>

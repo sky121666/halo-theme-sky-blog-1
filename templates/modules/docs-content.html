@@ -13,7 +13,7 @@
       <a
         th:if="${docCount > 0}"
         th:href="@{${project.status.permalink}}"
-        class="glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 block cursor-pointer rounded-2xl border p-6 shadow-sm backdrop-blur-xl transition-all duration-300 hover:shadow-lg"
+        data-glow-owner="reading" data-glow-interaction="hover press focus" class="sky-glow-card group bg-base-100/80 border-base-content/[0.06] hover:border-base-content/10 block cursor-pointer rounded-2xl border p-6 shadow-sm backdrop-blur-xl transition-all duration-300"
       >
         <!-- 图标 -->
         <div
@@ -53,7 +53,7 @@
       <div
         th:unless="${docCount > 0}"
         aria-disabled="true"
-        class="glow-card bg-base-100/60 border-base-content/[0.06] block cursor-not-allowed rounded-2xl border p-6 opacity-70 shadow-sm backdrop-blur-xl"
+        data-glow-owner="reading" class="sky-glow-card bg-base-100/60 border-base-content/[0.06] block cursor-not-allowed rounded-2xl border p-6 opacity-70 shadow-sm backdrop-blur-xl"
       >
         <div class="bg-base-content/5 mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
           <img
@@ -85,7 +85,7 @@
   <!-- 空状态 -->
   <div
     th:if="${projects == null || projects.isEmpty()}"
-    class="glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-12 text-center shadow-lg backdrop-blur-xl"
+    data-glow-owner="reading" class="sky-glow-card bg-base-100/80 border-base-content/[0.06] rounded-2xl border p-12 text-center shadow-lg backdrop-blur-xl"
   >
     <span class="icon-[heroicons--document-text] text-base-content/20 mx-auto mb-4 h-16 w-16"></span>
     <p class="text-base-content/50 text-lg">暂无文档项目</p>

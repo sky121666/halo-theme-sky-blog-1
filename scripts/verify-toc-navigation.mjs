@@ -19,6 +19,23 @@ function fixture() {
   return { ...api, calls, window };
 }
 
+test("移动抽屉的目录项将焦点交给标题，并尊重减少动态效果", () => {
+  const f = fixture();
+  f.window.matchMedia = () => ({ matches: true });
+  let focus;
+  const heading = {
+    id: "section",
+    isConnected: true,
+    getBoundingClientRect: () => ({ top: 500 }),
+    hasAttribute: () => false,
+    focus: options => { focus = options.preventScroll; },
+  };
+  f.smoothScrollToHeading(heading, 80, { focus: true });
+  assert.equal(heading.tabIndex, -1);
+  assert.equal(focus, true);
+  assert.equal(f.calls.find(x => x.top !== undefined).behavior, "instant");
+});
+
 test("目录使用文档坐标而非定位父级坐标，并保留历史状态", () => {
   const f = fixture();
   f.smoothScrollToHeading({ id: "title", isConnected: true, offsetTop: 200, getBoundingClientRect: () => ({ top: 600 }) });

@@ -1,9 +1,9 @@
 <th:block th:fragment="docs(context)">
   <!-- 兼容基线：plugin-docsme v1.7.0；Finder >=1.4.0；0 篇文档项目不生成详情链接。 -->
-  <th:block th:with="docsSettings = ${theme.config.index.docs_settings}">
+  <th:block th:with="docsSettings = ${theme.config.pages.index.docs_settings}">
     <section
       th:if="${docsSettings != null and docsSettings.enable_docs == true}"
-      class="card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl sm:p-6 lg:mb-0"
+      data-glow-owner="home" data-glow-component="home-docs" class="sky-glow-card card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-5 shadow-lg backdrop-blur-xl sm:p-6 lg:mb-0"
     >
       <div class="mb-5 flex items-center justify-between px-1">
         <div class="flex items-center gap-3">

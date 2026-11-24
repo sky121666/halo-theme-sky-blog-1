@@ -15,9 +15,17 @@
  * 1. 文章容器 - 统一布局控制
  * ==================================================*/
 .article-container {
-  /* 移除负边距，避免移动端溢出 */
   max-width: 100%;
+}
+
+.article-container > .prose {
+  /* Contain wide article content while leaving the footer card shadows visible. */
   overflow-x: hidden;
+}
+
+.article-container > :where(.sky-glow-card[data-glow-owner="reading"]) {
+  --sky-glow-offset-default: -1px;
+  --sky-glow-offset: var(--sky-glow-offset-default);
 }
 
 /* ===================================================
@@ -128,51 +136,6 @@ html[data-color-scheme="dark"] ai-summary-widget {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-}
-
-/* ===================================================
- * 7. 目录抽屉（移动端）
- * TOC 基础样式已在 main.css 中导入
- * ==================================================*/
-.post-toc-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-}
-
-.post-toc-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.post-toc-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 61;
-  height: 100%;
-  width: 85vw;
-  max-width: 360px;
-  background: var(--color-base-100);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  visibility: hidden;
-  transition: transform 0.3s ease, visibility 0.3s ease;
-}
-
-.post-toc-drawer.open {
-  visibility: visible;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
 }
 
 /* ===================================================

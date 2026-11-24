@@ -987,11 +987,10 @@
   text-decoration: none;
 }
 
-.steam-game-card:hover {
+.steam-game-card[data-glow-interaction~="hover"]:hover {
   transform: translateY(-4px);
   background: color-mix(in srgb, var(--color-base-content) 6%, transparent);
   border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 .steam-game-card-image {
@@ -1284,7 +1283,7 @@
   border: 1px solid color-mix(in srgb, var(--color-base-content) 5%, transparent);
   padding: 3rem 2rem;
   text-align: center;
-  box-shadow: var(--art-shadow-md);
+  --sky-card-elevation: var(--art-shadow-md);
 }
 
 .steam-empty-icon {
@@ -1446,24 +1445,6 @@
 /* ========================================== */
 /*     Dark Mode Enhancements                 */
 /* ========================================== */
-
-/* 暗色模式：匹配 .glow-card 的微光效果 */
-[data-color-scheme="dark"] .steam-profile-card,
-[data-color-scheme="dark"] .steam-stat-card,
-[data-color-scheme="dark"] .steam-recent-card,
-[data-color-scheme="dark"] .steam-game-card,
-[data-color-scheme="dark"] .steam-heatmap-container,
-[data-color-scheme="dark"] .steam-empty-state {
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
-}
-
-[data-color-scheme="dark"] .steam-profile-card:hover,
-[data-color-scheme="dark"] .steam-stat-card:hover,
-[data-color-scheme="dark"] .steam-recent-card:hover,
-[data-color-scheme="dark"] .steam-game-card:hover,
-[data-color-scheme="dark"] .steam-heatmap-container:hover {
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
-}
 
 /* ========================================== */
 /*     Responsive Adjustments                 */

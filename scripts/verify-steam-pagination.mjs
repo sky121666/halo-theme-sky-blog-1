@@ -10,11 +10,11 @@ const template = fs.readFileSync(new URL('../templates/modules/steam/content.htm
 function setup() {
   let component;
   const requests = [];
-  vm.runInNewContext(source, {
+  vm.runInNewContext(source.replace(/^export .*;\n/gm, ""), {
     window: {}, AbortController,
     localStorage: { getItem() { return null; }, setItem() {} },
     Alpine: { data(name, factory) { if (name === 'steamPage') component = factory(); } },
-    registerAlpinePageComponents(fn) { fn(); }, registerPageLifecycle() {}, notifySwupPageReady() {},
+    createPage: () => ({ useAlpine: (fn) => fn(), onMount() {} }),
     skyDebug: { error() {} },
     // Deliberately allow a response after abort, including an already-started JSON parse.
     fetch(url, { signal }) {

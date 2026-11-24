@@ -6,7 +6,7 @@
 <!-- ========================================== -->
 
 <div th:fragment="card"
-  class="card backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl p-5 relative overflow-hidden group hover:shadow-xl transition-all duration-500"
+  data-glow-owner="widgets" data-glow-component="widget-welcome" class="sky-glow-card card backdrop-blur-xl shadow-lg border border-base-content/5 rounded-2xl p-5 relative overflow-hidden group transition-all duration-500"
   :class="{
     'bg-gradient-to-br from-amber-500/10 via-orange-400/5 to-yellow-300/10 hover:border-amber-500/20': weatherBg === 'sunny',
     'bg-gradient-to-br from-slate-500/10 via-gray-400/5 to-slate-300/10 hover:border-slate-400/20': weatherBg === 'cloudy',
@@ -17,7 +17,7 @@
     'bg-gradient-to-br from-sky-200/20 via-blue-100/10 to-white/20 hover:border-sky-400/20': weatherBg === 'snowy',
     'bg-gradient-to-br from-purple-600/15 via-slate-700/10 to-indigo-600/15 hover:border-purple-500/20': weatherBg === 'stormy',
   }" x-data="welcomeWeatherCard()"
-  th:with="fallbackRegion = ${theme.config.general.sidebar_settings?.welcome_card_config?.fallback_region ?: '北京'}"
+  th:with="fallbackRegion = ${theme.config.components.sidebar_settings?.welcome_card_config?.fallback_region ?: '北京'}"
   th:attr="
     data-weather-provider='auto',
     data-fallback-region=${fallbackRegion}

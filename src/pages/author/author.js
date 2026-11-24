@@ -4,11 +4,12 @@
  */
 
 import './author.css';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 // 页面初始化
-registerPageLifecycle(() => {
+page.onMount(() => {
   // 作者页面目前只展示文章列表，无需额外JS逻辑
-}, { entry: 'author' });
-
-notifySwupPageReady();
+});

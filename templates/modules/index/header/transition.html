@@ -1,7 +1,7 @@
 <div class="absolute bottom-0 left-0 right-0 z-20 overflow-hidden"
-    th:if="${theme.config.index.wave_transition_settings.show_wave_transition}">
+    th:if="${theme.config.pages.index.wave_transition_settings.show_wave_transition}">
     <!-- 波浪动画层 -->
-    <div class="wave-container" th:style="${'color: ' + theme.config.index.wave_transition_settings.wave_color}">
+    <div class="wave-container" th:style="${'color: ' + theme.config.pages.index.wave_transition_settings.wave_color}">
         <!-- 第一层波浪 - 最慢 -->
         <svg class="wave wave-1" viewBox="0 0 1440 320" preserveAspectRatio="none">
             <path class="wave-path"

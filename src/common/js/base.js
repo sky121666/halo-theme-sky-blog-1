@@ -121,43 +121,9 @@ window.SkyUtils = {
 };
 
 /**
- * 页面加载屏幕控制器
- */
-window.SkyLoadingScreen = {
-  startTime: Date.now(),
-  isHidden: false,
-
-  /**
-   * 隐藏加载屏幕
-   */
-  hide() {
-    if (this.isHidden) return;
-
-    const loadingScreen = document.getElementById("loading-screen");
-    if (!loadingScreen) return;
-
-    const minDuration = parseInt(loadingScreen.dataset.minDuration || "500");
-    const elapsed = Date.now() - this.startTime;
-    const delay = Math.max(0, minDuration - elapsed);
-
-    setTimeout(() => {
-      loadingScreen.classList.add("loaded");
-      this.isHidden = true;
-
-      // 动画结束后从 DOM 中移除
-      setTimeout(() => {
-        if (loadingScreen.parentNode) {
-          loadingScreen.remove();
-        }
-      }, 300);
-    }, delay);
-  },
-};
-
-/**
  * 全局事件处理器
  */
-window.SkyEvents = {
+const pageEffects = {
   _imageObserver: null,
   _animationObserver: null,
   _animationFallbackTimer: null,
@@ -178,7 +144,7 @@ window.SkyEvents = {
     // 初始化外部链接
     this.initExternalLinks();
 
-    // 监听当前 PJAX 容器后续插入的 loading="lazy" 图片
+    // 监听当前内容区域后续插入的 loading="lazy" 图片
     this.initLoadingImageObserver();
   },
 
@@ -278,7 +244,7 @@ window.SkyEvents = {
   },
 
   /**
-   * 为原生 loading="lazy" 图片补充 loaded 状态，并跟踪当前 PJAX 容器的动态插入。
+   * 为原生 loading="lazy" 图片补充 loaded 状态，并跟踪当前内容区域的动态插入。
    */
   initLoadingImageObserver() {
     const markImage = (img) => {
@@ -310,23 +276,7 @@ window.SkyEvents = {
   },
 };
 
-// 页面加载完成后执行初始化
-document.addEventListener("DOMContentLoaded", () => {
-  window.SkyEvents.onPageLoad();
-});
-
-// 监听 Alpine.js 初始化完成
-document.addEventListener("alpine:init", () => {
-  if (window.SkyLoadingScreen) {
-    window.SkyLoadingScreen.hide();
-  }
-});
-
-// 降级方案：如果没有使用 Alpine 或加载失败，在 window.load 时隐藏
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    if (window.SkyLoadingScreen && !window.SkyLoadingScreen.isHidden) {
-      window.SkyLoadingScreen.hide();
-    }
-  }, 100);
-});
+export function mountPageEffects() {
+  pageEffects.onPageLoad();
+  return () => pageEffects.cleanupPageObservers();
+}

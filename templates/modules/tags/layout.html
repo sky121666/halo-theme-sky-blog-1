@@ -1,5 +1,6 @@
 <!doctype html>
 <html th:lang="${#locale.toLanguageTag}" th:fragment="html (content)"
+  th:attr="data-site-url=${site.url != null ? site.url.toString() : null}"
   th:with="collectionBase=${!#strings.isEmpty(site.routes?.tagsUri) ? site.routes.tagsUri : '/tags'},
            collectionPageSize=${site.post.tagPageSize ?: 10},
            rawPage=${tag == null ? (param.p != null and !#lists.isEmpty(param.p) ? param.p[0] : (param.page != null and !#lists.isEmpty(param.page) ? param.page[0] : '1')) : '1'},
@@ -20,11 +21,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-    <meta name="view-transition" content="same-origin" />
 
     <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <th:block th:replace="~{modules/theme-script :: head}" />
 
     <th:block
       th:replace="~{modules/seo-head :: meta(${documentTitle}, ${null}, ${pageCanonical}, ${site.logo}, 'website')}"
@@ -35,27 +34,25 @@
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <link rel="stylesheet" th:href="@{/assets/css/categories.css?v={version}(version=${theme.spec.version})}" />
 
-    <!-- 音乐播放器 CSS -->
-    <th:block th:replace="~{modules/music-player :: head}" />
+
   </head>
 
   <body
-    th:with="bgConfig = ${theme.config.general.global_background},
+    th:with="bgConfig = ${theme.config.visual.global_background},
                  enableCustomBg = ${bgConfig?.enable_custom == true},
                  bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                  bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
     th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
   >
     <div class="relative z-10">
-      <!-- 加载屏幕 -->
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
       <!-- 导航栏 -->
       <th:block th:replace="~{modules/nav :: navbar}" />
 
       <!-- 主要内容区域 -->
-      <main id="swup" class="mt-6 flex-1 md:mt-8">
-        <th:block th:replace="${content}" />
+      <main id="swup" data-page="categories" class="mt-6 flex-1 md:mt-8"
+        th:attr="data-collection-base=${collectionBase},data-collection-mode=${tag == null ? 'query' : 'path'},data-collection-page=${tag != null ? (posts?.page ?: 1) : collectionPageNumber},data-collection-total-pages=${tag != null ? (posts?.totalPages ?: 0) : (firstCollectionPage?.totalPages ?: 0)}">
+        <th:block th:replace="~{modules/component-settings :: sidebar('tag', ${content})}" />
       </main>
 
       <!-- 页脚 -->
@@ -65,19 +62,11 @@
     <div id="swup-page-extras">
       <th:block th:replace="~{modules/global-background :: grid(${enableCustomBg}, ${bgStyle})}" />
       <!-- 悬浮 Dock 控制栏 -->
-      <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.tag_settings}, 'basic')}" />
+      <th:block th:replace="~{modules/floating-dock :: dockWithConfig('tag', 'basic')}" />
     </div>
 
     <!-- JavaScript 文件 -->
-    <div id="swup-scripts" hidden>
-      <script
-        type="module"
-        th:src="@{/assets/js/categories.js?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script
-      ></script>
-    </div>
+
     <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-    <!-- 悬浮音乐播放器 -->
-    <th:block th:replace="~{modules/music-player :: player}" />
   </body>
 </html>

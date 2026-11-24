@@ -6,7 +6,7 @@ import vm from "node:vm";
 import { normalizeLinkCapabilities } from "../src/apps/links/runtime.js";
 import "./verify-links-history.mjs";
 import "./verify-links-focus.mjs";
-import "./verify-links-pjax-history.mjs";
+import "./verify-links-navigation.mjs";
 
 const runtime = fs.readFileSync(new URL("../src/apps/links/runtime.js", import.meta.url), "utf8");
 function part(start, end) {

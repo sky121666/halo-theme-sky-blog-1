@@ -6,11 +6,11 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
-const modalSource = fs.readFileSync(new URL('src/common/js/modal-focus.js', root), 'utf8').replace('export function', 'function');
+const modalSource = fs.readFileSync(new URL('src/common/js/modal-focus.js', root), 'utf8').replaceAll('export function', 'function');
 const momentSource = fs.readFileSync(new URL('src/pages/moments/moment-publish.js', root), 'utf8')
-  .replace(/^import .*;\n/gm, '');
+  .replace(/^import .*;\n/gm, '').replace(/^export const .*;\n/gm, '').replace(/^export function /gm, 'function ');
 const momentsPageSource = fs.readFileSync(new URL('src/pages/moments/moments.js', root), 'utf8')
-  .replace(/^import .*;\n/gm, '');
+  .replace(/^import .*;\n/gm, '').replace(/^export const .*;\n/gm, '').replace(/^export function /gm, 'function ');
 const postSource = fs.readFileSync(new URL('src/pages/post/post.js', root), 'utf8');
 const momentTemplate = fs.readFileSync(new URL('templates/modules/moments/content.html', root), 'utf8');
 
@@ -135,7 +135,7 @@ async function momentFixture({
     'moment-publish-modal', 'moment-publish-form', 'moment-content', 'moment-publish-btn',
     'moment-char-count', 'moment-tags', 'moment-tags-input-row', 'moment-tags-display',
     'moment-tags-list', 'moment-media-preview', 'moment-media-list', 'moments-list',
-    'moments-refresh-status', 'moments-refresh-retry', 'moments-publish-status', 'moment-open-btn',
+    'moments-refresh-status', 'moments-refresh-retry', 'moments-publish-status', 'moment-open-btn', 'moment-publish-feedback',
     'moment-permission-status', 'moment-permission-message', 'moment-permission-retry',
   ];
   const elements = Object.fromEntries(ids.map((id) => [id, new Element()]));
@@ -200,8 +200,8 @@ async function momentFixture({
       getItem: () => savedUpvotes,
       setItem: (_key, value) => { savedUpvotes = value; },
     },
-    registerPageLifecycle: (init) => { lifecycles.push(init); },
-    notifySwupPageReady() {},
+    createPage: () => ({ onMount: (init) => lifecycles.push(init) }),
+    mountEmojiSelector: () => () => {},
     fetch: (url, options) => {
       if (url === '/apis/api.console.halo.run/v1alpha1/users/-/permissions') {
         permissionRequests.push({ url, options });
@@ -246,7 +246,7 @@ async function momentFixture({
     elements['moment-content'].dispatchEvent(event);
   }
   return {
-    elements, requests, permissionRequests, timers, alerts, cleanup, submit, shortcut, window,
+    elements, feedback: elements['moment-publish-feedback'], requests, permissionRequests, timers, alerts, cleanup, submit, shortcut, window,
     reloadCount: () => reloadCount,
     savedUpvotes: () => JSON.parse(savedUpvotes),
     setMomentButtons: (buttons) => { momentButtons = buttons; },
@@ -284,7 +284,7 @@ test('more than nine selected attachments are rejected before uploading', async 
   try {
     assert.equal(f.requests.length, 0);
     await pending;
-    assert.match(f.alerts[0], /9/);
+    assert.match(f.feedback.textContent, /9/);
     assert.equal(input.value, '');
     assert.equal(f.elements['moment-publish-btn'].disabled, false);
   } finally { f.cleanup(); }
@@ -338,7 +338,7 @@ test('a missing official upload permalink fails without polling an obsolete API'
     assert.equal(f.timers.size, 0, 'no legacy attachment polling');
     await upload;
     assert.equal(f.requests.length, 1);
-    assert.match(f.alerts[0], /文件地址/);
+    assert.match(f.feedback.textContent, /文件地址/);
     assert.equal(f.elements['moment-publish-btn'].disabled, false);
   } finally { f.cleanup(); }
 });
@@ -357,7 +357,7 @@ test('upload timeout restores the draft and permits a retry', async () => {
   assert.equal(f.requests[0].options.signal.aborted, true);
   f.requests[0].reject(f.requests[0].options.signal.reason);
   await upload;
-  assert.match(f.alerts[0], /上传超时/);
+  assert.match(f.feedback.textContent, /上传超时/);
   assert.equal(f.elements['moment-publish-btn'].disabled, false);
   assert.equal(f.elements['moment-content'].value, 'first draft');
   await uploadMedia(f, 1);
@@ -444,7 +444,7 @@ async function refreshDuringMomentUpvote(serverCount = 7) {
 
 function postFixture({ stored = '[]', readThrows = false, writeThrows = false } = {}) {
   const start = postSource.indexOf('function _registerAlpineComponents() {');
-  const end = postSource.indexOf('  registerAlpinePageComponents(_registerAlpineComponents);', start);
+  const end = postSource.indexOf('  page.useAlpine(_registerAlpineComponents);', start);
   assert.ok(start >= 0 && end > start, 'production Alpine registration must exist');
   const factories = new Map();
   const requests = [];
@@ -609,7 +609,7 @@ test('a pending-approval response preserves edits made after submission', async 
   await settle();
   assert.equal(fixture.elements['moment-content'].value, 'next draft');
   assert.equal(fixture.elements['moment-publish-modal'].style.display, 'flex');
-  assert.match(fixture.alerts[0], /待审核.*保留/);
+  assert.match(fixture.feedback.textContent, /待审核.*保留/);
   assert.equal(fixture.timers.size, 0);
   fixture.cleanup();
 });
@@ -635,6 +635,23 @@ test('an accepted response with unreadable result avoids claiming approval or in
   fixture.cleanup();
 });
 
+test('publication reports pending and failed requests next to the draft without a dialog', async () => {
+  const f = await momentFixture();
+  f.window.openMomentModal();
+  const feedback = f.elements['moment-publish-feedback'];
+  f.submit();
+  assert.equal(feedback.dataset.state, 'pending');
+  assert.match(feedback.textContent, /正在提交/);
+  f.requests[0].resolve({ ok: false, status: 503 });
+  await settle();
+  assert.equal(feedback.dataset.state, 'error');
+  assert.equal(feedback.textContent, '发布失败。 请稍后重试');
+  assert.equal(f.alerts.length, 0);
+  assert.equal(f.elements['moment-content'].value, 'first draft');
+  assert.equal(f.elements['moment-publish-btn'].disabled, false);
+  f.cleanup();
+});
+
 test('moment submit and shortcut share one pending request and allow retry after failure', async () => {
   const fixture = await momentFixture();
   fixture.submit();
@@ -645,7 +662,7 @@ test('moment submit and shortcut share one pending request and allow retry after
   fixture.requests[0].resolve({ ok: false, status: 403 });
   await settle();
   assert.equal(fixture.elements['moment-publish-btn'].disabled, false);
-  assert.equal(fixture.alerts.length, 1);
+  assert.equal(fixture.feedback.dataset.state, 'error');
   fixture.submit();
   assert.equal(fixture.requests.length, 2, 'failed publication must be retryable');
   fixture.requests[1].resolve({ ok: true });
@@ -681,9 +698,9 @@ test('an old publication failure remains visible without changing the newly open
   fixture.window.addMomentTag();
   fixture.requests[0].resolve({ ok: false, status: 403 });
   await settle();
-  assert.equal(fixture.alerts.length, 1, 'a failed earlier request still needs user feedback');
-  assert.match(fixture.alerts[0], /发布失败/);
-  assert.match(fixture.alerts[0], /之前|上一次/, 'feedback must identify the earlier submission');
+  assert.equal(fixture.feedback.dataset.state, 'error', 'a failed earlier request still needs user feedback');
+  assert.match(fixture.feedback.textContent, /发布失败/);
+  assert.match(fixture.feedback.textContent, /之前|上一次/, 'feedback must identify the earlier submission');
   assert.equal(fixture.elements['moment-content'].value, 'new draft');
   assert.equal(fixture.elements['moment-publish-modal'].style.display, 'flex');
   fixture.submit();
@@ -730,9 +747,9 @@ for (const change of [
     assert.equal(fixture.elements['moment-content'].value, change.content);
     assert.equal(fixture.elements['moment-tags'].value, change.tagInput);
     assert.equal(fixture.elements['moment-publish-modal'].style.display, 'flex');
-    assert.equal(fixture.alerts.length, 1, 'the user needs confirmation that only submitted content was published');
-    assert.match(fixture.alerts[0], /已(?:公开)?发布|发布成功/);
-    assert.match(fixture.alerts[0], /保留/);
+    assert.equal(fixture.feedback.dataset.state, 'success', 'the user needs confirmation that only submitted content was published');
+    assert.match(fixture.feedback.textContent, /已(?:公开)?发布|发布成功/);
+    assert.match(fixture.feedback.textContent, /保留/);
     fixture.submit();
     assert.deepEqual(JSON.parse(fixture.requests[1].options.body).spec.tags, change.tags);
     fixture.requests[1].resolve({ ok: true });
@@ -755,8 +772,8 @@ test('successful publication preserves media removed while the request is pendin
   await settle();
   assert.equal(fixture.elements['moment-content'].value, 'first draft');
   assert.equal(fixture.elements['moment-publish-modal'].style.display, 'flex');
-  assert.equal(fixture.alerts.length, 1);
-  assert.match(fixture.alerts[0], /保留/);
+  assert.equal(fixture.feedback.dataset.state, 'success');
+  assert.match(fixture.feedback.textContent, /保留/);
   fixture.submit();
   assert.equal(JSON.parse(fixture.requests[2].options.body).spec.content.medium, undefined);
   fixture.requests[2].resolve({ ok: true });
@@ -800,7 +817,7 @@ for (const invalid of [
     assert.equal(fixture.elements['moment-content'].value, 'first draft');
     assert.equal(fixture.elements['moment-publish-modal'].style.display, 'flex');
     assert.equal(fixture.elements['moment-publish-btn'].disabled, false);
-    assert.equal(fixture.alerts.length, 1, 'the validation error must be visible');
+    assert.equal(fixture.feedback.dataset.state, 'error', 'the validation error must be visible');
     fixture.cleanup();
   });
 }
@@ -930,6 +947,7 @@ test('a newer pending-approval result cannot be hidden or replaced by an older l
   const f = await momentFixture();
   f.submit(); f.requests[0].resolve({ ok: true }); await settle();
   const oldRefresh = [...f.timers.values()].at(-1)();
+  f.window.openMomentModal();
   f.elements['moment-content'].value = 'second draft'; f.submit();
   assert.equal(f.elements['moments-publish-status'].classList.contains('hidden'), true);
   f.requests[2].resolve({ ok: true, json: async () => publishedMoment({ approved: false }) });

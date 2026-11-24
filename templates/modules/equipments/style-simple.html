@@ -7,8 +7,8 @@
 <!-- ========================================== -->
 
 <th:block th:fragment="style-simple">
-    <div id="equipment" th:with="cfg=${theme.config.equipment_settings?.basic_info},
-                                 styleCfg=${theme.config.equipment_settings?.style_settings},
+    <div id="equipment" th:with="cfg=${theme.config.plugins.equipment?.basic_info},
+                                 styleCfg=${theme.config.plugins.equipment?.style_settings},
                                  currentGroup=${param.group != null and !#lists.isEmpty(param.group) and !#strings.isEmpty(#strings.trim(param.group[0])) ? param.group[0] : ''}">
 
         <!-- ========== Hero 区域 ========== -->

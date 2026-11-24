@@ -30,10 +30,10 @@
       th:with="isPinned = ${post.spec.pinned == true},
                       isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                       isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-      class="card group cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden">
+      th:data-glow-owner="${postCardGlowOwner ?: 'discovery'}" data-glow-interaction="hover press focus" class="sky-glow-card card group cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:scale-[1.01] transition-all duration-300 overflow-hidden">
       <!-- 封面区域：16:10 比例 -->
       <figure class="relative w-full aspect-video overflow-hidden">
-        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|"
+        <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|"
           class="block w-full h-full focus:outline-none focus:ring-2 focus:ring-primary">
           <img th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -79,11 +79,11 @@
           </div>
         </div>
         <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
-          <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
+          <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
         </h3>
         <!-- 摘要：固定两行高度（无简介也占位），保证卡片内容区稳定不跳动 -->
         <p class="text-sm text-base-content/70 line-clamp-2 w-full">
-          <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
+          <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
             th:text="${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"></a>
         </p>
         <!-- 元信息：固定在内容区底部。仅保留下行：日期 + 统计。分类与标签已上移至标题上方。 -->
@@ -120,7 +120,7 @@
                       isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                       isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''},
                       excerptText = ${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"
-      class="card group self-start cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden">
+      th:data-glow-owner="${postCardGlowOwner ?: 'discovery'}" data-glow-interaction="hover press focus" class="sky-glow-card card group self-start cursor-pointer rounded-[1.5rem] backdrop-blur-xl bg-base-100/80 border border-base-content/5 shadow-lg hover:scale-[1.01] transition-all duration-300 overflow-hidden">
       <div class="card-body p-4 flex flex-col">
         <!-- 日期与置顶保留为紧凑元信息，不依赖封面定位。 -->
         <div class="flex items-center justify-between gap-2 mb-1">
@@ -159,11 +159,11 @@
           </div>
         </div>
         <h3 class="text-base font-semibold mb-2 text-base-content line-clamp-2">
-          <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
+          <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary" th:text="${post.spec.title}">文章标题</a>
         </h3>
         <!-- 有摘要时展示，空摘要不占位。 -->
         <p th:if="${!#strings.isEmpty(excerptText)}" class="text-sm text-base-content/70 line-clamp-2 w-full">
-          <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
+          <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
             th:text="${excerptText}"></a>
         </p>
         <div class="mt-auto pt-2 space-y-1">

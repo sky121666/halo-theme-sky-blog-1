@@ -30,15 +30,15 @@ const logicalEntries = [
 ];
 
 const logicalChunks = [
-  "article-content",
+  "Swup.modern",
   "article-heatmap-data",
   "auth-common",
   "debug",
-  "external-links",
-  "history",
+  "gallery",
   "modal-focus",
-  "page-runtime",
+  "page",
   "toc-utils",
+  "widget-components",
 ];
 
 const copiedTopLevelCss = [
@@ -47,6 +47,7 @@ const copiedTopLevelCss = [
   "index-title-effects.css",
   "index-weather-effects.css",
 ];
+const deferredStyles = ["gallery"];
 
 const failures = [];
 
@@ -120,7 +121,7 @@ function loadVersions() {
   return { packageVersion, themeVersion };
 }
 
-function verifyEntries() {
+function verifyEntries(packageVersion) {
   for (const entry of logicalEntries) {
     recordMissing(`templates/assets/js/${entry}.js`, `入口 JS ${entry}`);
     recordMissing(`templates/assets/css/${entry}.css`, `入口 CSS ${entry}`);
@@ -136,8 +137,13 @@ function verifyEntries() {
     }
   }
 
+  const deferredCss = deferredStyles.map((name) => `${name}-${packageVersion}.css`);
+  for (const filename of deferredCss) {
+    recordMissing(`templates/assets/css/${filename}`, "按需样式");
+  }
   const allowedTopLevelCss = new Set([
     ...logicalEntries.map((entry) => `${entry}.css`),
+    ...deferredCss,
     ...copiedTopLevelCss,
   ]);
   const topLevelCssDir = absolutePath("templates/assets/css");
@@ -251,6 +257,18 @@ function verifyRelativeChunkImports(expectedChunkFiles) {
   return referenceCount;
 }
 
+function verifyDeferredThemeStyles(packageVersion) {
+  const main = "templates/assets/js/main.js";
+  if (!exists(main)) return;
+  const source = read(main);
+  for (const name of deferredStyles) {
+    const relativeImport = JSON.stringify(`../css/${name}-${packageVersion}.css`);
+    if (!source.includes(relativeImport)) {
+      failures.push(`按需样式须相对主题入口加载：${main} -> ${relativeImport}`);
+    }
+  }
+}
+
 function verifyNoSourceMaps() {
   const assetFiles = walk("templates/assets");
   for (const assetFile of assetFiles) {
@@ -313,11 +331,28 @@ function printReport(packageVersion, templateReferenceCount, jsReferenceCount) {
 
 }
 
+function verifyNavigationArtifacts() {
+  const retired = /\b(?:SkyPjax|__skyPjaxEnabled|__completeSwupPageInit|enable_pjax|__skyMusicPlayer|swup-scripts|data-swup-reload-script)\b|["']pjax:(?:success|complete|end)["']/;
+  const candidates = [...walk("src"), ...walk("templates"), "settings.yaml"];
+  for (const file of candidates) {
+    if (!/\.(?:js|ts|html|yaml)$/.test(file)) continue;
+    if (retired.test(read(file))) failures.push(`${file} 包含已退役的导航或播放器接口`);
+  }
+  for (const entry of logicalEntries.filter((name) => name !== "main" && !name.startsWith("auth-"))) {
+    const file = `templates/assets/js/${entry}.js`;
+    if (!exists(file) || !/export\s*\{[^}]*\bmount\b/.test(read(file))) {
+      failures.push(`${file} 缺少可供导航按需导入的 mount 导出`);
+    }
+  }
+}
+
 const { packageVersion } = loadVersions();
-verifyEntries();
+verifyEntries(packageVersion);
+verifyNavigationArtifacts();
 const { expectedChunkFiles } = verifyChunks(packageVersion);
 const templateAssetReferences = collectTemplateAssetReferences();
 const jsReferenceCount = verifyRelativeChunkImports(expectedChunkFiles);
+verifyDeferredThemeStyles(packageVersion);
 verifyNoSourceMaps();
 verifyCacheContracts(packageVersion);
 printReport(packageVersion ?? "未知版本", templateAssetReferences.size, jsReferenceCount);

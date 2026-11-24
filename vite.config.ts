@@ -3,7 +3,12 @@ import { glob } from "glob";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
 
-const bundledStaticAssets = new Set(["css/article-content.css", "js/article-content.js"]);
+const bundledStaticAssets = new Set([
+  "css/article-content.css",
+  "js/article-content.js",
+  "emoji/emoji-selector.js",
+  "emoji/emoji-selector.css",
+]);
 const qrcodeTemplate = "qrcode/qrcode-share.html";
 const assetVersionPlaceholder = "__THEME_ASSET_VERSION__";
 
@@ -66,13 +71,13 @@ function generateEntries() {
   const entries: Record<string, string> = {};
 
   // 公共资源入口
-  entries["main"] = "src/common/main.js";
+  entries["main"] = "src/common/main.ts";
 
   // 扫描页面JS文件
-  const jsFiles = glob.sync("src/pages/**/*.js");
+  const jsFiles = glob.sync("src/pages/**/*.{js,ts}");
   jsFiles.forEach((file) => {
     const normalized = normalizePath(file);
-    const matches = normalized.match(/src\/pages\/([^\/]+)\/\1\.js$/);
+    const matches = normalized.match(/src\/pages\/([^\/]+)\/\1\.(?:js|ts)$/);
     if (matches) {
       const pageName = matches[1];
       entries[pageName] = file;
@@ -97,12 +102,15 @@ function generateEntries() {
 const isWatchMode = process.argv.includes("--watch");
 const packageJson = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8"));
 const assetVersion = packageJson.version;
+const deferredStyles = new Set(["gallery"]);
 
 export default defineConfig({
+  base: "./",
   build: {
     outDir: "templates/assets",
     minify: "esbuild", // esbuild 压缩更快且不会产生变量名冲突
     rollupOptions: {
+      preserveEntrySignatures: "strict",
       input: generateEntries(),
       output: {
         format: "es", // 使用 ES Module 格式，支持代码分割
@@ -114,6 +122,9 @@ export default defineConfig({
             const name = assetInfo.name.replace(".css", "");
             if (name === "main") {
               return "css/main.css";
+            }
+            if (deferredStyles.has(name)) {
+              return `css/${name}-${assetVersion}.css`;
             }
             return `css/${name}.css`;
           }

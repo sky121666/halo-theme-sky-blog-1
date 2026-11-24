@@ -3,7 +3,10 @@
  */
 
 import './bangumi.css';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 /**
  * 鼠标悬停切换背景
@@ -76,5 +79,4 @@ function initHoverBackground() {
   };
 }
 
-registerPageLifecycle(initHoverBackground, { entry: 'bangumi' });
-notifySwupPageReady();
+page.onMount(initHoverBackground);

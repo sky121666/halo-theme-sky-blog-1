@@ -5,7 +5,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { runInNewContext } from "node:vm";
-import { applyLinksStateToUrl, normalizeLinksUrl } from "../src/apps/links/runtime.js";
 
 // Compile offline fixtures as ordinary Java programs. JShell's remote execution
 // requires loopback access and can hang in restricted runners before assertions run.
@@ -37,754 +36,6 @@ function runJavaFixture(commands, classpath) {
 }
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
-const main = read("src/common/main.js");
-const fallbackStart = main.indexOf("      if (!supportsSkyPjax || pluginBootstrapChanged) {");
-const fallback = main.slice(fallbackStart, main.indexOf("\n      debugState.generation", fallbackStart));
-
-function missingContainerVisit(popstate) {
-  const actions = [];
-  const visit = {
-    to: { url: "/independent", hash: "#section" },
-    history: { popstate },
-    abort: () => actions.push("abort"),
-  };
-  const swup = { options: {} };
-  runInNewContext(`(() => { ${fallback} })()`, {
-    supportsSkyPjax: false,
-    pluginBootstrapChanged: false,
-    visit,
-    swup,
-    pageGeneration: 0,
-    debugState: { id: 1 },
-    skyDebug: { event() {} },
-    debugPath: (path) => path,
-    window: {
-      location: {
-        assign: (url) => actions.push(["assign", url]),
-        reload: () => actions.push("reload"),
-      },
-      history: { back: () => actions.push("back") },
-    },
-  });
-  return { actions, swup };
-}
-
-test("PJAX 历史访问缺少容器时直接恢复目标，不能再后退一条历史", () => {
-  const { actions } = missingContainerVisit(true);
-  assert.deepEqual(actions, ["abort", "reload"]);
-});
-
-test("普通 PJAX 访问保留上一文档历史，再整页打开独立页面", () => {
-  const { actions, swup } = missingContainerVisit(false);
-  assert.deepEqual(actions, ["abort", "back"]);
-  assert.equal(swup.options.skipPopStateHandling(), true);
-  assert.deepEqual(actions.at(-1), ["assign", "/independent#section"]);
-});
-
-function pageModuleFixture(count = 1) {
-  const timers = new Map();
-  const actions = [];
-  const modules = Array.from({ length: count }, (_, i) =>
-    Object.assign(new EventTarget(), {
-      src: `https://halo.test/assets/js/page-${i}.js`,
-    }),
-  );
-  let hook;
-  let timerId = 0;
-  const window = {
-    location: { href: "https://halo.test/current", reload: () => actions.push("reload") },
-    __skyLoadedPluginScripts: new Set(),
-    __skyLoadingPluginScripts: new Set(),
-    setTimeout(fn) {
-      const id = ++timerId;
-      timers.set(id, fn);
-      return id;
-    },
-    clearTimeout(id) {
-      timers.delete(id);
-    },
-  };
-  const context = {
-    window,
-    document: {
-      querySelectorAll: () => [],
-      getElementById: () => ({ querySelectorAll: () => modules }),
-    },
-    swup: {
-      hooks: {
-        on(_name, callback) {
-          hook = callback;
-        },
-      },
-    },
-    getVisitDebug: () => ({ generation: 1 }),
-    pageGeneration: 1,
-    latestVisit: null,
-    pendingPageAction: null,
-    pendingPluginAction: null,
-    cancelPageModuleWait: null,
-    URL,
-    replayNewHeadScripts() {},
-    skyDebug: { event() {}, error() {}, warn() {} },
-    debugPath: (value) => value,
-    _currentSignaled: false,
-    _resumeAlpine: (_reason, generation) => {
-      if (generation === context.pageGeneration) actions.push("resume");
-    },
-  };
-  const helperStart = main.indexOf("  function canApplyPageAction(");
-  const helperEnd = main.indexOf("  const visitDebugState", helperStart);
-  const start = main.indexOf('  swup.hooks.on("content:replace", (visit) => {');
-  runInNewContext(
-    `${main.slice(helperStart, helperEnd)}\n${main.slice(start, main.indexOf("\n} else {\n  // PJAX", start))}`,
-    context,
-  );
-  hook({});
-  return { context, modules, timers, actions, timeout: () => [...timers.values()].forEach((fn) => fn()) };
-}
-
-test("PJAX 页面模块全部加载完成才恢复一次初始化", () => {
-  const f = pageModuleFixture(2);
-  f.modules[0].dispatchEvent(new Event("load"));
-  assert.deepEqual(f.actions, []);
-  f.modules[1].dispatchEvent(new Event("load"));
-  assert.deepEqual(f.actions, ["resume"]);
-  assert.equal(f.timers.size, 0);
-});
-
-test("PJAX 模块超时通过当前URL整页恢复，不把缺失模块当作初始化完成", () => {
-  const f = pageModuleFixture();
-  f.timeout();
-  assert.deepEqual(f.actions, ["reload"]);
-  f.modules[0].dispatchEvent(new Event("load"));
-  assert.deepEqual(f.actions, ["reload"], "late load must not initialize the discarded document");
-});
-
-test("PJAX 模块加载失败不对未注册的Alpine组件求值", () => {
-  const f = pageModuleFixture(2);
-  f.modules[0].dispatchEvent(new Event("error"));
-  f.modules[1].dispatchEvent(new Event("load"));
-  f.timeout();
-  assert.deepEqual(f.actions, ["reload"]);
-});
-
-for (const failure of ["timeout", "error"]) {
-  test(`旧页面模块${failure}不能刷新后来访问的页面`, () => {
-    const f = pageModuleFixture();
-    f.context.pageGeneration = 2;
-    if (failure === "timeout") f.timeout();
-    else f.modules[0].dispatchEvent(new Event("error"));
-    assert.deepEqual(f.actions, []);
-  });
-}
-
-// Exercise the actual visit hooks and rAF resume together. A navigation can have
-// started and changed the URL while its response has not replaced the old DOM.
-function slowNavigationFixture({ deferPlugins = false, initialPath = "/old", onMount } = {}) {
-  const hooks = new Map();
-  const frames = new Map();
-  const timers = new Map();
-  const actions = [];
-  const compatibilityEvents = [];
-  const eventNames = [];
-  const pluginWaits = [];
-  let onLateReady;
-  let nextId = 0;
-  let now = 0;
-  let modules = [];
-  let domPath = new URL(initialPath, "https://halo.test").pathname;
-  const classes = { contains: () => false, toggle() {} };
-  const container = {};
-  const incomingDocument = { querySelector: () => container, body: { classList: classes } };
-  const invoke = (name, visit, before = false) => {
-    for (const handler of hooks.get(`${before ? "before:" : ""}${name}`) || []) handler(visit, {});
-  };
-  const register = (name, handler) => {
-    const handlers = hooks.get(name) || [];
-    handlers.push(handler);
-    hooks.set(name, handlers);
-  };
-  const swup = {
-    navigating: false,
-    visit: null,
-    options: {},
-    hooks: {
-      on: register,
-      before: (name, handler) => register(`before:${name}`, handler),
-    },
-  };
-  const location = {
-    href: new URL(initialPath, "https://halo.test").href,
-    reload: () => actions.push({ type: "reload", url: location.href, domPath }),
-  };
-  const setTimer = (fn, delay = 0) => {
-    const id = ++nextId;
-    timers.set(id, { fn, at: now + delay });
-    return id;
-  };
-  const window = {
-    location,
-    __skyLoadedPluginScripts: new Set(),
-    __skyLoadingPluginScripts: new Set(),
-    __skyPluginScriptLifecycle: {
-      requiresReload: () => false,
-      ready() {
-        if (!deferPlugins) return Promise.resolve();
-        let resolve;
-        const promise = new Promise((complete) => {
-          resolve = complete;
-        });
-        pluginWaits.push({ resolve });
-        return promise;
-      },
-    },
-    setTimeout: setTimer,
-    clearTimeout: (id) => timers.delete(id),
-    SkyPjax: {
-      _cleanup() {},
-      _runPage(detail) {
-        actions.push({ type: "mount", url: detail.url, domPath });
-        onMount?.({ detail, window, changeUrl });
-      },
-    },
-    Alpine: { deferMutations() {}, destroyTree() {}, flushAndStopDeferringMutations() {} },
-  };
-  const context = {
-    window,
-    document: {
-      body: { classList: classes },
-      querySelectorAll: () => [],
-      querySelector: () => container,
-      getElementById: () => ({ querySelectorAll: () => modules }),
-      dispatchEvent(event) {
-        eventNames.push(event.type);
-        if (event.type === "pjax:complete") {
-          compatibilityEvents.push({ url: event.detail.url, currentUrl: location.href, domPath });
-        }
-        return true;
-      },
-    },
-    swup,
-    Alpine: window.Alpine,
-    SKY_PJAX_CONTAINERS: ["#swup", "#swup-scripts", "#swup-page-extras"],
-    URL,
-    CustomEvent,
-    performance: { now: () => now },
-    skyDebug: { event() {}, error() {}, warn() {} },
-    replayNewHeadScripts() {},
-    createPluginScriptLifecycle({ onLateReady: callback }) {
-      onLateReady = callback;
-      return window.__skyPluginScriptLifecycle;
-    },
-    requestAnimationFrame: (fn) => {
-      const id = ++nextId;
-      frames.set(id, fn);
-      return id;
-    },
-    cancelAnimationFrame: (id) => frames.delete(id),
-    setTimeout: setTimer,
-    clearTimeout: (id) => timers.delete(id),
-  };
-  const stateStart = main.indexOf("  const MANAGED_BODY_CLASSES");
-  const stateEnd = main.indexOf("  // main.js 作为 defer module", stateStart);
-  const lifecycleStart = main.indexOf("  window.__skyPluginScriptLifecycle = createPluginScriptLifecycle({");
-  const lifecycleEnd = main.indexOf("\n  });", lifecycleStart);
-  const compatibilityStart = main.indexOf("  function dispatchPjaxCompatibilityEvents(");
-  const compatibilityEnd = main.indexOf("  function getLightGalleryInlineScripts(", compatibilityStart);
-  const resumeStart = main.indexOf("  function _resumeAlpine(");
-  const resumeEnd = main.indexOf("\n} else {\n  // PJAX", resumeStart);
-  assert.ok(lifecycleStart >= 0 && lifecycleEnd > lifecycleStart, "the production lifecycle callback must exist");
-  assert.ok(
-    compatibilityStart >= 0 && compatibilityEnd > compatibilityStart,
-    "the production event dispatcher must exist",
-  );
-  runInNewContext(
-    `${main.slice(stateStart, stateEnd)}\n${main.slice(lifecycleStart, lifecycleEnd + "\n  });".length)}\n${main.slice(compatibilityStart, compatibilityEnd)}\n${main.slice(resumeStart, resumeEnd)}`,
-    context,
-  );
-  assert.equal(typeof onLateReady, "function", "the fixture must use the production late-readiness callback");
-
-  function changeUrl(value) {
-    location.href = new URL(value, location.href).href;
-  }
-
-  function begin(path) {
-    const visit = {
-      state: 1,
-      from: { url: new URL(location.href).pathname + new URL(location.href).search },
-      to: { url: path, hash: "" },
-      history: { action: "push", popstate: false },
-      get done() {
-        return this.state >= 7;
-      },
-      abort() {
-        this.state = 8;
-      },
-    };
-    swup.navigating = true;
-    swup.visit = visit;
-    invoke("visit:start", visit);
-    visit.state = 3;
-    changeUrl(path);
-    return visit;
-  }
-
-  function replace(visit) {
-    visit.state = 6;
-    visit.to.document = incomingDocument;
-    invoke("content:replace", visit, true);
-    domPath = new URL(visit.to.url, location.href).pathname;
-    modules = [Object.assign(new EventTarget(), { src: `https://halo.test/assets${domPath}.js` })];
-    invoke("content:replace", visit);
-    invoke("page:view", visit);
-    invoke("visit:end", visit);
-    visit.state = 7;
-    swup.navigating = false;
-    delete visit.to.document;
-    return modules[0];
-  }
-
-  function abort(visit, { restoreUrl = true } = {}) {
-    // Swup emits visit:abort BEFORE it sets ABORTED. Restoring the original URL
-    // is a caller precondition for a cancelled visit that retains the old DOM;
-    // bare visit.abort() does not restore history or emit this hook in Swup 4.
-    if (restoreUrl) changeUrl(visit.from.url);
-    invoke("visit:abort", visit);
-    visit.state = 8;
-    swup.navigating = false;
-  }
-
-  async function flush() {
-    // visit:abort resumes a retained page on one frame; _resumeAlpine mounts
-    // it on the next. Drain those real frame boundaries without firing timers.
-    for (let turn = 0; turn < 20; turn += 1) {
-      await Promise.resolve();
-      if (frames.size === 0) return;
-      for (const [id, fn] of [...frames]) {
-        if (frames.delete(id)) fn();
-      }
-      await Promise.resolve();
-    }
-    assert.fail("navigation fixture did not settle within 20 animation frames");
-  }
-
-  function tick(ms) {
-    now += ms;
-    for (const [id, timer] of [...timers]) {
-      if (timer.at > now) continue;
-      timers.delete(id);
-      timer.fn();
-    }
-  }
-
-  const oldModule = replace(begin(initialPath));
-  return {
-    begin,
-    replace,
-    abort,
-    changeUrl,
-    flush,
-    tick,
-    actions,
-    compatibilityEvents,
-    eventNames,
-    pluginWaits,
-    oldModule,
-    window,
-    swup,
-    lateReady: () => onLateReady(),
-  };
-}
-
-for (const event of ["timeout", "error", "load"]) {
-  test(`慢资源切页：新 visit 已开始但未替换 DOM 时，旧 ${event} 不干扰新访问`, async () => {
-    const f = slowNavigationFixture();
-    f.begin("/new");
-    if (event === "timeout") f.tick(5000);
-    else f.oldModule.dispatchEvent(new Event(event));
-    await f.flush();
-    assert.deepEqual(f.actions, [], "old page must neither reload nor mount under the new URL");
-  });
-}
-
-test("慢资源切页：已排队的旧页面 rAF 在新访问开始后不能挂载到新 URL", async () => {
-  const f = slowNavigationFixture();
-  f.oldModule.dispatchEvent(new Event("load"));
-  f.begin("/new");
-  await f.flush();
-  assert.deepEqual(f.actions, []);
-});
-
-test("慢资源切页：旧模块 ready 与迟到 load/error 不能替新页面宣告就绪", async () => {
-  const f = slowNavigationFixture();
-  const current = f.replace(f.begin("/new"));
-  f.window.__completeSwupPageInit({ source: "module" });
-  f.oldModule.dispatchEvent(new Event("load"));
-  f.oldModule.dispatchEvent(new Event("error"));
-  await f.flush();
-  assert.deepEqual(f.actions, []);
-  current.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/new", domPath: "/new" }]);
-});
-
-test("慢资源切页：新访问中止并恢复原 URL 后，已完成的旧模块恢复原页面一次", async () => {
-  const f = slowNavigationFixture();
-  const visit = f.begin("/new");
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.deepEqual(f.actions, [], "do not mount the retained DOM as the pending destination");
-  f.abort(visit);
-  await f.flush();
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/old", domPath: "/old" }]);
-});
-
-for (const failure of ["timeout", "error"]) {
-  test(`慢资源切页：旧 ${failure} 等到新访问中止且原 URL 恢复后才恢复原页面`, async () => {
-    const f = slowNavigationFixture();
-    const visit = f.begin("/new");
-    if (failure === "timeout") f.tick(5000);
-    else f.oldModule.dispatchEvent(new Event("error"));
-    await f.flush();
-    assert.deepEqual(f.actions, [], "pending navigation must not be replaced by a stale recovery");
-    f.abort(visit);
-    await f.flush();
-    assert.deepEqual(f.actions, [{ type: "reload", url: "https://halo.test/old", domPath: "/old" }]);
-  });
-}
-
-test("慢资源切页：新访问中止但尚未恢复原 URL 时，不把旧 DOM 标为新页面", async () => {
-  const f = slowNavigationFixture();
-  const visit = f.begin("/new");
-  f.abort(visit, { restoreUrl: false });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.ok(!f.actions.some((action) => action.type === "mount" && action.url === "https://halo.test/new"));
-});
-
-test("慢资源切页：中止被取代的访问不能在下一次访问开始后触发旧页面恢复", async () => {
-  const f = slowNavigationFixture();
-  const superseded = f.begin("/new");
-  f.tick(5000);
-  assert.deepEqual(f.actions, []);
-  // Swup 4 emits abort for the superseded visit, then starts its replacement.
-  f.abort(superseded, { restoreUrl: false });
-  const latest = f.begin("/latest");
-  await f.flush();
-  assert.deepEqual(f.actions, []);
-  const current = f.replace(latest);
-  current.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/latest", domPath: "/latest" }]);
-});
-
-test("慢资源切页：被暂缓的超时随后收到真实 load，中止新访问后无需重载原页", async () => {
-  const f = slowNavigationFixture();
-  const visit = f.begin("/new");
-  f.tick(5000);
-  assert.deepEqual(f.actions, []);
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.deepEqual(f.actions, []);
-  f.abort(visit);
-  await f.flush();
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/old", domPath: "/old" }]);
-});
-
-test("慢插件切页：旧页面挂载后的延迟兼容事件等待新访问中止并恢复原 URL，且只派发一次", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/old", domPath: "/old" }]);
-  assert.equal(f.pluginWaits.length, 1);
-  assert.deepEqual(f.compatibilityEvents, []);
-
-  const visit = f.begin("/new");
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  assert.deepEqual(
-    f.compatibilityEvents,
-    [],
-    "old DOM must not receive plugin compatibility events under the pending URL",
-  );
-  f.abort(visit);
-  await f.flush();
-  const expected = [{ url: "https://halo.test/old", currentUrl: "https://halo.test/old", domPath: "/old" }];
-  assert.deepEqual(f.compatibilityEvents, expected);
-  await f.flush();
-  assert.deepEqual(
-    f.compatibilityEvents,
-    expected,
-    "resuming the retained page must consume its queued plugin event once",
-  );
-  assert.equal(f.actions.length, 1, "plugin readiness must not mount the already mounted page again");
-});
-
-test("慢插件切页：新访问中止但原 URL 尚未恢复时不派发旧页面兼容事件", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  const visit = f.begin("/new");
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  f.abort(visit, { restoreUrl: false });
-  await f.flush();
-  assert.deepEqual(f.compatibilityEvents, []);
-  assert.deepEqual(f.actions, [{ type: "mount", url: "https://halo.test/old", domPath: "/old" }]);
-});
-
-for (const resolvedBeforeReplace of [true, false]) {
-  test(`慢插件切页：旧插件在新 DOM 替换${resolvedBeforeReplace ? "前" : "后"}完成时丢弃旧事件，保留新页面事件`, async () => {
-    const f = slowNavigationFixture({ deferPlugins: true });
-    f.oldModule.dispatchEvent(new Event("load"));
-    await f.flush();
-    const visit = f.begin("/new");
-    if (resolvedBeforeReplace) {
-      f.pluginWaits[0].resolve();
-      await f.flush();
-      assert.deepEqual(f.compatibilityEvents, []);
-    }
-    const current = f.replace(visit);
-    current.dispatchEvent(new Event("load"));
-    await f.flush();
-    assert.equal(f.pluginWaits.length, 2);
-    if (!resolvedBeforeReplace) f.pluginWaits[0].resolve();
-    await f.flush();
-    assert.deepEqual(
-      f.compatibilityEvents,
-      [],
-      "late old-page readiness must neither dispatch nor substitute for the new plugin wait",
-    );
-    f.pluginWaits[1].resolve();
-    await f.flush();
-    const expected = [{ url: "https://halo.test/new", currentUrl: "https://halo.test/new", domPath: "/new" }];
-    assert.deepEqual(f.compatibilityEvents, expected);
-    await f.flush();
-    assert.deepEqual(f.compatibilityEvents, expected);
-    assert.deepEqual(f.actions, [
-      { type: "mount", url: "https://halo.test/old", domPath: "/old" },
-      { type: "mount", url: "https://halo.test/new", domPath: "/new" },
-    ]);
-  });
-}
-
-const regularCompatibilityEvents = ["pjax:success", "pjax:complete", "pjax:end", "swup:contentReplaced"];
-
-test("Shiki 晚就绪：常规事件已派发后只补发 pjax:complete，不重建表单或重挂载页面", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  assert.deepEqual(f.eventNames, regularCompatibilityEvents);
-
-  f.lateReady();
-  await f.flush();
-  assert.deepEqual(f.eventNames, [...regularCompatibilityEvents, "pjax:complete"]);
-  assert.deepEqual(f.compatibilityEvents, [
-    { url: "https://halo.test/old", currentUrl: "https://halo.test/old", domPath: "/old" },
-    { url: "https://halo.test/old", currentUrl: "https://halo.test/old", domPath: "/old" },
-  ]);
-  assert.equal(f.actions.length, 1, "late plugin readiness must not remount the existing page");
-});
-
-test("Shiki 晚就绪：新导航等待时暂存补发，取消并恢复旧 URL 后只派发一次", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  const visit = f.begin("/new");
-  f.lateReady();
-  await f.flush();
-  assert.deepEqual(
-    f.eventNames,
-    regularCompatibilityEvents,
-    "do not send old-page completion under the destination URL",
-  );
-
-  f.abort(visit);
-  await f.flush();
-  assert.deepEqual(f.eventNames, [...regularCompatibilityEvents, "pjax:complete"]);
-  assert.deepEqual(f.compatibilityEvents.at(-1), {
-    url: "https://halo.test/old",
-    currentUrl: "https://halo.test/old",
-    domPath: "/old",
-  });
-  await f.flush();
-  assert.equal(f.eventNames.length, 5, "a restored page must consume the queued completion only once");
-  assert.equal(f.actions.length, 1);
-});
-
-test("Shiki 晚就绪：取消但未恢复旧 URL 时不得向新地址投递旧 DOM 事件", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  const visit = f.begin("/new");
-  f.lateReady();
-  f.abort(visit, { restoreUrl: false });
-  await f.flush();
-  assert.deepEqual(f.eventNames, regularCompatibilityEvents);
-  assert.equal(f.compatibilityEvents.length, 1);
-});
-
-for (const completedBeforeReplace of [true, false]) {
-  test(`Shiki 晚就绪：新 DOM 替换${completedBeforeReplace ? "前" : "后"}到达的旧完成信号不得投递到新页面`, async () => {
-    const f = slowNavigationFixture({ deferPlugins: true });
-    f.oldModule.dispatchEvent(new Event("load"));
-    await f.flush();
-    f.pluginWaits[0].resolve();
-    await f.flush();
-    const visit = f.begin("/new");
-    if (completedBeforeReplace) f.lateReady();
-    const current = f.replace(visit);
-    if (!completedBeforeReplace) f.lateReady();
-    await f.flush();
-    assert.deepEqual(
-      f.eventNames,
-      regularCompatibilityEvents,
-      "discard stale completion while the new page module is pending",
-    );
-
-    current.dispatchEvent(new Event("load"));
-    await f.flush();
-    assert.equal(f.pluginWaits.length, 2);
-    assert.deepEqual(f.eventNames, regularCompatibilityEvents);
-    f.pluginWaits[1].resolve();
-    await f.flush();
-    assert.deepEqual(f.eventNames, [...regularCompatibilityEvents, ...regularCompatibilityEvents]);
-    assert.deepEqual(f.compatibilityEvents.at(-1), {
-      url: "https://halo.test/new",
-      currentUrl: "https://halo.test/new",
-      domPath: "/new",
-    });
-  });
-}
-
-test("Shiki 晚就绪：已有等待中的全量插件事件时不提前或重复投递", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.lateReady();
-  await f.flush();
-  assert.deepEqual(f.eventNames, [], "late recovery must leave the existing full compatibility wait intact");
-
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  assert.deepEqual(f.eventNames, regularCompatibilityEvents);
-  assert.equal(f.compatibilityEvents.length, 1);
-  assert.equal(f.actions.length, 1);
-});
-
-test("Shiki 晚就绪：已有全量事件因新导航暂存时不能降级为单个事件", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  const visit = f.begin("/new");
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  f.lateReady();
-  await f.flush();
-  assert.deepEqual(f.eventNames, []);
-
-  f.abort(visit);
-  await f.flush();
-  assert.deepEqual(
-    f.eventNames,
-    regularCompatibilityEvents,
-    "restoration must keep every originally queued plugin event",
-  );
-  assert.equal(f.compatibilityEvents.length, 1);
-  assert.equal(f.actions.length, 1);
-});
-
-test("同页查询：Links 挂载同步规范 URL 后兼容事件使用当前 URL 派发一次", async () => {
-  const f = slowNavigationFixture({
-    deferPlugins: true,
-    initialPath: "/links?view=links",
-    onMount: ({ window, changeUrl }) => changeUrl(normalizeLinksUrl(window.location.href).url),
-  });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  assert.equal(
-    f.window.location.href,
-    "https://halo.test/links",
-    "use the real Links canonical URL normalizer during mount",
-  );
-  assert.deepEqual(f.compatibilityEvents, []);
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  const expected = [{ url: "https://halo.test/links", currentUrl: "https://halo.test/links", domPath: "/links" }];
-  assert.deepEqual(f.compatibilityEvents, expected);
-  await f.flush();
-  assert.deepEqual(f.compatibilityEvents, expected);
-  assert.equal(f.actions.length, 1);
-});
-
-test("同页查询：等待插件期间 Links 筛选改变查询参数后使用最新 URL 派发一次", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true, initialPath: "/links" });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.changeUrl(applyLinksStateToUrl(f.window.location.href, { group: "engineering" }));
-  const url = "https://halo.test/links?group=engineering";
-  assert.equal(f.window.location.href, url);
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  const expected = [{ url, currentUrl: url, domPath: "/links" }];
-  assert.deepEqual(f.compatibilityEvents, expected);
-  await f.flush();
-  assert.deepEqual(f.compatibilityEvents, expected);
-  assert.equal(f.actions.length, 1);
-});
-
-test("同页查询：筛选后新 visit 仍阻止旧事件，中止并恢复筛选 URL 后只派发一次", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true, initialPath: "/links" });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  f.changeUrl(applyLinksStateToUrl(f.window.location.href, { group: "engineering" }));
-  const url = "https://halo.test/links?group=engineering";
-  // The same pathname must not make a real pending visit look like a local filter.
-  const visit = f.begin("/links?group=another");
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  assert.deepEqual(
-    f.compatibilityEvents,
-    [],
-    "a pending visit owns its destination even when it only differs by query",
-  );
-  f.abort(visit);
-  assert.equal(f.window.location.href, url);
-  await f.flush();
-  const expected = [{ url, currentUrl: url, domPath: "/links" }];
-  assert.deepEqual(f.compatibilityEvents, expected);
-  await f.flush();
-  assert.deepEqual(f.compatibilityEvents, expected);
-  assert.equal(f.actions.length, 1, "restoring the local filter must not remount the retained DOM");
-});
-
-test("同页查询：中止恢复时插件尚未就绪，之后改变筛选仍能按最新 URL 派发一次", async () => {
-  const f = slowNavigationFixture({ deferPlugins: true, initialPath: "/links?group=engineering" });
-  f.oldModule.dispatchEvent(new Event("load"));
-  await f.flush();
-  const visit = f.begin("/new");
-  f.abort(visit);
-  await f.flush();
-  assert.equal(f.window.location.href, "https://halo.test/links?group=engineering");
-  assert.deepEqual(f.compatibilityEvents, [], "cancellation must not declare the still-loading plugin ready");
-  f.changeUrl(applyLinksStateToUrl(f.window.location.href, { group: "design" }));
-  const url = "https://halo.test/links?group=design";
-  assert.equal(f.window.location.href, url);
-  f.pluginWaits[0].resolve();
-  await f.flush();
-  const expected = [{ url, currentUrl: url, domPath: "/links" }];
-  assert.deepEqual(f.compatibilityEvents, expected);
-  await f.flush();
-  assert.deepEqual(f.compatibilityEvents, expected);
-  assert.equal(f.actions.length, 1, "cancellation and later filtering must retain the mounted page");
-});
-
 const alpine = read("src/common/js/alpine-modules.js");
 const shareSource = alpine.slice(
   alpine.indexOf("function createShareModal()"),
@@ -854,8 +105,8 @@ test("分享弹窗容器自身和首尾控件均能约束正反 Tab", () => {
 });
 
 test("自定义归档路径能展开对应年份并高亮当前月份", () => {
-  const source = read("templates/modules/widgets/archive-sidebar.html").match(/<script[^>]*>([\s\S]*?)<\/script>/)[1];
-  const expanded = [];
+  const source = read("src/common/js/archive-sidebar.js").replace("export function", "function");
+  const state = {};
   const classes = new Set();
   const month = {
     href: "https://halo.test/history/2025/08",
@@ -864,18 +115,21 @@ test("自定义归档路径能展开对应年份并高亮当前月份", () => {
       remove: (...items) => items.forEach((item) => classes.delete(item)),
     },
   };
-  const document = {
-    readyState: "complete",
-    querySelector: (selector) =>
-      selector === ".archive-sidebar-widget"
-        ? { dataset: { archivesBase: "/history/" } }
-        : selector.includes('[data-year="2025"]')
-          ? { _setExpandedState: (_, open) => expanded.push(open) }
-          : null,
-    querySelectorAll: (selector) => (selector.includes("archive-month-link") ? [month] : []),
+  const inertClasses = { remove() {}, add() {} };
+  const button = {
+    dataset: {}, classList: inertClasses, nextElementSibling: { classList: inertClasses },
+    setAttribute(name, value) { state[name] = value; }, querySelector: () => ({ classList: { ...inertClasses, replace() {} } }),
+    getAttribute(name) { return state[name]; }, addEventListener() {},
   };
-  runInNewContext(source, { document, window: { location: { pathname: "/history/2025/08" } }, URL });
-  assert.deepEqual(expanded, [true]);
+  const root = {
+    dataset: { archivesBase: "/history/" },
+    querySelector: (selector) => selector.includes('[data-year="2025"]') ? button : null,
+    querySelectorAll: (selector) => selector.includes("archive-month-link") ? [month] : [button],
+  };
+  runInNewContext(source + "\nmountArchiveSidebar(root, signal);", {
+    root, signal: new AbortController().signal, window: { location: { pathname: "/history/2025/08" } }, URL
+  });
+  assert.equal(state["aria-expanded"], true);
   assert.equal(classes.has("text-primary"), true);
 });
 
@@ -1271,7 +525,7 @@ function navbarFixture() {
     },
     cancelAnimationFrame: (id) => frames.delete(id),
   };
-  const focusSource = read("src/common/js/modal-focus.js").replace("export function", "function");
+  const focusSource = read("src/common/js/modal-focus.js").replaceAll("export function", "function");
   runInNewContext(`${focusSource}; ${navbarSource}; globalThis.create = createNavbarController`, context);
   const component = context.create();
   const triggerTag = navbarTags.find(
@@ -1316,8 +570,8 @@ function navbarFixture() {
     activate: () => evaluate(triggerTag.attributes["@click"]),
     expanded: () => String(evaluate(triggerTag.attributes[":aria-expanded"])),
     modelValue: () => evaluate(inputTag.attributes["x-model"]),
-    pageLoad: () => document.dispatchEvent(new Event("sky:page-load")),
-    cleanup: () => document.dispatchEvent(new Event("sky:page-cleanup")),
+    pageLoad: () => document.dispatchEvent(new Event("swup:page:view")),
+    cleanup: () => document.dispatchEvent(new Event("swup:page:view")),
     resize(desktop) {
       media.matches = desktop;
       media.dispatchEvent(new Event("change"));
@@ -1329,6 +583,68 @@ function navbarFixture() {
     },
   };
 }
+
+test("含子菜单的导航项使用披露按钮，悬停和点击都只控制子菜单", () => {
+  const desktopStart = navbarTemplate.indexOf('x-data="{ open: false, hovering: false }"');
+  const desktopEnd = navbarTemplate.indexOf("<ul", desktopStart);
+  const desktopMarkup = navbarTemplate.slice(desktopStart, desktopEnd);
+  assert.ok(desktopStart >= 0 && desktopEnd > desktopStart, "桌面子菜单应提供悬停与点击状态");
+  assert.match(desktopMarkup, /aria-haspopup="menu"/);
+  assert.doesNotMatch(desktopMarkup, /<a\b/, "含子菜单的父项文字不能再渲染成导航链接");
+
+  const mobileStart = navbarTemplate.indexOf('x-data="{ open: false }"');
+  const mobileMarkup = navbarTemplate.slice(
+    mobileStart,
+    navbarTemplate.indexOf("th:id=\"|mobile-submenu-", mobileStart),
+  );
+  assert.ok(mobileStart >= 0, "移动子菜单应保留独立展开状态");
+  assert.match(mobileMarkup, /<button\b/);
+  assert.doesNotMatch(mobileMarkup, /<a\b/, "移动端子菜单父项也必须使用披露按钮");
+
+  const desktopRoot = navbarTags.find(
+    ({ attributes }) => attributes["x-data"] === "{ open: false, hovering: false }",
+  );
+  assert.ok(desktopRoot, "桌面子菜单缺少悬停与固定展开状态");
+  assert.match(desktopRoot.attributes[":class"], /dropdown-open/);
+  const trigger = navbarTags.find(
+    ({ name, attributes }) => name === "button" && attributes["aria-haspopup"] === "menu",
+  );
+  assert.ok(trigger, "桌面子菜单触发项应为带 aria-haspopup 的按钮");
+  assert.equal(trigger.name, "button");
+  assert.equal(trigger.attributes.type, "button");
+
+  const scope = { open: false, hovering: false };
+  const evaluate = (expression, extras = {}) =>
+    runInNewContext(`with (scope) { ${expression} }`, { scope, ...extras });
+  evaluate(desktopRoot.attributes["@pointerenter"], { $event: { pointerType: "mouse" } });
+  assert.equal(scope.hovering, true, "鼠标进入文字或箭头区域时应展开子菜单");
+  assert.equal(evaluate(trigger.attributes[":aria-expanded"]), "true");
+  const dropdownClasses = runInNewContext(`(${desktopRoot.attributes[":class"]})`, scope);
+  assert.equal(dropdownClasses["dropdown-open"], true);
+
+  evaluate(trigger.attributes["@click"]);
+  assert.equal(scope.open, true, "点击父项应固定展开子菜单");
+  evaluate(desktopRoot.attributes["@pointerleave"], {
+    $event: { pointerType: "mouse" },
+    $el: { contains: () => false },
+    document: { activeElement: {} },
+  });
+  assert.equal(scope.hovering, false);
+  assert.equal(scope.open, true, "点击固定后的子菜单不能在鼠标离开时立即关闭");
+
+  evaluate(trigger.attributes["@click"]);
+  assert.deepEqual(scope, { open: false, hovering: false }, "再次点击应立即收起固定子菜单");
+
+  assert.ok(desktopRoot.attributes["@click.outside"].includes("hovering"));
+  evaluate(desktopRoot.attributes["@click.outside"]);
+  assert.deepEqual(scope, { open: false, hovering: false });
+
+  const child = navbarTags.find(({ name, attributes }) => name === "a" && attributes.role === "menuitem");
+  scope.hovering = true;
+  scope.open = true;
+  evaluate(child.attributes["@click"]);
+  assert.deepEqual(scope, { open: false, hovering: false });
+});
 
 test("移动菜单使用原生按钮，打开与遮罩关闭共享 checkbox 和展开状态", () => {
   const fixture = navbarFixture();
@@ -1353,6 +669,22 @@ test("移动菜单使用原生按钮，打开与遮罩关闭共享 checkbox 和�
   fixture.activate();
   assert.equal(fixture.modelValue(), true);
   assert.equal(fixture.expanded(), "true");
+});
+
+test("移动菜单的页内导航收起抽屉并恢复菜单入口焦点", () => {
+  const fixture = navbarFixture();
+  const panel = navbarTags.find(({ attributes }) => attributes.id === "mobile-nav-menu");
+  const click = (defaultPrevented, link) => fixture.evaluate(panel.attributes["@click"], fixture.component, {
+    $event: { defaultPrevented, target: { closest: () => link } },
+  });
+  fixture.activate();
+  click(false, {});
+  click(true, null);
+  assert.equal(fixture.expanded(), "true");
+  click(true, {});
+  assert.equal(fixture.expanded(), "false");
+  assert.equal(fixture.drawer.checked, false);
+  assert.equal(fixture.document.activeElement, fixture.trigger);
 });
 
 test("PJAX 页面切换同时复位移动菜单状态与 checkbox，重开不受旧状态影响", () => {
@@ -1593,7 +925,7 @@ test("用户菜单 Escape 恢复入口，焦点移出和页面切换关闭菜单
     assert.equal(context.userMenuOpen, relatedTarget === inside);
   }
   const context = { userMenuOpen: true };
-  runInNewContext(root.attributes["@sky:page-load.document"], context);
+  runInNewContext(root.attributes["@swup:page:view.document"], context);
   assert.equal(context.userMenuOpen, false);
 });
 
@@ -1617,7 +949,7 @@ test("建站日期为空、非法或在未来时隐藏整条天数，正常日�
     };
     const days = {};
     runInNewContext(
-      `${script.replace("[[${theme.config.footer.brand_settings.site_start_date}]]", date)}; calculateSiteDays()`,
+      `${script.replace("[[${theme.config.components.footer.brand_settings.site_start_date}]]", date)}; calculateSiteDays()`,
       {
         document: { getElementById: (id) => (id === "site-days" ? row : days) },
         Date: ClockDate,
@@ -1639,70 +971,76 @@ test(
     const docTemplate = read("templates/modules/doc-content.html");
     const button = docTemplate.match(/<button\b(?=[^>]*aria-label="分享文档")[^>]*>/)?.[0];
     const buttonCondition = button?.match(/th:if="([^"]+)"/)?.[1];
-    const hostCondition = docTemplate.match(/<th:block th:if="([^"]*enable_share[^"]*)">/)?.[1];
-    const idsExpression = docTemplate.match(/shareItemIds=(\$\{[^}]+\})/)?.[1];
-    const idsAttribute = shareTemplate.match(/th:data-share-item-ids="([^"]+)"/)?.[1];
-    const configuredAttribute = shareTemplate.match(/th:data-share-item-ids-configured="([^"]+)"/)?.[1];
-    assert.ok(buttonCondition && hostCondition && idsExpression && idsAttribute, "无法读取真实分享模板表达式");
+    const shareHost = docTemplate.match(
+      /<th:block th:if="[^"]*enable_share[^"]*">\s*<th:block th:replace="~\{modules\/share-modal :: shareFor\([^"]*\)\}" \/>\s*<\/th:block>/,
+    )?.[0];
+    assert.ok(buttonCondition && shareHost, "无法读取文档分享入口与宿主片段");
 
-    // 旧模板没有配置标记；仍渲染旧表达式，使空配置的 RED 来自实际组件行为。
-    const configuredMarkup = configuredAttribute ? ` th:data-share-item-ids-configured="${configuredAttribute}"` : "";
     const template = `<html xmlns:th="https://www.thymeleaf.org">
       <button id="trigger" th:if="${buttonCondition}">share</button>
-      <th:block th:if="${hostCondition}">
-        <div id="host" th:with="shareItemIds=${idsExpression}" th:data-share-item-ids="${idsAttribute}"${configuredMarkup}></div>
-      </th:block>
+      ${shareHost}
     </html>`;
     const configs = [
-      {
-        name: "disabled",
-        config: { docsme: { doc_settings: { enable_share: false, share_settings: { share_item_ids: ["wechat"] } } } },
-      },
-      {
-        name: "enabled",
-        config: {
-          docsme: {
-            doc_settings: { enable_share: true, share_settings: { share_item_ids: ["wechat", "weibo", "x", "qq"] } },
-          },
-        },
-      },
-      {
-        name: "default",
-        config: { docsme: { doc_settings: { share_settings: { share_item_ids: ["native", "telegram"] } } } },
-      },
-      { name: "empty", config: { docsme: { doc_settings: { share_settings: { share_item_ids: [] } } } } },
-      { name: "null", config: { docsme: { doc_settings: { share_settings: { share_item_ids: null } } } } },
-      { name: "missing_ids", config: { docsme: { doc_settings: { share_settings: {} } } } },
-      { name: "missing", config: {} },
+      { name: "disabled", enabled: false, ids: ["wechat"] },
+      { name: "enabled", enabled: true, ids: ["wechat", "weibo", "x", "qq"] },
+      { name: "default", ids: ["native", "telegram"] },
+      { name: "empty", ids: [] },
+      { name: "null", ids: null },
+      { name: "missing", noComponents: true },
     ];
     const encoded = (value) => Buffer.from(value).toString("base64");
-    const commands = [
-      "import org.thymeleaf.spring6.SpringTemplateEngine;",
-      "import org.thymeleaf.templateresolver.StringTemplateResolver;",
-      "import org.thymeleaf.context.Context;",
-      "import com.fasterxml.jackson.databind.ObjectMapper;",
-      "import java.util.Base64;",
-      "class Theme { public Object config; Theme(Object data) { config = data; } public Object getConfig() { return config; } }",
-      "var engine = new SpringTemplateEngine();",
-      "engine.setTemplateResolver(new StringTemplateResolver());",
-      "var mapper = new ObjectMapper();",
-      `String template = new String(Base64.getDecoder().decode("${encoded(template)}"), java.nio.charset.StandardCharsets.UTF_8);`,
-    ];
-    for (const [index, { name, config }] of configs.entries()) {
-      commands.push(
-        `String data${index} = new String(Base64.getDecoder().decode("${encoded(JSON.stringify(config))}"), java.nio.charset.StandardCharsets.UTF_8);`,
-      );
-      for (const [type, method] of [
-        ["jackson", `mapper.readTree(data${index})`],
-        ["map", `mapper.readValue(data${index}, java.util.Map.class)`],
-      ]) {
-        commands.push(
-          `{ var context = new Context(); context.setVariable("theme", new Theme(${method})); String result = engine.process(template, context); System.out.println("FIXTURE:${type}_${name}:" + Base64.getEncoder().encodeToString(result.getBytes(java.nio.charset.StandardCharsets.UTF_8))); }`,
-        );
+    const decode = (value) =>
+      `new String(Base64.getDecoder().decode("${encoded(value)}"), java.nio.charset.StandardCharsets.UTF_8)`;
+    const directory = mkdtempSync(join(tmpdir(), "sky-doc-share-"));
+    let result;
+    try {
+      mkdirSync(join(directory, "modules"));
+      writeFileSync(join(directory, "share.html"), template);
+      writeFileSync(join(directory, "modules/share-modal.html"), shareTemplate);
+      writeFileSync(join(directory, "modules/component-settings.html"), read("templates/modules/component-settings.html"));
+      const commands = [
+        "import org.thymeleaf.spring6.SpringTemplateEngine;",
+        "import org.thymeleaf.templateresolver.FileTemplateResolver;",
+        "import org.thymeleaf.context.Context;",
+        "import org.thymeleaf.context.IExpressionContext;",
+        "import org.thymeleaf.linkbuilder.AbstractLinkBuilder;",
+        "import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;",
+        "import org.springframework.context.support.StaticApplicationContext;",
+        "import org.springframework.integration.json.JsonPropertyAccessor;",
+        "import com.fasterxml.jackson.databind.ObjectMapper;",
+        "import java.util.*;",
+        "class Theme { final Object config; Theme(Object data) { config = data; } public Object getConfig() { return config; } public Map<String, String> getSpec() { return Map.of(\"version\", \"fixture\"); } }",
+        "var engine = new SpringTemplateEngine();",
+        `var resolver = new FileTemplateResolver(); resolver.setPrefix(${decode(`${directory}/`)}); resolver.setSuffix(".html"); engine.setTemplateResolver(resolver);`,
+        "engine.setLinkBuilder(new AbstractLinkBuilder() { public String buildLink(IExpressionContext c, String base, Map<String,Object> parameters) { return base; } });",
+        "var mapper = new ObjectMapper();",
+      ];
+      for (const [index, { name, enabled, ids, noComponents }] of configs.entries()) {
+        const config = {
+          plugins: { docsme: { doc_settings: { enable_share: enabled } } },
+          components: noComponents ? null : { share_overrides: null, share_suites: null, share_settings: { share_item_ids: ids } },
+        };
+        commands.push(`String data${index} = ${decode(JSON.stringify(config))};`);
+        for (const [type, method] of [
+          ["jackson", `mapper.readTree(data${index})`],
+          ["map", `mapper.readValue(data${index}, Map.class)`],
+        ]) {
+          commands.push(`{
+            var context = new Context();
+            context.setVariable("theme", new Theme(${method}));
+            context.setVariable("docTree", Map.of("status", Map.of("permalink", "/docs/fixture"), "spec", Map.of("title", "Fixture")));
+            var evaluation = new ThymeleafEvaluationContext(new StaticApplicationContext(), null);
+            evaluation.addPropertyAccessor(new JsonPropertyAccessor());
+            context.setVariable(ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME, evaluation);
+            String html = engine.process("share", context);
+            System.out.println("FIXTURE:${type}_${name}:" + Base64.getEncoder().encodeToString(html.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+          }`);
+        }
       }
+      result = runJavaFixture(commands, javaFixtureClasspath);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
     }
-    commands.push("/exit");
-    const result = runJavaFixture(commands, javaFixtureClasspath);
     assert.ifError(result.error);
     assert.equal(result.status, 0, result.stderr || result.stdout);
     const outputs = new Map(
@@ -1718,7 +1056,7 @@ test(
           const output = outputs.get(`${type}_${name}`);
           const enabled = name !== "disabled";
           assert.equal(output.includes('id="trigger"'), enabled, `${type}/${name} 分享按钮`);
-          assert.equal(output.includes('id="host"'), enabled, `${type}/${name} 分享宿主`);
+          assert.equal(output.includes('x-data="shareModal"'), enabled, `${type}/${name} 分享宿主`);
           if (!enabled) return;
           const ids = output.match(/data-share-item-ids="([^"]*)"/)?.[1].replaceAll("&quot;", '"');
           const configured = output.match(/data-share-item-ids-configured="([^"]*)"/)?.[1];
@@ -1759,14 +1097,16 @@ test(
       "${fixtureUser}",
     );
     const logo = (settings = {}) => ({
-      nav: {
-        logo_settings: {
-          logo_type: "none",
-          custom_logo_title: "",
-          logo_icon: null,
-          logo_icon_html: "",
-          logo_image: "",
-          ...settings,
+      components: {
+        nav: {
+          logo_settings: {
+            logo_type: "none",
+            custom_logo_title: "",
+            logo_icon: null,
+            logo_icon_html: "",
+            logo_image: "",
+            ...settings,
+          },
         },
       },
     });
@@ -1779,7 +1119,7 @@ test(
         subtitle: "官方副标题",
       },
       { name: "missing_nav", config: {}, title: "官方站点", subtitle: "官方副标题" },
-      { name: "missing_settings", config: { nav: {} }, title: "官方站点", subtitle: "官方副标题" },
+      { name: "missing_settings", config: { components: { nav: {} } }, title: "官方站点", subtitle: "官方副标题" },
       { name: "system_empty", config: logo({ logo_type: "system" }), title: "官方站点", subtitle: "官方副标题" },
       {
         name: "system_image",

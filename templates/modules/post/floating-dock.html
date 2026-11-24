@@ -6,11 +6,15 @@
 <!-- ========================================== -->
 
 <!-- 文章页悬浮 Dock 入口片段 - 根据样式选择 -->
-<th:block th:fragment="dock" th:if="${theme.config.general.floating_dock?.enable_dock != false}" th:with="cfg = ${theme.config.article.dock_settings},
-                   enableCustom = ${cfg?.enable_custom_dock},
-                   pageDockStyle = ${cfg?.dock_style ?: 'bottom'},
-                   globalDockStyle = ${theme.config.general.floating_dock?.dock_style ?: 'bottom'},
-                   dockStyle = ${enableCustom ? pageDockStyle : globalDockStyle}">
+<th:block th:fragment="dock">
+  <th:block th:replace="~{modules/component-settings :: sidebar('article', ~{:: articleDock})}" />
+</th:block>
+
+<th:block th:fragment="articleDock">
+  <th:block th:replace="~{modules/component-settings :: dock('article', ~{:: resolvedDock})}" />
+</th:block>
+
+<th:block th:fragment="resolvedDock" th:if="${enableDock}">
   <!-- 底部居中样式 -->
   <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: bottomDock}" />
   <!-- 右侧可折叠样式 -->
@@ -36,11 +40,7 @@
         <div class="flex items-center gap-1">
 
           <!-- 自定义菜单图标 -->
-          <th:block th:with="cfg = ${theme.config.article.dock_settings},
-                     enableCustom = ${cfg?.enable_custom_dock},
-                     globalDock = ${theme.config.general.floating_dock},
-                     menuName = ${enableCustom ? (cfg?.post_dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-                     dockMenu = ${menuFinder.getByName(menuName)}">
+          <th:block th:with="dockMenu=${menuFinder.getByName(dockMenuName)}">
             <th:block th:if="${dockMenu != null}">
               <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
@@ -64,14 +64,14 @@
           </th:block>
 
           <!-- 分隔线（目录按钮前） - 跟随目录按钮显示逻辑 -->
-          <div th:if="${theme.config.article.dock_settings?.enable_toc_drawer}"
-            th:classappend="${theme.config.article.sidebar_settings?.show_sidebar == true} ? 'lg:hidden!' : ''"
+          <div th:if="${theme.config.pages.article.dock_settings?.enable_toc_drawer}"
+            th:classappend="${showSidebar} ? 'lg:hidden!' : ''"
             class="w-px h-6 bg-base-300/50"></div>
 
           <!-- 目录按钮 - 仅移动端或隐藏侧边栏时显示 -->
-          <button th:if="${theme.config.article.dock_settings?.enable_toc_drawer}"
-            th:classappend="${theme.config.article.sidebar_settings?.show_sidebar == true} ? 'lg:hidden!' : ''"
-            onclick="window.openPostTocDrawer()" class="dock-item dock-btn group relative" title="目录">
+          <button th:if="${theme.config.pages.article.dock_settings?.enable_toc_drawer}"
+            th:classappend="${showSidebar} ? 'lg:hidden!' : ''"
+            data-drawer-open="post-toc-drawer" aria-controls="post-toc-drawer" aria-expanded="false" class="dock-item dock-btn group relative" title="目录">
             <span class="icon-[heroicons--list-bullet] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
             </span>
             <!-- 目录 Tooltip -->
@@ -82,10 +82,10 @@
           </button>
 
           <!-- 分隔线（返回顶部前） - 仅当返回顶部启用时显示 -->
-          <div class="w-px h-6 bg-base-300/50" th:if="${theme.config.article.dock_settings?.enable_back_to_top}"></div>
+          <div class="w-px h-6 bg-base-300/50" th:if="${enableBackToTop}"></div>
 
           <!-- 返回顶部按钮 -->
-          <button th:if="${theme.config.article.dock_settings.enable_back_to_top}" @click="scrollToTop()"
+          <button th:if="${enableBackToTop}" @click="scrollToTop()"
             class="dock-item dock-btn" title="返回顶部">
             <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
           </button>
@@ -121,11 +121,7 @@
       </div>
 
       <!-- 自定义菜单项 -->
-      <th:block th:with="cfg = ${theme.config.article.dock_settings},
-                 enableCustom = ${cfg?.enable_custom_dock},
-                 globalDock = ${theme.config.general.floating_dock},
-                 menuName = ${enableCustom ? (cfg?.post_dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-                 dockMenu = ${menuFinder.getByName(menuName)}">
+      <th:block th:with="dockMenu=${menuFinder.getByName(dockMenuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
             <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
@@ -144,16 +140,16 @@
       </th:block>
 
       <!-- 目录按钮 - 仅移动端或隐藏侧边栏时显示 -->
-      <div th:if="${theme.config.article.dock_settings?.enable_toc_drawer}"
-        th:classappend="${theme.config.article.sidebar_settings?.show_sidebar == true} ? 'lg:hidden!' : ''">
+      <div th:if="${theme.config.pages.article.dock_settings?.enable_toc_drawer}"
+        th:classappend="${showSidebar} ? 'lg:hidden!' : ''">
         <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
-        <button class="btn btn-circle" onclick="window.openPostTocDrawer()" aria-label="打开文章目录">
+        <button class="btn btn-circle" data-drawer-open="post-toc-drawer" aria-controls="post-toc-drawer" aria-expanded="false" aria-label="打开文章目录">
           <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
         </button>
       </div>
 
       <!-- 返回顶部按钮 -->
-      <div th:if="${theme.config.article.dock_settings.enable_back_to_top}">
+      <div th:if="${enableBackToTop}">
         <span class="text-sm whitespace-nowrap hidden sm:block">返回顶部</span>
         <button class="btn btn-circle" @click="scrollToTop()">
           <span class="icon-[heroicons--arrow-up] w-5 h-5"></span>
@@ -169,12 +165,12 @@
 <!-- ========================================== -->
 
 <!-- 分享弹窗 - 使用通用组件 -->
-<th:block th:fragment="shareModal" th:if="${theme.config.article.post_interaction.enable_share}">
-  <th:block th:replace="~{modules/share-modal :: shareModal(
-    title='分享文章',
+<th:block th:fragment="shareModal" th:if="${theme.config.pages.article.post_interaction.enable_share}">
+  <th:block th:replace="~{modules/share-modal :: shareFor(
+      host='article',
+      title='分享文章',
     shareUrl=${post.status.permalink},
-    shareTitle=${post.spec.title},
-    shareItemIds=${theme.config.article.post_interaction.share_settings.share_item_ids}
+    shareTitle=${post.spec.title}
   )}" />
 </th:block>
 
@@ -183,18 +179,18 @@
 <!-- ========================================== -->
 
 <!-- 目录抽屉 - 原生实现，不依赖 Alpine 组件 -->
-<th:block th:fragment="tocDrawer" th:if="${theme.config.article.dock_settings.enable_toc_drawer}">
+<th:block th:fragment="tocDrawer" th:if="${theme.config.pages.article.dock_settings.enable_toc_drawer}">
   <!-- 遮罩层 -->
-  <div id="post-toc-overlay" class="post-toc-overlay" onclick="window.closePostTocDrawer()"></div>
+  <div id="post-toc-overlay" class="content-drawer-backdrop" aria-hidden="true"></div>
   <!-- 抽屉面板 -->
-  <div id="post-toc-drawer" class="post-toc-drawer" role="dialog" aria-modal="true" aria-label="文章目录" tabindex="-1" inert aria-hidden="true">
+  <div id="post-toc-drawer" class="content-drawer" data-drawer-side="right" role="dialog" aria-modal="true" aria-label="文章目录" tabindex="-1" inert aria-hidden="true">
     <!-- 标题栏 -->
     <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
       <h3 class="text-base font-semibold flex items-center gap-2">
         <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary"></span>
         <span>文章目录</span>
       </h3>
-      <button type="button" aria-label="关闭文章目录" onclick="window.closePostTocDrawer()" class="btn btn-ghost btn-circle btn-sm">
+      <button type="button" aria-label="关闭文章目录" data-drawer-close class="btn btn-ghost btn-circle btn-sm">
         <span class="icon-[heroicons--x-mark] w-5 h-5" aria-hidden="true"></span>
       </button>
     </div>

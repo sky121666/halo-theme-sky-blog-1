@@ -5,12 +5,8 @@
  */
 import "./photos.css";
 import { skyDebug } from "../../common/js/debug.js";
-import { notifySwupPageReady, runPageInit } from "../../common/js/page-runtime.js";
 
-function initPhotosPage() {
-  window.__skyPhotosCleanup?.();
-  window.__skyPhotosCleanup = null;
-
+export function mount() {
   const photoGrid = document.getElementById("photo-grid");
   if (!photoGrid) return;
 
@@ -28,11 +24,6 @@ function initPhotosPage() {
 
   // 将圆角以 CSS 变量方式注入，所有 photo-item（含无限滚动加载的）自动继承
   photoGrid.style.setProperty("--photo-radius", borderRadius + "px");
-  const handleGridClick = (event) => {
-    if (event.target.closest(".photo-detail-btn, .photo-download-btn")) {
-      event.stopPropagation();
-    }
-  };
   const handleGridKeydown = (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
 
@@ -42,7 +33,6 @@ function initPhotosPage() {
     event.preventDefault();
     trigger.click();
   };
-  photoGrid.addEventListener("click", handleGridClick);
   photoGrid.addEventListener("keydown", handleGridKeydown);
 
   function ensureLightGalleryImageContract(item) {
@@ -64,91 +54,9 @@ function initPhotosPage() {
     return img;
   }
 
-  function getLightGalleryInstance() {
-    const ids = [photoGrid.getAttribute("lg-uid"), photoGrid.getAttribute("data-lg-id")].filter(Boolean);
-    return ids.map((id) => window.lgData?.[id]).find(Boolean) || null;
-  }
-
-  let lightGallerySyncPending = false;
-  let lightGalleryRebuildTimer = null;
-  let pendingLightGalleryTrigger = null;
-
-  const handleLightGalleryRebuildClick = (event) => {
-    if (lightGalleryRebuildTimer === null) return;
-    const image = event.target.closest("img[data-photo-lightbox-trigger]");
-    if (!image || image.getAttribute("aria-disabled") === "true") return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    pendingLightGalleryTrigger = image;
-  };
-  photoGrid.addEventListener("click", handleLightGalleryRebuildClick, true);
-
   function syncLightGalleryItems() {
-    if (disposed) return;
-
-    allPhotoItems.forEach((item) => ensureLightGalleryImageContract(item));
-    // More pages may arrive during teardown. The eventual initializer queries
-    // the latest DOM once; do not let another caller create an instance early.
-    if (lightGalleryRebuildTimer !== null) return;
-
-    const instance = getLightGalleryInstance();
-    if (!instance) {
-      window.SkyLightGallery?.initNow?.();
-      return;
-    }
-
-    if (typeof instance.refresh === "function") {
-      instance.refresh();
-      return;
-    }
-
-    if (typeof instance.destroy !== "function" || typeof window.lightGallery !== "function") return;
-
-    // Legacy lightGallery has no refresh API. Do not close an active/closing
-    // gallery when a page request finishes; update its items after close.
-    if (instance.lGalleryOn || instance.outer?.isConnected) {
-      lightGallerySyncPending = true;
-      return;
-    }
-
-    lightGallerySyncPending = false;
-    const settings = instance.s ? { ...instance.s } : { selector: "img" };
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    try {
-      // lightgallery.js 1.4.0 restores its open-time scroll position even on
-      // full teardown. Pagination must keep the viewport at append time.
-      instance.destroy(true);
-      // 1.4.0 removes .lg-backdrop globally after backdropDuration + 50ms.
-      // Register after destroy's timer so that cleanup finishes before a new
-      // instance (and a queued user click) can create its own backdrop.
-      lightGalleryRebuildTimer = window.setTimeout(() => {
-        lightGalleryRebuildTimer = null;
-        if (disposed || !photoGrid.isConnected) return;
-        window.lightGallery(photoGrid, settings);
-        const trigger = pendingLightGalleryTrigger;
-        pendingLightGalleryTrigger = null;
-        if (trigger?.isConnected && trigger.getAttribute("aria-disabled") !== "true") trigger.click();
-      }, Number(settings.backdropDuration ?? 150) + 50);
-    } finally {
-      if (!disposed && (window.scrollX !== scrollX || window.scrollY !== scrollY)) {
-        window.scrollTo({ left: scrollX, top: scrollY, behavior: "instant" });
-      }
-    }
+    if (!disposed) photoGrid.dispatchEvent(new Event("sky:gallery-items"));
   }
-
-  const handleLightGalleryClose = () => {
-    if (lightGallerySyncPending) syncLightGalleryItems();
-  };
-  photoGrid.addEventListener("onCloseAfter", handleLightGalleryClose);
-  addCleanupTask(() => {
-    lightGallerySyncPending = false;
-    window.clearTimeout(lightGalleryRebuildTimer);
-    lightGalleryRebuildTimer = null;
-    pendingLightGalleryTrigger = null;
-    photoGrid.removeEventListener("click", handleLightGalleryRebuildClick, true);
-    photoGrid.removeEventListener("onCloseAfter", handleLightGalleryClose);
-  });
 
   let masonryCols = 0;
   let masonryColNodes = [];
@@ -339,7 +247,7 @@ function initPhotosPage() {
   initMasonry();
   allPhotoItems.forEach((item) => {
     appendToShortest(item);
-    bindImageLoad(item.querySelector("img"), checkFirstScreenDone);
+    bindImageLoad(ensureLightGalleryImageContract(item), checkFirstScreenDone);
   });
 
   // 响应式重排
@@ -371,7 +279,6 @@ function initPhotosPage() {
   let continuationFrame = null;
 
   let cleaned = false;
-  let unregisterPjaxCleanup = null;
 
   const cleanup = () => {
     if (cleaned) return;
@@ -380,33 +287,20 @@ function initPhotosPage() {
     requestController.abort();
     clearTimeout(resizeTimer);
     cleanupTasks.splice(0).forEach((task) => task());
-    photoGrid.removeEventListener("click", handleGridClick);
     photoGrid.removeEventListener("keydown", handleGridKeydown);
     window.removeEventListener("resize", handleResize);
     if (handleRetry) retryButton?.removeEventListener("click", handleRetry);
     observer?.disconnect();
     if (continuationFrame !== null) window.cancelAnimationFrame(continuationFrame);
     continuationFrame = null;
-    unregisterPjaxCleanup?.();
-    unregisterPjaxCleanup = null;
-    if (window.__skyPhotosCleanup === cleanup) {
-      window.__skyPhotosCleanup = null;
-    }
   };
-
-  window.__skyPhotosCleanup = cleanup;
-  if (window.SkyPjax?.onCleanup) {
-    unregisterPjaxCleanup = window.SkyPjax.onCleanup(cleanup);
-  } else {
-    document.addEventListener("sky:page-cleanup", cleanup, { once: true });
-  }
 
   if (!nextUrlEl) {
     if (noMoreData) {
       noMoreData.classList.remove("hidden");
       noMoreData.classList.add("flex");
     }
-    return;
+    return cleanup;
   }
 
   const sentinel = nextUrlEl.parentElement;
@@ -436,64 +330,14 @@ function initPhotosPage() {
       const newItems = doc.querySelectorAll(".photo-item");
 
       if (newItems.length > 0) {
-        const pending = [];
-
-        newItems.forEach((item, index) => {
-          item.style.animationDelay = `${index * 35}ms`;
-          const img = item.querySelector("img");
-
-          if (img) {
-            img.onload = null;
-            const src = img.src || img.getAttribute("src") || "";
-            const preload = new Image();
-            preload.src = src;
-
-            pending.push({
-              item,
-              img,
-              ready: new Promise((resolve) => {
-                if (preload.complete && preload.naturalWidth > 0) {
-                  img._nw = preload.naturalWidth;
-                  img._nh = preload.naturalHeight;
-                  resolve();
-                } else {
-                  const t = setTimeout(resolve, 600);
-                  addCleanupTask(() => {
-                    clearTimeout(t);
-                    preload.onload = null;
-                    preload.onerror = null;
-                  });
-                  preload.onload = () => {
-                    clearTimeout(t);
-                    // 超时后预加载仍可能完成；失败的实际图片保持占位估算。
-                    if (!disposed && img.dataset.settled !== "1") {
-                      img._nw = preload.naturalWidth;
-                      img._nh = preload.naturalHeight;
-                      updateItemHeight(item);
-                    }
-                    resolve();
-                  };
-                  preload.onerror = () => {
-                    clearTimeout(t);
-                    resolve();
-                  };
-                }
-              }),
-            });
-          } else {
-            pending.push({ item, img: null, ready: Promise.resolve() });
-          }
-        });
-
-        await Promise.all(pending.map((p) => p.ready));
-        if (disposed) return;
-
-        pending.forEach(({ item, img }) => {
+        for (const item of newItems) {
+          item.style.animationDelay = "";
+          item.dataset.photoAppended = "";
+          const image = ensureLightGalleryImageContract(item);
           allPhotoItems.push(item);
           appendToShortest(item);
-          bindImageLoad(img);
-        });
-
+          bindImageLoad(image);
+        }
         syncLightGalleryItems();
       }
 
@@ -548,12 +392,5 @@ function initPhotosPage() {
   retryButton?.addEventListener("click", handleRetry);
 
   observer.observe(sentinel);
+  return cleanup;
 }
-
-if (window.SkyPjax?.onPage) {
-  window.SkyPjax.onPage(initPhotosPage, { immediate: false });
-} else {
-  runPageInit(initPhotosPage);
-}
-
-notifySwupPageReady();

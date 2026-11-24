@@ -6,7 +6,7 @@
   <th:block
     th:if="${photo != null}"
     th:with="
-    cfg=${theme.config.photos_settings},
+    cfg=${theme.config.plugins.photos},
     showDownloadBtn=${cfg?.show_download_btn != false},
     photoTitle=${photo.spec.displayName ?: (title ?: '照片')},
     photoDesc=${photo.spec.description},
@@ -117,7 +117,7 @@
               拍摄参数
             </h2>
 
-            <div class="photo-detail-meta-card">
+            <div class="photo-detail-meta-card sky-glow-card" data-glow-owner="personal">
               <div class="photo-detail-meta-item" th:if="${hasCamera}">
                 <span>Camera</span>
                 <strong

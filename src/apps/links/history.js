@@ -18,9 +18,3 @@ export function isSameLinksResource(current, target) {
     return false;
   }
 }
-
-// Retain Swup's index and any third-party metadata. Without this URL update,
-// returning from another page would load the route copied before a local push.
-export function linksHistoryState(state, url) {
-  return state?.source === "swup" && state.url !== url ? { ...state, url } : state;
-}

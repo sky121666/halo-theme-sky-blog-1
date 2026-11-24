@@ -40,6 +40,15 @@
   background-color: transparent;
 }
 
+/* Keep the bar's configured glow softer than the menu panels. */
+.navbar.sky-glow-card {
+  --sky-glow-opacity: 2%;
+}
+
+[data-color-scheme="dark"] .navbar.sky-glow-card {
+  --sky-glow-opacity: 4%;
+}
+
 /* 导航栏内容层级管理 - 确保内容显示在遮罩上层 */
 .navbar>* {
   position: relative;

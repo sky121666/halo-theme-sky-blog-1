@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import test from 'node:test';
 
 const source = fs.readFileSync(new URL('../src/common/js/modal-focus.js', import.meta.url), 'utf8')
-  .replace('export function', 'function');
+  .replaceAll('export function', 'function');
 
 function fixture({ empty = false } = {}) {
   const doc = new EventTarget();

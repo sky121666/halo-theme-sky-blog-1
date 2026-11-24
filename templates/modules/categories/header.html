@@ -9,7 +9,7 @@
 
 <header th:fragment="banner"
         class="category-banner relative w-full h-[50vh] md:h-[60vh] overflow-hidden transition-all duration-500 ease-out"
-        th:with="headerBgSettings=${theme.config.article.header_background}">
+        th:with="headerBgSettings=${theme.config.pages.article.header_background}">
   <!-- 背景图片层（与 post 结构一致） -->
   <div class="absolute inset-0 z-0">
     <img class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"

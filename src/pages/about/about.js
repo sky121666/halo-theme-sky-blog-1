@@ -5,11 +5,13 @@
 
 import './about.css';
 import { skyDebug } from '../../common/js/debug.js';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 import { annualWindow, fetchAnnualPublicPosts, localDateKey } from '../../common/js/article-heatmap-data.js';
 
 // 导入公共文章内容脚本（CSS 已在 about.css 中导入）
-import '../../static/js/article-content.js';
 
 (function(window, document) {
   'use strict';
@@ -353,7 +355,7 @@ import '../../static/js/article-content.js';
   
   // 更新 GitHub 卡片颜色（供主题切换时调用）
   SF.updateGitHubColors = function() {
-    const cfg = window.aboutGithubConfig;
+    const cfg = document.querySelector("[data-about-github]")?.dataset;
     if (!cfg || !cfg.username) return;
     
     // 检查是否使用自定义主题
@@ -403,7 +405,7 @@ import '../../static/js/article-content.js';
   
   SF.initGitHub = function() {
     const container = document.getElementById('github-heatmap-container');
-    const cfg = window.aboutGithubConfig;
+    const cfg = document.querySelector("[data-about-github]")?.dataset;
     if (!cfg || !cfg.username) return;
 
     // 获取主题颜色
@@ -660,7 +662,7 @@ import '../../static/js/article-content.js';
 
   // ============================= 初始化 =============================
   
-  registerPageLifecycle(function() {
+  page.onMount(function() {
     if (!document.querySelector('.about-squareform')) return;
 
     const cleanupTasks = [];
@@ -686,10 +688,7 @@ import '../../static/js/article-content.js';
         task();
       });
       SF.cancelAnimationFrames();
-      window.aboutGithubConfig = undefined;
     };
-  }, { entry: 'about' });
+  });
 
 })(window, document);
-
-notifySwupPageReady();

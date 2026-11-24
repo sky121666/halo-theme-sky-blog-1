@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <title th:text="${#strings.defaultString(title, '维护中')} + ' - ' + ${site.title}">维护中</title>
     <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <th:block th:replace="~{modules/theme-script :: head}" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <style>
       #maintenance-page {
@@ -43,7 +43,7 @@
         padding: clamp(2rem, 6vw, 4rem);
         text-align: center;
         background: color-mix(in srgb, var(--color-base-100, #fff) 88%, transparent);
-        box-shadow: 0 2rem 5rem color-mix(in srgb, var(--color-base-content, #111827) 12%, transparent);
+        --sky-card-elevation: 0 2rem 5rem rgb(0 0 0 / 0.12);
         backdrop-filter: blur(1.5rem);
       }
 
@@ -212,7 +212,7 @@
 
   <body id="maintenance-page" data-plugin-contract="maintenance@1.1.0">
     <main class="maintenance-shell">
-      <section class="maintenance-card" aria-labelledby="maintenance-title" aria-describedby="maintenance-description">
+      <section data-glow-owner="system" class="sky-glow-card maintenance-card" aria-labelledby="maintenance-title" aria-describedby="maintenance-description">
         <div class="maintenance-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <path

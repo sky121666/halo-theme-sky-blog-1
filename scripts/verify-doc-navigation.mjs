@@ -5,7 +5,7 @@ import fs from "node:fs";
 import test from "node:test";
 import vm from "node:vm";
 
-const modalSource = fs.readFileSync(new URL("../src/common/js/modal-focus.js", import.meta.url), "utf8").replace("export function", "function");
+const modalSource = fs.readFileSync(new URL("../src/common/js/modal-focus.js", import.meta.url), "utf8").replaceAll("export function", "function");
 const source = fs.readFileSync(new URL("../src/pages/doc/doc.js", import.meta.url), "utf8");
 const tocSource = source.slice(source.indexOf("function initTOC()"), source.indexOf("function initDropdowns()"));
 const drawerSource = source.slice(source.indexOf("function initDrawers()"), source.indexOf("// 初始化\n"));
@@ -14,8 +14,10 @@ const selectorsTemplate = fs.readFileSync(new URL("../templates/modules/doc/sele
 
 // Exercise the production TOC and drawer functions without a Halo server.
 // Browser rendering and the Thymeleaf selector fragment require page acceptance.
-function element({ html = "", links = [] } = {}) {
+function element({ html = "", links = [], closeButtons = [] } = {}) {
   const classes = new Set();
+  const attributes = new Map();
+  const events = new EventTarget();
   return {
     get innerHTML() {
       return html;
@@ -25,11 +27,17 @@ function element({ html = "", links = [] } = {}) {
       if (!value) links = [];
     },
     hidden: false,
-    setAttribute() {}, removeAttribute() {}, focus() {}, contains() { return false; },
+    setAttribute(name, value) { attributes.set(name, value); },
+    getAttribute(name) { return attributes.get(name); },
+    removeAttribute(name) { attributes.delete(name); },
+    focus() {}, contains() { return false; },
+    addEventListener: events.addEventListener.bind(events),
+    click() { events.dispatchEvent(new Event("click")); },
     style: {},
     classList: {
       add: (name) => classes.add(name),
       remove: (name) => classes.delete(name),
+      toggle: (name, on) => on ? classes.add(name) : classes.delete(name),
       contains: (name) => classes.has(name),
     },
     querySelector(selector) {
@@ -39,6 +47,7 @@ function element({ html = "", links = [] } = {}) {
     },
     querySelectorAll(selector) {
       if (selector.startsWith("a[href]")) return [];
+      if (selector === "[data-drawer-close]") return closeButtons;
       assert.equal(selector, ".toc-link");
       return links;
     },
@@ -47,14 +56,16 @@ function element({ html = "", links = [] } = {}) {
 
 function setup({ hasContent = true, hasToc = false } = {}) {
   const links = hasToc ? [{}] : [];
+  const closeToc = element();
+  const closeSidebar = element();
   const nodes = {
     "toc-nav": element({ html: hasToc ? '<ol class="toc-list"><li>Introduction</li></ol>' : "", links }),
     "toc-card": element(),
     "doc-toc-overlay": element(),
-    "doc-toc-drawer": element(),
+    "doc-toc-drawer": element({ closeButtons: [closeToc] }),
     "doc-toc-drawer-nav": element(),
     "doc-sidebar-overlay": element(),
-    "doc-sidebar-drawer": element(),
+    "doc-sidebar-drawer": element({ closeButtons: [closeSidebar] }),
   };
   if (hasContent) {
     nodes["article-content"] = {
@@ -65,21 +76,24 @@ function setup({ hasContent = true, hasToc = false } = {}) {
     };
   }
   const triggers = [element(), element()];
+  const sidebarTrigger = element();
+  const controller = new AbortController();
   const window = {};
   const document = Object.assign(new EventTarget(), {
     body: { style: { overflow: "" } },
     getElementById: (id) => nodes[id] || null,
     querySelectorAll(selector) {
-      assert.equal(selector, ".doc-toc-drawer-trigger");
-      return triggers;
+      if (selector === '.doc-toc-drawer-trigger' || selector === '[data-drawer-open="doc-toc-drawer"]') return triggers;
+      if (selector === '[data-drawer-open="doc-sidebar-drawer"]') return [sidebarTrigger];
+      throw new Error(`Unexpected document selector: ${selector}`);
     },
   });
   const api = vm.runInNewContext(`${modalSource}\n${tocSource}\n${drawerSource}\n({ initTOC, initDrawers });`, {
     window,
     document,
-    on() {}, AbortController, getPageSignal: () => new AbortController().signal,
+    on() {}, AbortController, getPageSignal: () => controller.signal,
   });
-  return { ...api, nodes, triggers, window, document };
+  return { ...api, nodes, triggers, closeToc, closeSidebar, sidebarTrigger, controller, document };
 }
 
 function selectorNavigation({ kind = "version", currentHref, currentBase, targetHref, initializeTimes = 1 }) {
@@ -299,7 +313,7 @@ test("a document without headings hides both TOC entries and its desktop card", 
 test("opening an empty TOC does not show an overlay or lock document scrolling", () => {
   const state = setup();
   state.initDrawers();
-  state.window.openDocTocDrawer();
+  state.triggers[0].click();
   assert.equal(state.nodes["doc-toc-drawer"].classList.contains("open"), false);
   assert.equal(state.nodes["doc-toc-overlay"].classList.contains("open"), false);
   assert.equal(state.document.body.style.overflow, "");
@@ -310,7 +324,7 @@ test("reinitializing a document without headings clears an earlier TOC before op
   state.nodes["doc-toc-drawer-nav"].innerHTML = "Earlier document";
   state.initTOC();
   state.initDrawers();
-  state.window.openDocTocDrawer();
+  state.triggers[0].click();
   assert.equal(state.nodes["toc-nav"].innerHTML, "");
   assert.equal(state.nodes["doc-toc-drawer-nav"].innerHTML, "");
   assert.equal(state.nodes["doc-toc-drawer"].classList.contains("open"), false);
@@ -320,11 +334,13 @@ test("reinitializing a document without headings clears an earlier TOC before op
 test("a nonempty TOC still opens with its content and releases scrolling when closed", () => {
   const state = setup({ hasToc: true });
   state.initDrawers();
-  state.window.openDocTocDrawer();
+  state.triggers[0].click();
   assert.equal(state.nodes["doc-toc-drawer"].classList.contains("open"), true);
   assert.equal(state.nodes["doc-toc-drawer-nav"].innerHTML, '<ol class="toc-list"><li>Introduction</li></ol>');
   assert.equal(state.document.body.style.overflow, "hidden");
-  state.window.closeDocTocDrawer();
+  assert.ok(state.triggers.every((trigger) => trigger.getAttribute("aria-expanded") === "true"));
+  state.closeToc.click();
+  assert.ok(state.triggers.every((trigger) => trigger.getAttribute("aria-expanded") === "false"));
   assert.equal(state.nodes["doc-toc-overlay"].classList.contains("open"), false);
   assert.equal(state.document.body.style.overflow, "");
 });
@@ -333,10 +349,22 @@ test("a catalog without article content retains its document-tree drawer", () =>
   const state = setup({ hasContent: false });
   state.initTOC();
   state.initDrawers();
-  state.window.openDocSidebarDrawer();
+  state.sidebarTrigger.click();
   assert.equal(state.nodes["doc-sidebar-drawer"].classList.contains("open"), true);
   assert.equal(state.document.body.style.overflow, "hidden");
-  state.window.closeDocSidebarDrawer();
+  state.closeSidebar.click();
   assert.equal(state.nodes["doc-sidebar-drawer"].classList.contains("open"), false);
   assert.equal(state.document.body.style.overflow, "");
+});
+
+test("a document visit releases the drawer and its controls on departure", () => {
+  const state = setup({ hasToc: true });
+  state.initDrawers();
+  state.triggers[0].click();
+  assert.equal(state.document.body.style.overflow, "hidden");
+  state.controller.abort();
+  assert.equal(state.document.body.style.overflow, "");
+  assert.equal(state.nodes["doc-toc-drawer"].classList.contains("open"), false);
+  state.triggers[0].click();
+  assert.equal(state.nodes["doc-toc-drawer"].classList.contains("open"), false);
 });

@@ -1,9 +1,9 @@
 <!-- 兼容基线：PluginPhotos v2.1.1；首页图库模块使用 photoFinder.groupBy()。 -->
 <th:block th:fragment="gallery(context)">
-  <th:block th:with="gallerySettings = ${theme.config.index.gallery_settings}">
+  <th:block th:with="gallerySettings = ${theme.config.pages.index.gallery_settings}">
     <section
       th:if="${gallerySettings != null and gallerySettings.enable_gallery == true}"
-      class="card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-6 shadow-lg backdrop-blur-xl sm:p-8 lg:mb-0"
+      data-glow-owner="home" data-glow-component="home-gallery" class="sky-glow-card card bg-base-100/80 border-base-content/5 mb-8 rounded-[1.5rem] border p-6 shadow-lg backdrop-blur-xl sm:p-8 lg:mb-0"
     >
       <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">

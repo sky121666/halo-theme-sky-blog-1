@@ -14,7 +14,7 @@
     th:with="isPinned = ${post.spec.pinned == true},
                     isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                     isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-    class="group card relative cursor-pointer bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-[1.5rem] p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 shadow-lg hover:shadow-xl hover:border-primary/20 transition-all duration-300">
+    th:data-glow-owner="${postCardGlowOwner ?: 'discovery'}" data-glow-interaction="hover press focus" class="sky-glow-card group card relative cursor-pointer bg-base-100/80 backdrop-blur-xl border border-base-content/5 rounded-[1.5rem] p-4 md:p-5 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 shadow-lg hover:border-primary/20 transition-all duration-300">
 
     <!-- 封面计算：支持主题的封面回退设置 (Context-Aware Fix) -->
     <th:block th:with="
@@ -32,7 +32,7 @@
     ">
       <!-- 左侧图片区域：4:3 比例 -->
       <figure class="relative w-full md:basis-[25%] md:max-w-[25%] shrink-0 overflow-hidden rounded-xl">
-        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="block w-full aspect-4/3">
+        <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="block w-full aspect-4/3">
           <img th:if="${coverUrl != null}" th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
           <!-- 无封面占位：与有图片时尺寸完全一致 -->
@@ -52,13 +52,13 @@
     <div class="flex-1 min-w-0 flex flex-col">
       <!-- 标题：可点击，强调可读性 -->
       <h3 class="text-base md:text-lg font-bold leading-6 md:leading-7 tracking-tight">
-        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary transition-colors"
+        <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-primary transition-colors"
           th:text="${post.spec.title}">文章标题</a>
       </h3>
 
       <!-- 摘要：响应式占满宽度，双行省略，移除固定宽度与高度以适配窄屏 -->
       <p class="mt-2 text-sm text-base-content/70 line-clamp-2 w-full leading-relaxed">
-        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
+        <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="hover:text-base-content"
           th:text="${(post.spec.excerpt != null and post.spec.excerpt.raw != null and !post.spec.excerpt.raw.isEmpty()) ? post.spec.excerpt.raw : (post.status.excerpt ?: '')}"></a>
       </p>
 

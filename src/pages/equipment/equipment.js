@@ -1,11 +1,14 @@
 import './equipment.css'
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 /**
  * 装备页面 - 3D 装备收藏卡交互
  * 战术终端版
  */
-registerPageLifecycle(() => {
+page.onMount(() => {
     const cards = document.querySelectorAll('.card-wrap');
 
     if (cards.length === 0) return;
@@ -73,6 +76,4 @@ registerPageLifecycle(() => {
     });
 
     return () => controller.abort();
-}, { entry: 'equipment' });
-
-notifySwupPageReady();
+});

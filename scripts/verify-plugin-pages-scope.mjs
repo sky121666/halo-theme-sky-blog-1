@@ -13,7 +13,7 @@ import { pluginContracts } from "./plugin-contracts.mjs";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const themeAsset = '<script src="/themes/theme-sky-blog-1/assets/js/main.js"></script>';
 const loginHtml = `${themeAsset}<form class="halo-form"></form>`;
-const photosHtml = `${themeAsset}<div class="photo-grid">图库</div><script src="photos.js"></script>`;
+const photosHtml = `${themeAsset}<div class="photo-grid">图库</div><main id="swup" data-page="photos"></main>`;
 
 function plugin(name, { enabled = true, phase = "STARTED", version = "1.0.0" } = {}) {
   return { metadata: { name }, spec: { enabled, version }, status: { phase } };

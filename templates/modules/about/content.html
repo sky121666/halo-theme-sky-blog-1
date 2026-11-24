@@ -5,17 +5,17 @@
 <th:block th:fragment="content">
 
   <th:block th:with="
-    cfg=${theme.config.about_settings},
-    nickname=${cfg?.profile?.nickname ?: site.title},
-    role=${cfg?.profile?.role ?: 'Full Stack Developer'},
-    bio=${cfg?.profile?.bio ?: 'Translating imagination into interactive, responsive, and timeless digital solutions.'},
-    avatar=${cfg?.profile?.avatar ?: singlePage.spec.cover},
+    cfg=${theme.config.pages.about},
+    nickname=${theme.config.general.profile?.nickname ?: site.title},
+    role=${theme.config.general.profile?.role ?: 'Full Stack Developer'},
+    bio=${theme.config.general.profile?.bio ?: 'Translating imagination into interactive, responsive, and timeless digital solutions.'},
+    avatar=${theme.config.general.profile?.avatar ?: singlePage.spec.cover},
     socialLinks=${cfg?.social_links},
     techStack=${cfg?.tech_stack},
-    githubUsername=${cfg?.github?.username},
-    githubStatsHost=${cfg?.github?.stats_host ?: 'https://github-readme-stats.xoku.cn'},
-    githubLocale=${cfg?.github?.locale},
-    githubTheme=${cfg?.github?.stats_theme},
+    githubUsername=${theme.config.general.github?.username},
+    githubStatsHost=${theme.config.general.github?.stats_host ?: 'https://github-readme-stats.xoku.cn'},
+    githubLocale=${theme.config.general.github?.locale},
+    githubTheme=${theme.config.general.github?.stats_theme},
     showGithubStats=${cfg?.github?.show_stats != false},
     showGithubCalendar=${cfg?.github?.show_calendar != false},
     showArticleHeatmap=${cfg?.display?.show_article_heatmap != false},
@@ -191,7 +191,7 @@
             
             <!-- 文章热力图 -->
             <div th:if="${showArticleHeatmap}" 
-                 class="sf-project-card sf-card-wide" 
+                 data-glow-owner="personal" class="sky-glow-card sf-project-card sf-card-wide"
                  data-reveal="fade-up" data-reveal-delay="100">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
@@ -222,7 +222,7 @@
 
             <!-- GitHub 热力图 - 全屏 -->
             <div th:if="${githubUsername != null && !githubUsername.isEmpty() && showGithubCalendar}" 
-                 class="sf-project-card sf-card-wide" 
+                 data-glow-owner="personal" class="sky-glow-card sf-project-card sf-card-wide"
                  data-reveal="fade-up" data-reveal-delay="200">
               <div class="sf-card-header">
                 <div class="sf-card-icon">
@@ -246,7 +246,7 @@
 
             <!-- GitHub Stats -->
             <th:block th:if="${githubUsername != null && !githubUsername.isEmpty() && showGithubStats}">
-              <div class="sf-project-card" data-reveal="fade-up" data-reveal-delay="300">
+              <div data-glow-owner="personal" class="sky-glow-card sf-project-card" data-reveal="fade-up" data-reveal-delay="300">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
@@ -258,7 +258,7 @@
                 </div>
               </div>
               
-              <div class="sf-project-card" data-reveal="fade-up" data-reveal-delay="400">
+              <div data-glow-owner="personal" class="sky-glow-card sf-project-card" data-reveal="fade-up" data-reveal-delay="400">
                 <div class="sf-card-header">
                   <div class="sf-card-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4a2 2 0 0 1 2-2h2"/><path d="M20 7V4a2 2 0 0 0-2-2h-2"/><path d="M4 17v3a2 2 0 0 0 2 2h2"/><path d="M20 17v3a2 2 0 0 1-2 2h-2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
@@ -285,7 +285,7 @@
 
           <div class="sf-toolkit-grid" data-reveal="fade-up" data-reveal-delay="200">
             <th:block th:each="tech, stat : ${techStack}">
-              <div class="sf-tool-card" th:if="${stat.index < 6}" 
+              <div data-glow-owner="personal" class="sky-glow-card sf-tool-card" th:if="${stat.index < 6}"
                    th:with="percent=${tech.proficiency != null ? tech.proficiency : (95 - stat.index * 5)}">
                 <div class="sf-tool-icon" 
                      th:if="${tech.icon != null and !tech.icon.toString().startsWith('<svg')}"
@@ -308,7 +308,7 @@
       <section th:if="${showLocation && locationLat != null && locationLng != null}" 
                class="sf-section">
         <div class="sf-container">
-          <div class="sf-location-card" data-reveal="fade-up">
+          <div data-glow-owner="personal" class="sky-glow-card sf-location-card" data-reveal="fade-up">
             <div class="sf-location-info">
               <span class="sf-section-tag">我的位置</span>
               <h3 class="sf-location-name" th:text="${locationName ?: '位置'}">北京</h3>
@@ -339,7 +339,7 @@
             <span class="sf-section-tag">更多信息</span>
             <h2 class="sf-section-title">详细介绍</h2>
           </div>
-          <div class="sf-content-card sf-content-visible">
+          <div data-glow-owner="personal" class="sky-glow-card sf-content-card sf-content-visible">
             <div id="article-content" class="sf-prose"
                  th:utext="${pageContent}"></div>
           </div>
@@ -349,7 +349,7 @@
       <!-- ========== CTA ========== -->
       <section th:if="${showCta and (ctaBtnLink != '#sf-comments' or enableComment)}" class="sf-section">
         <div class="sf-container">
-          <div class="sf-cta-card" data-reveal="fade-up">
+          <div data-glow-owner="personal" class="sky-glow-card sf-cta-card" data-reveal="fade-up">
             <h2 class="sf-cta-title" th:text="${ctaTitle}">
               让我们一起打造卓越的数字体验 — 立即开始您的下一个项目
         </h2>
@@ -369,7 +369,7 @@
             <span class="sf-section-tag">联系我</span>
             <h2 class="sf-section-title">留言板</h2>
           </div>
-          <div class="sf-comment-card" data-reveal="fade-up" data-reveal-delay="200">
+          <div data-glow-owner="personal" class="sky-glow-card sf-comment-card" data-reveal="fade-up" data-reveal-delay="200">
             <halo:comment 
               group="content.halo.run" 
               kind="SinglePage" 
@@ -382,15 +382,11 @@
     </div>
 
     <!-- GitHub 配置 -->
-    <script th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}" 
-            th:inline="javascript" data-swup-reload-script>
-      window.aboutGithubConfig = {
-        username: /*[[${githubUsername}]]*/ '',
-        statsHost: /*[[${#strings.isEmpty(githubStatsHost) ? 'https://github-readme-stats.xoku.cn' : githubStatsHost}]]*/ '',
-        locale: /*[[${#strings.isEmpty(githubLocale) ? '' : githubLocale}]]*/ '',
-        theme: /*[[${#strings.isEmpty(githubTheme) ? '' : githubTheme}]]*/ ''
-      };
-    </script>
+    <span hidden data-about-github
+      th:if="${githubUsername != null && !githubUsername.isEmpty() && (showGithubStats || showGithubCalendar)}"
+      th:attr="data-username=${githubUsername},
+        data-stats-host=${#strings.isEmpty(githubStatsHost) ? 'https://github-readme-stats.xoku.cn' : githubStatsHost},
+        data-locale=${githubLocale},data-theme=${githubTheme}"></span>
     
   </th:block>
 

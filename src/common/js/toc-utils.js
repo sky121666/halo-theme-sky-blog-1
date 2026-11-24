@@ -127,7 +127,7 @@ export function createDynamicTocHTML(tocTree, options = {}) {
  * @param {HTMLElement} headingElement - 目标标题元素
  * @param {number} offset - 偏移量（默认 80px，导航栏高度）
  */
-export function smoothScrollToHeading(headingElement, offset = 80, { updateHash = true, behavior = 'smooth' } = {}) {
+export function smoothScrollToHeading(headingElement, offset = 80, { updateHash = true, behavior = 'smooth', focus = false } = {}) {
   if (!headingElement || !headingElement.isConnected) return;
 
   // Match Swup's same-page anchor behavior: update this entry, keep its index.
@@ -138,10 +138,14 @@ export function smoothScrollToHeading(headingElement, offset = 80, { updateHash 
     window.history.replaceState({ ...window.history.state, url: nextUrl }, '', nextUrl);
   }
   const targetPosition = Math.max(0, headingDocumentTop(headingElement) - offset);
+  if (focus) {
+    if (!headingElement.hasAttribute('tabindex')) headingElement.tabIndex = -1;
+    headingElement.focus({ preventScroll: true });
+  }
 
   window.scrollTo({
     top: targetPosition,
-    behavior
+    behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ? 'instant' : behavior,
   });
 }
 

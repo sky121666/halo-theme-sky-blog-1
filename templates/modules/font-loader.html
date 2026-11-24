@@ -1,20 +1,20 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
-  <!-- 字体样式声明片段：保持服务端 head 与 PJAX 目标文档一致。 -->
+  <!-- 字体样式声明片段：保持服务端 head 与 Swup 目标文档一致。 -->
   <!-- 字体 link 由服务端直接声明，确保 Swup HeadPlugin 能正确保留、增加和移除。 -->
   <th:block
     th:fragment="fonts"
-    th:with="fontConfig=${theme.config.general.font_settings},
+    th:with="fontConfig=${theme.config.visual.font_settings},
              fontCdn=${fontConfig?.font_cdn ?: 'https://cdn.5ee.net/fonts'},
              bodyFont=${fontConfig?.body_font ?: 'font-default'}"
   >
     <!-- 预连接到字体 CDN -->
     <link rel="preconnect" th:href="${fontCdn}" crossorigin />
 
-    <!-- 保持 link outerHTML 稳定，避免 HeadPlugin 在每次 PJAX 后重复替换字体样式。 -->
+    <!-- 保持 link outerHTML 稳定，避免 HeadPlugin 在每次切页后重复替换字体样式。 -->
     <link rel="stylesheet" th:href="${fontCdn + '/open-fonts.css'}" />
 
-    <!-- 正文字体必须出现在服务端 head 中，否则首次 PJAX 后会被 HeadPlugin 当作陈旧资源移除。 -->
+    <!-- 正文字体必须出现在服务端 head 中，否则首次切页后会被 HeadPlugin 当作陈旧资源移除。 -->
     <link
       th:if="${bodyFont == 'font-lxgw-wenkai-bright'}"
       rel="stylesheet"
@@ -32,11 +32,11 @@
   <!-- 首页标题字体：与正文字体、主副标题之间按 URL 去重。 -->
   <th:block
     th:fragment="index-fonts"
-    th:with="fontConfig=${theme.config.general.font_settings},
+    th:with="fontConfig=${theme.config.visual.font_settings},
              fontCdn=${fontConfig?.font_cdn ?: 'https://cdn.5ee.net/fonts'},
              bodyFont=${fontConfig?.body_font ?: 'font-default'},
-             titleSettings=${theme.config.index.title_settings},
-             subtitleSettings=${theme.config.index.subtitle_settings},
+             titleSettings=${theme.config.pages.index.title_settings},
+             subtitleSettings=${theme.config.pages.index.subtitle_settings},
              titleFont=${titleSettings?.title_font ?: 'font-default'},
              subtitleFont=${subtitleSettings?.subtitle_font ?: 'font-default'}"
   >

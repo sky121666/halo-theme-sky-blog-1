@@ -7,7 +7,7 @@
   <!-- ========================================== -->
 
   <head
-    th:with="cfg = ${theme.config.equipment_settings?.basic_info},
+    th:with="cfg = ${theme.config.plugins.equipment?.basic_info},
              pageNumber = ${equipments?.page ?: 1},
              pageTitle = ${cfg?.page_title ?: (title ?: '装备')},
              documentTitle = ${pageTitle + (pageNumber > 1 ? ' - 第 ' + pageNumber + ' 页' : '') + ' - ' + site.title},
@@ -16,11 +16,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
-    <meta name="view-transition" content="same-origin" />
 
     <!-- 防止主题闪烁 -->
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+    <th:block th:replace="~{modules/theme-script :: head}" />
 
     <th:block
       th:replace="~{modules/seo-head :: meta(${documentTitle}, ${cfg?.page_description}, ${pageCanonical}, ${site.logo}, 'website')}"
@@ -39,27 +37,24 @@
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <link rel="stylesheet" th:href="@{/assets/css/equipment.css?v={version}(version=${theme.spec.version})}" />
 
-    <!-- 音乐播放器 CSS -->
-    <th:block th:replace="~{modules/music-player :: head}" />
+
   </head>
 
   <body
-    th:with="bgConfig = ${theme.config.general.global_background},
+    th:with="bgConfig = ${theme.config.visual.global_background},
                enableCustomBg = ${bgConfig?.enable_custom == true},
                bgStyle = ${bgConfig?.background_style ?: 'base-200'},
                bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
     th:class="'min-h-screen text-base-content relative ' + ${bgClass}"
   >
     <div class="relative z-10">
-      <!-- 加载屏幕 -->
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
 
       <!-- 导航栏 -->
       <th:block th:replace="~{modules/nav :: navbar}" />
 
       <!-- 主要内容区域 -->
-      <main id="swup" class="mt-6 flex-1 md:mt-8">
-        <th:block th:replace="${content}" />
+      <main id="swup" data-page="equipment" class="mt-6 flex-1 md:mt-8">
+        <th:block th:replace="~{modules/component-settings :: sidebar('equipment', ${content})}" />
       </main>
 
       <!-- 页脚 -->
@@ -69,19 +64,11 @@
     <div id="swup-page-extras">
       <th:block th:replace="~{modules/global-background :: grid(${enableCustomBg}, ${bgStyle})}" />
       <!-- 悬浮 Dock 控制栏 -->
-      <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.equipment_settings}, 'basic')}" />
+      <th:block th:replace="~{modules/floating-dock :: dockWithConfig('equipment', 'basic')}" />
     </div>
 
     <!-- JavaScript -->
-    <div id="swup-scripts" hidden>
-      <script
-        type="module"
-        th:src="@{/assets/js/equipment.js?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script
-      ></script>
-    </div>
+
     <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-    <!-- 悬浮音乐播放器 -->
-    <th:block th:replace="~{modules/music-player :: player}" />
   </body>
 </html>

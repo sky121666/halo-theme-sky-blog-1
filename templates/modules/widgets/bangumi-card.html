@@ -9,7 +9,7 @@
   <th:block th:fragment="card">
     <!-- 读取配置 -->
     <th:block
-      th:with="cardCfg = ${theme.config.bangumi_settings?.card_settings},
+      th:with="cardCfg = ${theme.config.components.sidebar_settings?.bangumi_card_config},
                      typeNum = ${cardCfg?.type_num ?: 1},
                      status = ${cardCfg?.status ?: 2},
                      size = ${cardCfg?.size ?: 6},
@@ -22,7 +22,7 @@
       >
         <div
           th:if="${bangumiList != null && bangumiList.items != null && !bangumiList.items.isEmpty()}"
-          class="bangumi-carousel-card"
+          data-glow-owner="widgets" data-glow-component="widget-bangumi" class="sky-glow-card bangumi-carousel-card"
           x-data="{
              current: 0, 
              total: 0,
@@ -57,7 +57,7 @@
           @mouseleave="paused = false"
         >
           <!-- 主卡片区域 -->
-          <a th:href="@{/bangumis}" class="group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-lg">
+          <a th:href="@{/bangumis}" data-glow-owner="widgets" data-glow-component="widget-bangumi" data-glow-interaction="hover press focus" class="sky-glow-card group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-lg">
             <!-- 轮播封面容器 -->
             <div class="absolute inset-0" x-ref="slides">
               <th:block th:each="bangumi, iter : ${bangumiList.items}" th:with="cover=${bangumi.spec.cover ?: ''}">

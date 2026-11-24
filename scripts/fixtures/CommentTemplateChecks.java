@@ -108,45 +108,40 @@ public class CommentTemplateChecks {
 
   @SuppressWarnings("removal") // Match the Spring JSON accessor used by the existing template fixtures.
   private static Context context(ConfigMode mode, boolean global, Boolean themeSwitch, Boolean contentSwitch) {
-    var config = map(
+    var pages = map(
       "article", map(
         "post_interaction", map("enable_comment", themeSwitch, "enable_like", false, "enable_share", false),
         "copyright_notice", null),
-      "about_settings", map(
+      "about", map(
         "display", map("enable_comment", themeSwitch, "show_site_stats", false,
           "show_article_heatmap", false, "show_page_content", false),
-        "profile", null,
         "social_links", null,
         "tech_stack", null,
         "location", null,
-        "github", map("username", null, "stats_host", null, "locale", null, "stats_theme", null,
-          "show_stats", false, "show_calendar", false),
+        "github", map("show_stats", false, "show_calendar", false),
         "hero_actions", map(
           "primary_group", map("show_primary", false, "primary_text", null, "primary_link", null),
           "secondary_group", map("show_secondary", false, "secondary_text", null, "secondary_link", null)),
         "cta", map("show_cta", true, "title", null, "button_text", null, "button_link", null)),
-      "archive_settings", map(
-        "basic_info", map("enable_comment", themeSwitch),
-        "sidebar_settings", map("show_sidebar", false, "enable_custom_sidebar", false)),
-      "links_settings", map(
+      "archive", map("basic_info", map("enable_comment", themeSwitch)));
+    var plugins = map(
+      "links", map(
         "basic_info", map("enable_comment", themeSwitch, "page_title", null, "page_description", null),
         "display_settings", map("show_link_feeds", false, "show_link_status", false),
-        "sidebar_settings", map("show_sidebar", false, "enable_custom_sidebar", false),
         "apply_settings", null),
-      "moments_settings", map(
+      "moments", map(
         "basic_info", map("page_title", null, "enable_upvote", false, "enable_comment", themeSwitch),
-        "sidebar_settings", map("show_sidebar", false, "enable_custom_sidebar", false),
         "publish_settings", map("enable_publish", false),
-        "enable_share", false, "share_settings", null),
+        "enable_share", false),
       "docsme", map("doc_settings", map("enable_share", false)),
-      "photos_settings", map(
+      "photos", map(
         "enable_comment", themeSwitch, "page_title", null, "page_description", null,
         "show_photo_info", true, "show_download_btn", true, "layout", null),
-      "equipment_settings", map(
+      "equipment", map(
         "feature_settings", map("enable_comment", themeSwitch),
-        "sidebar_settings", map("show_sidebar", false, "enable_custom_sidebar", false),
-        "style_settings", null, "basic_info", null),
-      "general", map("sidebar_settings", map("position", "right")));
+        "style_settings", null, "basic_info", null));
+    var config = map("pages", pages, "plugins", plugins,
+      "general", map("profile", null, "github", map("username", null, "stats_host", null, "locale", null, "stats_theme", null)));
 
     var context = new Context();
     context.setVariable("haloCommentEnabled", global);
@@ -202,6 +197,8 @@ public class CommentTemplateChecks {
     context.setVariable("param", map("view", null, "scope", null, "groupName", null, "linkName", null));
     context.setVariable("photos", null);
     context.setVariable("groups", List.of());
+    context.setVariable("showSidebar", false);
+    context.setVariable("sidebarPosition", "right");
     return context;
   }
 

@@ -3,7 +3,10 @@
  * 分类切换和翻页由真实链接交给 Halo/Swup 处理，确保 URL、分页器与每页文章数一致。
  */
 import './categories.css';
-import { notifySwupPageReady, registerAlpinePageComponents } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 function publishVisibleCategoryItems(root) {
   const items = Array.from(root.querySelectorAll('#category-posts article')).map((article) => {
@@ -30,5 +33,4 @@ function registerCategoryComponents() {
   Alpine.data('categoryArchive', page);
 }
 
-registerAlpinePageComponents(registerCategoryComponents);
-notifySwupPageReady();
+page.useAlpine(registerCategoryComponents);

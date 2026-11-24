@@ -3,11 +3,11 @@
 <!-- ========================================== -->
 
 <!-- 仅在 show_background 为 true 时显示背景 -->
-<th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
+<th:block th:if="${theme.config.pages.index.background_settings?.enable_header != false}">
 
     <!-- 背景层：天气联动特效 -->
     <div class="absolute inset-0 z-0 overflow-hidden weather-effect-container"
-        th:if="${theme.config.index.background_settings.background_type == 'weather'}" id="weather-effect-root">
+        th:if="${theme.config.pages.index.background_settings.background_type == 'weather'}" id="weather-effect-root">
 
         <!-- 天气效果容器 - JS 会动态更新 class -->
         <div class="weather-effect">
@@ -20,8 +20,8 @@
     </div>
 
     <!-- 背景层：图片/视频背景 -->
-    <div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.background_type == 'image'}"
-        th:with="bgSrc=${theme.config.index.background_settings.background_image},
+    <div class="absolute inset-0 z-0" th:if="${theme.config.pages.index.background_settings.background_type == 'image'}"
+        th:with="bgSrc=${theme.config.pages.index.background_settings.background_image},
               isVideo=${#strings.endsWith(bgSrc, '.mp4') or #strings.endsWith(bgSrc, '.webm') or #strings.endsWith(bgSrc, '.ogg')}">
         <!-- 原始媒体背景（视频优先，其次图片） -->
         <video th:if="${isVideo}"
@@ -33,7 +33,7 @@
 
         <!-- 组合蒙版容器 - 支持明暗主题独立配置 -->
         <th:block th:with="
-        overlayCfg = ${theme.config.index.background_settings},
+        overlayCfg = ${theme.config.pages.index.background_settings},
         lightScheme = ${overlayCfg?.light_scheme ?: 'black'},
         lightCustom = ${overlayCfg?.light_custom_color ?: '#000000'},
         darkScheme = ${overlayCfg?.dark_scheme ?: 'black'},
@@ -61,11 +61,11 @@
 
     <!-- 背景层：CSS 特效（4种优化特效） -->
     <div class="absolute inset-0 z-0 overflow-hidden"
-        th:if="${theme.config.index.background_settings.background_type == 'effect'}">
+        th:if="${theme.config.pages.index.background_settings.background_type == 'effect'}">
 
         <!-- 特效 1：流体渐变 - 优化加强版 -->
         <div class="effect-fluid-gradient"
-            th:if="${theme.config.index.background_settings.effect_style == 'fluid-gradient'}">
+            th:if="${theme.config.pages.index.background_settings.effect_style == 'fluid-gradient'}">
             <!-- 暗色基底 -->
             <div class="effect-bg-base"></div>
             <!-- 流体层 - 6个blob -->
@@ -80,7 +80,7 @@
         </div>
 
         <!-- 特效 2：霓虹线条 -->
-        <div class="effect-neon-lines" th:if="${theme.config.index.background_settings.effect_style == 'neon-lines'}">
+        <div class="effect-neon-lines" th:if="${theme.config.pages.index.background_settings.effect_style == 'neon-lines'}">
             <!-- 暗色基底 -->
             <div class="effect-bg-base"></div>
             <!-- 霓虹线条 - 8条 -->
@@ -97,7 +97,7 @@
         </div>
 
         <!-- 特效 4：深邃星空 -->
-        <div class="effect-starry-sky" th:if="${theme.config.index.background_settings.effect_style == 'starry-sky'}">
+        <div class="effect-starry-sky" th:if="${theme.config.pages.index.background_settings.effect_style == 'starry-sky'}">
             <!-- 暗色基底 -->
             <div class="effect-bg-base"></div>
             <!-- 星空层 -->

@@ -11,11 +11,10 @@
 
 import './steam.css';
 import { skyDebug } from '../../common/js/debug.js';
-import {
-  notifySwupPageReady,
-  registerAlpinePageComponents,
-  registerPageLifecycle
-} from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 // 缓存配置
 const CACHE_KEY = 'steam_page_cache';
@@ -127,12 +126,18 @@ async function fetchSteamEndpoint(endpoint, signal) {
     },
 
     // 配置
-    config: window.steamPageConfig || {},
+    config: {},
 
     async init() {
       // 防止重复初始化
       if (this._initialized) return;
       this._initialized = true;
+      const config = this.$el.querySelector("[data-steam-config]")?.dataset;
+      this.config = {
+        recentGamesLimit: Number(config?.recentGamesLimit) || 10,
+        gamesPageSize: Number(config?.gamesPageSize) || 20,
+        enableGameLink: config?.enableGameLink !== "false",
+      };
       this._abortController = new AbortController();
 
       // 并行加载所有数据
@@ -260,22 +265,20 @@ async function fetchSteamEndpoint(endpoint, signal) {
     }
   }));
 }
-  registerAlpinePageComponents(_registerAlpineComponents);
+  page.useAlpine(_registerAlpineComponents);
 })();
 
-// 页面加载完成后初始化。页面模块会被缓存，必须通过 PJAX 生命周期重新 mount。
-registerPageLifecycle(() => {
+// 页面加载完成后初始化。页面模块会被缓存，必须通过 页面生命周期重新 mount。
+page.onMount(() => {
   const root = document.querySelector('.steam-page');
   if (!root) return;
 
   const cleanupImageObserver = observeImageLoad(root);
   return () => {
     cleanupImageObserver();
-    window.steamPageConfig = undefined;
   };
-}, { entry: 'steam' });
+});
 
-notifySwupPageReady();
 
 /**
  * 图片懒加载优化

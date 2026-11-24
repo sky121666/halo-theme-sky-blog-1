@@ -2,10 +2,11 @@
 <th:block th:fragment="tabs_group(context)">
   <th:block
     th:with="
+            postCardGlowOwner = 'home',
             configuredTabs = ${tabsOrder.![#this instanceof T(java.lang.String) ? #this : #this.tab].?[#this == 'posts' or #this == 'moments']},
-            tabsList = ${configuredTabs.isEmpty() ? {'posts', 'moments'} : (configuredTabs[0] == 'posts' ? (configuredTabs.contains('moments') ? {'posts', 'moments'} : {'posts'}) : (configuredTabs.contains('posts') ? {'moments', 'posts'} : {'moments'}))},
-            tab0 = ${tabsList.size() > 0 ? tabsList[0] : 'posts'},
-            tab1 = ${tabsList.size() > 1 ? tabsList[1] : 'moments'},
+            tabsList = ${!configuredTabs.isEmpty() and configuredTabs[0] == 'moments' ? {'moments', 'posts'} : {'posts', 'moments'}},
+            tab0 = ${tabsList[0]},
+            tab1 = ${tabsList[1]},
             isTab0Enabled = ${(tab0 == 'posts' and showPostsTab) or (tab0 == 'moments' and showMomentsTab)},
             isTab1Enabled = ${(tab1 == 'posts' and showPostsTab) or (tab1 == 'moments' and showMomentsTab)},
             firstEnabledTab = ${isTab0Enabled ? tab0 : (isTab1Enabled ? tab1 : 'posts')},
@@ -36,8 +37,8 @@
                   aria-controls="home-panel-site"
                   :aria-selected="(tab === 'site').toString()"
                   :tabindex="tab === 'site' ? '0' : '-1'"
-                  :class="tab === 'site' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
-                  class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-200"
+                  :class="tab === 'site' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:border-base-content/10'"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-200"
                 >
                   <span class="icon-[heroicons--home] h-3.5 w-3.5"></span>
                   全部文章
@@ -52,8 +53,8 @@
                   aria-controls="home-panel-moments"
                   :aria-selected="(tab === 'moments').toString()"
                   :tabindex="tab === 'moments' ? '0' : '-1'"
-                  :class="tab === 'moments' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:shadow-sm hover:border-base-content/10'"
-                  class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-200"
+                  :class="tab === 'moments' ? 'bg-base-100 text-base-content shadow-sm border-base-content/10' : 'bg-base-100/60 text-base-content/60 border-base-content/5 hover:bg-base-100 hover:text-base-content hover:border-base-content/10'"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-200"
                 >
                   <span class="icon-[heroicons--chat-bubble-left-ellipsis] h-3.5 w-3.5"></span>
                   瞬间说说
@@ -82,7 +83,7 @@
                   :aria-selected="(tab === 'site').toString()"
                   :tabindex="tab === 'site' ? '0' : '-1'"
                   :class="tab === 'site' ? 'bg-base-100 shadow-md text-base-content dark:bg-base-100/95' : 'text-base-content/60 hover:text-base-content hover:bg-base-100/40'"
-                  class="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200"
                 >
                   <span class="icon-[heroicons--squares-2x2] h-4 w-4"></span>全部文章
                 </button>
@@ -97,7 +98,7 @@
                   :aria-selected="(tab === 'moments').toString()"
                   :tabindex="tab === 'moments' ? '0' : '-1'"
                   :class="tab === 'moments' ? 'bg-base-100 shadow-md text-base-content dark:bg-base-100/95' : 'text-base-content/60 hover:text-base-content hover:bg-base-100/40'"
-                  class="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200"
                 >
                   <span class="icon-[heroicons--chat-bubble-left-ellipsis] h-4 w-4"></span>瞬间说说
                 </button>
@@ -121,7 +122,7 @@
                   :aria-selected="(tab === 'site').toString()"
                   :tabindex="tab === 'site' ? '0' : '-1'"
                   :class="tab === 'site' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
-                  class="relative px-4 py-3 text-sm font-medium transition-colors duration-200"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card relative px-4 py-3 text-sm font-medium transition-colors duration-200"
                 >
                   全部文章
                   <span
@@ -140,7 +141,7 @@
                   :aria-selected="(tab === 'moments').toString()"
                   :tabindex="tab === 'moments' ? '0' : '-1'"
                   :class="tab === 'moments' ? 'text-primary' : 'text-base-content/60 hover:text-base-content'"
-                  class="relative px-4 py-3 text-sm font-medium transition-colors duration-200"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card relative px-4 py-3 text-sm font-medium transition-colors duration-200"
                 >
                   瞬间说说
                   <span
@@ -167,7 +168,7 @@
                   :aria-selected="(tab === 'site').toString()"
                   :tabindex="tab === 'site' ? '0' : '-1'"
                   :class="tab === 'site' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
-                  class="rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
                 >
                   全部文章
                 </button>
@@ -181,7 +182,7 @@
                   :aria-selected="(tab === 'moments').toString()"
                   :tabindex="tab === 'moments' ? '0' : '-1'"
                   :class="tab === 'moments' ? 'bg-base-100/90 text-base-content shadow-md dark:bg-base-100/95' : 'text-base-content/60 hover:bg-base-100/50 hover:text-base-content'"
-                  class="rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
                 >
                   瞬间说说
                 </button>
@@ -203,8 +204,8 @@
                   aria-controls="home-panel-site"
                   :aria-selected="(tab === 'site').toString()"
                   :tabindex="tab === 'site' ? '0' : '-1'"
-                  :class="tab === 'site' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
-                  class="rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
+                  :class="tab === 'site' ? 'bg-primary text-primary-content shadow-lg' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content'"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
                 >
                   全部文章
                 </button>
@@ -217,8 +218,8 @@
                   aria-controls="home-panel-moments"
                   :aria-selected="(tab === 'moments').toString()"
                   :tabindex="tab === 'moments' ? '0' : '-1'"
-                  :class="tab === 'moments' ? 'bg-primary text-primary-content shadow-lg shadow-primary/30' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content hover:shadow-md'"
-                  class="rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
+                  :class="tab === 'moments' ? 'bg-primary text-primary-content shadow-lg' : 'bg-base-200/80 text-base-content/70 hover:bg-base-300 hover:text-base-content'"
+                  data-glow-owner="home" data-glow-interaction="hover press toggle focus" class="sky-glow-card rounded-full px-5 py-2 text-sm font-medium transition-all duration-300"
                 >
                   瞬间说说
                 </button>
@@ -240,19 +241,19 @@
         >
           <th:block th:switch="${listStyle}">
             <th:block th:case="'modern'">
-              <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts}, ${postSettings})}" />
+              <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts}, ${theme.config.components.post_lists.index})}" />
             </th:block>
             <th:block th:case="'media_text'">
-              <th:block th:replace="~{modules/categories/list-media :: media_text(${sitePosts}, ${postSettings})}" />
+              <th:block th:replace="~{modules/categories/list-media :: media_text(${sitePosts}, ${theme.config.components.post_lists.index})}" />
             </th:block>
             <th:block th:case="'magazine'">
-              <th:block th:replace="~{modules/categories/list-magazine :: magazine(${sitePosts}, ${postSettings})}" />
+              <th:block th:replace="~{modules/categories/list-magazine :: magazine(${sitePosts}, ${theme.config.components.post_lists.index})}" />
             </th:block>
             <th:block th:case="'minimal'">
-              <th:block th:replace="~{modules/categories/list-minimal :: minimal(${sitePosts}, ${postSettings})}" />
+              <th:block th:replace="~{modules/categories/list-minimal :: minimal(${sitePosts}, ${theme.config.components.post_lists.index})}" />
             </th:block>
             <th:block th:case="*">
-              <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts}, ${postSettings})}" />
+              <th:block th:replace="~{modules/categories/list-modern :: modern(${sitePosts}, ${theme.config.components.post_lists.index})}" />
             </th:block>
           </th:block>
           <div class="mt-10 text-center">
@@ -286,7 +287,7 @@
             <th:block th:each="moment : ${momentsList}">
               <article
                 th:with="content = ${moment.spec.content}"
-                class="card group bg-base-100/80 border-base-content/5 hover:bg-base-100 relative mb-6 cursor-pointer break-inside-avoid overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-2xl"
+                data-glow-owner="home" data-glow-interaction="hover press focus" class="sky-glow-card card group bg-base-100/80 border-base-content/5 hover:bg-base-100 relative mb-6 cursor-pointer break-inside-avoid overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300"
               >
                 <!-- 头部信息 -->
                 <div class="p-5 pb-3">
@@ -484,7 +485,7 @@
                       <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
                     </span>
                   </div>
-                  <a
+                  <a data-glow-trigger
                     th:href="@{'/moments/' + ${moment.metadata.name}}"
                     class="text-primary flex items-center gap-1 hover:underline"
                   >
@@ -501,7 +502,7 @@
             <th:block th:each="moment : ${momentsList}">
               <article
                 th:with="content = ${moment.spec.content}"
-                class="card group bg-base-100/80 border-base-content/5 hover:bg-base-100 overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl"
+                data-glow-owner="home" data-glow-interaction="hover press focus" class="sky-glow-card card group bg-base-100/80 border-base-content/5 hover:bg-base-100 overflow-hidden rounded-[1.5rem] border shadow-lg backdrop-blur-xl transition-all duration-300"
               >
                 <div class="p-5">
                   <!-- 头部 -->
@@ -675,7 +676,7 @@
                         <span th:text="${moment.stats?.totalComment ?: 0}">0</span>
                       </span>
                     </div>
-                    <a th:href="@{'/moments/' + ${moment.metadata.name}}" class="text-primary hover:underline"
+                    <a data-glow-trigger th:href="@{'/moments/' + ${moment.metadata.name}}" class="text-primary hover:underline"
                       >查看详情 →</a
                     >
                   </div>

@@ -1,46 +1,41 @@
 <!-- 首页内容区 -->
 <th:block
   th:fragment="main-content"
-  th:with="githubUsername = ${theme.config.about_settings.github.username},
-                   profile = ${theme.config.about_settings.profile},
-                   indexCfg = ${theme.config.index},
+  th:with="githubUsername = ${theme.config.general.github.username},
+                   profile = ${theme.config.general.profile},
+                   indexCfg = ${theme.config.pages.index},
                    contentSettings = ${indexCfg.content_settings},
                    postSettings = ${indexCfg.post_settings},
                    momentsSettings = ${indexCfg.moments_settings},
-                   sidebarCfg = ${indexCfg.sidebar_settings},
                    hasMomentsPlugin = ${pluginFinder.available('PluginMoments', '>=1.16.1')},
                    showMomentsTab = ${hasMomentsPlugin and momentsSettings.show_moments_tab != false},
                    showPostsTab = ${postSettings.show_posts != false},
-                   showSidebar = ${sidebarCfg?.show_sidebar != false},
                    showHeatmap = ${contentSettings.show_heatmap != false},
                    heatmapType = ${contentSettings.heatmap_type ?: 'github'},
                    tabStyle = ${contentSettings.tab_style ?: 'chips'},
                    tabsOrder = ${contentSettings.tabs_order ?: {'posts', 'moments'}},
-                   listStyle = ${postSettings.list_style ?: 'magazine'},
+                   listStyle = ${theme.config.components.post_lists.index.list_style ?: 'magazine'},
                    postCount = ${postSettings.post_count ?: 8},
                    momentsCount = ${momentsSettings.moments_count ?: 6},
-                   momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'},
-                   globalSidebarCfg = ${theme.config.general.sidebar_settings},
-                   useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-                   sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}"
+                   momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'}"
 >
   <!-- prettier-ignore -->
-  <div th:class="${theme.config.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
+  <div th:class="${theme.config.pages.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
     <!-- 主内容区：内容 + 侧边栏 -->
     <div class="lazy-anim flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：热力图 + Tab切换 + 文章列表 -->
       <section class="flex min-w-0 flex-1 flex-col gap-6 lg:gap-8">
         <!-- 默认排版流 (兼容老配置) -->
-        <th:block th:unless="${theme.config.index.index_layout?.enabled}">
+        <th:block th:unless="${theme.config.pages.index.index_layout?.enabled}">
           <th:block th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
           <th:block th:insert="~{modules/widgets/docs :: docs(context='main')}" />
           <th:block th:insert="~{modules/widgets/tabs_group :: tabs_group(context='main')}" />
         </th:block>
 
         <!-- 自由排序排版流 -->
-        <th:block th:if="${theme.config.index.index_layout?.enabled}">
-          <th:block th:each="module : ${theme.config.index.index_layout.modules}">
-            <th:block th:switch="${module.id}">
+        <th:block th:if="${theme.config.pages.index.index_layout?.enabled}">
+          <th:block th:each="module : ${theme.config.pages.index.index_layout.modules}">
+            <th:block th:switch="${module instanceof T(java.lang.String) ? module : module?.id}">
               <th:block th:case="'heatmap'" th:insert="~{modules/widgets/heatmap :: heatmap(context='main')}" />
               <th:block th:case="'docs'" th:insert="~{modules/widgets/docs :: docs(context='main')}" />
               <th:block
@@ -57,14 +52,14 @@
       <!-- 右侧：侧边栏 -->
       <aside th:if="${showSidebar}" class="sticky top-20 hidden w-80 shrink-0 space-y-6 self-start lg:block">
         <!-- 动态小工具 -->
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
       </aside>
     </div>
 
     <!-- ========== 首页扩展模块区域 ========== -->
 
     <!-- 默认底宽模块 (兼容老配置) -->
-    <th:block th:unless="${theme.config.index.index_layout?.enabled}">
+    <th:block th:unless="${theme.config.pages.index.index_layout?.enabled}">
       <!-- 图库模块 -->
       <div class="mt-10 lg:mt-16">
         <th:block th:insert="~{modules/widgets/gallery :: gallery(context='main')}" />

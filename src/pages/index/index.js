@@ -4,7 +4,10 @@
 
 import './index.css';
 import { skyDebug } from '../../common/js/debug.js';
-import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 /**
  * 天气联动背景效果 - 终极卡通真实感融合版 (V3)
@@ -1041,64 +1044,8 @@ import { notifySwupPageReady, registerPageLifecycle } from '../../common/js/page
     };
   }
 
-  registerPageLifecycle(init, { entry: 'index' });
+  page.onMount(init);
 })();
-
-/**
- * 瞬间卡片鼠标跟随发光效果
- * 为moment-card元素添加动态光晕交互效果
- */
-function handleMomentCardGlow(event, card) {
-  if (!event) return;
-  // 获取卡片内的光效元素
-  const glowElement = card.querySelector('.moment-glow');
-  if (!glowElement) return;
-
-  // 获取卡片的边界矩形信息
-  const rect = card.getBoundingClientRect();
-
-  // 计算鼠标在卡片内的相对位置
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-
-  // 更新光效位置，使其跟随鼠标移动
-  glowElement.style.left = x + 'px';
-  glowElement.style.top = y + 'px';
-}
-
-/**
- * 显示瞬间卡片发光效果
- * @param {HTMLElement} card - 卡片元素
- */
-function showMomentCardGlow(card) {
-  const glow = card.querySelector('.moment-glow');
-  if (glow) {
-    glow.style.opacity = '1';
-  }
-}
-
-/**
- * 隐藏瞬间卡片发光效果
- * @param {HTMLElement} card - 卡片元素
- */
-function hideMomentCardGlow(card) {
-  const glow = card.querySelector('.moment-glow');
-  if (glow) {
-    glow.style.opacity = '0';
-  }
-}
-
-registerPageLifecycle(() => {
-  window.handleMomentCardGlow = handleMomentCardGlow;
-  window.showMomentCardGlow = showMomentCardGlow;
-  window.hideMomentCardGlow = hideMomentCardGlow;
-
-  return () => {
-    if (window.handleMomentCardGlow === handleMomentCardGlow) window.handleMomentCardGlow = undefined;
-    if (window.showMomentCardGlow === showMomentCardGlow) window.showMomentCardGlow = undefined;
-    if (window.hideMomentCardGlow === hideMomentCardGlow) window.hideMomentCardGlow = undefined;
-  };
-}, { entry: 'index' });
 
 /**
  * 首页标题特效控制器
@@ -1191,14 +1138,12 @@ registerPageLifecycle(() => {
   /**
    * 页面加载完成后初始化
    */
-  registerPageLifecycle(() => {
+  page.onMount(() => {
     TitleEffectsManager.init();
     return () => {
       TitleEffectsManager.titleElement = null;
       TitleEffectsManager.originalText = '';
     };
-  }, { entry: 'index' });
+  });
 
 })();
-
-notifySwupPageReady();

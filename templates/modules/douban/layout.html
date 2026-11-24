@@ -13,9 +13,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="view-transition" content="same-origin" />
 
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
+
+    <th:block th:replace="~{modules/theme-script :: head}" />
 
     <th:block
       th:replace="~{modules/seo-head :: meta(${documentTitle}, ${null}, '/douban', ${site.logo}, 'website')}"
@@ -26,11 +26,11 @@
     <th:block th:replace="~{modules/font-loader :: fonts}" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
     <link rel="stylesheet" th:href="@{/assets/css/douban.css?v={version}(version=${theme.spec.version})}" />
-    <th:block th:replace="~{modules/music-player :: head}" />
+
   </head>
 
   <body
-    th:with="bgConfig = ${theme.config.general.global_background},
+    th:with="bgConfig = ${theme.config.visual.global_background},
              enableCustomBg = ${bgConfig?.enable_custom == true},
              bgStyle = ${bgConfig?.background_style ?: 'base-200'},
              bgClass = ${enableCustomBg ? (bgStyle == 'grid' ? 'bg-base-100' : 'bg-' + bgStyle) : 'bg-base-200'}"
@@ -38,10 +38,10 @@
     th:classappend="${bgClass}"
   >
     <div class="relative z-10">
-      <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+
       <th:block th:replace="~{modules/nav :: navbar}" />
 
-      <main id="swup" class="mt-6 flex-1 md:mt-8">
+      <main id="swup" data-page="douban" class="mt-6 flex-1 md:mt-8">
         <th:block th:replace="${content}" />
       </main>
 
@@ -49,7 +49,7 @@
     </div>
 
     <div id="swup-page-extras">
-      <!-- 页面专属背景必须跟随 PJAX extras 容器进入和离开。 -->
+      <!-- 页面专属背景必须跟随 页面附属区域进入和离开。 -->
       <div class="douban-bg pointer-events-none fixed inset-0 z-0" aria-hidden="true">
         <div class="douban-bg-mask absolute inset-0"></div>
       </div>
@@ -58,14 +58,7 @@
       <th:block th:replace="~{modules/floating-dock :: dock}" />
     </div>
 
-    <div id="swup-scripts" hidden>
-      <script
-        type="module"
-        th:src="@{/assets/js/douban.js?v={version}(version=${theme.spec.version})}"
-        data-swup-reload-script
-      ></script>
-    </div>
+
     <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-    <th:block th:replace="~{modules/music-player :: player}" />
   </body>
 </html>

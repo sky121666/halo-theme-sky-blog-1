@@ -5,6 +5,7 @@
 
 import { skyDebug } from "./debug.js";
 import { createModalFocus } from "./modal-focus.js";
+import { onlineStats } from "./online-stats.js";
 
 /**
  * 悬浮 Dock 控制器
@@ -622,8 +623,7 @@ function createNavbarController() {
 
       // 导航栏位于 Swup 容器外，页面切换后必须主动收起持久化的移动抽屉。
       this._pageLoadHandler = () => this.closeMobileMenu();
-      document.addEventListener("sky:page-cleanup", this._pageLoadHandler);
-      document.addEventListener("sky:page-load", this._pageLoadHandler);
+      document.addEventListener("swup:page:view", this._pageLoadHandler);
     },
 
     destroy() {
@@ -637,8 +637,7 @@ function createNavbarController() {
         this._scrollHandler = null;
       }
       if (this._pageLoadHandler) {
-        document.removeEventListener("sky:page-cleanup", this._pageLoadHandler);
-        document.removeEventListener("sky:page-load", this._pageLoadHandler);
+        document.removeEventListener("swup:page:view", this._pageLoadHandler);
         this._pageLoadHandler = null;
       }
     },
@@ -843,13 +842,6 @@ function createDocFloatingDock() {
       window.dispatchEvent(new CustomEvent("toggle-doc-comment-drawer"));
     },
 
-    toggleTocDrawer() {
-      window.dispatchEvent(new CustomEvent("toggle-doc-toc-drawer"));
-    },
-
-    toggleSidebarDrawer() {
-      window.dispatchEvent(new CustomEvent("toggle-doc-sidebar-drawer"));
-    },
   };
 }
 
@@ -1305,375 +1297,6 @@ function welcomeWeatherCard() {
   };
 }
 
-/**
- * 在线统计组件
- * 模板使用：templates/modules/widgets/online-stats.html
- * 适配 plugin-online (Zyx-2012) 的统计 API
- */
-function onlineStats() {
-  const API_SUMMARY = "/apis/online-user.zyx2012.cn/v1alpha1/stats/summary";
-  const API_STATS = "/apis/online-user.zyx2012.cn/v1alpha1/stats";
-  const MAX_HOT_PAGES = 5;
-  const MIN_LOAD_INTERVAL = 1500;
-
-  // 已知路由 → 友好名称
-  const KNOWN_ROUTES = {
-    "/": "首页",
-    "/archives": "归档",
-    "/links": "友链",
-    "/moments": "瞬间",
-    "/photos": "相册",
-    "/about": "关于",
-    "/douban": "豆瓣",
-    "/bangumis": "追番",
-    "/equipments": "装备",
-    "/steam": "Steam",
-  };
-
-  // 标题缓存（会话级）
-  const titleCache = {};
-
-  return {
-    loading: true,
-    error: false,
-    total: 0,
-    peak24h: 0,
-    activePages: 0,
-    wsActive: false,
-    updatedAt: "",
-    hotPages: [],
-    showHotPages: true,
-    _loadTimer: null,
-    _loadPromise: null,
-    _lastLoadAt: 0,
-    _registeredHandler: null,
-    _pathChangedHandler: null,
-    _abortController: null,
-    _titleAbortController: null,
-    _destroyed: false,
-
-    init() {
-      this._destroyed = false;
-      this.showHotPages = this.$el.dataset.showHotPages !== "false";
-      this._registeredHandler = () => this.scheduleLoadData();
-      this._pathChangedHandler = () => this.scheduleLoadData();
-      window.addEventListener("online-monitor:registered", this._registeredHandler);
-      window.addEventListener("online-monitor:path-changed", this._pathChangedHandler);
-      this.scheduleLoadData({ immediate: true });
-    },
-
-    destroy() {
-      if (this._registeredHandler) {
-        window.removeEventListener("online-monitor:registered", this._registeredHandler);
-      }
-      if (this._pathChangedHandler) {
-        window.removeEventListener("online-monitor:path-changed", this._pathChangedHandler);
-      }
-      clearTimeout(this._loadTimer);
-      this._loadTimer = null;
-      this._destroyed = true;
-      this._abortController?.abort();
-      this._titleAbortController?.abort();
-      this._abortController = null;
-      this._titleAbortController = null;
-    },
-
-    scheduleLoadData(options = {}) {
-      const now = Date.now();
-      const wait = options.immediate ? 0 : Math.max(0, MIN_LOAD_INTERVAL - (now - this._lastLoadAt));
-      clearTimeout(this._loadTimer);
-
-      if (this._loadPromise && wait === 0) return this._loadPromise;
-
-      if (wait > 0) {
-        this._loadTimer = setTimeout(() => this.loadData(), wait);
-        return null;
-      }
-
-      return this.loadData();
-    },
-
-    async loadData() {
-      if (this._destroyed) return null;
-      if (this._loadPromise) return this._loadPromise;
-      this._lastLoadAt = Date.now();
-      const controller = new AbortController();
-      this._abortController = controller;
-      const loadPromise = this.fetchData(controller.signal).finally(() => {
-        if (this._abortController === controller) this._abortController = null;
-        if (this._loadPromise === loadPromise) this._loadPromise = null;
-      });
-      this._loadPromise = loadPromise;
-      return loadPromise;
-    },
-
-    async fetchData(signal) {
-      try {
-        const fetches = [fetch(API_SUMMARY, { signal })];
-        if (this.showHotPages) fetches.push(fetch(API_STATS, { signal }));
-
-        const results = await Promise.allSettled(fetches);
-        if (signal.aborted || this._destroyed) return;
-        const summaryRes = results[0];
-
-        if (summaryRes.status === "fulfilled" && summaryRes.value.ok) {
-          const summary = await summaryRes.value.json();
-          if (signal.aborted || this._destroyed) return;
-          this.total = summary.total || 0;
-          this.peak24h = summary.peak24h || 0;
-          this.activePages = summary.activePages || 0;
-          this.wsActive = summary.wsActive ?? false;
-
-          if (summary.updatedAt) {
-            const d = new Date(summary.updatedAt);
-            this.updatedAt = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")} 更新`;
-          }
-        } else {
-          this.error = true;
-          return;
-        }
-
-        if (this.showHotPages && results[1]?.status === "fulfilled" && results[1].value.ok) {
-          const stats = await results[1].value.json();
-          if (signal.aborted || this._destroyed) return;
-          const pages = (Array.isArray(stats) ? stats : [])
-            .filter((p) => p.count > 0)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, MAX_HOT_PAGES);
-
-          this.hotPages = pages.map((p) => ({
-            ...p,
-            title: KNOWN_ROUTES[p.uri] || this.fallbackTitle(p.uri),
-          }));
-
-          this.resolveTitles(pages);
-        }
-
-        this.error = false;
-      } catch (error) {
-        if (!signal.aborted && !this._destroyed && error?.name !== "AbortError") this.error = true;
-      } finally {
-        if (!signal.aborted && !this._destroyed) this.loading = false;
-      }
-    },
-
-    // URI → 可读回退名（去掉前缀路径，保留最后段）
-    fallbackTitle(uri) {
-      const segments = uri.replace(/\/$/, "").split("/").filter(Boolean);
-      if (segments.length === 0) return "首页";
-      const last = segments[segments.length - 1];
-      // 解码 URL 编码
-      try {
-        return decodeURIComponent(last);
-      } catch {
-        return last;
-      }
-    },
-
-    // 批量异步解析页面标题
-    async resolveTitles(pages) {
-      this._titleAbortController?.abort();
-      const controller = new AbortController();
-      this._titleAbortController = controller;
-
-      try {
-        const tasks = pages.map(async (page) => {
-          if (controller.signal.aborted || this._destroyed || KNOWN_ROUTES[page.uri]) return;
-          if (titleCache[page.uri]) {
-            this.updatePageTitle(page.uri, titleCache[page.uri]);
-            return;
-          }
-          try {
-            const res = await fetch(page.uri, {
-              method: "GET",
-              headers: { Accept: "text/html" },
-              signal: controller.signal,
-            });
-            if (!res.ok || controller.signal.aborted || this._destroyed) return;
-            // 只读取前 8KB 提取 <title>
-            const reader = res.body.getReader();
-            const decoder = new TextDecoder();
-            let html = "";
-            while (html.length < 8192 && !controller.signal.aborted && !this._destroyed) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              html += decoder.decode(value, { stream: true });
-              const match = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-              if (match) {
-                reader.cancel();
-                let title = match[1].trim();
-                // 去除站点后缀 " - SiteName" 或 " | SiteName"
-                title = title.replace(/\s*[-|–—]\s*[^-|–—]+$/, "").trim();
-                if (title && !controller.signal.aborted && !this._destroyed) {
-                  titleCache[page.uri] = title;
-                  this.updatePageTitle(page.uri, title);
-                }
-                return;
-              }
-            }
-            reader.cancel();
-          } catch {
-            // 解析失败或被 PJAX 取消时静默忽略，保持 URI 回退名
-          }
-        });
-        await Promise.allSettled(tasks);
-      } finally {
-        if (this._titleAbortController === controller) this._titleAbortController = null;
-      }
-    },
-
-    updatePageTitle(uri, title) {
-      if (this._destroyed) return;
-      const idx = this.hotPages.findIndex((p) => p.uri === uri);
-      if (idx !== -1) {
-        this.hotPages[idx].title = title;
-      }
-    },
-  };
-}
-
-/**
- * 音乐播放器 UI 控制器
- * 模板使用：templates/modules/music-player.html
- * 绑定 APlayer 引擎实例（window.__skyMusicPlayer），驱动自定义 UI
- */
-function skyMusicPlayer() {
-  return {
-    ready: false,
-    expanded: false,
-    playing: false,
-    showList: false,
-    title: "加载中...",
-    artist: "",
-    cover: "",
-    progress: 0,
-    tracks: [],
-    currentIndex: 0,
-    _ap: null,
-    _raf: null,
-
-    init() {
-      this._applyPosition();
-      const ap = window.__skyMusicPlayer;
-      if (ap) this._bindAP(ap);
-      else window.addEventListener("sky:player:ready", (e) => this._bindAP(e.detail), { once: true });
-    },
-
-    _bindAP(ap) {
-      this._ap = ap;
-      this.tracks = ap.list.audios.map((a) => ({ name: a.name, artist: a.artist }));
-      this._syncTrack();
-      this.ready = true;
-      ap.on("play", () => {
-        this.playing = true;
-        this._tickStart();
-      });
-      ap.on("pause", () => {
-        this.playing = false;
-        this._tickStop();
-      });
-      ap.on("listswitch", () => this._syncTrack());
-      ap.on("ended", () => this._syncTrack());
-    },
-
-    _syncTrack() {
-      const ap = this._ap;
-      if (!ap) return;
-      const a = ap.list.audios[ap.list.index];
-      if (a) {
-        this.title = a.name || "Unknown";
-        this.artist = a.artist || "";
-        this.cover = a.cover || "";
-        this.currentIndex = ap.list.index;
-      }
-      this.playing = ap.audio ? !ap.audio.paused : false;
-      this._tickProg();
-    },
-
-    _tickStart() {
-      this._tickStop();
-      const f = () => {
-        this._tickProg();
-        this._raf = requestAnimationFrame(f);
-      };
-      this._raf = requestAnimationFrame(f);
-    },
-    _tickStop() {
-      if (this._raf) {
-        cancelAnimationFrame(this._raf);
-        this._raf = null;
-      }
-    },
-    _tickProg() {
-      const ap = this._ap;
-      if (!ap?.audio) return;
-      const d = ap.audio.duration || 0;
-      this.progress = d > 0 ? (ap.audio.currentTime / d) * 100 : 0;
-    },
-
-    togglePlay() {
-      this._ap?.toggle();
-    },
-    prev() {
-      this._ap?.skipBack();
-    },
-    next() {
-      this._ap?.skipForward();
-    },
-    seek(e) {
-      if (!this._ap) return;
-      const r = e.currentTarget.getBoundingClientRect();
-      const p = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
-      const d = this._ap.audio.duration || 0;
-      if (d > 0) this._ap.seek(d * p);
-    },
-    switchTo(i) {
-      if (!this._ap) return;
-      this._ap.list.switch(i);
-      this._ap.play();
-      this.showList = false;
-    },
-
-    // ═══════ 后台配置定位系统 ═══════
-
-    _applyPosition() {
-      const el = this.$el;
-      const pos = el.dataset.position || "bottom-left";
-      const ox = parseInt(el.dataset.offsetX) || 0;
-      const oy = parseInt(el.dataset.offsetY) || 0;
-      const [v, h] = pos.split("-"); // vertical: top|middle|bottom, horizontal: left|center|right
-
-      // 重置所有定位状态
-      el.style.left = el.style.right = el.style.top = el.style.bottom = "";
-      el.classList.remove("sky-mp-h-center", "sky-mp-v-middle", "sky-mp-pos-top");
-
-      // 水平定位
-      if (h === "left") el.style.left = Math.max(0, ox) + "px";
-      else if (h === "right") el.style.right = Math.max(0, ox) + "px";
-      else {
-        // center：用 CSS class 基于 calc() 居中，避免 transform 与 x-transition 冲突
-        el.classList.add("sky-mp-h-center");
-        el.style.setProperty("--mp-h-nudge", ox + "px");
-      }
-
-      // 垂直定位
-      if (v === "top") {
-        el.style.top = Math.max(0, oy) + "px";
-        el.classList.add("sky-mp-pos-top"); // 播放列表翻转到下方
-      } else if (v === "bottom") {
-        el.style.bottom = Math.max(0, oy) + "px";
-      } else {
-        el.classList.add("sky-mp-v-middle");
-        el.style.setProperty("--mp-v-nudge", oy + "px");
-      }
-    },
-
-    destroy() {
-      this._tickStop();
-    },
-  };
-}
-
 function initializeAll() {
   // 注册模板中使用的组件
   Alpine.data("floatingDock", createFloatingDock);
@@ -1693,8 +1316,6 @@ function initializeAll() {
   Alpine.data("welcomeWeatherCard", welcomeWeatherCard);
   Alpine.data("onlineStats", onlineStats);
 
-  // 音乐播放器
-  Alpine.data("skyMusicPlayer", skyMusicPlayer);
 }
 
 export {
@@ -1711,5 +1332,4 @@ export {
   createDocCommentDrawer,
   welcomeWeatherCard,
   onlineStats,
-  skyMusicPlayer,
 };

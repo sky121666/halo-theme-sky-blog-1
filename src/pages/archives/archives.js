@@ -3,7 +3,10 @@
  * 模板位置：templates/archives.html
  */
 import './archives.css';
-import { notifySwupPageReady, registerAlpinePageComponents } from '../../common/js/page-runtime.js';
+import { createPage } from "../../common/js/page.js";
+
+const page = createPage();
+export const { mount, registerAlpine } = page;
 
 // Alpine.js 归档滚动组件
 (function() {
@@ -32,6 +35,6 @@ import { notifySwupPageReady, registerAlpinePageComponents } from '../../common/
     },
   }));
 }
-  registerAlpinePageComponents(_registerAlpineComponents);
-  notifySwupPageReady();
+  page.useAlpine(_registerAlpineComponents);
+
 })();

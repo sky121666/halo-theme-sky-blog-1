@@ -1,6 +1,6 @@
+import { mountEmojiSelector } from "../../static/emoji/emoji-selector.js";
 import { createModalFocus } from '../../common/js/modal-focus.js';
 import { skyDebug } from '../../common/js/debug.js';
-import { registerPageLifecycle } from '../../common/js/page-runtime.js';
 
 const BLOCKED_EXTENSIONS = ['.svg', '.html', '.htm', '.js', '.exe', '.bat', '.sh', '.php'];
 // Match PluginMoments' official editor limit, including mixed media and earlier batches.
@@ -34,7 +34,7 @@ function sanitizeTag(tag) {
   return tag.replace(/[<>'"&]/g, '').trim();
 }
 
-function initMomentPublishModal() {
+export function initMomentPublishModal() {
   const modal = getElement('moment-publish-modal');
   if (!modal || modal.dataset.initialized === 'true') {
     return;
@@ -47,6 +47,7 @@ function initMomentPublishModal() {
   const refreshStatus = getElement('moments-refresh-status');
   const refreshRetry = getElement('moments-refresh-retry');
   const publishStatus = getElement('moments-publish-status');
+  const modalFeedback = getElement('moment-publish-feedback');
   const permissionStatus = getElement('moment-permission-status');
   const permissionMessage = getElement('moment-permission-message');
   const permissionRetry = getElement('moment-permission-retry');
@@ -66,6 +67,19 @@ function initMomentPublishModal() {
     panel: modal, signal, onClose: closeMomentModal,
     initialFocus: () => getElement('moment-content'),
   });
+
+  function setFeedback(element, message, state) {
+    if (!element) return;
+    element.textContent = message;
+    if (state) element.dataset.state = state;
+    else delete element.dataset.state;
+    if (element === publishStatus) element.classList.toggle('hidden', !message);
+  }
+
+  function showFeedback(message, state) {
+    const visible = modal.style.display !== 'none';
+    setFeedback(visible ? modalFeedback : publishStatus, message, state);
+  }
 
   function syncPublishControls() {
     document.querySelectorAll('[data-moment-publish-trigger]').forEach((button) => {
@@ -427,7 +441,7 @@ function initMomentPublishModal() {
       if (response.status === 400) {
         throw new Error('数据格式错误');
       }
-      throw new Error('发布失败，请重试');
+      throw new Error('请稍后重试');
     }
 
     // POST 已被接受；响应体异常不能误报为发布失败而诱导用户重复提交。
@@ -489,6 +503,7 @@ function initMomentPublishModal() {
     if (!canPublish) return;
     modal.classList.remove('hidden');
     modal.style.display = 'flex';
+    if (isPublishing) setFeedback(modalFeedback, '正在提交瞬间…', 'pending');
     focus.open();
   }
 
@@ -497,6 +512,7 @@ function initMomentPublishModal() {
     cancelUpload();
     modal.classList.add('hidden');
     modal.style.display = 'none';
+    setFeedback(modalFeedback, '');
     window.hideEmojiSelector?.();
     focus.close(options);
     selectedTags = [];
@@ -535,7 +551,7 @@ function initMomentPublishModal() {
       return;
     }
     if (uploadedMedia.length + files.length > MAX_MEDIA_COUNT) {
-      alert(`最多允许添加 ${MAX_MEDIA_COUNT} 个附件，当前已添加 ${uploadedMedia.length} 个。请重新选择。`);
+      showFeedback(`最多允许添加 ${MAX_MEDIA_COUNT} 个附件，当前已添加 ${uploadedMedia.length} 个。请重新选择。`, 'error');
       event.target.value = '';
       return;
     }
@@ -545,6 +561,7 @@ function initMomentPublishModal() {
       originalHtml: publishBtn?.innerHTML || '发布',
     };
     activeUpload = upload;
+    showFeedback(`正在上传 ${files.length} 个附件…`, 'pending');
 
     if (publishBtn) {
       publishBtn.disabled = true;
@@ -578,12 +595,15 @@ function initMomentPublishModal() {
       updateMediaPreview();
 
       if (errors.length > 0) {
-        alert(`部分文件上传失败：\n${errors.join('\n')}`);
+        const summary = errors.length < files.length ? '部分附件上传失败。' : '附件上传失败。';
+        showFeedback(`${summary}\n${errors.join('\n')}`, 'error');
+      } else {
+        showFeedback(`已上传 ${files.length} 个附件。`, 'success');
       }
     } catch (error) {
       if (signal.aborted || uploadSession !== modalSession) return;
       skyDebug.error('moment-publish', '上传失败', error);
-      alert('上传失败，请重试');
+      showFeedback('上传失败，请重试', 'error');
     } finally {
       finishUpload(upload);
     }
@@ -632,19 +652,19 @@ function initMomentPublishModal() {
     }
 
     if (tag.length > 50) {
-      alert('标签长度不能超过 50 个字符');
+      showFeedback('标签长度不能超过 50 个字符', 'error');
       return false;
     }
 
     const safeTag = sanitizeTag(tag);
     if (!safeTag) {
-      alert('标签包含非法字符');
+      showFeedback('标签包含非法字符', 'error');
       return false;
     }
 
     if (!selectedTags.includes(safeTag)) {
       if (selectedTags.length >= 10) {
-        alert('最多只能添加 10 个标签');
+        showFeedback('最多只能添加 10 个标签', 'error');
         return false;
       }
       selectedTags.push(safeTag);
@@ -690,7 +710,8 @@ function initMomentPublishModal() {
     const content = contentInput.value.trim();
 
     if (!content && uploadedMedia.length === 0) {
-      alert('请输入内容或上传媒体');
+      showFeedback('请输入内容或上传媒体', 'error');
+      contentInput.focus();
       return;
     }
     if (!window.addMomentTag()) return;
@@ -700,11 +721,12 @@ function initMomentPublishModal() {
     window.clearTimeout(statusTimer);
     ++refreshVersion;
     isRefreshing = false;
-    publishStatus?.classList.add('hidden');
+    setFeedback(publishStatus, '');
     refreshStatus?.classList.add('hidden');
     const submitSession = modalSession;
     const submittedDraft = snapshotDraft();
     isPublishing = true;
+    showFeedback('正在提交瞬间…', 'pending');
     if (publishBtn) {
       publishBtn.disabled = true;
       publishBtn.setAttribute('aria-busy', 'true');
@@ -719,10 +741,7 @@ function initMomentPublishModal() {
         : moment?.spec?.approved === false ? '瞬间已提交，待审核后公开。'
           : moment?.spec?.approved === true ? '瞬间已提交，当前未公开。'
             : '瞬间已提交，发布状态暂未确认，请前往用户中心查看。';
-      if (publishStatus) {
-        publishStatus.textContent = resultMessage;
-        publishStatus.classList.remove('hidden');
-      }
+      setFeedback(publishStatus, resultMessage, 'success');
       if (submitSession === modalSession && submittedDraft === snapshotDraft()) {
         contentInput.value = '';
         selectedTags = [];
@@ -733,8 +752,8 @@ function initMomentPublishModal() {
         getElement('moment-tags').value = '';
         getElement('moment-tags-input-row').style.display = 'none';
         closeMomentModal();
-      } else if (submitSession === modalSession) {
-        alert(`${resultMessage} 当前编辑已保留。`);
+      } else if (modal.style.display !== 'none') {
+        showFeedback(`${resultMessage} 当前编辑已保留。`, 'success');
       }
       if (isPublic) {
         window.clearTimeout(refreshTimer);
@@ -745,7 +764,7 @@ function initMomentPublishModal() {
       if (signal.aborted) return;
       skyDebug.error('moment-publish', '发布异常', error);
       const subject = submitSession === modalSession ? '发布失败' : '之前提交的瞬间发布失败';
-      alert(`${subject}: ${error.message}`);
+      showFeedback(`${subject}。 ${error.message}`, 'error');
     } finally {
       isPublishing = false;
       if (publishBtn && !signal.aborted) {
@@ -767,6 +786,7 @@ function initMomentPublishModal() {
     }
   }, { signal });
 
+  const disposeEmoji = mountEmojiSelector();
   const globalBindings = {
     openMomentModal: window.openMomentModal,
     closeMomentModal: window.closeMomentModal,
@@ -789,6 +809,7 @@ function initMomentPublishModal() {
 
   return () => {
     controller.abort();
+    disposeEmoji();
     cancelUpload();
     window.clearTimeout(refreshTimer);
     window.clearTimeout(statusTimer);
@@ -798,5 +819,3 @@ function initMomentPublishModal() {
     });
   };
 }
-
-registerPageLifecycle(initMomentPublishModal, { entry: 'moments' });

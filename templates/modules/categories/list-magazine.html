@@ -11,7 +11,7 @@
     th:with="isPinned = ${post.spec.pinned == true},
                     isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                     isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-    class="sky-magazine-card group relative overflow-hidden rounded-[2rem] shadow-lg border border-base-content/5 hover:shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
+    th:data-glow-owner="${postCardGlowOwner ?: 'discovery'}" data-glow-interaction="hover press focus" class="sky-glow-card sky-magazine-card group relative overflow-hidden rounded-[2rem] shadow-lg border border-base-content/5 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
 
     <!-- 封面计算 (Context-Aware Fix) -->
     <th:block th:with="
@@ -29,7 +29,7 @@
     ">
       <!-- 背景大图：16:10 比例 -->
       <div class="relative aspect-video overflow-hidden">
-        <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="absolute inset-0 block">
+        <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" class="absolute inset-0 block">
           <img th:if="${coverUrl != null}" th:src="${coverUrl}" th:alt="|${post.spec.title} 的封面|" loading="lazy"
             class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)]" />
           <!-- 无封面占位 -->
@@ -76,7 +76,7 @@
                 <h3
                   class="transform translate-y-0 opacity-100 transition-all duration-600 delay-75 ease-out
                          text-lg md:text-xl font-bold leading-snug drop-shadow-lg tracking-tight text-white pointer-events-auto line-clamp-2">
-                  <a th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" th:text="${post.spec.title}">文章标题</a>
+                  <a data-glow-trigger th:href="@{${post.status.permalink}}" th:aria-label="|阅读文章：${post.spec.title}|" th:text="${post.spec.title}">文章标题</a>
                 </h3>
               </div>
             </div>

@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org">
   <th:block
     th:fragment="notice"
-    th:with="copyrightNotice=${theme.config.article.copyright_notice},
+    th:with="copyrightNotice=${theme.config.pages.article.copyright_notice},
   postNoticeMode=${post.metadata.annotations?.get('copyrightNoticeMode') ?: 'inherit'},
   usePostNotice=${postNoticeMode == 'custom'},
   noticeEnabled=${postNoticeMode == 'hide' ? false : (postNoticeMode == 'show' or postNoticeMode == 'custom' ? true : copyrightNotice?.enable != false)},
@@ -41,7 +41,7 @@
   >
     <section
       th:if="${noticeEnabled}"
-      class="post-copyright-notice card bg-base-100/80 border-base-content/5 mt-8 rounded-2xl border shadow-lg backdrop-blur-xl"
+      data-glow-owner="reading" class="sky-glow-card post-copyright-notice card bg-base-100/80 border-base-content/5 mt-8 rounded-2xl border shadow-lg backdrop-blur-xl"
     >
       <div class="card-body p-4 sm:p-5">
         <div class="flex items-start gap-3.5 sm:gap-4">

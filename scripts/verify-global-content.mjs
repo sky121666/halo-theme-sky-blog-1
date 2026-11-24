@@ -78,7 +78,6 @@ function contentFixture() {
   };
   const window = {
     location: new URL("https://blog.example/article"),
-    SkyPjax: { onPage() {}, onCleanup() {} },
   };
   const context = {
     document,
@@ -92,8 +91,7 @@ function contentFixture() {
       disconnect() {}
     },
   };
-  vm.runInNewContext(read("src/static/js/article-content.js").replace(/^import .*;\r?\n/gm, ""), context);
-  window.initArticleContent();
+  vm.runInNewContext(read("src/static/js/article-content.js").replace(/^import .*;\r?\n/gm, "").replace("export function", "function") + "\nmountArticleContent();", context);
   return { media, style, link };
 }
 
@@ -124,14 +122,12 @@ test("全局外链区分相似主机名与端口，重复初始化不丢 rel", (
   ];
   const document = { querySelectorAll: () => links, addEventListener() {} };
   const window = { location: new URL("https://blog.example/"), addEventListener() {} };
-  vm.runInNewContext(read("src/common/js/base.js").replace(/^import .*;\r?\n/gm, ""), {
+  vm.runInNewContext(read("src/common/js/base.js").replace(/^import .*;\r?\n/gm, "").replace("export function", "function") + "\npageEffects.initExternalLinks();\npageEffects.initExternalLinks();", {
     document,
     window,
     URL,
     decorateExternalLinks,
   });
-  window.SkyEvents.initExternalLinks();
-  window.SkyEvents.initExternalLinks();
   assert.equal(links[0].getAttribute("target"), null);
   assert.equal(links[0].getAttribute("rel"), "author");
   for (const link of links.slice(1)) assert.equal(link.getAttribute("target"), "_blank");
@@ -188,7 +184,7 @@ function themeFixture(mode) {
 for (const mode of ["normal", "read-failure", "write-failure"]) {
   test(`主题偏好 ${mode} 时生命周期和颜色切换仍可用`, () => {
     const { window, attributes, toggle } = themeFixture(mode);
-    assert.equal(typeof window.SkyPjax.onPage, "function");
+    assert.equal(typeof window.SkyThemePreference.read, "function");
     const before = attributes["data-color-scheme"];
     toggle.toggleTheme();
     if (mode !== "normal") assert.notEqual(attributes["data-color-scheme"], before);
@@ -230,7 +226,7 @@ async function docFixture({
   };
   // Exercise the production lifecycle callback, including its initial/PJAX distinction.
   const source = read("src/pages/doc/doc.js");
-  const entry = source.slice(source.indexOf("// 初始化\n"), source.indexOf("\nif (window.SkyPjax?.onPage)"));
+  const entry = source.slice(source.indexOf("// 初始化\n")).replace("export function", "function");
   const initialized = [];
   let pending;
   const context = {
@@ -258,7 +254,7 @@ async function docFixture({
       pending = renderDocsMath?.({ document, window, signal });
     },
   };
-  vm.runInNewContext(entry + "\nhandlePageEnter(detail ?? undefined);", context);
+  vm.runInNewContext(entry + "\nmount(detail ?? { initial: true });", context);
   await pending;
   return { calls, nodes, initialized };
 }

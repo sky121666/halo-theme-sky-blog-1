@@ -65,12 +65,9 @@
   background: var(--color-base-100);
 }
 
-/* 卡片悬停效果 - 提升 + 阴影 */
+/* 卡片悬停时提升位置和边框对比度。 */
 #category-posts .card:hover {
   transform: translateY(-4px);
-  box-shadow: 
-    0 12px 28px color-mix(in oklch, var(--color-base-content) 10%, transparent),
-    0 4px 8px color-mix(in oklch, var(--color-base-content) 5%, transparent);
   border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
 }
 
@@ -222,7 +219,4 @@
 
 [data-color-scheme="dark"] #category-posts .card:hover {
   background: var(--color-base-100);
-  box-shadow: 
-    0 12px 28px color-mix(in oklch, black 25%, transparent),
-    0 4px 8px color-mix(in oklch, black 15%, transparent);
 }

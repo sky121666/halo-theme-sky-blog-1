@@ -69,7 +69,7 @@
 
         <!-- 最新动态 (热力图) -->
         <div th:if="${showHeatmap}" class="steam-activity-section">
-          <div class="steam-heatmap-inline relative">
+          <div data-glow-owner="integration" class="sky-glow-card steam-heatmap-inline relative">
             <div class="heatmap-container relative min-h-[120px]">
               <div id="steam-heatmap-grid" class="steam-heatmap-grid" th:data-days="${heatmapDays}"
                 th:data-api-url="@{/apis/api.steam.timxs.com/v1alpha1/heatmap/records}"></div>
@@ -104,7 +104,7 @@
       <div class="steam-sidebar">
 
         <!-- 徽章展示 - 骨架屏 -->
-        <div x-show="loading.badges" class="steam-sidebar-card">
+        <div x-show="loading.badges" data-glow-owner="integration" class="sky-glow-card steam-sidebar-card">
           <div class="steam-sidebar-title">徽章</div>
           <div class="steam-badges-grid">
             <template x-for="i in 8" :key="i">
@@ -114,7 +114,7 @@
         </div>
 
         <!-- 徽章展示 - 实际内容 -->
-        <div x-show="!loading.badges && badges?.badges?.length > 0" x-cloak class="steam-sidebar-card">
+        <div x-show="!loading.badges && badges?.badges?.length > 0" x-cloak data-glow-owner="integration" class="sky-glow-card steam-sidebar-card">
           <div class="steam-sidebar-title">
             徽章 <span x-text="badges?.totalBadges || 0">0</span>
           </div>
@@ -135,7 +135,7 @@
         </div>
 
         <!-- 统计信息 - 骨架屏 -->
-        <div x-show="loading.stats" class="steam-sidebar-card steam-stats-list">
+        <div x-show="loading.stats" data-glow-owner="integration" class="sky-glow-card steam-sidebar-card steam-stats-list">
           <div class="steam-stat-item">
             <span class="steam-stat-label">游戏</span>
             <span class="skeleton h-5 w-12"></span>
@@ -151,7 +151,7 @@
         </div>
 
         <!-- 统计信息 - 实际内容 -->
-        <div x-show="!loading.stats && stats" x-cloak class="steam-sidebar-card steam-stats-list">
+        <div x-show="!loading.stats && stats" x-cloak data-glow-owner="integration" class="sky-glow-card steam-sidebar-card steam-stats-list">
           <div class="steam-stat-item">
             <span class="steam-stat-label">游戏</span>
             <span class="steam-stat-value" x-text="stats?.totalGames || 0">0</span>
@@ -191,7 +191,7 @@
       <!-- 骨架屏 -->
       <div x-show="loading.recent" class="steam-library-grid">
         <template x-for="i in 6" :key="i">
-          <div class="steam-game-card">
+          <div data-glow-owner="integration" class="sky-glow-card steam-game-card">
             <div class="steam-game-card-image">
               <div class="skeleton w-full h-full"></div>
             </div>
@@ -209,7 +209,7 @@
           <a :href="config.enableGameLink ? 'https://store.steampowered.com/app/' + (game.appid || game.appId) : null"
             :target="config.enableGameLink ? '_blank' : null" :rel="config.enableGameLink ? 'noopener noreferrer' : null"
             :aria-disabled="!config.enableGameLink" @click="if (!config.enableGameLink) $event.preventDefault()"
-            class="steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
+            data-glow-owner="integration" :data-glow-interaction="config.enableGameLink ? 'hover press focus' : null" class="sky-glow-card steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
             <div class="steam-game-card-image">
               <img x-show="game.headerImageUrl || game.realHeaderImage"
                 :src="game.headerImageUrl || game.realHeaderImage || null" :alt="game.name" loading="lazy"
@@ -245,7 +245,7 @@
       </div>
 
       <!-- 空状态 -->
-      <div x-show="!loading.recent && !errors.recent && recentGames.length === 0" x-cloak class="steam-empty-state steam-empty-state--compact">
+      <div x-show="!loading.recent && !errors.recent && recentGames.length === 0" x-cloak data-glow-owner="integration" class="sky-glow-card steam-empty-state steam-empty-state--compact">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无最近游玩</div>
       </div>
@@ -265,7 +265,7 @@
       <!-- 骨架屏 -->
       <div x-show="loading.games" class="steam-library-grid">
         <template x-for="i in 12" :key="i">
-          <div class="steam-game-card">
+          <div data-glow-owner="integration" class="sky-glow-card steam-game-card">
             <div class="steam-game-card-image">
               <div class="skeleton w-full h-full"></div>
             </div>
@@ -284,7 +284,7 @@
           <a :href="config.enableGameLink ? 'https://store.steampowered.com/app/' + (game.appid || game.appId) : null"
             :target="config.enableGameLink ? '_blank' : null" :rel="config.enableGameLink ? 'noopener noreferrer' : null"
             :aria-disabled="!config.enableGameLink" @click="if (!config.enableGameLink) $event.preventDefault()"
-            class="steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
+            data-glow-owner="integration" :data-glow-interaction="config.enableGameLink ? 'hover press focus' : null" class="sky-glow-card steam-game-card" :class="!config.enableGameLink ? 'cursor-default' : ''">
             <div class="steam-game-card-image">
               <img x-show="game.headerImageUrl || game.realHeaderImage"
                 :src="game.headerImageUrl || game.realHeaderImage || null" :alt="game.name" loading="lazy"
@@ -315,7 +315,7 @@
       </div>
 
       <!-- 空状态 -->
-      <div x-show="!loading.games && !errors.games && games.items.length === 0" x-cloak class="steam-empty-state">
+      <div x-show="!loading.games && !errors.games && games.items.length === 0" x-cloak data-glow-owner="integration" class="sky-glow-card steam-empty-state">
         <div class="steam-empty-icon">🎮</div>
         <div class="steam-empty-title">暂无游戏数据</div>
         <div class="steam-empty-desc">游戏库为空，请检查 Steam 账号设置</div>
@@ -342,13 +342,9 @@
   </div>
 
   <!-- 配置数据 -->
-  <script th:inline="javascript" data-swup-reload-script>
-    window.steamPageConfig = {
-      recentGamesLimit: /*[[${recentGamesLimit ?: 10}]]*/ 10,
-      gamesPageSize: /*[[${gamesPageSize ?: 20}]]*/ 20,
-      enableGameLink: /*[[${enableGameLink != false}]]*/ true
-    };
-  </script>
+  <span hidden data-steam-config
+    th:attr="data-recent-games-limit=${recentGamesLimit ?: 10},data-games-page-size=${gamesPageSize ?: 20},
+      data-enable-game-link=${enableGameLink != false}"></span>
 </div>
 
 </html>

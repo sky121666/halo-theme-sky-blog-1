@@ -76,14 +76,9 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 6%, transparent);
   border-radius: 1rem;
-  box-shadow: 0 2px 12px color-mix(in srgb, var(--color-primary) 8%, transparent);
   z-index: 30;
   overflow: hidden;
   transition: box-shadow 0.3s ease;
-}
-
-[data-color-scheme="dark"] .doc-sidebar {
-  box-shadow: 0 2px 16px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 .doc-sidebar-inner {
@@ -417,22 +412,12 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid color-mix(in oklch, var(--color-base-content) 5%, transparent);
   border-radius: 1.5rem;
-  box-shadow: 0 4px 20px -4px color-mix(in srgb, var(--color-base-content) 8%, transparent);
   padding: 1.25rem;
   transition: all 0.3s ease;
 }
 
-.doc-toc-card:hover {
-  box-shadow: 0 8px 30px -6px color-mix(in srgb, var(--color-base-content) 12%, transparent);
-}
-
 [data-color-scheme="dark"] .doc-toc-card {
   background: color-mix(in oklch, var(--color-base-100) 70%, transparent);
-  box-shadow: 0 4px 24px -4px color-mix(in srgb, var(--color-primary) 12%, transparent);
-}
-
-[data-color-scheme="dark"] .doc-toc-card:hover {
-  box-shadow: 0 8px 32px -6px color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 /* 目录容器样式已在 main.css (toc.css) 中定义 */
@@ -681,73 +666,6 @@
   opacity: 1;
 }
 
-
-/* ===================================================
- * 文档抽屉样式
- * ==================================================*/
-.doc-toc-overlay,
-.doc-sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.doc-toc-overlay.open,
-.doc-sidebar-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.doc-toc-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 61;
-  height: 100%;
-  width: 85vw;
-  max-width: 360px;
-  background: var(--color-base-100);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  visibility: hidden;
-  transition: transform 0.3s ease, visibility 0.3s ease;
-}
-
-.doc-toc-drawer.open {
-  visibility: visible;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
-}
-
-.doc-sidebar-drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 61;
-  height: 100%;
-  width: 85vw;
-  max-width: 320px;
-  background: var(--color-base-100);
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(-100%);
-  visibility: hidden;
-  transition: transform 0.3s ease, visibility 0.3s ease;
-}
-
-.doc-sidebar-drawer.open {
-  visibility: visible;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
-}
 
 /* ===================================================
  * Admonition 提示框样式 - 文档页特有

@@ -5,7 +5,7 @@
 <!--           文章页头部 Banner - 苹果风        -->
 <!-- ========================================== -->
 
-<header th:fragment="banner" class="post-banner relative w-full" th:with="headerBgSettings=${theme.config.article.header_background},
+<header th:fragment="banner" class="post-banner relative w-full" th:with="headerBgSettings=${theme.config.pages.article.header_background},
            fallbackImage=${headerBgSettings.enable_fallback != false and headerBgSettings.fallback_image != null and !headerBgSettings.fallback_image.isEmpty() ? headerBgSettings.fallback_image : ''},
            primaryImage=${headerBgSettings.background_type == 'cover' ? post.spec.cover : headerBgSettings.custom_image},
            hasPrimaryImage=${primaryImage != null and !primaryImage.isEmpty()},

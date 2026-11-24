@@ -1,5 +1,6 @@
+import { createHistoryRecord, updateHistoryRecord } from "swup";
 import { requestLinkCaptcha, submitLinkApplication } from "./application.js";
-import { MANAGED_QUERY_KEYS, isSameLinksResource, linksHistoryState } from "./history.js";
+import { MANAGED_QUERY_KEYS, isSameLinksResource } from "./history.js";
 
 const VALID_VIEWS = new Set(["friends", "apply", "board"]);
 const VALID_SCOPES = new Set(["all", "unread", "favorite", "later"]);
@@ -744,20 +745,22 @@ export function mountLinksApp() {
     const current = new URL(window.location.href);
     const result = normalizeLinksUrl(current, routeContext());
     const nextPath = historyPath(result.url);
-    const nextHistoryState = linksHistoryState(window.history.state, nextPath);
-    if (historyPath(current) !== nextPath || nextHistoryState !== window.history.state) {
-      window.history.replaceState(nextHistoryState, "", nextPath);
-    }
+    if (historyPath(current) !== nextPath) updateHistoryRecord(nextPath);
     state.route = result.state;
     if (announce) result.notes.forEach((note) => toast(note));
     return result;
+  }
+
+  function scrollBehavior(smooth) {
+    return smooth && !window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "instant";
   }
 
   function focusBoard({ smooth = false } = {}) {
     const board = root.querySelector("#links-comments");
     if (!board) return;
     requestAnimationFrame(() => {
-      board.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+      if (signal.aborted) return;
+      board.scrollIntoView({ behavior: scrollBehavior(smooth), block: "start" });
       board.classList.add("links-board-focus");
       globalThis.clearTimeout(state.boardFocusTimer);
       state.boardFocusTimer = globalThis.setTimeout(() => board.classList.remove("links-board-focus"), 1600);
@@ -770,14 +773,17 @@ export function mountLinksApp() {
     const nextPath = historyPath(url);
     const currentPath = historyPath(new URL(window.location.href));
     if (nextPath !== currentPath) {
-      window.history[replace ? "replaceState" : "pushState"](linksHistoryState(window.history.state, nextPath), "", nextPath);
+      if (replace) updateHistoryRecord(nextPath);
+      else createHistoryRecord(nextPath);
     }
     state.route = result.state;
     if (announce) result.notes.forEach((note) => toast(note));
     render();
     if (scroll) {
       if (result.state.view === "board") focusBoard({ smooth: true });
-      else requestAnimationFrame(() => root.scrollIntoView({ behavior: "smooth", block: "start" }));
+      else requestAnimationFrame(() => {
+        if (!signal.aborted) root.scrollIntoView({ behavior: scrollBehavior(true), block: "start" });
+      });
     }
   }
 
@@ -1993,6 +1999,18 @@ export function mountLinksApp() {
       !event.altKey
     );
   }
+
+  document.addEventListener("click", (event) => {
+    if (!plainClick(event)) return;
+    const link = event.target.closest?.("a[href]");
+    if (!link || root.contains(link) || link.closest("[data-no-swup]") ||
+      link.hasAttribute("download") || (link.target && link.target.toLowerCase() !== "_self")) return;
+    const target = new URL(link.href, window.location.href);
+    if (target.hash || !isSameLinksResource(mountedUrl, target.href) ||
+      !isSameLinksResource(mountedUrl, window.location.href)) return;
+    event.preventDefault();
+    commitRoute(parseLinksState(target), { scroll: true });
+  }, { capture: true, signal });
 
   function syncFeedAvatar(image) {
     if (signal.aborted || !image?.matches?.("[data-feed-avatar-image]") || !root.contains(image) || !image.complete)

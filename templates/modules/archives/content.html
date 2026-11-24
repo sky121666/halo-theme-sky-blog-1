@@ -8,12 +8,8 @@
 
 <!-- 归档内容片段 -->
 <div class="relative" th:fragment="archive-content"
-  th:with="rootCfg = ${theme.config.archive_settings},
+  th:with="rootCfg = ${theme.config.pages.archive},
                cfg = ${rootCfg.basic_info},
-               sidebarCfg = ${rootCfg.sidebar_settings},
-               globalSidebarCfg = ${theme.config.general.sidebar_settings},
-               useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
-               sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')},
                archiveBase = ${archives?.prevUrl != null and archives.prevUrl.contains('/page/') ? archives.prevUrl.substring(0, archives.prevUrl.indexOf('/page/')) : archives?.prevUrl},
                hasYearMonth = ${archiveBase != null and archiveBase.matches('.*/[0-9]{4}/[0-9]{2}$')},
                hasYear = ${!hasYearMonth and archiveBase != null and archiveBase.matches('.*/[0-9]{4}$')},
@@ -23,7 +19,7 @@
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：归档内容 -->
-      <section class="flex-1" th:classappend="${sidebarCfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
+      <section class="flex-1" th:classappend="${not showSidebar ? 'max-w-4xl mx-auto' : ''}">
 
         <!-- 页面标题区 - Apple风格简洁 -> 衬线体优雅风格 -->
         <header class="mb-14 border-b border-base-content/5 pb-8">
@@ -83,9 +79,9 @@
                         th:with="isPinned = ${post.spec.pinned == true},
                                         isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                                         isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-                        class="glow-card group relative flex items-start gap-4 p-4 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/[0.06] hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer">
+                        data-glow-owner="discovery" data-glow-interaction="hover press focus" class="sky-glow-card group relative flex items-start gap-4 p-4 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/[0.06] hover:border-primary/30 transition-all duration-300 cursor-pointer">
                         <!-- 整卡片可点击链接 -->
-                        <a th:href="@{${post.status.permalink}}" class="absolute inset-0 z-10" th:aria-label="|阅读文章：${post.spec.title}|"></a>
+                        <a data-glow-trigger th:href="@{${post.status.permalink}}" class="absolute inset-0 z-10" th:aria-label="|阅读文章：${post.spec.title}|"></a>
 
                         <!-- 日期标记 -->
                         <div
@@ -170,13 +166,13 @@
         <!-- 评论区 -->
         <section
           class="mt-12"
-          th:if="${haloCommentEnabled and theme.config.archive_settings.basic_info.enable_comment == true and singlePage != null and singlePage.spec.allowComment != false}"
+          th:if="${haloCommentEnabled and theme.config.pages.archive.basic_info.enable_comment == true and singlePage != null and singlePage.spec.allowComment != false}"
         >
           <h2 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
           </h2>
-          <div class="glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
+          <div data-glow-owner="discovery" class="sky-glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
             <div class="card-body p-6 sm:p-8">
               <halo:comment group="content.halo.run" kind="SinglePage"
                 th:attr="name=${singlePage.metadata.name}" colorScheme="system">
@@ -187,9 +183,9 @@
       </section>
 
       <!-- 右侧：侧边栏 -->
-      <aside th:if="${sidebarCfg?.show_sidebar == true}"
+      <aside th:if="${showSidebar}"
         class="right-sidebar w-80 space-y-6 hidden lg:block shrink-0 sticky top-20 self-start">
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarWidgets}, ${sidebarHost})}" />
       </aside>
     </div>
   </div>

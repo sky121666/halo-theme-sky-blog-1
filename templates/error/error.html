@@ -1,239 +1,70 @@
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}" xmlns:th="http://www.thymeleaf.org" class="h-full">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title th:text="${error.status} + ' - ' + ${#strings.defaultString(error.title, '页面访问错误')} + ' - ' + ${site.title}">
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:lang="${#locale.toLanguageTag}"
+  th:replace="${error.status == 404} ? ~{layout :: html(head = ~{::error-head}, content = ~{::error-content})} : _"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <th:block th:replace="~{modules/theme-script :: head}" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+    <th:block th:fragment="error-head">
+      <meta name="robots" content="noindex, nofollow" />
+      <title th:text="${error.status} + ' - ' + ${#strings.defaultString(error.title, '页面访问错误')} + ' - ' + ${site.title}">
         页面访问错误
-    </title>
-    <link rel="icon" type="image/x-icon" th:href="${site.favicon}">
-    <th:block th:replace="~{modules/theme-script :: inline-script}" />
-    <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}">
-    <style>
+      </title>
+      <link rel="icon" type="image/x-icon" th:href="${site.favicon}" />
+      <style>
         .error-page {
-            min-height: 100%;
-            padding-block: 4rem;
-            overflow-x: hidden;
+          min-block-size: 62svh;
+          padding-block: clamp(2rem, 8vh, 4rem);
+          display: grid;
+          place-items: center;
+          position: relative;
+          isolation: isolate;
+          overflow: clip;
         }
 
-        /* ============================= 高端按钮效果 (自 About 页面移植) ============================= */
-        .error-actions .btn {
-            position: relative;
-            overflow: hidden;
-            border: none;
-            isolation: isolate;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* 主按钮 - 深色发光效果 */
-        .error-actions .btn-neutral {
-            background: var(--color-base-content);
-            color: var(--color-base-100);
-            box-shadow:
-                0 4px 15px color-mix(in oklch, var(--color-base-content) 30%, transparent),
-                inset 0 1px 0 color-mix(in oklch, white 15%, transparent);
-        }
-
-        .error-actions .btn-neutral::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg,
-                    transparent 0%,
-                    color-mix(in oklch, white 10%, transparent) 50%,
-                    transparent 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        /* 流光扫过效果 */
-        .error-actions .btn-neutral::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                    transparent,
-                    color-mix(in oklch, white 25%, transparent),
-                    transparent);
-            transition: left 0.6s ease;
-        }
-
-        .error-actions .btn-neutral:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow:
-                0 8px 25px color-mix(in oklch, var(--color-base-content) 40%, transparent),
-                0 0 40px color-mix(in oklch, var(--color-primary) 20%, transparent),
-                inset 0 1px 0 color-mix(in oklch, white 20%, transparent);
-        }
-
-        .error-actions .btn-neutral:hover::before {
-            opacity: 1;
-        }
-
-        .error-actions .btn-neutral:hover::after {
-            left: 100%;
-        }
-
-        /* 次要按钮 - 边框发光效果 */
-        .error-actions .btn-outline {
-            background: transparent;
-            color: var(--color-base-content);
-            border: 2px solid color-mix(in oklch, var(--color-base-content) 30%, transparent);
-            box-shadow: 0 2px 10px color-mix(in oklch, var(--color-base-content) 10%, transparent);
-        }
-
-        /* 渐变边框动画背景 */
-        .error-actions .btn-outline::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: conic-gradient(from 0deg,
-                    var(--color-primary),
-                    var(--color-secondary),
-                    var(--color-accent),
-                    var(--color-primary));
-            border-radius: inherit;
-            opacity: 0;
-            z-index: -2;
-            transition: opacity 0.4s ease;
-            animation: error-border-spin 3s linear infinite paused;
-        }
-
-        /* 内部背景遮罩 */
-        .error-actions .btn-outline::after {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: var(--color-base-100);
-            border-radius: inherit;
-            /* Fallback if var missing */
-            z-index: -1;
-            transition: background 0.3s ease;
-        }
-
-        @keyframes error-border-spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .error-actions .btn-outline:hover {
-            transform: translateY(-4px) scale(1.02);
-            border-color: transparent;
-            color: var(--color-base-content);
-            box-shadow:
-                0 8px 30px color-mix(in oklch, var(--color-primary) 30%, transparent),
-                0 0 20px color-mix(in oklch, var(--color-primary) 15%, transparent);
-        }
-
-        .error-actions .btn-outline:hover::before {
-            opacity: 1;
-            animation-play-state: running;
-        }
-
-        .error-actions .btn-outline:hover::after {
-            background: color-mix(in oklch, var(--color-primary) 5%, var(--color-base-100));
-        }
-
-        /* 按钮文字层 */
-        .error-actions .btn span,
-        .error-actions .btn {
-            z-index: 1;
-        }
-
-        .error-actions .btn:active {
-            transform: translateY(-2px) scale(0.98);
-            transition-duration: 0.1s;
-        }
-
-        .error-actions .btn:focus-visible {
-            outline: 3px solid var(--color-primary);
-            outline-offset: 4px;
-        }
+        .error-actions .btn { transition: transform 150ms ease-out, background-color 150ms ease-out; }
+        .error-actions .btn:active { transform: scale(.97); }
 
         @media (prefers-reduced-motion: reduce) {
-            .error-actions .btn,
-            .error-actions .btn::before,
-            .error-actions .btn::after {
-                animation: none;
-                transition: none;
-            }
-
-            .error-actions .btn:hover,
-            .error-actions .btn:active {
-                transform: none;
-            }
+          .error-actions .btn { transition: none; }
+          .error-actions .btn:active { transform: none; }
         }
-    </style>
-</head>
-
-<body
-    class="error-page bg-base-100 w-full flex flex-col items-center justify-center relative font-sans text-base-content antialiased tracking-wide">
-
-    <!-- Subtle Grain/Dot Pattern -->
-    <div aria-hidden="true" class="fixed inset-0 opacity-[0.03] pointer-events-none"
-        style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 24px 24px; mask-image: radial-gradient(circle at center, black 40%, transparent 100%); -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);">
-    </div>
-
-    <!-- Top Status Bar -->
-    <div aria-hidden="true" class="absolute top-8 right-8 text-xs font-mono opacity-30 select-none">
-        ERR::<span th:text="${error.status}">000</span>
-    </div>
-
-    <!-- Main Content -->
-    <main
-        class="z-10 text-center px-6 relative max-w-3xl transform transition-all duration-700 ease-out translate-y-0 opacity-100">
-
-        <!-- Status Code (Background Element) -->
-        <div aria-hidden="true"
-            class="text-[10rem] md:text-[16rem] leading-none font-black text-base-content/[0.03] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none blur-sm"
-            th:text="${error.status}">404</div>
-
-        <!-- Icon -->
-        <div aria-hidden="true"
-            class="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-base-200/50 text-base-content/80 shadow-inner">
-            <span th:if="${error.status == 404}" class="icon-[heroicons--map] w-10 h-10 opacity-60"></span>
-            <span th:if="${error.status == 500}" class="icon-[heroicons--server-stack] w-10 h-10 opacity-60"></span>
-            <span th:if="${error.status != 404 and error.status != 500}"
-                class="icon-[heroicons--exclamation-triangle] w-10 h-10 opacity-60"></span>
-        </div>
-
-        <!-- Title -->
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight"
-            th:text="${#strings.defaultString(error.title, '页面访问错误')}">页面访问错误</h1>
-
-        <!-- Detail -->
-        <p class="text-base-content/60 text-lg md:text-xl mb-12 max-w-lg mx-auto leading-relaxed border-l-2 border-primary/20 pl-4 py-1 text-left md:text-center md:border-l-0 md:pl-0"
-            th:text="${#strings.defaultString(error.detail, '当前无法访问此内容，请稍后重试。')}">
-        </p>
-
-        <!-- Actions -->
-        <div class="error-actions flex flex-col sm:flex-row items-center justify-center gap-5">
-            <a th:href="@{/}" class="btn btn-neutral btn-lg">
-                <span aria-hidden="true" class="icon-[heroicons--home] w-5 h-5"></span>
-                返回首页
+      </style>
+    </th:block>
+  </head>
+  <body class="bg-base-100 text-base-content flex min-h-screen items-center justify-center">
+    <main class="w-full px-4">
+      <section th:fragment="error-content" class="error-page text-center" data-theme-swup>
+        <div
+          aria-hidden="true"
+          class="text-base-content/5 pointer-events-none absolute inset-0 -z-10 grid place-items-center text-[10rem] leading-none font-black select-none md:text-[16rem]"
+          th:text="${error.status}"
+        >404</div>
+        <div class="max-w-3xl px-2 sm:px-6">
+          <div aria-hidden="true" data-glow-owner="system" class="sky-glow-card bg-base-200/70 mb-8 inline-flex size-20 items-center justify-center rounded-3xl shadow-inner">
+            <span th:if="${error.status == 404}" class="icon-[heroicons--map] size-10 opacity-60"></span>
+            <span th:if="${error.status == 500}" class="icon-[heroicons--server-stack] size-10 opacity-60"></span>
+            <span th:if="${error.status != 404 and error.status != 500}" class="icon-[heroicons--exclamation-triangle] size-10 opacity-60"></span>
+          </div>
+          <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl" th:text="${#strings.defaultString(error.title, '页面访问错误')}">
+            页面访问错误
+          </h1>
+          <p class="text-base-content/70 mx-auto mb-10 max-w-lg text-lg leading-relaxed" th:text="${#strings.defaultString(error.detail, '当前无法访问此内容，请稍后重试。')}"></p>
+          <div class="error-actions flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a id="error-home-link" th:href="@{/}" class="btn btn-neutral btn-lg">
+              <span aria-hidden="true" class="icon-[heroicons--home] size-5"></span>
+              返回首页
             </a>
-            <button type="button" onclick="history.length > 1 ? history.back() : location.assign('/')"
-                class="btn btn-outline btn-lg">
-                返回上一页
+            <button type="button" onclick="history.length > 1 ? history.back() : document.getElementById('error-home-link').click()" class="btn btn-outline btn-lg">
+              返回上一页
             </button>
+          </div>
         </div>
+      </section>
     </main>
-
-    <!-- Bottom Decoration -->
-    <div aria-hidden="true"
-        class="fixed bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-50">
-    </div>
-
-</body>
-
+  </body>
 </html>

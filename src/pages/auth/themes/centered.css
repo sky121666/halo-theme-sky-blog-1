@@ -24,7 +24,7 @@
     border: 1px solid oklch(from var(--color-base-content) l c h / 0.08);
     border-radius: 2rem;
     padding: 2.5rem;
-    box-shadow: 0 25px 50px -12px oklch(from var(--color-base-content) l c h / 0.1);
+    --sky-card-elevation: 0 25px 50px -12px rgb(0 0 0 / 0.16);
     position: relative;
     z-index: 10;
 }
@@ -57,10 +57,6 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
     transform: translateZ(-10px);
     filter: blur(10px);
-}
-
-.auth-card-3d:hover {
-    box-shadow: 0 35px 60px -15px oklch(from var(--color-base-content) l c h / 0.15);
 }
 
 .auth-card-3d:hover::before {

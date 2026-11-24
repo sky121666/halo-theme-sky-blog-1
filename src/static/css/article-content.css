@@ -1307,45 +1307,6 @@
 }
 
 /* ===================================================
- * 25. 目录抽屉（移动端）
- * ==================================================*/
-.post-toc-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.post-toc-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.post-toc-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 61;
-  height: 100%;
-  width: 85vw;
-  max-width: 360px;
-  background: var(--color-base-100);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-}
-
-.post-toc-drawer.open {
-  transform: translateX(0);
-}
-
-/* ===================================================
  * 26. Halo 评论组件
  * ==================================================*/
 halo-comment {

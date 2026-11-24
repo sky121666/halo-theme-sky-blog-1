@@ -1,9 +1,87 @@
+import { createPage } from "../src/common/js/page.js";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 import test from "node:test";
 
 const read = (name) => fs.readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
+
+function onlineStatsFixture() {
+  let now = 0;
+  const requests = [];
+  const intervals = new Set();
+  const document = Object.assign(new EventTarget(), { hidden: false, title: "测试文章" });
+  const source = read("src/common/js/online-stats.js").replace("export function onlineStats", "function onlineStats");
+  const create = vm.runInNewContext(`${source}\nonlineStats`, {
+    document,
+    location: { pathname: "/archives/test" },
+    Date: class extends Date { static now() { return now; } },
+    fetch: (path) => new Promise((resolve) => requests.push({ path, resolve })),
+    AbortSignal,
+    setInterval: (fn) => { intervals.add(fn); return fn; },
+    clearInterval: (fn) => intervals.delete(fn),
+  });
+  return {
+    requests,
+    intervals,
+    document,
+    tick: (time) => { now = time; intervals.forEach((fn) => fn()); },
+    mount(showHotPages = true) {
+      const widget = create();
+      widget.$el = { dataset: { showHotPages: String(showHotPages) } };
+      widget.init();
+      return widget;
+    },
+  };
+}
+
+test("online stats shares requests across page mounts and renders titles without fetching HTML", async () => {
+  const f = onlineStatsFixture();
+  const first = f.mount();
+  const second = f.mount();
+  const expected = "/apis/online-user.zyx2012.cn/v1alpha1/stats";
+  assert.deepEqual(f.requests.map(({ path }) => path), [`${expected}/summary`, expected]);
+  f.requests[0].resolve(Response.json({ total: 7 }));
+  f.requests[1].resolve(Response.json([
+    { uri: "/archives/test", count: 3 },
+    { uri: "/document", title: "插件标题", count: 2 },
+    { uri: "/unknown/slug", count: 1 },
+  ]));
+  first.destroy();
+  await second.loadData();
+  f.tick(1000);
+  f.document.dispatchEvent(new Event("visibilitychange"));
+  const remounted = f.mount();
+  await remounted.loadData();
+  assert.equal(first.total, 0);
+  assert.equal(second.total, 7);
+  assert.deepEqual(Array.from(remounted.hotPages, ({ title }) => title), ["测试文章", "插件标题", "slug"]);
+  assert.equal(f.requests.length, 2);
+  second.destroy();
+  remounted.destroy();
+  assert.equal(f.intervals.size, 0);
+});
+
+test("online stats respects Retry-After and keeps the last successful sample on rate limit", async () => {
+  const f = onlineStatsFixture();
+  const widget = f.mount(false);
+  f.requests[0].resolve(Response.json({ total: 4 }));
+  await widget.loadData();
+  f.tick(30_000);
+  f.requests[1].resolve(new Response(null, { status: 429, headers: { "Retry-After": "90" } }));
+  await widget.loadData();
+  f.tick(60_000);
+  f.tick(119_999);
+  assert.equal(f.requests.length, 2);
+  assert.equal(widget.total, 4);
+  assert.equal(widget.error, false);
+  f.tick(120_000);
+  assert.equal(f.requests.length, 3);
+  f.requests[2].resolve(Response.json({ total: 6 }));
+  await widget.loadData();
+  assert.equal(widget.total, 6);
+  widget.destroy();
+});
 
 function bangumiFixture() {
   let now = 0;
@@ -26,15 +104,12 @@ function bangumiFixture() {
       timers.delete(id);
     },
   };
-  const code = read("src/pages/bangumi/bangumi.js").replace(/^import .*;\n/gm, "");
-  vm.runInNewContext(code, {
+  const code = read("src/pages/bangumi/bangumi.js").replace(/^import .*;\n/gm, "").replace(/^export .*;\n/gm, "");
+  cleanup = vm.runInNewContext(code + "\npage.mount({});", {
     window,
     AbortController,
     document: { getElementById: () => image, querySelectorAll: () => cards },
-    registerPageLifecycle: (mount) => {
-      cleanup = mount();
-    },
-    notifySwupPageReady() {},
+    createPage,
   });
   return {
     image,
@@ -91,7 +166,7 @@ test("bangumi unmount prevents delayed cover changes", () => {
 for (const failure of [null, "QuotaExceededError", "SecurityError"]) {
   test(`weather updates remain observable when storage ${failure || "works"}`, () => {
     const source = read("src/common/js/alpine-modules.js");
-    const code = source.slice(source.indexOf("function weatherNumber("), source.indexOf("function onlineStats("));
+    const code = source.slice(source.indexOf("function weatherNumber("), source.indexOf("function initializeAll("));
     const events = [];
     const card = vm.runInNewContext(`${code};welcomeWeatherCard()`, {
       localStorage: {
@@ -117,7 +192,7 @@ for (const failure of [null, "QuotaExceededError", "SecurityError"]) {
 
 function weatherFixture({ cached = null, idle = false } = {}) {
   const source = read("src/common/js/alpine-modules.js");
-  const code = source.slice(source.indexOf("function weatherNumber("), source.indexOf("function onlineStats("));
+  const code = source.slice(source.indexOf("function weatherNumber("), source.indexOf("function initializeAll("));
   let sequence = 0;
   const timers = new Map(), events = [], writes = [], requests = [];
   const schedule = (fn) => { const id = ++sequence; timers.set(id, fn); return id; };
@@ -220,10 +295,12 @@ function doubanFilterFixture(query = "", { deferItems = false } = {}) {
     querySelectorAll: () => buttons(),
     addEventListener: (name, callback) => listeners.set(name, callback),
   };
-  const code = read("src/pages/douban/douban.js").replace(/^import .*;\n/gm, "");
+  const code = read("src/pages/douban/douban.js").replace(/^import .*;\n/gm, "").replace(/^export .*;\n/gm, "");
   let cleanup;
-  vm.runInNewContext(code, {
+  cleanup = vm.runInNewContext(code + "\npage.mount({});", {
     window, URL, AbortController, Element: FilterElement,
+    createHistoryRecord: (url) => window.history.pushState(null, "", url),
+    updateHistoryRecord: (url) => window.history.replaceState(null, "", url),
     normalizeDoubanItem: item => item,
     document: { querySelector: () => root, createElement: () => new FilterElement() },
     skyDebug: { event() {}, warn() {} },
@@ -243,8 +320,7 @@ function doubanFilterFixture(query = "", { deferItems = false } = {}) {
         },
       };
     },
-    registerPageLifecycle: mount => { cleanup = mount(); },
-    notifySwupPageReady() {},
+    createPage,
   });
   return {
     requests, panel,

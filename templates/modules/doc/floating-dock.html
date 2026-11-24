@@ -6,30 +6,20 @@
 <!-- ========================================== -->
 
 <!-- 文档内容页悬浮 Dock 入口片段 - 根据样式选择 -->
-<th:block th:fragment="doc-dock" th:with="cfg = ${theme.config.docsme?.doc_settings},
-                   globalDock = ${theme.config.general.floating_dock},
-                   enableCustom = ${cfg?.enable_custom_dock},
-                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
-                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
-                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
-  <th:block th:if="${globalDock?.enable_dock != false}">
-    <!-- 底部居中样式 -->
-    <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docBottomDock}" />
-    <!-- 右侧可折叠样式 -->
-    <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: docSideDock}" />
-  </th:block>
+<th:block th:fragment="doc-dock">
+  <th:block th:replace="~{modules/component-settings :: dock('docsBody', ~{:: docResolvedDock})}" />
+</th:block>
+
+<th:block th:fragment="docResolvedDock" th:if="${enableDock}">
+  <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docBottomDock}" />
+  <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: docSideDock}" />
 </th:block>
 
 <!-- ========================================== -->
 <!--          底部居中样式                        -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docBottomDock"
-  th:with="cfg = ${theme.config.docsme?.doc_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="docBottomDock" th:with="cfg=${theme.config.plugins.docsme?.doc_settings}">
   <div x-data="docFloatingDock" th:attr="data-doc-name=${docTree?.metadata?.name}" x-show="isVisible"
     x-transition:enter="transition ease-in-out duration-400" x-transition:enter-start="opacity-0 translate-y-8"
     x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in-out duration-300"
@@ -43,7 +33,7 @@
         <div class="flex items-center gap-1">
 
           <!-- 自定义菜单图标 -->
-          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+          <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
             <th:block th:if="${dockMenu != null}">
               <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
@@ -72,7 +62,7 @@
           <!-- 评论按钮已移除，移至文章底部 -->
 
           <!-- 右侧目录隐藏时显示抽屉入口 -->
-          <button th:if="${cfg?.enable_toc_drawer}" onclick="window.openDocTocDrawer()"
+          <button th:if="${cfg?.enable_toc_drawer}" data-drawer-open="doc-toc-drawer" aria-controls="doc-toc-drawer" aria-expanded="false"
             class="dock-item dock-btn group relative doc-toc-drawer-trigger" title="目录" aria-label="打开文档目录">
             <span class="icon-[heroicons--list-bullet] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
             </span>
@@ -83,7 +73,7 @@
           </button>
 
           <!-- 左侧文档树隐藏时显示抽屉入口 -->
-          <button th:if="${cfg?.enable_sidebar_drawer != false}" onclick="window.openDocSidebarDrawer()"
+          <button th:if="${cfg?.enable_sidebar_drawer != false}" data-drawer-open="doc-sidebar-drawer" aria-controls="doc-sidebar-drawer" aria-expanded="false"
             class="dock-item dock-btn group relative doc-sidebar-drawer-trigger" title="文档菜单" aria-label="打开文档菜单">
             <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
             </span>
@@ -108,12 +98,7 @@
 <!--          右侧可折叠样式 (FAB)                -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docSideDock"
-  th:with="cfg = ${theme.config.docsme?.doc_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="docSideDock" th:with="cfg=${theme.config.plugins.docsme?.doc_settings}">
   <div x-data="sideFloatingDock" th:attr="data-doc-name=${docTree?.metadata?.name}" x-show="isVisible"
     class="fixed right-4 bottom-6 z-40">
 
@@ -133,7 +118,7 @@
       </div>
 
       <!-- 自定义菜单项 -->
-      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+      <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
             <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
@@ -156,7 +141,7 @@
       <!-- 右侧目录隐藏时显示抽屉入口 -->
       <div th:if="${cfg?.enable_toc_drawer}" class="doc-toc-drawer-trigger">
         <span class="text-sm whitespace-nowrap hidden sm:block">目录</span>
-        <button class="btn btn-circle" onclick="window.openDocTocDrawer()" aria-label="打开文档目录">
+        <button class="btn btn-circle" data-drawer-open="doc-toc-drawer" aria-controls="doc-toc-drawer" aria-expanded="false" aria-label="打开文档目录">
           <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
         </button>
       </div>
@@ -164,7 +149,7 @@
       <!-- 左侧文档树隐藏时显示抽屉入口 -->
       <div th:if="${cfg?.enable_sidebar_drawer != false}" class="doc-sidebar-drawer-trigger">
         <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
-        <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()" aria-label="打开文档菜单">
+        <button class="btn btn-circle" data-drawer-open="doc-sidebar-drawer" aria-controls="doc-sidebar-drawer" aria-expanded="false" aria-label="打开文档菜单">
           <span class="icon-[heroicons--book-open] w-5 h-5"></span>
         </button>
       </div>
@@ -193,19 +178,19 @@
 <!-- ========================================== -->
 
 <!-- 目录抽屉 - 原生实现 -->
-<th:block th:fragment="doc-toc-drawer" th:with="cfg = ${theme.config.docsme?.doc_settings}">
+<th:block th:fragment="doc-toc-drawer" th:with="cfg = ${theme.config.plugins.docsme?.doc_settings}">
   <th:block th:if="${cfg?.enable_toc_drawer}">
     <!-- 遮罩层 -->
-    <div id="doc-toc-overlay" class="doc-toc-overlay" onclick="window.closeDocTocDrawer()"></div>
+    <div id="doc-toc-overlay" class="content-drawer-backdrop" aria-hidden="true"></div>
     <!-- 抽屉面板 -->
-    <div id="doc-toc-drawer" class="doc-toc-drawer" role="dialog" aria-modal="true" aria-label="文档目录" tabindex="-1" inert aria-hidden="true">
+    <div id="doc-toc-drawer" class="content-drawer" data-drawer-side="right" role="dialog" aria-modal="true" aria-label="文档目录" tabindex="-1" inert aria-hidden="true">
       <!-- 标题栏 -->
       <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
         <h3 class="text-base font-semibold flex items-center gap-2">
           <span class="icon-[heroicons--list-bullet] w-5 h-5 text-primary"></span>
           <span>文档目录</span>
         </h3>
-        <button onclick="window.closeDocTocDrawer()" class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档目录">
+        <button data-drawer-close class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档目录">
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </button>
       </div>
@@ -224,12 +209,12 @@
 <!-- ========================================== -->
 
 <!-- 菜单抽屉 - 原生实现 -->
-<th:block th:fragment="doc-sidebar-drawer(config)" th:with="cfg = ${config ?: theme.config.docsme?.doc_settings}">
+<th:block th:fragment="doc-sidebar-drawer(config)" th:with="cfg = ${config ?: theme.config.plugins.docsme?.doc_settings}">
   <th:block th:if="${cfg?.enable_sidebar_drawer != false}">
     <!-- 遮罩层 -->
-    <div id="doc-sidebar-overlay" class="doc-sidebar-overlay" onclick="window.closeDocSidebarDrawer()"></div>
+    <div id="doc-sidebar-overlay" class="content-drawer-backdrop" aria-hidden="true"></div>
     <!-- 抽屉面板 -->
-    <div id="doc-sidebar-drawer" class="doc-sidebar-drawer" role="dialog" aria-modal="true" aria-label="文档菜单" tabindex="-1" inert aria-hidden="true">
+    <div id="doc-sidebar-drawer" class="content-drawer" data-drawer-side="left" role="dialog" aria-modal="true" aria-label="文档菜单" tabindex="-1" inert aria-hidden="true">
       <!-- 标题栏 -->
       <div class="flex items-center justify-between px-5 py-4 border-b border-base-200">
         <a th:href="@{${project.status.permalink}}"
@@ -237,7 +222,7 @@
           <span class="icon-[heroicons--book-open] w-5 h-5 text-primary"></span>
           <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
         </a>
-        <button onclick="window.closeDocSidebarDrawer()" class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档菜单">
+        <button data-drawer-close class="btn btn-ghost btn-circle btn-sm" aria-label="关闭文档菜单">
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </button>
       </div>
@@ -256,31 +241,23 @@
 <!--         文档列表页 Dock (docs.html)         -->
 <!-- ========================================== -->
 
-<th:block th:fragment="docs-dock" th:with="cfg = ${theme.config.docsme?.docs_settings},
-                   globalDock = ${theme.config.general.floating_dock},
-                   enableCustom = ${cfg?.enable_custom_dock},
-                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
-                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
-                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
-  <th:block th:if="${globalDock?.enable_dock != false}">
-    <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docsBottomDock}" />
-    <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: docsSideDock}" />
-  </th:block>
+<th:block th:fragment="docs-dock">
+  <th:block th:replace="~{modules/component-settings :: dock('docsList', ~{:: docsResolvedDock})}" />
 </th:block>
 
-<th:block th:fragment="docsBottomDock"
-  th:with="cfg = ${theme.config.docsme?.docs_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="docsResolvedDock" th:if="${enableDock}">
+  <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: docsBottomDock}" />
+  <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: docsSideDock}" />
+</th:block>
+
+<th:block th:fragment="docsBottomDock">
   <div x-data="simpleFloatingDock" x-show="isVisible" x-transition:enter="transition ease-in-out duration-400"
     x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
     x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="opacity-100 translate-y-0"
     x-transition:leave-end="opacity-0 translate-y-4" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
     <div class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
         <div class="flex items-center gap-1">
-          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+          <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
             <th:block th:if="${dockMenu != null}">
               <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
@@ -307,12 +284,7 @@
   </div>
 </th:block>
 
-<th:block th:fragment="docsSideDock"
-  th:with="cfg = ${theme.config.docsme?.docs_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="docsSideDock">
   <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
     <div class="fab fab-top">
       <div tabindex="0" role="button" aria-label="展开文档工具" class="btn btn-circle btn-primary shadow-lg">
@@ -324,7 +296,7 @@
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </span>
       </div>
-      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+      <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
             <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
@@ -354,32 +326,23 @@
 <!--       文档目录页 Dock (doc-catalog.html)     -->
 <!-- ========================================== -->
 
-<th:block th:fragment="catalog-dock" th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
-                   globalDock = ${theme.config.general.floating_dock},
-                   enableCustom = ${cfg?.enable_custom_dock},
-                   globalStyle = ${globalDock?.dock_style ?: 'bottom'},
-                   pageStyle = ${cfg?.dock_style ?: 'bottom'},
-                   dockStyle = ${enableCustom ? pageStyle : globalStyle}">
-  <th:block th:if="${globalDock?.enable_dock != false}">
-    <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: catalogBottomDock}" />
-    <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: catalogSideDock}" />
-    <th:block th:replace="~{modules/doc/floating-dock :: doc-sidebar-drawer(config=${cfg})}" />
-  </th:block>
+<th:block th:fragment="catalog-dock">
+  <th:block th:replace="~{modules/component-settings :: dock('docsCatalog', ~{:: catalogResolvedDock})}" />
 </th:block>
 
-<th:block th:fragment="catalogBottomDock"
-  th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="catalogResolvedDock" th:if="${enableDock}">
+  <th:block th:if="${dockStyle != 'side'}" th:insert="~{:: catalogBottomDock}" />
+  <th:block th:if="${dockStyle == 'side'}" th:insert="~{:: catalogSideDock}" />
+</th:block>
+
+<th:block th:fragment="catalogBottomDock" th:with="cfg=${theme.config.plugins.docsme?.doc_catalog_settings}">
   <div x-data="simpleFloatingDock" x-show="isVisible" x-transition:enter="transition ease-in-out duration-400"
     x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
     x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="opacity-100 translate-y-0"
     x-transition:leave-end="opacity-0 translate-y-4" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
     <div class="dock-container bg-base-100/90 backdrop-blur-md shadow-lg rounded-full border border-base-300/30 px-2 py-1.5">
         <div class="flex items-center gap-1">
-          <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+          <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
             <th:block th:if="${dockMenu != null}">
               <a th:each="menuItem : ${dockMenu.menuItems}" th:href="@{${menuItem.status.href == '/friends' ? '/links?view=friends' : menuItem.status.href}}"
                 th:target="${menuItem.spec.target?.value}" class="dock-item dock-btn group relative"
@@ -402,7 +365,7 @@
 <div class="w-px h-6" th:if="${cfg?.enable_sidebar_drawer != false or enableBackToTop}"></div>
 
 <!-- 左侧文档树隐藏时显示抽屉入口；旧配置缺字段时沿用设置项默认开启 -->
-<button th:if="${cfg?.enable_sidebar_drawer != false}" onclick="window.openDocSidebarDrawer()"
+<button th:if="${cfg?.enable_sidebar_drawer != false}" data-drawer-open="doc-sidebar-drawer" aria-controls="doc-sidebar-drawer" aria-expanded="false"
   class="dock-item dock-btn group relative doc-sidebar-drawer-trigger" title="文档菜单" aria-label="打开文档菜单">
   <span class="icon-[heroicons--book-open] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
   </span>
@@ -421,12 +384,7 @@
 </div>
 </th:block>
 
-<th:block th:fragment="catalogSideDock"
-  th:with="cfg = ${theme.config.docsme?.doc_catalog_settings},
-          globalDock = ${theme.config.general.floating_dock},
-          enableCustom = ${cfg?.enable_custom_dock},
-          finalMenu = ${enableCustom ? (cfg?.dock_menu ?: 'primary') : (globalDock?.dock_menu ?: 'primary')},
-          enableBackToTop = ${enableCustom ? (cfg?.enable_back_to_top != false) : (globalDock?.enable_back_to_top != false)}">
+<th:block th:fragment="catalogSideDock" th:with="cfg=${theme.config.plugins.docsme?.doc_catalog_settings}">
   <div x-data="sideFloatingDock" x-show="isVisible" class="fixed right-4 bottom-6 z-40">
     <div class="fab fab-top">
       <div tabindex="0" role="button" aria-label="展开文档工具" class="btn btn-circle btn-primary shadow-lg">
@@ -438,7 +396,7 @@
           <span class="icon-[heroicons--x-mark] w-5 h-5"></span>
         </span>
       </div>
-      <th:block th:with="dockMenu = ${menuFinder.getByName(finalMenu)}">
+      <th:block th:with="dockMenu = ${menuFinder.getByName(dockMenuName)}">
         <th:block th:if="${dockMenu != null}">
           <div th:each="menuItem : ${dockMenu.menuItems}">
             <span class="text-sm whitespace-nowrap hidden sm:block" th:text="${menuItem.status.href == '/friends' ? '友链动态' : menuItem.status.displayName}">菜单</span>
@@ -458,7 +416,7 @@
 <!-- 左侧文档树隐藏时显示抽屉入口 -->
 <div th:if="${cfg?.enable_sidebar_drawer != false}" class="doc-sidebar-drawer-trigger">
   <span class="text-sm whitespace-nowrap hidden sm:block">菜单</span>
-  <button class="btn btn-circle" onclick="window.openDocSidebarDrawer()" aria-label="打开文档菜单">
+  <button class="btn btn-circle" data-drawer-open="doc-sidebar-drawer" aria-controls="doc-sidebar-drawer" aria-expanded="false" aria-label="打开文档菜单">
     <span class="icon-[heroicons--book-open] w-5 h-5"></span>
   </button>
 </div>

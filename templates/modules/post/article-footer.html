@@ -13,7 +13,7 @@
 
     <!-- 互动卡片 - 使用 DaisyUI card -->
     <div
-      class="card bg-base-100/80 border-base-content/5 mt-8 rounded-2xl border shadow-lg backdrop-blur-xl"
+      data-glow-owner="reading" class="sky-glow-card card bg-base-100/80 border-base-content/5 mt-8 rounded-2xl border shadow-lg backdrop-blur-xl"
       th:attr="data-post-name=${post.metadata.name}, data-upvote-count=${post.stats.upvote ?: 0}"
     >
       <div class="card-body p-4 sm:p-6">
@@ -22,7 +22,7 @@
           <div class="flex items-center gap-3">
             <!-- 点赞按钮 -->
             <div
-              th:if="${theme.config.article.post_interaction?.enable_like != false}"
+              th:if="${theme.config.pages.article.post_interaction?.enable_like != false}"
               x-data="postLike()"
               class="flex flex-col items-start gap-1"
             >
@@ -53,7 +53,7 @@
             <button
               type="button"
               aria-label="分享文章"
-              th:if="${theme.config.article.post_interaction?.enable_share != false}"
+              th:if="${theme.config.pages.article.post_interaction?.enable_share != false}"
               x-data
               @click="$dispatch('open-share-modal')"
               class="btn btn-sm btn-ghost bg-base-200 hover:bg-primary/10 hover:text-primary gap-2 rounded-full transition-all duration-200"
@@ -125,8 +125,8 @@
 
     <!-- 评论卡片 - 使用 DaisyUI card -->
     <div
-      th:if="${haloCommentEnabled and theme.config.article.post_interaction?.enable_comment != false and post.spec.allowComment != false}"
-      class="card bg-base-100/80 border-base-content/5 mt-4 overflow-hidden rounded-2xl border shadow-lg backdrop-blur-xl"
+      th:if="${haloCommentEnabled and theme.config.pages.article.post_interaction?.enable_comment != false and post.spec.allowComment != false}"
+      data-glow-owner="reading" class="sky-glow-card card bg-base-100/80 border-base-content/5 mt-4 overflow-hidden rounded-2xl border shadow-lg backdrop-blur-xl"
     >
       <!-- 评论区标题 -->
       <div class="border-base-content/5 bg-base-200/30 flex items-center justify-between border-b px-4 py-3 sm:px-6">

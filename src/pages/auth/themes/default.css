@@ -19,7 +19,7 @@
     background: var(--color-base-100);
     border-radius: 1.5rem;
     padding: 2.5rem;
-    box-shadow: 0 10px 40px -10px oklch(from var(--color-base-content) l c h / 0.1);
+    --sky-card-elevation: 0 10px 40px -10px rgb(0 0 0 / 0.14);
     border: 1px solid oklch(from var(--color-base-content) l c h / 0.05);
 }
 

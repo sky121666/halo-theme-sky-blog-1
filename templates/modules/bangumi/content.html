@@ -9,10 +9,10 @@
     <div class="mx-auto max-w-6xl px-4 py-8">
       <!-- 页面头部 -->
       <header class="bangumi-header bangumi-animate-in">
-        <h1 class="bangumi-title" th:text="${theme.config.bangumi_settings?.page_title} ?: '追番列表'">追番列表</h1>
+        <h1 class="bangumi-title" th:text="${theme.config.plugins.bangumi?.page_title} ?: '追番列表'">追番列表</h1>
         <p
           class="bangumi-subtitle"
-          th:text="${theme.config.bangumi_settings?.page_description} ?: '记录我的二次元之旅'"
+          th:text="${theme.config.plugins.bangumi?.page_description} ?: '记录我的二次元之旅'"
         >
           记录我的二次元之旅
         </p>
@@ -90,7 +90,7 @@
         <!-- 番剧卡片网格 -->
         <div th:if="${!bangumis.items.isEmpty()}" class="bangumi-grid">
           <th:block th:each="bangumi : ${bangumis.items}" th:with="cover=${bangumi.spec.cover ?: ''}">
-            <a th:href="${bangumi.spec.url}" target="_blank" rel="noopener noreferrer" class="bangumi-card">
+            <a th:href="${bangumi.spec.url}" target="_blank" rel="noopener noreferrer" data-glow-owner="integration" data-glow-interaction="hover press focus" class="sky-glow-card bangumi-card">
               <!-- 封面 -->
               <div class="bangumi-cover">
                 <img
@@ -129,7 +129,7 @@
         </div>
 
         <!-- 空状态 -->
-        <div th:if="${bangumis.items.isEmpty()}" class="bangumi-empty">
+        <div th:if="${bangumis.items.isEmpty()}" data-glow-owner="integration" class="sky-glow-card bangumi-empty">
           <div class="bangumi-empty-icon">📺</div>
           <p>暂无追番数据</p>
         </div>

@@ -130,7 +130,7 @@ export const pluginContracts = [
     status: "compatible-tested",
     surface: "文章、图库、瞬间和文档图片灯箱",
     evidence:
-      "src/common/main.js; src/pages/photos/photos.js; templates/modules/photos/content.html; docs/system/adaptation/plugin-adaptation.md",
+      "src/common/js/plugin-page.js; src/pages/photos/photos.js; templates/modules/photos/content.html; docs/system/adaptation/plugin-adaptation.md",
   },
   {
     plugin: "auth-passkey",
@@ -168,19 +168,21 @@ export const pluginContracts = [
   {
     plugin: "PluginContactForm",
     aliases: ["PluginContactForm", "plugin-contact-form", "contact-form"],
-    contractVersion: "2.1.0",
-    status: "confirmed",
-    surface: "旧/新表单宿主、embed 引导与按需加载、自动展示组件 PJAX 清理；提交/上传待验",
-    evidence: "src/common/css/base.css; templates/modules/theme-script.html",
+    contractVersion: "2.1.1",
+    testedVersion: "2.1.1",
+    status: "compatible-tested",
+    surface: "form-name 正文宿主、Shadow DOM、embed 按需加载及 Swup 离页清理；提交/上传待验",
+    evidence: "src/common/css/base.css; src/common/js/plugin-page.js; docs/system/adaptation/plugin-adaptation.md",
   },
   {
     plugin: "ai-assistant",
     aliases: ["ai-assistant", "plugin-ai-assistant"],
-    contractVersion: "3.0.0",
-    status: "confirmed",
-    surface: "3.0/3.1 摘要宿主与四个颜色变量；3.1 官方组件临时样本的明暗/打字/PJAX已验，实际自动注入和模型生成未在该批验证",
+    contractVersion: "3.1.0",
+    testedVersion: "3.1.0",
+    status: "compatible-tested",
+    surface: "真实文章自动注入摘要宿主、既有一致快照读取、打字效果、颜色变量及 Swup 离页清理",
     evidence:
-      "src/pages/post/post.css; src/common/main.js; docs/system/adaptation/main-halo-runtime-audit.md; docs/system/adaptation/evidence/2026-09-23/ai-assistant-3.1.0-source-diff.json; docs/system/adaptation/plugin-coverage-followup-2026-11-01.md; docs/system/adaptation/evidence/2026-11-01/plugin-coverage-followup.json",
+      "src/pages/post/post.css; src/common/js/plugin-page.js; docs/system/adaptation/main-halo-runtime-audit.md; docs/system/adaptation/plugin-adaptation.md",
   },
   {
     plugin: "editor-hyperlink-card",
@@ -188,7 +190,7 @@ export const pluginContracts = [
     contractVersion: "1.9.2",
     status: "confirmed",
     surface: "正文块级与行内超链接卡片的宿主布局、暗色和 PJAX 资源生命周期",
-    evidence: "src/static/css/article-content.css; src/common/main.js",
+    evidence: "src/static/css/article-content.css; src/common/js/plugin-page.js",
   },
   {
     plugin: "plugin-katex",
@@ -196,7 +198,7 @@ export const pluginContracts = [
     contractVersion: "3.0.0",
     status: "confirmed",
     surface: "正文行内/块级数学公式与 PJAX 重执行",
-    evidence: "src/static/css/article-content.css; src/common/main.js",
+    evidence: "src/static/css/article-content.css; src/common/js/plugin-page.js",
   },
   {
     plugin: "lottery",
@@ -209,11 +211,12 @@ export const pluginContracts = [
   {
     plugin: "restricted-reading",
     aliases: ["restricted-reading", "plugin-restricted-reading"],
-    contractVersion: "1.8.1",
-    status: "confirmed",
-    surface: "文章/单页受限宿主、登录/评论依赖；answer/mp 官方关闭及暗色同步；answer浏览器样本已验，mp仅隔离回归，pay未验",
+    contractVersion: "1.9.4",
+    testedVersion: "1.9.4",
+    status: "compatible-tested",
+    surface: "文章/单页受限宿主、answer 弹窗暗色与 Swup 离页关闭清理；mp/pay 和解锁流程未验",
     evidence:
-      "src/static/css/article-content.css; templates/modules/post/article-footer.html; templates/modules/page/content.html; src/common/main.js; scripts/verify-restricted-reading-lifecycle.mjs; docs/system/adaptation/plugin-coverage-followup-2026-11-01.md; docs/system/adaptation/evidence/2026-11-01/plugin-coverage-followup.json",
+      "src/static/css/article-content.css; templates/modules/post/article-footer.html; templates/modules/page/content.html; src/common/js/plugin-page.js; scripts/verify-restricted-reading-lifecycle.mjs; docs/system/adaptation/plugin-coverage-followup-2026-11-01.md; docs/system/adaptation/evidence/2026-11-01/plugin-coverage-followup.json",
   },
   {
     plugin: "dishes",
@@ -221,7 +224,7 @@ export const pluginContracts = [
     contractVersion: "1.0.3",
     status: "confirmed",
     surface: "独立 /dishes SPA 路由的 PJAX 绕过",
-    evidence: "src/common/main.js; scripts/verify-plugin-pages.mjs",
+    evidence: "src/common/js/plugin-page.js; scripts/verify-plugin-pages.mjs",
   },
   {
     plugin: "schedule-calendar",
@@ -229,7 +232,7 @@ export const pluginContracts = [
     contractVersion: "3.3.0",
     status: "confirmed",
     surface: "独立 /schedule-calendar 路由的 PJAX 绕过",
-    evidence: "src/common/main.js; scripts/verify-plugin-pages.mjs",
+    evidence: "src/common/js/plugin-page.js; scripts/verify-plugin-pages.mjs",
   },
   {
     plugin: "maintenance",
