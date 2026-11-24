@@ -5742,6 +5742,7 @@ spec:
                   - {label: 文档, value: docsme}
                   - {label: 追番, value: bangumi}
                   - {label: 装备, value: equipment}
+                  - {label: 网抑云, value: ncm}
               index: $index
               key: $plugin.value
               modelValue:
@@ -6357,6 +6358,43 @@ spec:
               attrs:
                 hidden: $get(sky_plugin_settings_section).value !== 'editor' || $get(sky_plugin_section).value !== 'equipment' || $get(sky_show_equipment).value === false
         - $formkit: group
+          name: ncm
+          label: 网抑云
+          help: 歌单、播放开关和位置在「工具 → 网抑云」管理。
+          value:
+            color_source: theme
+            light_custom_color: "#395f91"
+            dark_custom_color: "#acc9fc"
+          children:
+            - $formkit: radio
+              name: color_source
+              id: sky_ncm_color_source
+              label: 小播放器主色
+              outer-class: sky-setting-segments
+              value: theme
+              options:
+                - {label: 跟随主题, value: theme}
+                - {label: 插件默认, value: plugin}
+                - {label: 自定义, value: custom}
+            - $formkit: color
+              name: light_custom_color
+              key: sky_ncm_light_custom_color
+              label: 浅色主色
+              value: "#395f91"
+              preserve: true
+              if: $get(sky_ncm_color_source).value === 'custom'
+            - $formkit: color
+              name: dark_custom_color
+              key: sky_ncm_dark_custom_color
+              label: 深色主色
+              value: "#acc9fc"
+              preserve: true
+              if: $get(sky_ncm_color_source).value === 'custom'
+          __raw__sectionsSchema:
+            outer:
+              attrs:
+                hidden: $get(sky_plugin_settings_section).value !== 'editor' || $get(sky_plugin_section).value !== 'ncm' || $get(sky_show_ncm).value === false
+        - $formkit: group
           name: visible_modules
           label: 设置入口
           help: 控制主题后台入口。插件启停请前往 Halo「插件」。
@@ -6368,6 +6406,7 @@ spec:
             docsme: true
             bangumi: true
             equipment: true
+            ncm: true
           children:
             - $formkit: switch
               name: links
@@ -6414,6 +6453,13 @@ spec:
               __raw__outer-class: *sky_settings_inline_switch_outer_class
               wrapper-class: *sky_settings_inline_switch_wrapper_class
               label: 装备
+              value: true
+            - $formkit: switch
+              name: ncm
+              id: sky_show_ncm
+              __raw__outer-class: *sky_settings_inline_switch_outer_class
+              wrapper-class: *sky_settings_inline_switch_wrapper_class
+              label: 网抑云
               value: true
           __raw__sectionsSchema:
             outer:

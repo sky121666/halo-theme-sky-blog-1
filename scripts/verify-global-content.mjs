@@ -141,7 +141,7 @@ test("全局外链区分相似主机名与端口，重复初始化不丢 rel", (
 
 function themeFixture(mode) {
   const script = read("templates/modules/theme-script.html").match(
-    /<script[^>]*th:fragment="inline-script"[^>]*>([\s\S]*?)<\/script>/,
+    /<script[^>]*th:fragment="theme-bootstrap"[^>]*>([\s\S]*?)<\/script>/,
   )[1];
   const attributes = {};
   const media = Object.assign(new EventTarget(), { matches: false });

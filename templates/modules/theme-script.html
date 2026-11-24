@@ -1,5 +1,10 @@
 <!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <th:block th:fragment="inline-script">
+    <th:block th:replace="~{modules/theme-script :: theme-bootstrap}" />
+    <th:block th:replace="~{modules/ncm-player :: styles}" />
+  </th:block>
+
   <!-- ========================================== -->
   <!--          主题切换内联脚本（防闪烁）          -->
   <!-- ========================================== -->
@@ -12,7 +17,7 @@
   1. 如果前端开关开启 && localStorage 有缓存 → 使用缓存主题
   2. 否则 → 使用默认配置主题
 -->
-  <script th:fragment="inline-script" th:inline="javascript">
+  <script th:fragment="theme-bootstrap" th:inline="javascript">
     (function () {
       // === 主题初始化 ===
       const showThemeToggle = /*[[${theme.config.nav.theme_settings.show_theme_toggle}]]*/ true;

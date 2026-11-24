@@ -1,0 +1,29 @@
+<th:block
+  xmlns:th="https://www.thymeleaf.org"
+  th:fragment="styles"
+  th:if="${pluginFinder.available('plugin-ncm')}"
+  th:with="ncm=${theme.config?.plugins?.ncm}, ncmColorSource=${ncm?.color_source ?: 'theme'}"
+>
+  <style
+    th:if="${ncmColorSource == 'theme' or ncmColorSource == 'custom'}"
+    th:with="light=${#strings.toString(ncm?.light_custom_color)}, dark=${#strings.toString(ncm?.dark_custom_color)}"
+    th:inline="css"
+    data-sky-ncm-accent
+  >
+    [# th:if="${ncmColorSource == 'theme'}"]
+    ncm-mini-player {
+      --ncm-player-accent: var(--color-primary);
+    }
+    [/]
+    [# th:if="${ncmColorSource == 'custom' and light != null and light.matches('#[0-9a-fA-F]{6}')}"]
+    :root[data-color-scheme="light"] ncm-mini-player {
+      --ncm-player-accent: [(${light})];
+    }
+    [/]
+    [# th:if="${ncmColorSource == 'custom' and dark != null and dark.matches('#[0-9a-fA-F]{6}')}"]
+    :root[data-color-scheme="dark"] ncm-mini-player {
+      --ncm-player-accent: [(${dark})];
+    }
+    [/]
+  </style>
+</th:block>
