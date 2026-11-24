@@ -21,7 +21,7 @@
 | 2    | 配置首页和文章页                     | 这是访问最多的主流程                         |
 | 3    | 配置分类、标签、归档、作者页         | 保证内容浏览链路完整                         |
 | 4    | 安装并配置需要的插件                 | 图库、瞬间、友链、文档等都依赖插件           |
-| 5    | 配置灯箱、搜索、评论、音乐、在线统计 | 这些属于全站增强功能                         |
+| 5    | 配置灯箱、搜索、评论、在线统计       | 这些属于全站增强功能                         |
 | 6    | 做前台验收                           | 检查桌面端、移动端、PJAX、插件页面和 Console |
 
 ## 全量配置原则
@@ -43,7 +43,6 @@
 | 通用设置   | `theme/base`         | [通用设置](./theme/base/general.md)              |
 | 顶部导航   | `theme/base`         | [顶部导航](./theme/base/nav.md)                  |
 | 页脚       | `theme/base`         | [页脚设置](./theme/base/footer.md)               |
-| 音乐播放器 | `theme/enhancements` | [音乐播放器](./theme/enhancements/music.md)      |
 | 在线统计   | `theme/enhancements` | [在线统计](./theme/enhancements/online-stats.md) |
 
 ### 内容页面

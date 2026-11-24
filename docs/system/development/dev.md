@@ -27,6 +27,16 @@ HALO_BASE_URL=http://localhost:8091 pnpm verify:plugins
 
 `SMOKE_BASE_URL` 仅作为旧命令兼容别名。Dishes 与 Schedule Calendar 的自动门禁固定检查默认 `/dishes`、`/schedule-calendar`；若在插件后台改路由，菜单链接必须标记 `data-no-swup`，并对自定义路由另做浏览器回归。
 
+## 主题设置重组
+
+旧站点更新前导出主题的 ConfigMap。用下面的命令生成迁移后的文件，再更新同名 ConfigMap 并重载主题配置。原始导出可用于回滚。
+
+脚本也支持已使用五个分组的配置。侧边栏小工具和首页模块会按原顺序转换为 ID 列表，单页例外的布尔显示值会转成 `on` 和 `off`。
+
+```bash
+node scripts/migrate-theme-settings.mjs theme-config.before.json > theme-config.after.json
+```
+
 ## 插件版本检测
 
 主题里的“适配版本”不是插件最新版，也不是当前站点随手安装的版本，而是主题模板已经按它验证过的契约版本。插件升级后，先跑版本检测，再决定是否需要页面回归。
@@ -98,7 +108,7 @@ AI 判断规则：
 | 有 `older`            | 优先升级插件；不要为了旧插件降低主题契约                     |
 | 页面 smoke 失败       | 先看模板变量、插件路由、Finder/API 是否变更                  |
 | 只有文档改动          | 不需要构建前台资源，但仍要检查 Markdown 格式和链接           |
-| 涉及 JS/CSS/PJAX/灯箱 | 必须 `pnpm lint`、`pnpm build-only`，再浏览器回归            |
+| 涉及 JS/CSS/Swup/灯箱 | 必须 `pnpm lint`、`pnpm build-only`，再浏览器回归            |
 
 ## 目录约定
 
@@ -106,7 +116,7 @@ AI 判断规则：
 | -------------------- | --------------------------------- |
 | `templates/`         | Halo Thymeleaf 模板               |
 | `templates/modules/` | 页面和组件片段                    |
-| `src/common/`        | 全局样式、PJAX、Alpine 和公共脚本 |
+| `src/common/`        | 全局样式、Swup、Alpine 和公共脚本 |
 | `src/pages/`         | 各页面独立 JS/CSS 入口            |
 | `templates/assets/`  | 构建产物和静态资源                |
 | `docs/`              | 本地说明文档                      |
@@ -114,59 +124,15 @@ AI 判断规则：
 
 `templates/assets/` 里的 JS/CSS 多数由构建生成，除非确认是静态资源，不要手工改构建产物。
 
-## 页面脚本约定
+## 页面模块与导航
 
-每个有独立交互的页面，优先放到 `src/pages/{page}/{page}.js`，再由对应模板在 `#swup-scripts` 中加载。
+布局在 `#swup` 上声明 `data-page`，页面附属控件放进 `#swup-page-extras`。Vite 将 `src/pages/{page}/{page}.js` 或 `.ts` 构建为版本化入口，导航按页面加载入口。常驻导航和页脚位于这两个容器之外。
 
-页面脚本要满足：
+页面模块导出 `mount({ content, extras, signal, initial })`，返回的清理函数会随旧页面一起释放。通过可选的 `registerAlpine(alpine)` 注册组件。首屏和站内切页使用同一个入口，组件注册先于新 DOM 初始化。插件专属资源由页面适配模块按需加载。
 
-| 要求            | 说明                                   |
-| --------------- | -------------------------------------- |
-| 首屏可执行      | 直接打开页面时能初始化                 |
-| PJAX 可重复进入 | 从其他页面切入时能重新初始化           |
-| 可清理          | 离开页面前清理监听器、定时器、observer |
-| 不重复绑定      | 多次进入页面不产生重复事件             |
-| 失败可降级      | 插件接口失败时显示空态或错误态         |
+Halo 的公共布局仍暴露 `html(head, content)`。内容片段带 `data-theme-swup` 时，主题使用单页入口接入 Swup，包括 404 的恢复路径。使用各自文档启动脚本的插件继续按其完整文档启动，调用公共布局时仍可复用站点外壳。
 
-通用辅助方法在 `src/common/js/page-runtime.js`：
-
-| 方法                             | 用途                             |
-| -------------------------------- | -------------------------------- |
-| `runPageInit()`                  | 首屏和 DOM 已加载场景统一初始化  |
-| `registerPageLifecycle()`        | 首屏/PJAX 统一挂载并在离页时清理 |
-| `registerAlpinePageComponents()` | 注册页面级 Alpine 组件           |
-| `notifySwupPageReady()`          | 通知 PJAX 页面脚本已就绪         |
-
-## PJAX 合约
-
-主题使用 Swup 管理无刷新切换，核心容器为：
-
-| 容器                | 作用               |
-| ------------------- | ------------------ |
-| `#swup`             | 页面主体内容       |
-| `#swup-scripts`     | 当前页面脚本       |
-| `#swup-page-extras` | 页面附加资源和片段 |
-
-需要随 PJAX 重新执行的脚本要加 `data-swup-reload-script`，插件注入脚本可按 `script[data-pjax]` 或 `script.pjax` 兼容。
-
-`window.SkyPjax` 提供三个常用入口：
-
-| 方法                    | 用途                   |
-| ----------------------- | ---------------------- |
-| `SkyPjax.once(key, fn)` | 全站只执行一次         |
-| `SkyPjax.onPage(fn)`    | 首屏和每次 PJAX 后执行 |
-| `SkyPjax.onCleanup(fn)` | 离开当前页前清理       |
-
-### 开发者模式诊断
-
-在主题设置的“通用 -> 开发者与调试”开启开发者模式后，控制台会以 `[SkyDebug:pjax]`、`[SkyDebug:page]` 等前缀输出：
-
-- `visit:start`、`content:replace:before`、`page:view`、`visit:end` / `visit:abort`
-- 页面 mount / unmount、Alpine destroy / resume 与恢复原因
-- PJAX 脚本 scan / skip / load / error、模块超时
-- 缺少 PJAX 容器时的整页导航降级，以及 `fetch:error` / `fetch:timeout`
-
-日志只用于本地诊断，不包含 URL 查询参数、请求体、表单内容、原始 DOM、位置或凭据。验证结束后关闭开发者模式并硬刷新，主题前缀日志应为零；第三方插件、Swup 或浏览器原生错误仍会正常显示。
+使用 Swup 的 `page:view` 等官方生命周期。认证入口和独立应用按整页导航处理。站长可通过后台的开发者模式打开页面和插件初始化日志。
 
 ## 资源缓存
 
@@ -219,24 +185,9 @@ node scripts/verify-passkey-disposable.mjs --allow-local-write --cleanup
 
 主题版本来自 `package.json`。改完前端资源后要重新构建，避免模板引用和构建产物不一致。
 
-## 灯箱边界
+## 灯箱
 
-主题负责：
-
-| 内容         | 说明                                                                          |
-| ------------ | ----------------------------------------------------------------------------- |
-| 保留图片容器 | 如 `.moment-media`、`#photo-grid`、`.photo-detail-viewer`、`#article-content` |
-| 兼容 PJAX    | 页面切换后重新触发插件注入脚本                                                |
-
-插件负责：
-
-| 内容     | 说明                                |
-| -------- | ----------------------------------- |
-| 路由匹配 | 在 lightgallery.js 插件后台配置路径 |
-| 匹配区域 | 在插件后台配置 selector             |
-| 灯箱行为 | 打开、关闭、切换、缩放等交互        |
-
-不要在主题里为每个页面硬编码灯箱初始化逻辑。
+Halo 的 LightGallery 插件声明需要放大的页面和图片区域。主题在这些区域按需挂载 GLightbox。图库新增图片时刷新当前实例，页面离开时销毁实例。页面和图片区域由插件的路径与 selector 设置控制。
 
 ## 本地验收
 
@@ -247,9 +198,9 @@ node scripts/verify-passkey-disposable.mjs --allow-local-write --cleanup
 | 文档             | Markdown 格式检查、链接和内容人工检查       |
 | CSS/JS           | `pnpm lint`、`pnpm build-only`              |
 | 插件页           | `pnpm verify:plugins`，再浏览器打开对应页面 |
-| PJAX/灯箱/评论   | 浏览器从首页进入目标页，再返回和重复进入    |
+| Swup、灯箱、评论 | 浏览器从首页进入目标页，再返回和重复进入    |
 | 发布、上传、登录 | 只在明确需要时手工验证，避免误改本地数据    |
 
 脚本通过不等于真实页面通过。涉及页面交互时，必须再用浏览器看一次。
 
-`pnpm verify:plugins` 和 `pnpm verify:plugins:deep` 只检查 HTTP 状态、服务端标记和公开 API，不能验证 PJAX。PJAX 验收必须从真实页面点击链接，并覆盖返回、前进、重复进入和快速连续导航；灯箱、评论、筛选、无限滚动等交互也必须在这条真实导航链里操作。
+`pnpm verify:plugins` 和 `pnpm verify:plugins:deep` 检查 HTTP 状态、服务端标记和公开 API。浏览器验收从真实链接出发，覆盖返回、前进、重复进入、快速连续导航，以及灯箱、评论、筛选和无限滚动。

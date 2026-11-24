@@ -5,7 +5,7 @@
 | 二级目录       | 内容                     | 入口                                 |
 | -------------- | ------------------------ | ------------------------------------ |
 | `base`         | 通用设置、顶部导航、页脚 | [基础设置](./base/README.md)         |
-| `enhancements` | 音乐播放器、在线统计     | [增强功能](./enhancements/README.md) |
+| `enhancements` | 在线统计                 | [增强功能](./enhancements/README.md) |
 
 ## 使用顺序
 
@@ -14,4 +14,4 @@
 | 1    | 先配置 `base/general.md`，确定全局背景、字体、Dock 和侧边栏 |
 | 2    | 再配置 `base/nav.md`，确认菜单、搜索和登录入口              |
 | 3    | 配置 `base/footer.md`，补齐版权、备案和社交链接             |
-| 4    | 按需要启用 `enhancements` 里的音乐播放器和在线统计          |
+| 4    | 按需要启用 `enhancements` 里的在线统计                     |

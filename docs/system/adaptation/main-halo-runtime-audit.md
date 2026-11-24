@@ -28,6 +28,8 @@ Node 24.18.0 的 `lint`、`format:check`、完整 `pnpm build`（含 27 项插�
 
 **仍未修复：** SEO Tools 1.10.1 在当前已恢复配置下，对 `/categories?p=abc`、`/tags?p=abc` 输出含非法查询的 canonical，对集合 `?page=2` 输出首页 canonical，和已规范化的正文/标题不一致。主题的临时互斥接管只修正主题页面，独立插件页会失去 canonical，因此未永久启用；插件本身仍需校验页码并处理 `page` 别名。AI Assistant 3.1 自动摘要注入、Passkey WebAuthn、Lottery Redis 和 Data Studio 稳定版仍保持逐插件表中的待运行验证/受阻状态。正式站点未升级或部署，Git 未暂存、提交或推送。
 
+**2026-11-19 补修：** 当前 SEO Tools 1.11.1 对上述 canonical 参数仍不校验，且其 Head 处理器会无条件追加到已包含主题 Head 的首屏。主题已在 Swup 整页启动和主题页导航载入时按服务端实际页码修正分类、标签、瞬间与图库 canonical，覆盖 `page` 别名与非法页码。插件根路由和 `/dishes`、`/schedule-calendar` 继续由插件独占。直接首屏无法在不丢失独立插件页 canonical 的前提下替换上游标签，因此该 SSR 顺序限制仍属插件修复范围。
+
 ## 2026-09-23 当前收口：GitHub 问题、全路由与后端日志
 
 执行日官方目标、当前实装、技能基线和项目契约仍按下方的不同列解释；[当前 45 项逐插件结果](./current-plugin-results.md)是最新状态，后续历史快照中的旧计数不再代表当前结论。本地环境为 Halo Pro 2.26.1 / 主题 2.2.39 未提交代码 / 45 项插件（44 STARTED、1 DISABLED），本次收口 `codeHash=6e74adb22faa05a12e1a8f01d3da6f5d771b8f0ffd8971a7287897f4f788e6ba`。

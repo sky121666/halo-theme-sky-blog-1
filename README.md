@@ -16,7 +16,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 - 🧩 首页自由排印 Widget 组件流
 - 👾 独家 Illustration 动态怪兽表情登录
 - 📱 面向移动端和桌面端的响应式布局
-- ⚡ 按页面拆分资源并适配 PJAX 生命周期
+- ⚡ 按页面拆分资源，使用 Swup 4 管理站内导航
 - 🔧 灵活的后台配置
 - 🧩 丰富的插件适配
 
@@ -42,7 +42,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 📝 列表风格      | 卡片/列表/杂志/极简                                          |
 | 🌐 背景定制      | 图片背景、天气联动和 3 种首页背景特效                        |
 | 📊 GitHub 热力图 | 贡献统计展示                                                 |
-| 🖼️ 高级图库      | JS Masonry 瀑布流、照片详情页、无限滚动、PJAX 适配           |
+| 🖼️ 高级图库      | JS Masonry 瀑布流、照片详情页、无限滚动与可刷新灯箱           |
 | 📚 文档中心      | 集成 Docsme 项目、目录、正文和评论                           |
 | 👤 作者主页      | 独立模板，支持文章/瞬间/动态展示                             |
 | 💻 极客终端      | 独家终端风格认证界面                                         |
@@ -164,7 +164,7 @@ Sky Blog Theme 是一款功能丰富、高度可定制的 Halo 2.0 主题，采�
 | 评论组件       | [app-YXyaD](https://www.halo.run/store/apps/app-YXyaD)       | [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) | ✅ 评论系统                                                                        |
 | 文本绘图       | [app-ahBRi](https://www.halo.run/store/apps/app-ahBRi)       | [plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)     | ✅ 1.5.2 默认节点、SVG、明暗重绘与 PJAX 重入通过                                   |
 | AI 助手        | [app-riNgb](https://www.halo.run/store/apps/app-riNgb)       | -                                                                           | ✅ 3.0.0 摘要宿主契约；前阶段 3.1.0 + Foundation 1.3.0 的既有摘要读取、展示与 PJAX 离页清理有证据，模型生成、自动注入、RAG/编辑器 AI 未验，见[适配状态](./docs/system/adaptation/plugin-adaptation.md) |
-| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 稳定 selector DOM 与 PJAX 后兼容重放                                            |
+| lightgallery   | [app-OoggD](https://www.halo.run/store/apps/app-OoggD)       | [plugin-lightgallery](https://github.com/halo-sigs/plugin-lightgallery)     | ✅ 根据插件声明的区域挂载灯箱，图库追加时刷新当前实例                                            |
 | Passkey 认证   | [app-g7tggrco](https://www.halo.run/store/apps/app-g7tggrco) | [plugin-auth-passkey](https://github.com/iLay1678/halo-plugin-auth-passkey) | ✅ 登录入口和认证 options 请求通过；真实凭据认证未执行                             |
 | 在线统计       | -                                                            | -                                                                           | ✅ 插件可用时显示；禁用或失败时不再请求 API                                        |
 
