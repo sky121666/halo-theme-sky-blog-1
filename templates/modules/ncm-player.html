@@ -26,4 +26,26 @@
     }
     [/]
   </style>
+
+  <style data-sky-ncm-glass>
+    /* 网抑云负责折射与实体回退，主题为展开面板提供玻璃底色。 */
+    @supports (color: color-mix(in oklab, white, transparent)) {
+      ncm-mini-player {
+        --sky-ncm-glass-color: color-mix(in oklab, var(--color-base-100, white) 76%, white);
+        --sky-ncm-glass-opacity: 66%;
+        --ncm-player-glass-tint: color-mix(in oklab, var(--sky-ncm-glass-color) var(--sky-ncm-glass-opacity), transparent);
+      }
+
+      :where(:root[data-color-scheme="dark"]) ncm-mini-player {
+        --sky-ncm-glass-color: color-mix(in oklab, var(--color-base-100, #141820) 85%, black);
+        --sky-ncm-glass-opacity: 64%;
+      }
+
+      @media (prefers-contrast: more) {
+        ncm-mini-player {
+          --sky-ncm-glass-opacity: 84%;
+        }
+      }
+    }
+  </style>
 </th:block>
