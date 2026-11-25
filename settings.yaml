@@ -2549,15 +2549,18 @@ spec:
                 cover_mode: "off"
                 cover_image: ''
           children:
-            - $el: p
-              attrs: {class: "sky-settings-note mb-2"}
-              children: 全站默认用于尚未设置场景规则的列表页。分类使用自定义模板时，模板样式优先。
             - $formkit: group
               name: defaults
               label: 全站默认
-              fieldset-class: *sky_settings_scope_fieldset
-              legend-class: "$reset sky-settings-group-title"
+              help: 全站默认用于尚未设置场景规则的列表页。分类使用自定义模板时，模板样式优先。
               inner-class: "$reset sky-post-list-scene"
+              __raw__sectionsSchema:
+                fieldset:
+                  attrs: {class: &sky_settings_group_class "formkit-fieldset sky-settings-group border border-gray-300 rounded-base px-2 py-2 focus-within:border-primary max-w-lg"}
+                legend:
+                  attrs: {class: &sky_settings_group_legend_class "formkit-legend block px-2 text-sm font-medium text-gray-700"}
+                help:
+                  attrs: {class: sky-settings-note}
               value:
                 list_style: modern
                 cover_mode: "off"
@@ -2595,6 +2598,9 @@ spec:
                   id: post_list_default_cover_mode
                   name: cover_mode
                   label: 替代封面
+                  __raw__sectionsSchema:
+                    help:
+                      attrs: {style: "grid-area: 2 / 2"}
                   value: "off"
                   options:
                     - {label: 关闭, value: "off"}
@@ -2613,7 +2619,7 @@ spec:
                     - image/webp
                     - image/gif
             - $el: div
-              attrs: {class: py-4}
+              attrs: {class: pb-4}
               children:
                 - $cmp: SkyBlogSettingsRules
                   props:
@@ -3414,10 +3420,10 @@ spec:
                     class: py-4
                   children:
                     - $el: fieldset
-                      attrs: {class: &sky_settings_group_class "formkit-fieldset sky-settings-group border border-gray-300 rounded-base px-2 py-2 focus-within:border-primary max-w-lg"}
+                      attrs: {class: *sky_settings_group_class}
                       children:
                         - $el: legend
-                          attrs: {class: &sky_settings_group_legend_class "formkit-legend block px-2 text-sm font-medium text-gray-700"}
+                          attrs: {class: *sky_settings_group_legend_class}
                           children: 版权与法律链接
                         - $formkit: switch
                           id: show_legal_links
